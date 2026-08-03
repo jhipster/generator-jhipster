@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { signal } from '@angular/core';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
@@ -25,7 +24,7 @@ import { Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { of<%- authenticationTypeOauth2 ? '' : ', Subject' %> } from 'rxjs';
+import { of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationTypeOauth2) { _%>
