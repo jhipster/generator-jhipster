@@ -21,7 +21,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
-import { Data, Router, TitleStrategy } from '@angular/router';
+import { Router, TitleStrategy } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { LangChangeEvent, TranslateService, provideTranslateService } from '@ngx-translate/core';
@@ -47,7 +47,6 @@ describe('Main', () => {
   let findLanguageFromKeyPipe: FindLanguageFromKeyPipe;
   <%_ } _%>
 <%_ } _%>
-  const routerState = { snapshot: { root: { data: {} as Data } } };
   let router: Router;
   let document: Document;
 
@@ -102,7 +101,6 @@ describe('Main', () => {
 <%_ } _%>
 
     beforeEach(() => {
-      routerState.snapshot.root = { data: {} };
 <%_ if (enableTranslation) { _%>
       vitest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
       vitest.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
@@ -178,7 +176,6 @@ describe('Main', () => {
 
       it('should set page title to root route pageTitle if there is no child routes', async () => {
         // GIVEN
-        routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
         router.resetConfig([{ path: '', title: parentRoutePageTitle, component: Blank }]);
 
         // WHEN
