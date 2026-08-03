@@ -20,6 +20,7 @@
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
+    const authorityRelationship = builtInUserManagement && generateBuiltInAuthorityEntity ? relationships.find(rel => rel.relationshipName === 'authority') : undefined;
 _%>
 import { Component, inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
@@ -46,6 +47,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+<%_ if (authorityRelationship) { _%>
+import { I<%- authorityRelationship.otherEntity.entityAngularName %> } from 'app/entities/<%- authorityRelationship.otherEntity.entityFolderName %>/<%- authorityRelationship.otherEntity.entityFileName %>.model';
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { AlertErrorModel } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -87,6 +91,9 @@ import { <%- importedType %> } from '<%- importedPath %>';
 export class <%- entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
     <%- entityInstance %>: I<%- entityAngularName %> | null = null;
+<%_ if (builtInUserManagement) { _%>
+    authorities = signal<<%- generateBuiltInAuthorityEntity ? `I${authorityRelationship.otherEntity.entityAngularName}[]` : 'string[]' %>>([]);
+<%_ } _%>
 <%_ for (const [importedType] of enumImports) { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ } _%>
@@ -128,6 +135,11 @@ export class <%- entityAngularName %>Update implements OnInit {
     compare<%- otherEntity.entityAngularName %> = (o1: I<%- otherEntity.entityAngularName %> | null, o2: I<%- otherEntity.entityAngularName %> | null): boolean =>
         this.<%- otherEntity.entityInstance %>Service.compare<%- otherEntity.entityAngularName %>(o1, o2);
 <%_ } _%>
+<%_ if (authorityRelationship) { _%>
+
+    compareAuthorityByName = (o1: Pick<I<%- authorityRelationship.otherEntity.entityAngularName %>, 'name'> | null, o2: Pick<I<%- authorityRelationship.otherEntity.entityAngularName %>, 'name'> | null): boolean =>
+        o1?.name === o2?.name;
+<%_ } _%>
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({ <%- entityInstance %> }) => {
@@ -136,6 +148,9 @@ export class <%- entityAngularName %>Update implements OnInit {
                 this.updateForm(<%- entityInstance %>);
             }
 
+<%_ if (builtInUserManagement) { _%>
+            this.<%- entityInstance %>Service.authorities().subscribe(authorities => this.authorities.set(authorities));
+<%_ } _%>
 <%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>

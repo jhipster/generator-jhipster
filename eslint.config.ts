@@ -30,7 +30,7 @@ export default defineConfig(
       ...js.configs.recommended.rules,
     },
   },
-  { ignores: ['dist', 'docs'] },
+  { ignores: ['dist', 'docs', 'jhipster-keycloak-test/**'] },
   {
     files: jsTsFiles,
     ...jhipster.base,

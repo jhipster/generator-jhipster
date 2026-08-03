@@ -153,7 +153,8 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       it('should match application snapshot', () => {
-        const { application } = runResult;
+        // autoCrlf is only set on win32 and never appears in Linux CI-generated snapshots.
+        const { autoCrlf: _autoCrlf, ...application } = runResult.application as any;
         expect(application).toMatchSnapshot({
           addLanguageCallbacks: expect.any(Array),
           customizeTemplatePaths: expect.any(Array),

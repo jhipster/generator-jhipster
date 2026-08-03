@@ -5,6 +5,11 @@ exports[`generator - client:i18n with defaults options should call source snapsh
   "addEntityTranslationKey": [
     {
       "language": "en",
+      "translationKey": "adminUserManagement",
+      "translationValue": "User Management",
+    },
+    {
+      "language": "en",
       "translationKey": "adminAuthority",
       "translationValue": "Authority",
     },
@@ -18,6 +23,9 @@ exports[`generator - client:i18n with defaults options should match files snapsh
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/activate.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/admin-languages.json": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/adminAuthority.json": {

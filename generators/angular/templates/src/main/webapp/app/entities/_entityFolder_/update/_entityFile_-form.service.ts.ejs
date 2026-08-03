@@ -16,9 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const formDefaultProperties = [
+<%_ const hasBuiltInAuthorities = builtInUserManagement && generateBuiltInAuthorityEntity;
+    const formDefaultProperties = [
       ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id).map(field => field.fieldName),
       ...relationships.filter(relationship => relationship.collection && relationship.persistableRelationship).map(relationship => relationship.propertyName),
+      ...hasBuiltInAuthorities ? ['authorities'] : [],
     ];
     const containDefaultProperties = formDefaultProperties.length > 0;
     const entityFormName = anyFieldIsTimeDerived ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
@@ -73,6 +75,9 @@ type <%- entityAngularName %>FormGroupContent = {
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
   <%_ const { propertyName } = relationship; _%>
   <%- propertyName %>: FormControl<<%- entityFormName %>['<%- propertyName %>']>;
+<%_ } _%>
+<%_ if (hasBuiltInAuthorities) { _%>
+  authorities: FormControl<<%- entityFormName %>['authorities']>;
 <%_ } _%>
 };
 
@@ -152,6 +157,9 @@ export class <%- entityAngularName %>FormService {
   <%_ } _%>
       ),
 <%_ } _%>
+<%_ if (hasBuiltInAuthorities) { _%>
+      authorities: new FormControl(<%- entityInstance %>RawValue.authorities ?? [], { nonNullable: true }),
+<%_ } _%>
     });
   }
 
@@ -211,6 +219,9 @@ export class <%- entityAngularName %>FormService {
     <%_ if (collection) { _%>
       <%- propertyName %>: [],
     <%_ } _%>
+  <%_ } _%>
+  <%_ if (hasBuiltInAuthorities) { _%>
+      authorities: [],
   <%_ } _%>
     };
   }
