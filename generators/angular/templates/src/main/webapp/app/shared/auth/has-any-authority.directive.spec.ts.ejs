@@ -71,7 +71,7 @@ describe('HasAnyAuthorityDirective tests', () => {
       fixture.detectChanges();
 
       // THEN
-      expect(comp.content).toBeDefined();
+      expect(comp.content()).toBeDefined();
     });
 
     it('should not show restricted content to user if user has not required role', () => {
@@ -114,7 +114,7 @@ describe('HasAnyAuthorityDirective tests', () => {
       fixture.detectChanges();
 
       // THEN
-      expect(comp.content).toBeDefined();
+      expect(comp.content()).toBeDefined();
     });
   });
 });
