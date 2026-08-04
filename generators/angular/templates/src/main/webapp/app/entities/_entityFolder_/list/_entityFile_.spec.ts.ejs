@@ -211,7 +211,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     httpMock.expectOne({ method: 'GET' });
 
     // THEN
-    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%- order %>'] }));
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%- order %>'] });
   });
 <%_ if (paginationInfiniteScroll) { _%>
 
@@ -227,7 +227,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     // WHEN
     comp.loadNextPage();
     TestBed.tick();
-    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ page: '1' }));
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ page: '1' });
     req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
     await vitest.runAllTimersAsync();
@@ -236,7 +236,7 @@ describe('<%- entityAngularName %> Management Component', () => {
 
     comp.loadNextPage();
     TestBed.tick();
-    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ page: '2' }));
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ page: '2' });
     req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
     await vitest.runAllTimersAsync();
@@ -252,7 +252,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     httpMock.expectOne({ method: 'GET' });
 
     // THEN
-    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] });
   });
 <%_ } _%>
 <%_ if (!readOnly) { _%>

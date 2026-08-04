@@ -60,11 +60,9 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should be applied to application config', () => {
-      expect(result.application).toMatchObject(
-        expect.objectContaining({
-          applicationProperty: '',
-        }),
-      );
+      expect(result.application).toMatchObject({
+        applicationProperty: '',
+      });
     });
   });
 
@@ -81,11 +79,9 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should be applied to application config', () => {
-      expect(result.application).toMatchObject(
-        expect.objectContaining({
-          applicationProperty: 'foo',
-        }),
-      );
+      expect(result.application).toMatchObject({
+        applicationProperty: 'foo',
+      });
     });
   });
 });
