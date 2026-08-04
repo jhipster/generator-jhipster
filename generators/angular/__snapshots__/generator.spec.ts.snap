@@ -705,9 +705,9 @@ describe("UserManagement Management Component", () => {
     httpMock.expectOne({ method: "GET" });
 
     // THEN
-    expect(service.userManagementsParams()).toMatchObject(
-      expect.objectContaining({ sort: ["login,desc"] }),
-    );
+    expect(service.userManagementsParams()).toMatchObject({
+      sort: ["login,desc"],
+    });
   });
 
   describe("delete", () => {

@@ -82,12 +82,10 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should be applied to entity config', () => {
-      expect(result.entities?.Foo).toMatchObject(
-        expect.objectContaining({
-          entityProperty: '',
-          fields: expect.arrayContaining([expect.objectContaining({ fieldProperty: '', fieldValidateRulesPattern: '' })]),
-        }),
-      );
+      expect(result.entities?.Foo).toMatchObject({
+        entityProperty: '',
+        fields: expect.arrayContaining([expect.objectContaining({ fieldProperty: '', fieldValidateRulesPattern: '' })]),
+      });
     });
   });
 });
