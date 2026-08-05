@@ -1,0 +1,14 @@
+# generator-jhipster
+
+> Internally, JHipster uses Yeoman as the core. JHipster is the most popular generator of all time.
+
+## Documentation
+
+- [JHipster architecture](/generator-jhipster/architecture/): Internally, JHipster uses Yeoman as the core. JHipster is the most popular generator of all time.
+- [JHipster development](/generator-jhipster/development/): JHipster is a Yeoman Generator, so you must follow the Yeoman authoring documentation in order to be able to run and test your changes.
+- [Contributing to JHipster](/generator-jhipster/contributing/): Are you ready to contribute to JHipster? We'd love to have you on board, and we will help you as much as we can. Here are the guidelines we'd like you to follow so that we can be of more help:
+- [JHipster Blueprints](/generator-jhipster/blueprints/): Blueprints allow adding new features or changing current features.
+- [JHipster-RFC-1: JHipster Kubernetes Operator](/generator-jhipster/rfcs/1-jhipster-rfc-k8s-operator/): The JHipster Operators use Kubernetes CRDs (Custom Resource Definitions) to encapsulate operational knowledge about JHipster Applications.
+- [JHipster-RFC-2: JHipster Control Center](/generator-jhipster/rfcs/2-jhipster-rfc-jhipster-control-center/): As of JHipster 6.5, the JHipster administrator's management and monitoring UI is spread out to various places (JHipster Registry, angular/react/vue pages) which causes code duplication and slows down their evolution. This RFC proposes to move this functionality to an external application that can be used in different development and production scenarios. In the following, this application will be referred to as the **JHipster Control Center**.
+- [JHipster-RFC-4: Entities as a core feature.](/generator-jhipster/rfcs/4-jhipster-rfc-entity-as-core/): This RFC proposes to implement entities as JHipster core feature instead of generators.
+- [JHipster-RFC-6: jhipster generator file structure](/generator-jhipster/rfcs/6-jhipster-rfc-jhipster-generator-file-structure/): The goal of this RFC is to describe the generator conventions and file structure for the JHipster generator that enhances modularity, maintainability, and ease of use. The new structure will allow for better organization of files and directories, making it easier for developers to navigate and contribute to the project.
