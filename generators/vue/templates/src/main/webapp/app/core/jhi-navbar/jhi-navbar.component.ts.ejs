@@ -1,4 +1,5 @@
 import { computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>defineComponent, inject, ref, type Ref } from 'vue';
+import { storeToRefs } from 'pinia';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -65,7 +66,7 @@ export default defineComponent({
 
     const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
     const inProduction = computed(() => store.activeProfiles.includes('prod'));
-    const authenticated = computed(() => store.authenticated);
+    const { authenticated } = storeToRefs(store);
 
     const subIsActive = (input: string | string[]) => {
       const paths = Array.isArray(input) ? input : [input];
@@ -78,24 +79,26 @@ export default defineComponent({
       localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
       sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
       store.logout();
-      if (router.currentRoute.value.path !== '/') {
-        router.push('/');
-      }
 <%_ } else { _%>
       const response = await loginService.logout();
       store.logout();
   <%_ if (authenticationTypeOauth2) { _%>
-      window.location.href = response.data.logoutUrl;
-      const next = response.data?.logoutUrl ?? '/';
-      if (router.currentRoute.value.path !== next) {
+      const next = response.data?.logoutUrl;
+
+      if (next) {
+        if (/^https?:\/\//i.test(next)) {
+          window.location.href = next;
+          return;
+        }
         await router.push(next);
+        return;
       }
-  <%_ } else { _%>
+
+  <%_ } _%>
+<%_ } _%>
       if (router.currentRoute.value.path !== '/') {
         await router.push('/');
       }
-  <%_ } _%>
-<%_ } _%>
     },
 
     return {

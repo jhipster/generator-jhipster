@@ -1,4 +1,4 @@
-import axios, { type AxiosPromise } from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 
 export default class LoginService {
 <%_ if (authenticationTypeOauth2) { _%>
@@ -20,7 +20,7 @@ export default class LoginService {
   }
 <%_ } _%>
 
-  logout(): AxiosPromise<any> {
+  async logout(): Promise<AxiosResponse<any>> {
     return axios.post('api/logout');
   }
 }
