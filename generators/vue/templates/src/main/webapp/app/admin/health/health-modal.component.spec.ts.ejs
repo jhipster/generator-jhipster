@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
 import HealthModal from './health-modal.vue';
 
 type HealthModalComponentType = InstanceType<typeof HealthModal>;
 
-const healthService = { getBaseName: vitest.fn(), getSubSystemName: vitest.fn() };
+const healthService = { getBaseName: vi.fn(), getSubSystemName: vi.fn() };
 
 describe('Health Modal Component', () => {
   let healthModal: HealthModalComponentType;

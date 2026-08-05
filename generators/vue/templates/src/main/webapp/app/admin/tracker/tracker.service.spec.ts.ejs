@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref, type Ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import { createMemoryHistory, createRouter, type Router } from 'vue-router';
@@ -35,7 +35,7 @@ describe('Tracker Service', () => {
 
   beforeEach(() => {
     router = createRouter({ history: createMemoryHistory(), routes: [] });
-    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
+    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
     router.afterEach = vi.fn();
     authenticated = ref(false);
 
@@ -93,7 +93,7 @@ describe('Tracker Service', () => {
 
   it('Should send activity on connected', async () => {
     // GIVEN
-    vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as any);
+    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as any);
     const wrapper = shallowMount(TrackerApp, {
       global: {
         plugins: [router],

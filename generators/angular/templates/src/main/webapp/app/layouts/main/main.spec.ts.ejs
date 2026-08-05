@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DOCUMENT } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -63,7 +63,7 @@ describe('Main', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: vitest.fn(() => of(null)),
+            identity: vi.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
@@ -102,10 +102,10 @@ describe('Main', () => {
 
     beforeEach(() => {
 <%_ if (enableTranslation) { _%>
-      vitest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
-      vitest.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
+      vi.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
+      vi.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
 <%_ } _%>
-      vitest.spyOn(titleService, 'setTitle');
+      vi.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
     });
 
@@ -257,7 +257,7 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = vitest.fn(() => false);
+      findLanguageFromKeyPipe.isRTL = vi.fn(() => false);
   <%_ } _%>
       langChangeSubject.next({ lang: 'lang1', translations: {} });
 
@@ -269,7 +269,7 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = vitest.fn(() => true);
+      findLanguageFromKeyPipe.isRTL = vi.fn(() => true);
   <%_ } _%>
       langChangeSubject.next({ lang: 'lang2', translations: {} });
 
