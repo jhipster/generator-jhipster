@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
 import Gateway from './gateway.vue';
@@ -30,7 +30,7 @@ describe('Gateway Component', () => {
 
   beforeEach(() => {
     const gatewayService = new GatewayService();
-    vitest.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
+    vi.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
     wrapper = shallowMount(Gateway, {
       global: {
         stubs: {

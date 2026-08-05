@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useDataUtils from './data-utils.service';
 import { endsWith, paddingSize } from '@/shared/jhipster/data-utils';
 
@@ -54,9 +54,9 @@ describe('Formatter i18n', () => {
   });
 
   it('should open file', () => {
-    window.open = vitest.fn().mockReturnValue({});
+    window.open = vi.fn().mockReturnValue({});
     const objectURL = 'blob:http://localhost:9000/xxx';
-    URL.createObjectURL = vitest.fn().mockImplementationOnce(() => {
+    URL.createObjectURL = vi.fn().mockImplementationOnce(() => {
       return objectURL;
     });
 

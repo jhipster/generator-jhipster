@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { signal, WritableSignal } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
@@ -51,7 +51,7 @@ describe('Alert Service Test', () => {
     translateService = TestBed.inject(TranslateService);
     translateService.setFallbackLang('en');
 <%_ } _%>
-    vitest.useFakeTimers();
+    vi.useFakeTimers();
     extAlerts = signal([]);
   });
 
@@ -187,7 +187,7 @@ describe('Alert Service Test', () => {
 
     expect(service.get()).toHaveLength(1);
 
-    vitest.advanceTimersByTime(6000);
+    vi.advanceTimersByTime(6000);
 
     expect(service.get()).toHaveLength(0);
   });

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Mock, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -47,7 +47,7 @@ function accountWithAuthorities(authorities: string[]): Account {
   };
 }
 
-const mockFn = (value: string | null): Mock => vitest.fn(() => value);
+const mockFn = (value: string | null): Mock => vi.fn(() => value);
 
 describe('Account Service', () => {
   let service: AccountService;
@@ -71,8 +71,8 @@ describe('Account Service', () => {
         {
           provide: StateStorageService,
           useValue: {
-            clearUrl: vitest.fn(),
-            getUrl: vitest.fn(),
+            clearUrl: vi.fn(),
+            getUrl: vi.fn(),
           },
         },
       ],
@@ -85,11 +85,11 @@ describe('Account Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
-    vitest.spyOn(mockRouter, 'navigateByUrl');
+    vi.spyOn(mockRouter, 'navigateByUrl');
 <%_ if (enableTranslation) { _%>
 
     mockTranslateService = TestBed.inject(TranslateService);
-    vitest.spyOn(mockTranslateService, 'use');
+    vi.spyOn(mockTranslateService, 'use');
 <%_ } _%>
   });
 

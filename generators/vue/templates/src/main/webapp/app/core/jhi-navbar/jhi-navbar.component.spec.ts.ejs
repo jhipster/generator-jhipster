@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed } from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import { type Router } from 'vue-router';
@@ -34,7 +34,7 @@ import JhiNavbar from './jhi-navbar.vue';
 <%_ if (microfrontend) { _%>
 
 vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
-  loadRemote: vitest.fn(() => Promise.reject(new Error('Test only'))),
+  loadRemote: vi.fn(() => Promise.reject(new Error('Test only'))),
 }));
 <%_ } _%>
 
@@ -51,9 +51,9 @@ describe('JhiNavbar', () => {
 <%_ if (generateUserManagement) { _%>
   let login: ReturnType<typeof useLoginModal>;
 <%_ } _%>
-  const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
+  const accountService = { hasAnyAuthorityAndCheckAuth: vi.fn().mockImplementation(() => Promise.resolve(true)) };
 <%_ if (enableTranslation) { _%>
-  const changeLanguage = vitest.fn();
+  const changeLanguage = vi.fn();
 <%_ } _%>
   let router: Router;
 

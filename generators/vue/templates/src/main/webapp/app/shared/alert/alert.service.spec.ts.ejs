@@ -16,23 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
 
 import AlertService from './alert.service';
 
 describe('Alert Service test suite', () => {
 <%_ if (enableTranslation) { _%>
-  let translationStub: vitest.Mock;
+  let translationStub: Mock;
 <%_ } _%>
-  let toastStub: vitest.Mock;
+  let toastStub: Mock;
   let alertService: AlertService;
 
   beforeEach(() => {
 <%_ if (enableTranslation) { _%>
-    translationStub = vitest.fn();
+    translationStub = vi.fn();
 <%_ } _%>
-    toastStub = vitest.fn();
+    toastStub = vi.fn();
     alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
       i18n: { t: translationStub } as any,

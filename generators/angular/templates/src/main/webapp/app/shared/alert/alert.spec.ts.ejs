@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -36,7 +36,7 @@ describe('Alert Component', () => {
           provide: AlertService,
           useValue: {
             alerts: signal([]),
-            clear: vitest.fn(),
+            clear: vi.fn(),
           },
         },
       ],

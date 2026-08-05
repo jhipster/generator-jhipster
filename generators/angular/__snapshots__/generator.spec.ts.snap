@@ -43,7 +43,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.spec.ts": {
-    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
@@ -72,8 +72,8 @@ describe("UserManagement Management Delete Component", () => {
   describe("confirmDelete", () => {
     it("should call delete service on confirmDelete", () => {
       // GIVEN
-      vitest.spyOn(service, "delete").mockReturnValue(of(undefined));
-      vitest.spyOn(mockActiveModal, "close");
+      vi.spyOn(service, "delete").mockReturnValue(of(undefined));
+      vi.spyOn(mockActiveModal, "close");
 
       // WHEN
       comp.confirmDelete("ABC");
@@ -87,9 +87,9 @@ describe("UserManagement Management Delete Component", () => {
   describe("cancel", () => {
     it("should not call delete service on cancel", () => {
       // GIVEN
-      vitest.spyOn(service, "delete");
-      vitest.spyOn(mockActiveModal, "close");
-      vitest.spyOn(mockActiveModal, "dismiss");
+      vi.spyOn(service, "delete");
+      vi.spyOn(mockActiveModal, "close");
+      vi.spyOn(mockActiveModal, "dismiss");
 
       // WHEN
       comp.cancel();
@@ -219,7 +219,7 @@ export class UserManagementDeleteDialog {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.spec.ts": {
-    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter, withComponentInputBinding } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
@@ -277,7 +277,7 @@ describe("UserManagement Management Detail Component", () => {
 
   describe("PreviousState", () => {
     it("should navigate to previous state", () => {
-      vitest.spyOn(globalThis.history, "back");
+      vi.spyOn(globalThis.history, "back");
       comp.previousState();
       expect(globalThis.history.back).toHaveBeenCalled();
     });
@@ -501,7 +501,7 @@ export class UserManagementDetail {
   describe,
   expect,
   it,
-  vitest,
+  vi,
 } from "vitest";
 import {
   provideHttpClientTesting,
@@ -529,7 +529,7 @@ import { UserManagementService } from "../service/user-management.service";
 
 import { UserManagement } from "./user-management";
 
-vitest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("UserManagement Management Component", () => {
   let httpMock: HttpTestingController;
@@ -571,7 +571,7 @@ describe("UserManagement Management Component", () => {
     fixture = TestBed.createComponent(UserManagement);
     comp = fixture.componentInstance;
     service = TestBed.inject(UserManagementService);
-    routerNavigateSpy = vitest.spyOn(comp.router, "navigate");
+    routerNavigateSpy = vi.spyOn(comp.router, "navigate");
 
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(
@@ -601,7 +601,7 @@ describe("UserManagement Management Component", () => {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
     });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN
     expect(comp.isLoading()).toEqual(false);
@@ -614,18 +614,18 @@ describe("UserManagement Management Component", () => {
     // WHEN
     TestBed.tick();
     const req = httpMock.expectOne({ method: "GET" });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     comp.page.set(3);
     comp.load();
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
     const req2 = httpMock.expectOne({ method: "GET" });
     req2.flush([{ login: "Oswald.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
     });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN
     expect(req.cancelled).toBeTruthy();
@@ -640,7 +640,7 @@ describe("UserManagement Management Component", () => {
     TestBed.tick();
     const errorReq = httpMock.expectOne({ method: "GET" });
     errorReq.flush("error", { status: 500, statusText: "Server Error" });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN - loading state was reset and list is empty
     expect(comp.isLoading()).toBe(false);
@@ -655,7 +655,7 @@ describe("UserManagement Management Component", () => {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
     });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN - subscription is still alive and second load succeeds
     expect(comp.userManagements()[0]).toEqual(
@@ -666,7 +666,7 @@ describe("UserManagement Management Component", () => {
   describe("trackLogin", () => {
     it("should forward to userManagementService", () => {
       const entity = { login: "Oswald.Kertzmann" };
-      vitest.spyOn(service, "getUserManagementIdentifier");
+      vi.spyOn(service, "getUserManagementIdentifier");
       const login = comp.trackLogin(entity);
       expect(service.getUserManagementIdentifier).toHaveBeenCalledWith(entity);
       expect(login).toBe(entity.login);
@@ -719,12 +719,12 @@ describe("UserManagement Management Component", () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as unknown as { modalService: NgbModal }).modalService;
-      vitest.spyOn(ngbModal, "open").mockReturnValue(deleteModalMock);
+      vi.spyOn(ngbModal, "open").mockReturnValue(deleteModalMock);
     });
 
     it("on confirm should call load", () => {
       // GIVEN
-      vitest.spyOn(comp, "load");
+      vi.spyOn(comp, "load");
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -737,7 +737,7 @@ describe("UserManagement Management Component", () => {
 
     it("on dismiss should call load", () => {
       // GIVEN
-      vitest.spyOn(comp, "load");
+      vi.spyOn(comp, "load");
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -956,7 +956,7 @@ export class UserManagement implements OnInit {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
-    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
@@ -992,7 +992,7 @@ describe("UserManagement routing resolve service", () => {
       ],
     });
     mockRouter = TestBed.inject(Router);
-    vitest.spyOn(mockRouter, "navigate");
+    vi.spyOn(mockRouter, "navigate");
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     service = TestBed.inject(UserManagementService);
   });
@@ -1000,7 +1000,7 @@ describe("UserManagement routing resolve service", () => {
   describe("resolve", () => {
     it("should return IUserManagement returned by find", async () => {
       // GIVEN
-      service.find = vitest.fn((login) => of({ login }));
+      service.find = vi.fn((login) => of({ login }));
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -1020,7 +1020,7 @@ describe("UserManagement routing resolve service", () => {
 
     it("should return null if id is not provided", async () => {
       // GIVEN
-      service.find = vitest.fn();
+      service.find = vi.fn();
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
@@ -1040,14 +1040,11 @@ describe("UserManagement routing resolve service", () => {
 
     it("should route to 404 page if data not found in server", async () => {
       // GIVEN
-      vitest
-        .spyOn(service, "find")
-        .mockReturnValue(
-          throwError(
-            () =>
-              new HttpErrorResponse({ status: 404, statusText: "Not Found" }),
-          ),
-        );
+      vi.spyOn(service, "find").mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 404, statusText: "Not Found" }),
+        ),
+      );
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -1063,17 +1060,15 @@ describe("UserManagement routing resolve service", () => {
 
     it("should route to error page if server returns an error other than 404", async () => {
       // GIVEN
-      vitest
-        .spyOn(service, "find")
-        .mockReturnValue(
-          throwError(
-            () =>
-              new HttpErrorResponse({
-                status: 500,
-                statusText: "Internal Server Error",
-              }),
-          ),
-        );
+      vi.spyOn(service, "find").mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 500,
+              statusText: "Internal Server Error",
+            }),
+        ),
+      );
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -2114,7 +2109,7 @@ export class UserManagementFormService {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.spec.ts": {
-    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HttpResponse } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
@@ -2171,13 +2166,11 @@ describe("UserManagement Management Update Component", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Oswald.Kertzmann" };
-      vitest
-        .spyOn(userManagementFormService, "getUserManagement")
-        .mockReturnValue(userManagement);
-      vitest
-        .spyOn(userManagementService, "update")
-        .mockReturnValue(saveSubject);
-      vitest.spyOn(comp, "previousState");
+      vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue(
+        userManagement,
+      );
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
 
@@ -2200,13 +2193,11 @@ describe("UserManagement Management Update Component", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Oswald.Kertzmann" };
-      vitest
-        .spyOn(userManagementFormService, "getUserManagement")
-        .mockReturnValue({ login: null });
-      vitest
-        .spyOn(userManagementService, "update")
-        .mockReturnValue(saveSubject);
-      vitest.spyOn(comp, "previousState");
+      vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue({
+        login: null,
+      });
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement: null });
       comp.ngOnInit();
 
@@ -2229,10 +2220,8 @@ describe("UserManagement Management Update Component", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Oswald.Kertzmann" };
-      vitest
-        .spyOn(userManagementService, "update")
-        .mockReturnValue(saveSubject);
-      vitest.spyOn(comp, "previousState");
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
 

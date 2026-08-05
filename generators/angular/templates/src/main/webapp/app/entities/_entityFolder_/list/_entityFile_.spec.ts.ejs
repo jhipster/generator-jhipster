@@ -20,7 +20,7 @@
     const testEntityPrimaryKey = tsPrimaryKeySamples[0];
     const testEntityPrimaryKey2 = tsPrimaryKeySamples[1];
 _%>
-import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -45,7 +45,7 @@ import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %
 
 import { <%- entityAngularName %> } from './<%- entityFileName %>';
 
-vitest.useFakeTimers();
+vi.useFakeTimers();
 
 describe('<%- entityAngularName %> Management Component', () => {
   let httpMock: HttpTestingController;
@@ -96,7 +96,7 @@ describe('<%- entityAngularName %> Management Component', () => {
         fixture = TestBed.createComponent(<%- entityAngularName %>);
         comp = fixture.componentInstance;
         service = TestBed.inject(<%- entityAngularName %>Service);
-        routerNavigateSpy = vitest.spyOn(comp.router, 'navigate');
+        routerNavigateSpy = vi.spyOn(comp.router, 'navigate');
 
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync, faTimes);
@@ -116,7 +116,7 @@ describe('<%- entityAngularName %> Management Component', () => {
       [<%- testEntityPrimaryKey %>],
       { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
     );
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN
     expect(comp.isLoading()).toEqual(false);
@@ -128,17 +128,17 @@ describe('<%- entityAngularName %> Management Component', () => {
     // WHEN
     TestBed.tick();
     const req = httpMock.expectOne({ method: 'GET' });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     comp.page.set(3);
     comp.load();
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
     const req2 = httpMock.expectOne({ method: 'GET' });
     req2.flush(
       [<%- testEntityPrimaryKey %>],
       { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
     );
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN
     expect(req.cancelled).toBeTruthy();
@@ -151,7 +151,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     TestBed.tick();
     const errorReq = httpMock.expectOne({ method: 'GET' });
     errorReq.flush('error', { status: 500, statusText: 'Server Error' });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN - loading state was reset and list is empty
     expect(comp.isLoading()).toBe(false);
@@ -165,7 +165,7 @@ describe('<%- entityAngularName %> Management Component', () => {
       [<%- testEntityPrimaryKey %>],
       { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
     );
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN - subscription is still alive and second load succeeds
     expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
@@ -175,7 +175,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     describe('track<%- primaryKey.nameCapitalized %>', () => {
         it('should forward to <%- entityInstance %>Service', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;
-            vitest.spyOn(service, 'get<%- entityAngularName %>Identifier');
+            vi.spyOn(service, 'get<%- entityAngularName %>Identifier');
             const <%- primaryKey.name %> = comp.track<%- primaryKey.nameCapitalized %>(entity);
             expect(service.get<%- entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
             expect(<%- primaryKey.name %>).toBe(entity.<%- primaryKey.name %>);
@@ -220,7 +220,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     TestBed.tick();
     let req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey %>], { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
     expect(comp.<%- entityInstancePlural %>()).toHaveLength(1);
     expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
 
@@ -230,7 +230,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ page: '1' });
     req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
     expect(comp.<%- entityInstancePlural %>()).toHaveLength(2);
     expect(comp.<%- entityInstancePlural %>()[1]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey2 %>));
 
@@ -239,7 +239,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     expect(service.<%- entityInstancePlural %>Params()).toMatchObject({ page: '2' });
     req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
     expect(comp.<%- entityInstancePlural %>()).toHaveLength(2);
     expect(comp.<%- entityInstancePlural %>()[1]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey2 %>));
   });
@@ -266,12 +266,12 @@ describe('<%- entityAngularName %> Management Component', () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as unknown as { modalService: NgbModal }).modalService;
-      vitest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+      vi.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
     });
 
     it('on confirm should call load', () => {
       // GIVEN
-      vitest.spyOn(comp, 'load');
+      vi.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -284,7 +284,7 @@ describe('<%- entityAngularName %> Management Component', () => {
 
     it('on dismiss should call load', () => {
       // GIVEN
-      vitest.spyOn(comp, 'load');
+      vi.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);

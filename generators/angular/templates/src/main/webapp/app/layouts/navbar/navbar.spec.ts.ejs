@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -71,7 +71,7 @@ describe('Navbar Component', () => {
     fixture = TestBed.createComponent(Navbar);
     comp = fixture.componentInstance;
 <%_ if (microfrontend) { _%>
-    comp.loadMicrofrontendsEntities = vitest.fn();
+    comp.loadMicrofrontendsEntities = vi.fn();
 <%_ } _%>
     accountService = TestBed.inject(AccountService);
     profileService = TestBed.inject(ProfileService);
@@ -79,7 +79,7 @@ describe('Navbar Component', () => {
 
   it('should call profileService.getProfileInfo on init', () => {
     // GIVEN
-    vitest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
+    vi.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
 
     // WHEN
     comp.ngOnInit();

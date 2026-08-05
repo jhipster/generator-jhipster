@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vitest, type Mock } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -43,7 +43,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
   beforeEach(() => {
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
-    hasAnyAuthority = vitest.fn((): boolean => Boolean(currentAccount()));
+    hasAnyAuthority = vi.fn((): boolean => Boolean(currentAccount()));
 
     TestBed.configureTestingModule({
       providers: [

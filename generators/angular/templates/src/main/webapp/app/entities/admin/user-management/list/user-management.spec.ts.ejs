@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = user.primaryKey.tsSampleValues[0]; _%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -66,15 +66,15 @@ describe('User Management Component', () => {
     comp = fixture.componentInstance;
     service = TestBed.inject(UserManagementService);
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.isAuthenticated = vitest.fn(() => false);
-    mockAccountService.identity = vitest.fn(() => of(null));
+    mockAccountService.isAuthenticated = vi.fn(() => false);
+    mockAccountService.identity = vi.fn(() => of(null));
   });
 
   describe('OnInit', () => {
     it('should call load all on init', () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
-      vitest.spyOn(service, 'query').mockReturnValue(
+      vi.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [{ id: <%- tsKeyId %> } as IUserManagement],
@@ -97,7 +97,7 @@ describe('User Management Component', () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
       const user = { id: <%- tsKeyId %> } as IUserManagement;
-      vitest.spyOn(service, 'query').mockReturnValue(
+      vi.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [user],
@@ -105,7 +105,7 @@ describe('User Management Component', () => {
           }),
         ),
       );
-      vitest.spyOn(service, 'update').mockReturnValue(of(user));
+      vi.spyOn(service, 'update').mockReturnValue(of(user));
 
       // WHEN
       comp.setActive(user, true);
