@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>
 import { loadMoreDataWhenScrolled } from 'react-jhipster';
 import { getPageNumberFromLinkHeader } from 'app/shared/jhipster/link-header';
