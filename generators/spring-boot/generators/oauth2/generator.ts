@@ -82,6 +82,12 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
                 templates: ['test/util/OAuth2TestUtil.java', 'web/rest/LogoutResourceIT.java'],
               },
               {
+                condition: generator => generator.generateAuthenticationApi && generator.reactive,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: ['web/filter/OAuth2ReactiveRefreshTokensWebFilterTest.java'],
+              },
+              {
                 condition: generator => !generator.reactive && generator.generateAuthenticationApi,
                 path: `${SERVER_MAIN_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageSrcDir,
