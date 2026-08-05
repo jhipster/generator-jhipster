@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, signal, OnInit, effect<%- microfrontend && enableTranslation ? ', EnvironmentInjector' : '' %> } from '@angular/core';
+import { Component, inject, signal, OnInit, effect } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -38,7 +38,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 <% if (microfrontend) { %>
-import { loadLazyTranslation, loadNavbarItems } from 'app/core/microfrontend';
+import { loadNavbarItems } from 'app/core/microfrontend';
 <%_ } _%>
 import { environment } from 'environments/environment';
 import NavbarItem from './navbar-item.model';
@@ -82,9 +82,6 @@ export default class Navbar implements OnInit {
 <%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);
   private readonly stateStorageService = inject(StateStorageService);
-  <%_ if (microfrontend) { _%>
-  private readonly injector = inject(EnvironmentInjector);
-  <%_ } _%>
 <%_ } _%>
 <%_ if (microfrontend) { _%>
   private readonly accountService = inject(AccountService);
