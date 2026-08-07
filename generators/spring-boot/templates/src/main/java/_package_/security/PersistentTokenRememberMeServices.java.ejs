@@ -235,7 +235,7 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
 <%_ } else { _%>
         Optional<PersistentToken> optionalToken = persistentTokenRepository.findById(presentedSeries);
 <%_ } _%>
-        if (!optionalToken.isPresent()) {
+        if (optionalToken.isEmpty()) {
             // No series match, so we can't authenticate using this cookie
             throw new RememberMeAuthenticationException("No persistent token found for series id: " + presentedSeries);
         }
