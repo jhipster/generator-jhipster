@@ -156,15 +156,41 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         return new CouchbaseCustomConversions(converters);
     }
 
+    // ponytail: Couchmove's first lock-document read can hit the Couchbase container before its
+    // KV service has fully warmed up (UnambiguousTimeoutException), even though the container
+    // itself reports "started". Retry with backoff instead of failing the whole context on attempt 1.
+    private static final int COUCHMOVE_MAX_ATTEMPTS = 5;
+    private static final Duration COUCHMOVE_RETRY_DELAY = Duration.ofSeconds(2);
+
     @Bean
     public Couchmove couchmove(Cluster cluster) {
         LOG.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
         Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
         Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
-        couchmove.migrate();
+        migrateWithRetry(couchmove);
         couchmove.buildN1qlDeferredIndexes(getScopeName());
         return couchmove;
+    }
+
+    private void migrateWithRetry(Couchmove couchmove) {
+        for (int attempt = 1; ; attempt++) {
+            try {
+                couchmove.migrate();
+                return;
+            } catch (RuntimeException e) {
+                if (attempt >= COUCHMOVE_MAX_ATTEMPTS) {
+                    throw e;
+                }
+                LOG.warn("Couchmove migration attempt {}/{} failed, retrying in {}", attempt, COUCHMOVE_MAX_ATTEMPTS, COUCHMOVE_RETRY_DELAY, e);
+                try {
+                    Thread.sleep(COUCHMOVE_RETRY_DELAY.toMillis());
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw e;
+                }
+            }
+        }
     }
 
     @Bean
