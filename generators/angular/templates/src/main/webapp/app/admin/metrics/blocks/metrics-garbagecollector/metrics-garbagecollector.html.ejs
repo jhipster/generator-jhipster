@@ -18,8 +18,9 @@
 -%>
 <h3 id="garbageCollectorMetrics">__jhiTranslateTag__('metrics.jvm.gc.title')</h3>
 
+@let garbageCollectorMetricsRef = garbageCollectorMetrics();
 <div class="row">
-  @if (garbageCollectorMetrics(); as garbageCollectorMetricsRef) {
+  @if (garbageCollectorMetricsRef) {
   <div class="col-md-4">
     <div>
       <span>
@@ -80,7 +81,7 @@
   </div>
   }
 
-  @if (!updating() && garbageCollectorMetrics()) {
+  @if (!updating() && garbageCollectorMetricsRef) {
     <div class="table-responsive">
       <table class="table table-striped" aria-describedby="garbageCollectorMetrics">
         <thead>
@@ -99,7 +100,7 @@
         <tbody>
           <tr>
             <td>jvm.gc.pause</td>
-            @let pause = garbageCollectorMetrics()!['jvm.gc.pause'];
+            @let pause = garbageCollectorMetricsRef['jvm.gc.pause'];
             <td class="text-end">{{ pause.count }}</td>
             <td class="text-end">{{ pause.mean | number: '1.0-3' }}</td>
             <td class="text-end">{{ pause['0.0'] | number: '1.0-3' }}</td>
