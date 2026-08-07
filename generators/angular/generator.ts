@@ -148,12 +148,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           const addRouteCallback = addEntitiesRoute(param);
           this.editFile(routeTemplatePath, { ignoreNonExisting: ignoreNonExistingRoute }, addRouteCallback);
 
-          const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.html`;
-          const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
-          const editCallback = addToEntitiesMenu(param);
-          this.editFile(filePath, { ignoreNonExisting }, editCallback);
-
-          if (application.applicationTypeMicroservice) {
+          if (application.exposeMicrofrontend) {
             this.editFile(
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
               createNeedleCallback({
@@ -172,6 +167,11 @@ export default class AngularGenerator extends AngularApplicationGenerator {
                 })),
               }),
             );
+          } else {
+            const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.html`;
+            const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
+            const editCallback = addToEntitiesMenu(param);
+            this.editFile(filePath, { ignoreNonExisting }, editCallback);
           }
         };
 

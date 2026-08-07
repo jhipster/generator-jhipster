@@ -36,6 +36,7 @@ let sharedDependencies = shareDependencies({ skipList: ['@angular/localize'] });
 sharedDependencies = {
   ...sharedDependencies,
   '@angular/common/http': sharedDependencies['@angular/common'],
+  'dayjs/esm': sharedDependencies.dayjs,
   'rxjs/operators': sharedDependencies.rxjs,
 };
 

@@ -68,7 +68,8 @@ const routes: Routes = [
     loadChildren: () => loadEntityRoutes('<%- remote.moduleFederationName %>'),
   },
   <%_ } _%>
-<%_ } else { _%>
+<%_ } _%>
+<%_ if (!exposeMicrofrontend) { _%>
   {
     path: '<%- applicationTypeMicroservice ? lowercaseBaseName : '' %>',
     loadChildren: () => import('./entities/entity.routes'),

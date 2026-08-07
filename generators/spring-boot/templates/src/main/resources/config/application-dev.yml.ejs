@@ -287,10 +287,10 @@ jhipster:
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
-  <%_ if (microfrontend) { _%>
+  <%_ if (applicationTypeGateway && microfrontend) { _%>
     # Ports <%- devServerPort + 1 %>-<%- devServerPort + 9 %> are allowed for microfrontend development
   <%_ } _%>
-    allowed-origins: "http://localhost:8100,https://localhost:8100<% if (devServerPortProxy) { %>,http://localhost:<%- devServerPortProxy %>,https://localhost:<%- devServerPortProxy %><% } %><% if (!skipClient) { %>,http://localhost:<%- devServerPort %>,https://localhost:<%- devServerPort %><% for (let port = 1; microfrontend && port < 10; port++) { %>,http://localhost:<%- devServerPort + port %>,https://localhost:<%- devServerPort + port %><% } %><% } %>"
+    allowed-origins: "http://localhost:8100,https://localhost:8100<% if (devServerPortProxy) { %>,http://localhost:<%- devServerPortProxy %>,https://localhost:<%- devServerPortProxy %><% } %><% if (!skipClient) { %>,http://localhost:<%- devServerPort %>,https://localhost:<%- devServerPort %><% for (let port = 1; applicationTypeGateway && microfrontend && port < 10; port++) { %>,http://localhost:<%- devServerPort + port %>,https://localhost:<%- devServerPort + port %><% } %><% } %>"
     # Enable CORS when running in GitHub Codespaces
     allowed-origin-patterns: 'https://*.githubpreview.dev'
     allowed-methods: "*"

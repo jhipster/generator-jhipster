@@ -26,4 +26,3 @@ export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
 
 export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
   loadRemote<Type<any>>(`${service}/entity-routes`) as Promise<Type<any>>;
-

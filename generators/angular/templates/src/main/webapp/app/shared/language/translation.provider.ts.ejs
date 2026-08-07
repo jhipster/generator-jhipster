@@ -45,12 +45,13 @@ export function provideTranslation(): (Provider | EnvironmentProviders)[] {
       loader: provideTranslateHttpLoader(
         {
           resources: [
+  <%_ if (!exposeMicrofrontend) { _%>
+            { prefix: './i18n/', suffix: `.json?_=${I18N_HASH}` },
+  <%_ } _%>
   <%_ if (microfrontend) { _%>
     <%_ for (const remote of microfrontends) { _%>
             { prefix: '<%- remote.endpointPrefix %>/i18n/', suffix: `.json?_=${I18N_HASH}` },
     <%_ } _%>
-  <%_ } else { _%>
-            { prefix: './i18n/', suffix: `.json?_=${I18N_HASH}` },
   <%_ } _%>
           ],
         },
