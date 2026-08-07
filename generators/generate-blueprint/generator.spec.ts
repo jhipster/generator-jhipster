@@ -109,6 +109,88 @@ describe(`generator - ${generator}`, () => {
         });
       });
     });
+    describe('defaults option with selected sub-generator', () => {
+      before(async () => {
+        await helpers.runJHipster().withOptions({ defaults: true, subGenerators: ['app'] }).withMockedGenerators(mockedGenerators);
+      });
+      it('should compose with init generator', () => {
+        result.assertGeneratorComposedOnce('jhipster:init');
+      });
+      it('should write the selected generator without prompting for sub-generator answers', () => {
+        expect(result.getStateSnapshot()).toMatchInlineSnapshot(`
+{
+  ".blueprint/cli/commands.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/command.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/generator.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/index.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/generate-sample/templates/samples/sample.jdl": {
+    "stateCleared": "modified",
+  },
+  ".github/workflows/generator.yml": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "README.md": {
+    "stateCleared": "modified",
+  },
+  "cli/cli-customizations.cts": {
+    "stateCleared": "modified",
+  },
+  "cli/cli.cts": {
+    "stateCleared": "modified",
+  },
+  "generators/app/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/app/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/app/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/app/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-generator.ts": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "vitest.config.ts": {
+    "stateCleared": "modified",
+  },
+  "vitest.test-setup.ts": {
+    "stateCleared": "modified",
+  },
+}
+`);
+      });
+      it('should store default sub-generator config', () => {
+        result.assertJHipsterConfigContent({
+          generators: {
+            app: {
+              sbs: true,
+              command: false,
+              priorities: [],
+            },
+          },
+        });
+      });
+    });
     describe('local-blueprint option', () => {
       before(async () => {
         await helpers.runJHipster().withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
