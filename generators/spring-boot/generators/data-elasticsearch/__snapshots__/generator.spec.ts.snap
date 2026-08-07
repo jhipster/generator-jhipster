@@ -757,6 +757,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -1129,6 +1132,9 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -2860,6 +2866,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -3531,6 +3540,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -4330,6 +4342,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }

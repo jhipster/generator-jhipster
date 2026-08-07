@@ -67,6 +67,8 @@ describe('Login Service test suite', () => {
 <%_ } _%>
 
   it('should call global logout when asked to', () => {
+    axiosStub.post.mockResolvedValue({});
+
     loginService.logout();
 
     expect(axiosStub.post).toHaveBeenCalledWith('api/logout');

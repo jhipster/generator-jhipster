@@ -44,8 +44,14 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
 <%_ } _%>
     if (browser.name === 'chrome' && browser.isHeadless) {
       launchOptions.args.push('--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage');
-      return launchOptions;
     }
+    if (browser.family === 'chromium' && browser.name !== 'electron') {
+      launchOptions.args.push(
+        // Forces Chrome/Edge to open a large window so the viewport doesn't scale down
+        '--window-size=1920,1080',
+      );
+    }
+    return launchOptions;
   });
 
   // Allows logging with cy.task('log', 'message') or cy.task('table', object)
