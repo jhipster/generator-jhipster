@@ -1,0 +1,120 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { test, expect } from '@playwright/test';
+import {
+<%_ if (generateUserManagement && !userManagement.generateEntityPlaywright) { _%>
+  userManagementPageHeadingSelector,
+<%_ } _%>
+<%_ if (withAdminUi) { _%>
+  metricsPageHeadingSelector,
+  healthPageHeadingSelector,
+  logsPageHeadingSelector,
+  configurationPageHeadingSelector,
+<%_ } _%>
+  swaggerPageSelector,
+  swaggerFrameSelector,
+  getCredentials,
+  login,
+  clickOnAdminMenuItem,
+} from '../../support/commands';
+import { getManagementInfo } from '../../support/management';
+
+test.describe('/admin', () => {
+  let adminUsername: string;
+  let adminPassword: string;
+
+  test.beforeAll(() => {
+    const credentials = getCredentials();
+    adminUsername = credentials.adminUsername;
+    adminPassword = credentials.adminPassword;
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await login(page, adminUsername, adminPassword);
+    await page.goto('/');
+  });
+
+<%_ if (generateUserManagement && !userManagement.generateEntityPlaywright) { _%>
+  test.describe('/user-management', () => {
+    test('should load the page', async ({ page }) => {
+      await clickOnAdminMenuItem(page, 'user-management');
+      await expect(page.locator(userManagementPageHeadingSelector)).toBeVisible();
+    });
+  });
+<%_ } _%>
+
+<%_ if (withAdminUi) { _%>
+  test.describe('/metrics', () => {
+    test('should load the page', async ({ page }) => {
+      await clickOnAdminMenuItem(page, 'metrics');
+      await expect(page.locator(metricsPageHeadingSelector)).toBeVisible();
+    });
+  });
+
+  test.describe('/health', () => {
+    test('should load the page', async ({ page }) => {
+      await clickOnAdminMenuItem(page, 'health');
+      await expect(page.locator(healthPageHeadingSelector)).toBeVisible();
+    });
+  });
+
+  test.describe('/logs', () => {
+    test('should load the page', async ({ page }) => {
+      await clickOnAdminMenuItem(page, 'logs');
+      await expect(page.locator(logsPageHeadingSelector)).toBeVisible();
+    });
+  });
+
+  test.describe('/configuration', () => {
+    test('should load the page', async ({ page }) => {
+      await clickOnAdminMenuItem(page, 'configuration');
+      await expect(page.locator(configurationPageHeadingSelector)).toBeVisible();
+    });
+  });
+<%_ } _%>
+
+  test.describe('/docs', () => {
+    test('should load the page', async ({ page }) => {
+      const info = await getManagementInfo(page);
+      if (info.activeProfiles.includes('api-docs')) {
+        await clickOnAdminMenuItem(page, 'docs');
+        const swaggerFrame = page.locator(swaggerFrameSelector);
+        await expect(swaggerFrame).toBeVisible();
+
+        // Wait for iframe content to load
+        const frameLocator = page.frameLocator(swaggerFrameSelector);
+        await expect(frameLocator.locator(swaggerPageSelector)).toBeVisible({ timeout: 15000 });
+        const optionCount = await frameLocator.locator('[id="select"] > option').count();
+        expect(optionCount).toBeGreaterThan(0);
+        await expect(frameLocator.locator(swaggerPageSelector).locator('.information-container')).toBeVisible();
+      }
+    });
+  });
+<%_ if (communicationSpringWebsocket) { _%>
+
+  test.describe('/tracker', () => {
+    test('should load the page', async ({ page }) => {
+      await clickOnAdminMenuItem(page, 'tracker');
+      await expect(page.locator('[data-cy="trackerPageHeading"]')).toBeVisible();
+      const rowCount = await page.locator('[data-cy="trackerTable"] > tbody > tr').count();
+      expect(rowCount).toBe(1);
+    });
+  });
+<%_ } _%>
+});

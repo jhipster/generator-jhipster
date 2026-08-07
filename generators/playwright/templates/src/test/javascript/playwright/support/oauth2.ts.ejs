@@ -1,0 +1,152 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+
+/**
+ * Initiate the OAuth2 login flow and return the authorization redirect URL.
+ */
+async function getOauth2RedirectUrl(page: Page): Promise<string> {
+  const response = await page.context().request.get('/oauth2/authorization/oidc', {
+    maxRedirects: 0,
+    failOnStatusCode: false,
+  });
+  return response.headers()['location'];
+}
+
+/**
+ * Perform an OAuth2 login, detecting the provider from the redirect URL.
+ */
+export async function oauthLogin(page: Page, username: string, password: string): Promise<void> {
+  const redirectUrl = await getOauth2RedirectUrl(page);
+  const url = new URL(redirectUrl);
+
+  if (url.origin.includes('okta')) {
+    await oktaLogin(page, redirectUrl, username, password);
+  } else if (url.origin.includes('auth0')) {
+    await auth0Login(page, redirectUrl, username, password);
+  } else {
+    await keycloakLogin(page, redirectUrl, username, password);
+  }
+}
+
+/**
+ * Handle Keycloak OAuth2 login flow.
+ */
+async function keycloakLogin(page: Page, redirectUrl: string, username: string, password: string): Promise<void> {
+  const request = page.context().request;
+
+  // Follow the redirect to get the login form
+  const loginPageResponse = await request.get(redirectUrl, { maxRedirects: 0, failOnStatusCode: false });
+  const html = await loginPageResponse.text();
+
+  // Parse the form action URL from the HTML
+  const formActionMatch = html.match(/action="([^"]+)"/);
+  if (!formActionMatch) {
+    throw new Error('Could not find login form action URL in Keycloak response');
+  }
+  const formUrl = formActionMatch[1].replace(/&amp;/g, '&');
+  const resolvedFormUrl = new URL(formUrl, redirectUrl).toString();
+
+  // Submit credentials
+  await request.post(resolvedFormUrl, {
+    form: { username, password },
+    maxRedirects: 0,
+    failOnStatusCode: false,
+  });
+
+  // Complete the OAuth2 flow
+  await request.get('/oauth2/authorization/oidc', { maxRedirects: 5 });
+  await page.goto('/');
+}
+
+/**
+ * Handle Auth0 OAuth2 login flow.
+ */
+async function auth0Login(page: Page, redirectUrl: string, username: string, password: string): Promise<void> {
+  const request = page.context().request;
+  const url = new URL(redirectUrl);
+
+  // Follow the authorization URL
+  const loginPageResponse = await request.get(redirectUrl, { maxRedirects: 5 });
+  const html = await loginPageResponse.text();
+
+  // Extract state parameter
+  const stateMatch = html.match(/name="state"\s+value="([^"]+)"/);
+  if (!stateMatch) {
+    throw new Error('Could not find state parameter in Auth0 response');
+  }
+
+  // Submit credentials
+  await request.post(`${url.origin}/u/login`, {
+    form: {
+      state: stateMatch[1],
+      action: 'default',
+      username,
+      password,
+    },
+    maxRedirects: 5,
+    failOnStatusCode: false,
+  });
+
+  // Complete the flow
+  await request.get('/oauth2/authorization/oidc', { maxRedirects: 5 });
+  await page.goto('/');
+}
+
+/**
+ * Handle Okta OAuth2 login flow.
+ */
+async function oktaLogin(page: Page, redirectUrl: string, username: string, password: string): Promise<void> {
+  const request = page.context().request;
+  const url = new URL(redirectUrl);
+
+  // Get session token from Okta authn API
+  const authnResponse = await request.post(`${url.origin}/api/v1/authn`, {
+    data: { username, password },
+    maxRedirects: 0,
+  });
+  const authnBody = await authnResponse.json();
+  const sessionToken = authnBody.sessionToken;
+
+  // Use the session token to complete the authorization
+  await request.get(`${redirectUrl}&sessionToken=${sessionToken}`, { maxRedirects: 5 });
+  await page.goto('/');
+}
+
+/**
+ * Perform an OAuth2 logout.
+ */
+export async function oauthLogout(page: Page): Promise<void> {
+  const request = page.context().request;
+  const cookies = await page.context().cookies();
+  const xsrfCookie = cookies.find(c => c.name === 'XSRF-TOKEN');
+
+  const logoutResponse = await request.post('api/logout', {
+    headers: {
+      'X-XSRF-TOKEN': xsrfCookie?.value ?? '',
+      origin: new URL(page.url()).origin,
+    },
+  });
+  expect(logoutResponse.status()).toBe(200);
+
+  const logoutBody = await logoutResponse.json();
+  await request.get(logoutBody.logoutUrl, { maxRedirects: 5 });
+  await page.goto('/');
+}

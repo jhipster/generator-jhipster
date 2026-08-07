@@ -16,12 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-const testFrameworkTypes = {
-  CYPRESS: 'cypress',
-  PLAYWRIGHT: 'playwright',
-  CUCUMBER: 'cucumber',
-  GATLING: 'gatling',
-  NO: 'no',
-} as const;
-export default testFrameworkTypes;
+export { default } from './generator.ts';
+export { default as command } from './command.ts';
+export { playwrightEntityFiles, playwrightFiles } from './files.ts';
