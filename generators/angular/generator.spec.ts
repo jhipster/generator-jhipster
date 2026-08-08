@@ -226,6 +226,27 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('clientTheme: bootswatch theme', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({
+          clientFramework,
+          clientTheme: 'flatly',
+        })
+        .withSharedApplication({ getWebappTranslation: () => 'translated-value' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should disable bootswatch web-font-path before importing the theme (#33691)', () => {
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
+        /\$web-font-path: false;\n@import 'bootswatch\/dist\/flatly\/bootswatch';/,
+      );
+    });
+  });
+
   describe('builtIn UserManagementEntity', () => {
     before(async () => {
       await dryRunHelpers
