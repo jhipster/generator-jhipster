@@ -120,7 +120,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
 
     @Named("<%- collectionMapperName %>")
     default Set<<%- otherEntity.dtoClass %>> toDto<%- this._.upperFirst(mapperName) %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {
-        return <%- otherEntity.persistInstance %>.stream().map(this:: toDto<%- this._.upperFirst(mapperName) %>).collect(Collectors.toSet());
+        return <%- otherEntity.persistInstance %>.stream().map(this::toDto<%- this._.upperFirst(mapperName) %>).collect(Collectors.toSet());
     }
     <%_ } _%>
   <%_ } _%>
