@@ -99,6 +99,15 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.0.0-beta.1': [
+            `${application.javaPackageSrcDir}confic/Neo4jTestContainersSpringContextCustomizerFactory.java`,
+            `${application.javaPackageSrcDir}config/EmbeddedNeo4j.java`,
+            `${application.srcTestResources}META-INF/spring.factories`,
+          ],
+        });
+      },
       cleanupTask,
       writeTask,
     });
@@ -142,17 +151,11 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory?.({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.Neo4jTestContainersSpringContextCustomizerFactory`,
-        });
-      },
       addLogs({ source }) {
         source.addMainLog?.({ name: 'org.springframework.data.neo4j.cypher.unrecognized', level: 'ERROR' });
       },
       addDependencies({ application, source }) {
-        source.addSpringBootModule?.('spring-boot-starter-data-neo4j');
+        source.addSpringBootModule?.('spring-boot-starter-data-neo4j', 'spring-boot-testcontainers');
         source.addJavaDefinitions?.(
           {
             dependencies: [
@@ -175,7 +178,14 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
       },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedNeo4j' }],
+          imports: [`${application.packageName}.config.Neo4jTestContainer`],
+          annotations: [
+            {
+              package: 'org.springframework.boot.testcontainers.context',
+              annotation: 'ImportTestcontainers',
+              parameters: (_, cb) => cb.addKeyValue('value', 'Neo4jTestContainer.class'),
+            },
+          ],
         });
       },
       blockhound({ application, source }) {
