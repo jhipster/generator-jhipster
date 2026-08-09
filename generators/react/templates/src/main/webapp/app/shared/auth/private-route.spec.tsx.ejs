@@ -35,7 +35,6 @@ describe('private-route component', () => {
     );
   };
 
-  // All tests will go here
   it('Should throw error when falsy children are provided', () => {
     const originalError = console.error;
     console.error = vi.fn();
@@ -110,7 +109,6 @@ describe('private-route component', () => {
 });
 
 describe('hasAnyAuthority', () => {
-  // All tests will go here
   it('Should return false when authorities is invalid', () => {
     expect(hasAnyAuthority(undefined, undefined)).toEqual(false);
     expect(hasAnyAuthority(null, [])).toEqual(false);
