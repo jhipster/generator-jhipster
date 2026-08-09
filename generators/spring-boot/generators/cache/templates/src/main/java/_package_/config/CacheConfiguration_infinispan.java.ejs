@@ -116,7 +116,7 @@ public class CacheConfiguration {
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .serialization().marshaller(new JBossUserMarshaller())
                     .build();
-            } else if (discoveryClient.getInstances(registration.getServiceId()).size() == 0) {
+            } else if (discoveryClient.getInstances(registration.getServiceId()).isEmpty()) {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport()
                     .transport(new JGroupsTransport())
