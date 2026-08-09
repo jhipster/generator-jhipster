@@ -195,7 +195,6 @@ class CustomClaimConverterIT {
 
         assertThatCode(() -> {
             Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            System.out.println(convertedClaims);
             assertThat(convertedClaims)
                 .containsEntry("preferred_username", USERNAME)
                 .containsEntry("given_name", NAME)
