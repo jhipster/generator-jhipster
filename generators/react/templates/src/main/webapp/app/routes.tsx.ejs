@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { Suspense } from 'react';
+import React, { Suspense<%- communicationSpringWebsocket ? ', useEffect' : '' %> } from 'react';
 import { Route<%- communicationSpringWebsocket ? ', useLocation' : '' %> } from 'react-router';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 import { loadRemote } from '@module-federation/enhanced/runtime';
@@ -62,7 +62,7 @@ const <%- remote.capitalizedBaseName %>Routes = React.lazy(() => loadRemote<any>
 const AppRoutes = () => {
 <%_ if (communicationSpringWebsocket) { _%>
   const pageLocation = useLocation();
-  React.useEffect(() => {
+  useEffect(() => {
     sendActivity(pageLocation.pathname);
   }, [pageLocation]);
 <%_ } _%>
