@@ -55,14 +55,14 @@ describe('AccountMenu', () => {
     mountedWrapper = undefined;
   });
 
-  it('Renders an authenticated AccountMenu component', async () => {
+  it('should render an authenticated AccountMenu component', async () => {
     const html = await authenticatedWrapper();
 
     expect(html).not.toContain('/login');
     expect(html).toContain('/logout');
   });
 
-  it('Renders a guest AccountMenu component', async () => {
+  it('should render a guest AccountMenu component', async () => {
     const html = await guestWrapper();
 
 <%_ if (!authenticationTypeOauth2) { _%>
