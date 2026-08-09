@@ -56,15 +56,10 @@ loadIcons();
 const rootEl = document.getElementById('root');
 const root = createRoot(rootEl!);
 
-const render = Component =>
-  root.render(
-    <ErrorBoundary>
-      <Provider store={store}>
-        <div>
-          <Component />
-        </div>
-      </Provider>
-    </ErrorBoundary>,
-  );
-
-render(AppComponent);
+root.render(
+  <ErrorBoundary>
+    <Provider store={store}>
+      <AppComponent />
+    </Provider>
+  </ErrorBoundary>,
+);
