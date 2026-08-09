@@ -6,7 +6,7 @@ import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { <%- enableTranslation ? 'beforeAll, ' : '' %>describe, expect, it, vi } from 'vitest';
 
 import { Authority } from 'app/shared/jhipster/constants';
 import PrivateRoute, { hasAnyAuthority } from './private-route';

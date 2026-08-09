@@ -20,7 +20,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it<%- applicationTypeGateway && microfrontend ? ', vi' : '' %> } from 'vitest';
 
 import initStore from 'app/config/store';
 import Header from './header';
