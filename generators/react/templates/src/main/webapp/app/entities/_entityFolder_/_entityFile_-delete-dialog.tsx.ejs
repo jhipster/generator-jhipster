@@ -56,7 +56,7 @@ export const <%- entityReactName %>DeleteDialog = () => {
 
   const confirmDelete = () => {
     dispatch(deleteEntity(<%- entityInstance %>Entity.<%- primaryKey.name %>));
-  }
+  };
 
   return (
     <Modal show onHide={handleClose}>
