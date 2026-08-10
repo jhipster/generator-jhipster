@@ -131,6 +131,13 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
           this.editFile('build.gradle', createNeedleCallback({ needle: 'gradle-repositories', contentToAdd: repository.repository }));
         source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
+        source.addGradlePluginManagementRepository = repository =>
+          this.editFile(
+            'settings.gradle',
+            'repository' in repository ?
+              createNeedleCallback({ needle: 'gradle-plugin-management-repositories', contentToAdd: repository.repository })
+            : addGradleMavenRepositoryCallback(repository),
+          );
         source.addGradleProperty = property => {
           application.javaProperties[property.property] = property.value!;
           this.editFile('gradle.properties', addGradlePropertyCallback(property));

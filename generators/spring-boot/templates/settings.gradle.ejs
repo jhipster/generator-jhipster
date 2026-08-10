@@ -19,12 +19,8 @@
 
 pluginManagement {
     repositories {
-<%_ if (addSpringMilestoneRepository) { _%>
-        mavenCentral()
-        maven { url 'https://repo.spring.io/milestone' }
-        gradlePluginPortal()
-<%_ } _%>
         // jhipster-needle-gradle-plugin-management-repositories - JHipster will add additional entries here
+        gradlePluginPortal()
     }
 <%_ if (databaseMigrationLiquibase) { _%>
     buildscript {

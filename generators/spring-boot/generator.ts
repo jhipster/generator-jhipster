@@ -386,8 +386,13 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           application.javaDependencies.liquibase = application.javaManagedProperties['liquibase.version']!;
         }
       },
-      prepareForTemplates({ application }) {
+      prepareForTemplates({ application, applicationDefaults }) {
         const SPRING_BOOT_VERSION = application.springBootDependencies['spring-boot-dependencies'];
+
+        applicationDefaults({
+          addSpringSnapshotRepository: SPRING_BOOT_VERSION.includes('-SNAPSHOT'),
+        });
+
         application.addSpringMilestoneRepository =
           (application.backendType ?? 'Java') === 'Java' &&
           (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
@@ -821,12 +826,16 @@ ${classProperties
             source.addMavenRepository?.(springRepository);
             source.addSpringBootModule?.('spring-boot-properties-migrator');
           }
-          if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
-            source.addMavenRepository?.({
-              id: 'ossrh-snapshots',
-              url: 'https://oss.sonatype.org/content/repositories/snapshots/',
+          if (application.addSpringSnapshotRepository) {
+            const snapshotRepository = {
+              id: 'spring-snapshot',
+              url: 'https://repo.spring.io/snapshot',
               releasesEnabled: false,
-            });
+              snapshotsEnabled: true,
+            };
+            source.addMavenPluginRepository?.(snapshotRepository);
+            source.addMavenRepository?.(snapshotRepository);
+            source.addSpringBootModule?.('spring-boot-properties-migrator');
           }
         } else if (application.buildToolGradle) {
           source.addGradleRepository?.({
@@ -834,12 +843,20 @@ ${classProperties
 ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenLocal()`,
           });
           if (application.addSpringMilestoneRepository) {
-            source.addGradleMavenRepository?.({ url: 'https://repo.spring.io/milestone' });
+            source.addGradlePluginManagementRepository?.({ repository: 'mavenCentral()' });
+
+            const milestoneRepository = { url: 'https://repo.spring.io/milestone' };
+            source.addGradleMavenRepository?.(milestoneRepository);
+            source.addGradlePluginManagementRepository?.(milestoneRepository);
           }
-          if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
+          if (application.addSpringSnapshotRepository) {
+            source.addGradlePluginManagementRepository?.({ repository: 'mavenCentral()' });
+
+            const snapshotRepository = { url: 'https://repo.spring.io/snapshot' };
+            source.addGradlePluginManagementRepository?.(snapshotRepository);
             source.addGradleRepository?.({
               repository: `maven {
-    url "https://oss.sonatype.org/content/repositories/snapshots/"
+    url "https://repo.spring.io/snapshot"
     mavenContent {
         snapshotsOnly()
     }
