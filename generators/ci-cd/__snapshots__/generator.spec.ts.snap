@@ -246,6 +246,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "javaNodeBuildPaths": [],
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaPackagingDestDir": "target/",
   "javaProperties": {},
   "javaVersion": "JAVA_VERSION",
   "jdlStore": undefined,
