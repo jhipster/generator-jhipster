@@ -148,6 +148,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "javaNodeBuildPaths": Any<Array>,
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaPackagingDestDir": "target/",
   "javaProperties": Any<Object>,
   "javaVersion": "JAVA_VERSION",
   "jhiPrefix": "jhi",
