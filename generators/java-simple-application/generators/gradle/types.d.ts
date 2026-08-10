@@ -52,6 +52,7 @@ export type Source = BaseApplicationSource & {
   addGradleDependencies?(dependency: GradleDependency[], options?: GradleFileNeedleOptions): void;
   addGradlePlugin?(plugin: GradlePlugin): void;
   addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
+  addGradlePluginManagementRepository?(repository: GradleRepository | GradleMavenRepository): void;
   addGradleProperty?(property: GradleProperty & GradleComment): void;
   addGradleRepository?(repository: GradleRepository): void;
   addGradleMavenRepository?(repository: GradleMavenRepository): void;

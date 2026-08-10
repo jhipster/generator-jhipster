@@ -42,6 +42,9 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
         this.springBootDependenciesFile = this.fetchFromInstalledJHipster(`spring-boot/resources/spring-boot-dependencies${suffix}`);
       },
       async download() {
+        if (this.version.endsWith('-SNAPSHOT')) {
+          this.repository = 'https://repo.spring.io/snapshot/';
+        }
         const response = await fetch(
           `${this.repository}/org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`,
         );
