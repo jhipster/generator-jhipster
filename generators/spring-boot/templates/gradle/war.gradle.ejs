@@ -34,3 +34,9 @@ war {
     archiveExtension = "war.original"
     includes = ["WEB-INF/**", "META-INF/**"]
 }
+
+if (project.hasProperty("e2e")) {
+    tasks.named('bootWar') {
+        archiveFileName = 'e2e.war'
+    }
+}

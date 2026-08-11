@@ -149,6 +149,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "javaNodeBuildPaths": Any<Array>,
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaPackagingDestDir": "target/",
   "javaProperties": Any<Object>,
   "javaVersion": "JAVA_VERSION",
   "jhiPrefix": "jhi",
