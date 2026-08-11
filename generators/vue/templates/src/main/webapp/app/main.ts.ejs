@@ -128,7 +128,7 @@ const app = createApp({
     provide('currentLanguage', computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
 
-    router.beforeResolve(async (to, from, next) => {
+    router.beforeResolve(async (to, from) => {
 <%_ if (!authenticationTypeOauth2) { _%>
       // Make sure login modal is closed
       hideLogin();
@@ -140,11 +140,10 @@ const app = createApp({
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
         const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
         if (!value && from.path !== '/forbidden') {
-          next({ path: '/forbidden' });
-          return;
+          return { path: '/forbidden' };
         }
       }
-      next();
+      return true;
     });
 
     setupAxiosInterceptors(
