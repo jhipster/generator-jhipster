@@ -27,7 +27,11 @@ import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
 
 const resetStore = (store: AccountStore) => {
-  store.$reset();
+  store.logout();
+  store.authenticate(null);
+  store.profilesLoaded = false;
+  store.activeProfiles = '';
+  store.ribbonOnProfiles = '';
 };
 
 const axiosStub = {
