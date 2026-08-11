@@ -34,6 +34,7 @@ export default Object.fromEntries(
     {
       'java-version': '25',
       jdl: convertOptionsToJDL({ ...value, graalvmSupport: true }),
+      'ignore-e2e-failures': !value.reactive && value.buildTool === 'gradle' ? 'true' : 'false',
     },
   ]),
 ) satisfies GitHubMatrixGroup;
