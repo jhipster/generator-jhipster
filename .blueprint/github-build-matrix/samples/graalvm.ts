@@ -34,6 +34,7 @@ export default Object.fromEntries(
     {
       'java-version': '25',
       jdl: convertOptionsToJDL({ ...value, graalvmSupport: true }),
+      // TODO Ignore e2e failures for Gradle + non-reactive builds until we fix the issue with the Gradle build and the e2e tests.
       'ignore-e2e-failures': !value.reactive && value.buildTool === 'gradle' ? 'true' : 'false',
     },
   ]),
