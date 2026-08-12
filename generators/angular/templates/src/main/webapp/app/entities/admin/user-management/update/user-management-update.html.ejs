@@ -132,7 +132,7 @@
     @if (languages.length > 0) {
       <div class="mb-3">
         <label class="form-label" for="langKey">__jhiTranslateTag__('userManagement.langKey')</label>
-        <select class="form-control" id="langKey" name="langKey" formControlName="langKey"  data-cy="langKey" >
+        <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
         @for (language of languages; track $index) {
           <option [value]="language">{{ language | findLanguageFromKey }}</option>
         }

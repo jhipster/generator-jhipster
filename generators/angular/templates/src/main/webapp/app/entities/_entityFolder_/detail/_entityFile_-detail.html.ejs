@@ -53,7 +53,7 @@
           </div>
         }
   <%_ } else if (field.fieldTypeDuration) { _%>
-          <span>{{ <%- entityInstance %>Ref.<%- fieldName %> | duration }} ({{<%- entityInstance %>Ref.<%- fieldName %> }})</span>
+          <span>{{ <%- entityInstance %>Ref.<%- fieldName %> | duration }} ({{ <%- entityInstance %>Ref.<%- fieldName %> }})</span>
   <%_ } else if (field.fieldTypeTimed) { _%>
           <span>{{ <%- entityInstance %>Ref.<%- fieldName %> | formatMediumDatetime }}</span>
   <%_ } else if (field.fieldTypeLocalDate) { _%>
