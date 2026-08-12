@@ -169,7 +169,7 @@ class AccountResourceIT {
         webTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().is3xxRedirection();
+            .expectStatus().isUnauthorized();
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))

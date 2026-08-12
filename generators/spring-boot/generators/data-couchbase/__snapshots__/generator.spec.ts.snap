@@ -718,6 +718,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -1090,6 +1093,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -2653,6 +2659,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -3225,6 +3234,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -3943,6 +3955,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }

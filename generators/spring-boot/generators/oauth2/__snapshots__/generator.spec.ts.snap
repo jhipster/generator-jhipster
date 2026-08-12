@@ -147,6 +147,9 @@ exports[`generator - spring-boot:oauth2 with reactive should match files snapsho
   "src/test/java/com/mycompany/myapp/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/filter/OAuth2ReactiveRefreshTokensWebFilterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/LogoutResourceIT.java": {
     "stateCleared": "modified",
   },

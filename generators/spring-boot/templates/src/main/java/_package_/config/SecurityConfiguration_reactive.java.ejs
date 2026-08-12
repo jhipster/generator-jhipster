@@ -43,7 +43,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.core.convert.converter.Converter;
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
 import org.springframework.core.ParameterizedTypeReference;
   <%_ } _%>
 <%_ } _%>
@@ -63,18 +63,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
   <%_ } _%>
 import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
 import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
   <%_ } _%>
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
   <%_ } _%>
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -111,13 +111,15 @@ import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHe
 <%_ if (applicationTypeMicroservice) { _%>
 import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 <%_ } _%>
-import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
-import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
 <%_ if (authenticationUsesCsrf) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
+import org.springframework.http.HttpStatus;
+import org.springframework.security.web.server.DelegatingServerAuthenticationEntryPoint;
+import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.github.benmanes.caffeine.cache.Cache;
@@ -127,16 +129,17 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import java.net.URI;
   <%_ } _%>
 
 import java.util.HashSet;
 import java.util.Set;
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
 import java.util.function.Consumer;
   <%_ } _%>
 <%_ } _%>
 
-<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice || authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeOauth2 || generateAuthenticationApi || authenticationTypeJwt) { _%>
 import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
@@ -150,7 +153,7 @@ public class SecurityConfiguration {
 <%_ if (authenticationTypeOauth2) { _%>
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
 
@@ -166,12 +169,12 @@ public class SecurityConfiguration {
 <%_ } _%>
 
     public SecurityConfiguration(
-<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationTypeOauth2 && generateAuthenticationApi) { _%>
         ReactiveClientRegistrationRepository clientRegistrationRepository,
 <%_ } _%>
         JHipsterProperties jHipsterProperties
     ) {
-<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationTypeOauth2 && generateAuthenticationApi) { _%>
         this.clientRegistrationRepository = clientRegistrationRepository;
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
@@ -212,29 +215,11 @@ public class SecurityConfiguration {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-            .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers(
-<%_ if (clientBundlerVite) { _%>
-                    "/assets/**",
-<%_ } else if (clientBundlerEsbuild) { _%>
-                    "/content/**",
-                    "/resources/**",
-<%_ } else if (clientBundlerRsbuild) { _%>
-                    "/static/**",
-                    "/content/**",
-<%_ } else { _%>
-                    "/app/**",
-                    "/i18n/**",
-                    "/content/**",
-<%_ } _%>
-                    "/swagger-ui/**"
-                )
-            )))
-<%_ if (!applicationTypeMicroservice) { _%>
+<%_ if (generateAuthenticationApi) { _%>
             .cors(withDefaults())
 <%_ } _%>
             .csrf(csrf -> csrf
-<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ if (authenticationUsesCsrf && generateAuthenticationApi) { _%>
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
                 // See https://stackoverflow.com/q/74447118/65681
                 .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler()))
@@ -270,8 +255,24 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
 <%_ if (!skipClient) { _%>
-                    .pathMatchers("/").permitAll()
-                    .pathMatchers("/*.*").permitAll()
+                    .pathMatchers(
+                        "/",
+                        "/*.*",
+  <%_ if (clientBundlerVite) { _%>
+                        "/assets/**",
+  <%_ } else if (clientBundlerEsbuild) { _%>
+                        "/content/**",
+                        "/resources/**",
+  <%_ } else if (clientBundlerRsbuild) { _%>
+                        "/static/**",
+                        "/content/**",
+  <%_ } else if (clientBundlerWebpack) { _%>
+                        "/app/**",
+                        "/i18n/**",
+                        "/content/**",
+  <%_ } _%>
+                        "/swagger-ui/**"
+                    ).permitAll()
 <%_ } _%>
                     .pathMatchers("/api/authenticate").permitAll()
 <%_ if (generateUserManagement) { _%>
@@ -297,7 +298,7 @@ public class SecurityConfiguration {
                     .pathMatchers("/services/*/management/health/readiness").permitAll()
                     .pathMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice) { _%>
+<%_ if (generateAuthenticationApi) { _%>
                     .pathMatchers("/services/**").authenticated()
 <%_ } _%>
                     .pathMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -307,8 +308,9 @@ public class SecurityConfiguration {
                     .pathMatchers("/management/prometheus").permitAll()
                     .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeOauth2) { _%>
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
+            .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint()))
   <%_ } _%>
             .oauth2Client(withDefaults())
             .oauth2ResourceServer(oauth2 -> oauth2
@@ -323,7 +325,18 @@ public class SecurityConfiguration {
     }
 
 <%_ if (authenticationTypeOauth2) { _%>
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
+    private DelegatingServerAuthenticationEntryPoint authenticationEntryPoint() {
+        DelegatingServerAuthenticationEntryPoint entryPoint = new DelegatingServerAuthenticationEntryPoint(
+            new DelegatingServerAuthenticationEntryPoint.DelegateEntry(
+                pathMatchers("/api/**"),
+                new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED)
+            )
+        );
+        entryPoint.setDefaultEntryPoint(new RedirectServerAuthenticationEntryPoint("/oauth2/authorization/oidc"));
+        return entryPoint;
+    }
+
     private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
         ReactiveClientRegistrationRepository clientRegistrationRepository
     ) {
@@ -391,7 +404,7 @@ public class SecurityConfiguration {
 
     @Bean
     ReactiveJwtDecoder jwtDecoder(
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (generateAuthenticationApi) { _%>
         ReactiveClientRegistrationRepository registrations
   <%_ } _%>
     ) {

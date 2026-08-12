@@ -127,4 +127,30 @@ class LogoutResourceIT {
             .andExpect(jsonPath("$.logoutUrl").value(logoutUrl));
 <%_ } _%>
     }
+<%_ if (reactive) { _%>
+
+    @Test
+    void getLogoutInformationWithoutOriginHeader() {
+        final String ORIGIN_URL = "http://localhost:8080";
+        String logoutUrl = this.registrations
+            .findByRegistrationId("oidc")
+            .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString())
+            .block();
+        logoutUrl = logoutUrl + "?id_token_hint=" + ID_TOKEN + "&post_logout_redirect_uri=" + ORIGIN_URL;
+
+        this.webTestClient
+            .mutateWith(csrf())
+            .mutateWith(
+                mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)))
+            )
+            .post()
+            .uri(ORIGIN_URL + "/api/logout")
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody()
+            .jsonPath("$.logoutUrl")
+            .isEqualTo(logoutUrl);
+    }
+<%_ } _%>
 }

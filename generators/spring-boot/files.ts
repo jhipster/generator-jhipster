@@ -356,6 +356,11 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
     },
     {
       condition: generator => generator.clientFrameworkAny && generator.reactive,
+      path: `${SERVER_TEST_RES_DIR}/`,
+      templates: ['static/test-resource.txt'],
+    },
+    {
+      condition: generator => generator.clientFrameworkAny && generator.reactive,
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['web/filter/SpaWebFilterTestController_reactive.java'],

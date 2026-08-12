@@ -78,20 +78,18 @@ export const lazyRoutes = Promise.all([
 ]);
 
 <%_ } _%>
-router.beforeResolve(async (to, from, next) => {
+router.beforeResolve(async to => {
   if (!to.matched.length) {
 <%_ if (microfrontend) { _%>
     await lazyRoutes;
     if (router.resolve(to.fullPath).matched.length > 0) {
-      next({ path: to.fullPath });
-      return;
+      return { path: to.fullPath };
     }
 
 <%_ } _%>
-    next({ path: '/not-found' });
-    return;
+    return { path: '/not-found' };
   }
-  next();
+  return true;
 });
 
 export default router;

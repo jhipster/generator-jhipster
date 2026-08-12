@@ -673,6 +673,9 @@ exports[`generator - mongodb gateway-jwt-reactive(true)-gradle-enableTranslation
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -1009,6 +1012,9 @@ exports[`generator - mongodb gateway-oauth2-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -2488,6 +2494,9 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -3030,6 +3039,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -3703,6 +3715,9 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }

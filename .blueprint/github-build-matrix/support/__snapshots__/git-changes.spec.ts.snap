@@ -1044,7 +1044,7 @@ exports[`git-changes generators/spring-boot/generators/graalvm/index.ts should m
   "devserverWorkflow": false,
   "e2e": false,
   "generateBlueprint": false,
-  "graalvm": false,
+  "graalvm": true,
   "java": true,
   "react": false,
   "reactWorkflow": false,

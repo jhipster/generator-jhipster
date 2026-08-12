@@ -700,6 +700,9 @@ exports[`generator - cassandra gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -1042,6 +1045,9 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -2617,6 +2623,9 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/resources/logback.xml": {
     "stateCleared": "modified",
   },
+  "src/test/resources/static/test-resource.txt": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -3204,6 +3213,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }
@@ -3904,6 +3916,9 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/static/test-resource.txt": {
     "stateCleared": "modified",
   },
 }

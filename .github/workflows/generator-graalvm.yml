@@ -130,6 +130,7 @@ jobs:
       - run: npm run native-e2e --if-present
         id: e2e
         if: steps.compare.outputs.has-backend-changes == 'true'
+        continue-on-error: ${{ matrix.ignore-e2e-failures == 'true' }}
         env:
           CYPRESS_video: >-
             ${{ contains(github.event.pull_request.labels.*.name, 'ci: cypress-video') && 'true' || 'false' }}
