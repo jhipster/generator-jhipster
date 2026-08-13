@@ -711,6 +711,11 @@ ${classProperties
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.2.1': [`${application.srcMainResources}static/index.html`],
+        });
+      },
       resetFakeDataSeed() {
         this.resetEntitiesFakeData('server');
       },
