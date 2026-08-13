@@ -73,6 +73,7 @@ export default class Metrics implements OnInit {
   }
 
   metricsKeyExistsAndObjectNotEmpty(key: keyof MetricsModel): boolean {
-    return Boolean(this.metrics()?.[key] && JSON.stringify(this.metrics()?.[key]) !== '{}');
+    const value = this.metrics()?.[key];
+    return Boolean(value && Object.keys(value).length > 0);
   }
 }
