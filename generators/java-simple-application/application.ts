@@ -155,7 +155,7 @@ export const mutateApplicationPreparing = {
       case 'maven':
         return `${temporaryDir}classes/static/`;
       case 'gradle':
-        return `${temporaryDir}resources/main/static/`;
+        return `${temporaryDir}generated/webapp/`;
       default:
         return 'dist/';
     }

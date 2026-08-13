@@ -40,18 +40,23 @@ bootRun {
 <%_ if (!skipClient) { _%>
 def webapp = tasks.register('webapp', NpmTask) {
     dependsOn(npmInstall)
-    // Tells Gradle that this task owns the client build directory. Without it, the stale output
-    // cleanup empties build/resources/main before processResources runs on a clean build folder,
-    // and the webapp never makes it into the jar.
-    outputs.dir("<%- clientDistDir %>")
+
+    outputs.dir(layout.buildDirectory.dir("<%- this.relativeDir(temporaryDir, clientDistDir) %>"))
         .withPropertyName("webapp-build-dir")
     outputs.upToDateWhen { false }
+
     args = ["run", "webapp:prod"]
     environment = [APP_VERSION: project.version]
 }
 <%_ } _%>
 
 processResources {
+<%_ if (!skipClient) { _%>
+    from(webapp) {
+        into "static"
+    }
+
+<%_ } _%>
     inputs.property('version', version)
     inputs.property('springProfiles', springProfiles)
     filesMatching("**/application.yml") {
@@ -100,8 +105,3 @@ def integrationTest = tasks.register('integrationTest', Test) {
 <%_ } _%>
     dependsOn(tasks.named('test'))
 }
-
-<%_ if (!skipClient) { _%>
-tasks.named('processResources').configure { dependsOn(webapp) }
-tasks.named('bootJar').configure { dependsOn(tasks.named('processResources')) }
-<%_ } _%>
