@@ -87,6 +87,8 @@ def integrationTest = tasks.register('integrationTest', Test) {
 <%_ if (javaIntegrationTestExclude.length > 0) { _%>
     exclude <%- javaIntegrationTestExclude.map(exclude => `"${exclude}"`).join('') %>
 <%_ } _%>
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
     testLogging {
         events = ['FAILED', 'SKIPPED']
         exceptionFormat = "full"
