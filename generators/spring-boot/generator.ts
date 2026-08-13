@@ -713,7 +713,9 @@ ${classProperties
       cleanupTask,
       async cleanup({ application, control }) {
         await control.cleanupFiles({
-          '9.2.1': [`${application.srcMainResources}static/index.html`],
+          '9.2.1': [
+            [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
+          ],
         });
       },
       resetFakeDataSeed() {
