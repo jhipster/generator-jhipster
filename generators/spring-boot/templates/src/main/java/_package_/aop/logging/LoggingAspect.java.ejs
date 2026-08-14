@@ -56,7 +56,7 @@ public class LoggingAspect {
         || within(@org.springframework.web.bind.annotation.RestController *)
         """)
     public void springBeanPointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
     }
 
     /**
@@ -68,7 +68,7 @@ public class LoggingAspect {
         || within(<%- packageName %>.web.rest..*)
         """)
     public void applicationPackagePointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+        // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
     }
 
     /**
