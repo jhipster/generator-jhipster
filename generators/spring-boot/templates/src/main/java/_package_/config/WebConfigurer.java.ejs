@@ -54,7 +54,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 <%_ } _%>
-<%_ if (!reactive || devDatabaseTypeH2Any && reactive) { _%>
+<%_ if (!reactive || devDatabaseTypeH2Any) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 <%_ } _%>
