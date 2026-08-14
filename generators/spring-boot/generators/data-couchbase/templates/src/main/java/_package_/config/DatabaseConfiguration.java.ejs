@@ -101,7 +101,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
             Set<Class<?>> ALLOWED_PAGEABLE_TYPES = (Set<Class<?>>) allowed_pageable_types.get(QueryExecutionConverters.class);
             ALLOWED_PAGEABLE_TYPES.add(Flux.class);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            LOG.error("Failed to register Flux as an allowed pageable type", e);
         }
     }
 
