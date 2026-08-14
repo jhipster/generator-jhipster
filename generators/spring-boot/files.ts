@@ -246,7 +246,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       templates: ['config/SpringDocConfiguration.java'],
     }),
     {
-      condition: generator => generator.applicationTypeMicroservice,
+      condition: generator => generator.applicationTypeMicroservice && !generator.microfrontend,
       path: SERVER_MAIN_RES_DIR,
       templates: [{ file: 'static/index_microservices.html', renameTo: () => 'static/index.html' }],
     },
