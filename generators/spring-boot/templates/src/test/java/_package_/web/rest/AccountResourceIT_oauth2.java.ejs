@@ -61,7 +61,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-  <%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
   <%_ } _%>
 

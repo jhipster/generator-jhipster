@@ -89,7 +89,7 @@
     <%_ } else { _%>
                         <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
                             :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %>/>
-      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+      <%_ if (field.fieldTypeBinary) { _%>
                         <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
                             v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />
       <%_ } _%>

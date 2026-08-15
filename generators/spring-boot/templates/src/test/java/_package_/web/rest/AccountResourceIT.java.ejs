@@ -1171,7 +1171,7 @@ class AccountResourceIT {
 <%_ if (authenticationTypeSession && !reactive) { _%>
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
     @WithMockUser("current-sessions")
@@ -1220,7 +1220,7 @@ class AccountResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
     @WithMockUser("invalidate-session")
