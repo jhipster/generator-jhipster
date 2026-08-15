@@ -114,7 +114,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
                 H2ConfigurationHelper.initH2Console();
             } catch (Exception e) {
                 // Console may already be running on another app or after a refresh.
-                e.printStackTrace();
+                LOG.warn("Failed to initialize H2 console", e);
             }
         }
 <%_ } _%>
