@@ -111,9 +111,10 @@
     "workbox-webpack-plugin": "<%- nodeDependencies['workbox-webpack-plugin'] %>"
   },
   <%# An unknown dependency pulls in outdated react and react-dom, override them -%>
+  <%# Use literal versions, npm 10 fails to resolve $ references https://github.com/npm/cli/issues/5730 -%>
   "overrides": {
-    "react": "$react",
-    "react-dom": "$react-dom"
+    "react": "<%- nodeDependencies.react %>",
+    "react-dom": "<%- nodeDependencies['react-dom'] %>"
   },
   "engines": {
     "node": ">=<%- nodeVersion %>"
