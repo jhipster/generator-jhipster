@@ -159,7 +159,7 @@ public class DatabaseConfiguration {
 
 <%_ } _%>
 <%_ if (reactive) { _%>
-    // LocalDateTime seems to be the only type that is supported across all drivers atm
+    // LocalDateTime seems to be the only type that is supported across all drivers at the moment
     // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions(R2dbcDialect dialect) {
