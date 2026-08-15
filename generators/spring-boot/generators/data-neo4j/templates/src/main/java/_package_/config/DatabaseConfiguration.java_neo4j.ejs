@@ -31,10 +31,10 @@ import org.springframework.data.neo4j.repository.<%- reactive ? 'Reactive' : '' 
 
 import org.neo4j.driver.Driver;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.neo4j.core.<%- reactive ? 'Reactive' : '' %>DatabaseSelectionProvider;
-import org.springframework.data.neo4j.core.transaction.<%- reactive ? 'Reactive' : '' %>Neo4jTransactionManager;
-import org.springframework.data.neo4j.repository.config.<%- reactive ? 'Reactive' : '' %>Neo4jRepositoryConfigurationExtension;
-import org.springframework.transaction.<%- reactive ? 'Reactive' : '' %>TransactionManager;
+import org.springframework.data.neo4j.core.ReactiveDatabaseSelectionProvider;
+import org.springframework.data.neo4j.core.transaction.ReactiveNeo4jTransactionManager;
+import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
+import org.springframework.transaction.ReactiveTransactionManager;
 <%_ } _%>
 
 @Configuration
@@ -46,9 +46,9 @@ import org.springframework.transaction.<%- reactive ? 'Reactive' : '' %>Transact
 public class DatabaseConfiguration {
 <%_ if (reactive) { _%>
 
-     @Bean(<%- reactive ? 'Reactive' : '' %>Neo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
-     public <%- reactive ? 'Reactive' : '' %>TransactionManager transactionManager(Driver driver, <%- reactive ? 'Reactive' : '' %>DatabaseSelectionProvider databaseNameProvider) {
-         return new <%- reactive ? 'Reactive' : '' %>Neo4jTransactionManager(driver, databaseNameProvider);
+     @Bean(ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+     public ReactiveTransactionManager transactionManager(Driver driver, ReactiveDatabaseSelectionProvider databaseNameProvider) {
+         return new ReactiveNeo4jTransactionManager(driver, databaseNameProvider);
      }
 <%_ } _%>
 }

@@ -105,7 +105,7 @@ export class AlertError implements OnDestroy {
 <%_ if (enableTranslation) { _%>
     if (message.errorKey) {
       const alertData = message.param ? { entityName: this.translateService.instant(`global.menu.entities.${message.param}`) } : undefined;
-      this.addErrorAlert(message.errorKey<%- enableTranslation ? ', message.errorKey, alertData' : '' %>);
+      this.addErrorAlert(message.errorKey, message.errorKey, alertData);
     } else
 <%_ } _%>
     if (message.errorMessage) {

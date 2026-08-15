@@ -307,7 +307,7 @@ export class <%- componentName %> implements OnInit {
 
 <%_ if (paginationPagination) { _%>
     navigateToPage(page: number): void {
-      this.handleNavigation(page, this.sortState()<%- jpaMetamodelFiltering && paginationPagination ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
+      this.handleNavigation(page, this.sortState()<%- jpaMetamodelFiltering ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
     }
 
 <%_ } _%>

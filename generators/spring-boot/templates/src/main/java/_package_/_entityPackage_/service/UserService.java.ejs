@@ -923,7 +923,7 @@ public class UserService {
             .doOnNext(authority -> LOG.debug("Saving authority '{}' in local database", authority))
             .flatMap(authorityRepository::save)
             .then(userRepository.findOneByLogin(user.getLogin()))
-            .switchIfEmpty(<%- authenticationTypeOauth2 && databaseTypeSql ? 'saveUser(user, true)' : 'userRepository.save(user)' %>)
+            .switchIfEmpty(<%- databaseTypeSql ? 'saveUser(user, true)' : 'userRepository.save(user)' %>)
             .flatMap(existingUser -> {
                 // if IdP sends last updated information, use it to determine if an update should happen
                 if (details.get("updated_at") != null) {

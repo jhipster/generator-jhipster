@@ -30,7 +30,7 @@ import tech.jhipster.config.ApplicationProperties;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
-import tech.jhipster.web.filter.<%- reactive ? 'reactive.' : '' %>CachingHttpHeadersFilter;
+import tech.jhipster.web.filter.reactive.CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

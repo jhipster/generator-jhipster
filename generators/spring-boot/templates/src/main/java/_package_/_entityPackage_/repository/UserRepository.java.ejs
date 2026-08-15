@@ -496,7 +496,7 @@ public class UserRepository {
   <%_ if (reactive) { _%>
         this.cqlTemplate = cqlTemplate;
 
-        findAllStmt = session.prepare("SELECT * FROM user")<%- reactive ? '.block()' : '' %>;
+        findAllStmt = session.prepare("SELECT * FROM user").block();
   <%_ } else { _%>
         UserTokenMapper userTokenMapper = new UserTokenMapperBuilder(session).build();
         userDao = userTokenMapper.userTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
