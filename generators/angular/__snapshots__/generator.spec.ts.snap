@@ -1359,7 +1359,7 @@ describe("UserManagement Service", () => {
         expect(compareResult2).toEqual(false);
       });
 
-      it("should return false if primaryKey matches", () => {
+      it("should return true if primaryKey matches", () => {
         const entity1 = { login: "Oswald.Kertzmann" };
         const entity2 = { login: "Oswald.Kertzmann" };
 

@@ -235,7 +235,7 @@ describe('<%- entityAngularName %> Service', () => {
                 expect(compareResult2).toEqual(false);
             });
 
-            it('should return false if primaryKey matches', () => {
+            it('should return true if primaryKey matches', () => {
                 const entity1 = <%- tsPrimaryKeySamples[0] %>;
                 const entity2 = <%- tsPrimaryKeySamples[0] %>;
 
