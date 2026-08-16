@@ -58,7 +58,7 @@ export default class extends <%- parentGenerator %>Generator {
     super(args, opts, { ...features,
   <%_ if (sbs) { -%>
       sbsBlueprint: true,
-  <%_ } else if (!customGenerator) { -%>
+  <%_ } else { -%>
       checkBlueprint: true,
       // Dropped it once migration is done.
       jhipster7Migration: true,

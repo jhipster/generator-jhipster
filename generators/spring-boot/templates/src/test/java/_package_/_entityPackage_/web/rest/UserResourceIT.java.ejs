@@ -481,7 +481,7 @@ class UserResourceIT {
   <%_ } _%>
     void getAllUsers()<%- reactive ? '' : ' throws Exception' %> {
         // Initialize the database
-        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<%- reactive ? '.block()' : '' %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
 
         // Get all the users
   <%_ if (reactive) { _%>
@@ -521,7 +521,7 @@ class UserResourceIT {
   <%_ } _%>
     void getUser()<%- reactive ? '' : ' throws Exception' %> {
         // Initialize the database
-        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<%- reactive ? '.block()' : '' %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
 
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
