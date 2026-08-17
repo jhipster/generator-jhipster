@@ -123,7 +123,6 @@ describe('<%- entityAngularName %> Service', () => {
 
             const req = httpMock.expectOne({ method: 'GET' });
             req.flush([returnedFromService]);
-            httpMock.verify();
             expect(expectedResult).toMatchObject([expected]);
         });
 
