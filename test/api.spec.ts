@@ -29,6 +29,11 @@ describe('public api', () => {
     expect(Object.keys(await import(mod))).toMatchSnapshot();
   });
 
+  it('generator-jhipster/cli should match snapshot', async () => {
+    const mod = 'generator-jhipster/cli';
+    expect(Object.keys(await import(mod))).toMatchSnapshot();
+  });
+
   it('should import nested sub-generators', async () => {
     const mod = 'generator-jhipster/generators/spring-cloud/generators/kafka';
     expect(await import(mod)).toBeDefined();
