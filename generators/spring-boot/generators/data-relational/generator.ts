@@ -137,18 +137,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
         await control.cleanupFiles({
-          '9.0.0-beta.1': [
+          '9.2.1': [
             [
               !application.devDatabaseTypeH2Any! && application.springBoot4,
-              `${application.srcTestJava}config/EmbeddedSQL.java`,
-              `${application.srcTestJava}config/SqlTestContainer.java`,
-              `${application.srcTestJava}config/SqlTestContainersSpringContextCustomizerFactory.java`,
+              `${application.javaPackageTestDir}config/EmbeddedSQL.java`,
+              `${application.javaPackageTestDir}config/SqlTestContainer.java`,
+              `${application.javaPackageTestDir}config/SqlTestContainersSpringContextCustomizerFactory.java`,
               `${application.srcTestResources}META-INF/spring.factories`,
             ],
-            [application.prodDatabaseTypeMysql!, `${application.srcTestJava}config/MysqlTestContainer.java`],
-            [application.prodDatabaseTypeMariadb!, `${application.srcTestJava}config/MariadbTestContainer.java`],
-            [application.prodDatabaseTypeMssql!, `${application.srcTestJava}config/MsSqlTestContainer.java`],
-            [application.prodDatabaseTypePostgresql!, `${application.srcTestJava}config/PostgreSqlTestContainer.java`],
+            [application.prodDatabaseTypeMysql!, `${application.javaPackageTestDir}config/MysqlTestContainer.java`],
+            [application.prodDatabaseTypeMariadb!, `${application.javaPackageTestDir}config/MariadbTestContainer.java`],
+            [application.prodDatabaseTypeMssql!, `${application.javaPackageTestDir}config/MsSqlTestContainer.java`],
+            [application.prodDatabaseTypePostgresql!, `${application.javaPackageTestDir}config/PostgreSqlTestContainer.java`],
           ],
         });
       },
