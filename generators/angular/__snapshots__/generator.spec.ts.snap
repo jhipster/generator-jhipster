@@ -843,6 +843,12 @@ export class UserManagement {
       this.activatedRoute.queryParamMap,
       this.activatedRoute.data,
     ]).pipe(map(([queryParamMap, data]) => ({ queryParamMap, data }))),
+    {
+      initialValue: {
+        queryParamMap: this.activatedRoute.snapshot.queryParamMap,
+        data: this.activatedRoute.snapshot.data,
+      },
+    },
   );
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
@@ -864,16 +870,14 @@ export class UserManagement {
     });
     effect(() => {
       const activatedRouteState = this.activatedRouteState();
-      if (activatedRouteState) {
+      untracked(() => {
         // Only watch for route changes. Other signals should be ignored.
-        untracked(() => {
-          this.fillComponentAttributeFromRoute(
-            activatedRouteState.queryParamMap,
-            activatedRouteState.data,
-          );
-          this.load();
-        });
-      }
+        this.fillComponentAttributeFromRoute(
+          activatedRouteState.queryParamMap,
+          activatedRouteState.data,
+        );
+        this.load();
+      });
     });
   }
 
