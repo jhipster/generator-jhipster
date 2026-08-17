@@ -60,7 +60,7 @@ export class EventManager {
     }
     return this.observable
       .pipe(
-        filter((event: EventWithContent<unknown>) => eventNames.includes(typeof event === 'string' ? event : event.name)),
+        filter((event: EventWithContent<unknown>) => eventNames.includes(event.name)),
       )
       .subscribe(callback);
   }
