@@ -29,6 +29,53 @@
 <%_ } _%>
 @import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
+/* Up to bootstrap-vue-next 0.45 the orchestrator mapped a toast position such as `top-end` to the
+Bootstrap utilities `top-0 end-0`. Since 0.46 it sets the raw position as the container class, and no
+stylesheet defines it, so toast containers are left unpositioned. Drop this once upstream maps them again. */
+.toast-container {
+  &.top-start {
+    top: 0;
+    left: 0;
+  }
+  &.top-center {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &.top-end {
+    top: 0;
+    right: 0;
+  }
+  &.middle-start {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+  &.middle-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &.middle-end {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+  }
+  &.bottom-start {
+    bottom: 0;
+    left: 0;
+  }
+  &.bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &.bottom-end {
+    bottom: 0;
+    right: 0;
+  }
+}
+
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/

@@ -62,15 +62,14 @@ export default class AlertService {
   }
 
   showInfo(toastMessage: string, props: BToastProps = {}) {
-    this.toast.show({
-      props: {
-        pos: 'top-center',
-        title: 'Info',
-        variant: 'info',
-        solid: true,
-        body: toastMessage,
-        ...props,
-      },
+    this.toast.create({
+      modelValue: 5000,
+      position: 'top-end',
+      title: 'Info',
+      variant: 'info',
+      solid: true,
+      body: toastMessage,
+      ...props,
     });
   }
 
