@@ -216,13 +216,7 @@ export class <%- componentName %> {
 <%_ if (paginationInfiniteScroll) { _%>
         this.reset();
 <%_ } _%>
-<%_ if (paginationNo && searchEngineNo && !jpaMetamodelFiltering) { _%>
-        if (this.<%- entityInstancePlural %>().length === 0) {
-<%_ } _%>
-          this.load();
-<%_ if (paginationNo && searchEngineNo && !jpaMetamodelFiltering) { _%>
-        }
-<%_ } _%>
+        this.load();
       });
     });
 <% if (jpaMetamodelFiltering && paginationPagination) { %>
