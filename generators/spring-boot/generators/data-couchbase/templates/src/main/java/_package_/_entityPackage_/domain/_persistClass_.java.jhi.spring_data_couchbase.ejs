@@ -174,7 +174,7 @@ import java.util.stream.Collectors;
     <%_ if (relationship.otherRelationship) { _%>
       <%_ if (!relationship.otherRelationship.collection) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
-      <%_ } else if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+      <%_ } else if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().add(this);
       <%_ } _%>
     <%_ } _%>
@@ -195,7 +195,7 @@ import java.util.stream.Collectors;
     <%_ if (relationship.otherRelationship) { _%>
       <%_ if (!relationship.otherRelationship.collection) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
-      <%_ } else if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+      <%_ } else if (!relationship.otherEntityUser) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().remove(this);
       <%_ } _%>
     <%_ } _%>

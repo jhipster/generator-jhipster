@@ -276,7 +276,7 @@ class UserServiceIT {
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
     void testRemoveOldPersistentTokens() {
