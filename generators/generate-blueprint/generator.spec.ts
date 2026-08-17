@@ -44,6 +44,32 @@ describe(`generator - ${generator}`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(helpers.commandName!));
 
+  describe('defaults option', () => {
+    before(async () => {
+      await helpers
+        .runJHipster()
+        .withOptions({ defaults: true, subGenerators: ['app'], additionalSubGenerators: 'custom, app' })
+        .withAnswers({ sbs: false, command: true, priorities: ['writing'] })
+        .withSkipWritingPriorities()
+        .withMockedGenerators(mockedGenerators);
+    });
+
+    it('should apply defaults to selected and additional sub-generators without prompting', () => {
+      expect(result.generator.getSubGeneratorStorage('app').getAll()).toMatchObject({
+        sbs: true,
+        command: false,
+        priorities: [],
+        written: false,
+      });
+      expect(result.generator.getSubGeneratorStorage('custom').getAll()).toMatchObject({
+        sbs: true,
+        command: false,
+        priorities: [],
+        written: false,
+      });
+    });
+  });
+
   describe('migration', () => {
     describe('javascriptBlueprint option', () => {
       describe('blueprints prior to v9.0.1', () => {
