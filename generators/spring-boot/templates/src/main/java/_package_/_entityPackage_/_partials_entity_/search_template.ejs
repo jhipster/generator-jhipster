@@ -40,7 +40,7 @@ _%>
     <%_ } else { _%>
             Page<<%- persistClass %>> page = <%- entityInstance %><%- searchEngineElasticsearch ? 'Search' : '' %>Repository.search(query, pageable);
     <%_ } _%>
-            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<%- reactive ? 'ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())' : 'ServletUriComponentsBuilder.fromCurrentRequest()' %>, page);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
             return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dtoMapstruct) { %><%- entityListToDtoListReference %>(<% } %>page.getContent()<%- (!viaService && dtoMapstruct) ? ')' : '' %>);
         } catch (RuntimeException e) {
     <% if (searchEngineElasticsearch) { %>

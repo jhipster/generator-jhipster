@@ -32,7 +32,7 @@ _%>
         return ResponseEntity.ok().body(entityList);
     <%_ } else { _%>
         Page<<%- restClass %>> page = <%- entityInstance %>QueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<%- reactive ? 'ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())' : 'ServletUriComponentsBuilder.fromCurrentRequest()' %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
   <%_ } else { _%>
@@ -113,10 +113,10 @@ _%>
         } else {
             page = <%- entityInstance %><%- viaService ? 'Service' : 'Repository' %>.findAll(pageable)<%- reactiveEntityToDto %>;
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<%- reactive ? 'ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())' : 'ServletUriComponentsBuilder.fromCurrentRequest()' %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
       <%_ } else { _%>
         Page<<%- restClass %>> page = <%- entityInstance %><%- viaService ? 'Service' : 'Repository' %>.findAll(pageable)<%- reactiveEntityToDto %>;
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<%- reactive ? 'ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())' : 'ServletUriComponentsBuilder.fromCurrentRequest()' %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
       <%_ } _%>
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
