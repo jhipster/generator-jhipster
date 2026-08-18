@@ -40,7 +40,7 @@ export class ProfileService {
       map((response: InfoResponse) => {
         const activeProfiles = response.activeProfiles;
         const profileInfo: ProfileInfo = {
-          activeProfiles: activeProfiles,
+          activeProfiles,
           inProduction: activeProfiles?.includes('prod'),
           openAPIEnabled: activeProfiles?.includes('api-docs'),
         };
