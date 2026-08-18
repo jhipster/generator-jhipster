@@ -1183,9 +1183,6 @@ class AccountResourceIT {
         user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
         user.setLogin("current-sessions");
         user.setEmail("current-sessions@example.com");
-  <%_ if (databaseTypeSql && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM);
-  <%_ } _%>
         userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         PersistentToken token = new PersistentToken();
@@ -1232,9 +1229,6 @@ class AccountResourceIT {
         user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
         user.setLogin("invalidate-session");
         user.setEmail("invalidate-session@example.com");
-  <%_ if (databaseTypeSql && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM);
-  <%_ } _%>
         userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         PersistentToken token = new PersistentToken();
