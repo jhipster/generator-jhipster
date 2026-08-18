@@ -466,6 +466,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "websocket": "no",
   "withAdminUi": true,
   "withGeneratedFlag": false,
+  "workspacesCommand": false,
   "wrapMono": [Function],
 }
 `;

@@ -991,14 +991,12 @@ jobs:
                   npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
-            - name: Package application
-              run: npm run java:jar:prod
             - name: 'E2E: Package'
               run: npm run ci:e2e:package
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1090,8 +1088,6 @@ jobs:
                   else
                       echo No SONAR_TOKEN, skipping...
                   fi
-            - name: Package application
-              run: npm run java:jar:prod
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
@@ -1113,7 +1109,7 @@ jobs:
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1217,14 +1213,12 @@ jobs:
                   npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
-            - name: Package application
-              run: npm run java:jar:prod
             - name: 'E2E: Package'
               run: npm run ci:e2e:package
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1310,8 +1304,6 @@ jobs:
                   else
                       echo No SONAR_TOKEN, skipping...
                   fi
-            - name: Package application
-              run: npm run java:jar:prod
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
@@ -1333,7 +1325,7 @@ jobs:
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: true
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1456,14 +1448,12 @@ jobs:
                   npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
-            - name: Package application
-              run: npm run java:jar:prod
             - name: 'E2E: Package'
               run: npm run ci:e2e:package
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
