@@ -1,0 +1,89 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+name: Native CI
+on:
+  push:
+    branches: main
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pipeline:
+    name: jhipster native pipeline
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+    timeout-minutes: 90
+    env:
+      SPRING_OUTPUT_ANSI_ENABLED: DETECT
+      SPRING_JPA_SHOW_SQL: false
+      JHI_DISABLE_WEBPACK_LOGS: true
+      NG_CLI_ANALYTICS: false
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        java-version: ['25']
+        include:
+          - os: ubuntu-latest
+            executable-suffix: ''
+          - os: macos-latest
+            executable-suffix: ''
+            e2e: false
+          - os: windows-latest
+            executable-suffix: '.exe'
+            # e2e is disabled due to unstable docker step
+            e2e: false
+    steps:
+      - uses: <%- githubActions['actions/checkout'] %>
+      - uses: <%- githubActions['actions/setup-node'] %>
+        with:
+          node-version: <%- nodeVersion %>
+      # Make sure that the script-shell is set to bash, otherwise npm scripts will fail on Windows runners
+      - run: npm config -L project set script-shell=bash
+      - name: Set up GraalVM (Java ${{ matrix.java-version }})
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '${{ matrix.java-version }}'
+          distribution: 'graalvm-community'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
+      - name: Install node.js packages
+        run: npm install
+      - name: 'E2E: Package'
+        run: npm run native-package
+      - name: Archive binary
+        uses: <%- githubActions['actions/upload-artifact'] %>
+        with:
+          name: native-executable${{ matrix.executable-suffix }}
+          path: <%- buildToolGradle ? 'build/native/nativeCompile/' : 'target/' %>native-executable${{ matrix.executable-suffix }}
+      - name: 'E2E: Prepare'
+        if: runner.os == 'Linux'
+        run: npm run ci:e2e:prepare
+      - name: 'E2E: Run'
+        if: runner.os == 'Linux'
+        run: npm run native-e2e
