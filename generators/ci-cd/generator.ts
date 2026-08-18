@@ -70,6 +70,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
   }
 
   shouldAskForPrompts() {
-    return true;
+    return this.options.defaults !== true;
   }
 }
