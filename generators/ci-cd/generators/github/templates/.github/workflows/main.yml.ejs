@@ -19,14 +19,6 @@
 name: Application CI
 on: [push, pull_request]
 jobs:
-<%_ if (buildToolGradle) { _%>
-    validation:
-        name: "Gradle Wrapper Validation"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: <%- githubActions['actions/checkout'] %>
-            - uses: gradle/wrapper-validation-action@v1
-<%_ } _%>
     pipeline:
         name: <%- baseName %> pipeline
         runs-on: ubuntu-latest
