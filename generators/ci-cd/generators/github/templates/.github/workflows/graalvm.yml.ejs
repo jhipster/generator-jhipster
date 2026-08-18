@@ -31,10 +31,21 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
     timeout-minutes: 90
     env:
+<%_ if (!skipClient) { _%>
+      NODE_VERSION: <%- nodeVersion %>
+<%_ } _%>
+<%_ if (!skipServer) { _%>
       SPRING_OUTPUT_ANSI_ENABLED: DETECT
+<%_ } _%>
+<%_ if (!databaseTypeNo && !skipServer) { _%>
       SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
+<%_ } _%>
+<%_ if (locals.clientFrameworkAngular) { _%>
       NG_CLI_ANALYTICS: false
+<%_ } _%>
+<%_ if (enableGradleDevelocity) { _%>
+      GRADLE_DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_DEVELOCITY_ACCESS_KEY }}
+<%_ } _%>
     defaults:
       run:
         shell: bash
@@ -66,14 +77,11 @@ jobs:
           java-version: '${{ matrix.java-version }}'
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
+          cache: '<%- buildTool %>'
+<%_ if (!skipClient) { _%>
       - name: Install node.js packages
         run: npm install
+<%_ } _%>
       - name: 'E2E: Package'
         run: npm run native-package
       - name: Archive binary
