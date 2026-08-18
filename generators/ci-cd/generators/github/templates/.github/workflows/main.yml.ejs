@@ -86,13 +86,7 @@ jobs:
 <%_ } _%>
 <%_ if (!skipServer) { _%>
             - name: Run backend test
-              run: |
-  <%_ if (buildToolMaven) { _%>
-                  chmod +x mvnw
-  <%_ } else if (buildToolGradle) { _%>
-                  chmod +x gradlew
-  <%_ } _%>
-                  <%- nodePackageManager %> run ci:backend:test
+              run: <%- nodePackageManager %> run ci:backend:test
   <%_ if (!skipClient) { _%>
             - name: Run frontend test
               run: <%- nodePackageManager %> run ci:frontend:test

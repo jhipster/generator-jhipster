@@ -35,7 +35,6 @@ node {
 
 <%_ if (buildToolMaven) { _%>
 <%- indent %>    stage('clean') {
-<%- indent %>        sh "chmod +x mvnw"
 <%- indent %>        sh "./mvnw -ntp clean -P-webapp"
 <%- indent %>    }
 <%- indent %>    stage('nohttp') {
@@ -103,7 +102,6 @@ node {
 <%- indent %>    }
 <%_ } else if (buildToolGradle) { _%>
 <%- indent %>    stage('clean') {
-<%- indent %>        sh "chmod +x gradlew"
 <%- indent %>        sh "./gradlew clean --no-daemon"
 <%- indent %>    }
 <%- indent %>    stage('nohttp') {

@@ -52,7 +52,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
-  - script: chmod +x gradlew
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -181,7 +180,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     displayName: 'CHECK: Snyk monitor'
     env:
       SNYK_TOKEN: $(SNYK_TOKEN)
-  - script: chmod +x gradlew
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -298,7 +296,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
-  - script: chmod +x mvnw
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -427,7 +424,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     displayName: 'CHECK: Snyk monitor'
     env:
       SNYK_TOKEN: $(SNYK_TOKEN)
-  - script: chmod +x mvnw
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -544,7 +540,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
-  - script: chmod +x mvnw
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -646,9 +641,6 @@ jobs:
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
             - run:
-                name: Give Executable Power
-                command: 'chmod +x gradlew'
-            - run:
                 name: Backend tests
                 command: npm run ci:backend:test
             - run:
@@ -737,9 +729,6 @@ jobs:
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
             - run:
-                name: Give Executable Power
-                command: 'chmod +x gradlew'
-            - run:
                 name: Backend tests
                 command: npm run ci:backend:test
             - run:
@@ -816,9 +805,6 @@ jobs:
                     - ~/.m2
                 key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
-            - run:
-                name: Give Executable Power
-                command: 'chmod +x mvnw'
             - run:
                 name: Backend tests
                 command: npm run ci:backend:test
@@ -908,9 +894,6 @@ jobs:
                 key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
             - run:
-                name: Give Executable Power
-                command: 'chmod +x mvnw'
-            - run:
                 name: Backend tests
                 command: npm run ci:backend:test
             - run:
@@ -986,9 +969,7 @@ jobs:
             - name: Install Node.js packages
               run: npm install
             - name: Run backend test
-              run: |
-                  chmod +x gradlew
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
             - name: 'E2E: Package'
@@ -1073,9 +1054,7 @@ jobs:
               env:
                   SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
             - name: Run backend test
-              run: |
-                  chmod +x gradlew
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
             - name: Analyze code with SonarQube
@@ -1208,9 +1187,7 @@ jobs:
             - name: Install Node.js packages
               run: npm install
             - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
             - name: 'E2E: Package'
@@ -1289,9 +1266,7 @@ jobs:
               env:
                   SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
             - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
             - name: Analyze code with SonarQube
@@ -1443,9 +1418,7 @@ jobs:
             - name: Install Node.js packages
               run: npm install
             - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
             - name: 'E2E: Package'
@@ -2286,7 +2259,6 @@ node {
     }
 
     stage('clean') {
-        sh "chmod +x gradlew"
         sh "./gradlew clean --no-daemon"
     }
     stage('nohttp') {
@@ -2471,7 +2443,6 @@ node {
         }
 
         stage('clean') {
-            sh "chmod +x mvnw"
             sh "./mvnw -ntp clean -P-webapp"
         }
         stage('nohttp') {
@@ -2745,7 +2716,6 @@ node {
     }
 
     stage('clean') {
-        sh "chmod +x mvnw"
         sh "./mvnw -ntp clean -P-webapp"
     }
     stage('nohttp') {
@@ -2932,7 +2902,6 @@ node {
     }
 
     stage('clean') {
-        sh "chmod +x mvnw"
         sh "./mvnw -ntp clean -P-webapp"
     }
     stage('nohttp') {
@@ -3214,7 +3183,6 @@ before_install:
 install:
   - npm install
 script:
-  - chmod +x gradlew
   - npm run ci:backend:test
   - npm run ci:frontend:test
   - npm run java:jar:prod
@@ -3290,7 +3258,6 @@ before_install:
 install:
   - npm install
 script:
-  - chmod +x mvnw
   - npm run ci:backend:test
   - npm run ci:frontend:test
   - npm run java:jar:prod
@@ -3370,7 +3337,6 @@ script:
   - chmod +x snyk
   - ./snyk test --all-projects || true
   - ./snyk monitor --all-projects
-  - chmod +x mvnw
   - npm run ci:backend:test
   - npm run ci:frontend:test
   - npm run java:jar:prod
