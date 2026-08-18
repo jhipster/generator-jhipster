@@ -957,12 +957,6 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular N
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-    validation:
-        name: "Gradle Wrapper Validation"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@VERSION
-            - uses: gradle/wrapper-validation-action@v1
     pipeline:
         name: sampleMysql pipeline
         runs-on: ubuntu-latest
@@ -1032,12 +1026,6 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular N
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-    validation:
-        name: "Gradle Wrapper Validation"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@VERSION
-            - uses: gradle/wrapper-validation-action@v1
     pipeline:
         name: sampleMysql pipeline
         runs-on: ubuntu-latest
