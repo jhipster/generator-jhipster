@@ -20,6 +20,7 @@ graalvmNative {
   metadataRepository {
     enabled = true
     version = '<%- graalvmReachabilityMetadata %>'
+    moduleToConfigVersion.put('io.netty:netty-common', '<%- nettyCommonReachabilityMetadata %>')
   }
 }
 

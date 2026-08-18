@@ -18,4 +18,13 @@
  */
 
 // renovate: datasource=github-releases depName=graalvm-reachability-metadata packageName=oracle/graalvm-reachability-metadata
-export const GRAALVM_REACHABILITY_METADATA = '1.0.10';
+export const GRAALVM_REACHABILITY_METADATA = '1.0.11';
+
+/**
+ * Netty 4.1.x is resolved to the `5.0.0.Alpha1` metadata since graalvm-reachability-metadata 1.0.11,
+ * which misses the `io.netty.util.internal.shaded.org.jctools` reflection registrations and makes reactive
+ * native executables fail at startup with `java.lang.NoSuchFieldException: producerIndex`.
+ * Force the metadata version that matches Netty 4.1.x/4.2.x.
+ * https://github.com/oracle/graalvm-reachability-metadata/pull/9254
+ */
+export const NETTY_COMMON_REACHABILITY_METADATA = '4.1.115.Final';

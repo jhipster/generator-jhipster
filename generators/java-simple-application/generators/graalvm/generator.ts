@@ -25,7 +25,7 @@ import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { addJavaAnnotation } from '../../../java/support/add-java-annotation.ts';
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
 
-import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
+import { GRAALVM_REACHABILITY_METADATA, NETTY_COMMON_REACHABILITY_METADATA } from './internal/constants.ts';
 import { mavenDefinition } from './internal/maven-definition.ts';
 
 export default class GraalvmGenerator extends JavaApplicationGenerator {
@@ -128,7 +128,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
               },
             ],
           },
-          context: application,
+          context: { ...application, nettyCommonReachabilityMetadata: NETTY_COMMON_REACHABILITY_METADATA },
         });
       },
     });
