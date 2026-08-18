@@ -20,6 +20,8 @@
 /* eslint-disable no-template-curly-in-string */
 import type { MavenDefinition } from '../../maven/types.ts';
 
+import { NETTY_COMMON_REACHABILITY_METADATA } from './constants.ts';
+
 export const mavenDefinition = ({
   graalvmReachabilityMetadata,
   reactive,
@@ -54,6 +56,13 @@ export const mavenDefinition = ({
             <metadataRepository>
                 <enabled>true</enabled>
                 <version>${graalvmReachabilityMetadata}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-common</artifactId>
+                        <metadataVersion>${NETTY_COMMON_REACHABILITY_METADATA}</metadataVersion>
+                    </dependency>
+                </dependencies>
             </metadataRepository>
             <imageName>\${native-image-name}</imageName>
             <verbose>true</verbose>
