@@ -41,4 +41,14 @@ describe(`generator - ${generator}`, () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('with graalvmSupport options', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ graalvmSupport: true });
+    });
+
+    it('should match files snapshot', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
 });

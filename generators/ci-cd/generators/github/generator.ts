@@ -34,7 +34,10 @@ export default class CiCdGithubGenerator extends BaseSimpleApplicationGenerator<
     return this.asWritingTaskGroup({
       async writeFiles({ application }) {
         await this.writeFiles({
-          templates: ['.github/workflows/main.yml'],
+          blocks: [
+            { templates: ['.github/workflows/main.yml'] },
+            { condition: data => data.graalvmSupport, templates: ['.github/workflows/graalvm.yml'] },
+          ],
           context: application,
         });
       },
