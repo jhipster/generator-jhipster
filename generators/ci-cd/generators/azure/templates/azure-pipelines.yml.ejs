@@ -72,11 +72,6 @@ jobs:
       SNYK_TOKEN: $(SNYK_TOKEN)
 <%_ } _%>
 <%_ if (!skipServer) { _%>
-  <%_ if (buildToolMaven) { _%>
-  - script: chmod +x mvnw
-  <%_ } else if (buildToolGradle) { _%>
-  - script: chmod +x gradlew
-  <%_ } _%>
   - task: Npm@1
     inputs:
       command: 'custom'
