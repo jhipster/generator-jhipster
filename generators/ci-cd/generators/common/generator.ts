@@ -118,6 +118,6 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
   }
 
   shouldAskForPrompts() {
-    return true;
+    return this.options.defaults !== true;
   }
 }
