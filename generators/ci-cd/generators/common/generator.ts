@@ -61,6 +61,7 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
             return indent;
           },
           cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
+          workspacesCommand: () => this.jhipsterConfig.defaultCommand === 'workspaces',
         });
       },
     });
