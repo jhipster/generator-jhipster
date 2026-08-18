@@ -391,7 +391,7 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-      - SPRING_R2DBC_URL=r2dbc:mysql://mariadb:3306/jhipster?useLegacyDatetimeCode=false
+      - SPRING_R2DBC_URL=r2dbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_R2DBC_USERNAME=root
       - SPRING_R2DBC_PASSWORD=
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false

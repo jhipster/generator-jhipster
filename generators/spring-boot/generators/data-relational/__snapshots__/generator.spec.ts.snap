@@ -40,6 +40,12 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
 
 exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix-Entity-Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Memory should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "org.mariadb.r2dbc.client.SimpleClient",
+      "method": "sendCommand",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -54,8 +60,8 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
             "scope": "test",
           },
           {
-            "artifactId": "r2dbc-mysql",
-            "groupId": "io.asyncer",
+            "artifactId": "r2dbc-mariadb",
+            "groupId": "org.mariadb",
           },
         ],
       },
@@ -105,8 +111,8 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],
@@ -2174,8 +2180,8 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],
@@ -2422,6 +2428,12 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
 
 exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(true)-eureka-enableHibernateCache(true)-h2Disk should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "org.mariadb.r2dbc.client.SimpleClient",
+      "method": "sendCommand",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -2436,8 +2448,8 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
             "scope": "test",
           },
           {
-            "artifactId": "r2dbc-mysql",
-            "groupId": "io.asyncer",
+            "artifactId": "r2dbc-mariadb",
+            "groupId": "org.mariadb",
           },
         ],
       },
@@ -2487,8 +2499,8 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],
@@ -4202,6 +4214,12 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
 
 exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-mariadb should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "org.mariadb.r2dbc.client.SimpleClient",
+      "method": "sendCommand",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -4216,8 +4234,8 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
             "scope": "test",
           },
           {
-            "artifactId": "r2dbc-mysql",
-            "groupId": "io.asyncer",
+            "artifactId": "r2dbc-mariadb",
+            "groupId": "org.mariadb",
           },
         ],
       },
@@ -4250,8 +4268,8 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": undefined,
             },
           ],
@@ -6124,8 +6142,8 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": undefined,
             },
           ],
@@ -6308,6 +6326,12 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
 
 exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--DTO-skipCommitHook(true)-enableSwaggerCodegen(true)-consul-enableHibernateCache(true)-h2Memory should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "org.mariadb.r2dbc.client.SimpleClient",
+      "method": "sendCommand",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -6322,8 +6346,8 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
             "scope": "test",
           },
           {
-            "artifactId": "r2dbc-mysql",
-            "groupId": "io.asyncer",
+            "artifactId": "r2dbc-mariadb",
+            "groupId": "org.mariadb",
           },
         ],
       },
@@ -6373,8 +6397,8 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],
@@ -7973,8 +7997,8 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],
@@ -8191,6 +8215,12 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
 
 exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-skipUserManagement(true)-eureka-enableHibernateCache(true)-mariadb should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "org.mariadb.r2dbc.client.SimpleClient",
+      "method": "sendCommand",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -8205,8 +8235,8 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
             "scope": "test",
           },
           {
-            "artifactId": "r2dbc-mysql",
-            "groupId": "io.asyncer",
+            "artifactId": "r2dbc-mariadb",
+            "groupId": "org.mariadb",
           },
         ],
       },
@@ -8239,8 +8269,8 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": undefined,
             },
           ],
@@ -10433,8 +10463,8 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": undefined,
             },
           ],
@@ -10617,6 +10647,12 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
 
 exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "org.mariadb.r2dbc.client.SimpleClient",
+      "method": "sendCommand",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -10631,8 +10667,8 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
             "scope": "test",
           },
           {
-            "artifactId": "r2dbc-mysql",
-            "groupId": "io.asyncer",
+            "artifactId": "r2dbc-mariadb",
+            "groupId": "org.mariadb",
           },
         ],
       },
@@ -10682,8 +10718,8 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],
@@ -12917,8 +12953,8 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],
@@ -13138,6 +13174,12 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
 
 exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(false)-enableSwaggerCodegen(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "org.mariadb.r2dbc.client.SimpleClient",
+      "method": "sendCommand",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -13152,8 +13194,8 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
             "scope": "test",
           },
           {
-            "artifactId": "r2dbc-mysql",
-            "groupId": "io.asyncer",
+            "artifactId": "r2dbc-mariadb",
+            "groupId": "org.mariadb",
           },
         ],
       },
@@ -13203,8 +13245,8 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "r2dbc-mysql",
-              "groupId": "io.asyncer",
+              "artifactId": "r2dbc-mariadb",
+              "groupId": "org.mariadb",
               "inProfile": "prod",
             },
           ],

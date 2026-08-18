@@ -358,6 +358,14 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           });
         }
       },
+      async blockHound({ application, source }) {
+        if (application.reactive && application.prodDatabaseTypeMariadb) {
+          source.addAllowBlockingCallsInside!({
+            classPath: 'org.mariadb.r2dbc.client.SimpleClient',
+            method: 'sendCommand',
+          });
+        }
+      },
     });
   }
 

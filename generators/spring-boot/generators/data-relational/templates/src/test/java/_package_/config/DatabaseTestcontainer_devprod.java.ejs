@@ -37,7 +37,7 @@ public interface DatabaseTestcontainer {
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
 <%_ if (reactive) { _%>
-        registry.add("spring.r2dbc.url", () -> databaseContainer.getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
+        registry.add("spring.r2dbc.url", () -> databaseContainer.getJdbcUrl().replace("jdbc", "r2dbc")<%- prodDatabaseTypeMssql ? '.replace(";encrypt=false", "")' : '' %> + "<%- prodDatabaseExtraOptions %>");
         registry.add("spring.r2dbc.username", databaseContainer::getUsername);
         registry.add("spring.r2dbc.password", databaseContainer::getPassword);
   <%_ if (prodDatabaseExtraOptions) { _%>
