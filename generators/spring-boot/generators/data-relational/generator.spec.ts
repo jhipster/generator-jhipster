@@ -111,4 +111,24 @@ describe(`generator - ${databaseType}`, () => {
       });
     });
   });
+
+  describe('reactive', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('jhipster:spring-boot:data-relational')
+        .withJHipsterConfig({
+          ...commonConfig,
+          packageName: 'com.mycompany',
+          reactive: true,
+          prodDatabaseType: POSTGRESQL,
+          devDatabaseType: H2_DISK,
+        })
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:domain'] });
+    });
+
+    it('should keep identifiers unquoted at the r2dbc mapping context', () => {
+      runResult.assertFileContent('src/main/java/com/mycompany/config/DatabaseConfiguration.java', 'mappingContext.setForceQuote(false);');
+    });
+  });
 });

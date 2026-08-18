@@ -27,6 +27,13 @@ graalvmNative {
 processTestAot {
   jvmArgs += ["-XX:+AllowRedefinitionToAddDeleteMethods"]
 }
+<%_ if (reactive || !databaseTypeSql) { _%>
+
+processAot {
+  // Spring Data ahead of time generated property accessors are broken at native image, see https://github.com/oracle/graal/issues/12596
+  systemProperty 'spring.aot.data.accessors.enabled', 'false'
+}
+<%_ } _%>
 <%_ if (!reactive && databaseTypeSql) { _%>
   <%_ if (backendTypeSpringBoot && devDatabaseTypeH2Any) { _%>
 

@@ -84,7 +84,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
         applicationDefaults({
           implementsDynamicSourceTestcontainersSupport: data =>
-            Boolean(!application.devDatabaseTypeH2Any && data.testcontainerClass && data.springBoot4),
+            Boolean(!application.devDatabaseTypeH2Any && data.testcontainerClass && data.springBoot4 && !data.reactive),
           useTestcontainersV1: data => Boolean(data.testcontainerClassPackage?.endsWith('.containers')),
         });
       },

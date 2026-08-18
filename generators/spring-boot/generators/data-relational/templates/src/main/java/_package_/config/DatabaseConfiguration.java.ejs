@@ -45,6 +45,9 @@ import org.springframework.boot.h2console.autoconfigure.H2ConsoleProperties;
 import org.springframework.core.env.Environment;
 <%_ } _%>
 <%_ if (reactive) { _%>
+  <%_ if (springBoot4) { _%>
+import org.springframework.beans.factory.ObjectProvider;
+  <%_ } _%>
 import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
@@ -53,9 +56,19 @@ import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
 import org.springframework.data.r2dbc.dialect.R2dbcDialect;
+  <%_ if (springBoot4) { _%>
+import org.springframework.data.r2dbc.mapping.R2dbcMappingContext;
+  <%_ } _%>
 import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+  <%_ if (springBoot4) { _%>
+import org.springframework.data.relational.RelationalManagedTypes;
+  <%_ } _%>
 import org.springframework.data.relational.core.dialect.RenderContextFactory;
+  <%_ if (springBoot4) { _%>
+import org.springframework.data.relational.core.mapping.DefaultNamingStrategy;
+import org.springframework.data.relational.core.mapping.NamingStrategy;
+  <%_ } _%>
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 <%_ } else { _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -178,6 +191,21 @@ public class DatabaseConfiguration {
         return R2dbcCustomConversions.of(dialect, converters);
     }
 
+  <%_ if (springBoot4) { _%>
+    @Bean
+    public R2dbcMappingContext r2dbcMappingContext(
+        ObjectProvider<NamingStrategy> namingStrategy,
+        R2dbcCustomConversions r2dbcCustomConversions,
+        RelationalManagedTypes r2dbcManagedTypes
+    ) {
+        R2dbcMappingContext mappingContext = new R2dbcMappingContext(namingStrategy.getIfAvailable(() -> DefaultNamingStrategy.INSTANCE));
+        mappingContext.setSimpleTypeHolder(r2dbcCustomConversions.getSimpleTypeHolder());
+        mappingContext.setManagedTypes(r2dbcManagedTypes);
+        mappingContext.setForceQuote(false);
+        return mappingContext;
+    }
+
+  <%_ } _%>
     @Bean
     public R2dbcDialect dialect(ConnectionFactory connectionFactory) {
         return DialectResolver.getDialect(connectionFactory);
