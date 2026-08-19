@@ -362,7 +362,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         if (application.reactive && application.prodDatabaseTypeMariadb) {
           source.addAllowBlockingCallsInside!({
             classPath: 'org.mariadb.r2dbc.client.SimpleClient',
-            method: 'sendCommand',
+            method: ['sendCommand', 'sendCommandWithoutResult', 'executeWhenTransaction', 'executeWhenNotInTransaction', 'setAutoCommit'],
           });
         }
       },

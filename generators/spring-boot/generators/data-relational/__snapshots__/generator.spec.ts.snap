@@ -43,7 +43,13 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
   "addAllowBlockingCallsInside": [
     {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
-      "method": "sendCommand",
+      "method": [
+        "sendCommand",
+        "sendCommandWithoutResult",
+        "executeWhenTransaction",
+        "executeWhenNotInTransaction",
+        "setAutoCommit",
+      ],
     },
   ],
   "addJavaDefinition": [
@@ -2431,7 +2437,13 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
   "addAllowBlockingCallsInside": [
     {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
-      "method": "sendCommand",
+      "method": [
+        "sendCommand",
+        "sendCommandWithoutResult",
+        "executeWhenTransaction",
+        "executeWhenNotInTransaction",
+        "setAutoCommit",
+      ],
     },
   ],
   "addJavaDefinition": [
@@ -4217,7 +4229,13 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "addAllowBlockingCallsInside": [
     {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
-      "method": "sendCommand",
+      "method": [
+        "sendCommand",
+        "sendCommandWithoutResult",
+        "executeWhenTransaction",
+        "executeWhenNotInTransaction",
+        "setAutoCommit",
+      ],
     },
   ],
   "addJavaDefinition": [
@@ -6329,7 +6347,13 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "addAllowBlockingCallsInside": [
     {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
-      "method": "sendCommand",
+      "method": [
+        "sendCommand",
+        "sendCommandWithoutResult",
+        "executeWhenTransaction",
+        "executeWhenNotInTransaction",
+        "setAutoCommit",
+      ],
     },
   ],
   "addJavaDefinition": [
@@ -8218,7 +8242,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "addAllowBlockingCallsInside": [
     {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
-      "method": "sendCommand",
+      "method": [
+        "sendCommand",
+        "sendCommandWithoutResult",
+        "executeWhenTransaction",
+        "executeWhenNotInTransaction",
+        "setAutoCommit",
+      ],
     },
   ],
   "addJavaDefinition": [
@@ -10650,7 +10680,13 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "addAllowBlockingCallsInside": [
     {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
-      "method": "sendCommand",
+      "method": [
+        "sendCommand",
+        "sendCommandWithoutResult",
+        "executeWhenTransaction",
+        "executeWhenNotInTransaction",
+        "setAutoCommit",
+      ],
     },
   ],
   "addJavaDefinition": [
@@ -13177,7 +13213,13 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   "addAllowBlockingCallsInside": [
     {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
-      "method": "sendCommand",
+      "method": [
+        "sendCommand",
+        "sendCommandWithoutResult",
+        "executeWhenTransaction",
+        "executeWhenNotInTransaction",
+        "setAutoCommit",
+      ],
     },
   ],
   "addJavaDefinition": [

@@ -496,11 +496,12 @@ ${classProperties
         source.addAllowBlockingCallsInside = ({ classPath, method }) => {
           if (!application.reactive) throw new Error('Blockhound is only supported by reactive applications');
 
+          method = Array.isArray(method) ? method : [method];
           this.editFile(
             `${application.javaPackageTestDir}config/JHipsterBlockHoundIntegration.java`,
             createNeedleCallback({
               needle: 'blockhound-integration',
-              contentToAdd: `builder.allowBlockingCallsInside("${classPath}", "${method}");`,
+              contentToAdd: method.map(m => `builder.allowBlockingCallsInside("${classPath}", "${m}");`),
             }),
           );
         };
