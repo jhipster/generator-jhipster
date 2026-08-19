@@ -26,14 +26,31 @@ import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
+<%_ if (searchEngineCouchbase) { _%>
+import org.testcontainers.couchbase.CouchbaseService;
+<%_ } _%>
 
 @TestConfiguration(proxyBeanMethods = false)
 public class CouchbaseTestContainer {
 
     public static final String BUCKET_NAME = "testBucket";
+<%_ if (searchEngineCouchbase) { _%>
+
+    /**
+     * Memory quota, in MB, for the search service.
+     *
+     * Testcontainers defaults every service to its minimum quota (256 MB for search), which is not enough to
+     * host one full-text index per entity: the search service throttles indexing as soon as it goes over the
+     * quota, mutations are never indexed and searches keep returning no result.
+     */
+    private static final int SEARCH_QUOTA_MB = 1024;
+<%_ } _%>
 
     private static final CouchbaseContainer COUCHBASE_CONTAINER = (CouchbaseContainer) new CouchbaseContainer("<%- dockerContainers.couchbase %>")
         .withBucket(new BucketDefinition(BUCKET_NAME))
+<%_ if (searchEngineCouchbase) { _%>
+        .withServiceQuota(CouchbaseService.SEARCH, SEARCH_QUOTA_MB)
+<%_ } _%>
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(CouchbaseTestContainer.class)));
 
     @Bean
