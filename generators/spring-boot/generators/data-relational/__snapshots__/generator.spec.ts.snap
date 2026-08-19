@@ -4398,15 +4398,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
@@ -4600,17 +4591,12 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -4619,9 +4605,13 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -4658,15 +4648,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
@@ -4846,17 +4827,12 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -4865,9 +4841,13 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -5179,15 +5159,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
@@ -5362,17 +5333,12 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -5381,9 +5347,13 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -6163,15 +6133,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
@@ -6343,17 +6304,12 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -6362,9 +6318,13 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -8613,15 +8573,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
@@ -8815,17 +8766,12 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -8834,9 +8780,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -9160,15 +9110,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
@@ -9346,17 +9287,12 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -9365,9 +9301,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -9694,15 +9634,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
@@ -9877,17 +9808,12 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -9896,9 +9822,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -10708,15 +10638,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
@@ -10888,17 +10809,12 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-r2dbc",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -10907,9 +10823,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "com.mycompany.config",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.config.DatabaseTestcontainer",
         ],
       },
     ],

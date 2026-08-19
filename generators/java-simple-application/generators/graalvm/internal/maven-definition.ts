@@ -143,17 +143,7 @@ export const mavenDefinition = ({
                             <id>process-aot</id>
                             <goals>
                                 <goal>process-aot</goal>
-                            </goals>${
-                              reactive || !databaseTypeSql ?
-                                `
-                            <configuration>
-                                <systemPropertyVariables>
-                                    <!-- Spring Data ahead of time generated property accessors are broken at native image, see https://github.com/oracle/graal/issues/12596 -->
-                                    <spring.aot.data.accessors.enabled>false</spring.aot.data.accessors.enabled>
-                                </systemPropertyVariables>
-                            </configuration>`
-                              : ``
-                            }
+                            </goals>
                         </execution>
                     </executions>
                 </plugin>

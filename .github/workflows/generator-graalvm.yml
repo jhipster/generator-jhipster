@@ -113,6 +113,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         if: steps.compare.outputs.has-backend-changes == 'true'
         with:
+          version: '25.2'
           java-version: ${{ matrix.java-version }}
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -51,28 +51,5 @@ describe(`generator - ${generator}`, () => {
         expect(result.sourceCallsArg).toMatchSnapshot();
       });
     });
-
-    describe('with reactive option', () => {
-      before(async () => {
-        await helpers
-          .runJHipster(generator)
-          .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap'] })
-          .withMockedSource()
-          .withOptions({ ignoreNeedlesError: true })
-          .withSharedApplication({ reactive: true })
-          .withJHipsterConfig({ buildTool });
-      });
-
-      it('should disable spring data ahead of time property accessors', () => {
-        // Generated property accessors are broken at native image, see https://github.com/oracle/graal/issues/12596
-        if (buildTool === 'gradle') {
-          result.assertFileContent('gradle/native.gradle', "systemProperty 'spring.aot.data.accessors.enabled', 'false'");
-        } else {
-          expect(JSON.stringify(result.sourceCallsArg.addMavenDefinition)).toContain(
-            '<spring.aot.data.accessors.enabled>false</spring.aot.data.accessors.enabled>',
-          );
-        }
-      });
-    });
   }
 });
