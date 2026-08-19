@@ -379,16 +379,17 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           source.addAllowBlockingCallsInside!({
             classPath: 'org.mariadb.r2dbc.client.SimpleClient',
             method: [
-              'sendCommandWithoutResult',
               'executeWhenTransaction',
               'executeWhenNotInTransaction',
+              'sendCommand',
+              'sendCommandWithoutResult',
               'setAutoCommit',
               // `receive` and `sendCommand` acquire the lock inside their `Flux.create` lambdas, which run at
               // subscribe time, so the enclosing method is no longer on the stack and BlockHound only sees the
-              // synthetic lambda. Names are tied to r2dbc-mariadb 1.3.0 and must be rechecked on driver upgrades.
-              'lambda$receive$14',
-              'lambda$sendCommand$16',
-              'lambda$sendCommand$19',
+              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.0 and must be rechecked on driver upgrades.
+              'lambda$receive$0',
+              'lambda$sendCommand$0',
+              'lambda$sendCommand$2',
             ],
           });
         }
