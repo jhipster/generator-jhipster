@@ -277,6 +277,10 @@ export default class SqlGenerator extends BaseApplicationGenerator<
             mavenDefinition: dbDefinitions.jdbc,
           },
           {
+            condition: reactive,
+            dependencies: [{ scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-r2dbc' }],
+          },
+          {
             condition: devDatabaseTypeH2Any,
             mavenDefinition: h2Definitions?.jdbc,
           },
@@ -312,9 +316,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
             imports: [`${application.packageName}.config.DatabaseTestcontainer`],
             annotations: [
               {
-                package: 'org.springframework.boot.testcontainers.context',
-                annotation: 'ImportTestcontainers',
-                parameters: (_, cb) => cb.addKeyValue('value', 'DatabaseTestcontainer.class'),
+                package: 'org.springframework.boot.test.context',
+                annotation: 'SpringBootTest',
+                parameters: (_, cb) => cb.addKeyValue('classes', 'DatabaseTestcontainer.class'),
               },
             ],
           });

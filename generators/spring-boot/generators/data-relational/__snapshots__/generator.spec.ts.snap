@@ -224,6 +224,16 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -515,6 +525,16 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -774,6 +794,16 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -799,8 +829,8 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -1029,6 +1059,16 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -1286,6 +1326,16 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -1524,6 +1574,16 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -1770,6 +1830,16 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -1795,8 +1865,8 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -2022,6 +2092,16 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -2296,6 +2376,16 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -2634,6 +2724,16 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -2905,6 +3005,16 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -3227,6 +3337,16 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -3542,6 +3662,16 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -3836,6 +3966,16 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -4138,6 +4278,16 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -4418,6 +4568,16 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -4653,6 +4813,16 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -4883,6 +5053,16 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -5148,6 +5328,16 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -5364,6 +5554,16 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -5598,6 +5798,16 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -5825,6 +6035,16 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -6087,6 +6307,16 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -6299,6 +6529,16 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -6324,8 +6564,8 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -6576,6 +6816,16 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -6817,6 +7067,16 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -6842,8 +7102,8 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -7075,6 +7335,16 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -7366,6 +7636,16 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -7633,6 +7913,16 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -7908,6 +8198,16 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -8179,6 +8479,16 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -8463,6 +8773,16 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -8705,6 +9025,16 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -8973,6 +9303,16 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -9218,6 +9558,16 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -9483,6 +9833,16 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -9716,6 +10076,16 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
         },
       },
       {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": true,
         "mavenDefinition": {
           "dependencies": [
@@ -9946,6 +10316,16 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": false,
@@ -10190,6 +10570,16 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -10452,6 +10842,16 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
         },
       },
       {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": false,
         "mavenDefinition": undefined,
       },
@@ -10664,6 +11064,16 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -10689,8 +11099,8 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -10941,6 +11351,16 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -11182,6 +11602,16 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -11207,8 +11637,8 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -11440,6 +11870,16 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -11687,6 +12127,16 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -11712,8 +12162,8 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -11942,6 +12392,16 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -12181,6 +12641,16 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": false,
@@ -12425,6 +12895,16 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -12653,6 +13133,16 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
       },
       {
         "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": false,
         "mavenDefinition": undefined,
       },
       {
@@ -12678,8 +13168,8 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -12905,6 +13395,16 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -13179,6 +13679,16 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -13490,6 +14000,16 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -13761,6 +14281,16 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -14056,6 +14586,16 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -14330,6 +14870,16 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -14622,6 +15172,16 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
       },
       {
         "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
+        "condition": true,
         "mavenDefinition": {
           "dependencies": [
             {
@@ -14884,6 +15444,16 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
         },
       },
       {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
+      },
+      {
         "condition": true,
         "mavenDefinition": {
           "dependencies": [
@@ -15140,6 +15710,16 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -15401,6 +15981,16 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
             },
           ],
         },
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
@@ -15687,6 +16277,16 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
             },
           ],
         },
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "testcontainers-r2dbc",
+            "groupId": "org.testcontainers",
+            "scope": "test",
+          },
+        ],
       },
       {
         "condition": true,
