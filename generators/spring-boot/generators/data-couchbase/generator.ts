@@ -86,9 +86,9 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
               parameters: (_, cb) => cb.addKeyValue('value', 'JHipsterConstants.SPRING_PROFILE_TEST'),
             },
             {
-              package: 'org.springframework.boot.testcontainers.context',
-              annotation: 'ImportTestcontainers',
-              parameters: (_, cb) => cb.addKeyValue('value', 'CouchbaseTestContainer.class'),
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'CouchbaseTestContainer.class'),
             },
           ],
           imports: ['tech.jhipster.config.JHipsterConstants', `${application.packageName}.config.CouchbaseTestContainer`],

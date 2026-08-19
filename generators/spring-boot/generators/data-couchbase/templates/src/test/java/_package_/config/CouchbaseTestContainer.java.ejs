@@ -18,28 +18,35 @@
 -%>
 package <%- packageName %>.config;
 
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
-import org.testcontainers.junit.jupiter.Container;
 
-public interface CouchbaseTestContainer {
-    String BUCKET_NAME = "testBucket";
+@TestConfiguration(proxyBeanMethods = false)
+public class CouchbaseTestContainer {
 
-    @Container
-    CouchbaseContainer couchbaseContainer = new CouchbaseContainer("<%- dockerContainers.couchbase %>")
+    public static final String BUCKET_NAME = "testBucket";
+
+    private static final CouchbaseContainer COUCHBASE_CONTAINER = (CouchbaseContainer) new CouchbaseContainer("<%- dockerContainers.couchbase %>")
         .withBucket(new BucketDefinition(BUCKET_NAME))
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(CouchbaseTestContainer.class)));
 
-    @DynamicPropertySource
-    static void registerProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.couchbase.connection-string", couchbaseContainer::getConnectionString);
-        registry.add("spring.couchbase.username", couchbaseContainer::getUsername);
-        registry.add("spring.couchbase.password", couchbaseContainer::getPassword);
-        registry.add("jhipster.database.couchbase.bucket-name", () -> BUCKET_NAME);
-        registry.add("jhipster.database.couchbase.scope-name", () -> "testScope");
+    @Bean
+    @ServiceConnection
+    CouchbaseContainer couchbaseContainer() {
+        return COUCHBASE_CONTAINER;
+    }
+
+    @Bean
+    DynamicPropertyRegistrar couchbaseProperties(CouchbaseContainer couchbaseContainer) {
+        return registry -> {
+            registry.add("jhipster.database.couchbase.bucket-name", () -> BUCKET_NAME);
+            registry.add("jhipster.database.couchbase.scope-name", () -> "testScope");
+        };
     }
 }
