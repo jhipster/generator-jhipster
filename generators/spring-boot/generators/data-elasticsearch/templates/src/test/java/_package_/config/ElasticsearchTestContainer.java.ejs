@@ -19,9 +19,9 @@
 package <%- packageName %>.config;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.utility.DockerImageName;
@@ -37,12 +37,8 @@ public class ElasticsearchTestContainer {
         .withReuse(true);
 
     @Bean
+    @ServiceConnection
     ElasticsearchContainer elasticsearchContainer() {
         return ELASTICSEARCH_CONTAINER;
-    }
-
-    @Bean
-    DynamicPropertyRegistrar elasticsearchProperties(ElasticsearchContainer elasticsearchContainer) {
-        return registry -> registry.add("spring.elasticsearch.uris", () -> "http://" + elasticsearchContainer.getHttpHostAddress());
     }
 }
