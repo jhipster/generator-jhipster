@@ -18,22 +18,32 @@
 -%>
 package <%- packageName %>.config;
 
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 
-public interface RedisTestContainer {
-    @Container
-    GenericContainer redisContainer = new GenericContainer("<%- dockerContainers.redis %>")
+@TestConfiguration(proxyBeanMethods = false)
+public class RedisTestContainer {
+
+    private static final GenericContainer REDIS_CONTAINER = new GenericContainer("<%- dockerContainers.redis %>")
         .withExposedPorts(6379)
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(RedisTestContainer.class)))
         .withReuse(true);
 
-    @DynamicPropertySource
-    static void registerProperties(DynamicPropertyRegistry registry) {
-        registry.add("jhipster.cache.redis.server", () -> "redis://" + redisContainer.getContainerIpAddress() + ":" + redisContainer.getMappedPort(6379));
+    @Bean
+    GenericContainer redisContainer() {
+        return REDIS_CONTAINER;
+    }
+
+    @Bean
+    DynamicPropertyRegistrar redisProperties(GenericContainer redisContainer) {
+        return registry ->
+            registry.add(
+                "jhipster.cache.redis.server",
+                () -> "redis://" + redisContainer.getContainerIpAddress() + ":" + redisContainer.getMappedPort(6379)
+            );
     }
 }

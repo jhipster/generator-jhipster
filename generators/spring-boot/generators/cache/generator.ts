@@ -219,9 +219,9 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
             imports: [`${application.packageName}.config.RedisTestContainer`],
             annotations: [
               {
-                package: 'org.springframework.boot.testcontainers.context',
-                annotation: 'ImportTestcontainers',
-                parameters: (_, cb) => cb.addKeyValue('value', 'RedisTestContainer.class'),
+                package: 'org.springframework.boot.test.context',
+                annotation: 'SpringBootTest',
+                parameters: (_, cb) => cb.addKeyValue('classes', 'RedisTestContainer.class'),
               },
             ],
           });
