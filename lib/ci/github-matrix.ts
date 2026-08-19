@@ -55,7 +55,8 @@ export type GitHubMatrix = {
   jdl?: string;
 };
 
-export type GitHubMatrixGroup = Record<string, Partial<Omit<GitHubMatrix, 'job-name'>> & { disabled?: boolean }>;
+export type GitHubMatrixGroupItem = Partial<Omit<GitHubMatrix, 'job-name'>> & { disabled?: boolean; workspaces?: 'true' | 'false' };
+export type GitHubMatrixGroup = Record<string, GitHubMatrixGroupItem>;
 
 export type GitHubMatrixOutput = {
   include: GitHubMatrix[];

@@ -20,6 +20,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "entity": "sqlfull",
       "sonar-analyse": "true",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -46,6 +47,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "clientBundler": "webpack"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -66,6 +68,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-mysql-es-noi18n-mapsid",
       "entity": "sql",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -90,6 +93,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -113,6 +117,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -133,27 +138,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-couchbase",
       "entity": "couchbase",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
-    },
-    {
-      "job-name": "ng-gradle-couchbase-search (n[0]/j[2])",
-      "sample": "ng-gradle-couchbase-search",
-      "os": "ubuntu-latest",
-      "node-version": "[0]",
-      "java-version": "[2]",
-      "npm-version": "NPM-VERSION",
-      "default-environment": "prod",
-      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-      "skip-compare": "false",
-      "skip-backend-tests": "false",
-      "skip-frontend-tests": "false",
-      "gradle-cache": true,
-      "name": "ng-gradle-couchbase-search",
-      "app-sample": "ng-gradle-couchbase-search",
-      "entity": "couchbase",
-      "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -175,6 +160,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-gradle-fr",
       "entity": "sql",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -199,6 +185,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -224,6 +211,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultPackaging": "war"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -244,6 +232,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-mongodb",
       "entity": "mongodb",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -265,6 +254,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -285,6 +275,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-psql",
       "entity": "sql",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -304,6 +295,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "name": "ng-webflux-psql-additional",
       "jdl-samples": "webflux-psql,custom-domain",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -328,6 +320,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       },
       "entity": "sqllight",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -348,6 +341,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-couchbase",
       "entity": "couchbase",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -374,6 +368,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "clientFramework": "angular"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -399,6 +394,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -423,6 +419,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -447,6 +444,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -855,6 +853,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "app-sample": "react-default",
       "entity": "sqlfull",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -878,6 +877,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -899,6 +899,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
       "entity": "sql",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -920,6 +921,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "app-sample": "react-gradle-cassandra-session-redis",
       "entity": "cassandra",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -947,6 +949,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
         "clientFramework": "react"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -971,6 +974,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -995,6 +999,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1022,6 +1027,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "app-sample": "vue-default",
       "entity": "sqlfull",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1043,6 +1049,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "entity": "none",
       "jdl-entity": "custom-id",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1063,6 +1070,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "app-sample": "vue-noi18n-ws-oauth2",
       "entity": "sqlfull",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1083,6 +1091,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "app-sample": "vue-fulli18n-es",
       "entity": "sql",
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1107,6 +1116,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1130,6 +1140,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1153,6 +1164,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1179,6 +1191,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "clientFramework": "vue"
       },
       "workspaces": "false",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1203,6 +1216,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1227,6 +1241,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"
@@ -1251,6 +1266,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "monorepository": true
       },
       "workspaces": "true",
+      "disabled": false,
       "build-jhipster-bom": true,
       "jhipster-bom-branch": "main",
       "jhipster-bom-cicd-version": "0.0.0-CICD"

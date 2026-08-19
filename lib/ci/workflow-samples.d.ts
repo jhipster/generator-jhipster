@@ -12,6 +12,7 @@ export type JHipsterGitHubMatrix = GitHubMatrix & {
   'skip-frontend-tests'?: 'true' | 'false';
   'skip-compare'?: 'true' | 'false';
   'skip-backend-tests'?: 'true' | 'false';
+  disabled?: string;
 };
 
 export type JHipsterGitHubInputMatrix = JHipsterGitHubMatrix & {
