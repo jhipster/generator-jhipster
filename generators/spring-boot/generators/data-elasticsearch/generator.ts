@@ -101,9 +101,9 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
           ],
           annotations: [
             {
-              package: 'org.springframework.boot.testcontainers.context',
-              annotation: 'ImportTestcontainers',
-              parameters: (_, cb) => cb.addKeyValue('value', 'ElasticsearchTestContainer.class'),
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'ElasticsearchTestContainer.class'),
             },
             {
               package: 'org.springframework.boot.test.context',
