@@ -72,7 +72,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                         }
                     }
 <%_ if (reactive) { _%>
-                    testValues = testValues.and("spring.r2dbc.url=" + prodTestcontainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
+                    testValues = testValues.and("spring.r2dbc.url=" + prodTestcontainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<%- prodDatabaseTypeMssql ? '.replace(";encrypt=false", "")' : '' %> + "<%- prodDatabaseExtraOptions %>");
                     testValues = testValues.and("spring.r2dbc.username=" + prodTestcontainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + prodTestcontainer.getTestContainer().getPassword());
                     testValues = testValues.and("spring.liquibase.url=" + prodTestcontainer.getTestContainer().getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");

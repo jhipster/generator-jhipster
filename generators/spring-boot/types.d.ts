@@ -98,7 +98,7 @@ export type Source = JavaSource &
     addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
     addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
     addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;
-    addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
+    addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string | string[] }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
     addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
     /**
