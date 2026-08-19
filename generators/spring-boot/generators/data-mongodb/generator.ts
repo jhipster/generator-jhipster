@@ -94,9 +94,9 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
           imports: [`${application.packageName}.config.MongoDbTestContainer`],
           annotations: [
             {
-              package: 'org.springframework.boot.testcontainers.context',
-              annotation: 'ImportTestcontainers',
-              parameters: (_, cb) => cb.addKeyValue('value', 'MongoDbTestContainer.class'),
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'MongoDbTestContainer.class'),
             },
           ],
         });
