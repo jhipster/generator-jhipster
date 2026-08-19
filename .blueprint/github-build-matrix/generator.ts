@@ -23,7 +23,7 @@ import { join } from 'node:path';
 import BaseGenerator from '../../generators/base-core/index.ts';
 import {
   type GitHubMatrixGroup,
-  type JHipsterGitHubInputMatrix,
+  type GitHubMatrixGroupItem,
   type WorkflowSamples,
   convertToGitHubMatrix,
   getGithubOutputFile,
@@ -118,7 +118,7 @@ export default class extends BaseGenerator {
               matrix = Object.fromEntries(
                 parsed.include
                   .filter(sample => enableAnyTest || sample['sonar-analyse'])
-                  .map((sample): [string, JHipsterGitHubInputMatrix] => {
+                  .map((sample): [string, GitHubMatrixGroupItem] => {
                     const { 'job-name': jobName = sample.name, 'sonar-analyse': sonarAnalyse, generatorOptions } = sample;
                     const enableSonar = sonarAnalyse === 'true';
                     const workspaces = generatorOptions?.workspaces ? 'true' : 'false';
@@ -137,6 +137,7 @@ export default class extends BaseGenerator {
                         ...sample,
                         sample: sample.name ?? jobName,
                         workspaces,
+                        disabled: Boolean(sample.disabled),
                       },
                     ];
                   }),

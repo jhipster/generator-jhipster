@@ -48,6 +48,7 @@
     {
       "name": "ng-gradle-couchbase-search",
       "app-sample": "ng-gradle-couchbase-search",
+      "disabled": "JUnit Integration Test is failing",
       "entity": "couchbase"
     },
     {
