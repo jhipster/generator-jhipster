@@ -45,6 +45,9 @@ import org.springframework.boot.h2console.autoconfigure.H2ConsoleProperties;
 import org.springframework.core.env.Environment;
 <%_ } _%>
 <%_ if (reactive) { _%>
+  <%_ if (generateUserManagement) { _%>
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+  <%_ } _%>
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
@@ -83,6 +86,9 @@ import java.util.UUID;
 @Configuration
 <%_ if (reactive) { _%>
 @EnableR2dbcRepositories({<%- domains.map(domain => `"${domain}.repository"`).join(', ') %>})
+  <%_ if (generateUserManagement) { _%>
+@RegisterReflectionForBinding({ java.sql.Date[].class, java.sql.Time[].class, java.sql.Timestamp[].class })
+  <%_ } _%>
 <%_ } else { _%>
 @EnableJpaRepositories({<%- domains.map(domain => `"${domain}.repository"`).join(', ') %>})
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
