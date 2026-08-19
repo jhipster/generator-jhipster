@@ -27,6 +27,10 @@ runs:
       with:
         generator-path: generator-jhipster
         generator-jhipster-path: generator-jhipster
+    - uses: actions/cache@v4
+      with:
+        path: ~/.m2/wrapper/dists
+        key: ${{ runner.os }}-jhipster-mvnw-${{ hashFiles('generator-jhipster/generators/java-simple-application/generators/maven/templates/.mvn/wrapper/maven-wrapper.properties') }}
     - uses: ./generator-jhipster/.github/actions/cache-java-dependencies
       if: always()
       with:

@@ -102,6 +102,10 @@ jobs:
           maven-cache: true
           gradle-cache: ${{ matrix.gradle-cache }}
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/wrapper/dists
+          key: ${{ runner.os }}-jhipster-mvnw-${{ hashFiles('generator-jhipster/generators/java-simple-application/generators/maven/templates/.mvn/wrapper/maven-wrapper.properties') }}
       # Fail git operations on line ending mismatches, and make sure that JHipster generates crlf line endings on Windows correctly.
       - run: |
           git config --global core.autocrlf false
