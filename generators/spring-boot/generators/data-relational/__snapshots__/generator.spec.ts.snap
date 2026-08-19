@@ -4608,8 +4608,8 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -4844,8 +4844,8 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -5350,8 +5350,8 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -6321,8 +6321,8 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -8785,8 +8785,8 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -9306,8 +9306,8 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -9827,8 +9827,8 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -10828,8 +10828,8 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
