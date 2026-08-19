@@ -189,9 +189,17 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
         });
       },
       blockhound({ application, source }) {
-        const { reactive } = application;
-        if (reactive) {
-          source.addAllowBlockingCallsInside!({ classPath: 'org.neo4j.driver.internal.util.Futures', method: 'blockingGet' });
+        if (!application.reactive) return;
+
+        source.addAllowBlockingCallsInside!({ classPath: 'org.neo4j.driver.internal.util.Futures', method: 'blockingGet' });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.data.neo4j.core.PropertyFilterSupport',
+          method: 'getInputProperties',
+        });
+
+        if (application.databaseMigrationLiquibase) {
+          source.addAllowBlockingCallsInside!({ classPath: 'io.netty.util.concurrent.DefaultPromise', method: 'awaitUninterruptibly' });
+          source.addAllowBlockingCallsInside!({ classPath: 'java.util.concurrent.ThreadPoolExecutor', method: 'shutdown' });
         }
       },
     });
