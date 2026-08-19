@@ -30,7 +30,7 @@
     "@rsbuild/core": "2.1.13",
     "@rsbuild/plugin-sass": "2.0.1",
     "@rsbuild/plugin-vue": "2.0.1",
-    "@tsconfig/node18": "18.2.6",
+    "@tsconfig/node18": "18.2.7",
     "@types/node": "22.20.1",
     "@vitejs/plugin-vue": "6.0.8",
     "@vue/test-utils": "2.4.11",
