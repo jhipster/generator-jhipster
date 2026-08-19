@@ -359,10 +359,39 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         }
       },
       async blockHound({ application, source }) {
-        if (application.reactive && application.prodDatabaseTypeMariadb) {
+        if (!application.reactive) return;
+
+        if (application.prodDatabaseTypeMariadb) {
+          source.addAllowBlockingCallsInside!({
+            classPath: 'org.mariadb.r2dbc.message.client.HandshakeResponse',
+            method: 'writeConnectAttributes',
+          });
+
+          source.addAllowBlockingCallsInside!({
+            classPath: 'org.mariadb.r2dbc.client.MariadbFrameDecoder',
+            method: 'decode',
+          });
+
           source.addAllowBlockingCallsInside!({
             classPath: 'org.mariadb.r2dbc.client.SimpleClient',
-            method: ['sendCommand', 'sendCommandWithoutResult', 'executeWhenTransaction', 'executeWhenNotInTransaction', 'setAutoCommit'],
+            method: [
+              'sendCommandWithoutResult',
+              'executeWhenTransaction',
+              'executeWhenNotInTransaction',
+              'setAutoCommit',
+              // `receive` and `sendCommand` acquire the lock inside their `Flux.create` lambdas, which run at
+              // subscribe time, so the enclosing method is no longer on the stack and BlockHound only sees the
+              // synthetic lambda. Names are tied to r2dbc-mariadb 1.3.0 and must be rechecked on driver upgrades.
+              'lambda$receive$14',
+              'lambda$sendCommand$16',
+              'lambda$sendCommand$19',
+            ],
+          });
+        }
+        if (application.prodDatabaseTypeMssql) {
+          source.addAllowBlockingCallsInside!({
+            classPath: 'io.r2dbc.mssql.client.ssl.TdsSslHandler',
+            method: 'createSslHandler',
           });
         }
       },

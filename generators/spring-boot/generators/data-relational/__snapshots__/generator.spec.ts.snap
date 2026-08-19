@@ -42,13 +42,23 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
 {
   "addAllowBlockingCallsInside": [
     {
+      "classPath": "org.mariadb.r2dbc.message.client.HandshakeResponse",
+      "method": "writeConnectAttributes",
+    },
+    {
+      "classPath": "org.mariadb.r2dbc.client.MariadbFrameDecoder",
+      "method": "decode",
+    },
+    {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
       "method": [
-        "sendCommand",
         "sendCommandWithoutResult",
         "executeWhenTransaction",
         "executeWhenNotInTransaction",
         "setAutoCommit",
+        "lambda$receive$14",
+        "lambda$sendCommand$16",
+        "lambda$sendCommand$19",
       ],
     },
   ],
@@ -337,6 +347,12 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
 
 exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix-Entity-Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-skipUserManagement(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "io.r2dbc.mssql.client.ssl.TdsSslHandler",
+      "method": "createSslHandler",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -2436,13 +2452,23 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
 {
   "addAllowBlockingCallsInside": [
     {
+      "classPath": "org.mariadb.r2dbc.message.client.HandshakeResponse",
+      "method": "writeConnectAttributes",
+    },
+    {
+      "classPath": "org.mariadb.r2dbc.client.MariadbFrameDecoder",
+      "method": "decode",
+    },
+    {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
       "method": [
-        "sendCommand",
         "sendCommandWithoutResult",
         "executeWhenTransaction",
         "executeWhenNotInTransaction",
         "setAutoCommit",
+        "lambda$receive$14",
+        "lambda$sendCommand$16",
+        "lambda$sendCommand$19",
       ],
     },
   ],
@@ -3033,6 +3059,12 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
 
 exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen(true)-consul-enableHibernateCache(true)-h2Disk should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "io.r2dbc.mssql.client.ssl.TdsSslHandler",
+      "method": "createSslHandler",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -4228,13 +4260,23 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
 {
   "addAllowBlockingCallsInside": [
     {
+      "classPath": "org.mariadb.r2dbc.message.client.HandshakeResponse",
+      "method": "writeConnectAttributes",
+    },
+    {
+      "classPath": "org.mariadb.r2dbc.client.MariadbFrameDecoder",
+      "method": "decode",
+    },
+    {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
       "method": [
-        "sendCommand",
         "sendCommandWithoutResult",
         "executeWhenTransaction",
         "executeWhenNotInTransaction",
         "setAutoCommit",
+        "lambda$receive$14",
+        "lambda$sendCommand$16",
+        "lambda$sendCommand$19",
       ],
     },
   ],
@@ -4467,6 +4509,12 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
 
 exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--DTO-skipCommitHook(false)-enableSwaggerCodegen(false)-skipUserManagement(true)-eureka-enableHibernateCache(true)-mssql should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "io.r2dbc.mssql.client.ssl.TdsSslHandler",
+      "method": "createSslHandler",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -6346,13 +6394,23 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
 {
   "addAllowBlockingCallsInside": [
     {
+      "classPath": "org.mariadb.r2dbc.message.client.HandshakeResponse",
+      "method": "writeConnectAttributes",
+    },
+    {
+      "classPath": "org.mariadb.r2dbc.client.MariadbFrameDecoder",
+      "method": "decode",
+    },
+    {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
       "method": [
-        "sendCommand",
         "sendCommandWithoutResult",
         "executeWhenTransaction",
         "executeWhenNotInTransaction",
         "setAutoCommit",
+        "lambda$receive$14",
+        "lambda$sendCommand$16",
+        "lambda$sendCommand$19",
       ],
     },
   ],
@@ -6852,6 +6910,12 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
 
 exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-serviceDiscoveryType(no)-enableHibernateCache(true)-h2Memory should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "io.r2dbc.mssql.client.ssl.TdsSslHandler",
+      "method": "createSslHandler",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -8241,13 +8305,23 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
 {
   "addAllowBlockingCallsInside": [
     {
+      "classPath": "org.mariadb.r2dbc.message.client.HandshakeResponse",
+      "method": "writeConnectAttributes",
+    },
+    {
+      "classPath": "org.mariadb.r2dbc.client.MariadbFrameDecoder",
+      "method": "decode",
+    },
+    {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
       "method": [
-        "sendCommand",
         "sendCommandWithoutResult",
         "executeWhenTransaction",
         "executeWhenNotInTransaction",
         "setAutoCommit",
+        "lambda$receive$14",
+        "lambda$sendCommand$16",
+        "lambda$sendCommand$19",
       ],
     },
   ],
@@ -8755,6 +8829,12 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
 
 exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen(true)-skipUserManagement(true)-consul-enableHibernateCache(true)-mssql should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "io.r2dbc.mssql.client.ssl.TdsSslHandler",
+      "method": "createSslHandler",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -10679,13 +10759,23 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
 {
   "addAllowBlockingCallsInside": [
     {
+      "classPath": "org.mariadb.r2dbc.message.client.HandshakeResponse",
+      "method": "writeConnectAttributes",
+    },
+    {
+      "classPath": "org.mariadb.r2dbc.client.MariadbFrameDecoder",
+      "method": "decode",
+    },
+    {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
       "method": [
-        "sendCommand",
         "sendCommandWithoutResult",
         "executeWhenTransaction",
         "executeWhenNotInTransaction",
         "setAutoCommit",
+        "lambda$receive$14",
+        "lambda$sendCommand$16",
+        "lambda$sendCommand$19",
       ],
     },
   ],
@@ -11185,6 +11275,12 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
 
 exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-eureka-enableHibernateCache(true)-h2Memory should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "io.r2dbc.mssql.client.ssl.TdsSslHandler",
+      "method": "createSslHandler",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
@@ -13212,13 +13308,23 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
 {
   "addAllowBlockingCallsInside": [
     {
+      "classPath": "org.mariadb.r2dbc.message.client.HandshakeResponse",
+      "method": "writeConnectAttributes",
+    },
+    {
+      "classPath": "org.mariadb.r2dbc.client.MariadbFrameDecoder",
+      "method": "decode",
+    },
+    {
       "classPath": "org.mariadb.r2dbc.client.SimpleClient",
       "method": [
-        "sendCommand",
         "sendCommandWithoutResult",
         "executeWhenTransaction",
         "executeWhenNotInTransaction",
         "setAutoCommit",
+        "lambda$receive$14",
+        "lambda$sendCommand$16",
+        "lambda$sendCommand$19",
       ],
     },
   ],
@@ -13782,6 +13888,12 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
 
 exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(true)-consul-enableHibernateCache(true)-h2Disk should match source calls snapshot 1`] = `
 {
+  "addAllowBlockingCallsInside": [
+    {
+      "classPath": "io.r2dbc.mssql.client.ssl.TdsSslHandler",
+      "method": "createSslHandler",
+    },
+  ],
   "addJavaDefinition": [
     [
       {
