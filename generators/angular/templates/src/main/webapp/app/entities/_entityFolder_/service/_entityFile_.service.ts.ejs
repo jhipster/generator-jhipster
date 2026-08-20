@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const searchType = paginationPagination || paginationInfiniteScroll ? 'SearchWithPagination' : 'Search';
-    const requiresRestTypeConversion = !builtInUserManagement && anyFieldIsDateDerived || builtInUserManagement && !userManagement.skipClient;
+    const requiresRestTypeConversion = anyFieldIsDateDerived || builtInUserManagement;
     const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
     const bodyArg = requiresRestTypeConversion ? 'copy' : entityInstance;
     const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
@@ -63,9 +63,6 @@ type RestOf<T extends I<%- entityAngularName %><% if (!readOnly) { %> | New<%- e
   <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
   <%- field.fieldName %>?: string | null;
   <%_ } _%>
-  <%_ if (builtInUserManagement) { _%>
-    authorities?: string[] | null;
-  <%_ } _%>
   };
 
 export type <%- entityRestName %> = RestOf<I<%- entityAngularName %>>;
@@ -107,9 +104,6 @@ export class <%- entityAngularNamePlural %>Service {
       ...rest<%- entityAngularName %>,
   <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
       <%- field.fieldName %>: rest<%- entityAngularName %>.<%- field.fieldName %> ? dayjs(rest<%- entityAngularName %>.<%- field.fieldName %>) : undefined,
-  <%_ } _%>
-  <%_ if (builtInUserManagement) { _%>
-      authorities: rest<%- entityAngularName %>.authorities?.map(authority => ({ name: authority as unknown as string })),
   <%_ } _%>
     }
   }
@@ -220,9 +214,6 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     <%_ if (field.fieldTypeLocalDate) { _%>
     <%- field.fieldName %>: <%- entityInstance %>.<%- field.fieldName %>?.format(DATE_FORMAT) ?? null,
     <%_ } _%>
-  <%_ } _%>
-  <%_ if (builtInUserManagement) { _%>
-      authorities: <%- entityInstance %>.authorities?.map(authority => authority.name),
   <%_ } _%>
     };
   }

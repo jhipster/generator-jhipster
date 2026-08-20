@@ -23,7 +23,7 @@ import type {
   Relationship as ClientRelationship,
 } from '../client/types.d.ts';
 
-export type { Config, Features, Options, Relationship, Source } from '../client/types.d.ts';
+export type { Config, Features, Options, Source } from '../client/types.d.ts';
 
 export type Field = ClientField & {
   fieldTsDefaultValue?: string;
@@ -31,7 +31,11 @@ export type Field = ClientField & {
   fieldValidateRulesPatternAngular?: string;
 };
 
-export interface Entity<F extends Field = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
+export type Relationship = ClientRelationship & {
+  relationshipShouldUsePick?: boolean;
+};
+
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ClientEntity<F, R> {
   /**
    * @experimental to be replaced with a calculated property
    * Returns the typescript import section of enums referenced by all fields of the entity.

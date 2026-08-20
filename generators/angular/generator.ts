@@ -294,6 +294,23 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ entity, relationship }) {
+        mutateData(relationship, {
+          __override__: false,
+          propertyTsType: ({ otherEntity }) => `I${otherEntity.entityAngularName}`,
+          relationshipShouldUsePick: ({ otherEntity }) =>
+            !entity.builtInUserManagement && !otherEntity.embedded && ((entity as any).dtoMapstruct || otherEntity.builtInUser),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+  }
+
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       prepareTranslationPipeUsage({ application: { enableTranslation }, entity }) {

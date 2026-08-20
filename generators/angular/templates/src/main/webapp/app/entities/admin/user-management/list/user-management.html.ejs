@@ -102,9 +102,9 @@
           }
           </td>
 <%_ if (!locals.databaseTypeCassandra) { _%>
-          <td>{{ userManagement.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ userManagement.createdDate | formatMediumDatetime }}</td>
           <td>{{ userManagement.lastModifiedBy }}</td>
-          <td>{{ userManagement.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
 <%_ } _%>
           <td class="text-end">
             <div class="btn-group">

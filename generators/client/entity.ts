@@ -63,7 +63,9 @@ export const mutateField = {
 
 export type Field = CommonField & LanguagesField & ClientAddedFieldProperties;
 
-export interface Relationship extends CommonRelationship, LanguagesRelationship {}
+export interface Relationship extends CommonRelationship, LanguagesRelationship {
+  propertyTsType?: string;
+}
 
 type ClientAddedEntityProperties = {
   entityFileName: string;
