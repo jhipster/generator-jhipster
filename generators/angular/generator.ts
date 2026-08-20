@@ -347,10 +347,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
         await control.cleanupFiles({
-          '9.2.1': [
-            `${application.clientSrcDir}app/core/config/application-config.service.ts`,
-            `${application.clientSrcDir}app/core/config/application-config.service.spec.ts`,
-          ],
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
           '8.7.4': [`${application.clientSrcDir}app/app.constants.ts`],
           '9.0.0-alpha.0': [
@@ -394,6 +390,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientSrcDir}app/admin/user-management/delete/user-management-delete-dialog.ts`,
             `${application.clientSrcDir}app/admin/user-management/service/user-management.service.spec.ts`,
             `${application.clientSrcDir}app/admin/user-management/service/user-management.service.ts`,
+          ],
+          '9.2.1': [
+            `${application.clientSrcDir}app/core/config/application-config.service.ts`,
+            `${application.clientSrcDir}app/core/config/application-config.service.spec.ts`,
           ],
         });
       },
