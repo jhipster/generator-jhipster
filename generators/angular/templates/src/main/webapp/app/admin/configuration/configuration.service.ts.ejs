@@ -16,20 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { Bean, Beans, ConfigProps, Env, PropertySource } from './configuration.model';
 
 @Service()
 export class ConfigurationService {
   private readonly http = inject(HttpClient);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   getBeans(): Observable<Bean[]> {
-    return this.http.get<ConfigProps>(this.applicationConfigService.getEndpointFor('management/configprops')).pipe(
+    return this.http.get<ConfigProps>(`${serverApiUrl}management/configprops`).pipe(
       map(configProps =>
         Object.values(
           Object.values(configProps.contexts)
@@ -41,6 +40,6 @@ export class ConfigurationService {
   }
 
   getPropertySources(): Observable<PropertySource[]> {
-    return this.http.get<Env>(this.applicationConfigService.getEndpointFor('management/env')).pipe(map(env => env.propertySources));
+    return this.http.get<Env>(`${serverApiUrl}management/env`).pipe(map(env => env.propertySources));
   }
 }

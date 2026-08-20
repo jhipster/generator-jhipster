@@ -22,6 +22,7 @@
     const bodyArg = requiresRestTypeConversion ? 'copy' : entityInstance;
     const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
 _%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { computed, inject, Service, signal } from '@angular/core';
 import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
 import {
@@ -45,7 +46,6 @@ import dayjs from 'dayjs/esm';
 <%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 <%_ if (searchEngineAny) { _%>
 import { <%- searchType %> } from 'app/core/request/request.model';
@@ -96,10 +96,9 @@ export class <%- entityAngularNamePlural %>Service {
   readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.hasValue() ? this.<%- entityInstancePlural %>Resource.value() : [])
     <%- requiresRestTypeConversion ? '.map(item => this.convertValueFromServer(item))' : '' %>
   );
-  protected readonly applicationConfigService = inject(ApplicationConfigService);
-  protected readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/<%- entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
+  protected readonly resourceUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>services/<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>`;
 <%_ if (searchEngineAny) { _%>
-  protected readonly resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/<%- entityApiUrl %>/_search'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
+  protected readonly resourceSearchUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>services/<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>/_search`;
 <%_ } _%>
 <%_ if (requiresRestTypeConversion) { _%>
 

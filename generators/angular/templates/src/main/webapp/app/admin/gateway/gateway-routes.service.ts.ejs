@@ -16,19 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { GatewayRoute } from './gateway-route.model';
 
 @Service()
 export class GatewayRoutesService {
   private readonly http = inject(HttpClient);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   findAll(): Observable<GatewayRoute[]> {
-    return this.http.get<GatewayRoute[]>(this.applicationConfigService.getEndpointFor('api/gateway/routes'));
+    return this.http.get<GatewayRoute[]>(`${serverApiUrl}api/gateway/routes`);
   }
 }

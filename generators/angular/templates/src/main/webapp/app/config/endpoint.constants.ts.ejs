@@ -16,20 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Service } from '@angular/core';
-
-@Service()
-export class ApplicationConfigService {
-  private endpointPrefix = '';
-
-  setEndpointPrefix(endpointPrefix: string): void {
-    this.endpointPrefix = endpointPrefix;
-  }
-
-  getEndpointFor(api: string, microservice?: string): string {
-    if (microservice) {
-      return `${this.endpointPrefix}services/${microservice}/${api}`;
-    }
-    return `${this.endpointPrefix}${api}`;
-  }
-}
+// The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
+// If this URL is left empty (""), then it will be relative to the current context.
+export const serverApiUrl = SERVER_API_URL;

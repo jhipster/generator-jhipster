@@ -16,23 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { LoggersResponse, Level } from './log.model';
 
 @Service()
 export class LogsService {
   private readonly http = inject(HttpClient);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   changeLevel(name: string, configuredLevel: Level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`management/loggers/${name}`<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service' : '' %>), { configuredLevel });
+    return this.http.post(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `services/${service}/` : ''}" : '' %>management/loggers/${name}`, { configuredLevel });
   }
 
   findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<LoggersResponse> {
-    return this.http.get<LoggersResponse>(this.applicationConfigService.getEndpointFor('management/loggers'<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service' : '' %>));
+    return this.http.get<LoggersResponse>(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `services/${service}/` : ''}" : '' %>management/loggers`);
   }
 }
