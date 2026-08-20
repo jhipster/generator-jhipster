@@ -22,7 +22,7 @@
     const bodyArg = requiresRestTypeConversion ? 'copy' : entityInstance;
     const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
 _%>
-import { serverApiUrl } from 'app/config/endpoint.constants';
+import { <%- (applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config/endpoint.constants';
 import { computed, inject, Service, signal } from '@angular/core';
 import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
 import {
@@ -96,9 +96,9 @@ export class <%- entityAngularNamePlural %>Service {
   readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.hasValue() ? this.<%- entityInstancePlural %>Resource.value() : [])
     <%- requiresRestTypeConversion ? '.map(item => this.convertValueFromServer(item))' : '' %>
   );
-  protected readonly resourceUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>services/<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>`;
+  protected readonly resourceUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>${microserviceContextPath}<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>`;
 <%_ if (searchEngineAny) { _%>
-  protected readonly resourceSearchUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>services/<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>/_search`;
+  protected readonly resourceSearchUrl = `${serverApiUrl}<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>${microserviceContextPath}<%- microserviceName.toLowerCase() %>/<% } %>api/<%- entityApiUrl %>/_search`;
 <%_ } _%>
 <%_ if (requiresRestTypeConversion) { _%>
 

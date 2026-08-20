@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config/endpoint.constants';
+import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config/endpoint.constants';
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -28,10 +28,10 @@ export class LogsService {
   private readonly http = inject(HttpClient);
 
   changeLevel(name: string, configuredLevel: Level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
-    return this.http.post(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `services/${service}/` : ''}" : '' %>management/loggers/${name}`, { configuredLevel });
+    return this.http.post(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>management/loggers/${name}`, { configuredLevel });
   }
 
   findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<LoggersResponse> {
-    return this.http.get<LoggersResponse>(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `services/${service}/` : ''}" : '' %>management/loggers`);
+    return this.http.get<LoggersResponse>(`${serverApiUrl}<%- applicationTypeGateway && gatewayServicesApiAvailable ? "${service ? `${microserviceContextPath}${service}/` : ''}" : '' %>management/loggers`);
   }
 }
