@@ -74,6 +74,8 @@ module.exports = async (config, options, targetOptions) => {
                 // URI that will be retrieved by the ForwardedHeaderFilter on the server side
                 proxyReq.setHeader('X-Forwarded-Host', 'localhost:<%- devServerPortProxy %>');
                 proxyReq.setHeader('X-Forwarded-Proto', `http${tls ? 's' : ''}`);
+                // Tomcat's RemoteIpValve drops the port from X-Forwarded-Host, it must be forwarded separately
+                proxyReq.setHeader('X-Forwarded-Port', '<%- devServerPortProxy %>');
               },
             ],
           },
