@@ -245,7 +245,7 @@ describe("UserManagement Management Detail Component", () => {
                   (m) => m.UserManagementDetail,
                 ),
               resolve: {
-                userManagement: () => of({ login: "Oswald.Kertzmann" }),
+                userManagement: () => of({ login: "Ozella.Kertzmann" }),
               },
             },
           ],
@@ -270,7 +270,7 @@ describe("UserManagement Management Detail Component", () => {
 
       // THEN
       expect(instance.userManagement()).toEqual(
-        expect.objectContaining({ login: "Oswald.Kertzmann" }),
+        expect.objectContaining({ login: "Ozella.Kertzmann" }),
       );
     });
   });
@@ -596,7 +596,7 @@ describe("UserManagement Management Component", () => {
     // WHEN
     TestBed.tick();
     const req = httpMock.expectOne({ method: "GET" });
-    req.flush([{ login: "Oswald.Kertzmann" }], {
+    req.flush([{ login: "Ozella.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -606,7 +606,7 @@ describe("UserManagement Management Component", () => {
     // THEN
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Oswald.Kertzmann" }),
+      expect.objectContaining({ login: "Ozella.Kertzmann" }),
     );
   });
 
@@ -620,7 +620,7 @@ describe("UserManagement Management Component", () => {
     comp.load();
     await vi.runAllTimersAsync();
     const req2 = httpMock.expectOne({ method: "GET" });
-    req2.flush([{ login: "Oswald.Kertzmann" }], {
+    req2.flush([{ login: "Ozella.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -631,7 +631,7 @@ describe("UserManagement Management Component", () => {
     expect(req.cancelled).toBeTruthy();
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Oswald.Kertzmann" }),
+      expect.objectContaining({ login: "Ozella.Kertzmann" }),
     );
   });
 
@@ -650,7 +650,7 @@ describe("UserManagement Management Component", () => {
     comp.load();
     TestBed.tick();
     const successReq = httpMock.expectOne({ method: "GET" });
-    successReq.flush([{ login: "Oswald.Kertzmann" }], {
+    successReq.flush([{ login: "Ozella.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -659,13 +659,13 @@ describe("UserManagement Management Component", () => {
 
     // THEN - subscription is still alive and second load succeeds
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Oswald.Kertzmann" }),
+      expect.objectContaining({ login: "Ozella.Kertzmann" }),
     );
   });
 
   describe("trackLogin", () => {
     it("should forward to userManagementService", () => {
-      const entity = { login: "Oswald.Kertzmann" };
+      const entity = { login: "Ozella.Kertzmann" };
       vi.spyOn(service, "getUserManagementIdentifier");
       const login = comp.trackLogin(entity);
       expect(service.getUserManagementIdentifier).toHaveBeenCalledWith(entity);
@@ -771,7 +771,7 @@ import {
   Router,
   RouterLink,
 } from "@angular/router";
-import { combineLatest, filter, map, tap } from "rxjs";
+import { combineLatest, filter, tap, map } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
 import { AlertError } from "app/shared/alert/alert-error";
@@ -1344,7 +1344,7 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if one entity is null", () => {
-        const entity1 = { login: "Oswald.Kertzmann" };
+        const entity1 = { login: "Ozella.Kertzmann" };
         const entity2 = null;
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
@@ -1355,8 +1355,8 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if primaryKey differs", () => {
-        const entity1 = { login: "Oswald.Kertzmann" };
-        const entity2 = { login: "Beth.Schiller33" };
+        const entity1 = { login: "Ozella.Kertzmann" };
+        const entity2 = { login: "Anya.Schiller33" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -1366,8 +1366,8 @@ describe("UserManagement Service", () => {
       });
 
       it("should return true if primaryKey matches", () => {
-        const entity1 = { login: "Oswald.Kertzmann" };
-        const entity2 = { login: "Oswald.Kertzmann" };
+        const entity1 = { login: "Ozella.Kertzmann" };
+        const entity2 = { login: "Ozella.Kertzmann" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -2158,7 +2158,7 @@ describe("UserManagement Management Update Component", () => {
 
   describe("ngOnInit", () => {
     it("should update editForm", () => {
-      const userManagement: IUserManagement = { login: "Beth.Schiller33" };
+      const userManagement: IUserManagement = { login: "Anya.Schiller33" };
 
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
@@ -2171,7 +2171,7 @@ describe("UserManagement Management Update Component", () => {
     it("should call update service on save for existing entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Oswald.Kertzmann" };
+      const userManagement = { login: "Ozella.Kertzmann" };
       vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue(
         userManagement,
       );
@@ -2198,7 +2198,7 @@ describe("UserManagement Management Update Component", () => {
     it("should call update service on save for new entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Oswald.Kertzmann" };
+      const userManagement = { login: "Ozella.Kertzmann" };
       vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue({
         login: null,
       });
@@ -2225,7 +2225,7 @@ describe("UserManagement Management Update Component", () => {
     it("should set isSaving to false on error", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Oswald.Kertzmann" };
+      const userManagement = { login: "Ozella.Kertzmann" };
       vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
       vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement });
@@ -2427,16 +2427,16 @@ export default userManagementRoute;
 import { IUserManagement, NewUserManagement } from "./user-management.model";
 
 export const sampleWithRequiredData: IUserManagement = {
-  login: "Rickey.Sauer",
-  email: "Lia5@hotmail.com",
+  login: "Randall.Sauer",
+  email: "Lucienne5@hotmail.com",
 };
 
 export const sampleWithPartialData: IUserManagement = {
   id: 2737,
-  login: "Guillermo_Klein32",
-  firstName: "Mitchel",
+  login: "Grayson_Klein32",
+  firstName: "Mertie",
   lastName: "Mitchell",
-  email: "Gordon.Franey@gmail.com",
+  email: "Gerson.Franey@gmail.com",
   imageUrl: "mash meanwhile youthfully",
   activated: false,
   lastModifiedDate: dayjs("2019-12-31T10:49"),
@@ -2444,10 +2444,10 @@ export const sampleWithPartialData: IUserManagement = {
 
 export const sampleWithFullData: IUserManagement = {
   id: 26558,
-  login: "Catherine72",
-  firstName: "Lenore",
+  login: "Brisa72",
+  firstName: "Lorena",
   lastName: "Bode",
-  email: "Samuel_Altenwerth65@hotmail.com",
+  email: "Rylan_Altenwerth65@hotmail.com",
   imageUrl: "ew nor",
   activated: false,
   createdBy: "pure",
@@ -2457,7 +2457,7 @@ export const sampleWithFullData: IUserManagement = {
 };
 
 export const sampleWithNewData: NewUserManagement = {
-  email: "Jevon82@yahoo.com",
+  email: "Jasen82@yahoo.com",
   login: null,
 };
 
