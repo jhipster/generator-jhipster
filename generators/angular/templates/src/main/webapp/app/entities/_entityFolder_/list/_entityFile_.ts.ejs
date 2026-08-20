@@ -38,9 +38,9 @@ import {
   combineLatest,
 <%_ if (!readOnly) { _%>
   filter,
+  tap,
 <%_ } _%>
   map,
-  tap,
 } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
