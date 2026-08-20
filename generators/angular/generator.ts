@@ -391,6 +391,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientSrcDir}app/admin/user-management/service/user-management.service.spec.ts`,
             `${application.clientSrcDir}app/admin/user-management/service/user-management.service.ts`,
           ],
+          '9.2.1': [
+            `${application.clientSrcDir}app/core/config/application-config.service.ts`,
+            `${application.clientSrcDir}app/core/config/application-config.service.spec.ts`,
+          ],
         });
       },
       cleanupOldFilesTask,

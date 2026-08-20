@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { inject, Service } from '@angular/core';
 import { HttpClient<%- authenticationTypeOauth2 ? '' : ', HttpHeaders' %> } from '@angular/common/http';
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -24,7 +25,6 @@ import { map, Observable } from 'rxjs';
 import { Observable } from 'rxjs';
 <%_ } _%>
 
-import { ApplicationConfigService } from '../config/application-config.service';
 <%_ if (authenticationTypeOauth2) { _%>
 import { Logout } from 'app/login/logout.model';
 <%_ } else { _%>
@@ -34,7 +34,6 @@ import { Login } from 'app/login/login.model';
 @Service()
 export class AuthServerProvider {
   private readonly http = inject(HttpClient);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
 <%_ if (!authenticationTypeOauth2) { _%>
 
@@ -47,15 +46,15 @@ export class AuthServerProvider {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post(this.applicationConfigService.getEndpointFor('api/authentication'), data, { headers });
+    return this.http.post(`${serverApiUrl}api/authentication`, data, { headers });
   }
 
   logout(): Observable<void> {
     // logout from the server
-    return this.http.post(this.applicationConfigService.getEndpointFor('api/logout'), {}).pipe(
+    return this.http.post(`${serverApiUrl}api/logout`, {}).pipe(
       map(() => {
         // to get a new csrf token call the api
-        this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe({
+        this.http.get(`${serverApiUrl}api/account`).subscribe({
           error() {
             // Handled by interceptor
           },
@@ -67,7 +66,7 @@ export class AuthServerProvider {
 <%_ } else { _%>
 
   logout(): Observable<Logout> {
-    return this.http.post<Logout>(this.applicationConfigService.getEndpointFor('api/logout'), {});
+    return this.http.post<Logout>(`${serverApiUrl}api/logout`, {});
   }
 
 <%_ } _%>

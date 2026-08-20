@@ -16,19 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { HealthModel } from './health.model';
 
 @Service()
 export class HealthService {
   private readonly http = inject(HttpClient);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   checkHealth(): Observable<HealthModel> {
-    return this.http.get<HealthModel>(this.applicationConfigService.getEndpointFor('management/health'));
+    return this.http.get<HealthModel>(`${serverApiUrl}management/health`);
   }
 }

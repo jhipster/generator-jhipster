@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -29,7 +30,6 @@ import { Authority } from 'app/shared/jhipster/constants';
 import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ if (generateUserManagement) { _%>
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
 
 import { AccountService } from './account.service';
@@ -52,7 +52,6 @@ const mockFn = (value: string | null): Mock => vi.fn(() => value);
 describe('Account Service', () => {
   let service: AccountService;
 <%_ if (generateUserManagement) { _%>
-  let applicationConfigService: ApplicationConfigService;
 <%_ } _%>
   let httpMock: HttpTestingController;
   let mockStorageService: StateStorageService;
@@ -80,7 +79,6 @@ describe('Account Service', () => {
 
     service = TestBed.inject(AccountService);
 <%_ if (generateUserManagement) { _%>
-    applicationConfigService = TestBed.inject(ApplicationConfigService);
 <%_ } _%>
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
@@ -105,7 +103,7 @@ describe('Account Service', () => {
 
       // WHEN
       service.save(account).subscribe();
-      const testRequest = httpMock.expectOne({ method: 'POST', url: applicationConfigService.getEndpointFor('api/account') });
+      const testRequest = httpMock.expectOne({ method: 'POST', url: `${serverApiUrl}api/account` });
       testRequest.flush({});
 
       // THEN

@@ -1386,13 +1386,13 @@ describe("UserManagement Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { computed, inject, Service, signal } from "@angular/core";
+    "contents": "import { serverApiUrl } from "app/config/endpoint.constants";
+import { computed, inject, Service, signal } from "@angular/core";
 import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 
 import dayjs from "dayjs/esm";
 
-import { ApplicationConfigService } from "app/core/config/application-config.service";
 import { createRequestOption } from "app/core/request/request-util";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
@@ -1441,11 +1441,7 @@ export class UserManagementsService {
       : []
     ).map((item) => this.convertValueFromServer(item)),
   );
-  protected readonly applicationConfigService = inject(
-    ApplicationConfigService,
-  );
-  protected readonly resourceUrl =
-    this.applicationConfigService.getEndpointFor("api/admin/users");
+  protected readonly resourceUrl = \`\${serverApiUrl}api/admin/users\`;
 
   protected convertValueFromServer(
     restUserManagement: RestUserManagement,
@@ -2859,6 +2855,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -2890,12 +2889,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -4040,6 +4033,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -4074,12 +4070,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -5156,6 +5146,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -5187,12 +5180,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -6351,6 +6338,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -6385,12 +6375,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -7693,6 +7677,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -7730,12 +7717,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -8888,6 +8869,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -8916,12 +8900,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -9908,6 +9886,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -9936,12 +9917,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {

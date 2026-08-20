@@ -68,6 +68,7 @@ module.exports = () => {
         shared: {
           ...sharedDependencies,
           ...shareMappings(
+            'app/config/endpoint.constants',
             'app/config/input.constants',
             'app/config/pagination.constants',
             'app/config/translation.config',
