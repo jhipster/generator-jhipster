@@ -274,6 +274,8 @@ export function createUserManagementEntity(
 
   if (!application.databaseTypeCassandra) {
     addOrExtendFields(userManagement.fields!, getAuditFields());
+    // The user management list shows the audit trail, but not who created the user.
+    mutateFields(userManagement.fields!, [{ fieldName: 'createdBy', hideListView: true }]);
   }
 
   if (application.generateBuiltInAuthorityEntity) {

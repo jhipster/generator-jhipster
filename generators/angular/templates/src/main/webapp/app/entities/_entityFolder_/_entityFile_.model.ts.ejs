@@ -46,9 +46,12 @@ export interface I<%- entityAngularName %> {
   <%- fieldName %>ContentType<%- id ? '' : '?' %>: string<%- id ? '' : ' | null' %>,
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => (builtInUserManagement && rel.otherEntityName === 'Authority') || rel.persistableRelationship || rel.relationshipEagerLoad)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !(builtInUserManagement && rel.otherEntityName === 'Authority') && (rel.persistableRelationship || rel.relationshipEagerLoad))) { _%>
   <%_ const { propertyName, propertyTsType, otherEntity, collection, otherEntityField, relationshipShouldUsePick } = relationship; _%>
   <%- propertyName %>?: <%- relationshipShouldUsePick ? 'Pick<' : '' %><%- propertyTsType %><%- relationshipShouldUsePick ? `, '${otherEntity.primaryKey.name}'${otherEntity.primaryKey.name !== otherEntityField ? ` | '${otherEntityField}'` : ''}>` : '' %><%- collection ? '[]' : '' %> | null;
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+  authorities?: string[] | null;
 <%_ } _%>
 }
 <%_ if (!readOnly && primaryKey) { _%>

@@ -3036,6 +3036,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
         "fieldWithContentType": false,
         "generateFakeData": Any<Function>,
         "generateFakeDataFromPattern": Any<Function>,
+        "hideListView": true,
         "javaFieldType": "String",
         "javaFieldTypeInteger": false,
         "javaFieldTypeLong": false,

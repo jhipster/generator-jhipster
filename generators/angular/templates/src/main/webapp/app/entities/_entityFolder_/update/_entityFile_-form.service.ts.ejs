@@ -74,6 +74,9 @@ type <%- entityAngularName %>FormGroupContent = {
   <%_ const { propertyName } = relationship; _%>
   <%- propertyName %>: FormControl<<%- entityFormName %>['<%- propertyName %>']>;
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+  authorities: FormControl<<%- entityFormName %>['authorities']>;
+<%_ } _%>
 };
 
 export type <%- entityAngularName %>FormGroup = FormGroup<<%- entityAngularName %>FormGroupContent>;
@@ -151,6 +154,9 @@ export class <%- entityAngularName %>FormService {
         }
   <%_ } _%>
       ),
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+      authorities: new FormControl(<%- entityInstance %>RawValue.authorities ?? []),
 <%_ } _%>
     });
   }
