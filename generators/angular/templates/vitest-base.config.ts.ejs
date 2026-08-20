@@ -21,9 +21,6 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  define: {
-    SERVER_API_URL: "''",
-  },
   test: {
     coverage: {
       reportsDirectory: '<%- temporaryDir %>test-results',
