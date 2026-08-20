@@ -158,6 +158,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     public Couchmove couchmove(Cluster cluster) {
         LOG.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
+        bucket.waitUntilReady(Duration.ofMinutes(1));
         Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
         Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
         couchmove.migrate();
