@@ -137,18 +137,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
         await control.cleanupFiles({
-          '9.0.0-beta.1': [
+          '9.2.1': [
             [
               !application.devDatabaseTypeH2Any! && application.springBoot4,
-              `${application.srcTestJava}config/EmbeddedSQL.java`,
-              `${application.srcTestJava}config/SqlTestContainer.java`,
-              `${application.srcTestJava}config/SqlTestContainersSpringContextCustomizerFactory.java`,
+              `${application.javaPackageTestDir}config/EmbeddedSQL.java`,
+              `${application.javaPackageTestDir}config/SqlTestContainer.java`,
+              `${application.javaPackageTestDir}config/SqlTestContainersSpringContextCustomizerFactory.java`,
               `${application.srcTestResources}META-INF/spring.factories`,
             ],
-            [application.prodDatabaseTypeMysql!, `${application.srcTestJava}config/MysqlTestContainer.java`],
-            [application.prodDatabaseTypeMariadb!, `${application.srcTestJava}config/MariadbTestContainer.java`],
-            [application.prodDatabaseTypeMssql!, `${application.srcTestJava}config/MsSqlTestContainer.java`],
-            [application.prodDatabaseTypePostgresql!, `${application.srcTestJava}config/PostgreSqlTestContainer.java`],
+            [application.prodDatabaseTypeMysql!, `${application.javaPackageTestDir}config/MysqlTestContainer.java`],
+            [application.prodDatabaseTypeMariadb!, `${application.javaPackageTestDir}config/MariadbTestContainer.java`],
+            [application.prodDatabaseTypeMssql!, `${application.javaPackageTestDir}config/MsSqlTestContainer.java`],
+            [application.prodDatabaseTypePostgresql!, `${application.javaPackageTestDir}config/PostgreSqlTestContainer.java`],
           ],
         });
       },
@@ -379,16 +379,17 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           source.addAllowBlockingCallsInside!({
             classPath: 'org.mariadb.r2dbc.client.SimpleClient',
             method: [
-              'sendCommandWithoutResult',
               'executeWhenTransaction',
               'executeWhenNotInTransaction',
+              'sendCommand',
+              'sendCommandWithoutResult',
               'setAutoCommit',
               // `receive` and `sendCommand` acquire the lock inside their `Flux.create` lambdas, which run at
               // subscribe time, so the enclosing method is no longer on the stack and BlockHound only sees the
-              // synthetic lambda. Names are tied to r2dbc-mariadb 1.3.0 and must be rechecked on driver upgrades.
-              'lambda$receive$14',
-              'lambda$sendCommand$16',
-              'lambda$sendCommand$19',
+              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.0 and must be rechecked on driver upgrades.
+              'lambda$receive$0',
+              'lambda$sendCommand$0',
+              'lambda$sendCommand$2',
             ],
           });
         }

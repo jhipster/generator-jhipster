@@ -159,6 +159,9 @@ class AccountResourceIT {
     @AfterEach
     void cleanupAndCheck() {
 <%_ if (requiresDeleteAllUsers) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } else if (!databaseTypeCassandra) { _%>
         assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
