@@ -29,8 +29,7 @@ import com.github.couchmove.Couchmove;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.couchbase.autoconfigure.CouchbaseProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.couchbase.autoconfigure.CouchbaseConnectionDetails;
 import org.springframework.context.annotation.*;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.Converter;
@@ -64,7 +63,6 @@ import reactor.core.publisher.Flux;
 <%_ } _%>
 
 @Configuration
-@EnableConfigurationProperties(CouchbaseProperties.class)
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 @Enable<%- reactive ? 'Reactive' : '' %>CouchbaseRepositories(
 <%_ if (searchEngineElasticsearch) { %>
@@ -83,11 +81,11 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     private final JHipsterProperties jHipsterProperties;
-    private final CouchbaseProperties couchbaseProperties;
+    private final CouchbaseConnectionDetails couchbaseConnectionDetails;
 
-    public DatabaseConfiguration(JHipsterProperties jHipsterProperties, CouchbaseProperties couchbaseProperties) {
+    public DatabaseConfiguration(JHipsterProperties jHipsterProperties, CouchbaseConnectionDetails couchbaseConnectionDetails) {
         this.jHipsterProperties = jHipsterProperties;
-        this.couchbaseProperties = couchbaseProperties;
+        this.couchbaseConnectionDetails = couchbaseConnectionDetails;
         <%- reactive ? 'allowPageable();' : '' %>
     }
 
@@ -118,17 +116,17 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
 
     @Override
     public String getConnectionString() {
-        return couchbaseProperties.getConnectionString();
+        return couchbaseConnectionDetails.getConnectionString();
     }
 
     @Override
     public String getUserName() {
-        return couchbaseProperties.getUsername();
+        return couchbaseConnectionDetails.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return couchbaseProperties.getPassword();
+        return couchbaseConnectionDetails.getPassword();
     }
 
     @Override
@@ -160,6 +158,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     public Couchmove couchmove(Cluster cluster) {
         LOG.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
+        bucket.waitUntilReady(Duration.ofMinutes(1));
         Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
         Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
         couchmove.migrate();
