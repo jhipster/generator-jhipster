@@ -44,7 +44,10 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           this.jhipsterConfig.enableHibernateCache = undefined;
         }
         if (reactive && cacheProvider !== 'no') {
-          this.log.error(`Cache provider is not supported in reactive application`);
+          throw new Error(`Cache provider '${cacheProvider}' is not supported in reactive applications`);
+        }
+        if (cacheProvider === 'no') {
+          this.cancelCancellableTasks();
         }
       },
     });
