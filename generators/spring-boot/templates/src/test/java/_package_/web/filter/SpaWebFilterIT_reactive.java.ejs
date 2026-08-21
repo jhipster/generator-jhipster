@@ -18,6 +18,8 @@
 -%>
 package <%- packageName %>.web.filter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import <%- packageName %>.IntegrationTest;
 import <%- packageName %>.security.AuthoritiesConstants;
 import java.time.Duration;
@@ -93,7 +95,7 @@ class SpaWebFilterIT {
             .expectStatus()
             .isOk()
             .expectBody(String.class)
-            .isEqualTo("test resource\n");
+            .value(body -> assertThat(body).isEqualToNormalizingNewlines("test resource\n"));
     }
 
     @Test
