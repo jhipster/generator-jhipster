@@ -43,9 +43,6 @@ const requireRestSample: <% if (requiresRestTypeConversion) { %><%- entityRestNa
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-  authorities: null,
-<%_ } _%>
 };
 
 describe('<%- entityAngularName %> Service', () => {

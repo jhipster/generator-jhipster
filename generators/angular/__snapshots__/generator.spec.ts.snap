@@ -1165,7 +1165,6 @@ const requireRestSample: RestUserManagement = {
   ...sampleWithRequiredData,
   createdDate: sampleWithRequiredData.createdDate?.toJSON(),
   lastModifiedDate: sampleWithRequiredData.lastModifiedDate?.toJSON(),
-  authorities: null,
 };
 
 describe("UserManagement Service", () => {
@@ -2288,8 +2287,7 @@ export class UserManagementUpdate implements OnInit {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
-    "contents": "import { LANGUAGES } from "app/config/language.constants";
-import dayjs from "dayjs/esm";
+    "contents": "import dayjs from "dayjs/esm";
 import { IAuthority } from "app/entities/admin/authority/authority.model";
 
 export interface IUserManagement {

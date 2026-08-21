@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const enumImports = generateEntityClientEnumImports(fields.filter(field => !(builtInUserManagement && field.fieldName === 'langKey'))); _%>
-<%_ if (builtInUserManagement) { _%>
+<%_ if (builtInUserManagement && enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
 <%_ if (anyFieldIsDateDerived) { _%>
