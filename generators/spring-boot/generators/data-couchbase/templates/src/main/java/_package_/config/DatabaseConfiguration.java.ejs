@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.couchbase.autoconfigure.CouchbaseConnectionDetails;
 import org.springframework.context.annotation.*;
 import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.core.convert.support.GenericConversionService;
@@ -50,8 +52,13 @@ import org.springframework.data.couchbase.repository.config.Enable<%- reactive ?
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.Duration;
@@ -76,6 +83,7 @@ import reactor.core.publisher.Flux;
 public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
 
     private static final String CHANGELOG_COLLECTION = "changelog";
+    private static final String CHANGELOG_PATH = "config/couchmove/changelog";
     private static final String TYPE_KEY = "type";
 
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseConfiguration.class);
@@ -160,10 +168,42 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         Bucket bucket = cluster.bucket(getBucketName());
         bucket.waitUntilReady(Duration.ofMinutes(1));
         Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
-        Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
+        Couchmove couchmove = new Couchmove(collection, cluster, extractChangelog());
         couchmove.migrate();
         couchmove.buildN1qlDeferredIndexes(getScopeName());
         return couchmove;
+    }
+
+    /**
+     * Couchmove cannot read the changelog from Spring Boot's nested executable jar format
+     * (https://github.com/tchlyah/couchmove/issues/48), so extract it to a temporary directory
+     * and pass a plain filesystem path, which couchmove reads directly.
+     * Migration checksums are computed from file names and contents only, so they are not
+     * affected by the changelog location.
+     */
+    private static String extractChangelog() {
+        try {
+            Path changelogDirectory = Files.createTempDirectory("couchmove-changelog");
+            PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            for (Resource resource : resolver.getResources("classpath:" + CHANGELOG_PATH + "/**")) {
+                if (!resource.isReadable()) {
+                    continue;
+                }
+                String url = resource.getURL().toString();
+                String relativePath = url.substring(url.lastIndexOf(CHANGELOG_PATH) + CHANGELOG_PATH.length() + 1);
+                if (relativePath.isEmpty() || relativePath.endsWith("/")) {
+                    continue;
+                }
+                Path target = changelogDirectory.resolve(relativePath);
+                Files.createDirectories(target.getParent());
+                try (InputStream inputStream = resource.getInputStream()) {
+                    Files.copy(inputStream, target);
+                }
+            }
+            return changelogDirectory.toAbsolutePath().toString();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Could not extract the couchmove changelog", e);
+        }
     }
 
     @Bean
