@@ -57,6 +57,7 @@ exports[`public api generator-jhipster/testing should match snapshot 1`] = `
   "entitiesMicroservice",
   "entitiesServerSamples",
   "entitiesSimple",
+  "entitiesWithEmbeddedRelationship",
   "entitiesWithRelationships",
   "entityAnotherSimple",
   "entityCustomId",

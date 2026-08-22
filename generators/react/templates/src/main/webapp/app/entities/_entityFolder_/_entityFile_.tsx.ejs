@@ -378,7 +378,7 @@ export const <%- entityReactName %> = () => {
 <%_ for (field of fields) { _%>
                   <th className="hand" onClick={sort('<%- field.fieldName %>')}><Translate contentKey="<%- `${i18nKeyPrefix}.${field.fieldName}` %>"><%- field.fieldNameHumanized %></Translate> <FontAwesomeIcon icon={getSortIconByFieldName('<%- field.fieldName %>')} /></th>
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                   <th><Translate contentKey="<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- relationship.relationshipNameHumanized %></Translate> <FontAwesomeIcon icon="sort" /></th>
   <%_ } _%>
@@ -436,7 +436,7 @@ export const <%- entityReactName %> = () => {
                     </td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;

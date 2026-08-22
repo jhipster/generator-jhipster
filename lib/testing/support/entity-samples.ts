@@ -54,6 +54,23 @@ export const entitiesWithRelationships = [
   },
 ] satisfies Entity[];
 
+const entityEmbedded = {
+  name: 'EmbeddedEntity',
+  changelogDate: '20220129000500',
+  embedded: true,
+  fields: [{ fieldName: 'embeddedName', fieldType: 'String' }],
+} satisfies Entity;
+
+export const entitiesWithEmbeddedRelationship = [
+  entityEmbedded,
+  {
+    name: 'RelationshipWithEmbedded',
+    changelogDate: '20220129000600',
+    fields: [{ fieldName: 'relationshipName', fieldType: 'String' }],
+    relationships: [{ relationshipName: 'embeddedRelationship', otherEntityName: 'EmbeddedEntity', relationshipType: 'many-to-one' }],
+  },
+] satisfies Entity[];
+
 export const entityCustomId = {
   name: 'EntityWithCustomId',
   changelogDate: '20220129002000',
