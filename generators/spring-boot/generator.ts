@@ -716,6 +716,7 @@ ${classProperties
         await control.cleanupFiles({
           '9.2.1': [
             [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
+            [application.springBoot4, `${application.javaPackageSrcDir}config/JacksonConfiguration.java`],
           ],
         });
       },
@@ -755,10 +756,23 @@ ${classProperties
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      springBoot3({ application, source }) {
+        if (application.springBoot4) return;
+
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          imports: [`${application.packageName}.config.JacksonConfiguration`],
+          annotations: [
+            {
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'JacksonConfiguration.class'),
+            },
+          ],
+        });
+      },
       baseDependencies({ application, source }) {
         if (application.springBoot4) {
           source.addSpringBootModule!(
-            'spring-boot-jackson2',
             'spring-boot-starter-aspectj',
             'spring-boot-starter-jackson',
             'spring-boot-starter-jackson-test',
@@ -974,8 +988,6 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
               { name: 'archunit-junit5', version: application.javaDependencies['archunit-junit5'] },
             ],
             dependencies: [
-              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hppc' },
-              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-jsr310' },
               { groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus' },
               { groupId: 'org.apache.commons', artifactId: 'commons-lang3' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct', versionRef: 'mapstruct' },
@@ -995,6 +1007,13 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
                 versionRef: 'archunit-junit5',
                 exclusions: [{ groupId: 'org.slf4j', artifactId: 'slf4j-api' }],
               },
+            ],
+          },
+          {
+            condition: !application.springBoot4,
+            dependencies: [
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hppc' },
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-jsr310' },
             ],
           },
           {

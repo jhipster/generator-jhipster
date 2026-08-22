@@ -99,9 +99,16 @@ spring:
   liquibase:
     contexts: test
 <%_ } _%>
-  jackson<%- springBoot4 ? '2' : '' %>:
+<%_ if (springBoot4) { _%>
+  jackson:
+    datatype:
+      datetime:
+        write-durations-as-timestamps: false
+<%_ } else { _%>
+  jackson:
     serialization:
       write-durations-as-timestamps: false
+<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
     compression: NONE
