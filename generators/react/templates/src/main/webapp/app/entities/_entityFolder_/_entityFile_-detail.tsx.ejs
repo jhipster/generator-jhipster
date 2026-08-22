@@ -113,7 +113,7 @@ export const <%- entityReactName %>Detail = () => {
   <%_ } _%>
             </dd>
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, relationshipNameHumanized } = relationship;
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;

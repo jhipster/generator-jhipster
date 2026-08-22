@@ -31,7 +31,7 @@ import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)
-      .map(relationships => relationships.filter(rel => rel.persistableRelationship))
+      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
 _%>

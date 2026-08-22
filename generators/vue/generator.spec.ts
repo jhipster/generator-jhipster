@@ -26,7 +26,13 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 import Generator from './index.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
-import { buildClientSamples, createTestHelpers, entitiesClientSamples as entities, runResult } from '#testing';
+import {
+  buildClientSamples,
+  createTestHelpers,
+  entitiesClientSamples as entities,
+  entitiesWithEmbeddedRelationship,
+  runResult,
+} from '#testing';
 
 const helpers = createTestHelpers({
   importMeta: import.meta,
@@ -278,6 +284,51 @@ describe(`generator - ${clientFramework}`, () => {
           });
         }
       });
+    });
+  });
+
+  describe('entity with a relationship to an embedded entity', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework, databaseType: 'mongodb' }, entitiesWithEmbeddedRelationship)
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should generate the embedded entity model', () => {
+      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/shared/model/embedded-entity.model.ts`);
+    });
+
+    it('should not generate ui files for the embedded entity', () => {
+      runResult.assertNoFile([
+        `${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity-update.vue`,
+      ]);
+    });
+
+    it('should not use the embedded entity service at the update component', () => {
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.ts`,
+        'embedded-entity.service',
+      );
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.spec.ts`,
+        'embeddedEntityService',
+      );
+    });
+
+    it('should not render the embedded relationship at list and detail components', () => {
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded.vue`,
+        'embeddedRelationship',
+      );
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-details.vue`,
+        'embeddedRelationship',
+      );
     });
   });
 });
