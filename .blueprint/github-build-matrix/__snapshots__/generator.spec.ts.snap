@@ -144,6 +144,28 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
+      "job-name": "ng-gradle-couchbase-search (n[0]/j[2])",
+      "sample": "ng-gradle-couchbase-search",
+      "os": "ubuntu-latest",
+      "node-version": "[0]",
+      "java-version": "[2]",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-compare": "false",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ng-gradle-couchbase-search",
+      "app-sample": "ng-gradle-couchbase-search",
+      "entity": "couchbase",
+      "workspaces": "false",
+      "disabled": false,
+      "build-jhipster-bom": true,
+      "jhipster-bom-branch": "main",
+      "jhipster-bom-cicd-version": "0.0.0-CICD"
+    },
+    {
       "job-name": "ng-gradle-fr (n[2]/j[2])",
       "sample": "ng-gradle-fr",
       "os": "ubuntu-latest",
