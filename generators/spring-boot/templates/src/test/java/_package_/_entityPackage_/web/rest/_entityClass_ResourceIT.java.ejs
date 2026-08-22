@@ -2058,8 +2058,15 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (reactive) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+    <%_ } else { _%>
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+            assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+        });
+    <%_ } _%>
   <%_ } _%>
 
     }
