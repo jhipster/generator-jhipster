@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { DatePipe } from '@angular/common';
+import { FormatMediumDatetimePipe } from 'app/shared/date';
 import { Component, input } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -29,7 +29,7 @@ import { IUserManagement } from '../user-management.model';
 @Component({
   selector: '<%- jhiPrefixDashed %>-user-mgmt-detail',
   templateUrl: './user-management-detail.html',
-  imports: [FontAwesomeModule, DatePipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
+  imports: [FontAwesomeModule, FormatMediumDatetimePipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export class UserManagementDetail {
   readonly userManagement = input<IUserManagement | null>(null);

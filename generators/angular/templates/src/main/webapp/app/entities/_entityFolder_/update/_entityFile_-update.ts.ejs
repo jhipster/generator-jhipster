@@ -16,12 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const relationshipsByOtherEntity = Object.fromEntries(Object.entries(locals.relationshipsByOtherEntity).filter(([, rels]) => !(builtInUserManagement && rels[0].otherEntityName === 'Authority'))); _%>
 <%_ const allRelationshipsByEntityNeedingOptions = Object
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
 _%>
-import { Component, inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
+import { Component, <%- builtInUserManagement ? 'computed, ' : '' %>inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { finalize<%- relationships.some(rel => rel.persistableRelationship) ? ', map' : '' %>, Observable } from 'rxjs';
@@ -46,6 +47,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+<%# locals.relationships is the unfiltered list: the `relationships` shadow above excludes the Authority relationship -%>
+<%_ const authorityEntity = builtInUserManagement ? locals.relationships.find(rel => rel.otherEntityName === 'Authority')?.otherEntity : undefined; _%>
+<%_ if (builtInUserManagement && fields.some(field => field.fieldName === 'langKey')) { _%>
+import { LANGUAGES } from 'app/config/language.constants';
+<%_ } _%>
+<%_ if (authorityEntity) { _%>
+import { <%- authorityEntity.entityAngularName %>Service } from 'app/entities/<%- authorityEntity.entityFolderName %>/service/<%- authorityEntity.entityFileName %>.service';
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { AlertErrorModel } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -58,7 +67,7 @@ import { I<%- uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%
 import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/service/<%- uniqueRel.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = generateEntityClientEnumImports(fields.filter(field => !(builtInUserManagement && field.fieldName === 'langKey'))); _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
@@ -90,6 +99,9 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ for (const [importedType] of enumImports) { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ } _%>
+<%_ if (builtInUserManagement && fields.some(field => field.fieldName === 'langKey')) { _%>
+    languagesValues = LANGUAGES;
+<%_ } _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
@@ -118,6 +130,11 @@ export class <%- entityAngularName %>Update implements OnInit {
     protected elementRef = inject(ElementRef);
 <%_ } _%>
     protected activatedRoute = inject(ActivatedRoute);
+<%_ if (authorityEntity) { _%>
+    protected readonly authorityService = inject(<%- authorityEntity.entityAngularName %>Service);
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    readonly authorities = computed(() => this.authorityService.<%- authorityEntity.entityInstancePlural %>().map(authority => authority.name));
+<%_ } _%>
 
     // eslint-disable-next-line @typescript-eslint/member-ordering
     editForm: <%- entityAngularName %>FormGroup = this.<%- entityInstance %>FormService.create<%- entityAngularName %>FormGroup();
@@ -136,7 +153,7 @@ export class <%- entityAngularName %>Update implements OnInit {
                 this.updateForm(<%- entityInstance %>);
             }
 
-<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
+<%_ if (allRelationshipsByEntityNeedingOptions.length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
         });
@@ -248,7 +265,7 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ } _%>
     }
 
-<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
+<%_ if (allRelationshipsByEntityNeedingOptions.length > 0) { _%>
     protected loadRelationshipsOptions(): void {
   <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); %>

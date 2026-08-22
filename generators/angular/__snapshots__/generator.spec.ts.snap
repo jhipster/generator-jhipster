@@ -193,6 +193,17 @@ export class UserManagementDeleteDialog {
             }}</span
           >
         </dd>
+
+        <dt><span>Profiles</span></dt>
+        <dd>
+          <ul class="list-unstyled">
+            @for (authority of userManagementRef.authorities; track $index) {
+            <li>
+              <span class="badge bg-info">{{ authority }}</span>
+            </li>
+            }
+          </ul>
+        </dd>
       </dl>
 
       <button
@@ -1154,7 +1165,6 @@ const requireRestSample: RestUserManagement = {
   ...sampleWithRequiredData,
   createdDate: sampleWithRequiredData.createdDate?.toJSON(),
   lastModifiedDate: sampleWithRequiredData.lastModifiedDate?.toJSON(),
-  authorities: null,
 };
 
 describe("UserManagement Service", () => {
@@ -1405,7 +1415,6 @@ type RestOf<T extends IUserManagement | NewUserManagement> = Omit<
 > & {
   createdDate?: string | null;
   lastModifiedDate?: string | null;
-  authorities?: string[] | null;
 };
 
 export type RestUserManagement = RestOf<IUserManagement>;
@@ -1454,9 +1463,6 @@ export class UserManagementsService {
       lastModifiedDate: restUserManagement.lastModifiedDate
         ? dayjs(restUserManagement.lastModifiedDate)
         : undefined,
-      authorities: restUserManagement.authorities?.map((authority) => ({
-        name: authority as unknown as string,
-      })),
     };
   }
 }
@@ -1580,9 +1586,6 @@ export class UserManagementService extends UserManagementsService {
       ...userManagement,
       createdDate: userManagement.createdDate?.toJSON() ?? null,
       lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
-      authorities: userManagement.authorities?.map(
-        (authority) => authority.name,
-      ),
     };
   }
 
@@ -2014,73 +2017,22 @@ export class UserManagementFormService {
             formControlName="activated"
           />
         </div>
-        } @if (editForm.controls.createdBy.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_createdBy">Created by</label>
-          <input
-            type="text"
-            class="form-control"
-            name="createdBy"
-            id="field_createdBy"
-            data-cy="createdBy"
-            formControlName="createdBy"
-            [readonly]="true"
-          />
-        </div>
-        } @if (editForm.controls.createdDate.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_createdDate">Created date</label>
-          <div class="d-flex">
-            <input
-              id="field_createdDate"
-              data-cy="createdDate"
-              type="datetime-local"
-              class="form-control"
-              name="createdDate"
-              formControlName="createdDate"
-              placeholder="YYYY-MM-DD HH:mm"
-              [readonly]="true"
-            />
-          </div>
-        </div>
-        } @if (editForm.controls.lastModifiedBy.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_lastModifiedBy"
-            >Modified by</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="lastModifiedBy"
-            id="field_lastModifiedBy"
-            data-cy="lastModifiedBy"
-            formControlName="lastModifiedBy"
-            [readonly]="true"
-          />
-        </div>
-        } @if (editForm.controls.lastModifiedDate.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_lastModifiedDate"
-            >Modified date</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_lastModifiedDate"
-              data-cy="lastModifiedDate"
-              type="datetime-local"
-              class="form-control"
-              name="lastModifiedDate"
-              formControlName="lastModifiedDate"
-              placeholder="YYYY-MM-DD HH:mm"
-              [readonly]="true"
-            />
-          </div>
-        </div>
         }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_authority">Profiles</label>
+          <select
+            class="form-control"
+            id="field_authority"
+            multiple
+            name="authority"
+            formControlName="authorities"
+          >
+            @for (authority of authorities(); track $index) {
+            <option [value]="authority">{{ authority }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>
@@ -2243,7 +2195,7 @@ describe("UserManagement Management Update Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { Component, inject, signal, OnInit } from "@angular/core";
+    "contents": "import { Component, computed, inject, signal, OnInit } from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
 import { finalize, Observable } from "rxjs";
@@ -2258,6 +2210,7 @@ import {
 } from "./user-management-form.service";
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
+import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 
 @Component({
   selector: "jhi-user-management-update",
@@ -2271,6 +2224,11 @@ export class UserManagementUpdate implements OnInit {
   protected userManagementService = inject(UserManagementService);
   protected userManagementFormService = inject(UserManagementFormService);
   protected activatedRoute = inject(ActivatedRoute);
+  protected readonly authorityService = inject(AuthorityService);
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly authorities = computed(() =>
+    this.authorityService.authorities().map((authority) => authority.name),
+  );
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: UserManagementFormGroup =
@@ -2344,6 +2302,7 @@ export interface IUserManagement {
   createdDate?: dayjs.Dayjs | null;
   lastModifiedBy?: string | null;
   lastModifiedDate?: dayjs.Dayjs | null;
+  authorities?: string[] | null;
 }
 
 export type NewUserManagement = Omit<IUserManagement, "login"> & {
@@ -7882,6 +7841,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.test-samples.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {

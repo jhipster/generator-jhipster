@@ -3418,6 +3418,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
         "propertyNameUpperSnakeCase": "AUTHORITIES",
         "propertySupplierName": "getAuthorities",
         "propertyTranslationKey": "userManagement.profiles",
+        "propertyTsType": "string",
         "relatedField": Any<Object>,
         "relationshipEagerLoad": false,
         "relationshipFieldName": "authority",

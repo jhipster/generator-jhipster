@@ -23,7 +23,7 @@
 
             <div>
                 <<%- jhiPrefixDashed %>-alert-error />
-<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+<%_ for (const field of fields.filter(field => !field.hidden && !(builtInUserManagement && field.readonly))) { _%>
   <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field;
       const readonlyAttr = readonly ? ' [readonly]="true"' : '';
   _%>
@@ -145,7 +145,17 @@
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) { _%>
   <%_ const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship; _%>
-  <%_ if (relationship.persistableRelationship && !relationship.collection) { _%>
+  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
+
+                <div class="mb-3">
+                    <label class="form-label" for="field_authority">__jhiTranslateTag__('<%- i18nKeyPrefix %>.profiles')</label>
+                    <select class="form-control" id="field_authority" multiple name="authority" formControlName="authorities">
+                    @for (authority of authorities(); track $index) {
+                        <option [value]="authority">{{ authority }}</option>
+                    }
+                    </select>
+                </div>
+  <%_ } else if (relationship.persistableRelationship && !relationship.collection) { _%>
 
                 <div class="mb-3">
                     <label class="form-label" for="field_<%- relationshipName %>">__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</label>

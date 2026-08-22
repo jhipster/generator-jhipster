@@ -3417,6 +3417,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
         "propertyNameUpperSnakeCase": "AUTHORITIES",
         "propertySupplierName": "getAuthorities",
         "propertyTranslationKey": "userManagement.profiles",
+        "propertyTsType": "string",
         "relatedField": Any<Object>,
         "relationshipEagerLoad": false,
         "relationshipFieldName": "authority",

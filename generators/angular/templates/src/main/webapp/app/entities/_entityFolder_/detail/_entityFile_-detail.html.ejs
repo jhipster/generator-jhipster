@@ -65,7 +65,19 @@
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { persistableRelationship, relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
-  <%_ if (persistableRelationship) { _%>
+  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
+
+        <dt><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.profiles')</span></dt>
+        <dd>
+            <ul class="list-unstyled">
+            @for (authority of <%- entityInstance %>Ref.authorities; track $index) {
+                <li>
+                    <span class="badge bg-info">{{ authority }}</span>
+                </li>
+            }
+            </ul>
+        </dd>
+  <%_ } else if (persistableRelationship) { _%>
         <dt><span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span></dt>
         <dd>
     <%_ if (relationship.otherEntityUser) { _%>

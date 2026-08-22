@@ -24,7 +24,7 @@ import {
   Router,
 <%_ } _%>
 } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { FormatMediumDatetimePipe } from 'app/shared/date';
 import {
   HttpResponse,
 <%_ if (!locals.databaseTypeCassandra) { %>
@@ -70,7 +70,7 @@ import { UserManagementDeleteDialog } from '../delete/user-management-delete-dia
     SortDirective,
     SortByDirective,
     ItemCount,
-    DatePipe,
+    FormatMediumDatetimePipe,
 <%_ } _%>
   ],
 })
