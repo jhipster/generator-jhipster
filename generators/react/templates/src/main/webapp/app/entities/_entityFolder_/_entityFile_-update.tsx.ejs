@@ -42,7 +42,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 <%_ const otherEntityActions = new Set(); _%>
-<%_ for (const otherEntity of otherEntitiesWithPersistableRelationship) { _%>
+<%_ for (const otherEntity of otherEntitiesWithPersistableRelationship.filter(otherEntity => !otherEntity.embedded)) { _%>
   <%_ otherEntityActions.add({
         action: `get${otherEntity.entityNamePlural}`,
         instance: otherEntity.entityInstancePlural,
