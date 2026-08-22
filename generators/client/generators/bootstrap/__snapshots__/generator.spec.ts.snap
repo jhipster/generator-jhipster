@@ -2599,6 +2599,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
         "fieldWithContentType": false,
         "generateFakeData": Any<Function>,
         "generateFakeDataFromPattern": Any<Function>,
+        "hideListView": true,
         "htmlInputType": "text",
         "nullable": true,
         "path": [
@@ -2933,7 +2934,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
     "restProperties": Any<Array>,
     "searchEngine": "no",
     "service": "no",
-    "skipClient": true,
+    "skipClient": false,
     "skipDbChangelog": true,
     "skipServer": true,
     "skipUiGrouping": false,

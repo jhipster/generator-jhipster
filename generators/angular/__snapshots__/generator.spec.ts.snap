@@ -390,20 +390,7 @@ export class UserManagementDetail {
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="activated">
-            <div class="d-flex">
-              <span>Activated</span>
-
-              <fa-icon class="p-1" icon="sort" />
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="createdBy">
-            <div class="d-flex">
-              <span>Created by</span>
-
-              <fa-icon class="p-1" icon="sort" />
-            </div>
-          </th>
+          <th scope="col"></th>
           <th scope="col" jhiSortBy="createdDate">
             <div class="d-flex">
               <span>Created date</span>
@@ -425,6 +412,7 @@ export class UserManagementDetail {
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
+          <th scope="col"><span>Profiles</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -438,11 +426,34 @@ export class UserManagementDetail {
             >
           </td>
           <td>{{ userManagement.email }}</td>
-          <td>{{ userManagement.activated }}</td>
-          <td>{{ userManagement.createdBy }}</td>
+          <td>
+            @if (!userManagement.activated) {
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="setActive(userManagement, true)"
+            >
+              Deactivated
+            </button>
+            } @else {
+            <button
+              class="btn btn-success btn-sm"
+              (click)="setActive(userManagement, false)"
+              [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
+            >
+              Activated
+            </button>
+            }
+          </td>
           <td>{{ userManagement.createdDate | formatMediumDatetime }}</td>
           <td>{{ userManagement.lastModifiedBy }}</td>
           <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
+          <td>
+            @for (authority of userManagement.authorities; track $index) {
+            <div>
+              <span class="badge bg-info">{{ authority }}</span>
+            </div>
+            }
+          </td>
           <td class="text-end">
             <div class="btn-group">
               <a
@@ -467,6 +478,7 @@ export class UserManagementDetail {
                 type="submit"
                 (click)="delete(userManagement)"
                 class="btn btn-danger btn-sm"
+                [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
                 data-cy="entityDeleteButton"
               >
                 <fa-icon icon="times" />
@@ -816,6 +828,7 @@ import {
   DEFAULT_SORT_DATA,
 } from "app/config/navigation.constants";
 import { UserManagementService } from "../service/user-management.service";
+import { AccountService } from "app/core/auth/account.service";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
@@ -844,6 +857,7 @@ export class UserManagement {
   readonly page = signal(1);
 
   readonly router = inject(Router);
+  readonly currentAccount = inject(AccountService).account;
   protected readonly userManagementService = inject(UserManagementService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading =
@@ -908,6 +922,12 @@ export class UserManagement {
         tap(() => this.load()),
       )
       .subscribe();
+  }
+
+  setActive(userManagement: IUserManagement, isActivated: boolean): void {
+    this.userManagementService
+      .update({ ...userManagement, activated: isActivated })
+      .subscribe(() => this.load());
   }
 
   load(): void {
@@ -1756,6 +1776,7 @@ type UserManagementFormGroupContent = {
   createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
   lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
   lastModifiedDate: FormControl<UserManagementFormRawValue["lastModifiedDate"]>;
+  authorities: FormControl<UserManagementFormRawValue["authorities"]>;
 };
 
 export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
@@ -1812,6 +1833,7 @@ export class UserManagementFormService {
       lastModifiedDate: new FormControl(
         userManagementRawValue.lastModifiedDate,
       ),
+      authorities: new FormControl(userManagementRawValue.authorities ?? []),
     });
   }
 
@@ -7828,6 +7850,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
     "stateCleared": "modified",
   },
@@ -7910,6 +7938,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/enumerations/languages.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.html": {
@@ -8390,11 +8421,11 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "application": "Application[jhipster]",
       "control": "TaskParameter[control]",
       "entities": [
+        "Entity[UserManagement]",
         "Entity[Authority]",
         "Entity[Simple]",
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
