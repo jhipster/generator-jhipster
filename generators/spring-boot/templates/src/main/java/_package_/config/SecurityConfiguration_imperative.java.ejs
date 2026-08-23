@@ -157,7 +157,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)<%- springBoot4 ? '' : ' throws Exception' %> {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         http
 <%_ if (!applicationTypeMicroservice) { _%>
             .cors(withDefaults())

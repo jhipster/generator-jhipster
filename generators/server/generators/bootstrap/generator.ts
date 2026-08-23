@@ -106,9 +106,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
       async loadDockerDependencies({ application }) {
-        // springBoot4 is prepared in preparing phase of spring-boot generator
         loadDockerElasticsearchVersion.call(this, {
-          springBoot4: application.springBoot4,
           dockerContainers: application.dockerContainers,
         });
       },

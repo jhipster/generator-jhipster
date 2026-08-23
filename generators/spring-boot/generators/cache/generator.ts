@@ -195,9 +195,9 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
         if (!application.javaDependencies) {
           throw new Error('Some application fields are be mandatory');
         }
-        const { javaDependencies, cacheProvider, enableHibernateCache, springBoot4 } = application;
+        const { javaDependencies, cacheProvider, enableHibernateCache } = application;
 
-        const definition = getCacheProviderJavaDefinition(cacheProvider!, javaDependencies, { springBoot4 });
+        const definition = getCacheProviderJavaDefinition(cacheProvider!, javaDependencies);
         source.addJavaDefinitions?.(
           {
             ...definition.base,

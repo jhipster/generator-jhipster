@@ -49,6 +49,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
         applicationDefaults(mutateApplicationPreparing, {
+          // Deprecated: Spring Boot 3 is no longer supported, springBoot4 is always true.
           springBoot4: true,
         });
       },
@@ -56,7 +57,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         if (application.databaseTypeSql && !application.reactive) {
           applicationDefaults({
             hibernateNamingPhysicalStrategy: 'org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy',
-            hibernateNamingImplicitStrategy: `org.springframework.boot${application.springBoot4 ? '' : '.orm.jpa'}.hibernate.SpringImplicitNamingStrategy`,
+            hibernateNamingImplicitStrategy: 'org.springframework.boot.hibernate.SpringImplicitNamingStrategy',
           });
         }
       },

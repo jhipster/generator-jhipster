@@ -19,8 +19,7 @@
 import { mutateData } from '../../../lib/utils/object.ts';
 import type BaseCoreGenerator from '../../base-core/generator.ts';
 import { getDockerfileContainers } from '../../docker/utils.ts';
-import springBoot4Dependencies from '../../spring-boot/resources/spring-boot-dependencies-4.ts';
-import springBoot3Dependencies from '../../spring-boot/resources/spring-boot-dependencies.ts';
+import springBootDependencies from '../../spring-boot/resources/spring-boot-dependencies-4.ts';
 
 const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
@@ -35,11 +34,9 @@ export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(
 
 export function loadDockerElasticsearchVersion<const G extends BaseCoreGenerator>(
   this: G,
-  { springBoot4, dockerContainers }: { springBoot4?: boolean; dockerContainers: Record<string, string> },
+  { dockerContainers }: { dockerContainers: Record<string, string> },
 ) {
-  const elasticsearchClientVersion = (springBoot4 ? springBoot4Dependencies : springBoot3Dependencies).properties[
-    'elasticsearch-client.version'
-  ];
+  const elasticsearchClientVersion = springBootDependencies.properties['elasticsearch-client.version'];
   mutateData(
     dockerContainers,
     this.prepareDependencies(

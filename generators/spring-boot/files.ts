@@ -302,13 +302,6 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       ],
     },
     {
-      // Jackson 3 (Spring Boot 4) ships jdk8 and java.time support in jackson-databind.
-      condition: data => !data.springBoot4,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/JacksonConfiguration.java'],
-    },
-    {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/Constants.java'],

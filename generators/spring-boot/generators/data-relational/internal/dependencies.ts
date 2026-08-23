@@ -28,11 +28,9 @@ type DatabaseTypeDependencies = {
 
 export const getTestcontainerSupport = ({
   databaseType,
-  springBoot4,
   dockerContainers,
 }: {
   databaseType: string;
-  springBoot4: boolean;
   dockerContainers: Record<string, string>;
 }): TestcontainerSupport => {
   return (
@@ -59,7 +57,7 @@ export const getTestcontainerSupport = ({
       },
       postgresql: {
         testcontainerClass: 'PostgreSQLContainer',
-        testcontainerClassPackage: `org.testcontainers.${springBoot4 ? 'postgresql' : 'containers'}`,
+        testcontainerClassPackage: 'org.testcontainers.postgresql',
         testcontainerClassInitialization: '',
         testcontainerDockerImageName: dockerContainers.postgresql,
       },
