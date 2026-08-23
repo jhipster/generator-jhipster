@@ -1024,12 +1024,13 @@ class <%- entityClass %>ResourceIT {
 <%_ } _%>;
     }
 <% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
+  <%_ const eagerLoadMockResult = reactive ? 'Flux.empty()' : paginationNo ? 'new ArrayList<>()' : 'new PageImpl(new ArrayList<>())'; _%>
     @SuppressWarnings({"unchecked"})
     void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
   <%_ } else { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1042,18 +1043,18 @@ class <%- entityClass %>ResourceIT {
   <%_ } _%>
 
   <%_ if (!serviceNo) { _%>
-        verify(<%- entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(<%- entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
   <%_ } else { _%>
-        verify(<%- entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        verify(<%- entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
   <%_ } _%>
     }
 
     @SuppressWarnings({"unchecked"})
     void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
   <%_ } else { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>

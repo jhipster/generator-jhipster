@@ -26,7 +26,7 @@ import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
 import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
-<%_ if (!paginationNo || implementsEagerLoadApis) { _%>
+<%_ if (!paginationNo) { _%>
 
   <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
@@ -118,11 +118,11 @@ public interface <%- entityClass %>Service {
 <%_ if (implementsEagerLoadApis) { _%>
     /**
      * Get all the <%- entityInstancePlural %> with eager load of many-to-many relationships.
-     *
-     * @param pageable the pagination information.
+     *<% if (!paginationNo) { %>
+     * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <%- pageOrFlux %><<%- restClass %>> findAllWithEagerRelationships(Pageable pageable);
+    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAllWithEagerRelationships(<%- paginationNo ? '' : 'Pageable pageable' %>);
 
 <%_ } _%>
 <%_ if (reactive) { _%>

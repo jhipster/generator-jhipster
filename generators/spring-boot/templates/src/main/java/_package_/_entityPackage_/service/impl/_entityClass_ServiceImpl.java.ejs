@@ -43,7 +43,7 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<%_ if (!paginationNo || implementsEagerLoadApis) { _%>
+<%_ if (!paginationNo) { _%>
   <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
   <%_ } _%>
@@ -215,8 +215,14 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
      * @return the list of entities.
      */
   <%_ } _%>
-    public <%- pageOrFlux %><<%- restClass %>> findAllWithEagerRelationships(Pageable pageable) {
+    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAllWithEagerRelationships(<%- paginationNo ? '' : 'Pageable pageable' %>) {
+  <%_ if (paginationNo) { _%>
+        return <%- entityInstance %>Repository.findAllWithEagerRelationships()<% if (dtoMapstruct) { %><%- reactive ? '' : '.stream()' %>
+            .map(<%- entityToDtoReference %>)<% if (!reactive) { %>
+            .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
+  <%_ } else { _%>
         return <%- entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>.map(<%- entityToDtoReference %>);<% } %>
+  <%_ } _%>
     }
 <%_ } _%>
 <%- include('../../_partials_entity_/get_filtered_template') -%>
