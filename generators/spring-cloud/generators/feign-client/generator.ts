@@ -52,9 +52,7 @@ export default class FeignClientGenerator extends SpringBootApplicationGenerator
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ application, source }) {
-        if (application.springBoot4) {
-          source.addSpringBootModule?.('spring-boot-starter-restclient');
-        }
+        source.addSpringBootModule?.('spring-boot-starter-restclient');
         const openFeignArtifact = { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-openfeign' };
         if (application.buildToolMaven) {
           source.addMavenDependency?.(openFeignArtifact);

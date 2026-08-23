@@ -129,12 +129,11 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      loadBaseDeployment({ deployment, applications }) {
+      loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
         loadDockerDependenciesTask.call(this, { context: deployment });
         loadDockerElasticsearchVersion.call(this, {
-          springBoot4: applications.some(app => app.springBoot4),
           dockerContainers: deployment.dockerContainers!,
         });
       },

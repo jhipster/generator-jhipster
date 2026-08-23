@@ -340,7 +340,7 @@ spring:
   <%- reactive ? 'webflux' : 'mvc' %>:
     problemdetails:
       enabled: true
-<%_ if (databaseTypeMongodb && springBoot4) { _%>
+<%_ if (databaseTypeMongodb) { _%>
   mongodb:
     representation:
       uuid: standard

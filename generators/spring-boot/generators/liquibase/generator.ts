@@ -65,7 +65,7 @@ export default class SpringBootLiquibaseGenerator extends SpringBootApplicationG
       },
 
       addDependencies({ application, source }) {
-        if (application.springBoot4 && application.backendTypeSpringBoot) {
+        if (application.backendTypeSpringBoot) {
           source.addJavaDependencies?.([
             {
               groupId: 'org.springframework.boot',
@@ -76,9 +76,6 @@ export default class SpringBootLiquibaseGenerator extends SpringBootApplicationG
                 : undefined,
             },
           ]);
-        }
-        if (application.databaseTypeNeo4j && !application.springBoot4) {
-          source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
         }
       },
 

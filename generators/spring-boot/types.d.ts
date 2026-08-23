@@ -25,18 +25,16 @@ import type {
 import type { SpringBootAddedApplicationProperties, SpringBootAddedPropertyProperties } from './application.ts';
 import type command from './command.ts';
 import type cacheCommand from './generators/cache/command.ts';
-import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
-import type springBootDependencies3 from './resources/spring-boot-dependencies.ts';
+import type springBootDependencies from './resources/spring-boot-dependencies-4.ts';
 
 export type { Features } from '../server/types.d.ts';
 
 type Command = CommandTypeMap<typeof command>;
 type CacheCommand = CommandTypeMap<typeof cacheCommand>;
 
-export type SpringBootModule = keyof (typeof springBootDependencies3)['modules'] | keyof (typeof springBootDependencies4)['modules'];
+export type SpringBootModule = keyof (typeof springBootDependencies)['modules'];
 
-export type SpringBootProperties =
-  keyof (typeof springBootDependencies3)['properties'] | keyof (typeof springBootDependencies4)['properties'];
+export type SpringBootProperties = keyof (typeof springBootDependencies)['properties'];
 
 export type Config = Command['Config'] & CacheCommand['Config'] & JavaConfig & ServerConfig & CommonConfig;
 
@@ -191,6 +189,7 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     communicationSpringWebsocket: boolean;
     requiresDeleteAllUsers: boolean;
 
+    /** @deprecated Spring Boot 3 is no longer supported, always true. */
     springBoot4: boolean;
 
     hibernateNamingPhysicalStrategy?: string;
