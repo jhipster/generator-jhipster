@@ -266,4 +266,40 @@ describe(`generator - ${clientFramework}`, () => {
       expect(runResult.getSnapshot('**/entities/admin/user-management/**')).toMatchSnapshot();
     });
   });
+
+  describe('builtIn UserManagementEntity with cassandra', () => {
+    before(async () => {
+      await dryRunHelpers
+        .runJHipster(generator)
+        .withJHipsterConfig(
+          {
+            clientFramework,
+            databaseType: 'cassandra',
+            enableTranslation: false,
+          },
+          [{ name: 'UserManagement', skipClient: false }],
+        )
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common']);
+    });
+
+    it('should add authorities to the model even though the Authority entity is not generated', () => {
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/user-management.model.ts`,
+        'authorities?: string[] | null;',
+      );
+    });
+
+    it('should not reference audit fields, which are not available with cassandra', () => {
+      runResult.assertNoFileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/user-management.model.ts`, 'createdBy');
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/detail/user-management-detail.html`,
+        /createdBy|createdDate|lastModifiedBy|lastModifiedDate/,
+      );
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/list/user-management.html`,
+        /createdDate|lastModifiedBy|lastModifiedDate/,
+      );
+    });
+  });
 });
