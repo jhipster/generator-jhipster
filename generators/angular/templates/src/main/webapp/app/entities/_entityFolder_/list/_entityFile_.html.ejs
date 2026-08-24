@@ -75,7 +75,7 @@
                 <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
   <%_ const { fieldSupportsSortBy } = field; _%>
-  <%_ if (builtInUserManagement && (field.fieldName === 'activated' || field.fieldName === 'authorities')) { _%>
+  <%_ if (builtInUserManagement && (field.fieldName === 'activated')) { _%>
                     <th scope="col"></th>
   <%_ } else { _%>
                     <th scope="col"<% if (fieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- field.fieldName %>"<% } %>>
@@ -94,14 +94,8 @@
                     </th>
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
-                    <th scope="col">
-                        <div class="d-flex">
-                            <span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span>
-                        </div>
-                    </th>
-  <%_ } else if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded && !builtInUserManagement)) { _%>
+  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
     <%_ const fieldName = `.${relationship.otherEntityField}`;
         const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
     _%>
@@ -115,8 +109,15 @@
                     </th>
   <%_ } _%>
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+                    <th scope="col">
+                        <div class="d-flex">
+                            <span>__jhiTranslateTag__('userManagement.profiles')</span>
+                        </div>
+                    </th>
                     <th scope="col"></th>
                 </tr>
+<%_ } _%>
             </thead>
             <tbody<%- paginationInfiniteScroll ? ' infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"' : '' %>>
             @for (<%- entityInstance %> of <%- entityInstancePlural %>(); track track<%- primaryKey.nameCapitalized %>(<%- entityInstance %>)) {
@@ -164,17 +165,9 @@
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<%- field.id ? '</a>' : '' %></td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded && !builtInUserManagement)) { _%>
   <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
-  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
-                    <td>
-                    @for (authority of <%- entityInstance %>.authorities; track $index) {
-                        <div>
-                            <span class="badge bg-info">{{ authority }}</span>
-                        </div>
-                    }
-                    </td>
-  <%_ } else if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.collection) { _%>
@@ -201,6 +194,15 @@
     <%_ } _%>
                     </td>
   <%_ } _%>
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+                    <td>
+                    @for (authority of <%- entityInstance %>.authorities; track $index) {
+                        <div>
+                            <span class="badge bg-info">{{ authority }}</span>
+                        </div>
+                    }
+                    </td>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
