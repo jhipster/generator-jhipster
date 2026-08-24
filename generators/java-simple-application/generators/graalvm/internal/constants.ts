@@ -18,7 +18,7 @@
  */
 
 // renovate: datasource=github-releases depName=graalvm-reachability-metadata packageName=oracle/graalvm-reachability-metadata
-export const GRAALVM_REACHABILITY_METADATA = '1.0.11';
+export const GRAALVM_REACHABILITY_METADATA = '1.0.12';
 
 /**
  * Netty 4.1.x is resolved to the `5.0.0.Alpha1` metadata since graalvm-reachability-metadata 1.0.11,
