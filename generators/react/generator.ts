@@ -249,13 +249,24 @@ ${comment}
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ application, control }) {
         await control.cleanupFiles({
           '9.0.0-alpha.0': [
             // Try to remove possibles old eslint config files
             'eslint.config.js',
             'eslint.config.mjs',
             'postcss.config.js',
+          ],
+          '9.2.1': [
+            // Webpack was replaced with Vite
+            'webpack/package.json',
+            'webpack/environment.js',
+            'webpack/webpack.common.js',
+            'webpack/webpack.dev.js',
+            'webpack/webpack.prod.js',
+            'webpack/utils.js',
+            'webpack/logo-jhipster.png',
+            [application.microfrontend, 'webpack/webpack.microfrontend.js'],
           ],
         });
       },
