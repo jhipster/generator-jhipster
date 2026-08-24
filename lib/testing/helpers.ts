@@ -228,7 +228,10 @@ export const createBlueprintFiles = (
   };
 };
 
-class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator> extends RunContext<Generator> {
+class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, ResultType = RunResult<Generator>> extends RunContext<
+  Generator,
+  ResultType
+> {
   public sharedSource!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
   private readonly workspaceApplications: string[] = [];
@@ -459,7 +462,7 @@ plugins {
     });
   }
 
-  async run(): Promise<RunResult<Generator>> {
+  async run(): Promise<ResultType> {
     const runResult = (await super.run()) as unknown as JHipsterRunResult<Generator>;
     if (this.sharedSource) {
       // Convert big objects to an identifier to avoid big snapshot and serialization issues.
@@ -512,7 +515,7 @@ plugins {
     runResult.assertJHipsterConfigContent = (expected: Record<string, any>) =>
       runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': expected });
 
-    return runResult;
+    return runResult as unknown as ResultType;
   }
 
   withTask(
