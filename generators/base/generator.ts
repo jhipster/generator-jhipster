@@ -133,7 +133,7 @@ export default class BaseGenerator<
           if (this.blueprintConfig!.blueprintVersion) {
             this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => this.blueprintConfig!.blueprintVersion });
           }
-          const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
+          const blueprintPackageJson = this._meta.getPackageJson!<PackageJson>()!;
           this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
         } catch {
           this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);

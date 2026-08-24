@@ -133,7 +133,7 @@
     "@yeoman/conflicter": "4.1.0",
     "@yeoman/namespace": "2.1.0",
     "@yeoman/transform": "2.1.2",
-    "@yeoman/types": "1.11.1",
+    "@yeoman/types": "1.12.1",
     "chalk": "6.0.0",
     "chevrotain": "13.2.0",
     "commander": "15.0.0",
@@ -174,8 +174,8 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.67.0",
     "yaml": "2.9.0",
-    "yeoman-environment": "6.1.0",
-    "yeoman-generator": "8.2.2"
+    "yeoman-environment": "6.2.0",
+    "yeoman-generator": "8.3.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "5.10.0",
