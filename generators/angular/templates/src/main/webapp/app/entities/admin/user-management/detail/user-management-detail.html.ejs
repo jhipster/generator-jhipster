@@ -48,6 +48,7 @@
         <dt><span>__jhiTranslateTag__('userManagement.langKey')</span></dt>
         <dd>{{ userManagementRef.langKey }}</dd>
 <%_ } _%>
+<%_ if (!locals.databaseTypeCassandra) { _%>
 
         <dt><span>__jhiTranslateTag__('userManagement.createdBy')</span></dt>
         <dd>{{ userManagementRef.createdBy }}</dd>
@@ -60,6 +61,7 @@
 
         <dt><span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span></dt>
         <dd>{{ userManagementRef.lastModifiedDate | formatMediumDatetime }}</dd>
+<%_ } _%>
 
         <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
         <dd>
