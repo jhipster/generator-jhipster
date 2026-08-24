@@ -274,6 +274,12 @@ export function createUserManagementEntity(
 
   if (!application.databaseTypeCassandra) {
     addOrExtendFields(userManagement.fields!, getAuditFields());
+    mutateFields(userManagement.fields!, [
+      {
+        fieldName: 'createdBy',
+        hidden: true,
+      },
+    ]);
   }
 
   if (application.generateBuiltInAuthorityEntity) {
