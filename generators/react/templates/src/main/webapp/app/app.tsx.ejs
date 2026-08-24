@@ -50,6 +50,10 @@ export const App = () => {
 
 <%_ if (enableTranslation) { _%>
   const currentLocale = useAppSelector(state => state.locale.currentLocale);
+  <%_ if (microfrontend) { _%>
+  // Translations registered by microfrontends must re-render the already rendered components.
+  useAppSelector(state => state.locale.lastChange);
+  <%_ } _%>
 <%_ } _%>
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const isAdmin = useAppSelector(state => hasAnyAuthority(state.authentication.account.authorities, [Authority.ADMIN]));
