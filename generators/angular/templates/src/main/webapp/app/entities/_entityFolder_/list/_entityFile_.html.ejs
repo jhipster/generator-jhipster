@@ -95,7 +95,13 @@
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
+                    <th scope="col">
+                        <div class="d-flex">
+                            <span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span>
+                        </div>
+                    </th>
+  <%_ } else if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
     <%_ const fieldName = `.${relationship.otherEntityField}`;
         const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
     _%>
@@ -154,7 +160,13 @@
                                 [disabled]="!currentAccount() || currentAccount()?.login === <%- entityInstance %>.login">__jhiTranslateTag__('<%- i18nKeyPrefix %>.activated')</button>
                     }
                     </td>
-  <%_ } else if (builtInUserManagement && fieldName === 'authorities') { _%>
+  <%_ } else { _%>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<%- field.id ? '</a>' : '' %></td>
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
+  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
                     <td>
                     @for (authority of <%- entityInstance %>.authorities; track $index) {
                         <div>
@@ -162,13 +174,7 @@
                         </div>
                     }
                     </td>
-  <%_ } else { _%>
-                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<%- field.id ? '</a>' : '' %></td>
-  <%_ } _%>
-<%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
-  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+  <%_ } else if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.collection) { _%>

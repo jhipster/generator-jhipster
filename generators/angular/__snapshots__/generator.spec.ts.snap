@@ -413,6 +413,11 @@ export class UserManagementDetail {
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
+          <th scope="col">
+            <div class="d-flex">
+              <span>Profiles</span>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -448,6 +453,13 @@ export class UserManagementDetail {
           <td>{{ userManagement.createdDate | formatMediumDatetime }}</td>
           <td>{{ userManagement.lastModifiedBy }}</td>
           <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
+          <td>
+            @for (authority of userManagement.authorities; track $index) {
+            <div>
+              <span class="badge bg-info">{{ authority }}</span>
+            </div>
+            }
+          </td>
           <td class="text-end">
             <div class="btn-group">
               <a
