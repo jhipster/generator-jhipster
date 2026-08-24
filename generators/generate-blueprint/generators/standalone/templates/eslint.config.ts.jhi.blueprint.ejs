@@ -18,14 +18,14 @@
 -%>
 <&_ if (fragment.importsSection) { -&>
 import jhipster from 'generator-jhipster/eslint';
-  <%_ if (typescriptEslint) { _%>
+<%_ if (typescriptEslint) { _%>
 import tseslint from 'typescript-eslint';
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   { ignores: ['coverage/**'] },
   jhipster.recommended,
-  <%_ if (typescriptEslint) { _%>
+<%_ if (typescriptEslint) { _%>
   {
     files: ['**/*.ts'],
     ...tseslint.configs.recommended[0],
@@ -41,5 +41,5 @@ import tseslint from 'typescript-eslint';
       '@typescript-eslint/no-floating-promises': 'error',
     },
   },
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
