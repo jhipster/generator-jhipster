@@ -43,7 +43,6 @@
     "happy-dom": "20.11.6",
     "identity-obj-proxy": "3.0.0",
     "jiti": "2.7.0",
-    "patch-package": "8.0.1",
     "postcss-rtlcss": "6.0.0",
     "react-infinite-scroll-component": "7.2.1",
     "rimraf": "6.1.3",
@@ -52,6 +51,7 @@
     "typescript-eslint": "8.67.0",
     "vite": "8.2.2",
     "vite-plugin-static-copy": "4.1.1",
+    "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.1.11",
     "vitest-sonar-reporter": "3.0.0"
   },

@@ -20,13 +20,14 @@ import { fileURLToPath, URL } from 'node:url';
 import path from 'node:path';
 import { normalizePath } from 'vite';
 
-import { defineConfig<%- microfrontend ? ', type Plugin' : '' %> } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ } _%>
 <%_ if (microfrontend) { _%>
 import { federation } from '@module-federation/vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 import federationConfig from './module-federation.config.ts';
 <%_ } _%>
@@ -42,23 +43,6 @@ const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, c
 
 <%_ } _%>
 const development = process.env.NODE_ENV !== 'production';
-<%_ if (microfrontend) { _%>
-const appDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url));
-
-/**
- * Resolves 'app/*' imports.
- * A `resolve.alias` entry is applied before any plugin and would bypass Module Federation sharing
- * (`app/*` modules listed in module-federation.config.ts `shared`), so resolve them after the federation plugin instead.
- */
-const appAliasPlugin: Plugin = {
-  name: 'jhipster:app-alias',
-  enforce: 'pre',
-  resolveId(source, importer, options) {
-    if (!source.startsWith('app/')) return null;
-    return this.resolve(`${appDir}${source.slice('app/'.length)}`, importer, { ...options, skipSelf: true });
-  },
-};
-<%_ } _%>
 
 const config = defineConfig({
   plugins: [
@@ -84,7 +68,15 @@ const config = defineConfig({
 <%_ } _%>
 <%_ if (microfrontend) { _%>
     federation(federationConfig),
-    appAliasPlugin,
+    // Resolves tsconfig 'app/*' paths after the federation plugin.
+    // A `resolve.alias` entry is applied before any plugin and would bypass Module Federation sharing
+    // of the `app/*` modules listed in module-federation.config.ts `shared`.
+    tsconfigPaths({
+      projects: [
+        fileURLToPath(new URL('./tsconfig.json', import.meta.url)),
+        fileURLToPath(new URL('./tsconfig.vitest.json', import.meta.url)),
+      ],
+    }),
 <%_ } _%>
   ],
   root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),

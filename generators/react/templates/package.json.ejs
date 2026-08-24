@@ -65,9 +65,6 @@
     "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",
     "happy-dom": "<%- nodeDependencies['happy-dom'] %>",
     "identity-obj-proxy": "<%- nodeDependencies['identity-obj-proxy'] %>",
-<%_ if (microfrontend) { _%>
-    "patch-package": "<%- nodeDependencies['patch-package'] %>",
-<%_ } _%>
 <%_ if (enableTranslation) { _%>
     "deepmerge": null,
 <%_ } _%>
@@ -82,6 +79,9 @@
     "typescript-eslint": "<%- nodeDependencies['typescript-eslint'] %>",
     "vite": "<%- nodeDependencies.vite %>",
     "vite-plugin-static-copy": null,
+<%_ if (microfrontend) { _%>
+    "vite-tsconfig-paths": "<%- nodeDependencies['vite-tsconfig-paths'] %>",
+<%_ } _%>
     "vitest": "<%- nodeDependencies.vitest %>",
     "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>"
   },
@@ -107,9 +107,6 @@
     "start": "<%- nodePackageManager %> run webapp:dev --",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
-<%_ } _%>
-<%_ if (microfrontend) { _%>
-    "postinstall": "patch-package",
 <%_ } _%>
     "pretest": "<%- nodePackageManager %> run lint",
     "test": "<%- nodePackageManager %> run vitest-run --",

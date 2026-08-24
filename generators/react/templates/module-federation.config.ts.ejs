@@ -24,7 +24,11 @@ import packageJson from './package.json' with { type: 'json' };
 const apiVersion = '0.0.1';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
-const shareMappings = (...mappings: string[]) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));
+// Application modules are not installed packages, `import` points the federation plugin to the source file.
+const shareMappings = (...mappings: string[]) =>
+  Object.fromEntries(
+    mappings.map(map => [map, { ...sharedDefaults, version: apiVersion, import: `./<%- this.relativeDir(clientRootDir, clientSrcDir) %>${map}` }]),
+  );
 
 const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
   Object.fromEntries(

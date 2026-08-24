@@ -1915,9 +1915,6 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/patches/@module-federation+vite+1.20.7.patch": {
-    "stateCleared": "modified",
-  },
   "clientRoot/postcss.config.ts": {
     "stateCleared": "modified",
   },
@@ -2701,9 +2698,6 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "package.json": {
-    "stateCleared": "modified",
-  },
-  "patches/@module-federation+vite+1.20.7.patch": {
     "stateCleared": "modified",
   },
   "postcss.config.ts": {
