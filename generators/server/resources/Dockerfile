@@ -33,7 +33,7 @@ LABEL ALIAS=mssql
 
 FROM neo4j:5.26.29
 
-FROM hazelcast/management-center:5.11.0
+FROM hazelcast/management-center:5.11.1
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.45-alpine
