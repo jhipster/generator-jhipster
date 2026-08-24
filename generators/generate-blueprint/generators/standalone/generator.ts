@@ -54,7 +54,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing({ application, applicationDefaults }) {
+      async preparing({ applicationDefaults }) {
         applicationDefaults({
           blueprintCliName: data => `cli.c${data.javascriptBlueprint ? 'j' : 't'}s`,
           typescriptEslint: data => !data.javascriptBlueprint,
