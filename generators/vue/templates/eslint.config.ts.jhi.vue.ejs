@@ -19,7 +19,7 @@
 <&_ if (fragment.importsSection) { -&>
 import js from '@eslint/js';
 import vue from 'eslint-plugin-vue';
-
+import tseslint from 'typescript-eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
