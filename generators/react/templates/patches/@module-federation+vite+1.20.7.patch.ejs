@@ -1,0 +1,38 @@
+diff --git a/node_modules/@module-federation/vite/lib/index.js b/node_modules/@module-federation/vite/lib/index.js
+--- a/node_modules/@module-federation/vite/lib/index.js
++++ b/node_modules/@module-federation/vite/lib/index.js
+@@ -7762,6 +7762,26 @@
+ 		return;
+ 	}
+ }
++/**
++* A shared key that is not an installed package (an application module such as
++* `app/store`, made resolvable by a user resolver plugin) has no package entry to
++* inspect, so the generated loadShare module silently falls back to the local
++* copy and every consumer ends up with its own instance. Resolve the key through
++* Vite and adopt the resolved project file as the `import` source, which is
++* exactly what `shared: { 'app/store': { import: './src/store' } }` configures.
++* Upstream fix: https://github.com/mshima/vite/tree/fix/app-local-shared-import
++*/
++async function adoptResolvedLocalSharedImport(ctx, source, importer, key, shareItem) {
++	const { shareConfig } = shareItem;
++	if (typeof shareConfig.import === "string" || shareConfig.import === false) return;
++	if (source !== key || isNodeModulePath(source)) return;
++	if (tryResolveFromProjectRoot(source)) return;
++	const resolved = await ctx.resolve(source, importer, { skipSelf: true });
++	if (!resolved || resolved.external) return;
++	const id = resolved.id.split("?")[0];
++	if (id.startsWith("\0") || !path.isAbsolute(id) || isNodeModulePath(id) || !existsSync(id)) return;
++	shareConfig.import = id;
++}
+ function isBuildConfigImporter(importer) {
+ 	if (!importer) return false;
+ 	return /(^|\/)(?:nuxt|vite|vitest|webpack|rollup|rspack)\.config\.[cm]?[jt]sx?$/.test(importer.replace(/\\/g, "/"));
+@@ -8044,6 +8064,7 @@
+ 				const loadSharePath = getLoadShareModulePath(shareSource, useRolldown, federationOptions);
+ 				if (!materializedLoadShareSources.has(shareSource)) {
+ 					materializedLoadShareSources.add(shareSource);
++					await adoptResolvedLocalSharedImport(this, source, importer, key, shared[key]);
+ 					writeLoadShareModule(shareSource, shared[key], _command, useRolldown, federationOptions);
+ 					if (shared[key].shareConfig.import !== false) writePreBuildLibPath(shareSource, shared[key], federationOptions);
+ 					addUsedShares(shareSource, federationOptions);

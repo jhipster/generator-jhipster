@@ -43,6 +43,7 @@
     "happy-dom": "20.11.6",
     "identity-obj-proxy": "3.0.0",
     "jiti": "2.7.0",
+    "patch-package": "8.0.1",
     "postcss-rtlcss": "6.0.0",
     "react-infinite-scroll-component": "7.2.1",
     "rimraf": "6.1.3",

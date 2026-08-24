@@ -246,7 +246,11 @@ export const files = asWriteFilesSection({
   microfrontend: [
     clientRootTemplatesBlock({
       condition: generator => generator.microfrontend,
-      templates: ['module-federation.config.ts'],
+      templates: [
+        'module-federation.config.ts',
+        // Fixes sharing of application modules, see https://github.com/mshima/vite/tree/fix/app-local-shared-import
+        'patches/@module-federation+vite+1.20.7.patch',
+      ],
     }),
     {
       condition: generator => generator.microfrontend,

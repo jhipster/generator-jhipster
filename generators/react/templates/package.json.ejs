@@ -65,6 +65,9 @@
     "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",
     "happy-dom": "<%- nodeDependencies['happy-dom'] %>",
     "identity-obj-proxy": "<%- nodeDependencies['identity-obj-proxy'] %>",
+<%_ if (microfrontend) { _%>
+    "patch-package": "<%- nodeDependencies['patch-package'] %>",
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
     "deepmerge": null,
 <%_ } _%>
@@ -104,6 +107,9 @@
     "start": "<%- nodePackageManager %> run webapp:dev --",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
+<%_ } _%>
+<%_ if (microfrontend) { _%>
+    "postinstall": "patch-package",
 <%_ } _%>
     "pretest": "<%- nodePackageManager %> run lint",
     "test": "<%- nodePackageManager %> run vitest-run --",
