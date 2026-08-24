@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && !applicationTypeMicroservice) { _%>
 import { loadRemote } from '@module-federation/runtime';
 <%_ } _%>
 import dayjs from 'dayjs';
@@ -36,13 +36,17 @@ export type LocaleState = Readonly<typeof initialState>;
 
 const loadLocaleAndRegisterLocaleFile = async (locale: string, prefix: string) => {
   if (prefix || !Object.keys(TranslatorContext.context.translations).includes(locale)) {
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && !applicationTypeMicroservice) { _%>
     if (prefix) {
       // Load translations exposed by the microfrontend.
       const remoteTranslations = await loadRemote<any>(`${prefix}i18n-${locale}`);
       TranslatorContext.registerTranslations(locale, remoteTranslations.default);
       return;
     }
+<%_ } _%>
+<%_ if (applicationTypeMicroservice) { _%>
+    // A microservice only provides its own translations, they are bundled with the microfrontend.
+    // Module federation runtime is not shared, loadRemote would use the microfrontend's own runtime instance.
 <%_ } _%>
     const translations = await import(`../../../i18n/${locale}/${locale}.js`);
     TranslatorContext.registerTranslations(locale, translations.default);
