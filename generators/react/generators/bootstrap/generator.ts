@@ -18,10 +18,7 @@
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 import { ClientApplicationGenerator } from '../../../client/generator.ts';
-import {
-  createDayjsUpdateLanguagesEditFileCallback,
-  createWebpackUpdateLanguagesNeedleCallback,
-} from '../../../client/support/update-languages.ts';
+import { createDayjsUpdateLanguagesEditFileCallback } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
 import { mutateApplication } from '../../application.ts';
 
@@ -38,14 +35,13 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
         applicationDefaults(mutateApplication, {
-          clientBundler: 'webpack',
-          devServerPort: (_, { data }) => 9060 + (data.applicationIndex ?? 0),
-          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
+          clientBundler: 'vite',
+          devServerPort: (_, { data }) => 9000 + (data.applicationIndex ?? 0),
         });
       },
       translations({ application }) {
-        application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientRootDir, clientI18nDir } = application;
+        application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
+          const { enableTranslation, clientSrcDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -61,11 +57,16 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
             }),
           );
 
-          if (application.microfrontend) {
+          if (application.microfrontend && (application.applicationTypeMicroservice || application.exposeMicrofrontend)) {
             this.editFile(
-              `${clientRootDir}webpack/webpack.common.js`,
+              `${clientRootDir}module-federation.config.ts`,
               { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
+              createNeedleCallback({
+                contentToAdd: newLanguages.map(
+                  lang => `    './i18n-${lang.languageTag}': './i18n/${lang.languageTag}/${lang.languageTag}.js',`,
+                ),
+                needle: 'jhipster-needle-expose',
+              }),
             );
           }
         });

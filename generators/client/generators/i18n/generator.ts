@@ -143,8 +143,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             this.writeFiles({
               templates: [
                 {
-                  condition: (data: any) =>
-                    data.enableTranslation && (data.clientFrameworkVue || (data.clientFrameworkReact && !data.microfrontend)),
+                  condition: (data: any) => data.enableTranslation && (data.clientFrameworkVue || data.clientFrameworkReact),
                   sourceFile: data => `${CLIENT_MAIN_SRC_DIR}/i18n/index_${data.clientBundler}.js`,
                   destinationFile: data => `${data.clientI18nDir}${data.lang}/${data.lang}.js`,
                 },

@@ -26,7 +26,7 @@ import initStore from 'app/config/store';
 import Header from './header';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
-vi.mock('@module-federation/enhanced/runtime', () => ({
+vi.mock('@module-federation/runtime', () => ({
   loadRemote: vi.fn(() => Promise.reject(new Error('Test only'))),
   init: vi.fn(),
 }));

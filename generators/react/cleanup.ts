@@ -90,4 +90,16 @@ export default asWritingTask<ClientEntity, ClientApplication>(function cleanupOl
     this.removeFile('jest.conf.js');
     this.removeFile('tsconfig.test.json');
   }
+  if (control.isJhipsterVersionLessThan('9.2.1')) {
+    this.removeFile('webpack/package.json');
+    this.removeFile('webpack/environment.js');
+    this.removeFile('webpack/webpack.common.js');
+    this.removeFile('webpack/webpack.dev.js');
+    this.removeFile('webpack/webpack.prod.js');
+    this.removeFile('webpack/utils.js');
+    this.removeFile('webpack/logo-jhipster.png');
+    if (application.microfrontend) {
+      this.removeFile('webpack/webpack.microfrontend.js');
+    }
+  }
 });

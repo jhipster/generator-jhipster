@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+<%_ if (microfrontend) { _%>
+import { loadRemote } from '@module-federation/runtime';
+<%_ } _%>
 import dayjs from 'dayjs';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
@@ -35,12 +37,15 @@ export type LocaleState = Readonly<typeof initialState>;
 const loadLocaleAndRegisterLocaleFile = async (locale: string, prefix: string) => {
   if (prefix || !Object.keys(TranslatorContext.context.translations).includes(locale)) {
 <%_ if (microfrontend) { _%>
-    const response = await axios.get(`${prefix}i18n/${locale}.json?_=${I18N_HASH}`, { baseURL: '' });
-    TranslatorContext.registerTranslations(locale, response.data);
-<%_ } else { _%>
+    if (prefix) {
+      // Load translations exposed by the microfrontend.
+      const remoteTranslations = await loadRemote<any>(`${prefix}i18n-${locale}`);
+      TranslatorContext.registerTranslations(locale, remoteTranslations.default);
+      return;
+    }
+<%_ } _%>
     const translations = await import(`../../../i18n/${locale}/${locale}.js`);
     TranslatorContext.registerTranslations(locale, translations.default);
-<%_ } _%>
   }
 };
 

@@ -30,7 +30,7 @@ const EntitiesMenu = () => {
   const lastChange = useAppSelector(state => state.locale.lastChange);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(addTranslationSourcePrefix('services/<%- lowercaseBaseName %>/'));
+    dispatch(addTranslationSourcePrefix('<%- lowercaseBaseName.replaceAll('-', '_') %>/'));
   }, [lastChange]);
 
 <%_ } _%>

@@ -26,7 +26,7 @@ import ClientGenerator from './index.ts';
 
 import { dryRunHelpers as helpers, result as runResult } from '#testing';
 
-const { ANGULAR, REACT } = clientFrameworkTypes;
+const { ANGULAR } = clientFrameworkTypes;
 
 type MockBlueprintSubGenConstructorParamsT = ConstructorParameters<typeof ClientGenerator>;
 
@@ -79,16 +79,6 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
 
     it('should add webpack config to webpack.custom.js', async () => {
       runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.custom.js`, '{ devServer: {} }');
-    });
-  });
-
-  describe('React clientFramework', () => {
-    before(() => {
-      return generateAppWithClientFramework(REACT);
-    });
-
-    it('should add webpack config to webpack.common.js', async () => {
-      runResult.assertFileContent(`${CLIENT_WEBPACK_DIR}webpack.common.js`, '{ devServer: {} }');
     });
   });
 });

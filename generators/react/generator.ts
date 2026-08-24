@@ -61,6 +61,26 @@ export default class ReactGenerator extends ClientApplicationGenerator<
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      migrateToVite({ control }) {
+        if (this.jhipsterConfig.clientBundler === 'webpack') {
+          // Webpack support was replaced with Vite.
+          delete this.jhipsterConfig.clientBundler;
+        }
+        if (this.jhipsterConfig.devServerPort !== undefined && control.isJhipsterVersionLessThan('9.2.1')) {
+          // Vite dev server listens directly on the BrowserSync port previously used by webpack.
+          const { applicationIndex = 0 } = this.jhipsterConfigWithDefaults;
+          this.jhipsterConfig.devServerPort = 9000 + applicationIndex;
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
@@ -87,9 +107,6 @@ export default class ReactGenerator extends ClientApplicationGenerator<
       },
       applicationDefaults({ application, applicationDefaults }) {
         application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
-        if (application.clientBundlerWebpack) {
-          application.prettierFolders.push('webpack/');
-        }
         if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
           // When we have a java backend, 'src/**' is already added by java:bootstrap
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
@@ -101,27 +118,14 @@ export default class ReactGenerator extends ClientApplicationGenerator<
         });
       },
       async javaNodeBuildPaths({ application }) {
-        const { clientBundlerWebpack, javaNodeBuildPaths } = application;
+        const { javaNodeBuildPaths, microfrontend } = application;
 
         javaNodeBuildPaths?.push('.postcss.config.js', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts');
-        if (clientBundlerWebpack) {
-          javaNodeBuildPaths?.push('webpack/');
+        if (microfrontend) {
+          javaNodeBuildPaths?.push('module-federation.config.ts');
         }
       },
       prepareForTemplates({ application, source }) {
-        source.addWebpackConfig = args => {
-          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
-          const ignoreNonExisting = this.ignoreNeedlesError && 'Webpack configuration file not found';
-          this.editFile(
-            webpackPath,
-            { ignoreNonExisting },
-            createNeedleCallback({
-              needle: 'jhipster-needle-add-webpack-config',
-              contentToAdd: `,${args.config}`,
-            }),
-          );
-        };
-
         source.addClientStyle = ({ style, comment }) => {
           comment =
             comment ?
@@ -280,7 +284,18 @@ ${comment}
       addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
         source.mergeClientPackageJson!({
-          devDependencies: { '@module-federation/enhanced': null },
+          dependencies: { '@module-federation/runtime': null },
+          devDependencies: { '@module-federation/vite': null },
+        });
+      },
+      addIndexAsset({ application, source }) {
+        source.addExternalResourceToRoot!({
+          resource: '<script>const global = globalThis;</script>',
+          comment: 'Workaround https://github.com/axios/axios/issues/5622',
+        });
+        source.addExternalResourceToRoot!({
+          resource: `<script type="module" src="./app/${application.microfrontend ? 'main.tsx' : 'index.tsx'}"></script>`,
+          comment: 'Load react main',
         });
       },
       addWebsocketDependencies({ application, source }) {
@@ -330,7 +345,7 @@ ${comment}
       end({ application }) {
         this.log.ok(`React ${application.nodeDependencies.react} application generated successfully.`);
         this.log.log(
-          chalk.green(`  Start your Webpack development server with:
+          chalk.green(`  Start your Vite development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `),
         );

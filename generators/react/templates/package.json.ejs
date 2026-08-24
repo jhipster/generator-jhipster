@@ -57,58 +57,30 @@
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
     "@types/react": "<%- nodeDependencies['@types/react'] %>",
     "@types/react-dom": "<%- nodeDependencies['@types/react-dom'] %>",
-    "@types/webpack-env": "<%- nodeDependencies['@types/webpack-env'] %>",
     "@vitejs/plugin-react": "<%- nodeDependencies['@vitejs/plugin-react'] %>",
     "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
     "autoprefixer": "<%- nodeDependencies.autoprefixer %>",
-    "browser-sync": "<%- nodeDependencies['browser-sync'] %>",
-    "browser-sync-webpack-plugin": "<%- nodeDependencies['browser-sync-webpack-plugin'] %>",
-    "copy-webpack-plugin": "<%- nodeDependencies['copy-webpack-plugin'] %>",
-    "css-loader": "<%- nodeDependencies['css-loader'] %>",
-    "css-minimizer-webpack-plugin": "<%- nodeDependencies['css-minimizer-webpack-plugin'] %>",
     "eslint": "<%- nodeDependencies.eslint %>",
     "eslint-config-prettier": "<%- nodeDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",
-    "eslint-webpack-plugin": "<%- nodeDependencies['eslint-webpack-plugin'] %>",
-    "fork-ts-checker-webpack-plugin": "<%- nodeDependencies['fork-ts-checker-webpack-plugin'] %>",
     "happy-dom": "<%- nodeDependencies['happy-dom'] %>",
-    "html-webpack-plugin": "<%- nodeDependencies['html-webpack-plugin'] %>",
     "identity-obj-proxy": "<%- nodeDependencies['identity-obj-proxy'] %>",
 <%_ if (enableTranslation) { _%>
-  <%_ if (microfrontend) { _%>
-    "folder-hash": "<%- nodeDependencies['folder-hash'] %>",
-    "merge-jsons-webpack-plugin": "<%- nodeDependencies['merge-jsons-webpack-plugin'] %>",
-  <%_ } else { _%>
     "deepmerge": null,
-  <%_ } _%>
 <%_ } _%>
-    "mini-css-extract-plugin": "<%- nodeDependencies['mini-css-extract-plugin'] %>",
-    "postcss-loader": "<%- nodeDependencies['postcss-loader'] %>",
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%- nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
     "react-infinite-scroll-component": "<%- nodeDependencies['react-infinite-scroll-component'] %>",
     "rimraf": "<%- nodeDependencies.rimraf %>",
     "sass": "<%- nodeDependencies.sass %>",
-    "sass-loader": "<%- nodeDependencies['sass-loader'] %>",
-    "simple-progress-webpack-plugin": "<%- nodeDependencies['simple-progress-webpack-plugin'] %>",
-    "source-map-loader": "<%- nodeDependencies['source-map-loader'] %>",
-    "style-loader": "<%- nodeDependencies['style-loader'] %>",
     "swagger-ui-dist": "<%- nodeDependencies['swagger-ui-dist'] %>",
-    "terser-webpack-plugin": "<%- nodeDependencies['terser-webpack-plugin'] %>",
-    "thread-loader": "<%- nodeDependencies['thread-loader'] %>",
-    "ts-loader": "<%- nodeDependencies['ts-loader'] %>",
     "typescript": "<%- nodeDependencies.typescript %>",
     "typescript-eslint": "<%- nodeDependencies['typescript-eslint'] %>",
     "vite": "<%- nodeDependencies.vite %>",
+    "vite-plugin-static-copy": null,
     "vitest": "<%- nodeDependencies.vitest %>",
-    "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>",
-    "webpack": "<%- nodeDependencies.webpack %>",
-    "webpack-cli": "<%- nodeDependencies['webpack-cli'] %>",
-    "webpack-dev-server": "<%- nodeDependencies['webpack-dev-server'] %>",
-    "webpack-merge": "<%- nodeDependencies['webpack-merge'] %>",
-    "webpack-notifier": "<%- nodeDependencies['webpack-notifier'] %>",
-    "workbox-webpack-plugin": "<%- nodeDependencies['workbox-webpack-plugin'] %>"
+    "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>"
   },
   <%# An unknown dependency pulls in outdated react and react-dom, override them -%>
   <%# Use literal versions, npm 10 fails to resolve $ references https://github.com/npm/cli/issues/5730 -%>
@@ -130,7 +102,6 @@
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<%- skipServer ? '' : ' npm:backend:start' %>",
     "start": "<%- nodePackageManager %> run webapp:dev --",
-    "start-tls": "<%- nodePackageManager %> run webapp:dev -- --env tls",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
 <%_ } _%>
@@ -141,12 +112,10 @@
     "vitest-run": "vitest run --coverage",
     "watch": "concurrently 'npm run start' npm:backend:start",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
-    "webapp:build:dev": "webpack --config webpack/webpack.dev.js --env stats=minimal",
-    "webapp:build:prod": "webpack --config webpack/webpack.prod.js --progress=profile",
-    "webapp:dev": "<%- nodePackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --env stats=minimal",
-    "webapp:dev-verbose": "<%- nodePackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress=profile --env stats=normal",
+    "webapp:build:dev": "vite build",
+    "webapp:build:prod": "vite build",
+    "webapp:dev": "vite",
     "webapp:prod": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:prod --",
-    "webapp:test": "<%- nodePackageManager %> run test --",
-    "webpack-dev-server": "webpack serve"
+    "webapp:test": "<%- nodePackageManager %> run test --"
   }
 }
