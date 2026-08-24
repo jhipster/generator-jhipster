@@ -181,7 +181,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
             globals: mainDependencies.globals,
             vitest: mainDependencies.vitest,
             prettier: mainDependencies.prettier,
-            ...(application.typescriptEslint ? { 'typescript-eslint': null } : {}),
+            ...(application.typescriptEslint ? { 'typescript-eslint': mainDependencies['typescript-eslint'] } : {}),
             /*
              * yeoman-test version is loaded through generator-jhipster peer dependency.
              * generator-jhipster uses a fixed version, blueprints must set a compatible range.
