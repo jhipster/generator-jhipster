@@ -75,18 +75,26 @@
                 <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
   <%_ const { fieldSupportsSortBy } = field; _%>
+  <%_ if (builtInUserManagement && field.fieldName === 'activated') { _%>
+                    <th scope="col"></th>
+  <%_ } else { _%>
                     <th scope="col"<% if (fieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- field.fieldName %>"<% } %>>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span>
-  <%_ if (fieldSupportsSortBy) { _%>
-                        <%- searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal ? '@if (!currentSearch()) {' : '' %>
-                            <fa-icon class="p-1" icon="sort" />
-                        <%- searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal ? '}' : '' %>
-  <%_ } _%>
+    <%_ if (fieldSupportsSortBy) { _%>
+      <%_ if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { _%>
+                            @if (!currentSearch()) {
+      <%_ } _%>
+                                <fa-icon class="p-1" icon="sort" />
+      <%_ if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { _%>
+                            }
+      <%_ } _%>
+    <%_ } _%>
                         </div>
                     </th>
+  <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded && !builtInUserManagement)) { _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
     <%_ const fieldName = `.${relationship.otherEntityField}`;
         const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
@@ -101,8 +109,15 @@
                     </th>
   <%_ } _%>
 <%_ } _%>
-                    <th scope="col"></th>
-                </tr>
+<%_ if (builtInUserManagement) { _%>
+                    <th scope="col">
+                        <div class="d-flex">
+                            <span>__jhiTranslateTag__('userManagement.profiles')</span>
+                        </div>
+                    </th>
+<%_ } _%>
+                   <th scope="col"></th>
+               </tr>
             </thead>
             <tbody<%- paginationInfiniteScroll ? ' infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"' : '' %>>
             @for (<%- entityInstance %> of <%- entityInstancePlural %>(); track track<%- primaryKey.nameCapitalized %>(<%- entityInstance %>)) {
@@ -126,6 +141,8 @@
                         <span>{{ <%- entityInstance %>.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>.<%- fieldName %>) }}</span>
                     }
                     </td>
+  <%_ } else if (builtInUserManagement && fieldName === 'langKey') { _%>
+                    <td>{{ <%- entityInstance %>.<%- fieldName %> }}</td>
   <%_ } else if (field.fieldIsEnum) { _%>
                     <%# TODO: import enum and use its key as label -%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>.<%- fieldName %> ?? 'null'" })<%- field.id ? '</a>' : '' %></td>
@@ -135,11 +152,20 @@
                     <td>{{ <%- entityInstance %>.<%- fieldName %> | formatMediumDate }}</td>
   <%_ } else if (field.fieldTypeDuration) { _%>
                     <td title="{{ <%- entityInstance %>.<%- fieldName %> }}">{{ <%- entityInstance %>.<%- fieldName %> | duration }}</td>
+  <%_ } else if (builtInUserManagement && fieldName === 'activated') { _%>
+                    <td>
+                    @if (!<%- entityInstance %>.activated) {
+                        <button class="btn btn-danger btn-sm" (click)="setActive(<%- entityInstance %>, true)">__jhiTranslateTag__('<%- i18nKeyPrefix %>.deactivated')</button>
+                    } @else {
+                        <button class="btn btn-success btn-sm" (click)="setActive(<%- entityInstance %>, false)"
+                                [disabled]="!currentAccount() || currentAccount()?.login === <%- entityInstance %>.login">__jhiTranslateTag__('<%- i18nKeyPrefix %>.activated')</button>
+                    }
+                    </td>
   <%_ } else { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<%- field.id ? '</a>' : '' %></td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded && !builtInUserManagement)) { _%>
   <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
                     <td>
@@ -168,6 +194,15 @@
     <%_ } _%>
                     </td>
   <%_ } _%>
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+                    <td>
+                    @for (authority of <%- entityInstance %>.authorities; track $index) {
+                        <div>
+                            <span class="badge bg-info">{{ authority }}</span>
+                        </div>
+                    }
+                    </td>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
@@ -200,6 +235,9 @@
 
                             <button type="submit" (click)="delete(<%- entityInstance %>)"
                                     class="btn btn-danger btn-sm"
+  <%_ if (builtInUserManagement) { _%>
+                                    [disabled]="!currentAccount() || currentAccount()?.login === <%- entityInstance %>.login"
+  <%_ } _%>
                                     data-cy="entityDeleteButton">
                                 <fa-icon icon="times" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.delete')</span>
