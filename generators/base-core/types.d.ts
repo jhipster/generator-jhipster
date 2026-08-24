@@ -25,6 +25,7 @@ export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) =
 
 export type Config = {
   defaultCommand?: string;
+  clientFramework?: 'angular' | 'react' | 'vue' | 'no';
 };
 
 export type Options = YeomanOptions & {

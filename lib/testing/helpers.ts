@@ -79,7 +79,7 @@ type RunJHipster = WithJHipsterGenerators & {
   prepareEnvironment?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends BaseCoreGenerator = BaseCoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
+type JHipsterRunResult<GeneratorType extends YeomanGenerator = BaseCoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
   env: Environment;
 
   /**
@@ -229,7 +229,7 @@ export const createBlueprintFiles = (
   };
 };
 
-class JHipsterRunContext<Generator extends BaseCoreGenerator = BaseCoreGenerator> extends RunContext<Generator> {
+class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator> extends RunContext<Generator> {
   public sharedSource!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
   private readonly workspaceApplications: string[] = [];
@@ -501,8 +501,9 @@ plugins {
       gen => (runResult.mockedGenerators[gen] as ReturnType<typeof mock.fn>)?.mock.callCount() > 0,
     );
 
-    runResult.application = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => undefined });
-    const entitiesMap: Map<string, Entity> | undefined = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, {
+    const generator = runResult.generator as unknown as BaseCoreGenerator;
+    runResult.application = generator.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => undefined });
+    const entitiesMap: Map<string, Entity> | undefined = generator.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, {
       factory: (): any => undefined,
     });
     runResult.entities = entitiesMap ? Object.fromEntries(entitiesMap.entries()) : undefined;
@@ -519,7 +520,8 @@ plugins {
       | (typeof WORKSPACES_PRIORITY_NAMES)[keyof typeof WORKSPACES_PRIORITY_NAMES],
     method: (this: BaseCoreGenerator, ...args: any[]) => any,
   ): this {
-    return this.onGenerator(async gen => {
+    return this.onGenerator(async generator => {
+      const gen = generator as unknown as BaseCoreGenerator;
       gen.on('queueOwnTasks', () => {
         const priority = gen._queues[priorityName];
         const queueName = priority.queueName ?? priority.priorityName;
@@ -548,8 +550,7 @@ export const getCommandHelpOutput = async (command?: string) => {
 class JHipsterTest<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGenerator> extends YeomanTest {
   commandName?: string;
 
-  // @ts-expect-error testing types should be improved
-  override run<GeneratorType extends JHipsterTestGenerator = JHipsterTestGenerator>(
+  override run<GeneratorType extends YeomanGenerator = JHipsterTestGenerator>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions & { createEnv?: any },
@@ -557,8 +558,7 @@ class JHipsterTest<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGen
     return super.run<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
   }
 
-  // @ts-expect-error testing types should be improved
-  override runDefault<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+  override runDefault<Generator extends YeomanGenerator = JHipsterTestGenerator>(
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions & { createEnv?: any },
   ): JHipsterRunContext<Generator> {
@@ -698,12 +698,11 @@ class JHipsterTest<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGen
     return this.runJHipster(blueprintNS).withGenerators([[BlueprintedGenerator, { namespace: blueprintNS }]]);
   }
 
-  // @ts-expect-error testing types should be improved
-  override create<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
+  override create<GeneratorType extends YeomanGenerator = YeomanGenerator<GeneratorTestOptions>>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions,
-  ): JHipsterRunContext {
+  ): JHipsterRunContext<GeneratorType> {
     return super.create<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
   }
 
@@ -831,10 +830,11 @@ export function createTestHelpers<JHipsterTestGenerator extends BaseCoreGenerato
     }
   }
   const mergeableOptions = pick(options, 'adapterOptions', 'environmentOptions', 'generatorOptions', 'settings');
-  // @ts-expect-error testing types should be improved
   return createHelpers<JHipsterTest<JHipsterTestGenerator>>({
+    // @ts-expect-error testing types should be improved
     factory: () => new JHipsterTest<JHipsterTestGenerator>(),
     defaultGenerator: './generator.ts',
+    // @ts-expect-error testing types should be improved
     getRunContextType: () => JHipsterRunContext,
     ...options,
     ...mergeHelperOptions(
