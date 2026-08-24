@@ -146,6 +146,13 @@ export function createUserEntity(
       builtIn: true,
       fakerTemplate: '{{internet.email}}',
     },
+    {
+      fieldName: 'activated',
+      fieldType: TYPE_BOOLEAN,
+      builtIn: true,
+      autoGenerate: true,
+      defaultValue: true,
+    },
     ...(application.enableTranslation ?
       [
         {
@@ -168,13 +175,6 @@ export function createUserEntity(
         },
       ]
     : []),
-    {
-      fieldName: 'activated',
-      fieldType: TYPE_BOOLEAN,
-      builtIn: true,
-      autoGenerate: true,
-      defaultValue: true,
-    },
   ] as BaseApplicationField[]);
 
   return user;

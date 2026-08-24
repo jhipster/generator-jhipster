@@ -1648,8 +1648,8 @@ describe("UserManagement Form Service", () => {
             firstName: expect.any(Object),
             lastName: expect.any(Object),
             email: expect.any(Object),
-            imageUrl: expect.any(Object),
             activated: expect.any(Object),
+            imageUrl: expect.any(Object),
             createdBy: expect.any(Object),
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
@@ -1670,8 +1670,8 @@ describe("UserManagement Form Service", () => {
             firstName: expect.any(Object),
             lastName: expect.any(Object),
             email: expect.any(Object),
-            imageUrl: expect.any(Object),
             activated: expect.any(Object),
+            imageUrl: expect.any(Object),
             createdBy: expect.any(Object),
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
@@ -1764,8 +1764,8 @@ type UserManagementFormGroupContent = {
   firstName: FormControl<UserManagementFormRawValue["firstName"]>;
   lastName: FormControl<UserManagementFormRawValue["lastName"]>;
   email: FormControl<UserManagementFormRawValue["email"]>;
-  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
   activated: FormControl<UserManagementFormRawValue["activated"]>;
+  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
   createdBy: FormControl<UserManagementFormRawValue["createdBy"]>;
   createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
   lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
@@ -1816,10 +1816,10 @@ export class UserManagementFormService {
           Validators.maxLength(191),
         ],
       }),
+      activated: new FormControl(userManagementRawValue.activated),
       imageUrl: new FormControl(userManagementRawValue.imageUrl, {
         validators: [Validators.maxLength(256)],
       }),
-      activated: new FormControl(userManagementRawValue.activated),
       createdBy: new FormControl(userManagementRawValue.createdBy),
       createdDate: new FormControl(userManagementRawValue.createdDate),
       lastModifiedBy: new FormControl(userManagementRawValue.lastModifiedBy),
@@ -2310,8 +2310,8 @@ export interface IUserManagement {
   firstName?: string | null;
   lastName?: string | null;
   email?: string | null;
-  imageUrl?: string | null;
   activated?: boolean | null;
+  imageUrl?: string | null;
   createdBy?: string | null;
   createdDate?: dayjs.Dayjs | null;
   lastModifiedBy?: string | null;
@@ -2406,9 +2406,9 @@ export const sampleWithPartialData: IUserManagement = {
   firstName: "Mertie",
   lastName: "Mitchell",
   email: "Gerson.Franey@gmail.com",
-  imageUrl: "mash meanwhile youthfully",
   activated: false,
-  lastModifiedDate: dayjs("2019-12-31T10:49"),
+  imageUrl: "boo suspension",
+  lastModifiedDate: dayjs("2019-12-31T08:52"),
 };
 
 export const sampleWithFullData: IUserManagement = {
@@ -2417,12 +2417,12 @@ export const sampleWithFullData: IUserManagement = {
   firstName: "Lorena",
   lastName: "Bode",
   email: "Rylan_Altenwerth65@hotmail.com",
-  imageUrl: "ew nor",
   activated: false,
-  createdBy: "pure",
-  createdDate: dayjs("2019-12-31T13:56"),
-  lastModifiedBy: "broadly",
-  lastModifiedDate: dayjs("2019-12-31T19:41"),
+  imageUrl: "as vastly than",
+  createdBy: "out absentmindedly",
+  createdDate: dayjs("2019-12-31T08:56"),
+  lastModifiedBy: "but sour sympathetically",
+  lastModifiedDate: dayjs("2019-12-31T04:49"),
 };
 
 export const sampleWithNewData: NewUserManagement = {
