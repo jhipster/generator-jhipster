@@ -43,7 +43,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           this.log.verboseInfo(`Disabling hibernate cache for ${reactive ? 'reactive application' : 'non-SQL databases'}`);
           this.jhipsterConfig.enableHibernateCache = undefined;
         }
-        if (reactive && cacheProvider !== 'no') {
+        if (!this.skipChecks && reactive && cacheProvider !== 'no') {
           throw new Error(`Cache provider '${cacheProvider}' is not supported in reactive applications`);
         }
         if (cacheProvider === 'no') {

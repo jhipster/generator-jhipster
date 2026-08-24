@@ -60,7 +60,11 @@ describe(`generator - ${generator}`, () => {
   describe('reactive application', () => {
     it('should fail with a cache provider', async () => {
       await expect(
-        helpers.runJHipster(generator).withJHipsterConfig({ reactive: true, cacheProvider: EHCACHE }).withMockedSource(),
+        helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ reactive: true, cacheProvider: EHCACHE })
+          .withOptions({ skipChecks: false })
+          .withMockedSource(),
       ).rejects.toThrow("Cache provider 'ehcache' is not supported in reactive applications");
     });
   });
