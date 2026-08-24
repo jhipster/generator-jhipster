@@ -75,7 +75,7 @@
                 <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
   <%_ const { fieldSupportsSortBy } = field; _%>
-  <%_ if (builtInUserManagement && (field.fieldName === 'activated')) { _%>
+  <%_ if (builtInUserManagement && field.fieldName === 'activated') { _%>
                     <th scope="col"></th>
   <%_ } else { _%>
                     <th scope="col"<% if (fieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- field.fieldName %>"<% } %>>
@@ -115,9 +115,9 @@
                             <span>__jhiTranslateTag__('userManagement.profiles')</span>
                         </div>
                     </th>
-                    <th scope="col"></th>
-                </tr>
-<%_ } _%>
+ <%_ } _%>
+                   <th scope="col"></th>
+               </tr>
             </thead>
             <tbody<%- paginationInfiniteScroll ? ' infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"' : '' %>>
             @for (<%- entityInstance %> of <%- entityInstancePlural %>(); track track<%- primaryKey.nameCapitalized %>(<%- entityInstance %>)) {
