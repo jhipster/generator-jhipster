@@ -22,7 +22,6 @@ import { basename, extname, isAbsolute, join, join as joinPath, relative } from 
 import { relative as posixRelative } from 'node:path/posix';
 
 import { requireNamespace } from '@yeoman/namespace';
-import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import latestVersion from 'latest-version';
 import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
@@ -178,7 +177,6 @@ export default class CoreGenerator<
   // Override the type of `env` to be a full Environment
   declare env: Environment;
   declare log: Logger;
-  declare _meta?: GeneratorMeta;
 
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, {
