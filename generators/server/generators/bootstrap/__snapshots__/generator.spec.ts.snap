@@ -3037,6 +3037,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
         "fieldWithContentType": false,
         "generateFakeData": Any<Function>,
         "generateFakeDataFromPattern": Any<Function>,
+        "hidden": true,
         "javaFieldType": "String",
         "javaFieldTypeInteger": false,
         "javaFieldTypeLong": false,

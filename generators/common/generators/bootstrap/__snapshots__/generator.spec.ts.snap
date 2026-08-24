@@ -2336,6 +2336,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "fieldWithContentType": false,
         "generateFakeData": Any<Function>,
         "generateFakeDataFromPattern": Any<Function>,
+        "hidden": true,
         "nullable": true,
         "path": [
           "createdBy",

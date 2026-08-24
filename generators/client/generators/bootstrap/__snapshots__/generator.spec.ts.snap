@@ -2599,6 +2599,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
         "fieldWithContentType": false,
         "generateFakeData": Any<Function>,
         "generateFakeDataFromPattern": Any<Function>,
+        "hidden": true,
         "htmlInputType": "text",
         "nullable": true,
         "path": [
