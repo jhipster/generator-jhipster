@@ -21,6 +21,7 @@ import { inject, Service } from '@angular/core';
 <%_ if (authenticationTypeOauth2) { _%>
 import { Location } from '@angular/common';
 
+import { AuthServerProvider } from 'app/core/auth';
 <%_ } else { _%>
 import { mergeMap, Observable } from 'rxjs';
 
