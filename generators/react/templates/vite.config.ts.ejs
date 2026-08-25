@@ -89,11 +89,6 @@ const config = defineConfig({
     },
   },
   resolve: {
-<%_ if (microfrontend) { _%>
-    // Resolve tsconfig 'app/*' paths using vite's resolver, which runs after the federation plugin.
-    // A `resolve.alias` entry is applied before any plugin and would bypass Module Federation sharing
-    // of the `app/*` modules listed in module-federation.config.ts `shared`.
-<%_ } _%>
     tsconfigPaths: true,
   },
   define: {
