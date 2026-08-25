@@ -40,6 +40,4 @@ export const setTextDirection = (lang: string) => {
 };
 <%_ } _%>
 
-export const registerLocale = store => {
-  store.dispatch(setLocale(Storage.session.get('locale', '<%- nativeLanguage %>')));
-};
+export const registerLocale = (store): Promise<unknown> => store.dispatch(setLocale(Storage.session.get('locale', '<%- nativeLanguage %>')));

@@ -29,7 +29,16 @@ const initialState = {
 
 export type LocaleState = Readonly<typeof initialState>;
 
-const loadLocaleAndRegisterLocaleFile = async (locale: string) => {
+const registeredLocales = new Set<string>();
+
+/**
+ * Registers the translations bundled with this application for the locale.
+ * Defaults to the locale of the (shared) translator context, so a microfrontend registers its translations
+ * for the locale of the host application.
+ */
+export const registerTranslations = async (locale = TranslatorContext.context.locale || TranslatorContext.context.defaultLocale) => {
+  if (!locale || registeredLocales.has(locale)) return;
+  registeredLocales.add(locale);
   const translations = await import(`../../../i18n/${locale}/${locale}.js`);
   TranslatorContext.registerTranslations(locale, translations.default);
 };
@@ -37,7 +46,7 @@ const loadLocaleAndRegisterLocaleFile = async (locale: string) => {
 export const setLocale = createAsyncThunk('locale/setLocale', async (locale: string, thunkAPI: any) => {
   const { loadedKeys } = thunkAPI.getState().locale;
   if (!loadedKeys.includes(locale)) {
-    await loadLocaleAndRegisterLocaleFile(locale);
+    await registerTranslations(locale);
     thunkAPI.dispatch(loaded({ keys: [locale] }));
   }
   thunkAPI.dispatch(updateLocale(locale));
@@ -55,7 +64,7 @@ export const addTranslationSourcePrefix = createAsyncThunk(
     const { currentLocale, loadedKeys } = thunkAPI.getState().locale;
     const key = `${sourcePrefix}${currentLocale}`;
     if (currentLocale && !loadedKeys.includes(key)) {
-      await loadLocaleAndRegisterLocaleFile(currentLocale);
+      await registerTranslations(currentLocale);
       thunkAPI.dispatch(loaded({ keys: [key] }));
     }
     return key;

@@ -45,7 +45,8 @@ import { loadIcons } from 'app/config/icon-loader';
 
 const store = getStore();
 <%_ if (enableTranslation) { _%>
-registerLocale(store);
+// Load the translations before rendering.
+await registerLocale(store);
 <%_ } _%>
 
 const actions = bindActionCreators({ clearAuthentication }, store.dispatch);

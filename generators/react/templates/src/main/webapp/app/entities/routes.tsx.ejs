@@ -29,6 +29,12 @@ import type { InjectableStore } from 'app/config/store';
 
 import entitiesReducers from './reducers';
 <%_ } _%>
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+import { registerTranslations } from 'app/shared/reducers/locale';
+
+// Register the microfrontend translations before the routes are rendered by the host application.
+await registerTranslations();
+<%_ } _%>
 
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
