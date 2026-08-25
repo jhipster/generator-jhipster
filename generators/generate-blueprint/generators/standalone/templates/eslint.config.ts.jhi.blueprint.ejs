@@ -18,8 +18,28 @@
 -%>
 <&_ if (fragment.importsSection) { -&>
 import jhipster from 'generator-jhipster/eslint';
+<%_ if (typescriptEslint) { _%>
+import tseslint from 'typescript-eslint';
+<%_ } _%>
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   { ignores: ['coverage/**'] },
   jhipster.recommended,
+<%_ if (typescriptEslint) { _%>
+  {
+    files: ['**/*.ts'],
+    ...tseslint.configs.recommended[0],
+    ...tseslint.configs.stylistic[0],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: ['./tsconfig.json'],
+      },
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+    },
+  },
+<%_ } _%>
 <&_ } -&>

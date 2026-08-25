@@ -24,7 +24,6 @@ exports[`generator - javascript-simple-application:eslint with defaults options 
     "contents": "import { defineConfig } from 'eslint/config';
 import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
 
 export default defineConfig(
