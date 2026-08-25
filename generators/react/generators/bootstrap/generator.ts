@@ -40,8 +40,8 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
         });
       },
       translations({ application }) {
-        application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientRootDir } = application;
+        application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
+          const { enableTranslation, clientSrcDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -56,19 +56,6 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
               needle: 'jhipster-needle-i18n-language-key-pipe',
             }),
           );
-
-          if (application.microfrontend && (application.applicationTypeMicroservice || application.exposeMicrofrontend)) {
-            this.editFile(
-              `${clientRootDir}module-federation.config.ts`,
-              { ignoreNonExisting },
-              createNeedleCallback({
-                contentToAdd: newLanguages.map(
-                  lang => `    './i18n-${lang.languageTag}': './i18n/${lang.languageTag}/${lang.languageTag}.js',`,
-                ),
-                needle: 'jhipster-needle-expose',
-              }),
-            );
-          }
         });
       },
     });

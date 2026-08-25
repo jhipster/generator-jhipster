@@ -27,11 +27,12 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 const EntitiesMenu = () => {
 <%_ if (applicationTypeMicroservice) { _%>
-  const lastChange = useAppSelector(state => state.locale.lastChange);
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
   const dispatch = useAppDispatch();
   useEffect(() => {
+    // Register the microfrontend translations into the host for the current locale.
     dispatch(addTranslationSourcePrefix('<%- lowercaseBaseName.replaceAll('-', '_') %>/'));
-  }, [lastChange]);
+  }, [currentLocale]);
 
 <%_ } _%>
   return (
