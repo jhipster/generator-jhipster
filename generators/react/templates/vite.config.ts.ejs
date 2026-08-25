@@ -27,7 +27,6 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ } _%>
 <%_ if (microfrontend) { _%>
 import { federation } from '@module-federation/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 import federationConfig from './module-federation.config.ts';
 <%_ } _%>
@@ -68,15 +67,6 @@ const config = defineConfig({
 <%_ } _%>
 <%_ if (microfrontend) { _%>
     federation(federationConfig),
-    // Resolves tsconfig 'app/*' paths after the federation plugin.
-    // A `resolve.alias` entry is applied before any plugin and would bypass Module Federation sharing
-    // of the `app/*` modules listed in module-federation.config.ts `shared`.
-    tsconfigPaths({
-      projects: [
-        fileURLToPath(new URL('./tsconfig.json', import.meta.url)),
-        fileURLToPath(new URL('./tsconfig.vitest.json', import.meta.url)),
-      ],
-    }),
 <%_ } _%>
   ],
   root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
@@ -98,13 +88,14 @@ const config = defineConfig({
       },
     },
   },
-<%_ if (!microfrontend) { _%>
   resolve: {
-    alias: {
-      app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url)),
-    },
-  },
+<%_ if (microfrontend) { _%>
+    // Resolve tsconfig 'app/*' paths using vite's resolver, which runs after the federation plugin.
+    // A `resolve.alias` entry is applied before any plugin and would bypass Module Federation sharing
+    // of the `app/*` modules listed in module-federation.config.ts `shared`.
 <%_ } _%>
+    tsconfigPaths: true,
+  },
   define: {
     DEVELOPMENT: JSON.stringify(development),
 <%_ if (buildToolUnknown) { _%>
