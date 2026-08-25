@@ -257,6 +257,9 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -595,6 +598,9 @@ exports[`generator - cassandra gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -921,6 +927,9 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1188,6 +1197,9 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -1492,6 +1504,9 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1786,6 +1801,9 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -2120,6 +2138,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2449,6 +2470,9 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2704,6 +2728,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -3012,6 +3039,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -3358,6 +3388,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3691,6 +3724,9 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {

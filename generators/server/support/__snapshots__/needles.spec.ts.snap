@@ -332,6 +332,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },

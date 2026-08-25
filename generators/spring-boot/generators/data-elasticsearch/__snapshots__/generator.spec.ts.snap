@@ -272,6 +272,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -649,6 +652,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1002,6 +1008,9 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1314,6 +1323,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -1657,6 +1669,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1987,6 +2002,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -2360,6 +2378,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2731,6 +2752,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3040,6 +3064,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -3396,6 +3423,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -3799,6 +3829,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -4192,6 +4225,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
