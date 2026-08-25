@@ -206,7 +206,7 @@ jobs:
         uses: actions/upload-artifact@v7
         if: |
           always() && (
-            contains(github.event.pull_request.labels.*.name, 'ci: cypress-video')
+            contains(github.event.pull_request.labels.*.name, 'ci: always-upload-cypress-assets')
             || steps.e2e.outcome == 'failure')
         with:
           name: cypress-${{ matrix.sample }}
