@@ -18,10 +18,34 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+import { join, relative } from 'node:path';
+import { Readable } from 'node:stream';
 
-import { detectCrLf } from './auto-crlf-transform.ts';
+import type { MemFsEditorFile } from 'mem-fs-editor';
+
+import autoCrlfTransform, { detectCrLf } from './auto-crlf-transform.ts';
 
 import { defaultHelpers as helpers } from '#testing';
+
+const gitAttributes = `* text=auto
+*.bat text eol=crlf
+*.sh text eol=lf
+`;
+
+const runAutoCrlfTransform = async (baseDir: string, filePaths: string[]): Promise<Record<string, string>> => {
+  const files = filePaths.map(filePath => ({
+    path: join(baseDir, filePath),
+    contents: Buffer.from('line1\nline2\n'),
+    state: 'modified',
+  })) as unknown as MemFsEditorFile[];
+
+  const contents: Record<string, string> = {};
+  const stream: AsyncIterable<MemFsEditorFile> = Readable.from(files).pipe(await autoCrlfTransform({ baseDir }));
+  for await (const file of stream) {
+    contents[relative(baseDir, file.path).replaceAll('\\', '/')] = file.contents!.toString();
+  }
+  return contents;
+};
 
 describe('generator - bootstrap - utils', () => {
   describe('::detectCrLf', () => {
@@ -49,6 +73,35 @@ describe('generator - bootstrap - utils', () => {
     describe('passing a single line file', () => {
       it('should return undefined', async () => {
         expect(await detectCrLf('lf-single.txt')).toBeUndefined();
+      });
+    });
+  });
+
+  describe('::autoCrlfTransform', () => {
+    describe('outside a git repository', () => {
+      let baseDir: string;
+
+      before(async () => {
+        const result = await helpers
+          .prepareTemporaryDir()
+          .withFiles({ '.gitattributes': gitAttributes, 'nested/.gitattributes': '*.md text eol=lf\n' })
+          .commitFiles();
+        baseDir = result.cwd;
+      });
+
+      it('should apply gitattributes instead of throwing', async () => {
+        await expect(
+          runAutoCrlfTransform(baseDir, ['file.txt', 'file.sh', 'file.bat', 'nested/file.txt', 'nested/file.sh', 'nested/file.md']),
+        ).resolves.toMatchObject({
+          'file.txt': 'line1\r\nline2\r\n',
+          'file.sh': 'line1\nline2\n',
+          'file.bat': 'line1\r\nline2\r\n',
+          // .gitattributes from the base dir applies to nested folders
+          'nested/file.txt': 'line1\r\nline2\r\n',
+          'nested/file.sh': 'line1\nline2\n',
+          // .gitattributes from the nested folder applies too
+          'nested/file.md': 'line1\nline2\n',
+        });
       });
     });
   });
