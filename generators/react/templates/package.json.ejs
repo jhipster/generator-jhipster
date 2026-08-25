@@ -45,9 +45,6 @@
     "react-top-loading-bar": "<%- nodeDependencies['react-top-loading-bar'] %>",
     "react-bootstrap": "<%- nodeDependencies['react-bootstrap'] %>",
     "redux": "<%- nodeDependencies.redux %>",
-<%_ if (skipServer) { _%>
-    "sonar-scanner": "<%- nodeDependencies['sonar-scanner'] %>",
-<%_ } _%>
     "tslib": "<%- nodeDependencies.tslib %>"
   },
   "devDependencies": {
@@ -74,6 +71,9 @@
     "react-infinite-scroll-component": "<%- nodeDependencies['react-infinite-scroll-component'] %>",
     "rimraf": "<%- nodeDependencies.rimraf %>",
     "sass": "<%- nodeDependencies.sass %>",
+<%_ if (skipServer) { _%>
+    "sonar-scanner": "<%- nodeDependencies['sonar-scanner'] %>",
+<%_ } _%>
     "swagger-ui-dist": "<%- nodeDependencies['swagger-ui-dist'] %>",
     "typescript": "<%- nodeDependencies.typescript %>",
     "typescript-eslint": "<%- nodeDependencies['typescript-eslint'] %>",

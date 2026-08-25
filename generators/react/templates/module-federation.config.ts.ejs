@@ -49,8 +49,7 @@ export default {
   filename: 'remoteEntry.js',
   shareScope: 'default',
   shared: {
-    // sonar-scanner is a node cli added to dependencies by skipServer applications.
-    ...shareDependencies({ skipList: ['sonar-scanner'] }),
+    ...shareDependencies(),
     ...shareMappings(
       'app/config/constants',
       'app/config/store',
