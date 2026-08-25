@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config/endpoint.constants';
+import { serverApiUrl } from 'app/config';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 
-import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { StateStorageService } from 'app/core/auth';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const stateStorageService = inject(StateStorageService);

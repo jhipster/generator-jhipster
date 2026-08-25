@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config/endpoint.constants';
+import { serverApiUrl } from 'app/config';
 import { inject, Service } from '@angular/core';
 import { HttpClient<%- authenticationTypeOauth2 ? '' : ', HttpHeaders' %> } from '@angular/common/http';
 <%_ if (!authenticationTypeOauth2) { _%>

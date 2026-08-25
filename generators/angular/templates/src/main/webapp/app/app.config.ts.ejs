@@ -34,10 +34,9 @@ import { authExpiredInterceptor } from 'app/core/interceptor/auth-expired.interc
 
 import './config/dayjs';
 <%_ if (enableTranslation) { _%>
-import { provideTranslation } from 'app/shared/language/translation.provider';
+import { provideTranslation, FindLanguageFromKeyPipe } from 'app/shared/language';
 <%_ } _%>
 import { environment } from 'environments/environment';
-import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
 import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { AppPageTitleStrategy } from './app-page-title-strategy';

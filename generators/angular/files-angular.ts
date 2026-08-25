@@ -286,6 +286,7 @@ export const files = asWriteFilesSection({
     {
       ...clientApplicationTemplatesBlock(),
       templates: [
+        'core/util/index.ts',
         'core/util/data-util.service.ts',
         'core/util/parse-links.service.ts',
         'core/util/alert.service.ts',
@@ -294,6 +295,7 @@ export const files = asWriteFilesSection({
         'core/util/operators.ts',
 
         // config
+        'config/index.ts',
         'config/dayjs.ts',
         'config/datepicker-adapter.ts',
         'config/font-awesome-icons.ts',
@@ -308,6 +310,7 @@ export const files = asWriteFilesSection({
         'core/interceptor/auth-expired.interceptor.ts',
 
         // request
+        'core/request/index.ts',
         'core/request/request-util.ts',
         'core/request/request.model.ts',
       ],
@@ -342,6 +345,7 @@ export const files = asWriteFilesSection({
         'shared/pagination/index.ts',
         'shared/pagination/item-count.ts',
         // alert service code
+        'shared/alert/index.ts',
         'shared/alert/alert.ts',
         'shared/alert/alert.html',
         'shared/alert/alert-error.ts',
@@ -370,7 +374,9 @@ export const files = asWriteFilesSection({
     {
       ...clientApplicationTemplatesBlock(),
       templates: [
+        'core/auth/index.ts',
         'core/auth/state-storage.service.ts',
+        'shared/auth/index.ts',
         'shared/auth/has-any-authority.directive.ts',
         'core/auth/account.model.ts',
         'core/auth/account.service.ts',

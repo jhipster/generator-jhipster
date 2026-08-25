@@ -19,6 +19,9 @@
 {
   "compilerOptions": {
     "paths": {
+<%_ for (const barrel of ['app/config', 'app/core/auth', 'app/core/request', 'app/core/util', 'app/shared/alert', 'app/shared/auth', 'app/shared/date', ...enableTranslation ? ['app/shared/language'] : [], 'app/shared/pagination', 'app/shared/sort']) { _%>
+      "<%- barrel %>": ["./<%- this.relativeDir(clientRootDir, clientSrcDir) %><%- barrel %>/index.ts"],
+<%_ } _%>
       "*": ["./<%- this.relativeDir(clientRootDir, clientSrcDir) %>*"]
     },
     "outDir": "./<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/root",

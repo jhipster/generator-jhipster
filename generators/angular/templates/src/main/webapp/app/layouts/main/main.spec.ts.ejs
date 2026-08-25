@@ -29,9 +29,9 @@ import { LangChangeEvent, TranslateService, provideTranslateService } from '@ngx
 import { Subject, of } from 'rxjs';
 
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 <%_ if (enableI18nRTL) { _%>
-import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from 'app/shared/language';
 <%_ } _%>
 
 import Main from './main';

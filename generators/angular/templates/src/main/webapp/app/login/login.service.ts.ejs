@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config/endpoint.constants';
+import { serverApiUrl } from 'app/config';
 import { inject, Service } from '@angular/core';
 <%_ if (authenticationTypeOauth2) { _%>
 import { Location } from '@angular/common';
@@ -24,13 +24,7 @@ import { Location } from '@angular/common';
 <%_ } else { _%>
 import { mergeMap, Observable } from 'rxjs';
 
-import { Account } from 'app/core/auth/account.model';
-import { AccountService } from 'app/core/auth/account.service';
-<%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
-<%_ } else if (authenticationUsesCsrf) { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+import { Account, AccountService, AuthServerProvider } from 'app/core/auth';
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 <%_ } _%>
