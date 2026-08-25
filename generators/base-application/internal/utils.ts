@@ -146,6 +146,13 @@ export function createUserEntity(
       builtIn: true,
       fakerTemplate: '{{internet.email}}',
     },
+    {
+      fieldName: 'activated',
+      fieldType: TYPE_BOOLEAN,
+      builtIn: true,
+      autoGenerate: true,
+      defaultValue: true,
+    },
     ...(application.enableTranslation ?
       [
         {
@@ -168,13 +175,6 @@ export function createUserEntity(
         },
       ]
     : []),
-    {
-      fieldName: 'activated',
-      fieldType: TYPE_BOOLEAN,
-      builtIn: true,
-      autoGenerate: true,
-      defaultValue: true,
-    },
   ] as BaseApplicationField[]);
 
   return user;
@@ -274,6 +274,12 @@ export function createUserManagementEntity(
 
   if (!application.databaseTypeCassandra) {
     addOrExtendFields(userManagement.fields!, getAuditFields());
+    mutateFields(userManagement.fields!, [
+      {
+        fieldName: 'createdBy',
+        hidden: true,
+      },
+    ]);
   }
 
   if (application.generateBuiltInAuthorityEntity) {

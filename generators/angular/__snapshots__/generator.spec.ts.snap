@@ -172,10 +172,6 @@ export class UserManagementDeleteDialog {
         <dd>
           <span>{{ userManagementRef.activated }}</span>
         </dd>
-        <dt><span>Created by</span></dt>
-        <dd>
-          <span>{{ userManagementRef.createdBy }}</span>
-        </dd>
         <dt><span>Created date</span></dt>
         <dd>
           <span
@@ -379,50 +375,37 @@ export class UserManagementDetail {
           <th scope="col" jhiSortBy="login">
             <div class="d-flex">
               <span>Login</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
           <th scope="col" jhiSortBy="email">
             <div class="d-flex">
               <span>Email</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="activated">
-            <div class="d-flex">
-              <span>Activated</span>
-
-              <fa-icon class="p-1" icon="sort" />
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="createdBy">
-            <div class="d-flex">
-              <span>Created by</span>
-
-              <fa-icon class="p-1" icon="sort" />
-            </div>
-          </th>
+          <th scope="col"></th>
           <th scope="col" jhiSortBy="createdDate">
             <div class="d-flex">
               <span>Created date</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
           <th scope="col" jhiSortBy="lastModifiedBy">
             <div class="d-flex">
               <span>Modified by</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
           <th scope="col" jhiSortBy="lastModifiedDate">
             <div class="d-flex">
               <span>Modified date</span>
-
               <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col">
+            <div class="d-flex">
+              <span>Profiles</span>
             </div>
           </th>
           <th scope="col"></th>
@@ -438,11 +421,34 @@ export class UserManagementDetail {
             >
           </td>
           <td>{{ userManagement.email }}</td>
-          <td>{{ userManagement.activated }}</td>
-          <td>{{ userManagement.createdBy }}</td>
+          <td>
+            @if (!userManagement.activated) {
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="setActive(userManagement, true)"
+            >
+              Deactivated
+            </button>
+            } @else {
+            <button
+              class="btn btn-success btn-sm"
+              (click)="setActive(userManagement, false)"
+              [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
+            >
+              Activated
+            </button>
+            }
+          </td>
           <td>{{ userManagement.createdDate | formatMediumDatetime }}</td>
           <td>{{ userManagement.lastModifiedBy }}</td>
           <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
+          <td>
+            @for (authority of userManagement.authorities; track $index) {
+            <div>
+              <span class="badge bg-info">{{ authority }}</span>
+            </div>
+            }
+          </td>
           <td class="text-end">
             <div class="btn-group">
               <a
@@ -467,6 +473,7 @@ export class UserManagementDetail {
                 type="submit"
                 (click)="delete(userManagement)"
                 class="btn btn-danger btn-sm"
+                [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
                 data-cy="entityDeleteButton"
               >
                 <fa-icon icon="times" />
@@ -816,6 +823,7 @@ import {
   DEFAULT_SORT_DATA,
 } from "app/config/navigation.constants";
 import { UserManagementService } from "../service/user-management.service";
+import { AccountService } from "app/core/auth/account.service";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
@@ -844,6 +852,7 @@ export class UserManagement {
   readonly page = signal(1);
 
   readonly router = inject(Router);
+  readonly currentAccount = inject(AccountService).account;
   protected readonly userManagementService = inject(UserManagementService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading =
@@ -908,6 +917,12 @@ export class UserManagement {
         tap(() => this.load()),
       )
       .subscribe();
+  }
+
+  setActive(userManagement: IUserManagement, isActivated: boolean): void {
+    this.userManagementService
+      .update({ ...userManagement, activated: isActivated })
+      .subscribe(() => this.load());
   }
 
   load(): void {
@@ -1634,8 +1649,8 @@ describe("UserManagement Form Service", () => {
             firstName: expect.any(Object),
             lastName: expect.any(Object),
             email: expect.any(Object),
-            imageUrl: expect.any(Object),
             activated: expect.any(Object),
+            imageUrl: expect.any(Object),
             createdBy: expect.any(Object),
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
@@ -1656,8 +1671,8 @@ describe("UserManagement Form Service", () => {
             firstName: expect.any(Object),
             lastName: expect.any(Object),
             email: expect.any(Object),
-            imageUrl: expect.any(Object),
             activated: expect.any(Object),
+            imageUrl: expect.any(Object),
             createdBy: expect.any(Object),
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
@@ -1750,8 +1765,8 @@ type UserManagementFormGroupContent = {
   firstName: FormControl<UserManagementFormRawValue["firstName"]>;
   lastName: FormControl<UserManagementFormRawValue["lastName"]>;
   email: FormControl<UserManagementFormRawValue["email"]>;
-  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
   activated: FormControl<UserManagementFormRawValue["activated"]>;
+  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
   createdBy: FormControl<UserManagementFormRawValue["createdBy"]>;
   createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
   lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
@@ -1802,10 +1817,10 @@ export class UserManagementFormService {
           Validators.maxLength(191),
         ],
       }),
+      activated: new FormControl(userManagementRawValue.activated),
       imageUrl: new FormControl(userManagementRawValue.imageUrl, {
         validators: [Validators.maxLength(256)],
       }),
-      activated: new FormControl(userManagementRawValue.activated),
       createdBy: new FormControl(userManagementRawValue.createdBy),
       createdDate: new FormControl(userManagementRawValue.createdDate),
       lastModifiedBy: new FormControl(userManagementRawValue.lastModifiedBy),
@@ -2296,8 +2311,8 @@ export interface IUserManagement {
   firstName?: string | null;
   lastName?: string | null;
   email?: string | null;
-  imageUrl?: string | null;
   activated?: boolean | null;
+  imageUrl?: string | null;
   createdBy?: string | null;
   createdDate?: dayjs.Dayjs | null;
   lastModifiedBy?: string | null;
@@ -2392,9 +2407,9 @@ export const sampleWithPartialData: IUserManagement = {
   firstName: "Mertie",
   lastName: "Mitchell",
   email: "Gerson.Franey@gmail.com",
-  imageUrl: "mash meanwhile youthfully",
   activated: false,
-  lastModifiedDate: dayjs("2019-12-31T10:49"),
+  imageUrl: "boo suspension",
+  lastModifiedDate: dayjs("2019-12-31T08:52"),
 };
 
 export const sampleWithFullData: IUserManagement = {
@@ -2403,12 +2418,12 @@ export const sampleWithFullData: IUserManagement = {
   firstName: "Lorena",
   lastName: "Bode",
   email: "Rylan_Altenwerth65@hotmail.com",
-  imageUrl: "ew nor",
   activated: false,
-  createdBy: "pure",
-  createdDate: dayjs("2019-12-31T13:56"),
-  lastModifiedBy: "broadly",
-  lastModifiedDate: dayjs("2019-12-31T19:41"),
+  imageUrl: "as vastly than",
+  createdBy: "out absentmindedly",
+  createdDate: dayjs("2019-12-31T08:56"),
+  lastModifiedBy: "but sour sympathetically",
+  lastModifiedDate: dayjs("2019-12-31T04:49"),
 };
 
 export const sampleWithNewData: NewUserManagement = {
