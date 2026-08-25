@@ -65,9 +65,9 @@
   <%_ } _%>
   <%_ if (builtInUserManagement && fieldName === 'login') { _%>
           @if (userManagementRef.activated) {
-            <span class="badge bg-success" myPrefixTranslate="userManagement.activated">Activated</span>
+            <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
           } @else {
-           <span class="badge bg-danger" myPrefixTranslate="userManagement.deactivated">Deactivated</span>
+           <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
           }
   <%_ } _%>
         </dd>
