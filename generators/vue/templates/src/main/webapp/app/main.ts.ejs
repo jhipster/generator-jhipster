@@ -29,6 +29,7 @@ import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
 import router<%- microfrontend ? ', { lazyRoutes }' : '' %> from './router';
+import { START_LOCATION } from 'vue-router';
 import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
 import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
 import JhiItemCount from '@/shared/jhi-item-count.vue';
@@ -130,8 +131,11 @@ const app = createApp({
 
     router.beforeResolve(async (to, from) => {
 <%_ if (!authenticationTypeOauth2) { _%>
-      // Make sure login modal is closed
-      hideLogin();
+      // Make sure login modal is closed when navigating.
+      // The initial navigation may resolve after the user opened the login modal, don't close it.
+      if (from !== START_LOCATION) {
+        hideLogin();
+      }
 
 <%_ } _%>
       if (!store.authenticated) {
