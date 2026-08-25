@@ -22,7 +22,9 @@ import tech.jhipster.config.JHipsterConstants;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+<%_ if (!reactive) { _%>
 import org.aspectj.lang.annotation.AfterThrowing;
+<%_ } _%>
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -30,11 +32,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 import java.util.Arrays;
 
 /**
  * Aspect for logging execution of service and repository Spring components.
+<%_ if (reactive) { _%>
+ *
+ * Reactive return types ({@link Mono} and {@link Flux}) are logged when they terminate, since the
+ * advised method only assembles the pipeline and returns immediately.
+<%_ } _%>
  *
  * By default, it only runs with the "dev" profile.
  */
@@ -81,6 +92,7 @@ public class LoggingAspect {
         return LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
     }
 
+<%_ if (!reactive) { _%>
     /**
      * Advice that logs methods throwing exceptions.
      *
@@ -89,6 +101,79 @@ public class LoggingAspect {
      */
     @AfterThrowing(pointcut = "applicationPackagePointcut() && springBeanPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
+        logException(joinPoint, e);
+    }
+
+<%_ } _%>
+    /**
+     * Advice that logs when a method is entered and exited<%- reactive ? ', and methods throwing exceptions' : '' %>.
+<%_ if (reactive) { _%>
+     *
+     * For reactive return types, the exit or the error is logged when the returned publisher terminates.
+     * Errors are handled here instead of an after throwing advice, which cannot access its join point when the
+     * method is invoked lazily by the reactive transaction interceptor, outside the AOP invocation frame.
+<%_ } _%>
+     *
+     * @param joinPoint join point for advice.
+     * @return result.
+     * @throws Throwable rethrows the exception thrown by the advised method.
+     */
+    @Around("applicationPackagePointcut() && springBeanPointcut()")
+    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        var log = logger(joinPoint);
+        if (log.isDebugEnabled()) {
+            log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+        }
+        try {
+            Object result = joinPoint.proceed();
+<%_ if (reactive) { _%>
+            if (result instanceof Mono<?> mono) {
+                return mono
+                    .doOnSuccess(value -> logExit(log, joinPoint, value))
+                    .doOnError(e -> logError(log, joinPoint, e));
+            }
+            if (result instanceof Flux<?> flux) {
+                return flux
+                    .doOnComplete(() -> logExit(log, joinPoint, "completed"))
+                    .doOnError(e -> logError(log, joinPoint, e));
+            }
+<%_ } _%>
+            logExit(log, joinPoint, result);
+            return result;
+<%_ if (reactive) { _%>
+        } catch (Throwable e) {
+            logError(log, joinPoint, e);
+            throw e;
+        }
+<%_ } else { _%>
+        } catch (IllegalArgumentException e) {
+            logIllegalArgument(log, joinPoint);
+            throw e;
+        }
+<%_ } _%>
+    }
+
+    private void logExit(Logger log, JoinPoint joinPoint, Object result) {
+        if (log.isDebugEnabled()) {
+            log.debug("Exit: {}() with result = {}", joinPoint.getSignature().getName(), result);
+        }
+    }
+<%_ if (reactive) { _%>
+
+    private void logError(Logger log, JoinPoint joinPoint, Throwable e) {
+        if (e instanceof IllegalArgumentException) {
+            logIllegalArgument(log, joinPoint);
+        } else {
+            logException(joinPoint, e);
+        }
+    }
+<%_ } _%>
+
+    private void logIllegalArgument(Logger log, JoinPoint joinPoint) {
+        log.error("Illegal argument: {} in {}()", Arrays.toString(joinPoint.getArgs()), joinPoint.getSignature().getName());
+    }
+
+    private void logException(JoinPoint joinPoint, Throwable e) {
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             logger(joinPoint).error(
                 "Exception in {}() with cause = '{}' and exception = '{}'",
@@ -103,31 +188,6 @@ public class LoggingAspect {
                 joinPoint.getSignature().getName(),
                 e.getCause() != null ? String.valueOf(e.getCause()) : "NULL"
             );
-        }
-    }
-
-    /**
-     * Advice that logs when a method is entered and exited.
-     *
-     * @param joinPoint join point for advice.
-     * @return result.
-     * @throws Throwable throws {@link IllegalArgumentException}.
-     */
-    @Around("applicationPackagePointcut() && springBeanPointcut()")
-    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        var log = logger(joinPoint);
-        if (log.isDebugEnabled()) {
-            log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
-        }
-        try {
-            Object result = joinPoint.proceed();
-            if (log.isDebugEnabled()) {
-                log.debug("Exit: {}() with result = {}", joinPoint.getSignature().getName(), result);
-            }
-            return result;
-        } catch (IllegalArgumentException e) {
-            log.error("Illegal argument: {} in {}()", Arrays.toString(joinPoint.getArgs()), joinPoint.getSignature().getName());
-            throw e;
         }
     }
 }
