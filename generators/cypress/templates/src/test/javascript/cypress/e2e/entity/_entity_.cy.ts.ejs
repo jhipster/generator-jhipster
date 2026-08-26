@@ -32,8 +32,7 @@ import {
   entityConfirmDeleteButtonSelector,
 <%_ } _%>
 } from '../../support/entity';
-<%_ const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
-    const baseApi = `${entityApi}api/`;
+<%_ const baseApi = `${entityApi}api/`;
 
     const entityFakeData = generateFakeData('cypress');
     const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
@@ -335,7 +334,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 <%_ if (!readOnly) { _%>
 
-  describe<%- skipUserManagementCreatePage ? '.skip' : '' %>('new <%- entityNameCapitalized %> page', () => {
+  describe('new <%- entityNameCapitalized %> page', () => {
     beforeEach(() => {
       cy.visit(<%- entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();
