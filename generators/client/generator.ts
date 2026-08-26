@@ -316,8 +316,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           source.addWebpackConfig!({
             config: `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
           });
-        } else if (application.clientFrameworkVue) {
-          source.addWebpackConfig!({ config: "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })" });
         } else {
           throw new Error(`Client framework ${application.clientFramework} doesn't support microfrontends`);
         }
