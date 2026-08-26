@@ -17,12 +17,14 @@
  limitations under the License.
 -%>
 import { copyFileSync, mkdirSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 
 import type { Plugin } from 'esbuild';
 import { globSync } from 'tinyglobby';
 
-const swaggerUiDir = path.resolve(__dirname, '../<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui');
+const require = createRequire(import.meta.url);
+const swaggerUiDir = path.resolve(import.meta.dirname, '../<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui');
 
 const copyFromPackage = (sourceDir: string, glob: string): void => {
   for (const file of globSync(glob, { cwd: sourceDir })) {

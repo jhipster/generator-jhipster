@@ -411,6 +411,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           '9.2.1': [
             `${application.clientSrcDir}app/core/config/application-config.service.ts`,
             `${application.clientSrcDir}app/core/config/application-config.service.spec.ts`,
+            [application.clientBundlerEsbuild!, `${application.clientRootDir}build-plugins/package.json`],
             [!application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/login.model.ts`],
             [application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/logout.model.ts`],
           ],
