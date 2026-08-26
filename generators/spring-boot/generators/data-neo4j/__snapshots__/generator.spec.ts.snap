@@ -251,6 +251,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -586,6 +589,9 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -909,6 +915,9 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1173,6 +1182,9 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -1462,6 +1474,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1741,6 +1756,9 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -2072,6 +2090,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2398,6 +2419,9 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2638,6 +2662,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -2931,6 +2958,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -3274,6 +3304,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3604,6 +3637,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {

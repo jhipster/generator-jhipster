@@ -280,6 +280,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'TechnicalStructureTest.java',
+        'aop/logging/LoggingAspectTest.java',
         'config/AsyncSyncConfiguration.java',
         'IntegrationTest.java',
         'config/SpringBootTestClassOrderer.java',
