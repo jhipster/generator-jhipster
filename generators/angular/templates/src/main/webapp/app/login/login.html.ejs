@@ -25,9 +25,10 @@
       }
       <form class="form" (ngSubmit)="login()" [formGroup]="loginForm">
         <div class="mb-3">
-          <label class="username-label" for="username">__jhiTranslateTag__('global.form.username.label')</label>
+          <label class="form-label" for="username">__jhiTranslateTag__('global.form.username.label')</label>
           <input
             type="text"
+            #username
             class="form-control"
             name="username"
             id="username"
@@ -38,7 +39,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="password">__jhiTranslateTag__('login.form.password')</label>
+          <label class="form-label" for="password">__jhiTranslateTag__('login.form.password')</label>
           <input
             type="password"
             class="form-control"

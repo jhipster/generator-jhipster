@@ -4,7 +4,6 @@
     "authenticationType": "jwt",
     "baseName": "appNeo4j",
     "buildTool": "maven",
-    "cacheProvider": "ehcache",
     "ci": true,
     "clientFramework": "angular",
     "creationTimestamp": 1596513172471,

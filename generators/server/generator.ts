@@ -102,11 +102,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
       },
       configureEntitySearchEngine({ application, entityConfig }) {
         const { applicationTypeMicroservice, applicationTypeGateway, clientFrameworkAny } = application;
-        if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
-          if (!entityConfig.searchEngine) {
-            // If a non-microfrontend microservice entity, should be disabled by default.
-            entityConfig.searchEngine = NO_SEARCH_ENGINE;
-          }
+        if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny) && !entityConfig.searchEngine) {
+          // If a non-microfrontend microservice entity, should be disabled by default.
+          entityConfig.searchEngine = NO_SEARCH_ENGINE;
         }
         if (
           // Don't touch the configuration for microservice entities published at gateways
@@ -197,15 +195,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
             );
           }
           // Field type check should be ignored for entities of others microservices.
-          if (!field.fieldValues && (!entityConfig.microserviceName || entityConfig.microserviceName === application.baseName)) {
-            if (
-              !(Object.values(CommonDBTypes) as string[]).includes(field.fieldType) &&
-              (application.databaseType !== SQL || !(Object.values(RelationalOnlyDBTypes) as string[]).includes(field.fieldType))
-            ) {
-              throw new Error(
-                `The type '${field.fieldType}' is an unknown field type for field '${field.fieldName}' of entity '${entityConfig.name}' using '${application.databaseType}' database.`,
-              );
-            }
+          if (
+            !field.fieldValues &&
+            (!entityConfig.microserviceName || entityConfig.microserviceName === application.baseName) &&
+            !(Object.values(CommonDBTypes) as string[]).includes(field.fieldType) &&
+            (application.databaseType !== SQL || !(Object.values(RelationalOnlyDBTypes) as string[]).includes(field.fieldType))
+          ) {
+            throw new Error(
+              `The type '${field.fieldType}' is an unknown field type for field '${field.fieldName}' of entity '${entityConfig.name}' using '${application.databaseType}' database.`,
+            );
           }
         });
         entityConfig.fields = fields;

@@ -6,8 +6,7 @@ exports[`generator - init help should print expected information 1`] = `
 Init project (alpha)
 
 Options:
-  --auto-crlf                   Detect line endings
-  --remove-needles              Remove needles, needles are used by entity and language generators to inject code
+  --auto-crlf                   Detect line endings (default: false)
   --skip-git                    Skip git repository initialization
   --force-git                   Force commit to git repository
   --commit-msg <value>          Commit changes (implies forceGit)

@@ -47,7 +47,7 @@ export function createBase64Secret(len?: number | boolean, reproducible = false)
     len = undefined;
   }
   if (reproducible) {
-    len = len ?? 50;
+    len ??= 50;
     return `SECRET--${len}`;
   }
   return Buffer.from(createSecret(len)).toString('base64');

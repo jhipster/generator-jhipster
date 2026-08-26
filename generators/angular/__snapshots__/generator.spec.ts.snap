@@ -43,7 +43,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.spec.ts": {
-    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
@@ -72,8 +72,8 @@ describe("UserManagement Management Delete Component", () => {
   describe("confirmDelete", () => {
     it("should call delete service on confirmDelete", () => {
       // GIVEN
-      vitest.spyOn(service, "delete").mockReturnValue(of(undefined));
-      vitest.spyOn(mockActiveModal, "close");
+      vi.spyOn(service, "delete").mockReturnValue(of(undefined));
+      vi.spyOn(mockActiveModal, "close");
 
       // WHEN
       comp.confirmDelete("ABC");
@@ -82,12 +82,14 @@ describe("UserManagement Management Delete Component", () => {
       expect(service.delete).toHaveBeenCalledWith("ABC");
       expect(mockActiveModal.close).toHaveBeenCalledWith("deleted");
     });
+  });
 
-    it("should not call delete service on clear", () => {
+  describe("cancel", () => {
+    it("should not call delete service on cancel", () => {
       // GIVEN
-      vitest.spyOn(service, "delete");
-      vitest.spyOn(mockActiveModal, "close");
-      vitest.spyOn(mockActiveModal, "dismiss");
+      vi.spyOn(service, "delete");
+      vi.spyOn(mockActiveModal, "close");
+      vi.spyOn(mockActiveModal, "dismiss");
 
       // WHEN
       comp.cancel();
@@ -103,7 +105,7 @@ describe("UserManagement Management Delete Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.ts": {
-    "contents": "import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
+    "contents": "import { Component, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
@@ -114,7 +116,6 @@ import { UserManagementService } from "../service/user-management.service";
 import { ITEM_DELETED_EVENT } from "app/config/navigation.constants";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./user-management-delete-dialog.html",
   imports: [FormsModule, FontAwesomeModule, AlertError],
 })
@@ -154,6 +155,11 @@ export class UserManagementDeleteDialog {
         <dt><span>Login</span></dt>
         <dd>
           <span>{{ userManagementRef.login }}</span>
+          @if (userManagementRef.activated) {
+          <span class="badge bg-success">Activated</span>
+          } @else {
+          <span class="badge bg-danger">Deactivated</span>
+          }
         </dd>
         <dt><span>First name</span></dt>
         <dd>
@@ -166,14 +172,6 @@ export class UserManagementDeleteDialog {
         <dt><span>Email</span></dt>
         <dd>
           <span>{{ userManagementRef.email }}</span>
-        </dd>
-        <dt><span>Activated</span></dt>
-        <dd>
-          <span>{{ userManagementRef.activated }}</span>
-        </dd>
-        <dt><span>Created by</span></dt>
-        <dd>
-          <span>{{ userManagementRef.createdBy }}</span>
         </dd>
         <dt><span>Created date</span></dt>
         <dd>
@@ -191,6 +189,17 @@ export class UserManagementDeleteDialog {
             >{{ userManagementRef.lastModifiedDate | formatMediumDatetime
             }}</span
           >
+        </dd>
+
+        <dt><span>Profiles</span></dt>
+        <dd>
+          <ul class="list-unstyled">
+            @for (authority of userManagementRef.authorities; track $index) {
+            <li>
+              <span class="badge bg-info">{{ authority }}</span>
+            </li>
+            }
+          </ul>
         </dd>
       </dl>
 
@@ -218,7 +227,7 @@ export class UserManagementDeleteDialog {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter, withComponentInputBinding } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
@@ -244,7 +253,7 @@ describe("UserManagement Management Detail Component", () => {
                   (m) => m.UserManagementDetail,
                 ),
               resolve: {
-                userManagement: () => of({ login: "Oswald.Kertzmann" }),
+                userManagement: () => of({ login: "Ozella.Kertzmann" }),
               },
             },
           ],
@@ -269,14 +278,14 @@ describe("UserManagement Management Detail Component", () => {
 
       // THEN
       expect(instance.userManagement()).toEqual(
-        expect.objectContaining({ login: "Oswald.Kertzmann" }),
+        expect.objectContaining({ login: "Ozella.Kertzmann" }),
       );
     });
   });
 
   describe("PreviousState", () => {
     it("should navigate to previous state", () => {
-      vitest.spyOn(globalThis.history, "back");
+      vi.spyOn(globalThis.history, "back");
       comp.previousState();
       expect(globalThis.history.back).toHaveBeenCalled();
     });
@@ -286,7 +295,7 @@ describe("UserManagement Management Detail Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
-    "contents": "import { Component, ChangeDetectionStrategy, input } from "@angular/core";
+    "contents": "import { Component, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -300,7 +309,6 @@ import {
 import { IUserManagement } from "../user-management.model";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management-detail",
   templateUrl: "./user-management-detail.html",
   imports: [
@@ -368,50 +376,37 @@ export class UserManagementDetail {
           <th scope="col" jhiSortBy="login">
             <div class="d-flex">
               <span>Login</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
           <th scope="col" jhiSortBy="email">
             <div class="d-flex">
               <span>Email</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="activated">
-            <div class="d-flex">
-              <span>Activated</span>
-
-              <fa-icon class="p-1" icon="sort" />
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="createdBy">
-            <div class="d-flex">
-              <span>Created by</span>
-
-              <fa-icon class="p-1" icon="sort" />
-            </div>
-          </th>
+          <th scope="col"></th>
           <th scope="col" jhiSortBy="createdDate">
             <div class="d-flex">
               <span>Created date</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
           <th scope="col" jhiSortBy="lastModifiedBy">
             <div class="d-flex">
               <span>Modified by</span>
-
               <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
           <th scope="col" jhiSortBy="lastModifiedDate">
             <div class="d-flex">
               <span>Modified date</span>
-
               <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col">
+            <div class="d-flex">
+              <span>Profiles</span>
             </div>
           </th>
           <th scope="col"></th>
@@ -427,11 +422,34 @@ export class UserManagementDetail {
             >
           </td>
           <td>{{ userManagement.email }}</td>
-          <td>{{ userManagement.activated }}</td>
-          <td>{{ userManagement.createdBy }}</td>
+          <td>
+            @if (!userManagement.activated) {
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="setActive(userManagement, true)"
+            >
+              Deactivated
+            </button>
+            } @else {
+            <button
+              class="btn btn-success btn-sm"
+              (click)="setActive(userManagement, false)"
+              [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
+            >
+              Activated
+            </button>
+            }
+          </td>
           <td>{{ userManagement.createdDate | formatMediumDatetime }}</td>
           <td>{{ userManagement.lastModifiedBy }}</td>
           <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
+          <td>
+            @for (authority of userManagement.authorities; track $index) {
+            <div>
+              <span class="badge bg-info">{{ authority }}</span>
+            </div>
+            }
+          </td>
           <td class="text-end">
             <div class="btn-group">
               <a
@@ -456,6 +474,7 @@ export class UserManagementDetail {
                 type="submit"
                 (click)="delete(userManagement)"
                 class="btn btn-danger btn-sm"
+                [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
                 data-cy="entityDeleteButton"
               >
                 <fa-icon icon="times" />
@@ -501,13 +520,13 @@ export class UserManagementDetail {
   describe,
   expect,
   it,
-  vitest,
+  vi,
 } from "vitest";
 import {
   provideHttpClientTesting,
   HttpTestingController,
 } from "@angular/common/http/testing";
-import { ComponentFixture, TestBed, inject } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute, convertToParamMap } from "@angular/router";
 
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
@@ -529,7 +548,7 @@ import { UserManagementService } from "../service/user-management.service";
 
 import { UserManagement } from "./user-management";
 
-vitest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("UserManagement Management Component", () => {
   let httpMock: HttpTestingController;
@@ -571,7 +590,7 @@ describe("UserManagement Management Component", () => {
     fixture = TestBed.createComponent(UserManagement);
     comp = fixture.componentInstance;
     service = TestBed.inject(UserManagementService);
-    routerNavigateSpy = vitest.spyOn(comp.router, "navigate");
+    routerNavigateSpy = vi.spyOn(comp.router, "navigate");
 
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(
@@ -596,17 +615,17 @@ describe("UserManagement Management Component", () => {
     // WHEN
     TestBed.tick();
     const req = httpMock.expectOne({ method: "GET" });
-    req.flush([{ login: "Oswald.Kertzmann" }], {
+    req.flush([{ login: "Ozella.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
     });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Oswald.Kertzmann" }),
+      expect.objectContaining({ login: "Ozella.Kertzmann" }),
     );
   });
 
@@ -614,24 +633,24 @@ describe("UserManagement Management Component", () => {
     // WHEN
     TestBed.tick();
     const req = httpMock.expectOne({ method: "GET" });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     comp.page.set(3);
     comp.load();
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
     const req2 = httpMock.expectOne({ method: "GET" });
-    req2.flush([{ login: "Oswald.Kertzmann" }], {
+    req2.flush([{ login: "Ozella.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
     });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN
     expect(req.cancelled).toBeTruthy();
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Oswald.Kertzmann" }),
+      expect.objectContaining({ login: "Ozella.Kertzmann" }),
     );
   });
 
@@ -640,7 +659,7 @@ describe("UserManagement Management Component", () => {
     TestBed.tick();
     const errorReq = httpMock.expectOne({ method: "GET" });
     errorReq.flush("error", { status: 500, statusText: "Server Error" });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN - loading state was reset and list is empty
     expect(comp.isLoading()).toBe(false);
@@ -650,23 +669,23 @@ describe("UserManagement Management Component", () => {
     comp.load();
     TestBed.tick();
     const successReq = httpMock.expectOne({ method: "GET" });
-    successReq.flush([{ login: "Oswald.Kertzmann" }], {
+    successReq.flush([{ login: "Ozella.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
     });
-    await vitest.runAllTimersAsync();
+    await vi.runAllTimersAsync();
 
     // THEN - subscription is still alive and second load succeeds
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Oswald.Kertzmann" }),
+      expect.objectContaining({ login: "Ozella.Kertzmann" }),
     );
   });
 
   describe("trackLogin", () => {
     it("should forward to userManagementService", () => {
-      const entity = { login: "Oswald.Kertzmann" };
-      vitest.spyOn(service, "getUserManagementIdentifier");
+      const entity = { login: "Ozella.Kertzmann" };
+      vi.spyOn(service, "getUserManagementIdentifier");
       const login = comp.trackLogin(entity);
       expect(service.getUserManagementIdentifier).toHaveBeenCalledWith(entity);
       expect(login).toBe(entity.login);
@@ -705,9 +724,9 @@ describe("UserManagement Management Component", () => {
     httpMock.expectOne({ method: "GET" });
 
     // THEN
-    expect(service.userManagementsParams()).toMatchObject(
-      expect.objectContaining({ sort: ["login,desc"] }),
-    );
+    expect(service.userManagementsParams()).toMatchObject({
+      sort: ["login,desc"],
+    });
   });
 
   describe("delete", () => {
@@ -718,13 +737,13 @@ describe("UserManagement Management Component", () => {
       deleteModalMock = { componentInstance: {}, closed: new Subject() };
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
-      ngbModal = (comp as any).modalService;
-      vitest.spyOn(ngbModal, "open").mockReturnValue(deleteModalMock);
+      ngbModal = (comp as unknown as { modalService: NgbModal }).modalService;
+      vi.spyOn(ngbModal, "open").mockReturnValue(deleteModalMock);
     });
 
-    it("on confirm should call load", inject([], () => {
+    it("on confirm should call load", () => {
       // GIVEN
-      vitest.spyOn(comp, "load");
+      vi.spyOn(comp, "load");
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -733,11 +752,11 @@ describe("UserManagement Management Component", () => {
       // THEN
       expect(ngbModal.open).toHaveBeenCalled();
       expect(comp.load).toHaveBeenCalled();
-    }));
+    });
 
-    it("on dismiss should call load", inject([], () => {
+    it("on dismiss should call load", () => {
       // GIVEN
-      vitest.spyOn(comp, "load");
+      vi.spyOn(comp, "load");
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -746,7 +765,7 @@ describe("UserManagement Management Component", () => {
       // THEN
       expect(ngbModal.open).toHaveBeenCalled();
       expect(comp.load).not.toHaveBeenCalled();
-    }));
+    });
   });
 });
 ",
@@ -755,11 +774,9 @@ describe("UserManagement Management Component", () => {
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
     "contents": "import {
   Component,
-  ChangeDetectionStrategy,
   computed,
   effect,
   inject,
-  OnInit,
   signal,
   WritableSignal,
   untracked,
@@ -773,7 +790,7 @@ import {
   Router,
   RouterLink,
 } from "@angular/router";
-import { combineLatest, filter, Subscription, tap } from "rxjs";
+import { combineLatest, filter, tap, map } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
 import { AlertError } from "app/shared/alert/alert-error";
@@ -807,10 +824,10 @@ import {
   DEFAULT_SORT_DATA,
 } from "app/config/navigation.constants";
 import { UserManagementService } from "../service/user-management.service";
+import { AccountService } from "app/core/auth/account.service";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management",
   templateUrl: "./user-management.html",
   imports: [
@@ -826,8 +843,7 @@ import { UserManagementDeleteDialog } from "../delete/user-management-delete-dia
     ItemCount,
   ],
 })
-export class UserManagement implements OnInit {
-  subscription: Subscription | null = null;
+export class UserManagement {
   readonly userManagements = signal<IUserManagement[]>([]);
 
   sortState = sortStateSignal({});
@@ -837,11 +853,24 @@ export class UserManagement implements OnInit {
   readonly page = signal(1);
 
   readonly router = inject(Router);
+  readonly currentAccount = inject(AccountService).account;
   protected readonly userManagementService = inject(UserManagementService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading =
     this.userManagementService.userManagementsResource.isLoading;
   protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly activatedRouteState = toSignal(
+    combineLatest([
+      this.activatedRoute.queryParamMap,
+      this.activatedRoute.data,
+    ]).pipe(map(([queryParamMap, data]) => ({ queryParamMap, data }))),
+    {
+      initialValue: {
+        queryParamMap: this.activatedRoute.snapshot.queryParamMap,
+        data: this.activatedRoute.snapshot.data,
+      },
+    },
+  );
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
 
@@ -860,24 +889,21 @@ export class UserManagement implements OnInit {
         ]),
       );
     });
+    effect(() => {
+      const activatedRouteState = this.activatedRouteState();
+      untracked(() => {
+        // Only watch for route changes. Other signals should be ignored.
+        this.fillComponentAttributeFromRoute(
+          activatedRouteState.queryParamMap,
+          activatedRouteState.data,
+        );
+        this.load();
+      });
+    });
   }
 
   trackLogin = (item: IUserManagement): string =>
     this.userManagementService.getUserManagementIdentifier(item);
-
-  ngOnInit(): void {
-    this.subscription = combineLatest([
-      this.activatedRoute.queryParamMap,
-      this.activatedRoute.data,
-    ])
-      .pipe(
-        tap(([params, data]) =>
-          this.fillComponentAttributeFromRoute(params, data),
-        ),
-        tap(() => this.load()),
-      )
-      .subscribe();
-  }
 
   delete(userManagement: IUserManagement): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialog, {
@@ -892,6 +918,12 @@ export class UserManagement implements OnInit {
         tap(() => this.load()),
       )
       .subscribe();
+  }
+
+  setActive(userManagement: IUserManagement, isActivated: boolean): void {
+    this.userManagementService
+      .update({ ...userManagement, activated: isActivated })
+      .subscribe(() => this.load());
   }
 
   load(): void {
@@ -958,7 +990,7 @@ export class UserManagement implements OnInit {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
@@ -994,7 +1026,7 @@ describe("UserManagement routing resolve service", () => {
       ],
     });
     mockRouter = TestBed.inject(Router);
-    vitest.spyOn(mockRouter, "navigate");
+    vi.spyOn(mockRouter, "navigate");
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     service = TestBed.inject(UserManagementService);
   });
@@ -1002,7 +1034,7 @@ describe("UserManagement routing resolve service", () => {
   describe("resolve", () => {
     it("should return IUserManagement returned by find", async () => {
       // GIVEN
-      service.find = vitest.fn((login) => of({ login }));
+      service.find = vi.fn((login) => of({ login }));
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -1022,7 +1054,7 @@ describe("UserManagement routing resolve service", () => {
 
     it("should return null if id is not provided", async () => {
       // GIVEN
-      service.find = vitest.fn();
+      service.find = vi.fn();
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
@@ -1042,14 +1074,11 @@ describe("UserManagement routing resolve service", () => {
 
     it("should route to 404 page if data not found in server", async () => {
       // GIVEN
-      vitest
-        .spyOn(service, "find")
-        .mockReturnValue(
-          throwError(
-            () =>
-              new HttpErrorResponse({ status: 404, statusText: "Not Found" }),
-          ),
-        );
+      vi.spyOn(service, "find").mockReturnValue(
+        throwError(
+          () => new HttpErrorResponse({ status: 404, statusText: "Not Found" }),
+        ),
+      );
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -1065,17 +1094,15 @@ describe("UserManagement routing resolve service", () => {
 
     it("should route to error page if server returns an error other than 404", async () => {
       // GIVEN
-      vitest
-        .spyOn(service, "find")
-        .mockReturnValue(
-          throwError(
-            () =>
-              new HttpErrorResponse({
-                status: 500,
-                statusText: "Internal Server Error",
-              }),
-          ),
-        );
+      vi.spyOn(service, "find").mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 500,
+              statusText: "Internal Server Error",
+            }),
+        ),
+      );
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -1130,7 +1157,7 @@ export default userManagementResolve;
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { TestBed } from "@angular/core/testing";
 import {
   provideHttpClientTesting,
@@ -1154,7 +1181,6 @@ const requireRestSample: RestUserManagement = {
   ...sampleWithRequiredData,
   createdDate: sampleWithRequiredData.createdDate?.toJSON(),
   lastModifiedDate: sampleWithRequiredData.lastModifiedDate?.toJSON(),
-  authorities: null,
 };
 
 describe("UserManagement Service", () => {
@@ -1234,7 +1260,6 @@ describe("UserManagement Service", () => {
 
       const req = httpMock.expectOne({ method: "GET" });
       req.flush([returnedFromService]);
-      httpMock.verify();
       expect(expectedResult).toMatchObject([expected]);
     });
 
@@ -1345,7 +1370,7 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if one entity is null", () => {
-        const entity1 = { login: "Oswald.Kertzmann" };
+        const entity1 = { login: "Ozella.Kertzmann" };
         const entity2 = null;
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
@@ -1356,8 +1381,8 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if primaryKey differs", () => {
-        const entity1 = { login: "Oswald.Kertzmann" };
-        const entity2 = { login: "Beth.Schiller33" };
+        const entity1 = { login: "Ozella.Kertzmann" };
+        const entity2 = { login: "Anya.Schiller33" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -1366,9 +1391,9 @@ describe("UserManagement Service", () => {
         expect(compareResult2).toEqual(false);
       });
 
-      it("should return false if primaryKey matches", () => {
-        const entity1 = { login: "Oswald.Kertzmann" };
-        const entity2 = { login: "Oswald.Kertzmann" };
+      it("should return true if primaryKey matches", () => {
+        const entity1 = { login: "Ozella.Kertzmann" };
+        const entity2 = { login: "Ozella.Kertzmann" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -1387,14 +1412,13 @@ describe("UserManagement Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { computed, inject, Injectable, signal } from "@angular/core";
+    "contents": "import { serverApiUrl } from "app/config/endpoint.constants";
+import { computed, inject, Service, signal } from "@angular/core";
 import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 
 import dayjs from "dayjs/esm";
 
-import { isPresent } from "app/core/util/operators";
-import { ApplicationConfigService } from "app/core/config/application-config.service";
 import { createRequestOption } from "app/core/request/request-util";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
@@ -1407,7 +1431,6 @@ type RestOf<T extends IUserManagement | NewUserManagement> = Omit<
 > & {
   createdDate?: string | null;
   lastModifiedDate?: string | null;
-  authorities?: string[] | null;
 };
 
 export type RestUserManagement = RestOf<IUserManagement>;
@@ -1417,7 +1440,7 @@ export type NewRestUserManagement = RestOf<NewUserManagement>;
 export type PartialUpdateRestUserManagement =
   RestOf<PartialUpdateUserManagement>;
 
-@Injectable()
+@Service()
 export class UserManagementsService {
   readonly userManagementsParams = signal<
     | Record<
@@ -1443,11 +1466,7 @@ export class UserManagementsService {
       : []
     ).map((item) => this.convertValueFromServer(item)),
   );
-  protected readonly applicationConfigService = inject(
-    ApplicationConfigService,
-  );
-  protected readonly resourceUrl =
-    this.applicationConfigService.getEndpointFor("api/admin/users");
+  protected readonly resourceUrl = \`\${serverApiUrl}api/admin/users\`;
 
   protected convertValueFromServer(
     restUserManagement: RestUserManagement,
@@ -1460,14 +1479,11 @@ export class UserManagementsService {
       lastModifiedDate: restUserManagement.lastModifiedDate
         ? dayjs(restUserManagement.lastModifiedDate)
         : undefined,
-      authorities: restUserManagement.authorities?.map((authority) => ({
-        name: authority as unknown as string,
-      })),
     };
   }
 }
 
-@Injectable({ providedIn: "root" })
+@Service()
 export class UserManagementService extends UserManagementsService {
   protected readonly http = inject(HttpClient);
 
@@ -1511,9 +1527,10 @@ export class UserManagementService extends UserManagementsService {
   query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
     const options = createRequestOption(req);
     return this.http
-      .get<
-        RestUserManagement[]
-      >(this.resourceUrl, { params: options, observe: "response" })
+      .get<RestUserManagement[]>(this.resourceUrl, {
+        params: options,
+        observe: "response",
+      })
       .pipe(
         map((res) =>
           res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
@@ -1549,7 +1566,10 @@ export class UserManagementService extends UserManagementsService {
     userManagementCollection: Type[],
     ...userManagementsToCheck: (Type | null | undefined)[]
   ): Type[] {
-    const userManagements: Type[] = userManagementsToCheck.filter(isPresent);
+    const userManagements: Type[] = userManagementsToCheck.filter(
+      (userManagementItem) =>
+        userManagementItem !== null && userManagementItem !== undefined,
+    );
     if (userManagements.length > 0) {
       const userManagementCollectionIdentifiers = userManagementCollection.map(
         (userManagementItem) =>
@@ -1582,9 +1602,6 @@ export class UserManagementService extends UserManagementsService {
       ...userManagement,
       createdDate: userManagement.createdDate?.toJSON() ?? null,
       lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
-      authorities: userManagement.authorities?.map(
-        (authority) => authority.name,
-      ),
     };
   }
 
@@ -1604,7 +1621,7 @@ export class UserManagementService extends UserManagementsService {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it } from "vitest";
 import { TestBed } from "@angular/core/testing";
 
 import {
@@ -1633,8 +1650,8 @@ describe("UserManagement Form Service", () => {
             firstName: expect.any(Object),
             lastName: expect.any(Object),
             email: expect.any(Object),
-            imageUrl: expect.any(Object),
             activated: expect.any(Object),
+            imageUrl: expect.any(Object),
             createdBy: expect.any(Object),
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
@@ -1655,8 +1672,8 @@ describe("UserManagement Form Service", () => {
             firstName: expect.any(Object),
             lastName: expect.any(Object),
             email: expect.any(Object),
-            imageUrl: expect.any(Object),
             activated: expect.any(Object),
+            imageUrl: expect.any(Object),
             createdBy: expect.any(Object),
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
@@ -1700,7 +1717,7 @@ describe("UserManagement Form Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
-    "contents": "import { Injectable } from "@angular/core";
+    "contents": "import { Service } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 import dayjs from "dayjs/esm";
@@ -1719,8 +1736,7 @@ type PartialWithRequiredKeyOf<T extends { login: unknown }> = Partial<
  * It accepts IUserManagement for edit and NewUserManagementFormGroupInput for create.
  */
 type UserManagementFormGroupInput =
-  | IUserManagement
-  | PartialWithRequiredKeyOf<NewUserManagement>;
+  IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
 
 /**
  * Type that converts some properties for forms.
@@ -1750,8 +1766,8 @@ type UserManagementFormGroupContent = {
   firstName: FormControl<UserManagementFormRawValue["firstName"]>;
   lastName: FormControl<UserManagementFormRawValue["lastName"]>;
   email: FormControl<UserManagementFormRawValue["email"]>;
-  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
   activated: FormControl<UserManagementFormRawValue["activated"]>;
+  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
   createdBy: FormControl<UserManagementFormRawValue["createdBy"]>;
   createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
   lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
@@ -1760,7 +1776,7 @@ type UserManagementFormGroupContent = {
 
 export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
 
-@Injectable({ providedIn: "root" })
+@Service()
 export class UserManagementFormService {
   createUserManagementFormGroup(
     userManagement?: UserManagementFormGroupInput,
@@ -1770,6 +1786,7 @@ export class UserManagementFormService {
         ...this.getFormDefaults(),
         ...(userManagement ?? { login: null }),
       });
+
     return new FormGroup<UserManagementFormGroupContent>({
       id: new FormControl(userManagementRawValue.id),
       login: new FormControl(
@@ -1801,10 +1818,10 @@ export class UserManagementFormService {
           Validators.maxLength(191),
         ],
       }),
+      activated: new FormControl(userManagementRawValue.activated),
       imageUrl: new FormControl(userManagementRawValue.imageUrl, {
         validators: [Validators.maxLength(256)],
       }),
-      activated: new FormControl(userManagementRawValue.activated),
       createdBy: new FormControl(userManagementRawValue.createdBy),
       createdDate: new FormControl(userManagementRawValue.createdDate),
       lastModifiedBy: new FormControl(userManagementRawValue.lastModifiedBy),
@@ -1853,8 +1870,7 @@ export class UserManagementFormService {
 
   private convertUserManagementRawValueToUserManagement(
     rawUserManagement:
-      | UserManagementFormRawValue
-      | NewUserManagementFormRawValue,
+      UserManagementFormRawValue | NewUserManagementFormRawValue,
   ): IUserManagement | NewUserManagement {
     return {
       ...rawUserManagement,
@@ -2017,73 +2033,22 @@ export class UserManagementFormService {
             formControlName="activated"
           />
         </div>
-        } @if (editForm.controls.createdBy.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_createdBy">Created by</label>
-          <input
-            type="text"
-            class="form-control"
-            name="createdBy"
-            id="field_createdBy"
-            data-cy="createdBy"
-            formControlName="createdBy"
-            [readonly]="true"
-          />
-        </div>
-        } @if (editForm.controls.createdDate.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_createdDate">Created date</label>
-          <div class="d-flex">
-            <input
-              id="field_createdDate"
-              data-cy="createdDate"
-              type="datetime-local"
-              class="form-control"
-              name="createdDate"
-              formControlName="createdDate"
-              placeholder="YYYY-MM-DD HH:mm"
-              [readonly]="true"
-            />
-          </div>
-        </div>
-        } @if (editForm.controls.lastModifiedBy.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_lastModifiedBy"
-            >Modified by</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="lastModifiedBy"
-            id="field_lastModifiedBy"
-            data-cy="lastModifiedBy"
-            formControlName="lastModifiedBy"
-            [readonly]="true"
-          />
-        </div>
-        } @if (editForm.controls.lastModifiedDate.value !== null) {
-
-        <div class="mb-3">
-          <label class="form-label" for="field_lastModifiedDate"
-            >Modified date</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_lastModifiedDate"
-              data-cy="lastModifiedDate"
-              type="datetime-local"
-              class="form-control"
-              name="lastModifiedDate"
-              formControlName="lastModifiedDate"
-              placeholder="YYYY-MM-DD HH:mm"
-              [readonly]="true"
-            />
-          </div>
-        </div>
         }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_authority">Profiles</label>
+          <select
+            class="form-control"
+            id="field_authority"
+            multiple
+            name="authority"
+            formControlName="authorities"
+          >
+            @for (authority of authorities(); track $index) {
+            <option [value]="authority">{{ authority }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>
@@ -2114,7 +2079,7 @@ export class UserManagementFormService {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HttpResponse } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
@@ -2157,7 +2122,7 @@ describe("UserManagement Management Update Component", () => {
 
   describe("ngOnInit", () => {
     it("should update editForm", () => {
-      const userManagement: IUserManagement = { login: "Beth.Schiller33" };
+      const userManagement: IUserManagement = { login: "Anya.Schiller33" };
 
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
@@ -2170,14 +2135,12 @@ describe("UserManagement Management Update Component", () => {
     it("should call update service on save for existing entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Oswald.Kertzmann" };
-      vitest
-        .spyOn(userManagementFormService, "getUserManagement")
-        .mockReturnValue(userManagement);
-      vitest
-        .spyOn(userManagementService, "update")
-        .mockReturnValue(saveSubject);
-      vitest.spyOn(comp, "previousState");
+      const userManagement = { login: "Ozella.Kertzmann" };
+      vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue(
+        userManagement,
+      );
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
 
@@ -2196,17 +2159,15 @@ describe("UserManagement Management Update Component", () => {
       expect(comp.isSaving()).toEqual(false);
     });
 
-    it("should call create service on save for new entity", () => {
+    it("should call update service on save for new entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Oswald.Kertzmann" };
-      vitest
-        .spyOn(userManagementFormService, "getUserManagement")
-        .mockReturnValue({ login: null });
-      vitest
-        .spyOn(userManagementService, "create")
-        .mockReturnValue(saveSubject);
-      vitest.spyOn(comp, "previousState");
+      const userManagement = { login: "Ozella.Kertzmann" };
+      vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue({
+        login: null,
+      });
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement: null });
       comp.ngOnInit();
 
@@ -2218,7 +2179,9 @@ describe("UserManagement Management Update Component", () => {
 
       // THEN
       expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
-      expect(userManagementService.create).toHaveBeenCalled();
+      expect(userManagementService.update).toHaveBeenCalledWith(
+        expect.objectContaining({ login: null }),
+      );
       expect(comp.isSaving()).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
@@ -2226,11 +2189,9 @@ describe("UserManagement Management Update Component", () => {
     it("should set isSaving to false on error", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Oswald.Kertzmann" };
-      vitest
-        .spyOn(userManagementService, "update")
-        .mockReturnValue(saveSubject);
-      vitest.spyOn(comp, "previousState");
+      const userManagement = { login: "Ozella.Kertzmann" };
+      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
 
@@ -2250,13 +2211,7 @@ describe("UserManagement Management Update Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  signal,
-  OnInit,
-} from "@angular/core";
+    "contents": "import { Component, computed, inject, signal, OnInit } from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
 import { finalize, Observable } from "rxjs";
@@ -2271,9 +2226,9 @@ import {
 } from "./user-management-form.service";
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
+import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management-update",
   templateUrl: "./user-management-update.html",
   imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
@@ -2285,6 +2240,11 @@ export class UserManagementUpdate implements OnInit {
   protected userManagementService = inject(UserManagementService);
   protected userManagementFormService = inject(UserManagementFormService);
   protected activatedRoute = inject(ActivatedRoute);
+  protected readonly authorityService = inject(AuthorityService);
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly authorities = computed(() =>
+    this.authorityService.authorities().map((authority) => authority.name),
+  );
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: UserManagementFormGroup =
@@ -2308,15 +2268,9 @@ export class UserManagementUpdate implements OnInit {
     const userManagement = this.userManagementFormService.getUserManagement(
       this.editForm,
     );
-    if (userManagement.login === null) {
-      this.subscribeToSaveResponse(
-        this.userManagementService.create(userManagement),
-      );
-    } else {
-      this.subscribeToSaveResponse(
-        this.userManagementService.update(userManagement),
-      );
-    }
+    this.subscribeToSaveResponse(
+      this.userManagementService.update(userManagement as IUserManagement),
+    );
   }
 
   protected subscribeToSaveResponse(
@@ -2358,12 +2312,13 @@ export interface IUserManagement {
   firstName?: string | null;
   lastName?: string | null;
   email?: string | null;
-  imageUrl?: string | null;
   activated?: boolean | null;
+  imageUrl?: string | null;
   createdBy?: string | null;
   createdDate?: dayjs.Dayjs | null;
   lastModifiedBy?: string | null;
   lastModifiedDate?: dayjs.Dayjs | null;
+  authorities?: string[] | null;
 }
 
 export type NewUserManagement = Omit<IUserManagement, "login"> & {
@@ -2375,7 +2330,7 @@ export type NewUserManagement = Omit<IUserManagement, "login"> & {
   "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
     "contents": "import { Routes } from "@angular/router";
 
-import { UserRouteAccessService } from "app/core/auth/user-route-access.service";
+import { userRouteAccessService } from "app/core/auth/user-route-access.service";
 import UserManagementResolve from "./route/user-management-routing-resolve.service";
 import { ASC } from "app/config/navigation.constants";
 
@@ -2387,7 +2342,7 @@ const userManagementRoute: Routes = [
     data: {
       authorities: ["ROLE_ADMIN"],
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [userRouteAccessService],
   },
   {
     path: ":login/view",
@@ -2401,7 +2356,7 @@ const userManagementRoute: Routes = [
     data: {
       authorities: ["ROLE_ADMIN"],
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [userRouteAccessService],
   },
   {
     path: "new",
@@ -2415,7 +2370,7 @@ const userManagementRoute: Routes = [
     data: {
       authorities: ["ROLE_ADMIN"],
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [userRouteAccessService],
   },
   {
     path: ":login/edit",
@@ -2429,7 +2384,7 @@ const userManagementRoute: Routes = [
     data: {
       authorities: ["ROLE_ADMIN"],
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [userRouteAccessService],
   },
 ];
 
@@ -2443,37 +2398,37 @@ export default userManagementRoute;
 import { IUserManagement, NewUserManagement } from "./user-management.model";
 
 export const sampleWithRequiredData: IUserManagement = {
-  login: "Rickey.Sauer",
-  email: "Lia5@hotmail.com",
+  login: "Randall.Sauer",
+  email: "Lucienne5@hotmail.com",
 };
 
 export const sampleWithPartialData: IUserManagement = {
   id: 2737,
-  login: "Guillermo_Klein32",
-  firstName: "Mitchel",
+  login: "Grayson_Klein32",
+  firstName: "Mertie",
   lastName: "Mitchell",
-  email: "Gordon.Franey@gmail.com",
-  imageUrl: "mash meanwhile youthfully",
+  email: "Gerson.Franey@gmail.com",
   activated: false,
-  lastModifiedDate: dayjs("2019-12-31T10:49"),
+  imageUrl: "boo suspension",
+  lastModifiedDate: dayjs("2019-12-31T08:52"),
 };
 
 export const sampleWithFullData: IUserManagement = {
   id: 26558,
-  login: "Catherine72",
-  firstName: "Lenore",
+  login: "Brisa72",
+  firstName: "Lorena",
   lastName: "Bode",
-  email: "Samuel_Altenwerth65@hotmail.com",
-  imageUrl: "ew nor",
+  email: "Rylan_Altenwerth65@hotmail.com",
   activated: false,
-  createdBy: "pure",
-  createdDate: dayjs("2019-12-31T13:56"),
-  lastModifiedBy: "broadly",
-  lastModifiedDate: dayjs("2019-12-31T19:41"),
+  imageUrl: "as vastly than",
+  createdBy: "out absentmindedly",
+  createdDate: dayjs("2019-12-31T08:56"),
+  lastModifiedBy: "but sour sympathetically",
+  lastModifiedDate: dayjs("2019-12-31T04:49"),
 };
 
 export const sampleWithNewData: NewUserManagement = {
-  email: "Jevon82@yahoo.com",
+  email: "Jasen82@yahoo.com",
   login: null,
 };
 
@@ -2546,7 +2501,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientTestDir": "clientRoot/test/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -2748,6 +2702,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "projectVersion": undefined,
   "reactive": true,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -2875,6 +2830,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -2906,12 +2864,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -3517,6 +3469,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -3525,7 +3478,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot/src/**/*.html",
           "options": {
             "parser": "angular",
           },
@@ -3596,7 +3549,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientTestDir": "clientRoot/test/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -3787,6 +3739,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "projectVersion": undefined,
   "reactive": true,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -4055,6 +4008,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -4089,12 +4045,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -4788,6 +4738,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -4796,7 +4747,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot/src/**/*.html",
           "options": {
             "parser": "angular",
           },
@@ -4866,7 +4817,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientTestDir": "clientRoot/test/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -4942,7 +4892,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "exposeMicrofrontend": false,
+  "exposeMicrofrontend": true,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -5031,7 +4981,16 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": [],
+  "microfrontends": [
+    {
+      "baseName": "jhipster",
+      "capitalizedBaseName": "Jhipster",
+      "endpointPrefix": "",
+      "lowercaseBaseName": "jhipster",
+      "moduleFederationName": "jhipster",
+      "self": true,
+    },
+  ],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -5067,6 +5026,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -5161,6 +5121,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -5194,12 +5157,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/core/config/application-config.service.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -5210,6 +5167,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/microfrontend/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request-util.ts": {
@@ -5835,8 +5795,14 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     },
     {
       "devDependencies": {
+        "@module-federation/enhanced": null,
+      },
+    },
+    {
+      "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -5845,7 +5811,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot/src/**/*.html",
           "options": {
             "parser": "angular",
           },
@@ -5915,7 +5881,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -5991,7 +5956,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "exposeMicrofrontend": false,
+  "exposeMicrofrontend": true,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -6070,7 +6035,16 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": [],
+  "microfrontends": [
+    {
+      "baseName": "jhipster",
+      "capitalizedBaseName": "Jhipster",
+      "endpointPrefix": "",
+      "lowercaseBaseName": "jhipster",
+      "moduleFederationName": "jhipster",
+      "self": true,
+    },
+  ],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -6106,6 +6080,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -6338,6 +6313,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -6374,12 +6352,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
     "stateCleared": "modified",
   },
@@ -6387,6 +6359,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/microfrontend/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request-util.ts": {
@@ -7022,8 +6997,14 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     },
     {
       "devDependencies": {
+        "@module-federation/enhanced": null,
+      },
+    },
+    {
+      "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -7103,7 +7084,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -7294,6 +7274,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -7671,6 +7652,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -7708,12 +7692,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -7879,6 +7857,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.test-samples.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
@@ -8471,6 +8452,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -8549,7 +8531,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -8750,6 +8731,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -8865,6 +8847,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -8893,12 +8878,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -9489,6 +9468,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -9567,7 +9547,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -9769,6 +9748,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
@@ -9884,6 +9864,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/endpoint.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -9912,12 +9895,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/user-route-access.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/core/config/application-config.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/auth-expired.interceptor.ts": {
@@ -10517,6 +10494,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },

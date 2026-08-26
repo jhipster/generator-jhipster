@@ -38,15 +38,20 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asAnyTaskGroup({
       springBootDependenciesFile() {
-        const suffix = this.version.startsWith('4') ? `-${this.version.split('.')[0]}` : '';
+        const suffix = `-${this.version.split('.')[0]}`;
         this.springBootDependenciesFile = this.fetchFromInstalledJHipster(`spring-boot/resources/spring-boot-dependencies${suffix}`);
       },
       async download() {
-        const response = await fetch(
-          `${this.repository}/org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`,
-        );
+        if (this.version.endsWith('-SNAPSHOT')) {
+          this.repository = 'https://repo.spring.io/snapshot/';
+        }
+        const pomUrl = `${this.repository}org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`;
+        const response = await fetch(pomUrl);
 
-        if (!response.ok) throw new Error(`Unexpected response ${response.statusText}`);
+        if (!response.ok) {
+          this.log.error(`Failed to download Spring Boot dependencies POM from ${pomUrl}`);
+          throw new Error(`Unexpected response ${response.statusText}`);
+        }
 
         this.pomContent = await response.text();
       },

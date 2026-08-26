@@ -98,10 +98,18 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ application, source }) {
+        if (!application.nodeDependencies.globals) {
+          this.log.warn('globals dependency is not defined in the nodeDependencies, the client generator must define it');
+        }
+        if (!application.nodeDependencies.jiti) {
+          this.log.warn('jiti dependency is not defined in the nodeDependencies, the client generator must define it');
+        }
+
         const packageJson = {
           devDependencies: {
             'eslint-config-prettier': application.nodeDependencies['eslint-config-prettier'],
             'eslint-plugin-prettier': application.nodeDependencies['eslint-plugin-prettier'],
+            globals: application.nodeDependencies.globals,
             jiti: application.nodeDependencies.jiti,
           },
         };

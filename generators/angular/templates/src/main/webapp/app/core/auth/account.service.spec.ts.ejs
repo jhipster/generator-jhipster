@@ -16,9 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { Mock, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
+import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -31,7 +30,6 @@ import { Authority } from 'app/shared/jhipster/constants';
 import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ if (generateUserManagement) { _%>
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
 
 import { AccountService } from './account.service';
@@ -49,12 +47,11 @@ function accountWithAuthorities(authorities: string[]): Account {
   };
 }
 
-const mockFn = (value: string | null): Mock => <%- clientTestFramework %>.fn(() => value);
+const mockFn = (value: string | null): Mock => vi.fn(() => value);
 
 describe('Account Service', () => {
   let service: AccountService;
 <%_ if (generateUserManagement) { _%>
-  let applicationConfigService: ApplicationConfigService;
 <%_ } _%>
   let httpMock: HttpTestingController;
   let mockStorageService: StateStorageService;
@@ -73,8 +70,8 @@ describe('Account Service', () => {
         {
           provide: StateStorageService,
           useValue: {
-            clearUrl: <%- clientTestFramework %>.fn(),
-            getUrl: <%- clientTestFramework %>.fn(),
+            clearUrl: vi.fn(),
+            getUrl: vi.fn(),
           },
         },
       ],
@@ -82,16 +79,15 @@ describe('Account Service', () => {
 
     service = TestBed.inject(AccountService);
 <%_ if (generateUserManagement) { _%>
-    applicationConfigService = TestBed.inject(ApplicationConfigService);
 <%_ } _%>
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
-    <%- clientTestFramework %>.spyOn(mockRouter, 'navigateByUrl');
+    vi.spyOn(mockRouter, 'navigateByUrl');
 <%_ if (enableTranslation) { _%>
 
     mockTranslateService = TestBed.inject(TranslateService);
-    <%- clientTestFramework %>.spyOn(mockTranslateService, 'use');
+    vi.spyOn(mockTranslateService, 'use');
 <%_ } _%>
   });
 
@@ -107,7 +103,7 @@ describe('Account Service', () => {
 
       // WHEN
       service.save(account).subscribe();
-      const testRequest = httpMock.expectOne({ method: 'POST', url: applicationConfigService.getEndpointFor('api/account') });
+      const testRequest = httpMock.expectOne({ method: 'POST', url: `${serverApiUrl}api/account` });
       testRequest.flush({});
 
       // THEN
@@ -235,7 +231,7 @@ describe('Account Service', () => {
         expect(hasAuthority).toBe(false);
       });
 
-      it('should return false if user is logged and has not authority', () => {
+      it('should return false if user is logged and has no authority', () => {
         service.authenticate(accountWithAuthorities([Authority.USER]));
 
         const hasAuthority = service.hasAnyAuthority(Authority.ADMIN);
@@ -258,7 +254,7 @@ describe('Account Service', () => {
         expect(hasAuthority).toBeFalsy();
       });
 
-      it('should return false if user is logged and has not authority', () => {
+      it('should return false if user is logged and has no authority', () => {
         service.authenticate(accountWithAuthorities([Authority.USER]));
 
         const hasAuthority = service.hasAnyAuthority([Authority.ADMIN]);

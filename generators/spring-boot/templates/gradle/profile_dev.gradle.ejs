@@ -59,7 +59,7 @@ def webapp = tasks.register('webapp', NpmTask) {
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
 
-    outputs.dir("<%- clientDistDir %>")
+    outputs.dir(layout.buildDirectory.dir("<%- this.relativeDir(temporaryDir, clientDistDir) %>"))
         .withPropertyName("webapp-build-dir")
 
     dependsOn(npmInstall)
@@ -70,6 +70,12 @@ def webapp = tasks.register('webapp', NpmTask) {
 <%_ } _%>
 
 processResources {
+<%_ if (!skipClient) { _%>
+    from(webapp) {
+        into "static"
+    }
+
+<%_ } _%>
     inputs.property('version', version)
     inputs.property('springProfiles', springProfiles)
     filesMatching("**/application.yml") {
@@ -98,8 +104,10 @@ def integrationTest = tasks.register('integrationTest', Test) {
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
 <%_ if (javaIntegrationTestExclude.length > 0) { _%>
-    exclude <%- javaIntegrationTestExclude.map(exclude => `"${exclude}"`).join('') %>
+    exclude <%- javaIntegrationTestExclude.map(exclude => `"${exclude}"`).join(', ') %>
 <%_ } _%>
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
     testLogging {
         events = ['FAILED', 'SKIPPED']
         exceptionFormat = "full"
@@ -118,8 +126,3 @@ def integrationTest = tasks.register('integrationTest', Test) {
 <%_ } _%>
     dependsOn(tasks.named('test'))
 }
-
-<%_ if (!skipClient) { _%>
-tasks.named('processResources').configure { dependsOn(webapp) }
-tasks.named('bootJar').configure { dependsOn(tasks.named('processResources')) }
-<%_ } _%>

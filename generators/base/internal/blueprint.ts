@@ -50,7 +50,7 @@ export function parseBlueprints(blueprints?: string | Blueprint[]) {
  * @returns {Blueprint[]} an array that contains the info for each blueprint
  */
 export function mergeBlueprints(...blueprintsToMerge: Blueprint[][]): Blueprint[] {
-  if (!blueprintsToMerge || blueprintsToMerge.length === 0) {
+  if (!blueprintsToMerge?.length) {
     return [];
   }
   blueprintsToMerge.forEach(blueprints => {

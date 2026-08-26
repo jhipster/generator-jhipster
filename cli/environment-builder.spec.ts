@@ -21,9 +21,9 @@ import { after, afterEach, before, beforeEach, describe, esmocha, expect, it } f
 import assert from 'node:assert';
 import fs from 'node:fs';
 
-import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
-
 import EnvironmentBuilder from './environment-builder.ts';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -114,10 +114,10 @@ describe('cli - EnvironmentBuilder', () => {
       envBuilder = EnvironmentBuilder.create();
     });
     it('should return an EnvironmentBuilder', () => {
-      expect(envBuilder).not.toBeUndefined();
-      expect(envBuilder.getEnvironment()).not.toBeUndefined();
-      expect(envBuilder.getEnvironment().adapter).not.toBeUndefined();
-      expect(envBuilder.getEnvironment().sharedOptions).not.toBeUndefined();
+      expect(envBuilder).toBeDefined();
+      expect(envBuilder.getEnvironment()).toBeDefined();
+      expect(envBuilder.getEnvironment().adapter).toBeDefined();
+      expect(envBuilder.getEnvironment().sharedOptions).toBeDefined();
     });
   });
 
@@ -143,10 +143,10 @@ describe('cli - EnvironmentBuilder', () => {
       _lookupBlueprintsSpy.mockRestore();
     });
     it('should call create, _lookupJHipster, _loadBlueprints and _lookupBlueprints', () => {
-      expect(createSpy.mock.calls.length).toBe(1);
-      expect(_lookupJHipsterSpy.mock.calls.length).toBe(1);
-      expect(_loadBlueprintsSpy.mock.calls.length).toBe(1);
-      expect(_lookupBlueprintsSpy.mock.calls.length).toBe(1);
+      expect(createSpy).toHaveBeenCalledTimes(1);
+      expect(_lookupJHipsterSpy).toHaveBeenCalledTimes(1);
+      expect(_loadBlueprintsSpy).toHaveBeenCalledTimes(1);
+      expect(_lookupBlueprintsSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -313,9 +313,9 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('should load all generators', () => {
-        expect(envBuilder.getEnvironment().get('jhipster-cli:foo')).not.toBeUndefined();
-        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:foo')).not.toBeUndefined();
-        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:bar')).not.toBeUndefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli:foo')).toBeDefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:foo')).toBeDefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:bar')).toBeDefined();
       });
     });
   });

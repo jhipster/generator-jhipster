@@ -246,7 +246,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       templates: ['config/SpringDocConfiguration.java'],
     }),
     {
-      condition: generator => generator.applicationTypeMicroservice,
+      condition: generator => generator.applicationTypeMicroservice && !generator.microfrontend,
       path: SERVER_MAIN_RES_DIR,
       templates: [{ file: 'static/index_microservices.html', renameTo: () => 'static/index.html' }],
     },
@@ -297,7 +297,6 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
         'config/DateTimeFormatConfiguration.java',
         'config/LoggingConfiguration.java',
         'config/ApplicationProperties.java',
-        'config/JacksonConfiguration.java',
         'config/LoggingAspectConfiguration.java',
         'config/WebConfigurer.java',
       ],
@@ -353,6 +352,11 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [data => `web/filter/SpaWebFilterIT_${data.imperativeOrReactive}.java`],
+    },
+    {
+      condition: generator => generator.clientFrameworkAny && generator.reactive,
+      path: `${SERVER_TEST_RES_DIR}/`,
+      templates: ['static/test-resource.txt'],
     },
     {
       condition: generator => generator.clientFrameworkAny && generator.reactive,

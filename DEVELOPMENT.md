@@ -181,7 +181,7 @@ List of commands being in the package.json scripts section of the generated samp
 
 ## DX using vscode
 
-`generator-jhipster` add a series of vscode configurations for a better developer experience.
+`generator-jhipster` adds a series of vscode configurations for a better developer experience.
 
 ### Development Containers
 

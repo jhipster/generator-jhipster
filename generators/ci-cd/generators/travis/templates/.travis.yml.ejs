@@ -68,11 +68,6 @@ script:
   - ./snyk test --all-projects || true
   - ./snyk monitor --all-projects
 <%_ } _%>
-<%_ if (buildToolMaven) { _%>
-  - chmod +x mvnw
-<%_ } else if (buildToolGradle) { _%>
-  - chmod +x gradlew
-<%_ } _%>
   - <%- nodePackageManager %> run ci:backend:test
 <%_ if (!skipClient) { _%>
   - <%- nodePackageManager %> run ci:frontend:test

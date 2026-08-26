@@ -52,12 +52,6 @@
 <%_ if (skipServer) { _%>
     "sonar-scanner": "3.1.0",
 <%_ } _%>
-<%_ if (microfrontend) { _%>
-  <%_ if (applicationTypeGateway) { _%>
-    "@angular-architects/module-federation-runtime": "<%- nodeDependencies['@angular-architects/module-federation-runtime'] %>",
-  <%_ } _%>
-    "@angular-architects/module-federation": "<%- nodeDependencies['@angular-architects/module-federation'] %>",
-<%_ } _%>
     "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
     "@angular/build": "<%- nodeDependencies['@angular/cli'] %>",
     "@angular/cli": "<%- nodeDependencies['@angular/cli'] %>",
@@ -66,6 +60,7 @@
     "@eslint/js": null,
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
     "angular-eslint": "<%- nodeDependencies['angular-eslint'] %>",
+    "axios": "<%- nodeDependencies.axios %>",
     "browser-sync": "<%- nodeDependencies['browser-sync'] %>",
     "eslint": "<%- nodeDependencies.eslint %>",
     "eslint-config-prettier": "<%- nodeDependencies['eslint-config-prettier'] %>",

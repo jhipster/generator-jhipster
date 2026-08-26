@@ -63,7 +63,7 @@ export default class TemplateFileFs {
 
   get(filePath: string): TemplateFile {
     assert(filePath, 'filePath is required');
-    this.fragmentFiles[filePath] = this.fragmentFiles[filePath] || new TemplateFile(path.basename(filePath), this.extension);
+    this.fragmentFiles[filePath] ||= new TemplateFile(path.basename(filePath), this.extension);
     return this.fragmentFiles[filePath];
   }
 }

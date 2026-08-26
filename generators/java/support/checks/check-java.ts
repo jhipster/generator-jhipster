@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { execaCommandSync } from 'execa';
+import { execaSync } from 'execa';
 
 import type { ValidationResult } from '../../../base-core/api.ts';
 
@@ -27,10 +27,10 @@ import type { ValidationResult } from '../../../base-core/api.ts';
  */
 export default (javaCompatibleVersions: string[]): ValidationResult & { javaVersion?: string } => {
   try {
-    const { exitCode, stderr } = execaCommandSync('java -version', { stdio: 'pipe' });
+    const { exitCode, stderr } = execaSync('java', ['-version'], { stdio: 'pipe' });
     if (exitCode === 0 && stderr) {
       const matchResult = /(?:java|openjdk)(?: version)? "?(.*)"? /s.exec(stderr);
-      if (matchResult && matchResult.length > 0) {
+      if (matchResult?.length) {
         const javaVersion = matchResult[1];
         const debug = `Detected java version ${javaVersion}`;
         if (javaCompatibleVersions && !new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`).test(javaVersion)) {

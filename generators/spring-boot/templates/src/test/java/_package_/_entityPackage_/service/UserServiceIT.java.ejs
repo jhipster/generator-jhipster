@@ -276,7 +276,7 @@ class UserServiceIT {
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
     void testRemoveOldPersistentTokens() {
@@ -416,7 +416,7 @@ class UserServiceIT {
     void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
         Instant now = Instant.now();
   <%_ if (databaseTypeSql && !reactive) { _%>
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)<%- databaseTypeSql && reactive ? '.atOffset(ZoneOffset.UTC)' : '' %>));
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
   <%_ } _%>
         user.setActivated(false);
         <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
@@ -451,7 +451,7 @@ class UserServiceIT {
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(token);
+        persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
     }
 <%_ } _%>
 

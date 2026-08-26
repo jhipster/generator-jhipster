@@ -54,7 +54,7 @@ export function getCstFromContent(content: string, runtime: JDLRuntime) {
 }
 
 function checkFiles(files: string[]) {
-  if (!files || files.length === 0) {
+  if (!files?.length) {
     throw new Error('The files must be passed to be parsed.');
   }
 }

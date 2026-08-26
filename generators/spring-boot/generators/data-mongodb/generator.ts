@@ -67,10 +67,11 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
-        source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}`, 'spring-boot-testcontainers');
-        if (application.springBoot4) {
-          source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}-test`);
-        }
+        source.addSpringBootModule?.(
+          `spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}`,
+          `spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}-test`,
+          'spring-boot-testcontainers',
+        );
         source.addJavaDependencies?.([
           { groupId: 'io.mongock', artifactId: 'mongock-bom', type: 'pom', version: javaDependencies['mongock-bom'], scope: 'import' },
           { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },
@@ -94,9 +95,9 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
           imports: [`${application.packageName}.config.MongoDbTestContainer`],
           annotations: [
             {
-              package: 'org.springframework.boot.testcontainers.context',
-              annotation: 'ImportTestcontainers',
-              parameters: (_, cb) => cb.addKeyValue('value', 'MongoDbTestContainer.class'),
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'MongoDbTestContainer.class'),
             },
           ],
         });

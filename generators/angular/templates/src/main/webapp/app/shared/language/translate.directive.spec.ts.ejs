@@ -16,17 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 
 import TranslateDirective from './translate.directive';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslateDirective],
   template: `<div <%- jhiPrefix %>Translate="test"></div>`,
 })
@@ -48,7 +45,7 @@ describe('TranslateDirective Tests', () => {
   });
 
   it('should change HTML', () => {
-    const spy = <%- clientTestFramework %>.spyOn(translateService, 'get');
+    const spy = vi.spyOn(translateService, 'get');
 
     fixture.detectChanges();
 

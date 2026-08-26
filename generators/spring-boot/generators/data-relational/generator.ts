@@ -79,12 +79,11 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         application.devDatabaseExtraOptions = getDBCExtraOption(application.devDatabaseType);
         application.prodDatabaseExtraOptions = getDBCExtraOption(application.prodDatabaseType);
 
-        const { prodDatabaseType, springBoot4, dockerContainers } = application;
-        applicationDefaults(getTestcontainerSupport({ databaseType: prodDatabaseType, springBoot4, dockerContainers }));
+        const { prodDatabaseType, dockerContainers } = application;
+        applicationDefaults(getTestcontainerSupport({ databaseType: prodDatabaseType, dockerContainers }));
 
         applicationDefaults({
-          implementsDynamicSourceTestcontainersSupport: data =>
-            Boolean(!application.devDatabaseTypeH2Any && data.testcontainerClass && data.springBoot4),
+          implementsDynamicSourceTestcontainersSupport: data => Boolean(!application.devDatabaseTypeH2Any && data.testcontainerClass),
           useTestcontainersV1: data => Boolean(data.testcontainerClassPackage?.endsWith('.containers')),
         });
       },
@@ -137,18 +136,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
         await control.cleanupFiles({
-          '9.0.0-beta.1': [
+          '9.2.1': [
             [
-              !application.devDatabaseTypeH2Any! && application.springBoot4,
-              `${application.srcTestJava}config/EmbeddedSQL.java`,
-              `${application.srcTestJava}config/SqlTestContainer.java`,
-              `${application.srcTestJava}config/SqlTestContainersSpringContextCustomizerFactory.java`,
+              !application.devDatabaseTypeH2Any!,
+              `${application.javaPackageTestDir}config/EmbeddedSQL.java`,
+              `${application.javaPackageTestDir}config/SqlTestContainer.java`,
+              `${application.javaPackageTestDir}config/SqlTestContainersSpringContextCustomizerFactory.java`,
               `${application.srcTestResources}META-INF/spring.factories`,
             ],
-            [application.prodDatabaseTypeMysql!, `${application.srcTestJava}config/MysqlTestContainer.java`],
-            [application.prodDatabaseTypeMariadb!, `${application.srcTestJava}config/MariadbTestContainer.java`],
-            [application.prodDatabaseTypeMssql!, `${application.srcTestJava}config/MsSqlTestContainer.java`],
-            [application.prodDatabaseTypePostgresql!, `${application.srcTestJava}config/PostgreSqlTestContainer.java`],
+            [application.prodDatabaseTypeMysql!, `${application.javaPackageTestDir}config/MysqlTestContainer.java`],
+            [application.prodDatabaseTypeMariadb!, `${application.javaPackageTestDir}config/MariadbTestContainer.java`],
+            [application.prodDatabaseTypeMssql!, `${application.javaPackageTestDir}config/MsSqlTestContainer.java`],
+            [application.prodDatabaseTypePostgresql!, `${application.javaPackageTestDir}config/PostgreSqlTestContainer.java`],
           ],
         });
       },
@@ -205,11 +204,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
             })
           : undefined;
 
-        if (application.springBoot4) {
-          source.addSpringBootModule!('spring-boot-h2console');
-          // TODO move spring-boot-h2console to dev profile
-          // source.addJavaDependencies!([{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-h2console' }], { dev: true });
-        }
+        source.addSpringBootModule!('spring-boot-h2console');
+        // TODO move spring-boot-h2console to dev profile
+        // source.addJavaDependencies!([{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-h2console' }], { dev: true });
 
         source.addSpringBootModule?.(`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`);
         if (application.implementsDynamicSourceTestcontainersSupport) {
@@ -240,8 +237,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<
             condition: !reactive,
             dependencies: [
               {
-                groupId: application.springBoot4 ? 'tools.jackson.datatype' : 'com.fasterxml.jackson.datatype',
-                artifactId: application.springBoot4 ? 'jackson-datatype-hibernate7' : 'jackson-datatype-hibernate6',
+                groupId: 'tools.jackson.datatype',
+                artifactId: 'jackson-datatype-hibernate7',
               },
               { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
               { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
@@ -249,7 +246,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
               {
                 scope: 'annotationProcessor',
                 groupId: 'org.hibernate.orm',
-                artifactId: application.springBoot4 ? 'hibernate-processor' : 'hibernate-jpamodelgen',
+                artifactId: 'hibernate-processor',
               },
             ],
             mavenDefinition: {
@@ -257,7 +254,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
                 {
                   inProfile: 'IDE',
                   groupId: 'org.hibernate.orm',
-                  artifactId: application.springBoot4 ? 'hibernate-processor' : 'hibernate-jpamodelgen',
+                  artifactId: 'hibernate-processor',
                 },
               ],
             },
@@ -265,7 +262,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           {
             dependencies: [
               {
-                groupId: application.springBoot4 ? 'tools.jackson.module' : 'com.fasterxml.jackson.module',
+                groupId: 'tools.jackson.module',
                 artifactId: 'jackson-module-jaxb-annotations',
               },
               { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
@@ -275,6 +272,10 @@ export default class SqlGenerator extends BaseApplicationGenerator<
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
             ],
             mavenDefinition: dbDefinitions.jdbc,
+          },
+          {
+            condition: reactive,
+            dependencies: [{ scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-r2dbc' }],
           },
           {
             condition: devDatabaseTypeH2Any,
@@ -312,9 +313,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
             imports: [`${application.packageName}.config.DatabaseTestcontainer`],
             annotations: [
               {
-                package: 'org.springframework.boot.testcontainers.context',
-                annotation: 'ImportTestcontainers',
-                parameters: (_, cb) => cb.addKeyValue('value', 'DatabaseTestcontainer.class'),
+                package: 'org.springframework.boot.test.context',
+                annotation: 'SpringBootTest',
+                parameters: (_, cb) => cb.addKeyValue('classes', 'DatabaseTestcontainer.class'),
               },
             ],
           });
@@ -355,6 +356,50 @@ export default class SqlGenerator extends BaseApplicationGenerator<
             pluginName: 'hibernate',
             id: 'org.hibernate.orm',
             'version.ref': 'hibernate',
+          });
+        }
+      },
+      async blockHound({ application, source }) {
+        if (!application.reactive) return;
+
+        if (application.prodDatabaseTypeMariadb) {
+          source.addAllowBlockingCallsInside!({
+            classPath: 'org.mariadb.r2dbc.message.client.HandshakeResponse',
+            method: 'writeConnectAttributes',
+          });
+
+          source.addAllowBlockingCallsInside!({
+            classPath: 'org.mariadb.r2dbc.client.MariadbFrameDecoder',
+            method: 'decode',
+          });
+
+          source.addAllowBlockingCallsInside!({
+            classPath: 'org.mariadb.r2dbc.client.SimpleClient',
+            method: [
+              'executeWhenTransaction',
+              'executeWhenNotInTransaction',
+              'sendCommand',
+              'sendCommandWithoutResult',
+              'setAutoCommit',
+              // `receive` and `sendCommand` acquire the lock inside their `Flux.create` lambdas, which run at
+              // subscribe time, so the enclosing method is no longer on the stack and BlockHound only sees the
+              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.1 and must be rechecked on driver upgrades.
+              'lambda$receive$14',
+              'lambda$sendCommand$16',
+              'lambda$sendCommand$19',
+            ],
+          });
+
+          source.addAllowBlockingCallsInside!({
+            classPath: 'org.mariadb.r2dbc.message.flow.AuthenticationFlow',
+            // loads authentication plugins through ServiceLoader, which reads the driver jar
+            method: 'pluginRequireSecure',
+          });
+        }
+        if (application.prodDatabaseTypeMssql) {
+          source.addAllowBlockingCallsInside!({
+            classPath: 'io.r2dbc.mssql.client.ssl.TdsSslHandler',
+            method: 'createSslHandler',
           });
         }
       },

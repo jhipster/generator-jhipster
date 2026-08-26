@@ -77,30 +77,28 @@ export const userManagementFiles = asWriteEntityFilesSection({
         'entities/_entityFolder_/_entityFile_.routes.ts',
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.ts',
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.spec.ts',
-        'entities/admin/user-management/user-management.model.ts',
-        'entities/admin/user-management/list/user-management.html',
-        'entities/admin/user-management/list/user-management.spec.ts',
-        'entities/admin/user-management/list/user-management.ts',
-        'entities/admin/user-management/detail/user-management-detail.html',
-        'entities/admin/user-management/detail/user-management-detail.spec.ts',
-        'entities/admin/user-management/detail/user-management-detail.ts',
+        'entities/_entityFolder_/_entityFile_.model.ts',
+        'entities/_entityFolder_/_entityFile_.test-samples.ts',
+        'entities/_entityFolder_/list/_entityFile_.html',
+        'entities/_entityFolder_/list/_entityFile_.ts',
+        'entities/_entityFolder_/list/_entityFile_.spec.ts',
+        'entities/_entityFolder_/detail/_entityFile_-detail.html',
+        'entities/_entityFolder_/detail/_entityFile_-detail.ts',
+        'entities/_entityFolder_/detail/_entityFile_-detail.spec.ts',
         'entities/admin/user-management/update/user-management-update.html',
         'entities/admin/user-management/update/user-management-update.spec.ts',
         'entities/admin/user-management/update/user-management-update.ts',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.html',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.ts',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.spec.ts',
-        'entities/admin/user-management/service/user-management.service.spec.ts',
-        'entities/admin/user-management/service/user-management.service.ts',
+        'entities/_entityFolder_/service/_entityFile_.service.ts',
+        'entities/_entityFolder_/service/_entityFile_.service.spec.ts',
       ],
     }),
   ],
 });
 
-export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(async function ({
-  application,
-  entities,
-}) {
+export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication>(async function ({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesAndPropertiesForClient)(entities)) {
     if (entity.builtInUser) {
       await this.writeFiles({
@@ -128,7 +126,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>, AngularSource>(
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication, AngularSource>(
   async function (this, taskParam) {
     const { application, source } = taskParam;
     const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
@@ -141,11 +139,7 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, A
   },
 );
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(function ({
-  application,
-  entities,
-  control,
-}) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication>(function ({ application, entities, control }) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (control.isJhipsterVersionLessThan('5.0.0')) {

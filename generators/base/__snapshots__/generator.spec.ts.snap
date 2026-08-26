@@ -28,6 +28,7 @@ Options:
   --node-package-manager <value>  Force an unsupported client package manager
   --ignore-errors                 Don't fail on prettier errors.
   --creation-timestamp <value>    Project creation timestamp (used for reproducible builds)
+  --remove-needles                Remove needles; they are used by entity and language generators to inject code into files
   -h, --help                      display help for command
 
 Commands:

@@ -67,7 +67,11 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
-        source.addSpringBootModule?.(`spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}`, 'spring-boot-testcontainers');
+        source.addSpringBootModule?.(
+          `spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}`,
+          `spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}-test`,
+          'spring-boot-testcontainers',
+        );
         source.addJavaDependencies?.([
           { groupId: 'commons-codec', artifactId: 'commons-codec' },
           { groupId: 'com.couchbase.client', artifactId: 'java-client' },
@@ -86,24 +90,13 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
               parameters: (_, cb) => cb.addKeyValue('value', 'JHipsterConstants.SPRING_PROFILE_TEST'),
             },
             {
-              package: 'org.springframework.boot.testcontainers.context',
-              annotation: 'ImportTestcontainers',
-              parameters: (_, cb) => cb.addKeyValue('value', 'CouchbaseTestContainer.class'),
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'CouchbaseTestContainer.class'),
             },
           ],
           imports: ['tech.jhipster.config.JHipsterConstants', `${application.packageName}.config.CouchbaseTestContainer`],
         });
-      },
-      couchmoveSetup({ application }) {
-        if (application.buildToolGradle) {
-          this.editFile('build.gradle', {
-            needle: '',
-            contentToAdd: `
-bootJar {
-    loaderImplementation = org.springframework.boot.loader.tools.LoaderImplementation.CLASSIC
-}`,
-          });
-        }
       },
     });
   }

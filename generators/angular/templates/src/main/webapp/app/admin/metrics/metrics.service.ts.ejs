@@ -16,23 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable } from '@angular/core';
+import { serverApiUrl } from 'app/config/endpoint.constants';
+import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { MetricsModel, ThreadDump } from './metrics.model';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class MetricsService {
   private readonly http = inject(HttpClient);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   getMetrics(): Observable<MetricsModel> {
-    return this.http.get<MetricsModel>(this.applicationConfigService.getEndpointFor('management/jhimetrics'));
+    return this.http.get<MetricsModel>(`${serverApiUrl}management/jhimetrics`);
   }
 
   threadDump(): Observable<ThreadDump> {
-    return this.http.get<ThreadDump>(this.applicationConfigService.getEndpointFor('management/threaddump'));
+    return this.http.get<ThreadDump>(`${serverApiUrl}management/threaddump`);
   }
 }

@@ -29,7 +29,6 @@ import type BaseApplicationGenerator from '../generator.ts';
 import { loadRequiredConfigIntoEntity } from '../support/index.ts';
 import type {
   Application as BaseApplicationApplication,
-  Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
 } from '../types.d.ts';
@@ -55,7 +54,7 @@ export const getChangelogDateForBuiltInEntities = (
 export function createUserEntity(
   this: BaseApplicationGenerator,
   customUserData: Partial<UserEntity> = {},
-  application: BaseApplicationApplication<BaseApplicationEntity>,
+  application: BaseApplicationApplication,
 ): Partial<UserEntity> {
   if (customUserData.relationships?.length) {
     this.log.warn('Relationships on the User entity side will be disregarded');
@@ -94,7 +93,7 @@ export function createUserEntity(
 
   loadRequiredConfigIntoEntity(user, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>);
+  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
 
   const oauth2 = application.authenticationTypeOauth2;
   // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
@@ -147,6 +146,13 @@ export function createUserEntity(
       builtIn: true,
       fakerTemplate: '{{internet.email}}',
     },
+    {
+      fieldName: 'activated',
+      fieldType: TYPE_BOOLEAN,
+      builtIn: true,
+      autoGenerate: true,
+      defaultValue: true,
+    },
     ...(application.enableTranslation ?
       [
         {
@@ -169,13 +175,6 @@ export function createUserEntity(
         },
       ]
     : []),
-    {
-      fieldName: 'activated',
-      fieldType: TYPE_BOOLEAN,
-      builtIn: true,
-      autoGenerate: true,
-      defaultValue: true,
-    },
   ] as BaseApplicationField[]);
 
   return user;
@@ -275,6 +274,12 @@ export function createUserManagementEntity(
 
   if (!application.databaseTypeCassandra) {
     addOrExtendFields(userManagement.fields!, getAuditFields());
+    mutateFields(userManagement.fields!, [
+      {
+        fieldName: 'createdBy',
+        hidden: true,
+      },
+    ]);
   }
 
   if (application.generateBuiltInAuthorityEntity) {
@@ -285,6 +290,7 @@ export function createUserManagementEntity(
         relationshipType: 'many-to-many',
         relationshipIgnoreBackReference: true,
         propertyTranslationKey: 'userManagement.profiles',
+        propertyTsType: 'string',
       },
     ]);
   }
@@ -298,7 +304,7 @@ export function createUserManagementEntity(
 export function createAuthorityEntity(
   this: BaseApplicationGenerator,
   customAuthorityData: Partial<ApplicationEntity> = {},
-  application: BaseApplicationApplication<BaseApplicationEntity>,
+  application: BaseApplicationApplication,
 ): Partial<ApplicationEntity> {
   if (customAuthorityData.relationships?.length) {
     this.log.warn(`Relationships on the ${authorityEntityName} entity side will be disregarded`);
@@ -333,7 +339,7 @@ export function createAuthorityEntity(
 
   loadRequiredConfigIntoEntity(authorityEntity, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>);
+  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
 
   addOrExtendFields(authorityEntity.fields!, [
     {

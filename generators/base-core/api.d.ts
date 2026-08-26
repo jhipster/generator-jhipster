@@ -33,7 +33,7 @@ export type WriteFileTemplate<DataType, Generator = CoreGenerator> =
     };
 
 export type WriteFileBlock<DataType, Generator = CoreGenerator> = {
-  /** relative path were sources are placed */
+  /** relative path where sources are placed */
   from?: ((this: Generator, data: DataType) => string) | string;
   /** relative path were the files should be written, fallbacks to from/path */
   to?: ((this: Generator, data: DataType) => string) | string;

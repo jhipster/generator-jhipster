@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.Path
+
 plugins {
     id "com.github.node-gradle.node"
 }
@@ -9,22 +12,53 @@ if (project.hasProperty("nodeInstall")) {
         download = true
     }
 
-    // Copy local node and npm to a fixed location for npmw
-    def deleteOldNpm = tasks.register("deleteOldNpm", Delete) {
-        delete('<%- temporaryDir %>node/lib/node_modules/npm')
-    }
-    def fixedNode = tasks.register("fixedNode", Copy) {
-        from(nodeSetup)
-        into('<%- temporaryDir %>node')
-        finalizedBy(deleteOldNpm)
-    }
-    tasks.named("nodeSetup").configure { finalizedBy(fixedNode) }
+    // Link local node and npm to a fixed location for npmw.
+    // They are linked instead of copied, because a copy dereferences symlinks, and bin/npm and
+    // bin/npx must stay symlinks to lib/node_modules/npm/bin/*-cli.js: as plain extension-less
+    // files they are resolved against the wrong directory, and parsed as ESM since the closest
+    // package.json is the project one, which declares "type": "module".
+    def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
+    def nodeDir = tasks.named("nodeSetup").flatMap { it.nodeDir }
+    def npmDir = tasks.named("npmSetup").flatMap { it.npmDir }
+    def fixedNodeDir = layout.buildDirectory.dir("node")
 
-    def fixedNpm = tasks.register("fixedNpm", Copy) {
-        from(npmSetup)
-        into('<%- temporaryDir %>node')
+    // Link (in the fixed location) to target pairs, relative targets being resolved from the link
+    def nodeLinks = { ->
+        def fixed = fixedNodeDir.get().asFile.toPath()
+        def links = [:]
+        if (isWindows) {
+            links[fixed.resolve("bin/node.exe")] = nodeDir.get().file("node.exe").asFile.toPath()
+            links[fixed.resolve("bin/npm.cmd")] = npmDir.get().file("npm.cmd").asFile.toPath()
+            links[fixed.resolve("bin/npx.cmd")] = npmDir.get().file("npx.cmd").asFile.toPath()
+            links[fixed.resolve("lib/node_modules/npm")] = npmDir.get().dir("node_modules/npm").asFile.toPath()
+        } else {
+            links[fixed.resolve("bin/node")] = nodeDir.get().file("bin/node").asFile.toPath()
+            links[fixed.resolve("bin/npm")] = Path.of("../lib/node_modules/npm/bin/npm-cli.js")
+            links[fixed.resolve("bin/npx")] = Path.of("../lib/node_modules/npm/bin/npx-cli.js")
+            links[fixed.resolve("lib/node_modules/npm")] = npmDir.get().dir("lib/node_modules/npm").asFile.toPath()
+        }
+        links
     }
-    tasks.named("npmSetup").configure { finalizedBy(fixedNpm) }
+
+    def linkNode = tasks.register("linkNode") {
+        description = "Link the local node and npm installations to a fixed location for npmw."
+        onlyIf {
+            nodeLinks().any { link, target -> !Files.isSymbolicLink(link) || Files.readSymbolicLink(link) != target }
+        }
+        doLast {
+            nodeLinks().each { link, target ->
+                Files.createDirectories(link.parent)
+                if (Files.isDirectory(link) && !Files.isSymbolicLink(link)) {
+                    link.toFile().deleteDir()
+                } else {
+                    Files.deleteIfExists(link)
+                }
+                Files.createSymbolicLink(link, target)
+            }
+        }
+    }
+    tasks.named("nodeSetup").configure { finalizedBy(linkNode) }
+    tasks.named("npmSetup").configure { finalizedBy(linkNode) }
 }
 
 <%_ if (!skipClient) { _%>

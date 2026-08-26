@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -33,7 +33,7 @@ import { AuthorityService } from '../../authority/service/authority.service';
 import { Authority } from 'app/shared/jhipster/constants';
 <%_ } _%>
 import { UserManagementService } from '../service/user-management.service';
-import { IUserManagement } from '../user-management.model';
+import { IUserManagement, NewUserManagement } from '../user-management.model';
 
 const userTemplate = {} as IUserManagement;
 
@@ -46,7 +46,6 @@ const newUser: IUserManagement = {
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-user-management-update',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management-update.html',
   imports: [
 <%_ if (enableTranslation) { _%>
@@ -123,7 +122,7 @@ export class UserManagementUpdate implements OnInit {
     this.isSaving.set(true);
     const user = this.editForm.getRawValue();
     if (user.id === null) {
-      this.userService.create(user).subscribe({
+      this.userService.create(user as unknown as NewUserManagement).subscribe({
         next: () => this.onSaveSuccess(),
         error: () => this.onSaveError(),
       });

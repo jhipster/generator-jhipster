@@ -18,10 +18,10 @@
  */
 import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
 import { GENERATOR_JHIPSTER } from '../../../generator-constants.ts';
 
 import { getGeneratorNamespace, testBlueprintSupport } from '#test-support';
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = getGeneratorNamespace(import.meta.dirname);
 

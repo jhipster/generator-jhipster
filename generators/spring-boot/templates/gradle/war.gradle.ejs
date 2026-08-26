@@ -20,7 +20,7 @@ apply plugin: "war"
 
 bootWar {
 <%_ if (!skipClient) { _%>
-    webAppDirectory = file("<%- locals.clientDistDir %>")
+    webAppDirectory = layout.buildDirectory.dir("<%- this.relativeDir(temporaryDir, clientDistDir) %>")
 <%_ } _%>
     mainClass = "<%- packageName %>.<%- mainClass %>"
     includes = ["WEB-INF/**", "META-INF/**"]
@@ -28,9 +28,15 @@ bootWar {
 
 war {
 <%_ if (!skipClient) { _%>
-    webAppDirectory = file("<%- locals.clientDistDir %>")
+    webAppDirectory = layout.buildDirectory.dir("<%- this.relativeDir(temporaryDir, clientDistDir) %>")
 <%_ } _%>
     enabled = true
     archiveExtension = "war.original"
     includes = ["WEB-INF/**", "META-INF/**"]
+}
+
+if (project.hasProperty("e2e")) {
+    tasks.named('bootWar') {
+        archiveFileName = 'e2e.war'
+    }
 }

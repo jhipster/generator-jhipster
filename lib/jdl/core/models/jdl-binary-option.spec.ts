@@ -70,13 +70,8 @@ describe('jdl - JDLBinaryOption', () => {
       });
 
       it('removes the dupes', () => {
-        expect(option.entityNames.size).toBe(3);
-        expect(option.entityNames.has('A')).toBe(true);
-        expect(option.entityNames.has('B')).toBe(true);
-        expect(option.entityNames.has('C')).toBe(true);
-        expect(option.excludedNames.size).toBe(2);
-        expect(option.excludedNames.has('E')).toBe(true);
-        expect(option.excludedNames.has('D')).toBe(true);
+        expect(option.entityNames).toEqual(new Set(['A', 'B', 'C']));
+        expect(option.excludedNames).toEqual(new Set(['E', 'D']));
       });
     });
   });
@@ -93,8 +88,7 @@ describe('jdl - JDLBinaryOption', () => {
     });
 
     it('sets the entity names', () => {
-      expect(option.entityNames.size).toBe(1);
-      expect(option.entityNames.has('A')).toBe(true);
+      expect(option.entityNames).toEqual(new Set(['A']));
     });
   });
   describe('addEntityName', () => {
@@ -251,6 +245,9 @@ describe('jdl - JDLBinaryOption', () => {
         name: binaryOptions.Options.DTO,
         value: binaryOptions.Values.dto.MAPSTRUCT,
       });
+    });
+
+    it('should stringify the option', () => {
       expect(option.toString()).toBe(`${binaryOptions.Options.DTO} * with ${binaryOptions.Values.dto.MAPSTRUCT}`);
       option.addEntityName('D');
       expect(option.toString()).toBe(`${binaryOptions.Options.DTO} D with ${binaryOptions.Values.dto.MAPSTRUCT}`);
@@ -262,13 +259,13 @@ describe('jdl - JDLBinaryOption', () => {
       option.excludeEntityName('B');
       option.excludeEntityName('C');
       expect(option.toString()).toBe(`${binaryOptions.Options.DTO} D, E, F with ${binaryOptions.Values.dto.MAPSTRUCT} except A, B, C`);
+    });
+
+    it('should stringify a paginate option', () => {
       option = new JDLBinaryOption({
         name: binaryOptions.Options.PAGINATION,
         value: binaryOptions.Values.pagination.PAGINATION,
       });
-    });
-
-    it('should stringify the option', () => {
       expect(option.toString()).toBe(`paginate * with ${binaryOptions.Values.pagination.PAGINATION}`);
     });
   });

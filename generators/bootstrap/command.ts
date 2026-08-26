@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { isWin32 } from '../base-core/support/index.ts';
 
 const command = {
   configs: {
@@ -25,18 +26,8 @@ const command = {
       cli: {
         type: Boolean,
       },
-      scope: 'storage',
-    },
-    removeNeedles: {
-      description: 'Remove needles, needles are used by entity and language generators to inject code',
-      cli: {
-        type: Boolean,
-      },
-      jdl: {
-        tokenType: 'BOOLEAN',
-        type: 'boolean',
-      },
-      scope: 'storage',
+      default: isWin32,
+      scope: 'none',
     },
     skipPrettier: {
       description: 'Skip prettier transformation',

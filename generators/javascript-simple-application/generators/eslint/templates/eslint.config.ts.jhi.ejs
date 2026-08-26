@@ -27,9 +27,6 @@ _&>
 import { defineConfig } from 'eslint/config';
 import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
-<%_ if (typescriptEslint) { _%>
-import tseslint from 'typescript-eslint';
-<%_ } _%>
 <&- fragments.importsSection() -&>
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
 

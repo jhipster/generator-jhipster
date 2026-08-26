@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - ci-cd:gitlab with defaults options should match files snapshot 1`] = `
+{
+  ".gitlab-ci.yml": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

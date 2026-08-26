@@ -9,7 +9,10 @@ export type { Options } from '../base/types.ts';
 
 export type { Features } from '../base/types.ts';
 
-export type Application = WriteContext & ProjectNameApplication & BaseSimpleApplicationAddedApplicationProperties;
+export type Application = WriteContext &
+  ProjectNameApplication &
+  BaseSimpleApplicationAddedApplicationProperties &
+  Pick<BaseConfig, 'removeNeedles'>;
 
 export type Config = BaseConfig & {
   baseName?: string;

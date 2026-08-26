@@ -82,9 +82,7 @@ export type { ${typesToExport.toSorted().join(', ')} } from '${typesExportSource
           namespace: `jhipster:${namespace}`,
           generator: getSourceRoot(generator),
         }));
-        generators.sort((a, b) => {
-          return a.namespace.localeCompare(b.namespace);
-        });
+        generators.sort((a, b) => a.namespace.localeCompare(b.namespace));
 
         const contentToAdd = generators.flatMap(({ namespace, generator }) => {
           if (namespace.startsWith('jhipster:base') && namespace.split(':').length === 2) {

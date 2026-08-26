@@ -144,7 +144,7 @@ public class AccountResource {
             .then();
 <%_ } else { _%>
         Optional<<%- user.persistClass %>> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
 <%_ } _%>
@@ -216,7 +216,7 @@ public class AccountResource {
             throw new EmailAlreadyUsedException();
         }
         Optional<<%- user.persistClass %>> user = userRepository.findOneByLogin(userLogin);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
@@ -357,7 +357,7 @@ public class AccountResource {
         Optional<<%- user.persistClass %>> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             // Dummy hash to prevent reset-key enumeration via response-time timing attack:
             // mirrors the bcrypt cost of a successful path so both branches take equal time.
             passwordEncoder.encode(keyAndPassword.getNewPassword());

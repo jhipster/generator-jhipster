@@ -28,7 +28,7 @@
 
     const componentName = entityAngularName;
 _%>
-import { Component, ChangeDetectionStrategy, computed, effect, inject, OnInit, signal, WritableSignal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, signal, WritableSignal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
@@ -38,9 +38,9 @@ import {
   combineLatest,
 <%_ if (!readOnly) { _%>
   filter,
-<%_ } _%>
-  Subscription,
   tap,
+<%_ } _%>
+  map,
 } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
@@ -51,6 +51,8 @@ import { Alert } from 'app/shared/alert/alert';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+<%_ if (angularEntityListRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
@@ -82,6 +84,9 @@ import {
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+<%_ if (builtInUserManagement) { _%>
+import { AccountService } from 'app/core/auth/account.service';
+<%_ } _%>
 <%_ if (!readOnly) { _%>
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
@@ -99,7 +104,6 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>',
     templateUrl: './<%- entityFileName %>.html',
     imports: [
@@ -114,6 +118,8 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
       SortByDirective,
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
+<%_ } _%>
+<%_ if (angularEntityListRequiresTranslationPipe) { _%>
       TranslatePipe,
 <%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>
@@ -137,13 +143,12 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
     ],
 })
-export class <%- componentName %> implements OnInit {
+export class <%- componentName %> {
 
 <%_ if (notSortableFieldsAfterSearch) { _%>
     private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
 
 <%_ } _%>
-    subscription: Subscription | null = null;
     readonly <%- entityInstancePlural %> = signal<I<%- entityAngularName %>[]>([]);
 
     sortState = sortStateSignal({});
@@ -166,10 +171,19 @@ export class <%- componentName %> implements OnInit {
 <%_ } _%>
 
   readonly router = inject(Router);
+<%_ if (builtInUserManagement) { _%>
+  readonly currentAccount = inject(AccountService).account;
+<%_ } _%>
   protected readonly <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading = this.<%- entityInstance %>Service.<%- entityInstancePlural %>Resource.isLoading;
   protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly activatedRouteState = toSignal(
+    combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+      map(([queryParamMap, data]) => ({ queryParamMap, data })),
+    ),
+    { initialValue: { queryParamMap: this.activatedRoute.snapshot.queryParamMap, data: this.activatedRoute.snapshot.data } },
+  );
   protected readonly sortService = inject(SortService);
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
   protected readonly filterOptions = toSignal(this.filters.filterChanges);
@@ -200,6 +214,17 @@ export class <%- componentName %> implements OnInit {
       this.<%- entityInstancePlural %>.set(this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]));
 <%_ } _%>
     });
+    effect(() => {
+      const activatedRouteState = this.activatedRouteState();
+      untracked(() => {
+        // Only watch for route changes. Other signals should be ignored.
+        this.fillComponentAttributeFromRoute(activatedRouteState.queryParamMap, activatedRouteState.data);
+<%_ if (paginationInfiniteScroll) { _%>
+        this.reset();
+<%_ } _%>
+        this.load();
+      });
+    });
 <% if (jpaMetamodelFiltering && paginationPagination) { %>
 
     effect(() => {
@@ -215,35 +240,18 @@ export class <%- componentName %> implements OnInit {
   }
 
 <%_ if (primaryKey) { _%>
-    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> => this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
+  track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> => this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
 
 <%_ } _%>
-    ngOnInit(): void {
-      this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
-        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-<%_ if (paginationInfiniteScroll) { _%>
-        tap(() => this.reset()),
-<%_ } _%>
-<%_ if (!paginationNo || searchEngineAny || jpaMetamodelFiltering) { _%>
-        tap(() => this.load()),
-<%_ } else { _%>
-        tap(() => {
-          if (this.<%- entityInstancePlural %>().length === 0) {
-            this.load();
-          }
-        }),
-<%_ } _%>
-      ).subscribe();
-    }
-
 <%_ if (paginationInfiniteScroll) { _%>
   reset(): void {
     this.<%- entityInstancePlural %>.set([]);
+    this.links.set({});
   }
 
-    loadNextPage(): void {
-      this.load();
-    }
+  loadNextPage(): void {
+    this.load();
+  }
 
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
@@ -294,6 +302,12 @@ export class <%- componentName %> implements OnInit {
     }
 
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+    setActive(<%- entityInstance %>: I<%- entityAngularName %>, isActivated: boolean): void {
+      this.<%- entityInstance %>Service.update({ ...<%- entityInstance %>, activated: isActivated }).subscribe(() => this.load());
+    }
+
+<%_ } _%>
   load(): void {
     this.queryBackend();
   }
@@ -304,7 +318,7 @@ export class <%- componentName %> implements OnInit {
 
 <%_ if (paginationPagination) { _%>
     navigateToPage(page: number): void {
-      this.handleNavigation(page, this.sortState()<%- jpaMetamodelFiltering && paginationPagination ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
+      this.handleNavigation(page, this.sortState()<%- jpaMetamodelFiltering ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
     }
 
 <%_ } _%>

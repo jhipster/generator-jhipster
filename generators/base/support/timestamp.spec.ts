@@ -41,7 +41,7 @@ describe('generator - base - support - timestamp', () => {
     });
     describe('when passing a valid changelogDate', () => {
       it('returns a date object', () => {
-        expect(parseChangelog('20160208210114') instanceof Date).toBeTruthy();
+        expect(parseChangelog('20160208210114')).toBeInstanceOf(Date);
       });
       it('returns the date', () => {
         expect(parseChangelog('20160208210114').toISOString()).toBe('2016-02-08T21:01:14.000Z');

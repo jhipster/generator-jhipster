@@ -1,4 +1,23 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>defineComponent, inject, ref, type Ref } from 'vue';
+import { storeToRefs } from 'pinia'
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -54,26 +73,23 @@ export default defineComponent({
 <%_ if (enableTranslation) { _%>
     const changeLanguage = inject<(string) => Promise<void>>('changeLanguage');
 
-    const isActiveLanguage = (key: string) => {
-      return key === currentLanguage.value;
-    };
+    const isActiveLanguage = (key: string) => key === currentLanguage.value;
 <%_ } _%>
 
     const router = useRouter();
     const store = useStore();
 
     const version = `v${APP_VERSION}`;
-    const hasAnyAuthorityValues: Ref<any> = ref({});
+    const hasAnyAuthorityValues: Ref = ref({});
 
     const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
     const inProduction = computed(() => store.activeProfiles.includes('prod'));
-    const authenticated = computed(() => store.authenticated);
+    const { authenticated } = storeToRefs(store)
 
     const subIsActive = (input: string | string[]) => {
       const paths = Array.isArray(input) ? input : [input];
-      return paths.some(path => {
-        return router.currentRoute.value.path.startsWith(path); // current path starts with this path string
-      });
+      // current path starts with this path string
+      return paths.some(path => router.currentRoute.value.path.startsWith(path));
     };
 
     const logout = async () => {
@@ -81,24 +97,27 @@ export default defineComponent({
       localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
       sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
       store.logout();
-      if (router.currentRoute.value.path !== '/') {
-        router.push('/');
-      }
 <%_ } else { _%>
       const response = await loginService.logout();
       store.logout();
+
   <%_ if (authenticationTypeOauth2) { _%>
-      window.location.href = response.data.logoutUrl;
-      const next = response.data?.logoutUrl ?? '/';
-      if (router.currentRoute.value.path !== next) {
+      const next = response.data?.logoutUrl;
+
+      if (next) {
+        if (/^https?:\/\//i.test(next)) {
+          window.location.href = next;
+          return;
+        }
         await router.push(next);
+        return;
       }
-  <%_ } else { _%>
+
+  <%_ } _%>
+<%_ } _%>
       if (router.currentRoute.value.path !== '/') {
         await router.push('/');
       }
-  <%_ } _%>
-<%_ } _%>
     },
 
     return {

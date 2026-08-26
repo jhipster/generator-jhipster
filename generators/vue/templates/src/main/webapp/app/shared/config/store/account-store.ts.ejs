@@ -1,50 +1,76 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue';
 
-export interface AccountStateStorable {
-  logon: boolean | null;
-  userIdentity: any;
-  authenticated: boolean;
-  profilesLoaded: boolean;
-  ribbonOnProfiles: string;
-  activeProfiles: string;
-}
+export const useAccountStore = defineStore('main', () => {
+  const userIdentity = ref(null);
+  const logon = ref(null);
+  const profilesLoaded = ref(false);
+  const activeProfiles = ref('');
+  const ribbonOnProfiles = ref('');
 
-export const defaultAccountState: AccountStateStorable = {
-  logon: null,
-  userIdentity: null,
-  authenticated: false,
-  profilesLoaded: false,
-  ribbonOnProfiles: '',
-  activeProfiles: '',
-};
+  const account = computed(() => userIdentity.value);
+  const authenticated = computed(() => !!userIdentity.value);
 
-export const useAccountStore = defineStore('main', {
-  state: (): AccountStateStorable => ({ ...defaultAccountState }),
-  getters: {
-    account: state => state.userIdentity,
-  },
-  actions: {
-    authenticate(promise) {
-      this.logon = promise;
-    },
-    setAuthentication(identity) {
-      this.userIdentity = identity;
-      this.authenticated = true;
-      this.logon = null;
-    },
-    logout() {
-      this.userIdentity = null;
-      this.authenticated = false;
-      this.logon = null;
-    },
-    setProfilesLoaded() {
-      this.profilesLoaded = true;
-    },
-    setActiveProfiles(profile) {
-      this.activeProfiles = profile;
-    },
-    setRibbonOnProfiles(ribbon) {
-      this.ribbonOnProfiles = ribbon;
-    },
-  },
+  function authenticate(promise) {
+    logon.value = promise;
+  }
+
+  function setAuthentication(identity) {
+    userIdentity.value = identity;
+    logon.value = null;
+  }
+
+  function logout() {
+    userIdentity.value = null;
+    logon.value = null;
+  }
+
+  function setProfilesLoaded() {
+    profilesLoaded.value = true;
+  }
+
+  function setActiveProfiles(profile) {
+    activeProfiles.value = profile;
+  }
+
+  function setRibbonOnProfiles(ribbon) {
+    ribbonOnProfiles.value = ribbon;
+  }
+
+  return {
+    // State
+    userIdentity,
+    logon,
+    profilesLoaded,
+    activeProfiles,
+    ribbonOnProfiles,
+    // Getters
+    account,
+    authenticated,
+    // Actions
+    authenticate,
+    setAuthentication,
+    logout,
+    setProfilesLoaded,
+    setActiveProfiles,
+    setRibbonOnProfiles,
+  };
 });

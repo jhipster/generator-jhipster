@@ -125,13 +125,11 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @TypeAlias(TYPE_NAME)
 @Collection(TYPE_NAME)
 <%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeCassandra && reactive) { _%>
 @Table("user")
-  <%_ } else { _%>
+<%_ } else if (databaseTypeCassandra) { _%>
 @Entity
 @NamingStrategy(convention = NamingConvention.SNAKE_CASE_INSENSITIVE)
-  <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
@@ -182,12 +180,10 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ if (databaseTypeCouchbase) { _%>
     @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
   <%_ } _%>
-  <%_ if (databaseTypeCassandra) { _%>
-    <%_ if (reactive) { _%>
+  <%_ if (databaseTypeCassandra && reactive) { _%>
     @PrimaryKey
-    <%_ } else { _%>
+  <%_ } else if (databaseTypeCassandra) { _%>
     @PartitionKey
-    <%_ } _%>
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
@@ -198,12 +194,10 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("login")
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
     @Column(name = "login", length = 50, unique = true, nullable = false)
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed
@@ -273,12 +267,10 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
 
     @Email
     @Size(min = 5, max = 254)
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("email")
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
     @Column(name = "email", length = 254, unique = true)
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed
@@ -403,12 +395,10 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
         name = "<%- user.entityTableName %>_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-  <%_ if (enableHibernateCache) { _%>
-    <%_ if (cacheProviderInfinispan) { _%>
+  <%_ if (enableHibernateCache && cacheProviderInfinispan) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    <%_ } else { _%>
+  <%_ } else if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    <%_ } _%>
   <%_ } _%>
     @BatchSize(size = 20)
 <%_ } _%>

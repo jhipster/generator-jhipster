@@ -18,11 +18,12 @@
 -%>
 <&_ if (fragment.importsSection) { -&>
 import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 // For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_FLAT_CONFIG.md
 import angular from 'angular-eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/'<%- clientTestFrameworkVitest ? ', \'dist/\'' : '' %>] },
+  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', 'dist/'] },
   eslint.configs.recommended,
   {
     files: ['**/*.{js,cjs,mjs}'],

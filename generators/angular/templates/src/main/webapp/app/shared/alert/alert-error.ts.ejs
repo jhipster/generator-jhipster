@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
@@ -31,7 +31,6 @@ import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-alert-error',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './alert-error.html',
   imports: [NgbAlert],
 })
@@ -47,12 +46,12 @@ export class AlertError implements OnDestroy {
 <% } %>
 
   constructor() {
-    this.errorListener = this.eventManager.subscribe('<%- frontendAppName %>.error', (response: EventWithContent<unknown> | string) => {
+    this.errorListener = this.eventManager.subscribe('<%- frontendAppName %>.error', (response: EventWithContent<unknown>) => {
       const errorResponse = (response as EventWithContent<AlertErrorModel>).content;
       this.addErrorAlert(errorResponse.message<%- enableTranslation ? ', errorResponse.key, errorResponse.params' : '' %>);
     });
 
-    this.httpErrorListener = this.eventManager.subscribe('<%- frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
+    this.httpErrorListener = this.eventManager.subscribe('<%- frontendAppName %>.httpError', (response: EventWithContent<unknown>) => {
       this.handleHttpError(response);
     });
   }
@@ -71,14 +70,14 @@ export class AlertError implements OnDestroy {
   }
 
   close(alert: AlertModel): void {
-    alert.close?.(this.alerts());
+    alert.close?.();
   }
 
   private addErrorAlert(message?: string<%- enableTranslation ? ', translationKey?: string, translationParams?: Record<string, unknown>' : '' %>): void {
-    this.alertService.addAlert({ type: 'danger', message<%- enableTranslation ? ', translationKey, translationParams' : '' %> }, this.alerts());
+    this.alertService.addAlert({ type: 'danger', message<%- enableTranslation ? ', translationKey, translationParams' : '' %> }, this.alerts);
   }
 
-  private handleHttpError(response: EventWithContent<unknown> | string): void {
+  private handleHttpError(response: EventWithContent<unknown>): void {
     const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
     switch (httpErrorResponse.status) {
       // connection refused, server not reachable
@@ -106,7 +105,7 @@ export class AlertError implements OnDestroy {
 <%_ if (enableTranslation) { _%>
     if (message.errorKey) {
       const alertData = message.param ? { entityName: this.translateService.instant(`global.menu.entities.${message.param}`) } : undefined;
-      this.addErrorAlert(message.errorKey<%- enableTranslation ? ', message.errorKey, alertData' : '' %>);
+      this.addErrorAlert(message.errorKey, message.errorKey, alertData);
     } else
 <%_ } _%>
     if (message.errorMessage) {

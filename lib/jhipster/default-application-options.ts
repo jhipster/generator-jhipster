@@ -19,7 +19,6 @@
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import type { ConfigAll } from '../types/command-all.ts';
-import { isWin32 } from '../utils/index.ts';
 
 import applicationOptions from './application-options.ts';
 import authenticationTypes from './authentication-types.ts';
@@ -94,9 +93,7 @@ const commonDefaultOptions: ApplicationDefaults = {
 export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = { ...customOptions };
   const { applicationType } = options;
-  if (isWin32) {
-    options.autoCrlf ??= true;
-  }
+
   if (options.graalvmSupport) {
     options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   }
@@ -149,9 +146,7 @@ function getConfigForPackageName(options: ApplicationDefaults = {}): Application
 }
 
 function getConfigForCacheProvider(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[REACTIVE] || options[CACHE_PROVIDER] === undefined) {
-    options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
-  }
+  options[CACHE_PROVIDER] ??= NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] ??=
     options[DATABASE_TYPE] === SQL && !options[REACTIVE] && ![NO_CACHE_PROVIDER as string, MEMCACHED].includes(options[CACHE_PROVIDER]);
   return options;
@@ -188,13 +183,13 @@ function getConfigForDatabaseType(options: ApplicationDefaults = {}): Applicatio
 function getServerConfigForMonolithApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = {
     ...commonDefaultOptions,
-    [CACHE_PROVIDER]: EHCACHE,
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: NO_SERVICE_DISCOVERY,
     [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
+  options[CACHE_PROVIDER] ??= options[REACTIVE] ? NO_CACHE_PROVIDER : EHCACHE;
   return {
     ...options,
     [APPLICATION_TYPE]: APPLICATION_TYPE_MONOLITH,
@@ -221,7 +216,7 @@ function getServerConfigForGatewayApplication(customOptions: ApplicationDefaults
     [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
-  options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
+  options[CACHE_PROVIDER] ??= NO_CACHE_PROVIDER;
   options[ENABLE_HIBERNATE_CACHE] = false;
 
   return {
@@ -246,7 +241,6 @@ function getServerConfigForMicroserviceApplication(customOptions: ApplicationDef
   const DEFAULT_SERVER_PORT = 8081;
   const options = {
     ...commonDefaultOptions,
-    [CACHE_PROVIDER]: HAZELCAST,
     [SERVER_PORT]: DEFAULT_SERVER_PORT,
     [SERVICE_DISCOVERY_TYPE]: CONSUL,
     [SKIP_USER_MANAGEMENT]: true,
@@ -254,6 +248,7 @@ function getServerConfigForMicroserviceApplication(customOptions: ApplicationDef
     ...customOptions,
   };
 
+  options[CACHE_PROVIDER] ??= options[REACTIVE] ? NO_CACHE_PROVIDER : HAZELCAST;
   options[WITH_ADMIN_UI] = false;
   return {
     ...options,

@@ -16,7 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const stripTemplateLiteral = (value: string): string => (typeof value === 'string' ? value.replace(/\$\{[^}]*\}/g, '') : value);
+const TEMPLATE_LITERAL_PATTERN = /\$\{[^}]*\}/g;
+
+/**
+ * Strips template literal placeholders from a string.
+ *
+ * A single pass is not enough: removing a match joins the surrounding characters, which can
+ * assemble a new placeholder out of previously inert text (`$` + `${}` + `{payload}` collapses
+ * to `${payload}`). Repeat until a pass no longer changes the value. Each pass can only shorten
+ * the string, so the loop always terminates.
+ */
+const stripTemplateLiteral = (value: string): string => {
+  if (typeof value !== 'string') return value;
+  let previousValue;
+  let newValue = value;
+  do {
+    previousValue = newValue;
+    newValue = previousValue.replace(TEMPLATE_LITERAL_PATTERN, '');
+  } while (newValue !== previousValue);
+  return newValue;
+};
 
 type Cleanups = Record<string, { oldValue: string; newValue: string }>;
 

@@ -43,12 +43,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import org.springframework.data.relational.core.mapping.Column;
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
 import jakarta.persistence.Column;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
 import jakarta.persistence.EntityListeners;
@@ -74,12 +72,10 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
 <%_ if (!reactive) { _%>
     @CreatedBy
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("created_by")
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("created_by")
@@ -93,12 +89,10 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
     private String createdBy;
 
     @CreatedDate
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("created_date")
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
     @Column(name = "created_date", updatable = false)
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("created_date")
@@ -114,12 +108,10 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
 <%_ if (!reactive) { _%>
     @LastModifiedBy
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("last_modified_by")
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
     @Column(name = "last_modified_by", length = 50)
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("last_modified_by")
@@ -133,12 +125,10 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
     private String lastModifiedBy;
 
     @LastModifiedDate
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
     @Column("last_modified_date")
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
     @Column(name = "last_modified_date")
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("last_modified_date")

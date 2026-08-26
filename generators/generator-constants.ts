@@ -18,7 +18,6 @@
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 export * from '../lib/constants/yeoman.ts';
 export * from '../lib/constants/jhipster.ts';
@@ -34,10 +33,7 @@ export const JAVA_COMPATIBLE_VERSIONS = ['21', '25'];
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const RECOMMENDED_NODE_VERSION = readFileSync(
-  join(fileURLToPath(import.meta.url), '../init/resources/.node-version'),
-  'utf-8',
-).trim();
+export const RECOMMENDED_NODE_VERSION = readFileSync(join(import.meta.dirname, 'init/resources/.node-version'), 'utf-8').trim();
 
 // all constants used throughout all generators
 

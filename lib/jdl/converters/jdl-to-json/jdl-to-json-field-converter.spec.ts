@@ -130,8 +130,6 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 ]
 `);
           });
-
-          it('should convert the blob content', () => {});
         });
       });
       describe('with field types being enums', () => {

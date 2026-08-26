@@ -44,7 +44,7 @@ import <%- packageName %>.service.dto.<%- user.dtoClass %>;
 import <%- packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%- packageName %>.web.rest.vm.ManagedUserVM;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -159,6 +159,9 @@ class AccountResourceIT {
     @AfterEach
     void cleanupAndCheck() {
 <%_ if (requiresDeleteAllUsers) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } else if (!databaseTypeCassandra) { _%>
         assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
@@ -1171,11 +1174,11 @@ class AccountResourceIT {
 <%_ if (authenticationTypeSession && !reactive) { _%>
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
     @WithMockUser("current-sessions")
-    void testGetCurrentSessions() <%- reactive ? '' : 'throws Exception ' %>{
+    void testGetCurrentSessions() throws Exception {
         <%- user.persistClass %> user = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1186,7 +1189,7 @@ class AccountResourceIT {
   <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
   <%_ } _%>
-        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
 
         PersistentToken token = new PersistentToken();
         token.setSeries("current-sessions");
@@ -1205,7 +1208,7 @@ class AccountResourceIT {
   <% } %>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(token);
+        persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
 
         restAccountMockMvc
             .perform(get("/api/account/sessions"))
@@ -1220,11 +1223,11 @@ class AccountResourceIT {
     }
 
     @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
     @WithMockUser("invalidate-session")
-    void testInvalidateSession() <%- reactive ? '' : 'throws Exception ' %>{
+    void testInvalidateSession() throws Exception {
         <%- user.persistClass %> user = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1235,7 +1238,7 @@ class AccountResourceIT {
   <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
   <%_ } _%>
-        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
 
         PersistentToken token = new PersistentToken();
         token.setSeries("invalidate-session");
@@ -1254,7 +1257,7 @@ class AccountResourceIT {
   <%_ } _%>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(token);
+        persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
 
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
 
@@ -1354,7 +1357,7 @@ class AccountResourceIT {
             .exchange()
             .expectStatus().isOk();
 <%_ } else { _%>
-    void testRequestPasswordResetWrongEmail() <%- reactive ? '' : 'throws Exception ' %>{
+    void testRequestPasswordResetWrongEmail() throws Exception {
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
                 .content("password-reset-wrong-email@example.com")<% if (authenticationUsesCsrf) { %>
@@ -1372,7 +1375,7 @@ class AccountResourceIT {
             .expectStatus().isBadRequest();
     }
 <%_ } else { _%>
-    void testRequestPasswordResetInvalidEmail() <%- reactive ? '' : 'throws Exception ' %>{
+    void testRequestPasswordResetInvalidEmail() throws Exception {
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
                 .content("invalid-email")<% if (authenticationUsesCsrf) { %>
@@ -1390,7 +1393,7 @@ class AccountResourceIT {
             .expectStatus().isBadRequest();
     }
 <%_ } else { _%>
-    void testRequestPasswordResetTooLongEmail() <%- reactive ? '' : 'throws Exception ' %>{
+    void testRequestPasswordResetTooLongEmail() throws Exception {
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
                 .content("a".repeat(250) + "@x.co")<% if (authenticationUsesCsrf) { %>

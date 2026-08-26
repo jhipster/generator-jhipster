@@ -34,6 +34,21 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
     }
   }
 
+  get composingBootstrap() {
+    return this.asComposingBootstrapTaskGroup({
+      async composingBootstrap({ application }) {
+        const { backendType = 'Java' } = application;
+        if (['Java', 'SpringBoot'].includes(backendType)) {
+          await this.dependsOnBootstrap('java');
+        }
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.COMPOSING_BOOTSTRAP]() {
+    return this.delegateTasksToBlueprint(() => this.composingBootstrap);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {
@@ -46,6 +61,7 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
             return indent;
           },
           cypressTests: ({ testFrameworks }) => testFrameworks?.includes('cypress') ?? false,
+          workspacesCommand: () => this.jhipsterConfig.defaultCommand === 'workspaces',
         });
       },
     });
@@ -103,6 +119,6 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
   }
 
   shouldAskForPrompts() {
-    return true;
+    return this.options.defaults !== true;
   }
 }

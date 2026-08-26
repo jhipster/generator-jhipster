@@ -70,7 +70,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
       });
 
       it('should return a list with no entity', () => {
-        expect(result.get('toto')?.length).toBe(0);
+        expect(result.get('toto')).toHaveLength(0);
       });
     });
     describe('when passing a JDL object with entities', () => {
@@ -284,7 +284,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
+          expect(loggerSpy).toHaveBeenCalledWith(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
               'no other value has been set.',
           );
@@ -345,7 +345,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
+          expect(loggerSpy).toHaveBeenCalledWith(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
               'entity if no other value has been set.',
           );

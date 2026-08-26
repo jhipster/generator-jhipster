@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, <%- anyFieldIsBlobDerived ? 'inject, ' : '' %>input } from '@angular/core';
+import { Component, <%- anyFieldIsBlobDerived ? 'inject, ' : '' %>input } from '@angular/core';
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
 import { RouterLink } from '@angular/router';
 <%_ } _%>
@@ -29,6 +29,8 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+<%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
@@ -38,7 +40,6 @@ import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-detail',
     templateUrl: './<%- entityFileName %>-detail.html',
     imports: [
@@ -50,6 +51,8 @@ import { DataUtils } from 'app/core/util/data-util.service';
       AlertError,
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
+<%_ } _%>
+<%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
       TranslatePipe,
 <%_ } _%>
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>

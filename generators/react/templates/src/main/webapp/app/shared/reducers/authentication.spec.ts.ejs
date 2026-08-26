@@ -27,7 +27,6 @@ import { configureStore, createReducer } from '@reduxjs/toolkit';
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 <%_ } _%>
 import authentication, {
-  getSession,
   getAccount,
 <%_ if (!authenticationTypeOauth2) { _%>
   authenticate,
@@ -42,9 +41,6 @@ import authentication, {
   clearAuth,
   initialState,
 } from 'app/shared/reducers/authentication';
-<%_ if (enableTranslation) { _%>
-import { updateLocale, setLocale } from 'app/shared/reducers/locale';
-<%_ } _%>
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -65,7 +61,7 @@ describe('Authentication reducer tests', () => {
 <%_ } _%>
         redirectMessage: null
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
   });
 
@@ -127,7 +123,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: true,
         loginError: true,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
 <%_ } _%>
 
@@ -143,7 +139,7 @@ describe('Authentication reducer tests', () => {
 <%_ } _%>
         errorMessage: error.message
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
   });
 
@@ -172,7 +168,7 @@ describe('Authentication reducer tests', () => {
         errorMessage: null,
         redirectMessage: null,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
 
     it('should properly define an error message and change the current state to display the login modal', () => {
@@ -189,7 +185,7 @@ describe('Authentication reducer tests', () => {
         errorMessage: null,
         redirectMessage: message,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
 
     it('should clear authentication', () => {
@@ -283,28 +279,26 @@ describe('Authentication reducer tests', () => {
       });
     });
     it('clears the session token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = AUTHENTICATION_TOKEN_KEY;
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('test', 'test'));
-      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
-      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
+      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
       clearAuthToken();
-      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
-      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
     });
     it('clears the local storage token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = AUTHENTICATION_TOKEN_KEY;
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('user', 'user', true));
-      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
-      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe('TestToken');
+      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBe('TestToken');
       clearAuthToken();
-      expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
-      expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      expect(Storage.session.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
+      expect(Storage.local.get(AUTHENTICATION_TOKEN_KEY)).toBeUndefined();
     });
   });
 <%_ } _%>

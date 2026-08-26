@@ -67,7 +67,7 @@ export const downloadJdlFile = async (jdlFile: string, { skipSampleRepository }:
 export const downloadJdlFiles = async (jdlFiles: string[], options: DownloadJdlOptions = {}): Promise<string[]> => {
   logger.debug('cmd: download');
   logger.debug(`jdlFiles: ${inspect(jdlFiles)}`);
-  if (!jdlFiles || jdlFiles.length === 0) {
+  if (!jdlFiles?.length) {
     throw new Error('\nAt least one jdl file is required.\n');
   }
   return Promise.all(jdlFiles.map(filename => downloadJdlFile(filename, options)));

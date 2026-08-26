@@ -22,7 +22,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
   "authority": Any<Object>,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -84,7 +83,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -248,6 +246,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "javaNodeBuildPaths": [],
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaPackagingDestDir": "target/",
   "javaProperties": {},
   "javaVersion": "JAVA_VERSION",
   "jdlStore": undefined,
@@ -467,6 +466,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "websocket": "no",
   "withAdminUi": true,
   "withGeneratedFlag": false,
+  "workspacesCommand": false,
   "wrapMono": [Function],
 }
 `;

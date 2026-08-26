@@ -158,8 +158,7 @@ Create entities from the JDL file/URL/content passed in argument.
     Use the '--interactive' flag to generate multiple applications in series.
 
 Options:
-  --auto-crlf                              Detect line endings
-  --remove-needles                         Remove needles, needles are used by entity and language generators to inject code
+  --auto-crlf                              Detect line endings (default: false)
   --interactive                            Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders
   --json-only                              Generate only the JSON files and skip entity regeneration
   --ignore-application                     Ignores application generation
@@ -188,6 +187,7 @@ Options:
   --node-package-manager <value>           Force an unsupported client package manager
   --ignore-errors                          Don't fail on prettier errors.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
+  --remove-needles                         Remove needles; they are used by entity and language generators to inject code into files
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json. (env: JHI_SKIP_JHIPSTER_DEPENDENCIES)
   --base-name <value>                      Application base name
   --jdl-store <value>                      JDL store
@@ -227,7 +227,7 @@ Options:
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
-  --client-test-framework <value>          undefined (default: jest) (choices: "jest", "vitest")
+  --client-test-framework <value>          undefined (default: vitest) (choices: "vitest")
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
   --cypress-coverage                       Enable Cypress code coverage report generation

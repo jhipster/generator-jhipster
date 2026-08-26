@@ -22,7 +22,7 @@ import { rm } from 'node:fs/promises';
 import path, { relative } from 'node:path';
 
 import chalk from 'chalk';
-import { execaCommandSync } from 'execa';
+import { execaSync } from 'execa';
 import { union } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson } from 'type-fest';
@@ -107,7 +107,7 @@ export default class BaseGenerator<
       }
 
       try {
-        // Fallback to the original generator if the file does not exists in the blueprint.
+        // Fallback to the original generator if the file does not exist in the blueprint.
         const blueprintedTemplatePath = this.jhipsterTemplatePath();
         if (!this.jhipsterTemplatesFolders.includes(blueprintedTemplatePath)) {
           this.jhipsterTemplatesFolders.push(blueprintedTemplatePath);
@@ -133,7 +133,7 @@ export default class BaseGenerator<
           if (this.blueprintConfig!.blueprintVersion) {
             this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => this.blueprintConfig!.blueprintVersion });
           }
-          const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
+          const blueprintPackageJson = this._meta.getPackageJson!<PackageJson>()!;
           this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
         } catch {
           this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);
@@ -211,8 +211,8 @@ export default class BaseGenerator<
           },
           get environmentHasDockerCompose(): boolean {
             if (environmentHasDockerCompose === undefined) {
-              const commandReturn = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-              environmentHasDockerCompose = !commandReturn?.failed; // TODO looks to be a bug on ARM MaCs and execaCommandSync, does not return anything, assuming mac users are smart and install docker.
+              const commandReturn = execaSync({ reject: false, stdio: 'pipe' })`docker compose version`;
+              environmentHasDockerCompose = !commandReturn?.failed; // TODO looks to be a bug on ARM MaCs and execaSync, does not return anything, assuming mac users are smart and install docker.
             }
             return environmentHasDockerCompose;
           },
@@ -287,11 +287,14 @@ export default class BaseGenerator<
    * Generate a timestamp to be used by Liquibase changelogs.
    */
   nextTimestamp(): string {
+    if (this.features.uniqueGlobally) {
+      throw new Error('Timestamp generation is not supported in unique globally generators.');
+    }
     const reproducible = Boolean(this.options.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
-    // Milliseconds is ignored for changelogDate.
+    // Milliseconds are ignored for changelogDate.
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with reproducible option or a specific timestamp.
     if (reproducible || creationTimestamp) {
@@ -531,7 +534,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * Default priority should used as misc customizations.
+   * Default priority should be used as misc customizations.
    */
   get default() {
     return {};
@@ -549,7 +552,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * Writing priority should used to write files.
+   * Writing priority should be used to write files.
    */
   get writing() {
     return {};
@@ -567,7 +570,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * PostWriting priority should used to customize files.
+   * PostWriting priority should be used to customize files.
    */
   get postWriting() {
     return {};
@@ -585,7 +588,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * Install priority should used to prepare the project.
+   * Install priority should be used to prepare the project.
    */
   get install() {
     return {};
@@ -603,7 +606,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * PostWriting priority should used to customize files.
+   * PostWriting priority should be used to customize files.
    */
   get postInstall() {
     return {};
@@ -621,7 +624,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * End priority should used to say good bye and print instructions.
+   * End priority should be used to say good bye and print instructions.
    */
   get end() {
     return {};
@@ -670,7 +673,7 @@ export default class BaseGenerator<
           // If sbsBlueprint, add templatePath to the original generator templatesFolder.
           this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
         } else {
-          // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
+          // If the blueprints do not set sbsBlueprint property, ignore normal workflow.
           this.delegateToBlueprint = true;
           this.#checkBlueprintImplementsPriorities(blueprintGenerator);
         }
@@ -693,6 +696,10 @@ export default class BaseGenerator<
         // Use the blueprint command if it is set to override.
         this.generatorCommand = blueprintCommand;
       }
+    }
+    if (this.features.uniqueGlobally && composedBlueprints.length) {
+      // TODO: Evaluate blueprint support in uniqueGlobally generators (bootstrap generator).
+      this.log.warn('Blueprint support in the bootstrap generator may not be applied when it runs within a workspace.');
     }
     return composedBlueprints;
   }
@@ -737,7 +744,7 @@ export default class BaseGenerator<
       this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
       argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
     }
-    const blueprints = mergeBlueprints(parseBlueprints(argvBlueprints), this.jhipsterConfig.blueprints ?? []);
+    const blueprints = mergeBlueprints(parseBlueprints(argvBlueprints), this.config.get('blueprints') ?? []);
 
     // EnvironmentBuilder already looks for blueprint when running from cli, this is required for tests.
     // Can be removed once the tests uses EnvironmentBuilder.
@@ -748,18 +755,18 @@ export default class BaseGenerator<
       await this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
     }
 
-    if (blueprints && blueprints.length > 0) {
+    if (blueprints?.length) {
       blueprints.forEach(blueprint => {
         blueprint.version = this.#findBlueprintVersion(blueprint.name) ?? blueprint.version;
       });
-      this.jhipsterConfig.blueprints = blueprints;
+      this.config.set('blueprints', blueprints);
     }
 
     if (!this.skipChecks) {
       const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
       // Verify if the blueprints have been registered.
       const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
-      if (missing && missing.length > 0) {
+      if (missing?.length) {
         throw new Error(`Some blueprints were not found ${missing}, you should install them manually`);
       }
       blueprints.forEach(blueprint => {

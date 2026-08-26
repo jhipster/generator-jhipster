@@ -134,7 +134,7 @@ function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEn
     if (splitField.otherEntityField) {
       convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
     }
-    relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo ?? lowerFirst(relationshipToConvert.from);
+    relationshipToConvert.injectedFieldInTo ??= lowerFirst(relationshipToConvert.from);
 
     setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
     const convertedEntityRelationships = convertedRelationships.get(entityName)!;
@@ -146,7 +146,7 @@ function setOptionsForRelationshipSourceSide(
   relationshipToConvert: JDLRelationship,
   convertedRelationship: Partial<JSONRelationship>,
 ): void {
-  convertedRelationship.options = convertedRelationship.options || {};
+  convertedRelationship.options ||= {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     if (optionName === BUILT_IN_ENTITY) {
       convertedRelationship.relationshipWithBuiltInEntity = optionValue;
@@ -163,7 +163,7 @@ function setOptionsForRelationshipSourceSide(
 }
 
 function setOptionsForRelationshipDestinationSide(relationshipToConvert: JDLRelationship, convertedRelationship: JSONRelationship): void {
-  convertedRelationship.options = convertedRelationship.options || {};
+  convertedRelationship.options ||= {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     convertedRelationship.options![optionName] = optionValue;
   });

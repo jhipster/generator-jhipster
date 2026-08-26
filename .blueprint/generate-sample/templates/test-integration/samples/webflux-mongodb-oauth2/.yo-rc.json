@@ -17,6 +17,7 @@
     "entitySuffix": "",
     "jhiPrefix": "jhi",
     "languages": ["en", "fr"],
+    "microfrontend": true,
     "nativeLanguage": "en",
     "packageFolder": "tech/jhipster/sample",
     "packageName": "tech.jhipster.sample",

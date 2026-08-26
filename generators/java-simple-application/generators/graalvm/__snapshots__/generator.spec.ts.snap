@@ -13,6 +13,13 @@ exports[`generator - java-simple-application:graalvm with default options should
             <metadataRepository>
                 <enabled>true</enabled>
                 <version>GRAALVM_REACHABILITY_METADATA_VERSION</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-common</artifactId>
+                        <metadataVersion>4.1.115.Final</metadataVersion>
+                    </dependency>
+                </dependencies>
             </metadataRepository>
             <imageName>\${native-image-name}</imageName>
             <verbose>true</verbose>

@@ -209,7 +209,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
         // Copy overrides from workspaces
         for (const appFolder of this.workspacesConfig.appsFolders) {
-          const { overrides, dependencies, devDependencies } =
+          const { allowScripts, overrides, dependencies, devDependencies } =
             this.readDestinationJSON(this.destinationPath(appFolder, 'package.json')) ?? ({} as any);
           if (overrides) {
             const allDependencies = { ...dependencies, ...devDependencies };
@@ -231,6 +231,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
               return obj;
             };
             this.packageJson.merge({ overrides: replaceOverrides(overrides) });
+          }
+          if (allowScripts) {
+            this.packageJson.merge({ allowScripts });
           }
         }
 

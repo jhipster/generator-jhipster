@@ -52,7 +52,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
-  - script: chmod +x gradlew
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -181,7 +180,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     displayName: 'CHECK: Snyk monitor'
     env:
       SNYK_TOKEN: $(SNYK_TOKEN)
-  - script: chmod +x gradlew
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -298,7 +296,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
-  - script: chmod +x mvnw
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -427,7 +424,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     displayName: 'CHECK: Snyk monitor'
     env:
       SNYK_TOKEN: $(SNYK_TOKEN)
-  - script: chmod +x mvnw
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -544,7 +540,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
-  - script: chmod +x mvnw
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -646,9 +641,6 @@ jobs:
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
             - run:
-                name: Give Executable Power
-                command: 'chmod +x gradlew'
-            - run:
                 name: Backend tests
                 command: npm run ci:backend:test
             - run:
@@ -737,9 +729,6 @@ jobs:
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
             - run:
-                name: Give Executable Power
-                command: 'chmod +x gradlew'
-            - run:
                 name: Backend tests
                 command: npm run ci:backend:test
             - run:
@@ -816,9 +805,6 @@ jobs:
                     - ~/.m2
                 key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
-            - run:
-                name: Give Executable Power
-                command: 'chmod +x mvnw'
             - run:
                 name: Backend tests
                 command: npm run ci:backend:test
@@ -908,9 +894,6 @@ jobs:
                 key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
             - run:
-                name: Give Executable Power
-                command: 'chmod +x mvnw'
-            - run:
                 name: Backend tests
                 command: npm run ci:backend:test
             - run:
@@ -957,12 +940,6 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular N
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-    validation:
-        name: "Gradle Wrapper Validation"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@VERSION
-            - uses: gradle/wrapper-validation-action@v1
     pipeline:
         name: sampleMysql pipeline
         runs-on: ubuntu-latest
@@ -986,19 +963,15 @@ jobs:
             - name: Install Node.js packages
               run: npm install
             - name: Run backend test
-              run: |
-                  chmod +x gradlew
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
-            - name: Package application
-              run: npm run java:jar:prod
             - name: 'E2E: Package'
               run: npm run ci:e2e:package
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1032,12 +1005,6 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular N
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-    validation:
-        name: "Gradle Wrapper Validation"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@VERSION
-            - uses: gradle/wrapper-validation-action@v1
     pipeline:
         name: sampleMysql pipeline
         runs-on: ubuntu-latest
@@ -1075,9 +1042,7 @@ jobs:
               env:
                   SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
             - name: Run backend test
-              run: |
-                  chmod +x gradlew
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
             - name: Analyze code with SonarQube
@@ -1090,8 +1055,6 @@ jobs:
                   else
                       echo No SONAR_TOKEN, skipping...
                   fi
-            - name: Package application
-              run: npm run java:jar:prod
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
@@ -1113,7 +1076,7 @@ jobs:
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1212,19 +1175,15 @@ jobs:
             - name: Install Node.js packages
               run: npm install
             - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
-            - name: Package application
-              run: npm run java:jar:prod
             - name: 'E2E: Package'
               run: npm run ci:e2e:package
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1295,9 +1254,7 @@ jobs:
               env:
                   SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
             - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
             - name: Analyze code with SonarQube
@@ -1310,8 +1267,6 @@ jobs:
                   else
                       echo No SONAR_TOKEN, skipping...
                   fi
-            - name: Package application
-              run: npm run java:jar:prod
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
@@ -1333,7 +1288,7 @@ jobs:
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: true
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -1451,19 +1406,15 @@ jobs:
             - name: Install Node.js packages
               run: npm install
             - name: Run backend test
-              run: |
-                  chmod +x mvnw
-                  npm run ci:backend:test
+              run: npm run ci:backend:test
             - name: Run frontend test
               run: npm run ci:frontend:test
-            - name: Package application
-              run: npm run java:jar:prod
             - name: 'E2E: Package'
               run: npm run ci:e2e:package
             - name: 'E2E: Prepare'
               run: npm run ci:e2e:prepare
             - name: 'E2E: Run'
-              run: npm run ci:e2e:run
+              run: npm run ci:e2e:run --if-present
               env:
                 CYPRESS_ENABLE_RECORD: false
                 CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
@@ -2296,7 +2247,6 @@ node {
     }
 
     stage('clean') {
-        sh "chmod +x gradlew"
         sh "./gradlew clean --no-daemon"
     }
     stage('nohttp') {
@@ -2481,7 +2431,6 @@ node {
         }
 
         stage('clean') {
-            sh "chmod +x mvnw"
             sh "./mvnw -ntp clean -P-webapp"
         }
         stage('nohttp') {
@@ -2755,7 +2704,6 @@ node {
     }
 
     stage('clean') {
-        sh "chmod +x mvnw"
         sh "./mvnw -ntp clean -P-webapp"
     }
     stage('nohttp') {
@@ -2942,7 +2890,6 @@ node {
     }
 
     stage('clean') {
-        sh "chmod +x mvnw"
         sh "./mvnw -ntp clean -P-webapp"
     }
     stage('nohttp') {
@@ -3224,7 +3171,6 @@ before_install:
 install:
   - npm install
 script:
-  - chmod +x gradlew
   - npm run ci:backend:test
   - npm run ci:frontend:test
   - npm run java:jar:prod
@@ -3300,7 +3246,6 @@ before_install:
 install:
   - npm install
 script:
-  - chmod +x mvnw
   - npm run ci:backend:test
   - npm run ci:frontend:test
   - npm run java:jar:prod
@@ -3380,7 +3325,6 @@ script:
   - chmod +x snyk
   - ./snyk test --all-projects || true
   - ./snyk monitor --all-projects
-  - chmod +x mvnw
   - npm run ci:backend:test
   - npm run ci:frontend:test
   - npm run java:jar:prod

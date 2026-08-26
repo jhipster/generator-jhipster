@@ -132,7 +132,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
     }
   }
 
-  entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
+  entityWithConfig.useMicroserviceJson ||= entityWithConfig.microserviceName !== undefined;
   entityWithConfig.microserviceAppName = '';
   if ((generator.jhipsterConfig as any).applicationType === APPLICATION_TYPE_GATEWAY && entityWithConfig.useMicroserviceJson) {
     if (!entityWithConfig.microserviceName) {
@@ -199,7 +199,7 @@ export function prepareEntityPrimaryKeyForTemplates(
     let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
     if (idField) {
       idField.id = true;
-      idField.autoGenerate = idField.autoGenerate ?? true;
+      idField.autoGenerate ??= true;
     } else {
       if (entityWithConfig.microserviceName && !application?.microfrontend) {
         this?.log.warn(
@@ -387,7 +387,7 @@ function fieldToId(field: BaseApplicationField): any {
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
   entity: E,
-  config: BaseApplicationApplication<BaseApplicationEntity>,
+  config: BaseApplicationApplication,
 ): E {
   mutateData(entity as Partial<ServerEntity>, {
     __override__: false,
@@ -458,8 +458,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
 
-  entity.anyPropertyHasValidation =
-    entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
+  entity.anyPropertyHasValidation ||= relationships.some(({ relationshipValidate }) => relationshipValidate);
 
   const relationshipsByOtherEntity = relationships
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship] as const)
@@ -478,7 +477,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   entity.relationshipsByOtherEntity = relationshipsByOtherEntity;
   entity.differentRelationships = relationshipsByOtherEntity;
 
-  entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
+  entity.anyPropertyHasValidation ||= fields.some(({ fieldValidate }) => fieldValidate);
 
   entity.otherEntities = uniq(entity.relationships.map(rel => rel.otherEntity));
 
@@ -493,8 +492,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
 
   if (entity.primaryKey) {
     derivedPrimaryKeyProperties(entity.primaryKey);
-    entity.requiresPersistableImplementation =
-      entity.requiresPersistableImplementation || entity.fields.some(field => field.requiresPersistableImplementation);
+    entity.requiresPersistableImplementation ||= entity.fields.some(field => field.requiresPersistableImplementation);
   }
 
   const types = entity.relationships
@@ -522,7 +520,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
-  entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerRelationships apis
+  entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
     !([CASSANDRA, COUCHBASE, NEO4J] as string[]).includes(entity.databaseType) &&
     // Only sql and mongodb provides *WithEagerRelationships apis for imperative implementation
     (entity.reactive || ([SQL, MONGODB] as string[]).includes(entity.databaseType)) &&
@@ -537,7 +535,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
 }
 
 export async function addFakerToEntity(entityWithConfig: BaseApplicationEntity, nativeLanguage = 'en') {
-  entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
+  entityWithConfig.faker ||= await createFaker(nativeLanguage);
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker!.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
   entityWithConfig.resetFakerSeed();

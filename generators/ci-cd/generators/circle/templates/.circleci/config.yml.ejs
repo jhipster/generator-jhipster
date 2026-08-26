@@ -72,13 +72,6 @@ jobs:
 <%_ } _%>
 
             - run:
-                name: Give Executable Power
-<%_ if (buildToolMaven) { _%>
-                command: 'chmod +x mvnw'
-<%_ } else if (buildToolGradle) { _%>
-                command: 'chmod +x gradlew'
-<%_ } _%>
-            - run:
                 name: Backend tests
                 command: <%- nodePackageManager %> run ci:backend:test
 <%_ if (!skipClient) { _%>

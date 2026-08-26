@@ -218,7 +218,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
    * Returns the JDBC URL for a databaseType
    *
    * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   * @param {*} options: databaseName, and required infos that depends on databaseType (hostname, localDirectory, ...)
    */
   getJDBCUrl(...args: Parameters<typeof getJdbcUrl>) {
     return getJdbcUrl(...args);
@@ -229,7 +229,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
    * Returns the R2DBC URL for a databaseType
    *
    * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   * @param {*} options: databaseName, and required infos that depends on databaseType (hostname, localDirectory, ...)
    */
   getR2DBCUrl(...args: Parameters<typeof getR2dbcUrl>) {
     return getR2dbcUrl(...args);

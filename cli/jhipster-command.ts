@@ -196,7 +196,7 @@ export default class JHipsterCommand extends Command {
     if (optionDefinition.env) {
       option.env(optionDefinition.env);
     }
-    if (optionDefinition.choices && optionDefinition.choices.length > 0) {
+    if (optionDefinition.choices?.length) {
       option.choices(optionDefinition.choices);
     }
     if (optionDefinition.implies) {

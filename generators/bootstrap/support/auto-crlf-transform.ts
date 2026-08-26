@@ -18,7 +18,7 @@
  */
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
-import { relative } from 'node:path';
+import path from 'node:path';
 
 import { isBinaryFile } from 'isbinaryfile';
 import type { MemFsEditorFile } from 'mem-fs-editor';
@@ -27,6 +27,28 @@ import { transform } from 'p-transform';
 import { simpleGit } from 'simple-git';
 
 import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
+
+async function findExistingParent(filePath: string): Promise<string> {
+  let currentPath = path.resolve(path.dirname(filePath));
+
+  while (currentPath) {
+    try {
+      await stat(currentPath);
+      return currentPath;
+    } catch (error: any) {
+      // Ignore error if directory doesn't exist, continue moving up
+      if (error.code !== 'ENOENT') throw error;
+    }
+
+    const parentPath = path.dirname(currentPath);
+    if (parentPath === currentPath) {
+      break;
+    }
+    currentPath = parentPath;
+  }
+
+  throw new Error(`No existing parent directory found for path: ${filePath}`);
+}
 
 /**
  * Detect the file first line endings
@@ -52,20 +74,9 @@ export function detectCrLf(filePath: string): Promise<boolean | undefined> {
   });
 }
 
-const autoCrlfTransform = async ({ baseDir }: { baseDir: string }) => {
-  const git = simpleGit({ baseDir }).env({
-    HOME: process.env.HOME,
-    PATH: process.env.PATH,
-    LANG: 'C',
-    LC_ALL: 'C',
-  });
-
-  if (!(await git.checkIsRepo())) {
-    throw new Error(`${baseDir} is not inside a git repository`);
-  }
-
+const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
   return transform(async (file: MemFsEditorFile) => {
-    if (!isFileStateModified(file) || !file.path.startsWith(baseDir)) {
+    if (!isFileStateModified(file)) {
       return file;
     }
 
@@ -75,20 +86,34 @@ const autoCrlfTransform = async ({ baseDir }: { baseDir: string }) => {
         if (await isBinaryFile(file.contents!)) {
           return file;
         }
-
-        const attrs = Object.fromEntries(
-          (await git.raw('check-attr', 'binary', 'eol', '--', relative(baseDir, file.path)))
-            .split(/\r\n|\r|\n/)
-            .map(attr => attr.split(':'))
-            .map(([_file, attr, value]) => [attr, value]),
-        );
-
-        if (attrs.eol === 'crlf' || (attrs.binary !== 'set' && attrs.eol !== 'lf' && (await detectCrLf(file.path)))) {
-          file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), CRLF));
-        }
       }
     } catch {
       // File doesn't exist.
+    }
+
+    const baseDir = await findExistingParent(file.path);
+    const git = simpleGit({ baseDir }).env({
+      HOME: process.env.HOME,
+      PATH: process.env.PATH,
+      LANG: 'C',
+      LC_ALL: 'C',
+    });
+    const checkAttrs = await git.raw('check-attr', 'binary', 'eol', '--', file.path);
+    const attrs = Object.fromEntries(
+      checkAttrs
+        .split(/\r\n|\r|\n/)
+        .map(attr => attr.split(': '))
+        .map(([_file, attr, value]) => [attr, value]),
+    );
+    if (!['set', 'unspecified'].includes(attrs.binary)) {
+      throw new Error(`Unexpected value for binary attribute: ${attrs.binary}`);
+    }
+    if (!['lf', 'crlf', 'unspecified'].includes(attrs.eol)) {
+      throw new Error(`Unexpected value for eol attribute: ${attrs.eol}`);
+    }
+
+    if (attrs.eol === 'crlf' || (attrs.binary !== 'set' && attrs.eol !== 'lf')) {
+      file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), CRLF));
     }
 
     return file;

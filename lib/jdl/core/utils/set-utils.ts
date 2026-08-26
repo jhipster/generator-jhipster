@@ -22,7 +22,7 @@ export function addAll<T>(set: Set<T>, elements: T[]) {
   if (!set) {
     throw new Error('A Set must be passed so as to insert elements.');
   }
-  if (!elements || elements.length === 0) {
+  if (!elements?.length) {
     return set;
   }
   elements.forEach(element => set.add(element));

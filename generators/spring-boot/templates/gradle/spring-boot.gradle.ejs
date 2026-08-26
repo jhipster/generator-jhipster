@@ -110,3 +110,9 @@ tasks.register('cleanResources', Delete) {
 
 tasks.named('compileJava').configure { dependsOn(tasks.named('processResources')) }
 tasks.named('processResources').configure { dependsOn(tasks.named('bootBuildInfo')) }
+
+if (project.hasProperty("e2e")) {
+    tasks.named('bootJar') {
+        archiveFileName = 'e2e.jar'
+    }
+}

@@ -43,9 +43,7 @@ export function preparePostEntityServerDerivedProperties(
   entity: SpringBootEntity<SpringBootField, RelationshipWithEntity<SpringBootRelationship, SpringBootEntity>>,
 ) {
   mutateData(entity, {
-    uniqueEnums: ({ fields }) => {
-      return [...new Set(fields.filter(field => field.fieldIsEnum))];
-    },
+    uniqueEnums: ({ fields }) => [...new Set(fields.filter(field => field.fieldIsEnum))],
   });
 
   if (entity.primaryKey?.derived) {

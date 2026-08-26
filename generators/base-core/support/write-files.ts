@@ -66,7 +66,7 @@ export function mergeSections(...allFiles: Record<string, any>[]): Record<string
   const generated: Record<string, any[]> = {};
   for (const files of allFiles) {
     for (const [sectionName, sectionValue] of Object.entries(files)) {
-      generated[sectionName] = generated[sectionName] || [];
+      generated[sectionName] ||= [];
       generated[sectionName].push(...sectionValue);
     }
   }

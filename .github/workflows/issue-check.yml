@@ -61,7 +61,7 @@ jobs:
           path: generator-jhipster
           fetch-depth: 2
       - uses: ./generator-jhipster/.github/actions/setup-default-node-java
-      - uses: jhipster/actions/setup-runner@v1
+      - uses: jhipster/actions/setup-runner@v2
         with:
           maven-cache: true
           gradle-cache: true
@@ -69,9 +69,9 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
-      - uses: jhipster/actions/build-jhipster-bom@v1
+      - uses: jhipster/actions/build-jhipster-bom@v2
         with:
           jhipster-bom-ref: main
       - name: 'GENERATION: project'

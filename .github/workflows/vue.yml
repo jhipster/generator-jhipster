@@ -55,10 +55,10 @@ jobs:
           fetch-depth: 2
       - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
         id: node-version
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix vue --event-name ${{ github.event_name }}
   applications:
@@ -67,6 +67,7 @@ jobs:
     needs: build-matrix
     defaults:
       run:
+        shell: bash
         working-directory: ${{ github.workspace }}/app
     if: >-
       !contains(github.event.head_commit.message, '[angular]') &&
@@ -93,7 +94,7 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - uses: jhipster/actions/setup-runner@v1
+      - uses: jhipster/actions/setup-runner@v2
         with:
           node-version: ${{ matrix.node-version }}
           java-version: ${{ matrix.java-version }}
@@ -101,13 +102,17 @@ jobs:
           maven-cache: true
           gradle-cache: ${{ matrix.gradle-cache }}
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+      # Fail git operations on line ending mismatches, and make sure that JHipster generates crlf line endings on Windows correctly.
+      - run: |
+          git config --global core.autocrlf false
+          git config --global core.safecrlf true
       - name: 'WORKAROUND: Node.js 22 require(esm) V8 crash'
         if: startsWith(matrix.node-version, '22')
         run: echo "NODE_OPTIONS=${NODE_OPTIONS:+$NODE_OPTIONS }--no-experimental-require-module" >> $GITHUB_ENV
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
         run: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
@@ -116,10 +121,12 @@ jobs:
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
           JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: jhipster.cjs info
+      # Make sure that the script-shell is set to bash, otherwise npm scripts will fail on Windows runners
+      - run: npm config -L project set script-shell=bash
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
-      - uses: jhipster/actions/compare-sample@v1
+      - uses: jhipster/actions/compare-sample@v2
         id: compare
         if: >-
           github.event.pull_request &&
@@ -136,7 +143,7 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - uses: jhipster/actions/build-jhipster-bom@v1
+      - uses: jhipster/actions/build-jhipster-bom@v2
         if: matrix.build-jhipster-bom && steps.compare.outputs.equals != 'true'
         with:
           jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
@@ -163,14 +170,17 @@ jobs:
         timeout-minutes: 15
       - name: 'TESTS: Start docker compose containers for e2e tests'
         id: docker-compose
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.equals != 'true' && runner.os == 'Linux'
         run: npm run ci:e2e:prepare
         timeout-minutes: 5
       - name: 'E2E: Run'
         id: e2e
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.equals != 'true' && runner.os == 'Linux'
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
+        env:
+          CYPRESS_video: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: cypress-video') && 'true' || 'false' }}
       - name: Store the application
         uses: actions/upload-artifact@v7
         if: always() && (steps.backend.outcome == 'failure' || steps.e2e.outcome == 'failure' || steps.frontend.outcome == 'failure' || steps.packaging.outcome == 'failure' || steps.docker-compose.outcome == 'failure')
@@ -192,14 +202,16 @@ jobs:
         with:
           name: log-${{ matrix.sample }}
           path: ${{ github.workspace }}/app/**/test-results/**/*.xml
-      - name: 'E2E: Store failure screenshots'
+      - name: 'E2E: Store failure cypress assets'
         uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ matrix.sample }}
-          path: ${{ github.workspace }}/app/**/cypress/screenshots
+          name: cypress-${{ matrix.sample }}
+          path: |
+            ${{ github.workspace }}/app/**/cypress/screenshots
+            ${{ github.workspace }}/app/**/cypress/videos
       - name: Dump docker logs
-        if: always()
+        if: always() && runner.os == 'Linux'
         uses: jwalton/gh-docker-logs@v2
   check-vue:
     permissions:

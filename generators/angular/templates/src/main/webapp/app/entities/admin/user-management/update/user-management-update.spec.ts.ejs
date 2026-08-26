@@ -17,10 +17,8 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = user.primaryKey.tsSampleValues[0]; _%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
-import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
@@ -61,10 +59,10 @@ describe('User Management Update Component', () => {
   });
 
   describe('save', () => {
-    it('should call update service on save for existing user', inject([], () => {
+    it('should call update service on save for existing user', () => {
       // GIVEN
       const entity = { id: <%- tsKeyId %> } as IUserManagement;
-      <%- clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(entity));
+      vi.spyOn(service, 'update').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();
@@ -72,12 +70,12 @@ describe('User Management Update Component', () => {
       // THEN
       expect(service.update).toHaveBeenCalledWith(expect.objectContaining(entity));
       expect(comp.isSaving()).toEqual(false);
-    }));
+    });
 
-    it('should call create service on save for new user', inject([], () => {
+    it('should call create service on save for new user', () => {
       // GIVEN
       const entity = { login: 'foo' } as IUserManagement;
-      <%- clientTestFramework %>.spyOn(service, 'create').mockReturnValue(of(entity));
+      vi.spyOn(service, 'create').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();
@@ -86,6 +84,6 @@ describe('User Management Update Component', () => {
       expect(comp.editForm.getRawValue().id).toBeNull();
       expect(service.create).toHaveBeenCalledWith(expect.objectContaining(entity));
       expect(comp.isSaving()).toEqual(false);
-    }));
+    });
   });
 });

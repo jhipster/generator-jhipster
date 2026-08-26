@@ -6,8 +6,7 @@ exports[`generator - app help should print expected information 1`] = `
 [Default] Create a new JHipster application based on the selected options
 
 Options:
-  --auto-crlf                              Detect line endings
-  --remove-needles                         Remove needles, needles are used by entity and language generators to inject code
+  --auto-crlf                              Detect line endings (default: false)
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name
@@ -23,6 +22,7 @@ Options:
   --node-package-manager <value>           Force an unsupported client package manager
   --ignore-errors                          Don't fail on prettier errors.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
+  --remove-needles                         Remove needles; they are used by entity and language generators to inject code into files
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json. (env: JHI_SKIP_JHIPSTER_DEPENDENCIES)
   --base-name <value>                      Application base name
   --jdl-store <value>                      JDL store
@@ -64,7 +64,7 @@ Options:
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
-  --client-test-framework <value>          undefined (default: jest) (choices: "jest", "vitest")
+  --client-test-framework <value>          undefined (default: vitest) (choices: "vitest")
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
   --skip-git                               Skip git repository initialization

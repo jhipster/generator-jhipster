@@ -19,11 +19,12 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import { CONTEXT_DATA_SANITIZATION_KEY } from '../../support/constants.ts';
 
 import Generator from './index.ts';
+
+import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
@@ -59,11 +60,9 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should be applied to application config', () => {
-      expect(result.application).toMatchObject(
-        expect.objectContaining({
-          applicationProperty: '',
-        }),
-      );
+      expect(result.application).toMatchObject({
+        applicationProperty: '',
+      });
     });
   });
 
@@ -80,11 +79,9 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should be applied to application config', () => {
-      expect(result.application).toMatchObject(
-        expect.objectContaining({
-          applicationProperty: 'foo',
-        }),
-      );
+      expect(result.application).toMatchObject({
+        applicationProperty: 'foo',
+      });
     });
   });
 });

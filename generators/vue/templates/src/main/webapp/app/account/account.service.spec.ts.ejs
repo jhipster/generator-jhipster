@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import axios from 'axios';
 
@@ -9,7 +27,11 @@ import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
 
 const resetStore = (store: AccountStore) => {
-  store.$reset();
+  store.logout();
+  store.authenticate(null);
+  store.profilesLoaded = false;
+  store.activeProfiles = '';
+  store.ribbonOnProfiles = '';
 };
 
 const axiosStub = {
@@ -43,9 +65,9 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    expect(store.logon).toBe(null);
+    expect(store.logon).toBeNull();
     expect(accountService.authenticated).toBe(false);
-    expect(store.account).toBe(null);
+    expect(store.account).toBeNull();
     expect(axiosStub.get).toHaveBeenCalledWith('management/info');
     expect(store.activeProfiles[0]).toBe('dev');
     expect(store.activeProfiles[1]).toBe('test');
@@ -57,9 +79,9 @@ describe('Account Service test suite', () => {
     accountService = new AccountService(store);
     await accountService.update();
 
-    expect(store.logon).toBe(null);
+    expect(store.logon).toBeNull();
     expect(accountService.authenticated).toBe(false);
-    expect(store.account).toBe(null);
+    expect(store.account).toBeNull();
     expect(axiosStub.get).toHaveBeenCalledWith('management/info');
   });
 
@@ -72,7 +94,7 @@ describe('Account Service test suite', () => {
     await accountService.update();
 
     expect(accountService.authenticated).toBe(false);
-    expect(store.account).toBe(null);
+    expect(store.account).toBeNull();
     expect(axiosStub.get).toHaveBeenCalledWith('management/info');
   });
 
@@ -106,7 +128,7 @@ describe('Account Service test suite', () => {
     });
   });
 
-  it('should init service as not authenticated and return authority user', async () => {
+  it('should init service as not authenticated and not return authority user', async () => {
     axiosStub.get.mockRejectedValue(new Error());
     accountService = new AccountService(store);
     await accountService.update();

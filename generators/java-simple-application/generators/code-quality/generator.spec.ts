@@ -19,10 +19,11 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 
 import Generator from './index.ts';
+
+import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
@@ -46,6 +47,14 @@ describe(`generator - ${generator}`, () => {
 
     it('should call source snapshot', () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
+    });
+
+    it('should generate a valid checkstyle config', () => {
+      result.assertNoFileContent('checkstyle.xml', 'TreeWalker');
+      result.assertNoFileContent('checkstyle.xml', 'MissingJavadocMethod');
+      result.assertNoFileContent('checkstyle.xml', 'allowMissingPropertyJavadoc');
+      result.assertFileContent('checkstyle.xml', '<module name="Checker">');
+      result.assertFileContent('checkstyle.xml', 'io.spring.nohttp.checkstyle.check.NoHttpCheck');
     });
 
     it('should compose with generators', () => {
@@ -73,6 +82,20 @@ describe(`generator - ${generator}`, () => {
 
     it('should call source snapshot', () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
+    });
+
+    it('should generate a valid checkstyle config', () => {
+      result.assertNoFileContent('checkstyle.xml', 'TreeWalker');
+      result.assertNoFileContent('checkstyle.xml', 'MissingJavadocMethod');
+      result.assertNoFileContent('checkstyle.xml', 'allowMissingPropertyJavadoc');
+      result.assertFileContent('checkstyle.xml', '<module name="Checker">');
+      result.assertFileContent('checkstyle.xml', 'io.spring.nohttp.checkstyle.check.NoHttpCheck');
+    });
+
+    it('should generate a valid spotless target', () => {
+      const gradleFile = 'buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle';
+      result.assertFileContent(gradleFile, "target 'src/*/java/**/*.java'");
+      result.assertNoFileContent(gradleFile, /target\s*=/);
     });
 
     it('should compose with generators', () => {

@@ -19,14 +19,6 @@
 name: Application CI
 on: [push, pull_request]
 jobs:
-<%_ if (buildToolGradle) { _%>
-    validation:
-        name: "Gradle Wrapper Validation"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: <%- githubActions['actions/checkout'] %>
-            - uses: gradle/wrapper-validation-action@v1
-<%_ } _%>
     pipeline:
         name: <%- baseName %> pipeline
         runs-on: ubuntu-latest
@@ -45,7 +37,7 @@ jobs:
 <%_ if (!skipClient) { _%>
             JHI_DISABLE_WEBPACK_LOGS: true
 <%_ } _%>
-<%_ if (clientFrameworkAngular) { _%>
+<%_ if (locals.clientFrameworkAngular) { _%>
             NG_CLI_ANALYTICS: false
 <%_ } _%>
 <%_ if (enableGradleDevelocity) { _%>
@@ -86,13 +78,7 @@ jobs:
 <%_ } _%>
 <%_ if (!skipServer) { _%>
             - name: Run backend test
-              run: |
-  <%_ if (buildToolMaven) { _%>
-                  chmod +x mvnw
-  <%_ } else if (buildToolGradle) { _%>
-                  chmod +x gradlew
-  <%_ } _%>
-                  <%- nodePackageManager %> run ci:backend:test
+              run: <%- nodePackageManager %> run ci:backend:test
   <%_ if (!skipClient) { _%>
             - name: Run frontend test
               run: <%- nodePackageManager %> run ci:frontend:test
@@ -114,10 +100,8 @@ jobs:
                       echo No SONAR_TOKEN, skipping...
                   fi
 <%_ } _%>
+<%_ if (skipServer) { _%>
             - name: Package application
-<%_ if (!skipServer) { _%>
-              run: <%- nodePackageManager %> run java:jar:prod
-<%_ } else { _%>
               run: <%- nodePackageManager %> run build
 <%_ } _%>
 <%_ if (ciCdIntegrationsHeroku) { _%>
@@ -148,18 +132,17 @@ jobs:
                   ./gradlew jib -Djib.to.image=<%- dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
   <%_ } _%>
 <%_ } _%>
-<%_ if (cypressTests) { _%>
-  <%_ const commented = applicationTypeGateway ? '# ' : ''; _%>
-            <%- commented %>- name: 'E2E: Package'
-            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:package
-            <%- commented %>- name: 'E2E: Prepare'
-            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:prepare
-            <%- commented %>- name: 'E2E: Run'
-            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:run
-            <%- commented %>  env:
-            <%- commented %>    CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
-            <%- commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-            <%- commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-            <%- commented %>- name: 'E2E: Teardown'
-            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:teardown
+<%_ if (cypressTests || workspacesCommand) { _%>
+            - name: 'E2E: Package'
+              run: <%- nodePackageManager %> run ci:e2e:package
+            - name: 'E2E: Prepare'
+              run: <%- nodePackageManager %> run ci:e2e:prepare
+            - name: 'E2E: Run'
+              run: <%- nodePackageManager %> run ci:e2e:run --if-present
+              env:
+                CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
+                CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+                CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+            - name: 'E2E: Teardown'
+              run: <%- nodePackageManager %> run ci:e2e:teardown
 <%_ } _%>

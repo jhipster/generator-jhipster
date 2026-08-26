@@ -57,7 +57,6 @@ module.exports = async (env, options) => {
               '/oauth2',
               '/login',
 <%_ } _%>
-              '/auth'
             ],
             target: 'http://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
             secure: false,

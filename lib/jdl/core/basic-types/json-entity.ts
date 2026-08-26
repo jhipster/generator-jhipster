@@ -100,7 +100,7 @@ class JSONEntity {
   }
 
   addFields(fields: JSONField[]) {
-    if (!fields || fields.length === 0) {
+    if (!fields?.length) {
       return;
     }
     this.fields = this.fields.concat(fields);
@@ -113,7 +113,7 @@ class JSONEntity {
   }
 
   addRelationships(relationships: JSONRelationship[]) {
-    if (!relationships || relationships.length === 0) {
+    if (!relationships?.length) {
       return;
     }
     this.relationships = this.relationships.concat(relationships);

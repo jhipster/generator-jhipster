@@ -151,8 +151,8 @@ relationship ManyToOne {
       });
 
       it('should add relationship at both sides', () => {
-        expect(result.get(applicationName)![0].relationships.length).toBe(1);
-        expect(result.get(applicationName)![1].relationships.length).toBe(1);
+        expect(result.get(applicationName)![0].relationships).toHaveLength(1);
+        expect(result.get(applicationName)![1].relationships).toHaveLength(1);
       });
 
       it('should result matching', () => {
@@ -252,8 +252,8 @@ relationship ManyToOne {
       });
 
       it('should add relationship at one side', () => {
-        expect(result.get(applicationName)![0].relationships.length).toBe(1);
-        expect(result.get(applicationName)![1].relationships.length).toBe(0);
+        expect(result.get(applicationName)![0].relationships).toHaveLength(1);
+        expect(result.get(applicationName)![1].relationships).toHaveLength(0);
       });
 
       it('should result matching', () => {
@@ -343,8 +343,8 @@ relationship ManyToOne {
       });
 
       it('should add relationship at both sides', () => {
-        expect(result.get(applicationName)![0].relationships.length).toBe(1);
-        expect(result.get(applicationName)![1].relationships.length).toBe(1);
+        expect(result.get(applicationName)![0].relationships).toHaveLength(1);
+        expect(result.get(applicationName)![1].relationships).toHaveLength(1);
       });
 
       it('should result matching', () => {

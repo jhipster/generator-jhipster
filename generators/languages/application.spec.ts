@@ -19,10 +19,10 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '../../lib/testing/index.ts';
-
 import * as entityData from './application.ts';
 import { supportedLanguages } from './support/languages.ts';
+
+import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '#testing';
 
 describe('application mutation test', () => {
   for (const [name, data] of Object.entries(prepareMutationTest(entityData))) {

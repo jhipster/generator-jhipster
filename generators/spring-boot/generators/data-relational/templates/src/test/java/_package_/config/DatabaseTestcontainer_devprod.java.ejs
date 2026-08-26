@@ -19,40 +19,43 @@
 package <%- packageName %>.config;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
+<%_ if (reactive) { _%>
+import org.springframework.test.context.DynamicPropertyRegistrar;
+<%_ } _%>
 import <%- testcontainerClassPackage %>.<%- testcontainerClass %>;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.junit.jupiter.Container;
 
-public interface DatabaseTestcontainer {
+<%_ const containerType = `${testcontainerClass}${useTestcontainersV1 ? '<?>' : ''}`; _%>
+@TestConfiguration(proxyBeanMethods = false)
+public class DatabaseTestcontainer {
 
-    @Container
-    <%- testcontainerClass %><%- useTestcontainersV1 ? '<?>' : '' %> databaseContainer = <%- useTestcontainersV1 ? `(${testcontainerClass}) ` : '' %>new <%- testcontainerClass %><%- useTestcontainersV1 ? '<>' : '' %>("<%- testcontainerDockerImageName %>")
+    private static final <%- containerType %> DATABASE_CONTAINER = <%- useTestcontainersV1 ? `(${testcontainerClass}) ` : '' %>new <%- testcontainerClass %><%- useTestcontainersV1 ? '<>' : '' %>("<%- testcontainerDockerImageName %>")
         .withDatabaseName("<%- baseName %>")
         <%- testcontainerClassInitialization %>
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(DatabaseTestcontainer.class)))
         .withReuse(true);
 
-    @DynamicPropertySource
-    static void registerProperties(DynamicPropertyRegistry registry) {
-<%_ if (reactive) { _%>
-        registry.add("spring.r2dbc.url", () -> databaseContainer.getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
-        registry.add("spring.r2dbc.username", databaseContainer::getUsername);
-        registry.add("spring.r2dbc.password", databaseContainer::getPassword);
-  <%_ if (prodDatabaseExtraOptions) { _%>
-        registry.add("spring.liquibase.url", () -> databaseContainer.getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
-  <%_ } else { _%>
-        registry.add("spring.liquibase.url", databaseContainer::getJdbcUrl);
-  <%_ } _%>
-<%_ } else { _%>
-  <%_ if (prodDatabaseExtraOptions) { _%>
-        registry.add("spring.datasource.url", () -> databaseContainer.getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
-  <%_ } else { _%>
-        registry.add("spring.datasource.url", databaseContainer::getJdbcUrl);
-  <%_ } _%>
-        registry.add("spring.datasource.username", databaseContainer::getUsername);
-        registry.add("spring.datasource.password", databaseContainer::getPassword);
-<%_ } _%>
+    @Bean
+    @ServiceConnection
+    <%- containerType %> databaseContainer() {
+        return DATABASE_CONTAINER;
     }
+<%_ if (reactive) { _%>
+
+    @Bean
+    DynamicPropertyRegistrar databaseProperties(<%- containerType %> databaseContainer) {
+        return registry -> {
+  <%_ if (prodDatabaseExtraOptions) { _%>
+            registry.add("spring.liquibase.url", () -> databaseContainer.getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
+  <%_ } else { _%>
+            registry.add("spring.liquibase.url", databaseContainer::getJdbcUrl);
+  <%_ } _%>
+            registry.add("spring.liquibase.user", databaseContainer::getUsername);
+            registry.add("spring.liquibase.password", databaseContainer::getPassword);
+        };
+    }
+<%_ } _%>
 }

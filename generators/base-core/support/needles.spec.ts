@@ -413,7 +413,7 @@ content
     });
 
     it('should return a function', () => {
-      expect(typeof createNeedleCallback({ contentToAdd, needle })).toBe('function');
+      expect(createNeedleCallback({ contentToAdd, needle })).toBeInstanceOf(Function);
     });
 
     it('returned function should throw on missing content', () => {
@@ -513,7 +513,7 @@ content to add2
     });
 
     it('should return a function', () => {
-      expect(typeof createBaseNeedle(needles)).toBe('function');
+      expect(createBaseNeedle(needles)).toBeInstanceOf(Function);
     });
 
     it('should throw with filePath without generator', () => {
@@ -529,8 +529,7 @@ content to add2
       spy.mockImplementation(() => undefined as any);
       createBaseNeedle.call(generator, { filePath }, needles);
       expect(generator.editFile).toHaveBeenCalledTimes(1);
-      expect(spy.mock.lastCall?.[0]).toBe(filePath);
-      expect(typeof spy.mock.lastCall?.[1]).toBe('function');
+      expect(spy).toHaveBeenLastCalledWith(filePath, expect.any(Function));
     });
   });
 });

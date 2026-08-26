@@ -18,8 +18,8 @@
 -%>
 package <%- packageName %>.security.oauth2;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 import <%- packageName %>.security.AuthoritiesConstants;
 import <%- packageName %>.security.SecurityUtils;
 import <%- packageName %>.IntegrationTest;
@@ -195,7 +195,6 @@ class CustomClaimConverterIT {
 
         assertThatCode(() -> {
             Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            System.out.println(convertedClaims);
             assertThat(convertedClaims)
                 .containsEntry("preferred_username", USERNAME)
                 .containsEntry("given_name", NAME)

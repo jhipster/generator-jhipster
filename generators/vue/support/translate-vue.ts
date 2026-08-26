@@ -30,7 +30,7 @@ function replaceTranslationAttributes({
   content: string;
   getWebappTranslation: GetWebappTranslationCallback;
 }) {
-  return content.replaceAll(/:(?<tag>(?:placeholder|title|label))="(?<translate>t\$\([^"]+\))"/g, (_complete, ...args) => {
+  return content.replaceAll(/:(?<tag>placeholder|title|label)="(?<translate>t\$\([^"]+\))"/g, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
     if (groups.translate.includes('+')) {
       return '';
@@ -83,7 +83,7 @@ export function replaceVueTranslations(
       return complete;
     })
     .replaceAll(
-      /(?<tagWithAttributes>(?<beforeTranslateTag><(?<tagName>a|b-(?:badge|link|button|alert)|button|div|h[1-9]|input|label|p|router-link|small|span|t[hd])(?:[^>]*)) v-(?:text|html)="(?<translate>t\$\([^)]*\))"(?<afterTranslateTag>(?:(?!\/?>)[^/>])*>))(?<tagContent>(?:(?!<\/\k<tagName>(?:>|\s|\n)).|\n)*)/g,
+      /(?<tagWithAttributes>(?<beforeTranslateTag><(?<tagName>a|b-(?:badge|link|button|alert)|button|div|h[1-9]|input|label|p|router-link|small|span|t[hd])[^>]*) v-(?:text|html)="(?<translate>t\$\([^)]*\))"(?<afterTranslateTag>(?:(?!\/?>)[^/>])*>))(?<tagContent>(?:(?!<\/\k<tagName>(?:>|\s|\n)).|\n)*)/g,
       (_complete, ...args) => {
         const groups: Record<string, string> = args.pop();
         if (new RegExp(String.raw`<${groups.tagName}[\s>]`, 'g').test(groups.tagContent)) {

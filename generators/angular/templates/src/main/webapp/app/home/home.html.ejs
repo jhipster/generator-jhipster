@@ -27,11 +27,9 @@
     <p class="lead">__jhiTranslateTag__('home.subtitle')</p>
 
     <div>
-      @if (account() !== null) {
+      @if (account(); as accountRef) {
         <div class="alert alert-success">
-        @if (account(); as accountRef) {
           <span id="home-logged-message">__jhiTranslateTag__('home.logged.message', { "username": "accountRef.login" })</span>
-        }
         </div>
       } @else {
         <div class="alert alert-warning">

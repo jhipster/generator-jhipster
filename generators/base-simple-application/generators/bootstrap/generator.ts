@@ -70,6 +70,14 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      async removeNeedles({ application }) {
+        if (application.removeNeedles) {
+          // This sets the bootstrap generator's removeNeedles flag to true so it removes needles from generated files.
+          // Needles will be removed from every generated file. To apply this to generated project files only, we need https://github.com/SBoudrias/mem-fs/issues/67.
+          const bootstrapGenerator = await this.dependsOnJHipster('bootstrap');
+          bootstrapGenerator.removeNeedles = true;
+        }
+      },
       preparing({ applicationDefaults }) {
         if (this.useVersionPlaceholders) {
           applicationDefaults({

@@ -99,9 +99,10 @@ spring:
   liquibase:
     contexts: test
 <%_ } _%>
-  jackson<%- springBoot4 ? '2' : '' %>:
-    serialization:
-      write-durations-as-timestamps: false
+  jackson:
+    datatype:
+      datetime:
+        write-durations-as-timestamps: false
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
     compression: NONE
@@ -112,7 +113,7 @@ spring:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-<%_ if (databaseTypeMongodb && springBoot4) { _%>
+<%_ if (databaseTypeMongodb) { _%>
   mongodb:
     representation:
       uuid: standard

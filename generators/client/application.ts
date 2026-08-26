@@ -48,6 +48,7 @@ export type ClientAddedApplicationProperties = {
   microfrontend: boolean;
   microfrontends:
     | {
+        self: boolean;
         baseName: string;
         lowercaseBaseName: string;
         moduleFederationName: string;

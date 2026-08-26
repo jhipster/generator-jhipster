@@ -59,7 +59,7 @@ const Header = (props: IHeaderProps) => {
   const handleLocaleChange = langKey => {
     Storage.session.set('locale', langKey);
     dispatch(setLocale(langKey));
-  }
+  };
 <%_ } _%>
 
   const loadingBarRef = useRef<LoadingBarRef>(null);

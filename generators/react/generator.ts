@@ -279,12 +279,6 @@ ${comment}
     return this.asPostWritingTaskGroup({
       addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
-        const { applicationTypeGateway } = application;
-        if (applicationTypeGateway) {
-          source.mergeClientPackageJson!({
-            devDependencies: { '@module-federation/utilities': null },
-          });
-        }
         source.mergeClientPackageJson!({
           devDependencies: { '@module-federation/enhanced': null },
         });
@@ -386,7 +380,7 @@ ${comment}
   }
 
   /**
-   * get the an upperFirst camelCase value.
+   * get the upperFirst camelCase value.
    * @param {string} value string to convert
    */
   upperFirstCamelCase(value: string): string {

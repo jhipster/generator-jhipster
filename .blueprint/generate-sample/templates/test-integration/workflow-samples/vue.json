@@ -47,6 +47,18 @@
       }
     },
     {
+      "name": "vue-default-windows",
+      "app-sample": "none",
+      "environment": "dev",
+      "os": "windows-latest",
+      "generatorOptions": {
+        "defaults": true,
+        "devDatabaseType": "h2Disk",
+        "creationTimestamp": "2020-01-02",
+        "clientFramework": "vue"
+      }
+    },
+    {
       "name": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "generatorOptions": {

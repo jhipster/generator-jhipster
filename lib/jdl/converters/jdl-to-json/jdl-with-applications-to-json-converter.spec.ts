@@ -80,10 +80,8 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       it('should return a map with two applications', () => {
         expect(result.size).toBe(2);
-        // @ts-expect-error FIXME
-        expect(result.get('app1').length).toBe(0);
-        // @ts-expect-error FIXME
-        expect(result.get('app2').length).toBe(1);
+        expect(result.get('app1')).toHaveLength(0);
+        expect(result.get('app2')).toHaveLength(1);
       });
     });
     describe('when passing a JDL object without entities', () => {
@@ -98,7 +96,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       it('should return a map with no entity', () => {
         result.forEach(entities => {
-          expect(entities.length).toBe(0);
+          expect(entities).toHaveLength(0);
         });
       });
     });
@@ -327,7 +325,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
+          expect(loggerSpy).toHaveBeenCalledWith(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
               'no other value has been set.',
           );
@@ -391,7 +389,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
+          expect(loggerSpy).toHaveBeenCalledWith(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
               'entity if no other value has been set.',
           );

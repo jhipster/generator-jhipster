@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import {
   Button,
@@ -31,7 +31,7 @@ import {
   translate,
   ValidatedField,
   ValidatedForm,
-  <%- anyFieldHasFileBasedContentType ? ' ValidatedBlobField,' : '' %>
+  <%- anyFieldHasFileBasedContentType ? 'ValidatedBlobField,' : '' %>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -42,7 +42,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 <%_ const otherEntityActions = new Set(); _%>
-<%_ for (const otherEntity of otherEntitiesWithPersistableRelationship) { _%>
+<%_ for (const otherEntity of otherEntitiesWithPersistableRelationship.filter(otherEntity => !otherEntity.embedded)) { _%>
   <%_ otherEntityActions.add({
         action: `get${otherEntity.entityNamePlural}`,
         instance: otherEntity.entityInstancePlural,
@@ -97,7 +97,7 @@ export const <%- entityReactName %>Update = () => {
 
   const handleClose = () => {
     navigate('/<%- entityPage %>'<%- paginationPagination ? ' + location.search' : '' %>);
-  }
+  };
 
   useEffect(() => {
 <%_ if (paginationInfiniteScroll) { _%>
@@ -152,7 +152,7 @@ export const <%- entityReactName %>Update = () => {
     } else {
       dispatch(updateEntity(entity));
     }
-  }
+  };
 
   const defaultValues = () =>
     isNew
@@ -203,7 +203,7 @@ export const <%- entityReactName %>Update = () => {
     <Row className="justify-content-center">
       <Col md="8">
         { loading ? <p>Loading...</p> :
-        <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity} >
+        <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
           { !isNew &&
             <ValidatedField
               name="<%- primaryKey.fields[0].fieldName %>" required readOnly
@@ -355,7 +355,7 @@ export const <%- entityReactName %>Update = () => {
 <%_ } _%>
           <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%- entityPage %>" replace variant="info">
             <FontAwesomeIcon icon="arrow-left" />&nbsp;
-            <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
+            <span className="d-none d-md-inline"><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>
           &nbsp;
           <Button variant="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>

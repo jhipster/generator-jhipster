@@ -65,8 +65,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
   <%_ let renMapAnotEnt = false; /* Render Mapping Annotation during Entity to DTO conversion? */ _%>
   <%_ for (relationship of dtoRelationships) { _%>
     <%_ renMapAnotEnt = true;
-        let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
-        qualifiedByName = qualifiedByName + (relationship.collection ? 'Set' : '');
+        const qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField) + (relationship.collection ? 'Set' : '');
     _%>
     @Mapping(target = "<%- relationship.propertyName %>", source = "<%- relationship.propertyName %>", qualifiedByName="<%- qualifiedByName %>")
   <%_ } _%>
@@ -106,12 +105,10 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%_ for (const field of otherEntity.primaryKey.fields) { _%>
     @Mapping(target = "<%- field.propertyName %>", source = "<%- field.propertyName %>")
     <%_ } _%>
-    <%_ if (!relatedField.id) { _%>
-      <%_ if (relatedField.mapstructExpression) { _%>
+    <%_ if (!relatedField.id && relatedField.mapstructExpression) { _%>
     @Mapping(target = "<%- relatedField.propertyName %>", expression = "<%- relatedField.mapstructExpression %>")
-      <%_ } else { _%>
+    <%_ } else if (!relatedField.id) { _%>
     @Mapping(target = "<%- relatedField.propertyName %>", source = "<%- relatedField.propertyName %>")
-      <%_ } _%>
     <%_ } _%>
     <%_ if (relatedField.mapstructExpression) { _%>
     <%- otherEntity.dtoClass %> toDto<%- this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> s);
@@ -123,7 +120,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
 
     @Named("<%- collectionMapperName %>")
     default Set<<%- otherEntity.dtoClass %>> toDto<%- this._.upperFirst(mapperName) %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {
-        return <%- otherEntity.persistInstance %>.stream().map(this:: toDto<%- this._.upperFirst(mapperName) %>).collect(Collectors.toSet());
+        return <%- otherEntity.persistInstance %>.stream().map(this::toDto<%- this._.upperFirst(mapperName) %>).collect(Collectors.toSet());
     }
     <%_ } _%>
   <%_ } _%>

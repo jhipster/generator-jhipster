@@ -1,3 +1,22 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { fieldTypes } from '../../jhipster/index.ts';
 import type { Entity } from '../../jhipster/types/entity.ts';
 
@@ -32,6 +51,23 @@ export const entitiesWithRelationships = [
     changelogDate: '20220129001000',
     fields: [{ fieldName: 'twoName', fieldType: 'String' }],
     relationships: [{ relationshipName: 'relationship', otherEntityName: 'Simple', relationshipType: 'many-to-one' }],
+  },
+] satisfies Entity[];
+
+const entityEmbedded = {
+  name: 'EmbeddedEntity',
+  changelogDate: '20220129000500',
+  embedded: true,
+  fields: [{ fieldName: 'embeddedName', fieldType: 'String' }],
+} satisfies Entity;
+
+export const entitiesWithEmbeddedRelationship = [
+  entityEmbedded,
+  {
+    name: 'RelationshipWithEmbedded',
+    changelogDate: '20220129000600',
+    fields: [{ fieldName: 'relationshipName', fieldType: 'String' }],
+    relationships: [{ relationshipName: 'embeddedRelationship', otherEntityName: 'EmbeddedEntity', relationshipType: 'many-to-one' }],
   },
 ] satisfies Entity[];
 

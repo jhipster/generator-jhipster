@@ -25,7 +25,9 @@ import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import type { Options as PrettierOptions } from 'prettier';
+import type { GeneratorPipelineOptions } from 'yeoman-generator';
 
+import { isWin32 } from '../../lib/utils/index.ts';
 import BaseGenerator, { CommandBaseGenerator } from '../base/index.ts';
 import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.ts';
@@ -40,6 +42,7 @@ import {
   createMultiStepTransform,
   createPrettierTransform,
   createSortConfigFilesTransform,
+  isGitConfigFilePath,
   isPrettierConfigFilePath,
 } from './support/index.ts';
 
@@ -58,8 +61,13 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   skipPrettier?: boolean;
   skipEslint?: boolean;
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
+  prettierJava = false;
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
+  // TODO: This feature is project-specific; it depends on https://github.com/SBoudrias/mem-fs/issues/67 being implemented so we can add a transform to remove needles based on file metadata.
+  // Metadata should be set on the writeFiles API based on the application.removeNeedles config.
+  /** @experimental This should be dropped if a meta-based transform is implemented */
+  removeNeedles = false;
 
   constructor(args?: string[], options?: BaseOptions, features?: BaseFeatures) {
     super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitTask(), ...features });
@@ -175,35 +183,18 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     { log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {},
     ...transforms: FileTransform<MemFsEditorFile>[]
   ) {
-    const skipYoResolveTransforms: FileTransform<MemFsEditorFile>[] = [];
-    if (!this.options.skipYoResolve) {
-      skipYoResolveTransforms.push(createYoResolveTransform());
-    }
-
-    const prettierTransforms: FileTransform<MemFsEditorFile>[] = [];
-    if (!this.skipPrettier) {
-      const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
-      if (!this.skipEslint) {
-        prettierTransforms.push(await createESLintTransform.call(this, { ignoreErrors }));
-      }
-      prettierTransforms.push(
-        await createPrettierTransform.call(this, {
-          ignoreErrors,
-          prettierPackageJson: true,
-          prettierJava: !(this.jhipsterConfig as any).skipServer,
-          extensions: this.prettierExtensions.join(','),
-          prettierOptions: this.prettierOptions,
-        }),
-      );
-    }
-
-    const autoCrlfTransforms: FileTransform<MemFsEditorFile>[] = [];
-    if (this.jhipsterConfigWithDefaults.autoCrlf) {
-      autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
-    }
+    const { autoCrlf = isWin32, devBlueprintEnabled, removeNeedles, skipYoResolve } = this.options;
+    const pipelineOptions: GeneratorPipelineOptions = {
+      refresh: false,
+      // Let pending files pass through.
+      pendingFiles: false,
+      ...options,
+      // Disable progress since it blocks stdin.
+      disabled: true,
+    };
 
     let customizeActions: NonNullable<Parameters<typeof createConflicterTransform>[1]>['customizeActions'];
-    if (this.options.devBlueprintEnabled) {
+    if (devBlueprintEnabled) {
       customizeActions = (actions, { separator }) => {
         return [
           ...(actions as any),
@@ -233,36 +224,66 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       };
     }
 
-    const removeNeedlesTransforms: FileTransform<MemFsEditorFile>[] = [];
-    if (this.jhipsterConfig.removeNeedles) {
-      removeNeedlesTransforms.push(createNeedleTransform());
+    const createTransformStreams = async () => {
+      const transformStreams: FileTransform<MemFsEditorFile>[] = [];
+      if (!skipYoResolve) {
+        transformStreams.push(createYoResolveTransform());
+      }
+
+      transformStreams.push(forceYoFiles(), createSortConfigFilesTransform(), createForceWriteConfigFilesTransform());
+
+      if (removeNeedles) {
+        transformStreams.push(createNeedleTransform());
+      }
+
+      if (!this.skipPrettier) {
+        const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
+        if (!this.skipEslint) {
+          transformStreams.push(await createESLintTransform.call(this, { ignoreErrors, cwd: this.destinationPath() }));
+        }
+        transformStreams.push(
+          await createPrettierTransform.call(this, {
+            ignoreErrors,
+            prettierPackageJson: true,
+            prettierJava: this.prettierJava,
+            extensions: this.prettierExtensions.join(','),
+            prettierOptions: this.prettierOptions,
+          }),
+        );
+      }
+
+      if (autoCrlf) {
+        transformStreams.push(await autoCrlfTransform());
+      }
+
+      transformStreams.push(
+        createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),
+        createCommitTransform(),
+      );
+
+      return transformStreams;
+    };
+
+    if (autoCrlf) {
+      this.log.info('autoCrlf is enabled, line endings will be detected and normalized');
+      await this.pipeline(
+        {
+          ...pipelineOptions,
+          filter: file => isGitConfigFilePath(file.path),
+        },
+        ...transforms,
+        // Filter out pending files.
+        transform((file: MemFsEditorFile) => (isFilePending(file) ? file : undefined)),
+        ...(await createTransformStreams()),
+      );
     }
 
-    const transformStreams = [
-      ...skipYoResolveTransforms,
-      forceYoFiles(),
-      createSortConfigFilesTransform(),
-      createForceWriteConfigFilesTransform(),
-      ...removeNeedlesTransforms,
-      ...prettierTransforms,
-      ...autoCrlfTransforms,
-      createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),
-      createCommitTransform(),
-    ];
-
     await this.pipeline(
-      {
-        refresh: false,
-        // Let pending files pass through.
-        pendingFiles: false,
-        ...options,
-        // Disable progress since it blocks stdin.
-        disabled: true,
-      },
+      pipelineOptions,
       ...transforms,
       // Filter out pending files.
       transform((file: MemFsEditorFile) => (isFilePending(file) ? file : undefined)),
-      ...transformStreams,
+      ...(await createTransformStreams()),
     );
     this.log.ok(log ?? 'files committed to disk');
   }

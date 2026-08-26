@@ -45,9 +45,7 @@ const needsValuedMap = {
   maxbytes: true,
 } as const;
 
-const needsValue = (validation: keyof typeof needsValuedMap) => {
-  return needsValuedMap[validation];
-};
+const needsValue = (validation: keyof typeof needsValuedMap) => needsValuedMap[validation];
 
 const SUPPORTED_VALIDATION_RULES = Object.values(validationTypes) as string[];
 

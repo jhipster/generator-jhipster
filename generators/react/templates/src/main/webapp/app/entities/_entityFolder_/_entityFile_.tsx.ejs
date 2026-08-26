@@ -219,7 +219,7 @@ export const <%- entityReactName %> = () => {
   }, [paginationState.activePage]);
 
   const handleLoadMore = () => {
-    if ((globalThis as any).pageYOffset > 0) {
+    if (globalThis.scrollY > 0) {
       setPaginationState({
         ...paginationState,
         activePage: paginationState.activePage + 1
@@ -371,14 +371,14 @@ export const <%- entityReactName %> = () => {
                         loader={<div className="loader">Loading ...</div>}>
 <%_ } _%>
         {
-          <%- entityInstance %>List?.length > 0 ?(
+          <%- entityInstance %>List?.length > 0 ? (
             <Table responsive>
               <thead>
                 <tr>
 <%_ for (field of fields) { _%>
-                  <th className="hand" onClick={sort('<%- field.fieldName %>')} ><Translate contentKey="<%- `${i18nKeyPrefix}.${field.fieldName}` %>"><%- field.fieldNameHumanized %></Translate> <FontAwesomeIcon icon={getSortIconByFieldName('<%- field.fieldName %>')} /></th>
+                  <th className="hand" onClick={sort('<%- field.fieldName %>')}><Translate contentKey="<%- `${i18nKeyPrefix}.${field.fieldName}` %>"><%- field.fieldNameHumanized %></Translate> <FontAwesomeIcon icon={getSortIconByFieldName('<%- field.fieldName %>')} /></th>
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                   <th><Translate contentKey="<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%- relationship.relationshipNameHumanized %></Translate> <FontAwesomeIcon icon="sort" /></th>
   <%_ } _%>
@@ -402,11 +402,11 @@ export const <%- entityReactName %> = () => {
     <%_ if (field.fieldTypeBoolean) { _%>
                       {<%- entityInstance %>.<%- field.fieldName %> ? 'true' : 'false'}
     <%_ } else if (field.fieldTypeTimed) { _%>
-                      {<%- entityInstance %>.<%- fieldName %> ? <TextFormat type="date" value={<%- entityInstance %>.<%- fieldName %>} format={APP_DATE_FORMAT} />: null}
+                      {<%- entityInstance %>.<%- fieldName %> ? <TextFormat type="date" value={<%- entityInstance %>.<%- fieldName %>} format={APP_DATE_FORMAT} /> : null}
     <%_ } else if (field.fieldTypeDuration) { _%>
-                      {<%- entityInstance %>.<%- fieldName %> ? <DurationFormat value={<%- entityInstance %>.<%- fieldName %>} />: null}
+                      {<%- entityInstance %>.<%- fieldName %> ? <DurationFormat value={<%- entityInstance %>.<%- fieldName %>} /> : null}
     <%_ } else if (field.fieldTypeLocalDate) { _%>
-                      {<%- entityInstance %>.<%- fieldName %> ? <TextFormat type="date" value={<%- entityInstance %>.<%- fieldName %>} format={APP_LOCAL_DATE_FORMAT} />: null}
+                      {<%- entityInstance %>.<%- fieldName %> ? <TextFormat type="date" value={<%- entityInstance %>.<%- fieldName %>} format={APP_LOCAL_DATE_FORMAT} /> : null}
     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
                       <Translate contentKey={`<%- frontendAppName %>.<%- fieldType %>.${<%- entityInstance %>.<%- fieldName %>}`} />
     <%_ } else if (field.fieldTypeBinary) { _%>
@@ -436,7 +436,7 @@ export const <%- entityReactName %> = () => {
                     </td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;
@@ -477,7 +477,7 @@ export const <%- entityReactName %> = () => {
                       <td className="text-end">
                         <div className="btn-group flex-btn-group-container">
                           <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}`} variant="info" size="sm" data-cy="entityDetailsButton">
-                            <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
+                            <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
 <%_ if (!readOnly) { _%>
                           <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="primary" size="sm" data-cy="entityEditButton">

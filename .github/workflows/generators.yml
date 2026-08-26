@@ -44,10 +44,10 @@ jobs:
           fetch-depth: 2
       - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
         id: node-version
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix generators --event-name ${{ github.event_name }}
   generate-blueprint:

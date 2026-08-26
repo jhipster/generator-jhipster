@@ -32,12 +32,14 @@ import type { Application as JavaApplication, Field as JavaField, Relationship a
 
 export type JavaAddedApplicationProperties = {
   useNpmWrapper: boolean;
+  javaPackagingDestDir: string;
 };
 
 export const mutateApplicationPreparing = {
   __override__: false,
 
   useNpmWrapper: false,
+  javaPackagingDestDir: app => (app.buildToolGradle ? `${app.temporaryDir}libs/` : app.temporaryDir),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<JavaApplication>, JavaAddedApplicationProperties>;
 
 type JavaAddedPropertyProperties = {
@@ -103,7 +105,7 @@ export const mutateField = {
     primaryKeyTypes.includes(javaFieldType as any) ? getJavaValueGeneratorForType(javaFieldType) : undefined,
   javaValueGenerator: ({ fieldJavaValueGenerator }) => fieldJavaValueGenerator,
   fieldValidateRulesPatternJava: ({ fieldValidateRulesPattern }) =>
-    fieldValidateRulesPattern ? fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`) : fieldValidateRulesPattern,
+    fieldValidateRulesPattern?.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<JavaField>, JavaAddedFieldProperties>;
 
 export type JavaAddedValidatedFieldProperties = JavaAddedPropertyProperties & {

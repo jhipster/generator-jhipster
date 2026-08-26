@@ -18,14 +18,13 @@
 -%>
 package <%- entityAbsolutePackage %>.domain;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.assertj.core.api.Assertions.assertThat;
 
 <%_ if (anyFieldIsBigDecimal) { _%>
 import static <%- packageName %>.domain.AssertUtils.bigDecimalCompareTo;
 <%_ } _%>
 <%_ if (anyFieldIsZonedDateTime) { _%>
-import static <%- packageName %>.domain.AssertUtils.zonedDataTimeSameInstant;
+import static <%- packageName %>.domain.AssertUtils.zonedDateTimeSameInstant;
 <%_ } _%>
 
 public class <%- persistClass %>Asserts {
@@ -99,7 +98,7 @@ public class <%- persistClass %>Asserts {
             .as("Verify <%- persistClass %> relevant properties")
   <%_ for (const field of fields.filter(field => !field.transient && !field.autoGenerate)) { _%>
     <%_ if (field.fieldTypeZonedDateTime) { _%>
-            .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(zonedDataTimeSameInstant).isEqualTo(expected.<%- field.propertySupplierName %>()))
+            .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(zonedDateTimeSameInstant).isEqualTo(expected.<%- field.propertySupplierName %>()))
     <%_ } else if (field.fieldTypeBigDecimal) { _%>
             .satisfies(a -> assertThat(a.<%- field.propertySupplierName %>()).as("check <%- field.propertyName %>").usingComparator(bigDecimalCompareTo).isEqualTo(expected.<%- field.propertySupplierName %>()))
     <%_ } else { _%>

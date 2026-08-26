@@ -18,40 +18,58 @@
 -%>
 package <%- packageName %>.config;
 
-import java.time.Duration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
-import org.testcontainers.junit.jupiter.Container;
+<%_ if (searchEngineCouchbase) { _%>
+import org.testcontainers.couchbase.CouchbaseService;
+<%_ } _%>
 
-public interface CouchbaseTestContainer {
-    String BUCKET_NAME = "testBucket";
-    // ponytail: container reports "started" once management API is up, but KV service can still
-    // be warming up on loaded CI runners; a generous startup timeout plus the env timeouts below
-    // cover both ends of that gap.
-    Duration CONTAINER_STARTUP_TIMEOUT = Duration.ofMinutes(5);
+@TestConfiguration(proxyBeanMethods = false)
+public class CouchbaseTestContainer {
 
-    @Container
-    CouchbaseContainer couchbaseContainer = new CouchbaseContainer("<%- dockerContainers.couchbase %>")
+    public static final String BUCKET_NAME = "testBucket";
+<%_ if (searchEngineCouchbase) { _%>
+
+    /**
+     * Memory quota, in MB, for the search service.
+     *
+     * Testcontainers defaults every service to its minimum quota (256 MB for search), which is not enough to
+     * host one full-text index per entity: the search service throttles indexing as soon as it goes over the
+     * quota, mutations are never indexed and searches keep returning no result.
+     */
+    private static final int SEARCH_QUOTA_MB = 1024;
+<%_ } _%>
+
+    private static final CouchbaseContainer COUCHBASE_CONTAINER = (CouchbaseContainer) new CouchbaseContainer("<%- dockerContainers.couchbase %>")
         .withBucket(new BucketDefinition(BUCKET_NAME))
-        .withStartupTimeout(CONTAINER_STARTUP_TIMEOUT)
+<%_ if (searchEngineCouchbase) { _%>
+        .withServiceQuota(CouchbaseService.SEARCH, SEARCH_QUOTA_MB)
+<%_ } _%>
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(CouchbaseTestContainer.class)));
 
-    @DynamicPropertySource
-    static void registerProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.couchbase.connection-string", couchbaseContainer::getConnectionString);
-        // Spring Boot's auto-configuration always builds a ClusterEnvironment from these
-        // spring.couchbase.env.* properties; the SDK rejects connection-string query params
-        // once a ClusterEnvironment exists, so timeouts must be set this way instead. Default
-        // key-value timeout (~2.5s) is too tight right after container startup.
-        registry.add("spring.couchbase.env.timeouts.connect", () -> "15s");
-        registry.add("spring.couchbase.env.timeouts.key-value", () -> "10s");
-        registry.add("spring.couchbase.username", couchbaseContainer::getUsername);
-        registry.add("spring.couchbase.password", couchbaseContainer::getPassword);
-        registry.add("jhipster.database.couchbase.bucket-name", () -> BUCKET_NAME);
-        registry.add("jhipster.database.couchbase.scope-name", () -> "testScope");
+    @Bean
+    @ServiceConnection
+    CouchbaseContainer couchbaseContainer() {
+        return COUCHBASE_CONTAINER;
+    }
+
+    @Bean
+    DynamicPropertyRegistrar couchbaseProperties(CouchbaseContainer couchbaseContainer) {
+        return registry -> {
+            // Spring Boot's auto-configuration always builds a ClusterEnvironment from these
+            // spring.couchbase.env.* properties; the SDK rejects connection-string query params
+            // once a ClusterEnvironment exists, so timeouts must be set this way instead. Default
+            // key-value timeout (~2.5s) is too tight right after container startup.
+            registry.add("spring.couchbase.env.timeouts.connect", () -> "15s");
+            registry.add("spring.couchbase.env.timeouts.key-value", () -> "10s");
+            registry.add("jhipster.database.couchbase.bucket-name", () -> BUCKET_NAME);
+            registry.add("jhipster.database.couchbase.scope-name", () -> "testScope");
+        };
     }
 }

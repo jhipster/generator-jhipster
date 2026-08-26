@@ -25,7 +25,7 @@ import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { addJavaAnnotation } from '../../../java/support/add-java-annotation.ts';
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
 
-import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
+import { GRAALVM_REACHABILITY_METADATA, NETTY_COMMON_REACHABILITY_METADATA } from './internal/constants.ts';
 import { mavenDefinition } from './internal/maven-definition.ts';
 
 export default class GraalvmGenerator extends JavaApplicationGenerator {
@@ -78,14 +78,6 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
-      checkGradle({ application }) {
-        if (application.buildToolGradle && !application.reactive && application.databaseTypeSql && !application.springBoot4) {
-          // See https://hibernate.atlassian.net/jira/software/c/projects/HHH/issues/?jql=project%20%3D%20%22HHH%22%20AND%20textfields%20~%20%22gradle%209%22%20ORDER%20BY%20created%20DESC&selectedIssue=HHH-18984
-          throw new Error(
-            "GraalVM native image v25 is not supported by Gradle 8. Hibernate 6 hibernate-enhance-maven-plugin doesn't support Gradle 9.",
-          );
-        }
-      },
       // workaround for https://github.com/spring-projects/spring-boot/issues/32195
       async disabledInAotModeAnnotation({ application }) {
         this.queueTransformStream(
@@ -128,7 +120,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
               },
             ],
           },
-          context: application,
+          context: { ...application, nettyCommonReachabilityMetadata: NETTY_COMMON_REACHABILITY_METADATA },
         });
       },
     });
@@ -167,7 +159,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
             databaseTypeSql,
             userLanguage: nativeLanguageDefinition.languageTag,
             languages: languagesDefinition?.map(def => def.languageTag) ?? [nativeLanguageDefinition.languageTag],
-            hibernate7: application.springBoot4,
+            hibernate7: true,
           }),
         );
       },

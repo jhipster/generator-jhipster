@@ -126,6 +126,17 @@ const command = {
       },
       scope: 'none',
     },
+    removeNeedles: {
+      description: 'Remove needles; they are used by entity and language generators to inject code into files',
+      cli: {
+        type: Boolean,
+      },
+      jdl: {
+        tokenType: 'BOOLEAN',
+        type: 'boolean',
+      },
+      scope: 'storage',
+    },
   },
 } as const satisfies JHipsterCommandDefinition;
 

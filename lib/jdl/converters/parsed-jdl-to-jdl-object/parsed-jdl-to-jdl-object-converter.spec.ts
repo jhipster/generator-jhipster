@@ -362,7 +362,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         it('should accept them', () => {
           expect(jdlObject.entities.A.fields.name.comment).toBe('abc');
           expect(jdlObject.entities.A.fields.thing.comment).toBe('def');
-          expect(jdlObject.entities.A.fields.another.comment).toBe(undefined);
+          expect(jdlObject.entities.A.fields.another.comment).toBeUndefined();
         });
         describe('when having both forms of comments', () => {
           it('should accept the one defined first', () => {
@@ -390,7 +390,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
 
         describe('checking the options', () => {
           it('should parse them', () => {
-            expect(options.length).toBe(7);
+            expect(options).toHaveLength(7);
             expect(options[0].name).toBe('skipClient');
             expect(options[1].name).toBe('skipServer');
             expect(options[2].name).toBe(DTO);
@@ -756,7 +756,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            expect(fieldAnnotation).toEqual(true);
+            expect(fieldAnnotation).toBe(true);
             expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": "toto",
@@ -817,7 +817,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            expect(fieldAnnotation).toEqual(true);
+            expect(fieldAnnotation).toBe(true);
             expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": true,
@@ -887,8 +887,7 @@ JDLDeployment {
         });
 
         it('formats it', () => {
-          // @ts-expect-error FIXME
-          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes(String.raw`\'`)).toBe(true);
+          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value).toContain(String.raw`\'`);
         });
       });
       describe('when parsing a JDL with the unique constraint', () => {
@@ -903,8 +902,8 @@ JDLDeployment {
         });
 
         it('should accept it', () => {
-          expect(jdlObject.entities.A.fields.myString.validations.unique).not.toBeUndefined();
-          expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.toBeUndefined();
+          expect(jdlObject.entities.A.fields.myString.validations.unique).toBeDefined();
+          expect(jdlObject.entities.A.fields.myInteger.validations.unique).toBeDefined();
         });
       });
       describe('when parsing a JDL relationship with built in entity enabled', () => {

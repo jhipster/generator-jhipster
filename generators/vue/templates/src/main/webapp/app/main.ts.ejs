@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
 import { createApp, provide, computed, watch<%- enableTranslation ? ', onMounted' : '' %> } from 'vue';
@@ -11,6 +29,7 @@ import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
 import router<%- microfrontend ? ', { lazyRoutes }' : '' %> from './router';
+import { START_LOCATION } from 'vue-router';
 import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
 import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
 import JhiItemCount from '@/shared/jhi-item-count.vue';
@@ -72,7 +91,7 @@ const app = createApp({
     const translationService = new TranslationService(i18n);
 
     const changeLanguage = async (newLanguage: string) => {
-      if (i18n.locale.value !== newLanguage) {
+      if (newLanguage && i18n.locale.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
         translationStore.setCurrentLanguage(newLanguage);
       }
@@ -85,7 +104,7 @@ const app = createApp({
       () => store.account,
       async value => {
         if (!translationService.getLocalStoreLanguage()) {
-          await changeLanguage(value.langKey);
+          await changeLanguage(value?.langKey);
         }
       },
     );
@@ -110,10 +129,13 @@ const app = createApp({
     provide('currentLanguage', computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
 
-    router.beforeResolve(async (to, from, next) => {
+    router.beforeResolve(async (to, from) => {
 <%_ if (!authenticationTypeOauth2) { _%>
-      // Make sure login modal is closed
-      hideLogin();
+      // Make sure login modal is closed when navigating.
+      // The initial navigation may resolve after the user opened the login modal, don't close it.
+      if (from !== START_LOCATION) {
+        hideLogin();
+      }
 
 <%_ } _%>
       if (!store.authenticated) {
@@ -121,14 +143,11 @@ const app = createApp({
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
         const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
-        if (!value) {
-          if (from.path !== '/forbidden') {
-            next({ path: '/forbidden' });
-            return;
-          }
+        if (!value && from.path !== '/forbidden') {
+          return { path: '/forbidden' };
         }
       }
-      next();
+      return true;
     });
 
     setupAxiosInterceptors(
@@ -142,7 +161,7 @@ const app = createApp({
           localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
 <%_ } _%>
           store.logout();
-          if (!url.endsWith('api/account') && !url.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
+          if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
             // Ask for a new authentication
 <%_ if (authenticationTypeOauth2) { _%>
             window.location.reload();
@@ -154,9 +173,7 @@ const app = createApp({
         }
         return Promise.reject(error);
       },
-      error => {
-        return Promise.reject(error);
-      },
+      error => Promise.reject(error),
     );
 
     const { authenticated } = storeToRefs(store);

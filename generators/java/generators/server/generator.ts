@@ -46,7 +46,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
 
         const { buildTool } = application;
-        let e2ePackage = 'target/e2e';
         if (buildTool === 'maven') {
           const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
@@ -65,19 +64,17 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = application.skipClient ? '' : '-x webapp -x webapp_test';
-          e2ePackage = 'e2e';
           scriptsStorage.set({
             'app:start': './gradlew',
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
-            'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
+            'backend:nohttp:test': `./gradlew checkstyleNohttp checkstyleMain spotlessCheck ${excludeWebapp}`,
             'backend:start': `./gradlew ${excludeWebapp}`,
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -PjibArchitecture=arm64',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
-            'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
             'backend:build-cache':
               'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package -- -x webapp -x webapp_test',
           });
@@ -95,7 +92,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+          'ci:e2e:server:start': `java -jar ${application.javaPackagingDestDir}e2e.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
       packageJsonE2eScripts({ application }) {

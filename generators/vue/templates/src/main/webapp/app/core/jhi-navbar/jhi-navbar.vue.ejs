@@ -25,7 +25,6 @@
     <b-navbar-toggle
       right
       class="jh-navbar-toggler d-lg-none"
-      href="javascript:void(0);"
       data-toggle="collapse"
       target="header-tabs"
       aria-expanded="false"
@@ -116,7 +115,7 @@
             <span>{{ t$('global.menu.admin.apidocs') }}</span>
           </b-dropdown-item>
 <%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
-          <b-dropdown-item v-if="!inProduction" href='<% if (locals.databaseTypeCouchbase) { %>http://localhost:8092/<% } else if (locals.reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>' target="_tab">
+          <b-dropdown-item v-if="!inProduction" href='<%- locals.databaseTypeCouchbase || locals.reactive ? 'http://localhost:8092/' : './h2-console/' %>' target="_tab">
             <font-awesome-icon icon="database" />
             <span>{{ t$('global.menu.admin.database') }}</span>
           </b-dropdown-item>
@@ -140,7 +139,6 @@
 <%_ } _%>
         <b-nav-item-dropdown
           right
-          href="javascript:void(0);"
           id="account-menu"
           :class="{ 'router-link-active': subIsActive('/account') }"
           active-class="active"

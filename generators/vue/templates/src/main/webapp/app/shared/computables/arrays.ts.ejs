@@ -23,9 +23,7 @@ const compareString = (a: string, b: string): number => {
   return a.localeCompare(b);
 };
 
-const asString = (val): string => {
-  return typeof val === 'string' ? val : `${val}`;
-};
+const asString = (val): string => (typeof val === 'string' ? val : `${val}`);
 
 const compareAny = (a, b): number => {
   if (b == null) return 1;

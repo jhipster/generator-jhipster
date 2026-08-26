@@ -117,7 +117,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       configureBaseDeployment({ applications }) {
         this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
         if (applications.some(app => app.serviceDiscoveryTypeEureka)) {
-          this.jhipsterConfig.adminPassword = this.jhipsterConfig.adminPassword ?? 'admin';
+          this.jhipsterConfig.adminPassword ??= 'admin';
         }
       },
     });
@@ -129,12 +129,11 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      loadBaseDeployment({ deployment, applications }) {
+      loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
         loadDockerDependenciesTask.call(this, { context: deployment });
         loadDockerElasticsearchVersion.call(this, {
-          springBoot4: applications.some(app => app.springBoot4),
           dockerContainers: deployment.dockerContainers!,
         });
       },
@@ -200,7 +199,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           if (yamlConfig.environment) {
             yamlConfig.environment = yamlConfig.environment.map((envOption: string) => {
-              // Doesn't applies to keycloak, jhipster-registry and consul.
+              // Doesn't apply to keycloak, jhipster-registry and consul.
               // docker-compose changes the container name to `${lowercaseBaseName}-${databaseType}`.
               // we need to update the environment urls to the new container host.
               [

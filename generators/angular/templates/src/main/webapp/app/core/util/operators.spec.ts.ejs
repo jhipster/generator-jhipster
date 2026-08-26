@@ -16,18 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
-import { filterNaN, isPresent } from './operators';
+import { describe, expect, it } from 'vitest';
+import { filterNaN } from './operators';
 
 describe('Operators Test', () => {
-  describe('isPresent', () => {
-    it('should remove null and undefined values', () => {
-      expect([1, null, undefined].filter(isPresent)).toEqual([1]);
-    });
-  });
-
   describe('filterNaN', () => {
     it('should return 0 for NaN', () => {
       expect(filterNaN(Number.NaN)).toBe(0);

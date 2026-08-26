@@ -77,12 +77,10 @@ class <%- persistClass %>Test {
         <%- persistInstance %>.<%- relationship.propertyConsumerName %>(<%- relationship.otherEntity.persistInstance %>Back);
         assertThat(<%- persistInstance %>.<%- relationship.propertySupplierName %>()).isEqualTo(<%- relationship.otherEntity.persistInstance %>Back);
   <%_ } _%>
-  <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
-    <%_ if (relationship.otherRelationship.collection) { _%>
+  <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded && relationship.otherRelationship.collection) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).containsOnly(<%- persistInstance %>);
-    <%_ } else { _%>
+  <%_ } else if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).isEqualTo(<%- persistInstance %>);
-    <%_ } _%>
   <%_ } _%>
   <%_ if (relationship.collection) { _%>
 
@@ -97,12 +95,10 @@ class <%- persistClass %>Test {
     <%_ } _%>
         assertThat(<%- persistInstance %>.<%- relationship.propertySupplierName %>()).isNull();
   <%_ } _%>
-  <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
-    <%_ if (relationship.otherRelationship.collection) { _%>
+  <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded && relationship.otherRelationship.collection) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).doesNotContain(<%- persistInstance %>);
-    <%_ } else { _%>
+  <%_ } else if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).isNull();
-    <%_ } _%>
   <%_ } _%>
   <%_ if (relationship.collection) { _%>
 
@@ -112,22 +108,18 @@ class <%- persistClass %>Test {
         <%- persistInstance %>.<%- relationship.propertyConsumerName %>(new HashSet<>(Set.of(<%- relationship.otherEntity.persistInstance %>Back)));
     <%_ } _%>
         assertThat(<%- persistInstance %>.<%- relationship.propertySupplierName %>()).containsOnly(<%- relationship.otherEntity.persistInstance %>Back);
-    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
-      <%_ if (relationship.otherRelationship.collection) { _%>
+    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded && relationship.otherRelationship.collection) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).containsOnly(<%- persistInstance %>);
-      <%_ } else { _%>
+    <%_ } else if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).isEqualTo(<%- persistInstance %>);
-      <%_ } _%>
     <%_ } _%>
 
         <%- persistInstance %>.<%- relationship.propertyConsumerName %>(new HashSet<>());
         assertThat(<%- persistInstance %>.<%- relationship.propertySupplierName %>()).doesNotContain(<%- relationship.otherEntity.persistInstance %>Back);
-    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
-      <%_ if (relationship.otherRelationship.collection) { _%>
+    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded && relationship.otherRelationship.collection) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).doesNotContain(<%- persistInstance %>);
-      <%_ } else { _%>
+    <%_ } else if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
         assertThat(<%- relationship.otherEntity.persistInstance %>Back.<%- relationship.otherRelationship.propertySupplierName %>()).isNull();
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
     }

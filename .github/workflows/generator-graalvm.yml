@@ -41,10 +41,10 @@ jobs:
           fetch-depth: 2
       - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
         id: node-version
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix graalvm --event-name ${{ github.event_name }}
   applications:
@@ -68,7 +68,7 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - uses: jhipster/actions/setup-runner@v1
+      - uses: jhipster/actions/setup-runner@v2
         with:
           node-version: ${{ matrix.node-version }}
           java-version: ${{ matrix.java-version }}
@@ -79,7 +79,7 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
         run: jhipster.cjs jdl --skip-jhipster-dependencies --skip-install
@@ -92,7 +92,7 @@ jobs:
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
-      - uses: jhipster/actions/compare-sample@v1
+      - uses: jhipster/actions/compare-sample@v2
         id: compare
         if: >-
           github.event.pull_request &&
@@ -113,11 +113,12 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         if: steps.compare.outputs.has-backend-changes == 'true'
         with:
+          version: '25.2'
           java-version: ${{ matrix.java-version }}
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-job-reports: 'true'
-      - uses: jhipster/actions/build-jhipster-bom@v1
+      - uses: jhipster/actions/build-jhipster-bom@v2
         if: matrix.build-jhipster-bom && steps.compare.outputs.has-backend-changes == 'true'
         with:
           jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
@@ -130,6 +131,10 @@ jobs:
       - run: npm run native-e2e --if-present
         id: e2e
         if: steps.compare.outputs.has-backend-changes == 'true'
+        continue-on-error: ${{ matrix.ignore-e2e-failures == 'true' }}
+        env:
+          CYPRESS_video: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: cypress-video') && 'true' || 'false' }}
       - name: Store the application
         uses: actions/upload-artifact@v7
         if: steps.compare.outputs.has-backend-changes == 'true' && always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
@@ -145,12 +150,14 @@ jobs:
             !**/app/target/**
             !**/app/*/target/**
             !**/node_modules/**
-      - name: 'E2E: Store failure screenshots'
+      - name: 'E2E: Store failure cypress assets'
         uses: actions/upload-artifact@v7
-        if: steps.compare.outputs.has-backend-changes == 'true' && always() && steps.e2e.outcome == 'failure'
+        if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ matrix.sample }}
-          path: ${{ github.workspace }}/app/**/cypress/screenshots
+          name: cypress-${{ matrix.sample }}
+          path: |
+            ${{ github.workspace }}/app/**/cypress/screenshots
+            ${{ github.workspace }}/app/**/cypress/videos
       - name: Dump docker logs
         if: steps.compare.outputs.has-backend-changes == 'true' && always() && contains(matrix.os, 'ubuntu')
         uses: jwalton/gh-docker-logs@v2

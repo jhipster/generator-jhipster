@@ -25,7 +25,7 @@ import { joinCallbacks } from './write-files.ts';
 describe('generator - base - support - writeFiles', () => {
   describe('joinCallbacks', () => {
     it('should return a function', () => {
-      expect(typeof joinCallbacks()).toBe('function');
+      expect(joinCallbacks()).toBeInstanceOf(Function);
     });
 
     it('without callbacks, should return the original content', () => {
@@ -39,8 +39,7 @@ describe('generator - base - support - writeFiles', () => {
 
       expect(callback('original', 'file')).toBe('return1');
 
-      expect(mock.mock.calls[0][0]).toBe('original');
-      expect(mock.mock.calls[0][1]).toBe('file');
+      expect(mock).toHaveBeenCalledWith('original', 'file');
     });
 
     it('with two callbacks, should forward last callback and return the last callback return', () => {
@@ -51,8 +50,7 @@ describe('generator - base - support - writeFiles', () => {
 
       expect(callback('original', 'file')).toBe('return2');
 
-      expect(mock2.mock.calls[0][0]).toBe('return1');
-      expect(mock2.mock.calls[0][1]).toBe('file');
+      expect(mock2).toHaveBeenCalledWith('return1', 'file');
     });
   });
 });

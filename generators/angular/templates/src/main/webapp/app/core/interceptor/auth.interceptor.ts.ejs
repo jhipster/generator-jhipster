@@ -16,17 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { ApplicationConfigService } from '../config/application-config.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const stateStorageService = inject(StateStorageService);
-  const applicationConfigService = inject(ApplicationConfigService);
 
-  const serverApiUrl = applicationConfigService.getEndpointFor('');
   if (!req.url || (req.url.startsWith('http') && !(serverApiUrl && req.url.startsWith(serverApiUrl)))) {
     return next(req);
   }

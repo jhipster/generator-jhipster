@@ -16,31 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
+// The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
+// If this URL is left empty (""), then it will be relative to the current context.
+export const serverApiUrl = <%- clientBundlerWebpack ? "process.env.SERVER_API_URL ?? ''" : 'SERVER_API_URL' %>;
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ApplicationConfigService {
-  private endpointPrefix = '';
-  private microfrontend = false;
-
-  setEndpointPrefix(endpointPrefix: string): void {
-    this.endpointPrefix = endpointPrefix;
-  }
-
-  setMicrofrontend(microfrontend = true): void {
-    this.microfrontend = microfrontend;
-  }
-
-  isMicrofrontend(): boolean {
-    return this.microfrontend;
-  }
-
-  getEndpointFor(api: string, microservice?: string): string {
-    if (microservice) {
-      return `${this.endpointPrefix}services/${microservice}/${api}`;
-    }
-    return `${this.endpointPrefix}${api}`;
-  }
-}
+// Context path under which microservice endpoints are exposed through the gateway.
+export const microserviceContextPath = 'services/';
+<%_ } _%>

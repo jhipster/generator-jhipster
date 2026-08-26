@@ -16,10 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
-import { Component, ChangeDetectionStrategy, DebugElement, Type, inject } from '@angular/core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Component, DebugElement, Type, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -27,10 +25,9 @@ import { fas, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-i
 
 import { SortByDirective } from './sort-by.directive';
 import { SortDirective } from './sort.directive';
-import { SortState, sortStateSignal } from './sort-state';
+import { sortStateSignal } from './sort-state';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SortDirective, SortByDirective, FaIconComponent],
   template: `
     <table>
@@ -47,7 +44,7 @@ import { SortState, sortStateSignal } from './sort-state';
 })
 class TestSortByDirective {
   sortState = sortStateSignal({ predicate: 'name' });
-  transition = <%- clientTestFramework %>.fn();
+  transition = vi.fn();
 
   private readonly library = inject(FaIconLibrary);
 
@@ -123,7 +120,7 @@ describe('Directive: SortByDirective', () => {
   it('multiple clicks at same component, should call SortDirective sort', () => {
     // GIVEN
     const sortDirective = tableHead.injector.get(SortDirective as Type<SortDirective>);
-    sortDirective.sort = <%- clientTestFramework %>.fn();
+    sortDirective.sort = vi.fn();
 
     // WHEN
     fixture.detectChanges();

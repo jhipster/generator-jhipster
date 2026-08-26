@@ -20,7 +20,7 @@ import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
 export function convertVueTranslations(body: string) {
-  return body.replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }').replace(/([@|||$])/g, "{'$1'}");
+  return body.replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }').replace(/([@|$])/g, "{'$1'}");
 }
 
 const convertTranslationsSupport = ({ clientI18nDir }: { clientI18nDir: string }) => {

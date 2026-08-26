@@ -16,13 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-import { catchError, of } from 'rxjs';
 
 import { AlertError } from 'app/shared/alert/alert-error';
 import { AccountService } from 'app/core/auth/account.service';
@@ -35,7 +34,6 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-settings',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
@@ -67,7 +65,6 @@ export default class Settings implements OnInit {
       validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
     }),
     langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
-
     activated: new FormControl(initialAccount.activated, { nonNullable: true }),
     authorities: new FormControl(initialAccount.authorities, { nonNullable: true }),
     imageUrl: new FormControl(initialAccount.imageUrl, { nonNullable: true }),

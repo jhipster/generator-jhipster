@@ -21,7 +21,7 @@
 # To reach the application from a browser, you need to add '127.0.0.1 host.docker.internal' to your hosts file.
 ### Discovery mode
 # JHCC supports 3 kinds of discovery mode: Consul, Eureka and static
-# In order to use one, please set SPRING_PROFILES_ACTIVE to one (and only one) of this values: consul,eureka,static
+# In order to use one, please set SPRING_PROFILES_ACTIVE to one (and only one) of these values: consul,eureka,static
 ### Discovery properties
 # According to the discovery mode choose as Spring profile, you have to set the right properties
 # please note that current properties are set to run JHCC with default values, personalize them if needed
@@ -63,7 +63,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod,api-docs,<%- discoveryProfile %><%- authenticationTypeOauth2 ? ',oauth2' : '' %>
 <%_ if (authenticationTypeJwt) { _%>
       - SPRING_SECURITY_USER_PASSWORD=admin
-      # The token should have the same value than the one declared in you Spring configuration under the jhipster.security.authentication.jwt.base64-secret configuration's entry
+      # The token should have the same value as the one declared in you Spring configuration under the jhipster.security.authentication.jwt.base64-secret configuration's entry
       - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=<%- jwtSecretKey %>
 <%_ } else if (authenticationTypeOauth2) { _%>
       # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file

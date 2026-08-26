@@ -56,14 +56,14 @@ describe('Administration reducer tests', () => {
       totalItems: 0,
     });
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
-    expect(isEmpty(state.gateway.routes));
+    expect(isEmpty(state.gateway.routes)).toBe(true);
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
-    expect(isEmpty(state.logs.loggers));
-    expect(isEmpty(state.threadDump));
+    expect(isEmpty(state.logs.loggers)).toBe(true);
+    expect(isEmpty(state.threadDump)).toBe(true);
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-    expect(isEmpty(state.tracker.activities));
+    expect(isEmpty(state.tracker.activities)).toBe(true);
 <%_ } _%>
   }
 

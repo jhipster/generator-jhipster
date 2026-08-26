@@ -24,9 +24,7 @@ import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
-<%_ if (springBoot4) { _%>
 import org.apache.commons.lang3.Strings;
-<%_ } _%>
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +112,7 @@ _%>
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
-    private static final boolean CASUAL_CHAIN_ENABLED = false;
+    private static final boolean CAUSAL_CHAIN_ENABLED = false;
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
 
@@ -344,21 +342,21 @@ _%>
 <%_ } _%>
 
     public Optional<ProblemDetailWithCause> buildCause(final Throwable throwable, <%- requestClass %> request) {
-        if (throwable != null && isCasualChainEnabled()) {
+        if (throwable != null && isCausalChainEnabled()) {
             return Optional.of(customizeProblem(getProblemDetailWithCause(throwable), throwable, request));
         }
         return Optional.ofNullable(null);
     }
 
-    private boolean isCasualChainEnabled() {
+    private boolean isCausalChainEnabled() {
         // Customize as per the needs
-        return CASUAL_CHAIN_ENABLED;
+        return CAUSAL_CHAIN_ENABLED;
     }
 
     private boolean containsPackageName(String message) {
 
         // This list is for sure not complete
-        return <%- springBoot4 ? ' Strings.CS' : ' StringUtils' %>.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%- packageName %>");
+        return Strings.CS.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%- packageName %>");
     }
 
 }

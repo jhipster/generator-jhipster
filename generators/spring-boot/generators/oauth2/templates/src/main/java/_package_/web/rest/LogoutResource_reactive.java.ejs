@@ -74,6 +74,10 @@ public class LogoutResource {
         logoutUrl.append(clientRegistration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
 
         String originUrl = request.getHeaders().getOrigin();
+        if (originUrl == null) {
+            var requestUri = request.getURI();
+            originUrl = requestUri.getScheme() + "://" + requestUri.getAuthority();
+        }
 
         logoutUrl.append("?id_token_hint=").append(idToken.getTokenValue()).append("&post_logout_redirect_uri=").append(originUrl);
 

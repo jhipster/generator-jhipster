@@ -1,18 +1,32 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import {
-  buildClientSamples,
-  defaultHelpers as helpers,
-  dryRunHelpers,
-  entitiesClientSamples as entities,
-  runResult,
-} from '../../lib/testing/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import Generator from './index.ts';
+
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { buildClientSamples, defaultHelpers as helpers, dryRunHelpers, entitiesClientSamples as entities, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -212,6 +226,27 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('clientTheme: bootswatch theme', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({
+          clientFramework,
+          clientTheme: 'flatly',
+        })
+        .withSharedApplication({ getWebappTranslation: () => 'translated-value' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should disable bootswatch web-font-path before importing the theme (#33691)', () => {
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
+        /\$web-font-path: false;\n@import 'bootswatch\/dist\/flatly\/bootswatch';/,
+      );
+    });
+  });
+
   describe('builtIn UserManagementEntity', () => {
     before(async () => {
       await dryRunHelpers
@@ -229,6 +264,42 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should match snapshot for UserManagement files', () => {
       expect(runResult.getSnapshot('**/entities/admin/user-management/**')).toMatchSnapshot();
+    });
+  });
+
+  describe('builtIn UserManagementEntity with cassandra', () => {
+    before(async () => {
+      await dryRunHelpers
+        .runJHipster(generator)
+        .withJHipsterConfig(
+          {
+            clientFramework,
+            databaseType: 'cassandra',
+            enableTranslation: false,
+          },
+          [{ name: 'UserManagement', skipClient: false }],
+        )
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common']);
+    });
+
+    it('should add authorities to the model even though the Authority entity is not generated', () => {
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/user-management.model.ts`,
+        'authorities?: string[] | null;',
+      );
+    });
+
+    it('should not reference audit fields, which are not available with cassandra', () => {
+      runResult.assertNoFileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/user-management.model.ts`, 'createdBy');
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/detail/user-management-detail.html`,
+        /createdBy|createdDate|lastModifiedBy|lastModifiedDate/,
+      );
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/list/user-management.html`,
+        /createdDate|lastModifiedBy|lastModifiedDate/,
+      );
     });
   });
 });

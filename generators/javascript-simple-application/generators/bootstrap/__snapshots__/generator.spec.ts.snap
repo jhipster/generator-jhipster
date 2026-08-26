@@ -69,6 +69,7 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "prodDatabaseType": "postgresql",
   "projectDescription": "Description for JHipster",
   "reactive": false,
+  "removeNeedles": undefined,
   "searchEngine": "no",
   "serverPort": 8080,
   "serviceDiscoveryType": "no",

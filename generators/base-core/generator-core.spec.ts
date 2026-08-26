@@ -1,10 +1,30 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { before, beforeEach, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { createJHipsterLogger } from '../../lib/utils/index.ts';
 
 import Base from './index.ts';
 import { editPropertiesFileCallback } from './support/properties-file.ts';
+
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const BaseGenerator: any = Base.prototype;
 
@@ -30,7 +50,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('undefined positional arguments', async () => {
       const base = new Dummy([], { positionalArguments: [], env: await helpers.createTestEnv() });
@@ -39,7 +59,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('undefined argument', async () => {
       const base = new Dummy([undefined], { env: await helpers.createTestEnv() });
@@ -48,7 +68,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('undefined positional arguments', async () => {
       const base = new Dummy([], { positionalArguments: [undefined], env: await helpers.createTestEnv() });
@@ -57,7 +77,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('string arguments', async () => {
       const base = new Dummy(['foo'], { env: await helpers.createTestEnv() });

@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable } from '@angular/core';
+import { serverApiUrl } from 'app/config/endpoint.constants';
+import { inject, Service } from '@angular/core';
 <%_ if (authenticationTypeOauth2) { _%>
 import { Location } from '@angular/common';
 
@@ -32,7 +33,6 @@ import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { Logout } from './logout.model';
@@ -40,10 +40,9 @@ import { Logout } from './logout.model';
 import { Login } from './login.model';
 <%_ } _%>
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class LoginService {
 <%_ if (authenticationTypeSession) { _%>
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
   private readonly location = inject(Location);
@@ -66,7 +65,7 @@ export class LoginService {
 
 <%_ if (authenticationTypeSession) { _%>
   logoutUrl(): string {
-    return this.applicationConfigService.getEndpointFor('api/logout');
+    return `${serverApiUrl}api/logout`;
   }
 
   logoutInClient(): void {

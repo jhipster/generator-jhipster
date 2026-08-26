@@ -844,8 +844,8 @@ exports[`generator - spring-boot:cache redis-gradle should match source calls 1`
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],
@@ -936,8 +936,8 @@ exports[`generator - spring-boot:cache redis-maven should match source calls 1`]
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
             "parameters": [Function],
           },
         ],

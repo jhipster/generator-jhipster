@@ -29,11 +29,13 @@
       <<%- jhiPrefixDashed %>-alert />
 
       <dl class="row-md jh-entity-details">
-<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+<%_ for (const field of fields.filter(field => !field.hidden && !(builtInUserManagement && field.fieldName === 'activated'))) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
-        <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else { %> ngbTooltip="<%- field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
+        <dt><span<% if (field.documentation && enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else if (field.documentation) { %> ngbTooltip="<%- field.documentation %>"<% } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (builtInUserManagement && fieldName === 'langKey') { _%>
+          {{ <%- entityInstance %>Ref.<%- fieldName %> }}
+  <%_ } else if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label -%>
           <span>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>Ref.<%- fieldName %> ?? 'null'" })</span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
@@ -53,7 +55,7 @@
           </div>
         }
   <%_ } else if (field.fieldTypeDuration) { _%>
-          <span>{{ <%- entityInstance %>Ref.<%- fieldName %> | duration }} ({{<%- entityInstance %>Ref.<%- fieldName %> }})</span>
+          <span>{{ <%- entityInstance %>Ref.<%- fieldName %> | duration }} ({{ <%- entityInstance %>Ref.<%- fieldName %> }})</span>
   <%_ } else if (field.fieldTypeTimed) { _%>
           <span>{{ <%- entityInstance %>Ref.<%- fieldName %> | formatMediumDatetime }}</span>
   <%_ } else if (field.fieldTypeLocalDate) { _%>
@@ -61,11 +63,30 @@
   <%_ } else { _%>
           <span>{{ <%- entityInstance %>Ref.<%- fieldName %> }}</span>
   <%_ } _%>
+  <%_ if (builtInUserManagement && fieldName === 'login') { _%>
+          @if (userManagementRef.activated) {
+            <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
+          } @else {
+           <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
+          }
+  <%_ } _%>
         </dd>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { persistableRelationship, relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
-  <%_ if (persistableRelationship) { _%>
+  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
+
+        <dt><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.profiles')</span></dt>
+        <dd>
+            <ul class="list-unstyled">
+            @for (authority of <%- entityInstance %>Ref.authorities; track $index) {
+                <li>
+                    <span class="badge bg-info">{{ authority }}</span>
+                </li>
+            }
+            </ul>
+        </dd>
+  <%_ } else if (persistableRelationship) { _%>
         <dt><span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span></dt>
         <dd>
     <%_ if (relationship.otherEntityUser) { _%>

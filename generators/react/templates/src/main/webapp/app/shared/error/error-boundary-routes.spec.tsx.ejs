@@ -1,7 +1,25 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router';
 import { render } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ErrorBoundaryRoutes from './error-boundary-routes';
 
@@ -20,7 +38,7 @@ describe('error-boundary-routes component', () => {
     vi.spyOn((globalThis as any).console, 'error').mockImplementation(() => false);
   });
 
-  it('Should render fallback component when an uncaught error is thrown in route', () => {
+  it('should render fallback component when an uncaught error is thrown in route', () => {
     const { container } = render(
       <MemoryRouter>
         <ErrorBoundaryRoutes>
@@ -31,7 +49,7 @@ describe('error-boundary-routes component', () => {
     expect(container.innerHTML).toEqual('<div><h2 class="error">An unexpected error has occurred.</h2></div>');
   });
 
-  it('Should not render fallback component when route with uncaught error is not matched', () => {
+  it('should not render fallback component when route with uncaught error is not matched', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/path']}>
         <ErrorBoundaryRoutes>
@@ -43,7 +61,7 @@ describe('error-boundary-routes component', () => {
     expect(container.innerHTML).toEqual('<div>No error</div>');
   });
 
-  it('Should not render fallback component when no uncaught error is thrown', () => {
+  it('should not render fallback component when no uncaught error is thrown', () => {
     const { container } = render(
       <MemoryRouter>
         <ErrorBoundaryRoutes>

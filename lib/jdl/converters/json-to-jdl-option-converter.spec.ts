@@ -55,7 +55,7 @@ describe('jdl - JSONToJDLOptionConverter', () => {
       });
 
       it('should add the converted options', () => {
-        expect(jdlObject.getOptionsForName(SKIP_CLIENT)).not.toBeUndefined();
+        expect(jdlObject.getOptionsForName(SKIP_CLIENT)).toBeDefined();
       });
     });
   });

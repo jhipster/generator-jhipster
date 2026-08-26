@@ -1,9 +1,10 @@
 {
   "dependencies": {
     "ejs-lint": "2.0.1",
-    "eslint": "10.5.0",
-    "globals": "17.7.0",
-    "vitest": "4.1.9"
+    "eslint": "10.9.0",
+    "globals": "17.11.0",
+    "typescript-eslint": "8.67.0",
+    "vitest": "4.1.11"
   },
-  "packageManager": "npm@11"
+  "packageManager": "npm@12"
 }

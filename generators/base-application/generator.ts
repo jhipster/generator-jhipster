@@ -223,7 +223,7 @@ export default class BaseApplicationGenerator<
   /**
    * Get all the generator configuration from the .yo-rc.json file
    * @param entityName - Name of the entity to load.
-   * @param create - Create storage if doesn't exists.
+   * @param create - Create storage if it doesn't exist.
    */
   getEntityConfig(entityName: string, create = false): Storage | undefined {
     const entityPath = this.getEntityConfigPath(entityName);
@@ -434,7 +434,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to configure.
-   * This method doesn't filter entities. An filtered config can be changed at this priority.
+   * This method doesn't filter entities. A filtered config can be changed at this priority.
    * @returns {string[]}
    */
   #getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam<Entity, Application>[] {
@@ -450,7 +450,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to load.
-   * This method doesn't filter entities. An filtered config can be changed at this priority.
+   * This method doesn't filter entities. A filtered config can be changed at this priority.
    * @returns {string[]}
    */
   #getEntitiesDataToLoad(): EntityToLoad<any>[] {

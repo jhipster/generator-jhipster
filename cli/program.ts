@@ -370,9 +370,9 @@ export const buildCommands = ({
             args.shift(); // remove first argument which is handled in lazyBuildCommand
             await Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options)));
 
-            silent || done();
+            if (!silent) done();
           } catch (error) {
-            silent || done(error as Error);
+            if (!silent) done(error as Error);
           }
           return;
         }
@@ -408,8 +408,8 @@ export const buildJHipster = async ({
   if (env) {
     commands = { ...SUB_GENERATORS, ...commands };
   } else {
-    envBuilder = envBuilder ?? (await createEnvBuilder());
-    env = env ?? envBuilder.getEnvironment();
+    envBuilder ??= await createEnvBuilder();
+    env ??= envBuilder.getEnvironment();
     commands = { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()), ...commands };
   }
 

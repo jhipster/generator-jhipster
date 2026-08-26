@@ -55,14 +55,13 @@ export function aNeedle(generator, needleData) {
     generator = null;
   }
 
- return createBaseNeedle(
   return createBaseNeedle(
     {
       generator,
       filePath, // File path for logging purpose
       needlesPrefix: 'needle-prefix',
     },
-    needles
+    needles,
   );
 }
 

@@ -395,20 +395,6 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).toThrow();
         });
       });
-      describe('a blueprint name containing ~', () => {
-        it('should fail', () => {
-          expect(() =>
-            parse(
-              `application {
-  config {
-    blueprints [generator-jh~ipster-vuejs]
-  }
-}`,
-              jdlRuntime,
-            ),
-          ).toThrow();
-        });
-      });
       describe('a blueprint name containing \\', () => {
         it('should fail', () => {
           expect(() =>

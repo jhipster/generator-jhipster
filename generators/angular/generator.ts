@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import path from 'node:path';
+
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
@@ -53,7 +55,7 @@ const { ANGULAR } = clientFrameworkTypes;
 
 export class AngularApplicationGenerator extends BaseApplicationGenerator<
   AngularEntity,
-  AngularApplication<AngularEntity>,
+  AngularApplication,
   AngularConfig,
   AngularOptions,
   AngularSource
@@ -146,12 +148,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           const addRouteCallback = addEntitiesRoute(param);
           this.editFile(routeTemplatePath, { ignoreNonExisting: ignoreNonExistingRoute }, addRouteCallback);
 
-          const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.html`;
-          const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
-          const editCallback = addToEntitiesMenu(param);
-          this.editFile(filePath, { ignoreNonExisting }, editCallback);
-
-          if (application.applicationTypeMicroservice) {
+          if (application.exposeMicrofrontend) {
             this.editFile(
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
               createNeedleCallback({
@@ -170,6 +167,11 @@ export default class AngularGenerator extends AngularApplicationGenerator {
                 })),
               }),
             );
+          } else {
+            const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.html`;
+            const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
+            const editCallback = addToEntitiesMenu(param);
+            this.editFile(filePath, { ignoreNonExisting }, editCallback);
           }
         };
 
@@ -292,6 +294,52 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ entity, relationship }) {
+        mutateData(relationship, {
+          __override__: false,
+          propertyTsType: ({ otherEntity }) => `I${otherEntity.entityAngularName}`,
+          relationshipShouldUsePick: ({ otherEntity }) =>
+            !entity.builtInUserManagement && !otherEntity.embedded && ((entity as any).dtoMapstruct || otherEntity.builtInUser),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareTranslationPipeUsage({ application: { enableTranslation }, entity }) {
+        mutateData(entity as AngularEntity & { searchEngineAny?: boolean }, {
+          angularEntityDetailsRequiresTranslationPipe: ({ fields }) =>
+            enableTranslation && fields.some(field => !field.hidden && Boolean(field.documentation)),
+          angularEntityUpdateRequiresTranslationPipe: ({ angularEntityDetailsRequiresTranslationPipe, fields }) =>
+            Boolean(angularEntityDetailsRequiresTranslationPipe) ||
+            (enableTranslation && fields.some(field => !field.hidden && field.fieldIsEnum)),
+          angularEntityListRequiresTranslationPipe: ({ searchEngineAny, relationships }) =>
+            enableTranslation &&
+            (Boolean(searchEngineAny) ||
+              relationships.some(
+                relationship =>
+                  !relationship.otherEntity.embedded &&
+                  relationship.otherEntity.jpaMetamodelFiltering &&
+                  relationship.otherEntity.paginationPagination &&
+                  relationship.collection &&
+                  !relationship.persistableRelationship,
+              )),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       queueTranslateTransform({ application }) {
@@ -360,6 +408,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientSrcDir}app/admin/user-management/service/user-management.service.spec.ts`,
             `${application.clientSrcDir}app/admin/user-management/service/user-management.service.ts`,
           ],
+          '9.2.1': [
+            `${application.clientSrcDir}app/core/config/application-config.service.ts`,
+            `${application.clientSrcDir}app/core/config/application-config.service.spec.ts`,
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -386,9 +438,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addPrettierConfig({ application, source }) {
         source.mergePrettierConfig?.({
-          overrides: [
-            { files: `${this.relativeDir(application.clientRootDir, application.clientSrcDir)}**/*.html`, options: { parser: 'angular' } },
-          ],
+          overrides: [{ files: path.posix.join(application.clientSrcDir, '**/*.html'), options: { parser: 'angular' } }],
         });
       },
       clientBundler({ application, source }) {
@@ -426,11 +476,22 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           });
         }
       },
+      addMicrofrontendDependencies({ application, source }) {
+        const { clientBundlerWebpack, microfrontend } = application;
+        if (!microfrontend) return;
+        if (clientBundlerWebpack) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@module-federation/enhanced': null,
+            },
+          });
+        }
+      },
       addWebsocketDependencies({ application, source }) {
-        const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
+        const { authenticationUsesCsrf, communicationSpringWebsocket, nodeDependencies } = application;
         const dependencies: Record<string, string> = {};
         if (communicationSpringWebsocket) {
-          if (authenticationTypeSession) {
+          if (authenticationUsesCsrf) {
             dependencies['ngx-cookie-service'] = nodeDependencies['ngx-cookie-service'];
           }
           source.mergeClientPackageJson!({

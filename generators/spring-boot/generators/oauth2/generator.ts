@@ -76,6 +76,12 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
                 ],
               },
               {
+                condition: generator => generator.generateAuthenticationApi && generator.reactive,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: ['web/filter/OAuth2ReactiveRefreshTokensWebFilterTest.java'],
+              },
+              {
                 condition: generator => generator.generateAuthenticationApi,
                 path: `${SERVER_TEST_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageTestDir,
@@ -107,12 +113,12 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      dependencies({ application, source }) {
-        if (application.springBoot4) {
-          source.addSpringBootModule?.('spring-boot-starter-restclient');
-        }
-
-        source.addSpringBootModule?.('spring-boot-starter-oauth2-client', 'spring-boot-starter-oauth2-resource-server');
+      dependencies({ source }) {
+        source.addSpringBootModule?.(
+          'spring-boot-starter-oauth2-client',
+          'spring-boot-starter-oauth2-resource-server',
+          'spring-boot-starter-restclient',
+        );
         source.addJavaDefinition!({
           dependencies: [{ groupId: 'com.github.ben-manes.caffeine', artifactId: 'caffeine' }],
         });

@@ -34,11 +34,7 @@ import {
   prepareEntityPrimaryKeyForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.ts';
-import type {
-  Application as BaseApplicationApplication,
-  DerivedField,
-  Entity as BaseApplicationEntity,
-} from '../base-application/types.ts';
+import type { Application as BaseApplicationApplication, DerivedField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
@@ -226,10 +222,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             // Previous entities are not prepared using default jhipster priorities.
             // Prepare them.
             const entity = databaseChangelog.previousEntity!;
-            loadRequiredConfigIntoEntity(
-              entity as unknown as ServerEntity,
-              this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>,
-            );
+            loadRequiredConfigIntoEntity(entity as unknown as ServerEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
             // TODO fix types
             prepareEntity(entity, this);
             // TODO fix types
@@ -374,9 +367,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         }
 
         const { javaDependencies } = application;
-        const shouldAddProperty = (property: string, value: string) => {
-          return value && !source.hasJavaProperty?.(property) && application.javaManagedProperties[property] !== value;
-        };
+        const shouldAddProperty = (property: string, value: string) =>
+          value && !source.hasJavaProperty?.(property) && application.javaManagedProperties[property] !== value;
         const checkProperty = (property: string) => {
           if (!source.hasJavaManagedProperty?.(property) && !source.hasJavaProperty?.(property)) {
             const message = `${property} is required by maven-liquibase-plugin, make sure to add it to your pom.xml`;

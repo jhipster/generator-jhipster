@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 <%_ } _%>
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class StateStorageService {
   private readonly previousUrlKey = 'previousUrl';
 <%_ if (authenticationTypeJwt) { _%>

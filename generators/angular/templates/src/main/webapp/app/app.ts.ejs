@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import dayjs from 'dayjs/esm';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -24,7 +24,6 @@ import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap/datepicker';
 import locale from '@angular/common/locales/<%- angularLocaleId %>';
 import appRoutes from './app.routes';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { fontAwesomeIcons } from './config/font-awesome-icons';
 import Main from './layouts/main/main';
 <%_ if (communicationSpringWebsocket) { _%>
@@ -33,14 +32,12 @@ import { TrackerService } from './core/tracker/tracker.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-app',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<<%- jhiPrefixDashed %>-main />',
   imports: [
     Main,
   ],
 })
 export default class App {
-  private readonly applicationConfigService = inject(ApplicationConfigService);
   private readonly iconLibrary = inject(FaIconLibrary);
 <%_ if (communicationSpringWebsocket) { _%>
   private readonly trackerService = inject(TrackerService);
@@ -51,10 +48,6 @@ export default class App {
 <%_ if (communicationSpringWebsocket) { _%>
     this.trackerService.setup();
 <%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
-    this.applicationConfigService.setMicrofrontend();
-<%_ } _%>
-    this.applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);
     this.iconLibrary.addIcons(...fontAwesomeIcons);
     this.dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };

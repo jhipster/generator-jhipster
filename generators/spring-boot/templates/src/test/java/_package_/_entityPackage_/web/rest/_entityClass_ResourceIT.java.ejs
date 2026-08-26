@@ -101,7 +101,7 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 <%_ if (jpaMetamodelFiltering && !reactive) { _%>
 import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
 import org.springframework.data.util.Streamable;
@@ -216,12 +216,10 @@ import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (authenticationUsesCsrf && reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
-  <%_ } else { _%>
+<%_ } else if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch || implementsEagerLoadApis) { _%>
 import static org.mockito.Mockito.*;
@@ -481,13 +479,15 @@ class <%- entityClass %>ResourceIT {
 
     @Autowired
     private <%- entityClass %>Mapper <%- entityInstance %>Mapper;
-<%_ } if (!serviceNo) { _%>
+<%_ } _%>
+<%_ if (!serviceNo) { _%>
   <%_ if (implementsEagerLoadApis) { _%>
 
     @Mock
     private <%- entityClass %>Service <%- entityInstance %>ServiceMock;
   <%_ } _%>
-<%_ } if (searchEngineElasticsearch) { _%>
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
 
     @Autowired
     private <%- entityClass %>SearchRepository <%- entityInstance %>SearchRepository;
@@ -1882,12 +1882,13 @@ class <%- entityClass %>ResourceIT {
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
         <%- entityInstance %>SearchRepository.save(<%- persistInstance %>)<%- callBlock %>;
-  <%_ } else if (searchEngineCouchbase) { _%>
-        // Wait for the <%- entityInstance %> to be indexed
-        TestUtil.retryUntilNotEmpty(() -> <%- entityInstance %>Repository.search("id:" + <%- entityInstance %>.<%- primaryKey.propertySupplierName %>())<%- reactive ? '.collectList().block()' : '' %>);
   <%_ } _%>
 
         // Search the <%- entityInstance %>
+  <%_ if (searchEngineCouchbase) { _%>
+        // Search results are eventually consistent and non-monotonic: retry the assertions until the <%- entityInstance %> is indexed
+        TestUtil.retryUntilSuccess(() ->
+  <%_ } _%>
   <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .exchange()
@@ -1920,7 +1921,7 @@ class <%- entityClass %>ResourceIT {
     && !field.fieldTypeInteger
     && !field.fieldTypeDouble
   ) { %>.toString()<% } %>))<%- reactive ? '' : ')' %>
-  <%_ } _%>;
+  <%_ } _%><%- searchEngineCouchbase ? ')' : '' %>;
     }
 <%_ } _%>
 

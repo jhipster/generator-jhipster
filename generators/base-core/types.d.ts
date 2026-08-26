@@ -24,7 +24,6 @@ import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.ts';
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
 export type Config = {
-  autoCrlf?: boolean;
   defaultCommand?: string;
 };
 
@@ -48,6 +47,7 @@ export type Options = YeomanOptions & {
 
   /** bootstrap options */
   applyDefaults?: <const T = any>(data: T) => T;
+  autoCrlf?: boolean;
 };
 
 export type Features = YeomanFeatures & {

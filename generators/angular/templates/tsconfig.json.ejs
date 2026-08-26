@@ -18,7 +18,9 @@
 -%>
 {
   "compilerOptions": {
-    "baseUrl": "<%- this.relativeDir(clientRootDir, clientSrcDir) %>",
+    "paths": {
+      "*": ["./<%- this.relativeDir(clientRootDir, clientSrcDir) %>*"]
+    },
     "outDir": "./<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/root",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -27,7 +29,6 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
@@ -48,7 +49,6 @@
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true,
     "preserveWhitespaces": true
   }
 }

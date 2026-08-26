@@ -36,7 +36,7 @@ export const activateAction = createAsyncThunk('activate/activate_account', asyn
 
 export const ActivateSlice = createSlice({
   name: 'activate',
-  initialState: initialState as ActivateState,
+  initialState,
   reducers: {
     reset() {
       return initialState;

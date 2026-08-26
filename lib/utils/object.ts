@@ -81,7 +81,7 @@ export type MutateDataParam<T extends object> = Simplify<
     [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__' ? boolean
     : Key extends ReadonlyKeysOf<T> ? never
     : Key extends keyof T ?
-      T[Key] extends Function ?
+      T[Key] extends (...args: any[]) => any ?
         (ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation
       : T[Key] | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation)
     : never;
@@ -130,9 +130,8 @@ export const createDelayedMutationContext = <T extends object>(options: Omit<Mut
   return context;
 };
 
-const isMutationContext = <T extends object>(context: T): context is ContextWithMutationOptions<T> => {
-  return context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context && context[MUTATION_CONTEXT_SYMBOL] !== undefined;
-};
+const isMutationContext = <T extends object>(context: T): context is ContextWithMutationOptions<T> =>
+  context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context && context[MUTATION_CONTEXT_SYMBOL] !== undefined;
 
 const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
   new Proxy(target, {
@@ -162,10 +161,7 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
   }
 };
 
-const applyDelayedMutations = (
-  context: ContextWithMutationOptions<object>,
-  opts?: { defaults?: boolean; throwOnDelay?: boolean },
-): boolean => {
+const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { defaults?: boolean; throwOnDelay?: boolean }): boolean => {
   let mutationApplied = false;
   const delayedContext = context[MUTATION_CONTEXT_SYMBOL].delayContext;
   if (delayedContext) {

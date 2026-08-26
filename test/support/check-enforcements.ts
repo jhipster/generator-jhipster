@@ -103,7 +103,7 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
         '_',
       );
       it(`${templateFile} must have referenced with ${reference}`, () => {
-        const found = jsFiles.find(jsFile => {
+        const found = jsFiles.some(jsFile => {
           const content = readFileSync(jsFile).toString();
           return content.includes(`/${reference}`) || content.includes(`'${reference}`);
         });

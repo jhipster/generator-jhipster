@@ -52,10 +52,7 @@ import {
 } from '../../support/index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
 
-export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<
-  BaseApplicationEntity,
-  BaseApplicationApplication<BaseApplicationEntity>
-> {
+export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<BaseApplicationEntity, BaseApplicationApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -255,7 +252,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         for (const { entityName, entityBootstrap, entityStorage } of entitiesToLoad) {
           if (!entityBootstrap.builtIn) {
             let entity = entityStorage.getAll() as BaseEntity;
-            entity.name = entity.name ?? entityName;
+            entity.name ??= entityName;
             entity = { ...entity, ...entity.annotations };
             Object.assign(entityBootstrap, entity);
           }

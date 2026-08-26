@@ -95,7 +95,7 @@ export const createJHipsterLogger = (options: LoggerOptions & { namespace?: stri
   const cliLogger = namespace === CLI_LOGGER;
   let { debugEnabled } = options;
   if (cliLogger) {
-    debugEnabled = debugEnabled || process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
+    debugEnabled ||= process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
     if (debugEnabled) {
       logger.verboseInfo('Debug logging is on');
     }

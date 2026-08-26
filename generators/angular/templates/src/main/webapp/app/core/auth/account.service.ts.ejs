@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { serverApiUrl } from 'app/config/endpoint.constants';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Signal, effect, inject, signal } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
@@ -27,9 +28,8 @@ import { catchError, Observable, of, shareReplay, tap } from 'rxjs';
 
 import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { ApplicationConfigService } from '../config/application-config.service';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AccountService {
   private readonly userIdentity = signal<Account | null>(null);
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -42,11 +42,10 @@ export class AccountService {
   private readonly http = inject(HttpClient);
   private readonly stateStorageService = inject(StateStorageService);
   private readonly router = inject(Router);
-  private readonly applicationConfigService = inject(ApplicationConfigService);
 
 <%_ if (generateUserManagement) { _%>
   save(account: Account): Observable<{}> {
-    return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
+    return this.http.post(`${serverApiUrl}api/account`, account);
   }
 
 <%_ } _%>
@@ -96,7 +95,7 @@ export class AccountService {
   }
 
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('api/account'));
+    return this.http.get<Account>(`${serverApiUrl}api/account`);
   }
 
   private navigateToStoredUrl(): void {

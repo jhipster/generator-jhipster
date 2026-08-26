@@ -30,10 +30,8 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
     }
 
     await this.dependsOnBootstrap('javascript-simple-application');
-    if (!this.delegateToBlueprint) {
-      if (!this.options.fromInit) {
-        await this.dependsOnBootstrap('client');
-      }
+    if (!this.delegateToBlueprint && !this.options.fromInit) {
+      await this.dependsOnBootstrap('client');
     }
   }
 

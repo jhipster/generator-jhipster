@@ -98,10 +98,9 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
       loadConstants({ deployment }) {
         defaults(deployment, kubernetesConstants, helmConstants);
       },
-      async loadDockerDependenciesTask({ deployment, applications }) {
+      async loadDockerDependenciesTask({ deployment }) {
         loadDockerDependenciesTask.call(this, { context: deployment });
         loadDockerElasticsearchVersion.call(this, {
-          springBoot4: applications.some(app => app.springBoot4),
           dockerContainers: deployment.dockerContainers!,
         });
       },

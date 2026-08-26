@@ -17,12 +17,10 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0];
-    const requiresRestTypeConversion = !builtInUserManagement && anyFieldIsDateDerived || builtInUserManagement && !userManagement.skipClient;
+    const requiresRestTypeConversion = anyFieldIsDateDerived || builtInUserManagement;
     const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
 _%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
@@ -36,15 +34,14 @@ import { <%- entityAngularName %>Service<% if (requiresRestTypeConversion) { %>,
 
 const requireRestSample: <% if (requiresRestTypeConversion) { %><%- entityRestName %><% } else { %>I<%- entityAngularName %><% } %> = {
   ...sampleWithRequiredData,
-<%_ for (const field of fields) { _%>
-  <%_ if (field.fieldTypeLocalDate) { _%>
+<%_ if (requiresRestTypeConversion) { _%>
+  <%_ for (const field of fields) { _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
   <%- field.fieldName %>: sampleWithRequiredData.<%- field.fieldName %>?.format(DATE_FORMAT),
-  <%_ } else if (field.fieldTypeTimed) { _%>
+    <%_ } else if (field.fieldTypeTimed) { _%>
   <%- field.fieldName %>: sampleWithRequiredData.<%- field.fieldName %>?.toJSON(),
+    <%_ } _%>
   <%_ } _%>
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-  authorities: null,
 <%_ } _%>
 };
 
@@ -125,7 +122,6 @@ describe('<%- entityAngularName %> Service', () => {
 
             const req = httpMock.expectOne({ method: 'GET' });
             req.flush([returnedFromService]);
-            httpMock.verify();
             expect(expectedResult).toMatchObject([expected]);
         });
 
@@ -150,7 +146,7 @@ describe('<%- entityAngularName %> Service', () => {
 
             const req = httpMock.expectOne({ method: 'GET' });
             req.flush(null, { status: 500, statusText: 'Internal Server Error' });
-            expect(expectedResult).toBe(null);
+            expect(expectedResult).toBeNull();
         });
 <%_ } _%>
 
@@ -237,7 +233,7 @@ describe('<%- entityAngularName %> Service', () => {
                 expect(compareResult2).toEqual(false);
             });
 
-            it('should return false if primaryKey matches', () => {
+            it('should return true if primaryKey matches', () => {
                 const entity1 = <%- tsPrimaryKeySamples[0] %>;
                 const entity2 = <%- tsPrimaryKeySamples[0] %>;
 

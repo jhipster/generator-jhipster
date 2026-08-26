@@ -159,7 +159,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const allNew = allNewApplications(this.applications);
         const interactiveFallback = !allNew;
 
-        this.interactive = this.interactive ?? interactiveFallback;
+        this.interactive ??= interactiveFallback;
         this.force = (this.options.force ?? (nrApplications > 0 && allNew)) ? true : undefined;
         this.reproducible = allNew;
       },
@@ -242,7 +242,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   get end() {
     return this.asEndTaskGroup({
       async generateDeployments() {
-        if (!this.exportedDeployments || this.exportedDeployments.length === 0) {
+        if (!this.exportedDeployments?.length) {
           this.log.info('No deployment configured');
           return;
         }

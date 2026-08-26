@@ -16,14 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%- packageName %>.config;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EmbeddedCassandra {
-}
+        if (<%- restInstance %>.<%- primaryKey.propertySupplierName %>() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(<%- primaryKey.name %>, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }

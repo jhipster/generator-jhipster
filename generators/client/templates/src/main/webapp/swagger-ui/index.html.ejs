@@ -168,7 +168,7 @@
           presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
           plugins: [SwaggerUIBundle.plugins.DownloadUrl, AlwaysEnableTryItOutPlugin],
           tryItOutEnabled: true,
-          requestInterceptor: function (req) {
+          requestInterceptor(req) {
 <%_ if (authenticationUsesCsrf) { _%>
             req.headers['X-XSRF-TOKEN'] = getCSRF();
 <%_ } else { _%>

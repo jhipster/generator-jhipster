@@ -22,6 +22,7 @@ package <%- packageName %>.security;
 import <%- packageName %>.config.Constants;
 <%_ } _%>
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -56,7 +57,6 @@ import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 <%_ } _%>
 <%_ if (user?.primaryKey?.hasUUID) { _%>
 import java.util.UUID;
@@ -98,7 +98,8 @@ public final class SecurityUtils {
     }
 
     private static String extractPrincipal(Authentication authentication) {
-        if (authentication == null) {
+        // AnonymousAuthenticationToken has a String principal that would fall through below
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return null;
         } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
             return springSecurityUser.getUsername();
@@ -268,7 +269,7 @@ public final class SecurityUtils {
     }
 
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
-        return roles.stream().filter(role -> role.startsWith("ROLE_")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return roles.stream().filter(role -> role.startsWith("ROLE_")).<GrantedAuthority>map(SimpleGrantedAuthority::new).toList();
     }
 <%_ } _%>
 <%_ if (generateAuthenticationApi && (authenticationTypeOauth2 && !syncUserWithIdp || authenticationTypeJwt && skipUserManagement)) { _%>

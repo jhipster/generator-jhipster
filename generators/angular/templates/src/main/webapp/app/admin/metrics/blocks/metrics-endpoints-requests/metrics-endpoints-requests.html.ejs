@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h3 id="endpointsRequestsMetrics">Endpoints requests (time in millisecond)</h3>
+<h3 id="endpointsRequestsMetrics">Endpoints requests (time in milliseconds)</h3>
 
-@if (!updating() && endpointsRequestsMetrics()) {
+@let endpointsRequestsMetricsRef = endpointsRequestsMetrics();
+@if (!updating() && endpointsRequestsMetricsRef) {
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="endpointsRequestsMetrics">
       <thead>
@@ -30,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (entry of endpointsRequestsMetrics() | keyvalue; track entry.key) {
+        @for (entry of endpointsRequestsMetricsRef | keyvalue; track entry.key) {
           @for (method of entry.value | keyvalue; track method.key) {
             <tr>
               <td>{{ method.key }}</td>

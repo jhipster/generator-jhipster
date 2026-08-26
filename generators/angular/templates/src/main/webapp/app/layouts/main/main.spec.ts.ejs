@@ -16,17 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DOCUMENT } from '@angular/common';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { Router, TitleStrategy } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { InterpolatableTranslationObject, LangChangeEvent, TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { Subject, of } from 'rxjs';
 
@@ -49,7 +47,6 @@ describe('Main', () => {
   let findLanguageFromKeyPipe: FindLanguageFromKeyPipe;
   <%_ } _%>
 <%_ } _%>
-  const routerState: any = { snapshot: { root: { data: {} } } };
   let router: Router;
   let document: Document;
 
@@ -66,7 +63,7 @@ describe('Main', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: <%- clientTestFramework %>.fn(() => of(null)),
+            identity: vi.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
@@ -104,12 +101,11 @@ describe('Main', () => {
 <%_ } _%>
 
     beforeEach(() => {
-      routerState.snapshot.root = { data: {} };
 <%_ if (enableTranslation) { _%>
-      <%- clientTestFramework %>.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
-      <%- clientTestFramework %>.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
+      vi.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
+      vi.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
 <%_ } _%>
-      <%- clientTestFramework %>.spyOn(titleService, 'setTitle');
+      vi.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
     });
 
@@ -180,7 +176,6 @@ describe('Main', () => {
 
       it('should set page title to root route pageTitle if there is no child routes', async () => {
         // GIVEN
-        routerState.snapshot.root.data = { pageTitle: parentRoutePageTitle };
         router.resetConfig([{ path: '', title: parentRoutePageTitle, component: Blank }]);
 
         // WHEN
@@ -262,7 +257,7 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = <%- clientTestFramework %>.fn(() => false);
+      findLanguageFromKeyPipe.isRTL = vi.fn(() => false);
   <%_ } _%>
       langChangeSubject.next({ lang: 'lang1', translations: {} });
 
@@ -274,7 +269,7 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = <%- clientTestFramework %>.fn(() => true);
+      findLanguageFromKeyPipe.isRTL = vi.fn(() => true);
   <%_ } _%>
       langChangeSubject.next({ lang: 'lang2', translations: {} });
 
@@ -289,7 +284,6 @@ describe('Main', () => {
 });
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '',
 })
 export class Blank {}

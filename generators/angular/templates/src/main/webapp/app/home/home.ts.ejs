@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
+import { Component, inject } from '@angular/core';
 <%_ if (generateUserManagement || !authenticationTypeOauth2) { _%>
 import {
   <%_ if (!authenticationTypeOauth2) { _%>
@@ -27,9 +27,6 @@ import {
   <%_ } _%>
 } from '@angular/router';
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
-import { Subject, takeUntil } from 'rxjs';
-<%_ } _%>
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -38,11 +35,9 @@ import { TranslateDirective } from 'app/shared/language';
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/auth/account.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-home',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
   styleUrl: './home.scss',
   imports: [
@@ -70,5 +65,4 @@ export default class Home {
     this.loginService.login();
 <%_ } _%>
   }
-
 }

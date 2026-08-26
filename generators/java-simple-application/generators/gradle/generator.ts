@@ -109,7 +109,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
         source.addGradleDependencies = (dependencies, options = {}) => {
           const { gradleFile } = gradleNeedleOptionsWithDefaults(options);
           if (gradleFile === 'build.gradle') {
-            source._gradleDependencies = source._gradleDependencies ?? [];
+            source._gradleDependencies ??= [];
             source._gradleDependencies.push(...dependencies);
             this.queueTask({
               method: () => {
@@ -122,7 +122,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
             });
             return;
           }
-          dependencies = [...dependencies].sort(sortDependencies);
+          dependencies = dependencies.toSorted(sortDependencies);
           this.editFile(gradleFile, addGradleDependenciesCallback(dependencies));
         };
         source.addGradleDependency = (dependency, options) => source.addGradleDependencies!([dependency], options);
@@ -131,6 +131,13 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
           this.editFile('build.gradle', createNeedleCallback({ needle: 'gradle-repositories', contentToAdd: repository.repository }));
         source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
+        source.addGradlePluginManagementRepository = repository =>
+          this.editFile(
+            'settings.gradle',
+            'repository' in repository ?
+              createNeedleCallback({ needle: 'gradle-plugin-management-repositories', contentToAdd: repository.repository })
+            : addGradleMavenRepositoryCallback(repository),
+          );
         source.addGradleProperty = property => {
           application.javaProperties[property.property] = property.value!;
           this.editFile('gradle.properties', addGradlePropertyCallback(property));
@@ -140,7 +147,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
         source.addGradleDependencyCatalogVersion = (version, options) => source.addGradleDependencyCatalogVersions!([version], options);
         source.addGradleDependencyCatalogLibraries = (libs, options = {}) => {
           const { gradleFile, gradleVersionCatalogFile } = gradleNeedleOptionsWithDefaults(options);
-          libs = [...libs].sort((a, b) => a.libraryName.localeCompare(b.libraryName));
+          libs = libs.toSorted((a, b) => a.libraryName.localeCompare(b.libraryName));
           this.editFile(gradleVersionCatalogFile, addGradleDependencyCatalogLibrariesCallback(libs));
           source.addGradleDependencies!(libs.filter(lib => lib.scope) as GradleDependency[], { gradleFile });
         };

@@ -6,8 +6,7 @@ exports[`generator - generate-blueprint help should print expected information 1
 Generate a blueprint
 
 Options:
-  --auto-crlf                          Detect line endings
-  --remove-needles                     Remove needles, needles are used by entity and language generators to inject code
+  --auto-crlf                          Detect line endings (default: false)
   --javascript-blueprint               Generate a javascript blueprint
   --caret                              Use caret in package.json engines
   --defaults                           Use default values for the generator
@@ -165,6 +164,7 @@ exports[`generator - generate-blueprint with all option should match application
   ],
   "prettierTabWidth": 2,
   "projectDescription": "Description for JHipster",
+  "removeNeedles": undefined,
   "sampleWritten": undefined,
   "sendBuildToGitlab": undefined,
   "skipCommitHook": undefined,
@@ -1943,6 +1943,7 @@ exports[`generator - generate-blueprint with default config should match applica
   ],
   "prettierTabWidth": 2,
   "projectDescription": "Description for JHipster",
+  "removeNeedles": undefined,
   "sampleWritten": undefined,
   "sendBuildToGitlab": undefined,
   "skipCommitHook": undefined,
@@ -2156,6 +2157,7 @@ exports[`generator - generate-blueprint with local-blueprint option and app gene
   ],
   "prettierTabWidth": 2,
   "projectDescription": "Description for JHipster",
+  "removeNeedles": undefined,
   "sampleWritten": undefined,
   "sendBuildToGitlab": undefined,
   "skipCommitHook": undefined,
@@ -2297,6 +2299,7 @@ exports[`generator - generate-blueprint with local-blueprint option should match
   ],
   "prettierTabWidth": 2,
   "projectDescription": "Description for JHipster",
+  "removeNeedles": undefined,
   "sampleWritten": undefined,
   "sendBuildToGitlab": undefined,
   "skipCommitHook": undefined,

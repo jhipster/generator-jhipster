@@ -17,8 +17,7 @@ export type GradleScript = { script: string };
 export type GradleLibraryDependency = { libraryName: string; scope?: string };
 
 export type GradleDependency = (
-  | { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string }
-  | Required<GradleLibraryDependency>
+  { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string } | Required<GradleLibraryDependency>
 ) & { closure?: string[] };
 
 export type GradlePlugin = { id: string; version?: string };
@@ -38,8 +37,7 @@ export type GradleTomlLibraryId = { module: string } | { group: string; name: st
 export type GradleLibrary = GradleLibraryDependency & ({ library: string } | (GradleTomlLibraryId & GradleTomlAnyItemVersion));
 
 export type GradleTomlPlugin = { pluginName: string; addToBuild?: boolean } & (
-  | { plugin: string }
-  | ({ id: string } & GradleTomlAnyItemVersion)
+  { plugin: string } | ({ id: string } & GradleTomlAnyItemVersion)
 );
 
 export type GradleFileNeedleOptions = { gradleFile?: string };
@@ -54,6 +52,7 @@ export type Source = BaseApplicationSource & {
   addGradleDependencies?(dependency: GradleDependency[], options?: GradleFileNeedleOptions): void;
   addGradlePlugin?(plugin: GradlePlugin): void;
   addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
+  addGradlePluginManagementRepository?(repository: GradleRepository | GradleMavenRepository): void;
   addGradleProperty?(property: GradleProperty & GradleComment): void;
   addGradleRepository?(repository: GradleRepository): void;
   addGradleMavenRepository?(repository: GradleMavenRepository): void;

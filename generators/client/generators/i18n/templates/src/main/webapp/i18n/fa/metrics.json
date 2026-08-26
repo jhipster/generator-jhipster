@@ -57,7 +57,7 @@
       }
     },
     "servicesstats": {
-      "title": "Services statistics (time in millisecond)",
+      "title": "Services statistics (time in milliseconds)",
       "table": {
         "name": "نام سرویس",
         "count": "تعداد",
@@ -87,7 +87,7 @@
     },
     "datasource": {
       "usage": "Usage",
-      "title": "DataSource statistics (time in millisecond)",
+      "title": "DataSource statistics (time in milliseconds)",
       "name": "Pool usage",
       "count": "تعداد",
       "mean": "حد وسط",

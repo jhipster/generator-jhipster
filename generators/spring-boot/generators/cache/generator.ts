@@ -43,8 +43,11 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           this.log.verboseInfo(`Disabling hibernate cache for ${reactive ? 'reactive application' : 'non-SQL databases'}`);
           this.jhipsterConfig.enableHibernateCache = undefined;
         }
-        if (reactive && cacheProvider !== 'no') {
-          this.log.error(`Cache provider is not supported in reactive application`);
+        if (!this.skipChecks && reactive && cacheProvider !== 'no') {
+          throw new Error(`Cache provider '${cacheProvider}' is not supported in reactive applications`);
+        }
+        if (cacheProvider === 'no') {
+          this.cancelCancellableTasks();
         }
       },
     });
@@ -98,21 +101,15 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
-        if (application.cacheProviderHazelcast) {
-          if (control.isJhipsterVersionLessThan('3.12.0')) {
-            this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
-            this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/package-info.java`);
-          }
+        if (application.cacheProviderHazelcast && control.isJhipsterVersionLessThan('3.12.0')) {
+          this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
+          this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/package-info.java`);
         }
-        if (application.cacheProviderRedis) {
-          if (control.isJhipsterVersionLessThan('7.8.2')) {
-            this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
-          }
+        if (application.cacheProviderRedis && control.isJhipsterVersionLessThan('7.8.2')) {
+          this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
         }
-        if (application.buildToolGradle) {
-          if (control.isJhipsterVersionLessThan('8.1.1')) {
-            this.removeFile('gradle/cache.gradle');
-          }
+        if (application.buildToolGradle && control.isJhipsterVersionLessThan('8.1.1')) {
+          this.removeFile('gradle/cache.gradle');
         }
         await control.cleanupFiles({
           '8.9.1': [[application.cacheProviderInfinispan, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
@@ -198,9 +195,9 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
         if (!application.javaDependencies) {
           throw new Error('Some application fields are be mandatory');
         }
-        const { javaDependencies, cacheProvider, enableHibernateCache, springBoot4 } = application;
+        const { javaDependencies, cacheProvider, enableHibernateCache } = application;
 
-        const definition = getCacheProviderJavaDefinition(cacheProvider!, javaDependencies, { springBoot4 });
+        const definition = getCacheProviderJavaDefinition(cacheProvider!, javaDependencies);
         source.addJavaDefinitions?.(
           {
             ...definition.base,
@@ -225,9 +222,9 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
             imports: [`${application.packageName}.config.RedisTestContainer`],
             annotations: [
               {
-                package: 'org.springframework.boot.testcontainers.context',
-                annotation: 'ImportTestcontainers',
-                parameters: (_, cb) => cb.addKeyValue('value', 'RedisTestContainer.class'),
+                package: 'org.springframework.boot.test.context',
+                annotation: 'SpringBootTest',
+                parameters: (_, cb) => cb.addKeyValue('classes', 'RedisTestContainer.class'),
               },
             ],
           });

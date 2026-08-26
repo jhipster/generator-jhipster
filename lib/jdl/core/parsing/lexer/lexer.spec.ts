@@ -44,7 +44,7 @@ describe('jdl - JDLLexer', () => {
 
     it('should lex a simple valid JDL text', () => {
       const { tokens } = lexingResult;
-      expect(tokens.length).toBe(15);
+      expect(tokens).toHaveLength(15);
       expect(tokens[0].image).toBe('entity');
       expect(tokens[1].image).toBe('JobHistory');
       expect(tokens[2].image).toBe('{');

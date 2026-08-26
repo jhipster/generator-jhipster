@@ -20,17 +20,11 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
-import {
-  AuthenticationTypeMatrix,
-  type Matrix,
-  defaultHelpers as helpers,
-  extendMatrix,
-  fromMatrix,
-  runResult,
-} from '../../lib/testing/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 
 import Generator from './generator.ts';
+
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { AuthenticationTypeMatrix, type Matrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '#testing';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -149,6 +143,20 @@ describe(`generator - ${generator}`, () => {
             );
           });
         }
+      });
+
+      it('keeps backend wait before root headless e2e for workspace clients', () => {
+        const { clientRootDir } = sampleConfig;
+        if (!clientRootDir) {
+          return;
+        }
+
+        runResult.assertJsonFileContent('package.json', {
+          scripts: {
+            'pree2e:headless': 'npm run ci:server:await --if-present',
+            'e2e:headless': `npm run -w ${clientRootDir} e2e:headless`,
+          },
+        });
       });
     });
   });

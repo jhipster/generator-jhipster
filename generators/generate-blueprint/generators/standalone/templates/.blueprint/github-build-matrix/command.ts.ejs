@@ -18,7 +18,9 @@
 -%>
 import type { JHipsterCommandDefinition } from 'generator-jhipster';
 
-const command = {
+import type Generator from './generator.js';
+
+export default {
   configs: {
     samplesFolder: {
       description: 'Samples folder',
@@ -36,6 +38,4 @@ const command = {
       scope: 'generator',
     },
   },
-} as const satisfies JHipsterCommandDefinition;
-
-export default command;
+} as const satisfies JHipsterCommandDefinition<Generator>;

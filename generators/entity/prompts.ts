@@ -63,7 +63,8 @@ const {
   Validations: { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE },
 } = validations;
 
-const getFieldNameUndercored = (fields: BaseApplicationField[]): string[] => ['id'].concat(fields.map(field => snakeCase(field.fieldName)));
+const getFieldNameUnderscored = (fields: BaseApplicationField[]): string[] =>
+  ['id'].concat(fields.map(field => snakeCase(field.fieldName)));
 
 export const askForMicroserviceJson = asPromptingTask<EntityGenerator>(async function askForMicroserviceJson(this: EntityGenerator) {
   const context = this.entityData;
@@ -432,7 +433,7 @@ async function askForField(this: EntityGenerator) {
         if (input.startsWith(input.charAt(0).toUpperCase())) {
           return 'Your field name cannot start with an upper case letter';
         }
-        if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {
+        if (input === 'id' || getFieldNameUnderscored(this.entityConfig.fields).includes(snakeCase(input))) {
           return 'Your field name cannot use an already existing field name';
         }
         if ((clientFramework === undefined || clientFramework === ANGULAR) && isReservedFieldName(input, ANGULAR)) {
@@ -760,7 +761,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
         if (input.startsWith(input.charAt(0).toUpperCase())) {
           return 'Your relationship cannot start with an upper case letter';
         }
-        if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {
+        if (input === 'id' || getFieldNameUnderscored(this.entityConfig.fields).includes(snakeCase(input))) {
           return 'Your relationship cannot use an already existing field name';
         }
         if (isReservedTableName(input, 'JAVA')) {

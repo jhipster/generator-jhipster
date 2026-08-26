@@ -28,11 +28,9 @@ type DatabaseTypeDependencies = {
 
 export const getTestcontainerSupport = ({
   databaseType,
-  springBoot4,
   dockerContainers,
 }: {
   databaseType: string;
-  springBoot4: boolean;
   dockerContainers: Record<string, string>;
 }): TestcontainerSupport => {
   return (
@@ -59,7 +57,7 @@ export const getTestcontainerSupport = ({
       },
       postgresql: {
         testcontainerClass: 'PostgreSQLContainer',
-        testcontainerClassPackage: `org.testcontainers.${springBoot4 ? 'postgresql' : 'containers'}`,
+        testcontainerClassPackage: 'org.testcontainers.postgresql',
         testcontainerClassInitialization: '',
         testcontainerDockerImageName: dockerContainers.postgresql,
       },
@@ -77,9 +75,7 @@ export type DatabaseArtifact = { jdbc: JavaDependency; r2dbc?: JavaDependency; t
 export const javaSqlDatabaseArtifacts = {
   mariadb: {
     jdbc: { groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' },
-    // maria-r2dbc driver is failing.
-    // r2dbc: { groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' },
-    r2dbc: { groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' },
+    r2dbc: { groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' },
     testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-mariadb', scope: 'test' },
   },
   mssql: {

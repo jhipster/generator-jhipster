@@ -44,8 +44,7 @@ export default defineConfig(
   },
   {
     files: tsFiles,
-    ...ts.configs.recommended[0],
-    ...ts.configs.stylistic[0],
+    extends: [ts.configs.recommended, ts.configs.stylistic],
     languageOptions: {
       parser: ts.parser,
       parserOptions: {
@@ -63,8 +62,20 @@ export default defineConfig(
       '@typescript-eslint/no-unnecessary-type-arguments': 'off',
       '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/no-redundant-type-constituents': 'error',
+      '@typescript-eslint/no-import-type-side-effects': 'error',
       '@typescript-eslint/no-empty-function': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-this-alias': 'off',
       'no-redeclare': 'off',
@@ -101,6 +112,7 @@ export default defineConfig(
     files: jsTsFiles,
     rules: {
       eqeqeq: ['error', 'smart'],
+      'logical-assignment-operators': 'error',
       'no-use-before-define': ['error', 'nofunc'],
       'no-multi-str': 'error',
       'no-irregular-whitespace': 'error',
@@ -148,7 +160,6 @@ export default defineConfig(
         'prefer-destructuring': ['error', { array: false, object: true }],
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
         '@stylistic/comma-dangle': ['error', 'always-multiline'],
-        '@stylistic/max-statements-per-line': 'off',
         '@stylistic/no-mixed-operators': 'off',
       },
     },

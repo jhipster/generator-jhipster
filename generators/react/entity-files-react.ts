@@ -53,8 +53,9 @@ export const reactFiles = asWriteFilesSection({
 });
 
 export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(async function ({ application, entities }) {
+  // Embedded entities are not filtered out, the model file is needed by entities that reference them.
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
-    entity => !entity.builtInUser && !entity.embedded,
+    entity => !entity.builtInUser,
   )) {
     await this.writeFiles({
       sections: reactFiles,

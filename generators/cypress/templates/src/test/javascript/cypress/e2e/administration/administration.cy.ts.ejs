@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { entityConfirmDeleteButtonSelector, entityCreateCancelButtonSelector, entityCreateSaveButtonSelector, entityDeleteButtonSelector, entityDetailsBackButtonSelector, entityDetailsButtonSelector, entityEditButtonSelector } from 'support/entity';
 import {
 <%_ if (withAdminUi) { _%>
   metricsPageHeadingSelector,
@@ -79,8 +78,6 @@ describe('/admin', () => {
         if (info.activeProfiles.includes('api-docs')) {
           cy.clickOnAdminMenuItem('admin/docs');
           cy.get(swaggerFrameSelector).should('be.visible').then(() => {
-            // Wait iframe to load
-            cy.wait(500); // eslint-disable-line cypress/no-unnecessary-waiting
             const getSwaggerIframe = () => {
               return cy.get(swaggerFrameSelector).its('0.contentDocument.body').should('not.be.empty').then(cy.wrap);
             };

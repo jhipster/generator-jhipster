@@ -35,6 +35,7 @@ type CICDApplicationProperties = Command['Application'] &
     cypressTests?: boolean;
     javaVersion?: string;
     githubActions: Record<string, string>;
+    workspacesCommand?: boolean;
   };
 
 export type Application = DockerApplication & CICDApplicationProperties;

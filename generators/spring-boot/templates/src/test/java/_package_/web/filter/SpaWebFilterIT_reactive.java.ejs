@@ -1,14 +1,35 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 package <%- packageName %>.web.filter;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import <%- packageName %>.IntegrationTest;
 import <%- packageName %>.security.AuthoritiesConstants;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser
@@ -24,9 +45,12 @@ class SpaWebFilterIT {
             .get()
             .uri("/")
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType("text/html;charset=UTF-8")
-            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType("text/html;charset=UTF-8")
+            .expectBody(String.class)
+            .isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 <%_ if (!skipUserManagement) { _%>
 
@@ -59,6 +83,19 @@ class SpaWebFilterIT {
     @Test
     void testFilterDoesNotForwardToIndexForDotFile() {
         webTestClient.get().uri("/file.js").exchange().expectStatus().isNotFound();
+    }
+
+    @Test
+    @WithAnonymousUser
+    void staticAssetsArePubliclyAccessible() {
+        webTestClient
+            .get()
+            .uri("/test-resource.txt")
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectBody(String.class)
+            .value(body -> assertThat(body).isEqualToNormalizingNewlines("test resource\n"));
     }
 
     @Test

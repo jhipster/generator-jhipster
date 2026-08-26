@@ -22,7 +22,6 @@ import { basename, extname, isAbsolute, join, join as joinPath, relative } from 
 import { relative as posixRelative } from 'node:path/posix';
 
 import { requireNamespace } from '@yeoman/namespace';
-import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import latestVersion from 'latest-version';
 import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
@@ -49,7 +48,16 @@ import {
   getCommandDerivedPropertyMutations,
 } from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
-import { CRLF, LF, type Logger, hasCrlf, mutateData, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
+import {
+  CRLF,
+  LF,
+  type Logger,
+  hasCrlf,
+  isWin32,
+  mutateData,
+  normalizeLineEndings,
+  removeFieldsWithNullishValues,
+} from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
 import type BaseGenerator from '../base/generator.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
@@ -169,7 +177,6 @@ export default class CoreGenerator<
   // Override the type of `env` to be a full Environment
   declare env: Environment;
   declare log: Logger;
-  declare _meta?: GeneratorMeta;
 
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, {
@@ -185,8 +192,11 @@ export default class CoreGenerator<
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster', { transform: this.features.configTransform });
 
-      /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy();
+      // Ignore jhipsterConfig in uniqueGlobally generators, as it should not be dependent on a specific project.
+      if (!this.features.uniqueGlobally) {
+        /* JHipster config using proxy mode used as a plain object instead of using get/set. */
+        this.jhipsterConfig = this.config.createProxy();
+      }
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.#parseJHipsterConfigs(baseCommand.configs);
@@ -233,6 +243,9 @@ export default class CoreGenerator<
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults(): Readonly<Config> {
+    if (this.features.uniqueGlobally) {
+      throw new Error('jhipsterConfigWithDefaults is not available in uniqueGlobally generators');
+    }
     return removeFieldsWithNullishValues(this.config.getAll());
   }
 
@@ -285,7 +298,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     let priorities = super.getTaskNames();
     if (!this.features.disableSkipPriorities && this.options.skipPriorities) {
       // Make sure yeoman-generator will not throw on empty tasks due to filtered priorities.
-      this.customLifecycle = this.customLifecycle || priorities.length > 0;
+      this.customLifecycle ||= priorities.length > 0;
       priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
     return priorities;
@@ -411,7 +424,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             }
           }
         } catch {
-          // Ignore non existing command
+          // Ignore non-existing command
         }
 
         const split = this.options.namespace.split(':');
@@ -1223,7 +1236,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Edit file content.
    * Edits an empty file if `options.create` is truthy or no callback is passed.
    * @example
-   * // Throws if `foo.txt` doesn't exists or append the content.
+   * // Throws if `foo.txt` doesn't exist or append the content.
    * editFile('foo.txt', content => content + 'foo.txt content');
    * @example
    * // Appends `foo.txt` content whether it exists or not.
@@ -1286,7 +1299,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
-      const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
+      const { autoCrlf = isWin32, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
@@ -1393,7 +1406,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   readResourcesPackageJson(
-    packageJsonFile: string = 'package.json',
+    packageJsonFile = 'package.json',
   ): Omit<PackageJson.PackageJsonStandard, 'dependencies' | 'devDependencies'> &
     Record<'dependencies' | 'devDependencies', Record<string, string>> {
     packageJsonFile = this.resourcesPath(packageJsonFile);

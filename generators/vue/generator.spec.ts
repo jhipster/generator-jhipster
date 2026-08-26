@@ -1,12 +1,38 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { buildClientSamples, createTestHelpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import Generator from './index.ts';
+
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import {
+  buildClientSamples,
+  createTestHelpers,
+  entitiesClientSamples as entities,
+  entitiesWithEmbeddedRelationship,
+  runResult,
+} from '#testing';
 
 const helpers = createTestHelpers({
   importMeta: import.meta,
@@ -258,6 +284,51 @@ describe(`generator - ${clientFramework}`, () => {
           });
         }
       });
+    });
+  });
+
+  describe('entity with a relationship to an embedded entity', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework, databaseType: 'mongodb' }, entitiesWithEmbeddedRelationship)
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should generate the embedded entity model', () => {
+      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/shared/model/embedded-entity.model.ts`);
+    });
+
+    it('should not generate ui files for the embedded entity', () => {
+      runResult.assertNoFile([
+        `${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity-update.vue`,
+      ]);
+    });
+
+    it('should not use the embedded entity service at the update component', () => {
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.ts`,
+        'embedded-entity.service',
+      );
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.spec.ts`,
+        'embeddedEntityService',
+      );
+    });
+
+    it('should not render the embedded relationship at list and detail components', () => {
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded.vue`,
+        'embeddedRelationship',
+      );
+      runResult.assertNoFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-details.vue`,
+        'embeddedRelationship',
+      );
     });
   });
 });

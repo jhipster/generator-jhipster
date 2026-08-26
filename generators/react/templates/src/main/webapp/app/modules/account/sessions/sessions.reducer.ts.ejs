@@ -43,7 +43,7 @@ export const invalidateSession = createAsyncThunk('sessions/invalidate', async (
 
 export const SessionsSlice = createSlice({
   name: 'sessions',
-  initialState: initialState as SessionsState,
+  initialState,
   reducers: {},
   extraReducers(builder) {
     builder

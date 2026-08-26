@@ -57,6 +57,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
       async preparing({ applicationDefaults }) {
         applicationDefaults({
           blueprintCliName: data => `cli.c${data.javascriptBlueprint ? 'j' : 't'}s`,
+          typescriptEslint: data => !data.javascriptBlueprint,
         });
       },
     });
@@ -152,7 +153,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
         }
       },
       packageJson({ application }) {
-        const { jhipsterPackageJson } = application;
+        const { javascriptBlueprint, jhipsterPackageJson } = application;
         const mainDependencies: Record<string, string> = {
           ...jhipsterPackageJson.dependencies,
           ...jhipsterPackageJson.devDependencies,
@@ -169,7 +170,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
             ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            pretest: 'npm run prettier-check && npm run lint && tsc',
+            pretest: `npm run prettier-check && npm run lint${javascriptBlueprint ? '' : ' && tsc'}`,
             test: 'vitest run',
             'update-snapshot': 'vitest run --update',
             vitest: 'vitest',
@@ -181,6 +182,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
             globals: mainDependencies.globals,
             vitest: mainDependencies.vitest,
             prettier: mainDependencies.prettier,
+            ...(application.typescriptEslint ? { 'typescript-eslint': mainDependencies['typescript-eslint'] } : {}),
             /*
              * yeoman-test version is loaded through generator-jhipster peer dependency.
              * generator-jhipster uses a fixed version, blueprints must set a compatible range.
@@ -211,25 +213,29 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
       },
       addGeneratorJHipsterDependency({ application }) {
         const { jhipsterPackageJson } = application;
-        const exactDependency = {
-          'generator-jhipster':
-            this.options.linkJhipsterDependency ?
-              `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
-            : jhipsterPackageJson.version,
-        };
-        const caretDependency = {
-          'generator-jhipster': `^${jhipsterPackageJson.version}`,
-        };
+        const caretDependency = `^${jhipsterPackageJson.version}`;
+        const enginesVersion = this.jhipsterConfig.dynamic || !this.jhipsterConfig.caret ? jhipsterPackageJson.version : caretDependency;
+        let dependencySpec: string;
+        if (application.gitDependency && !this.jhipsterConfig.dynamic) {
+          dependencySpec = application.gitDependency;
+        } else if (this.options.linkJhipsterDependency) {
+          dependencySpec = `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`;
+        } else {
+          dependencySpec = jhipsterPackageJson.version;
+        }
+        const jhipsterDependency = (spec: string) => ({ 'generator-jhipster': spec });
+        let allowScripts = undefined;
+        if (dependencySpec !== jhipsterPackageJson.version) {
+          allowScripts = { [dependencySpec]: true };
+        }
+        this.packageJson.merge({
+          allowScripts,
+          [this.jhipsterConfig.dynamic ? 'devDependencies' : 'dependencies']: jhipsterDependency(dependencySpec),
+          engines: jhipsterDependency(enginesVersion),
+        });
         if (this.jhipsterConfig.dynamic) {
           this.packageJson.merge({
-            devDependencies: exactDependency,
-            peerDependencies: caretDependency,
-            engines: caretDependency,
-          });
-        } else {
-          this.packageJson.merge({
-            dependencies: application.gitDependency ? { 'generator-jhipster': application.gitDependency } : exactDependency,
-            engines: this.jhipsterConfig.caret ? caretDependency : exactDependency,
+            peerDependencies: jhipsterDependency(caretDependency),
           });
         }
       },

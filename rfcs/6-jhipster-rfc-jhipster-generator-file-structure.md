@@ -44,7 +44,7 @@ The JHipster generator will be organized into several types of generators, each 
 
 - **Base Generators**: These are the core generators that provide the basic functionality of the downstream JHipster generator in the inheritance chain. This includes:
   <!-- prettier-ignore -->
-  - Tasks and Priorities 
+  - Tasks and Priorities
   <!-- prettier-ignore -->
   - Contexts and object injection in functions (application, entities, etc.)
   <!-- prettier-ignore -->
@@ -99,7 +99,7 @@ This structure allows for a clear separation of concerns, with each base generat
 **index.ts**: This file serves as the entry point for the base generator, exporting the main functionality and any public methods or classes that should be accessible to other generators. Usually exposes the generator class, api, types and tasks.
 
 **generator.ts**: This file contains the main generator class that extends the JHipster base generator class.
-It should contains:
+It should contain:
 
 - Facade of support methods and functions that can be used by the downstream generator (`write() {return import {'./support/write.ts'}.writeFile}`).
 - Loading of contextual objects (application, entities, etc.) and their injection in the priorities methods.
@@ -170,7 +170,7 @@ It includes a lot of changes to the current file structure and conventions, whic
 
 [unresolved-questions]: #unresolved-questions
 
-The fine grained implementation details of each file as not been discussed yet, such as:
+The fine grained implementation details of each file has not been discussed yet, such as:
 
 - The amount and granularity of methods in the mutate (by file, by component, etc.) and support files.
 

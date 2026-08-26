@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%- packageName %>.config;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EmbeddedNeo4j {
-}
+<% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
+        if (<%- restInstance %>.<%- userRelationship.propertySupplierName %>() != null) {
+  <%_ if (userRelationship.collection) { _%>
+            // Save users in case they are new and only exist in gateway
+            userRepository.saveAll(<%- restInstance %>.<%- userRelationship.propertySupplierName %>());
+  <%_ } else { _%>
+            // Save user in case it's new and only exists in gateway
+            userRepository.save(<%- restInstance %>.<%- userRelationship.propertySupplierName %>());
+  <%_ } _%>
+        }
+<% } %>

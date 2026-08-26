@@ -38,8 +38,7 @@ type CacheProviderDependencies = {
 export const getCacheProviderJavaDefinition: (
   cacheProvider: string,
   javaDependencies: Record<string, string>,
-  opts?: { springBoot4?: boolean },
-) => CacheProviderDependencies = (cacheProvider: string, javaDependencies: Record<string, string>, { springBoot4 } = {}) => {
+) => CacheProviderDependencies = (cacheProvider: string, javaDependencies: Record<string, string>) => {
   const dependenciesForCache: Record<string, CacheProviderDependencies> = {
     redis: {
       base: {
@@ -112,14 +111,10 @@ export const getCacheProviderJavaDefinition: (
             artifactId: 'hazelcast-spring',
             version: javaDependencies['hazelcast-spring'],
           },
-          ...(springBoot4 ?
-            [
-              {
-                groupId: 'org.springframework.boot',
-                artifactId: 'spring-boot-starter-hazelcast',
-              },
-            ]
-          : []),
+          {
+            groupId: 'org.springframework.boot',
+            artifactId: 'spring-boot-starter-hazelcast',
+          },
         ],
       },
       hibernateCache: {
@@ -138,11 +133,11 @@ export const getCacheProviderJavaDefinition: (
           javaxCacheApi,
           {
             groupId: 'org.infinispan',
-            artifactId: `infinispan-hibernate-cache-${springBoot4 ? 'v66' : 'v62'}`,
+            artifactId: 'infinispan-hibernate-cache-v66',
           },
           {
             groupId: 'org.infinispan',
-            artifactId: `infinispan-spring-boot${springBoot4 ? '4' : '3'}-starter-embedded`,
+            artifactId: 'infinispan-spring-boot4-starter-embedded',
           },
           {
             groupId: 'org.infinispan',
@@ -153,7 +148,7 @@ export const getCacheProviderJavaDefinition: (
             groupId: 'io.micrometer',
             artifactId: 'micrometer-registry-prometheus',
           },
-          ...(springBoot4 ? [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache-test' }] : []),
+          { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache-test' },
         ],
       },
     },

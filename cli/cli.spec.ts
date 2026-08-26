@@ -1,21 +1,40 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { after, afterEach, before, beforeEach, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
 import assert from 'node:assert';
 import { fork } from 'node:child_process';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import type { BaseGenerator, GeneratorMeta } from '@yeoman/types';
-import { execaCommandSync } from 'execa';
+import { execaSync } from 'execa';
 import { coerce } from 'semver';
 import type FullEnvironment from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../generators/index.ts';
-import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
 import type JHipsterCommand from './jhipster-command.ts';
 import { createProgram } from './program.ts';
 import type { CliCommand } from './types.ts';
 import { getCommand as actualGetCommand } from './utils.ts';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -99,8 +118,7 @@ export const command = {
 };
 
 describe('cli', () => {
-  const __filename = fileURLToPath(import.meta.url);
-  const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
+  const jhipsterCli = join(import.meta.dirname, '..', 'bin', 'jhipster.cjs');
   const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
   const getCommand = esmocha.fn<typeof actualGetCommand>();
   let mockCli: (argv: string[], opts?: Record<string, any>) => Promise<JHipsterCommand>;
@@ -133,17 +151,17 @@ describe('cli', () => {
   });
 
   it('--help should run without errors', () => {
-    const { stdout } = execaCommandSync(`${jhipsterCli} --help`);
+    const { stdout } = execaSync`${jhipsterCli} --help`;
     expect(stdout).toMatch(/For more info visit/);
   });
 
   it('--version should run without errors', () => {
-    const { stdout } = execaCommandSync(`${jhipsterCli} --version`);
+    const { stdout } = execaSync`${jhipsterCli} --version`;
     expect(coerce(stdout)).toBeTruthy();
   });
 
   it('should return error on unknown command', () => {
-    expect(() => execaCommandSync(`${jhipsterCli} junkcmd`)).toThrow(
+    expect(() => execaSync`${jhipsterCli} junkcmd`).toThrow(
       expect.objectContaining({
         exitCode: 1,
         message: expect.stringContaining('is not a known command'),
@@ -221,7 +239,7 @@ describe('cli', () => {
             importModule: async () => ({
               command,
             }),
-            resolved: __filename,
+            resolved: import.meta.filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
             importGenerator: undefined as any,
@@ -428,7 +446,7 @@ describe('cli', () => {
         });
 
         it('should execute callback with error and print info', () => {
-          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar`)).toThrow(
+          expect(() => execaSync`${jhipsterCli} foo --blueprints bar`).toThrow(
             expect.objectContaining({
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-bar'),
@@ -448,7 +466,7 @@ describe('cli', () => {
         });
 
         it('should execute callback with error and print info', () => {
-          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar,baz`)).toThrow(
+          expect(() => execaSync`${jhipsterCli} foo --blueprints bar,baz`).toThrow(
             expect.objectContaining({
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-baz'),
@@ -708,7 +726,7 @@ export const command = {
         });
 
         it('should print error', () => {
-          expect(stderr.includes('Generator jhipster-non-existing not found.')).toBe(true);
+          expect(stderr).toContain('Generator jhipster-non-existing not found.');
         });
         it('should exit with code 1', () => {
           expect(exitCode).toBe(1);

@@ -37,7 +37,7 @@ export default {
  * @return the found relationship issues.
  */
 export function checkRelationships(relationshipDeclarations: CstNode[]): RelationshipIssue[] {
-  if (!relationshipDeclarations || relationshipDeclarations.length === 0) {
+  if (!relationshipDeclarations?.length) {
     return [];
   }
   issues = [];

@@ -57,6 +57,8 @@ jobs:
       - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-<%- baseName %>
       - run: <%- blueprintCliName %> generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
+        env:
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - uses: <%- githubActions['jhipster/actions/compare-sample'] %>
         id: compare
         if: >-
@@ -65,6 +67,8 @@ jobs:
         with:
           generator-path: generator-jhipster-<%- baseName %>
           cmd: <%- blueprintCliName %> generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
+        env:
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: npm run ci:backend:test
         if: steps.compare.outputs.equals != 'true'
         id: backend

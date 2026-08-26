@@ -49,7 +49,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
         name: 'databaseType',
         message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
         choices: () => {
-          const opts: Array<{ value: string; name: string }> = [];
+          const opts: { value: string; name: string }[] = [];
           if (reactive) {
             opts.push({
               value: SQL,
@@ -174,7 +174,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
 
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
 
-  const choices: Array<{ name: string; value: string; checked?: boolean }> = [];
+  const choices: { name: string; value: string; checked?: boolean }[] = [];
   if (([SQL, MONGODB, NEO4J] as string[]).includes(databaseType as string)) {
     choices.push({
       name: 'Elasticsearch as search engine',
@@ -187,13 +187,11 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
       value: 'searchEngine:couchbase',
     });
   }
-  if (!reactive) {
-    if (applicationType === APPLICATION_TYPE_MONOLITH || applicationType === APPLICATION_TYPE_GATEWAY) {
-      choices.push({
-        name: 'WebSockets using Spring Websocket',
-        value: 'websocket:spring-websocket',
-      });
-    }
+  if (!reactive && (applicationType === APPLICATION_TYPE_MONOLITH || applicationType === APPLICATION_TYPE_GATEWAY)) {
+    choices.push({
+      name: 'WebSockets using Spring Websocket',
+      value: 'websocket:spring-websocket',
+    });
   }
   choices.push(
     {

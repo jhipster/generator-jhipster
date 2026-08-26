@@ -23,8 +23,7 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 
-import account, { updateAccount, saveAccountSettings, reset } from './settings.reducer';
-import { getAccount } from 'app/shared/reducers/authentication';
+import account, { updateAccount, reset } from './settings.reducer';
 
 describe('Settings reducer tests', () => {
 <%_ if (enableTranslation) { _%>

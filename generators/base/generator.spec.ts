@@ -20,10 +20,11 @@ import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import BaseGenerator from './index.ts';
+
+import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
 

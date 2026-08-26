@@ -84,11 +84,11 @@ export const <%- entityReactName %>Detail = () => {
   <%_ if (field.fieldTypeBoolean) { _%>
               {<%- entityInstance %>Entity.<%- fieldName %> ? 'true' : 'false'}
   <%_ } else if (field.fieldTypeTimed) { _%>
-              {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_DATE_FORMAT} />: null}
+              {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_DATE_FORMAT} /> : null}
   <%_ } else if (field.fieldTypeDuration) { _%>
-              {<%- entityInstance %>Entity.<%- fieldName %> ? <DurationFormat value={<%- entityInstance %>Entity.<%- fieldName %>} />: null} ({<%- entityInstance %>Entity.<%- fieldName %>})
+              {<%- entityInstance %>Entity.<%- fieldName %> ? <DurationFormat value={<%- entityInstance %>Entity.<%- fieldName %>} /> : null} ({<%- entityInstance %>Entity.<%- fieldName %>})
   <%_ } else if (field.fieldTypeLocalDate) { _%>
-              {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} />: null}
+              {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (!field.blobContentTypeText) { _%>
                 {<%- entityInstance %>Entity.<%- fieldName %> ? (
@@ -113,7 +113,7 @@ export const <%- entityReactName %>Detail = () => {
   <%_ } _%>
             </dd>
 <%_ } _%>
-<%_ for (relationship of relationships) { _%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, relationshipNameHumanized } = relationship;
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;
@@ -155,7 +155,7 @@ export const <%- entityReactName %>Detail = () => {
 <%_ } _%>
           </dl>
         <Button as={Link as any} to="/<%- entityPage %>" replace variant="info" data-cy="entityDetailsBackButton">
-          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
+          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.back">Back</Translate></span>
         </Button>&nbsp;
         <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/edit`} replace variant="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
