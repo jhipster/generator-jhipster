@@ -22,6 +22,7 @@ import { join, relative } from 'node:path';
 import { Readable } from 'node:stream';
 
 import type { MemFsEditorFile } from 'mem-fs-editor';
+import { simpleGit } from 'simple-git';
 
 import autoCrlfTransform, { detectCrLf } from './auto-crlf-transform.ts';
 
@@ -40,7 +41,7 @@ const runAutoCrlfTransform = async (baseDir: string, filePaths: string[]): Promi
   })) as unknown as MemFsEditorFile[];
 
   const contents: Record<string, string> = {};
-  const stream: AsyncIterable<MemFsEditorFile> = Readable.from(files).pipe(await autoCrlfTransform({ baseDir }));
+  const stream: AsyncIterable<MemFsEditorFile> = Readable.from(files).pipe(await autoCrlfTransform());
   for await (const file of stream) {
     contents[relative(baseDir, file.path).replaceAll('\\', '/')] = file.contents!.toString();
   }
@@ -78,30 +79,43 @@ describe('generator - bootstrap - utils', () => {
   });
 
   describe('::autoCrlfTransform', () => {
+    const filePaths = ['file.txt', 'file.sh', 'file.bat', 'nested/file.txt', 'nested/file.sh'];
+
+    const prepareBaseDir = async (): Promise<string> => {
+      const result = await helpers.prepareTemporaryDir().withFiles({ '.gitattributes': gitAttributes }).commitFiles();
+      return result.cwd;
+    };
+
+    describe('inside a git repository', () => {
+      let baseDir: string;
+
+      before(async () => {
+        baseDir = await prepareBaseDir();
+        await simpleGit({ baseDir }).init();
+      });
+
+      it('should normalize line endings using gitattributes', async () => {
+        await expect(runAutoCrlfTransform(baseDir, filePaths)).resolves.toMatchObject({
+          'file.txt': 'line1\r\nline2\r\n',
+          'file.sh': 'line1\nline2\n',
+          'file.bat': 'line1\r\nline2\r\n',
+          'nested/file.txt': 'line1\r\nline2\r\n',
+          'nested/file.sh': 'line1\nline2\n',
+        });
+      });
+    });
+
     describe('outside a git repository', () => {
       let baseDir: string;
 
       before(async () => {
-        const result = await helpers
-          .prepareTemporaryDir()
-          .withFiles({ '.gitattributes': gitAttributes, 'nested/.gitattributes': '*.md text eol=lf\n' })
-          .commitFiles();
-        baseDir = result.cwd;
+        baseDir = await prepareBaseDir();
       });
 
-      it('should apply gitattributes instead of throwing', async () => {
-        await expect(
-          runAutoCrlfTransform(baseDir, ['file.txt', 'file.sh', 'file.bat', 'nested/file.txt', 'nested/file.sh', 'nested/file.md']),
-        ).resolves.toMatchObject({
-          'file.txt': 'line1\r\nline2\r\n',
-          'file.sh': 'line1\nline2\n',
-          'file.bat': 'line1\r\nline2\r\n',
-          // .gitattributes from the base dir applies to nested folders
-          'nested/file.txt': 'line1\r\nline2\r\n',
-          'nested/file.sh': 'line1\nline2\n',
-          // .gitattributes from the nested folder applies too
-          'nested/file.md': 'line1\nline2\n',
-        });
+      it('should leave files untouched instead of throwing', async () => {
+        await expect(runAutoCrlfTransform(baseDir, filePaths)).resolves.toMatchObject(
+          Object.fromEntries(filePaths.map(filePath => [filePath, 'line1\nline2\n'])),
+        );
       });
     });
   });

@@ -16,9 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createReadStream, rmSync } from 'node:fs';
-import { mkdtemp, stat } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { createReadStream } from 'node:fs';
+import { stat } from 'node:fs/promises';
 import path from 'node:path';
 
 import { isBinaryFile } from 'isbinaryfile';
@@ -28,37 +27,6 @@ import { transform } from 'p-transform';
 import { type SimpleGit, simpleGit } from 'simple-git';
 
 import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
-
-const createGit = (baseDir: string, env: Record<string, string | undefined> = {}): SimpleGit =>
-  simpleGit({ baseDir }).env({
-    HOME: process.env.HOME,
-    PATH: process.env.PATH,
-    LANG: 'C',
-    LC_ALL: 'C',
-    ...env,
-  });
-
-let detachedGitDir: Promise<string> | undefined;
-
-/**
- * `git check-attr` requires a git repository, but the destination is not necessarily inside one:
- * the git repository is initialized at the post writing priority, files are committed to disk before it,
- * `--skip-git` may be used, and the root folder of a workspaces application is never initialized.
- *
- * Returns a throwaway bare git dir to be used in those cases, so `.gitattributes` files from the
- * working tree are still applied instead of failing with `not a git repository`.
- */
-const getDetachedGitDir = (): Promise<string> => {
-  detachedGitDir ??= (async () => {
-    const gitDir = await mkdtemp(path.join(tmpdir(), 'jhipster-check-attr-'));
-    await createGit(gitDir).init(true);
-    process.on('exit', () => {
-      rmSync(gitDir, { recursive: true, force: true });
-    });
-    return gitDir;
-  })();
-  return detachedGitDir;
-};
 
 async function findExistingParent(filePath: string): Promise<string> {
   let currentPath = path.resolve(path.dirname(filePath));
@@ -106,23 +74,21 @@ export function detectCrLf(filePath: string): Promise<boolean | undefined> {
   });
 }
 
-const autoCrlfTransform = async ({ baseDir: rootDir }: { baseDir?: string } = {}) => {
-  const resolvedRootDir = rootDir ? path.resolve(rootDir) : undefined;
-  // A git process is spawned for every lookup, cache the resolved git instance by directory.
-  const gitCache = new Map<string, Promise<SimpleGit>>();
-  const getGit = (baseDir: string): Promise<SimpleGit> => {
+const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
+  // A git process is spawned for every lookup, cache the git instance by directory.
+  // Directories which are not inside a git repository are cached as undefined.
+  const gitCache = new Map<string, Promise<SimpleGit | undefined>>();
+  const getGit = (baseDir: string): Promise<SimpleGit | undefined> => {
     let git = gitCache.get(baseDir);
     if (!git) {
       git = (async () => {
-        const git = createGit(baseDir);
-        if (await git.checkIsRepo()) {
-          return git;
-        }
-        // Not inside a git repository, lookup attributes using a detached git dir.
-        // The working tree must be the application root, otherwise `.gitattributes` from parent folders are ignored.
-        const workTree =
-          resolvedRootDir && (baseDir === resolvedRootDir || baseDir.startsWith(resolvedRootDir + path.sep)) ? resolvedRootDir : baseDir;
-        return createGit(baseDir, { GIT_DIR: await getDetachedGitDir(), GIT_WORK_TREE: workTree });
+        const git = simpleGit({ baseDir }).env({
+          HOME: process.env.HOME,
+          PATH: process.env.PATH,
+          LANG: 'C',
+          LC_ALL: 'C',
+        });
+        return (await git.checkIsRepo()) ? git : undefined;
       })();
       gitCache.set(baseDir, git);
     }
@@ -147,6 +113,12 @@ const autoCrlfTransform = async ({ baseDir: rootDir }: { baseDir?: string } = {}
 
     const baseDir = await findExistingParent(file.path);
     const git = await getGit(baseDir);
+    if (!git) {
+      // Attributes cannot be looked up outside a git repository. The repository is initialized at the post writing
+      // priority, `--skip-git` may be used, and the root folder of a workspaces application is never initialized.
+      return file;
+    }
+
     const checkAttrs = await git.raw('check-attr', 'binary', 'eol', '--', file.path);
     const attrs = Object.fromEntries(
       checkAttrs

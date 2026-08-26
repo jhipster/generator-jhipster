@@ -253,7 +253,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       }
 
       if (autoCrlf) {
-        transformStreams.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
+        transformStreams.push(await autoCrlfTransform());
       }
 
       transformStreams.push(
