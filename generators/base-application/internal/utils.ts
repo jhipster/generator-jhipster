@@ -140,7 +140,7 @@ export function createUserEntity(
     {
       fieldName: 'email',
       fieldType: TYPE_STRING,
-      fieldValidateRules: [Validations.REQUIRED, Validations.UNIQUE, Validations.MAXLENGTH, Validations.MINLENGTH],
+      fieldValidateRules: [Validations.REQUIRED, Validations.UNIQUE, Validations.MAXLENGTH, Validations.MINLENGTH, Validations.EMAIL],
       fieldValidateRulesMinlength: 5,
       fieldValidateRulesMaxlength: 191,
       builtIn: true,

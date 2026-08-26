@@ -1809,6 +1809,7 @@ export class UserManagementFormService {
       email: new FormControl(userManagementRawValue.email, {
         validators: [
           Validators.required,
+          Validators.email,
           Validators.minLength(5),
           Validators.maxLength(191),
         ],
@@ -2010,6 +2011,8 @@ export class UserManagementFormService {
             <small class="form-text text-danger"
               >This field cannot be longer than 191 characters.</small
             >
+            } @if (emailRef.errors?.email) {
+            <small class="form-text text-danger">Your email is invalid.</small>
             }
           </div>
           }

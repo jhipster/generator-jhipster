@@ -45,6 +45,7 @@ exports[`mutation object test expects mutateField to match snapshot 1`] = `
   "fieldTypeTextBlob": false,
   "fieldTypeUUID": false,
   "fieldTypeZonedDateTime": false,
+  "fieldValidationEmail": false,
   "fieldValidationMax": false,
   "fieldValidationMaxBytes": false,
   "fieldValidationMaxLength": false,

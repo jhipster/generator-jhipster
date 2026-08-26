@@ -129,6 +129,11 @@
                         <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.pattern', { "pattern": "<%- fieldNameHumanized %>" })</small>
                     }
     <%_ } _%>
+    <%_ if (field.fieldValidationEmail) { _%>
+                    @if (<%- fieldName %>Ref.errors?.email) {
+                        <small class="form-text text-danger">__jhiTranslateTag__('global.messages.validate.email.invalid')</small>
+                    }
+    <%_ } _%>
     <%_ if (field.fieldTypeNumeric || field.fieldTypeDuration) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!<%- fieldName %>Ref.errors?.number">__jhiTranslateTag__('entity.validation.number')</small>
