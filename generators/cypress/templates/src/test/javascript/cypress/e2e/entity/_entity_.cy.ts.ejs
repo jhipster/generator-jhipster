@@ -353,9 +353,10 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
-      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? '' : 'not.' %>be.checked');
+      <%_ const checkedByDefault = field.fieldTsDefaultValue === 'true' || field.defaultValue === true; _%>
+      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- checkedByDefault ? '' : 'not.' %>be.checked');
       cy.get(`[data-cy="<%- fieldName %>"]`).click();
-      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? 'not.' : '' %>be.checked');
+      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- checkedByDefault ? 'not.' : '' %>be.checked');
 
     <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
       cy.setFieldImageAsBytesOfEntity('<%- fieldName %>', 'integration-test.png', 'image/png');
