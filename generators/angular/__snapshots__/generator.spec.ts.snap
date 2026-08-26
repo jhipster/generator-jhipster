@@ -2159,14 +2159,15 @@ describe("UserManagement Management Update Component", () => {
       expect(comp.isSaving()).toEqual(false);
     });
 
-    it("should call update service on save for new entity", () => {
+    it("should call create service on save for new entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Ozella.Kertzmann" };
       vi.spyOn(userManagementFormService, "getUserManagement").mockReturnValue({
+        id: null,
         login: null,
       });
-      vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
+      vi.spyOn(userManagementService, "create").mockReturnValue(saveSubject);
       vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement: null });
       comp.ngOnInit();
@@ -2179,9 +2180,7 @@ describe("UserManagement Management Update Component", () => {
 
       // THEN
       expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
-      expect(userManagementService.update).toHaveBeenCalledWith(
-        expect.objectContaining({ login: null }),
-      );
+      expect(userManagementService.create).toHaveBeenCalled();
       expect(comp.isSaving()).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
@@ -2189,7 +2188,7 @@ describe("UserManagement Management Update Component", () => {
     it("should set isSaving to false on error", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Ozella.Kertzmann" };
+      const userManagement = { id: 123, login: "Ozella.Kertzmann" };
       vi.spyOn(userManagementService, "update").mockReturnValue(saveSubject);
       vi.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement });
@@ -2224,7 +2223,7 @@ import {
   UserManagementFormService,
   UserManagementFormGroup,
 } from "./user-management-form.service";
-import { IUserManagement } from "../user-management.model";
+import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
 
@@ -2268,9 +2267,15 @@ export class UserManagementUpdate implements OnInit {
     const userManagement = this.userManagementFormService.getUserManagement(
       this.editForm,
     );
-    this.subscribeToSaveResponse(
-      this.userManagementService.update(userManagement as IUserManagement),
-    );
+    if (userManagement.id === null) {
+      this.subscribeToSaveResponse(
+        this.userManagementService.create(userManagement as NewUserManagement),
+      );
+    } else {
+      this.subscribeToSaveResponse(
+        this.userManagementService.update(userManagement as IUserManagement),
+      );
+    }
   }
 
   protected subscribeToSaveResponse(
