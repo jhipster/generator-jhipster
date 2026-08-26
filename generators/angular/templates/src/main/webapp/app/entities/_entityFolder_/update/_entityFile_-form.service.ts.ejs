@@ -28,7 +28,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 <%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
 import dayjs from 'dayjs/esm';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_TIME_FORMAT } from 'app/config';
 <%_ } _%>
 import { I<%- entityAngularName %>, New<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 

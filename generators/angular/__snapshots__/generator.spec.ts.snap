@@ -110,10 +110,10 @@ import { FormsModule } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { AlertError } from "app/shared/alert/alert-error";
+import { AlertError } from "app/shared/alert";
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
-import { ITEM_DELETED_EVENT } from "app/config/navigation.constants";
+import { ITEM_DELETED_EVENT } from "app/config";
 
 @Component({
   templateUrl: "./user-management-delete-dialog.html",
@@ -299,8 +299,7 @@ describe("UserManagement Management Detail Component", () => {
 import { RouterLink } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { Alert } from "app/shared/alert/alert";
-import { AlertError } from "app/shared/alert/alert-error";
+import { Alert, AlertError } from "app/shared/alert";
 import {
   DurationPipe,
   FormatMediumDatetimePipe,
@@ -793,8 +792,7 @@ import {
 import { combineLatest, filter, tap, map } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
-import { AlertError } from "app/shared/alert/alert-error";
-import { Alert } from "app/shared/alert/alert";
+import { AlertError, Alert } from "app/shared/alert";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import {
   sortStateSignal,
@@ -812,19 +810,16 @@ import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
 import { ItemCount } from "app/shared/pagination";
 import { FormsModule } from "@angular/forms";
 import { IUserManagement } from "../user-management.model";
-
 import {
   ITEMS_PER_PAGE,
   PAGE_HEADER,
   TOTAL_COUNT_RESPONSE_HEADER,
-} from "app/config/pagination.constants";
-import {
   SORT,
   ITEM_DELETED_EVENT,
   DEFAULT_SORT_DATA,
-} from "app/config/navigation.constants";
+} from "app/config";
 import { UserManagementService } from "../service/user-management.service";
-import { AccountService } from "app/core/auth/account.service";
+import { AccountService } from "app/core/auth";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
@@ -1412,14 +1407,14 @@ describe("UserManagement Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { serverApiUrl } from "app/config/endpoint.constants";
+    "contents": "import { serverApiUrl } from "app/config";
 import { computed, inject, Service, signal } from "@angular/core";
 import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 
 import dayjs from "dayjs/esm";
 
-import { createRequestOption } from "app/core/request/request-util";
+import { createRequestOption } from "app/core/request";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
 export type PartialUpdateUserManagement = Partial<IUserManagement> &
@@ -1721,7 +1716,7 @@ describe("UserManagement Form Service", () => {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 import dayjs from "dayjs/esm";
-import { DATE_TIME_FORMAT } from "app/config/input.constants";
+import { DATE_TIME_FORMAT } from "app/config";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
 /**
@@ -2217,7 +2212,7 @@ import { ActivatedRoute } from "@angular/router";
 import { finalize, Observable } from "rxjs";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { AlertError } from "app/shared/alert/alert-error";
+import { AlertError } from "app/shared/alert";
 import { ReactiveFormsModule } from "@angular/forms";
 
 import {
@@ -2330,9 +2325,9 @@ export type NewUserManagement = Omit<IUserManagement, "login"> & {
   "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
     "contents": "import { Routes } from "@angular/router";
 
-import { userRouteAccessService } from "app/core/auth/user-route-access.service";
+import { userRouteAccessService } from "app/core/auth";
 import UserManagementResolve from "./route/user-management-routing-resolve.service";
-import { ASC } from "app/config/navigation.constants";
+import { ASC } from "app/config";
 
 const userManagementRoute: Routes = [
   {
@@ -2836,6 +2831,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/index.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
@@ -2860,6 +2858,12 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/core/auth/auth-jwt.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -2876,6 +2880,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/request/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request-util.ts": {
@@ -2900,6 +2907,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/event-manager.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/util/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/operators.spec.ts": {
@@ -3175,9 +3185,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/login/login.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/login/login.model.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
@@ -3208,10 +3215,16 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/alert/alert.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/alert/index.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/auth/has-any-authority.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/date/duration.pipe.ts": {
@@ -4014,6 +4027,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/index.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
@@ -4041,6 +4057,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/core/auth/auth-session.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/auth/logout.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -4054,6 +4076,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/request/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request-util.ts": {
@@ -4078,6 +4103,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/event-manager.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/util/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/operators.spec.ts": {
@@ -4431,9 +4459,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/login/logout.model.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/shared/alert/alert-error.html": {
     "stateCleared": "modified",
   },
@@ -4455,10 +4480,16 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/alert/alert.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/alert/index.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/auth/has-any-authority.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/date/duration.pipe.ts": {
@@ -5127,6 +5158,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/index.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
@@ -5151,6 +5185,12 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/core/auth/auth-jwt.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -5170,6 +5210,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/microfrontend/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/request/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request-util.ts": {
@@ -5194,6 +5237,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/event-manager.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/util/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/operators.spec.ts": {
@@ -5472,9 +5518,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/login/login.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/login/login.model.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
@@ -5505,10 +5548,16 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/shared/alert/alert.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/alert/index.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/auth/has-any-authority.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/date/duration.pipe.ts": {
@@ -6319,6 +6368,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
@@ -6346,6 +6398,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/core/auth/auth-session.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/logout.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -6362,6 +6420,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/microfrontend/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/request/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request-util.ts": {
@@ -6386,6 +6447,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/event-manager.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/operators.spec.ts": {
@@ -6667,9 +6731,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/login/logout.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/shared/alert/alert-error.html": {
     "stateCleared": "modified",
   },
@@ -6691,10 +6752,16 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/shared/alert/alert.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/alert/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {
@@ -7658,6 +7725,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
@@ -7688,6 +7758,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/core/auth/auth-jwt.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -7704,6 +7780,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/request/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request-util.ts": {
@@ -7728,6 +7807,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/event-manager.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/operators.spec.ts": {
@@ -8138,9 +8220,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/login/login.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/login/login.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
@@ -8171,10 +8250,16 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/alert/alert.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/alert/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {
@@ -8853,6 +8938,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
@@ -8874,6 +8962,12 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/core/auth/auth-session.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/logout.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -8887,6 +8981,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/request/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request-util.ts": {
@@ -8911,6 +9008,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/event-manager.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/operators.spec.ts": {
@@ -9186,9 +9286,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/login/logout.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/shared/alert/alert-error.html": {
     "stateCleared": "modified",
   },
@@ -9210,10 +9307,16 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/alert/alert.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/alert/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {
@@ -9870,6 +9973,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/input.constants.ts": {
     "stateCleared": "modified",
   },
@@ -9891,6 +9997,12 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/core/auth/auth-session.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -9904,6 +10016,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/request/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request-util.ts": {
@@ -9928,6 +10043,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/event-manager.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/util/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/operators.spec.ts": {
@@ -10203,9 +10321,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/login/login.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/login/login.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/login/login.service.ts": {
     "stateCleared": "modified",
   },
@@ -10236,10 +10351,16 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/shared/alert/alert.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/alert/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/auth/has-any-authority.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/auth/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/duration.pipe.ts": {

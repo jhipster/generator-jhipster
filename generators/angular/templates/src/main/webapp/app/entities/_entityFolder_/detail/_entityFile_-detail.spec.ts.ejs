@@ -29,7 +29,7 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 <%_ if (anyFieldIsBlobDerived) { _%>
-import { DataUtils } from 'app/core/util/data-util.service';
+import { DataUtils } from 'app/core/util';
 <%_ } _%>
 
 import { <%- entityAngularName %>Detail } from './<%- entityFileName %>-detail';

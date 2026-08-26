@@ -41,7 +41,7 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 <%_ if (anyFieldHasDocumentation) { _%>
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 <%_ } _%>
-import { AlertError } from 'app/shared/alert/alert-error';
+import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
@@ -50,15 +50,13 @@ import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %
 <%# locals.relationships is the unfiltered list: the `relationships` shadow above excludes the Authority relationship -%>
 <%_ const authorityEntity = builtInUserManagement ? locals.relationships.find(rel => rel.otherEntityName === 'Authority')?.otherEntity : undefined; _%>
 <%_ if (builtInUserManagement && fields.some(field => field.fieldName === 'langKey')) { _%>
-import { LANGUAGES } from 'app/config/language.constants';
+import { LANGUAGES } from 'app/config';
 <%_ } _%>
 <%_ if (authorityEntity) { _%>
 import { <%- authorityEntity.entityAngularName %>Service } from 'app/entities/<%- authorityEntity.entityFolderName %>/service/<%- authorityEntity.entityFileName %>.service';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
-import { AlertErrorModel } from 'app/shared/alert/alert-error.model';
-import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
-import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { EventManager, EventWithContent, DataUtils, FileLoadError } from 'app/core/util';
 <%_ } _%>
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const uniqueRel = relationshipsByEntityNeedingOptions[0]; _%>

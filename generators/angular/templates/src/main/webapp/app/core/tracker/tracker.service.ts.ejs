@@ -24,13 +24,10 @@ import { filter, map, Observer, Subscription } from 'rxjs';
 import SockJS from 'sockjs-client';
 import { RxStomp } from '@stomp/rx-stomp';
 
+import { <%- authenticationTypeJwt ? 'AuthServerProvider' : 'CSRFService' %> } from 'app/core/auth';
 <%_ if (authenticationUsesCsrf) { _%>
-import { CSRFService } from 'app/core/auth/csrf.service';
 import { CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN_COOKIE_NAME } from 'app/shared/jhipster/constants';
 import { encodeCsrfToken } from 'app/shared/jhipster/encode-csrf-token';
-<%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } _%>
 
 import { TrackerActivity } from './tracker-activity.model';

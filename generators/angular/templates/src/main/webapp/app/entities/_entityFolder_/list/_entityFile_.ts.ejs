@@ -46,8 +46,7 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
 
-import { AlertError } from 'app/shared/alert/alert-error';
-import { Alert } from 'app/shared/alert/alert';
+import { AlertError, Alert } from 'app/shared/alert';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -65,36 +64,29 @@ import { ItemCount } from 'app/shared/pagination';
 import { FormsModule } from '@angular/forms';
 <%_ } _%>
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
-<%_ if (!paginationNo) { %>
 import {
+<%_ if (!paginationNo) { _%>
   ITEMS_PER_PAGE,
   <%_ if (paginationPagination) { _%>
   PAGE_HEADER,
-  <%_ } _%>
-  <%_ if (paginationPagination) { _%>
   TOTAL_COUNT_RESPONSE_HEADER,
   <%_ } _%>
-} from 'app/config/pagination.constants';
 <%_ } _%>
-import {
   SORT,
 <%_ if (!readOnly) { _%>
   ITEM_DELETED_EVENT,
 <%_ } _%>
   DEFAULT_SORT_DATA
-} from 'app/config/navigation.constants';
+} from 'app/config';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%_ if (builtInUserManagement) { _%>
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
-<%_ if (anyFieldIsBlobDerived) { _%>
-import { DataUtils } from 'app/core/util/data-util.service';
-<%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-import { ParseLinks } from 'app/core/util/parse-links.service';
+<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
+import { <%- [anyFieldIsBlobDerived ? 'DataUtils' : undefined, paginationInfiniteScroll ? 'ParseLinks' : undefined].filter(Boolean).join(', ') %> } from 'app/core/util';
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
 import { Filter, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
