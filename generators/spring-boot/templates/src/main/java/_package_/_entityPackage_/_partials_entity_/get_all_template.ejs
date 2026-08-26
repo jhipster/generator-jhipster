@@ -73,11 +73,11 @@ _%>
   <%_ if (paginationNo) { _%>
     public <%- reactive ? 'Mono<' : '' %>List<<%- restClass %>><%- reactive ? '>' : '' %> getAll<%- entityClassPlural %>(<%- fieldsContainNoOwnerOneToOne ? '@RequestParam(name = "filter", required = false) String filter' : '' %><%- implementsEagerLoadApis && fieldsContainNoOwnerOneToOne ? ',' : '' %><%- implementsEagerLoadApis ? '@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload' : '' %>) {<%- include('get_all_stream_template', { viaService }) -%>
         LOG.debug("REST request to get all <%- entityClassPlural %>");
-    <%_ if (viaService && implementsEagerLoadApis) { _%>
+    <%_ if (implementsEagerLoadApis && (viaService || !dtoMapstruct)) { _%>
         if (eagerload) {
-            return <%- entityInstance %>Service.findAllWithEagerRelationships()<%- reactive ? '.collectList()' : '' %>;
+            return <%- entityInstance %><%- viaService ? 'Service' : 'Repository' %>.findAllWithEagerRelationships()<%- reactive ? '.collectList()' : '' %>;
         } else {
-            return <%- entityInstance %>Service.findAll()<%- reactive ? '.collectList()' : '' %>;
+            return <%- entityInstance %><%- viaService ? 'Service' : 'Repository' %>.findAll()<%- reactive ? '.collectList()' : '' %>;
         }
     <%_ } else if (viaService) { _%>
         return <%- entityInstance %>Service.findAll()<%- reactive ? '.collectList()' : '' %>;
@@ -88,12 +88,6 @@ _%>
       <%_ } else { _%>
         return <%- entityListToDtoListReference %>(<%- entityInstancePlural %>);
       <%_ } _%>
-    <%_ } else if (implementsEagerLoadApis) { _%>
-        if (eagerload) {
-            return <%- entityInstance %>Repository.findAllWithEagerRelationships()<%- reactive ? '.collectList()' : '' %>;
-        } else {
-            return <%- entityInstance %>Repository.findAll()<%- reactive ? '.collectList()' : '' %>;
-        }
     <%_ } else { _%>
             return <%- entityInstance %>Repository.findAll()<%- reactive ? '.collectList()' : '' %>;
     <%_ } _%>
