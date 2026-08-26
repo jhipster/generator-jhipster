@@ -2860,6 +2860,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -3179,9 +3182,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/login/login.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/login/login.model.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/login/login.service.ts": {
@@ -4059,6 +4059,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/logout.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -4453,9 +4456,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/login/login.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/login/logout.model.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/alert/alert-error.html": {
@@ -5187,6 +5187,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -5512,9 +5515,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/login/login.html": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/login/login.model.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/login/login.service.ts": {
@@ -6400,6 +6400,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/logout.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -6725,9 +6728,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/logout.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/alert/alert-error.html": {
@@ -7760,6 +7760,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -8214,9 +8217,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/login.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.service.ts": {
@@ -8964,6 +8964,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/logout.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -9280,9 +9283,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/logout.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/alert/alert-error.html": {
@@ -9999,6 +9999,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/core/auth/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/login.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -10315,9 +10318,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/login.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.service.ts": {

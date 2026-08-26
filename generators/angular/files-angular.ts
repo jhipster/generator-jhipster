@@ -152,12 +152,12 @@ export const files = asWriteFilesSection({
     {
       ...clientApplicationTemplatesBlock(),
       condition: generator => !generator.authenticationTypeOauth2,
-      templates: ['login/login.ts', 'login/login.html', 'login/login.model.ts'],
+      templates: ['login/login.ts', 'login/login.html', 'core/auth/login.model.ts'],
     },
     {
       ...clientApplicationTemplatesBlock(),
       condition: generator => generator.authenticationTypeOauth2,
-      templates: ['login/logout.model.ts'],
+      templates: ['core/auth/logout.model.ts'],
     },
   ],
   angularAccountModule: [

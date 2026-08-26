@@ -19,38 +19,25 @@
 import { serverApiUrl } from 'app/config';
 import { inject, Service } from '@angular/core';
 <%_ if (authenticationTypeOauth2) { _%>
-import { Location } from '@angular/common';
-
-import { AuthServerProvider } from 'app/core/auth';
+import { AuthServerProvider, Logout } from 'app/core/auth';
 <%_ } else { _%>
 import { mergeMap, Observable } from 'rxjs';
 
-import { Account, AccountService, AuthServerProvider } from 'app/core/auth';
-<%_ } _%>
-<%_ if (authenticationTypeSession) { _%>
-<%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
-import { Logout } from './logout.model';
-<%_ } else { _%>
-import { Login } from './login.model';
+import { Account, AccountService, AuthServerProvider, Login } from 'app/core/auth';
 <%_ } _%>
 
 @Service()
 export class LoginService {
 <%_ if (authenticationTypeSession) { _%>
 <%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
-  private readonly location = inject(Location);
-<%_ } else { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   private readonly accountService = inject(AccountService);
 <%_ } _%>
   private readonly authServerProvider = inject(AuthServerProvider);
 
 <%_ if (authenticationTypeOauth2) { _%>
   login(): void {
-    // If you have configured multiple OIDC providers, then, you can update this URL to /login.
-    // It will show a Spring Security generated login page with links to configured OIDC providers.
-    location.href = `${location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
+    this.authServerProvider.login();
   }
 <%_ } else { _%>
   login(credentials: Login): Observable<Account | null> {

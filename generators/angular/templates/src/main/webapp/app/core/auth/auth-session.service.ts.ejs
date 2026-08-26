@@ -18,6 +18,9 @@
 -%>
 import { serverApiUrl } from 'app/config';
 import { inject, Service } from '@angular/core';
+<%_ if (authenticationTypeOauth2) { _%>
+import { Location } from '@angular/common';
+<%_ } _%>
 import { HttpClient<%- authenticationTypeOauth2 ? '' : ', HttpHeaders' %> } from '@angular/common/http';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { map, Observable } from 'rxjs';
@@ -26,14 +29,17 @@ import { Observable } from 'rxjs';
 <%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
-import { Logout } from 'app/login/logout.model';
+import { Logout } from './logout.model';
 <%_ } else { _%>
-import { Login } from 'app/login/login.model';
+import { Login } from './login.model';
 <%_ } _%>
 
 @Service()
 export class AuthServerProvider {
   private readonly http = inject(HttpClient);
+<%_ if (authenticationTypeOauth2) { _%>
+  private readonly location = inject(Location);
+<%_ } _%>
 
 <%_ if (!authenticationTypeOauth2) { _%>
 
@@ -64,6 +70,12 @@ export class AuthServerProvider {
   }
 
 <%_ } else { _%>
+
+  login(): void {
+    // If you have configured multiple OIDC providers, then, you can update this URL to /login.
+    // It will show a Spring Security generated login page with links to configured OIDC providers.
+    window.location.href = `${window.location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
+  }
 
   logout(): Observable<Logout> {
     return this.http.post<Logout>(`${serverApiUrl}api/logout`, {});

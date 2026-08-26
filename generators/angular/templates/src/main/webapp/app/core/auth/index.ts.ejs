@@ -21,6 +21,11 @@ export * from './account.service';
 <%_ if (authenticationTypeJwt) { _%>
 export * from './auth-jwt.service';
 <%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+export * from './logout.model';
+<%_ } else { _%>
+export * from './login.model';
+<%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 export * from './auth-session.service';
 <%_ } _%>
