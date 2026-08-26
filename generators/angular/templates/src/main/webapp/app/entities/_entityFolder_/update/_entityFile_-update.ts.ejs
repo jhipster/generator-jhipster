@@ -45,7 +45,7 @@ import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } fro
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
-import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+import { I<%- entityAngularName %><%- builtInUserManagement ? `, New${entityAngularName}` : '' %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%# locals.relationships is the unfiltered list: the `relationships` shadow above excludes the Authority relationship -%>
 <%_ const authorityEntity = builtInUserManagement ? locals.relationships.find(rel => rel.otherEntityName === 'Authority')?.otherEntity : undefined; _%>
@@ -195,12 +195,12 @@ export class <%- entityAngularName %>Update implements OnInit {
     save(): void {
         this.isSaving.set(true);
         const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.editForm);
-<%_ if (primaryKey.autoGenerate) { _%>
+<%_ if (primaryKey.autoGenerate || builtInUserManagement) { _%>
   <%_ if (updatableEntity) { _%>
-        if (<%- entityInstance %>.<%- primaryKey.name %> === null) {
-            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
+        if (<%- entityInstance %>.<%- builtInUserManagement ? 'id' : primaryKey.name %> === null) {
+            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %><%- builtInUserManagement ? ` as New${entityAngularName}` : '' %>));
         } else {
-            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %>));
+            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %><%- builtInUserManagement ? ` as I${entityAngularName}` : '' %>));
         }
   <%_ } else { _%>
         this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));

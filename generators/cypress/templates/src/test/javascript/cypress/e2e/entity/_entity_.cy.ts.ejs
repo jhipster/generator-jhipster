@@ -32,8 +32,7 @@ import {
   entityConfirmDeleteButtonSelector,
 <%_ } _%>
 } from '../../support/entity';
-<%_ const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
-    const baseApi = `${entityApi}api/`;
+<%_ const baseApi = `${entityApi}api/`;
 
     const entityFakeData = generateFakeData('cypress');
     const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
@@ -335,7 +334,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 <%_ if (!readOnly) { _%>
 
-  describe<%- skipUserManagementCreatePage ? '.skip' : '' %>('new <%- entityNameCapitalized %> page', () => {
+  describe('new <%- entityNameCapitalized %> page', () => {
     beforeEach(() => {
       cy.visit(<%- entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();
@@ -354,9 +353,10 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
-      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? '' : 'not.' %>be.checked');
+      <%_ const checkedByDefault = field.fieldTsDefaultValue === 'true' || field.defaultValue === true; _%>
+      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- checkedByDefault ? '' : 'not.' %>be.checked');
       cy.get(`[data-cy="<%- fieldName %>"]`).click();
-      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? 'not.' : '' %>be.checked');
+      cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- checkedByDefault ? 'not.' : '' %>be.checked');
 
     <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
       cy.setFieldImageAsBytesOfEntity('<%- fieldName %>', 'integration-test.png', 'image/png');
