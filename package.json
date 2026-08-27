@@ -133,7 +133,7 @@
     "@yeoman/conflicter": "4.1.0",
     "@yeoman/namespace": "2.1.0",
     "@yeoman/transform": "2.1.2",
-    "@yeoman/types": "1.12.1",
+    "@yeoman/types": "1.13.0",
     "chalk": "6.0.0",
     "chevrotain": "13.2.0",
     "commander": "15.0.0",
