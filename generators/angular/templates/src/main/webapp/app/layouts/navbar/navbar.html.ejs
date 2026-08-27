@@ -49,7 +49,7 @@
         <li
           ngbDropdown
           class="nav-item dropdown pointer"
-          display="dynamic"
+          display="static"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           data-cy="entity"
@@ -97,7 +97,7 @@
         *<%- jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'"
         ngbDropdown
         class="nav-item dropdown pointer"
-        display="dynamic"
+        display="static"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
         data-cy="adminMenu"
@@ -176,14 +176,14 @@
       </li>
 <%_ if (enableTranslation) { _%>
     @if (languages.length > 1) {
-      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic">
+      <li ngbDropdown class="nav-item dropdown pointer" display="static">
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
           <span>
             <fa-icon icon="flag" />
             <span>__jhiTranslateTag__('global.menu.language')</span>
           </span>
         </a>
-        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
+        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
         @for (language of languages; track $index) {
           <li>
             <a class="dropdown-item" [<%- jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
@@ -193,7 +193,7 @@
       </li>
     }
 <%_ } _%>
-      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-cy="accountMenu">
+      <li ngbDropdown class="nav-item dropdown pointer" display="static" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-cy="accountMenu">
         @let accountRef = account();
         <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
         @if (!accountRef?.imageUrl) {
@@ -207,7 +207,7 @@
           </span>
         }
         </a>
-        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
+        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="account-menu">
           @if (accountRef !== null) {
 <%_ if (generateUserManagement) { _%>
             <li>
