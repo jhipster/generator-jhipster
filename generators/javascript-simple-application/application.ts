@@ -67,7 +67,7 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
 
-  typescriptEslint: true,
+  typescriptEslint: (_, { delayMarker }) => delayMarker ?? true,
   nodeVersion: RECOMMENDED_NODE_VERSION,
   nodePackageManager: 'npm',
   nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,

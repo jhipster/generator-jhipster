@@ -47,7 +47,8 @@ export type TemplateData = Application & {
   generator: string;
   customGenerator: boolean;
   jhipsterGenerator: string;
-  generatorClass: string;
+  parentGenerator: string;
+  parentGeneratorImport: string;
   priorities: {
     name: string;
     asTaskGroup: string;

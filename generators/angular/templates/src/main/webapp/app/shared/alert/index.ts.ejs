@@ -16,18 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config';
-import { inject, Service } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-import { GatewayRoute } from './gateway-route.model';
-
-@Service()
-export class GatewayRoutesService {
-  private readonly http = inject(HttpClient);
-
-  findAll(): Observable<GatewayRoute[]> {
-    return this.http.get<GatewayRoute[]>(`${serverApiUrl}api/gateway/routes`);
-  }
-}
+export * from './alert';
+export * from './alert-error';
+export * from './alert-error.model';

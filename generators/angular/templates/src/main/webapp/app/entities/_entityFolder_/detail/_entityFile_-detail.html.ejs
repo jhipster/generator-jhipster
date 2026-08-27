@@ -29,11 +29,13 @@
       <<%- jhiPrefixDashed %>-alert />
 
       <dl class="row-md jh-entity-details">
-<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+<%_ for (const field of fields.filter(field => !field.hidden && !(builtInUserManagement && field.fieldName === 'activated'))) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
         <dt><span<% if (field.documentation && enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else if (field.documentation) { %> ngbTooltip="<%- field.documentation %>"<% } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (builtInUserManagement && fieldName === 'langKey') { _%>
+          {{ <%- entityInstance %>Ref.<%- fieldName %> }}
+  <%_ } else if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label -%>
           <span>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>Ref.<%- fieldName %> ?? 'null'" })</span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
@@ -60,6 +62,13 @@
           <span>{{ <%- entityInstance %>Ref.<%- fieldName %> | formatMediumDate }}</span>
   <%_ } else { _%>
           <span>{{ <%- entityInstance %>Ref.<%- fieldName %> }}</span>
+  <%_ } _%>
+  <%_ if (builtInUserManagement && fieldName === 'login') { _%>
+          @if (userManagementRef.activated) {
+            <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
+          } @else {
+           <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
+          }
   <%_ } _%>
         </dd>
 <%_ } _%>

@@ -22,8 +22,7 @@ import { RouterLink } from '@angular/router';
 <%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Alert } from 'app/shared/alert/alert';
-import { AlertError } from 'app/shared/alert/alert-error';
+import { Alert, AlertError } from 'app/shared/alert';
 <%_ if (anyFieldHasDocumentation) { _%>
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 <%_ } _%>
@@ -36,7 +35,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ if (anyFieldIsBlobDerived) { _%>
-import { DataUtils } from 'app/core/util/data-util.service';
+import { DataUtils } from 'app/core/util';
 <%_ } _%>
 
 @Component({

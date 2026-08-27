@@ -34,7 +34,7 @@ import { TranslateDirective } from 'app/shared/language';
 <%_ if (authenticationTypeOauth2) { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-home',

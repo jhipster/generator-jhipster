@@ -110,6 +110,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -274,6 +277,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -436,6 +442,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
@@ -891,6 +900,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {

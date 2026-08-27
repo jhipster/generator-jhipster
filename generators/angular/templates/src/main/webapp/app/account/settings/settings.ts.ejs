@@ -23,11 +23,10 @@ import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
-import { AlertError } from 'app/shared/alert/alert-error';
-import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/auth/account.model';
+import { AlertError } from 'app/shared/alert';
+import { AccountService, Account } from 'app/core/auth';
 <%_ if (enableTranslation) { _%>
-import { LANGUAGES } from 'app/config/language.constants';
+import { LANGUAGES } from 'app/config';
 <%_ } _%>
 
 const initialAccount: Account = {} as Account;

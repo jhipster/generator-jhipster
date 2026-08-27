@@ -23,10 +23,10 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 
-import { AccountService } from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth';
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 <%_ if (enableI18nRTL) { _%>
-import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
+import { FindLanguageFromKeyPipe } from 'app/shared/language';
 <%_ } _%>
 import Footer from '../footer/footer';
 import PageRibbon from '../profiles/page-ribbon';

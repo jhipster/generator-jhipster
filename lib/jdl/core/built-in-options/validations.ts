@@ -27,6 +27,7 @@ export const validationTypes = {
   PATTERN: 'pattern',
   MINBYTES: 'minbytes',
   MAXBYTES: 'maxbytes',
+  EMAIL: 'email',
 } as const;
 
 export type ValidationType = (typeof validationTypes)[keyof typeof validationTypes];
@@ -43,6 +44,7 @@ const needsValuedMap = {
   pattern: true,
   minbytes: true,
   maxbytes: true,
+  email: false,
 } as const;
 
 const needsValue = (validation: keyof typeof needsValuedMap) => needsValuedMap[validation];

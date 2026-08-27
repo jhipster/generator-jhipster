@@ -22,7 +22,7 @@
     const bodyArg = requiresRestTypeConversion ? 'copy' : entityInstance;
     const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
 _%>
-import { <%- (applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config/endpoint.constants';
+import { <%- (applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName ? 'microserviceContextPath, ' : '' %>serverApiUrl<%- anyFieldIsLocalDate ? ', DATE_FORMAT' : '' %> } from 'app/config';
 import { computed, inject, Service, signal } from '@angular/core';
 import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
 import {
@@ -43,13 +43,7 @@ import {
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 
-<%_ if (anyFieldIsLocalDate) { _%>
-import { DATE_FORMAT } from 'app/config/input.constants';
-<%_ } _%>
-import { createRequestOption } from 'app/core/request/request-util';
-<%_ if (searchEngineAny) { _%>
-import { <%- searchType %> } from 'app/core/request/request.model';
-<%_ } _%>
+import { createRequestOption<%- searchEngineAny ? `, ${searchType}` : '' %> } from 'app/core/request';
 import { I<%- entityAngularName %><% if (!readOnly) { %>, New<%- entityAngularName %><% } %> } from '../<%- entityFileName %>.model';
 <%_ if (!readOnly && updatableEntity) { _%>
 

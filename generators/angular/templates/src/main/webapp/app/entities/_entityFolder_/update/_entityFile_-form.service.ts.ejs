@@ -28,7 +28,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 <%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
 import dayjs from 'dayjs/esm';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_TIME_FORMAT } from 'app/config';
 <%_ } _%>
 import { I<%- entityAngularName %>, New<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 
@@ -100,8 +100,8 @@ export class <%- entityAngularName %>FormService {
 
     return new FormGroup<<%- entityAngularName %>FormGroupContent>({
 <%_ for (const field of fields) { _%>
-  <%_ const { fieldName, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
-      const usesValidators = fieldValidationRequired || fieldValidationMinLength || fieldValidationMaxLength || fieldValidationMin || fieldValidationMax || fieldValidationPattern || field.id;
+  <%_ const { fieldName, fieldValidationEmail, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
+      const usesValidators = fieldValidationEmail || fieldValidationRequired || fieldValidationMinLength || fieldValidationMaxLength || fieldValidationMin || fieldValidationMax || fieldValidationPattern || field.id;
   _%>
       <%- fieldName %>: new FormControl(
   <%_ if (field.id) { _%>
@@ -117,6 +117,9 @@ export class <%- entityAngularName %>FormService {
           validators: [
     <%_ if (field.fieldValidationRequired || field.id) { _%>
             Validators.required,
+    <%_ } _%>
+    <%_ if (field.fieldValidationEmail) { _%>
+            Validators.email,
     <%_ } _%>
     <%_ if (field.fieldValidationMinLength) { _%>
             Validators.minLength(<%- field.fieldValidateRulesMinlength %>),

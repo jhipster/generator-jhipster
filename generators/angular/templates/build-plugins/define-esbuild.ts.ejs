@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { copyFileSync, mkdirSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 
-import type { ApplicationBuilderOptions } from '@angular/build';
-import type { Target } from '@angular-devkit/architect';
 import type { Plugin } from 'esbuild';
 import { globSync } from 'tinyglobby';
 
-const swaggerUiDir = path.resolve(__dirname, '../<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui');
+const require = createRequire(import.meta.url);
+const swaggerUiDir = path.resolve(import.meta.dirname, '../<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui');
 
 const copyFromPackage = (sourceDir: string, glob: string): void => {
   for (const file of globSync(glob, { cwd: sourceDir })) {
@@ -32,16 +32,18 @@ const copyFromPackage = (sourceDir: string, glob: string): void => {
   }
 };
 
-export default (builderOptions: ApplicationBuilderOptions, _target: Target): Plugin => {
-  mkdirSync(swaggerUiDir, { recursive: true });
-  copyFromPackage(path.join(path.dirname(require.resolve('axios/package.json')), 'dist'), 'axios.min.js');
-  copyFromPackage(require('swagger-ui-dist').getAbsoluteFSPath(), '{*.{png,css},swagger-ui-{bundle,standalone-preset}.js}');
+export default {
+  name: 'define:vars',
+  setup(build) {
+    mkdirSync(swaggerUiDir, { recursive: true });
+    copyFromPackage(path.join(path.dirname(require.resolve('axios/package.json')), 'dist'), 'axios.min.js');
+    copyFromPackage(require('swagger-ui-dist').getAbsoluteFSPath(), '{*.{png,css},swagger-ui-{bundle,standalone-preset}.js}');
 
-  builderOptions.define ??= {};
-  builderOptions.define.__VERSION__ = JSON.stringify(process.env.APP_VERSION ?? 'unknown');
-
-  return {
-    name: 'define:vars',
-    setup(_build) {},
-  };
-};
+    build.initialOptions.define ??= {};
+    build.initialOptions.define.__VERSION__ = JSON.stringify(process.env.APP_VERSION ?? 'unknown');
+    // If this URL is left empty (""), then it will be relative to the current context.
+    // If you use an API server, in `prod` mode, you will need to enable CORS
+    // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
+    build.initialOptions.define.SERVER_API_URL = "''";
+  },
+} satisfies Plugin;

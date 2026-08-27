@@ -74,7 +74,7 @@ export default defineComponent({
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
     const previousState = () => router.go(-1);
 
-    const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
+    const userAccount: Ref<IUser> = ref({ ...new User(), activated: true, authorities: [] });
     const isSaving: Ref<boolean> = ref(false);
     const authorities: Ref<string[]> = ref([]);
 

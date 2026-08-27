@@ -195,12 +195,12 @@ describe('<%- entityAngularName %> Management Update Component', () => {
         });
 
 <%_ } _%>
-<%_ if (primaryKey.autoGenerate || !updatableEntity) { _%>
+<%_ if (primaryKey.autoGenerate || !updatableEntity || builtInUserManagement) { _%>
         it('should call create service on save for new entity', () => {
             // GIVEN
             const saveSubject = new Subject<I<%- entityAngularName %>>();
             const <%- entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            vi.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue({ <%- primaryKey.name %>: null });
+            vi.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue({ <%- builtInUserManagement ? 'id: null, ' : '' %><%- primaryKey.name %>: null });
             vi.spyOn(<%- entityInstance %>Service, 'create').mockReturnValue(saveSubject);
             vi.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%- entityInstance %>: null });
@@ -247,7 +247,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
         it('should set isSaving to false on error', () => {
             // GIVEN
             const saveSubject = new Subject<I<%- entityAngularName %>>();
-            const <%- entityInstance %> = <%- testEntityPrimaryKey0 %>;
+            const <%- entityInstance %> = <%- builtInUserManagement ? testEntityPrimaryKey0.replace('{', '{ id: 123,') : testEntityPrimaryKey0 %>;
             vi.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
             vi.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%- entityInstance %> });

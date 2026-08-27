@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config/endpoint.constants';
+import { serverApiUrl } from 'app/config';
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -27,8 +27,8 @@ import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { Authority } from 'app/shared/jhipster/constants';
-import { Account } from 'app/core/auth/account.model';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { Account } from './account.model';
+import { StateStorageService } from './state-storage.service';
 <%_ if (generateUserManagement) { _%>
 <%_ } _%>
 

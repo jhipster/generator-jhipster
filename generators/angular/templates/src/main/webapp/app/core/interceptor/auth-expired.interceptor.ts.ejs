@@ -21,11 +21,19 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 
-import { StateStorageService } from 'app/core/auth/state-storage.service';
+<%_ if (authenticationTypeOauth2) { _%>
+import { AuthServerProvider, StateStorageService } from 'app/core/auth';
+<%_ } else { _%>
+import { StateStorageService } from 'app/core/auth';
 import { LoginService } from 'app/login/login.service';
+<%_ } _%>
 
 export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
+<%_ if (authenticationTypeOauth2) { _%>
+  const authServerProvider = inject(AuthServerProvider);
+<%_ } else { _%>
   const loginService = inject(LoginService);
+<%_ } _%>
   const stateStorageService = inject(StateStorageService);
   const router = inject(Router);
 
@@ -44,7 +52,7 @@ export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
         loginService.logout();
         router.navigate(['/login']);
 <%_ } else { _%>
-        loginService.login();
+        authServerProvider.login();
 <%_ } _%>
         }
       },
