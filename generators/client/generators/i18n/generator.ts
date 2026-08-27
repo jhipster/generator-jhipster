@@ -279,7 +279,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             .filter(entity => !entity.skipClient && !entity.builtInUser)
             .flatMap(entity =>
               entity.fields.flatMap(field => {
-                if (!field.fieldIsEnum) return [];
+                if (!field.fieldIsEnum || field.clientConstantsAsValues) return [];
                 return this.languagesToGenerate.map(({ languageTag }) =>
                   this.writeFiles({
                     sections: {

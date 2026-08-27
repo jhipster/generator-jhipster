@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const enumImports = generateEntityClientEnumImports(fields.filter(field => !(builtInUserManagement && field.fieldName === 'langKey'))); _%>
-<%_ if (builtInUserManagement && enableTranslation) { _%>
-import { LANGUAGES } from 'app/config';
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantTsType.includes(field.angularFieldClientConstant.angularConstantName)).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
+<%_ for (const { angularConstantName, angularConstantImportPath } of clientConstants) { _%>
+import { <%- angularConstantName %> } from '<%- angularConstantImportPath %>';
 <%_ } _%>
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs/esm';
@@ -35,11 +36,7 @@ export interface I<%- entityAngularName %> {
 <%# TODO - handle required fields (and thus non-nullable) - currently all fields are optional and nullable) #-%>
 <%_ for (const field of fields) { _%>
   <%_ const { fieldName/* , fieldValidationRequired */, id } = field;
-      let tsType = `${field.fieldIsEnum ? 'keyof typeof ' : ''}${field.tsType}`;
-      if (builtInUserManagement && fieldName === 'langKey') {
-        // The application languages are already available at app/config/language.constants.
-        tsType = '(typeof LANGUAGES)[number]';
-      }
+      const tsType = `${field.fieldIsEnum && !field.clientConstantsAsValues ? 'keyof typeof ' : ''}${field.tsType}${field.collection ? '[]' : ''}`;
   _%>
   <%- fieldName %><%- id ? '' : '?' %>: <%- tsType %><%- id ? '' : ' | null' %>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
@@ -49,10 +46,6 @@ export interface I<%- entityAngularName %> {
 <%_ for (const relationship of relationships.filter(rel => (builtInUserManagement && rel.otherEntityName === 'Authority') || rel.persistableRelationship || rel.relationshipEagerLoad)) { _%>
   <%_ const { propertyName, propertyTsType, otherEntity, collection, otherEntityField, relationshipShouldUsePick } = relationship; _%>
   <%- propertyName %>?: <%- relationshipShouldUsePick ? 'Pick<' : '' %><%- propertyTsType %><%- relationshipShouldUsePick ? `, '${otherEntity.primaryKey.name}'${otherEntity.primaryKey.name !== otherEntityField ? ` | '${otherEntityField}'` : ''}>` : '' %><%- collection ? '[]' : '' %> | null;
-<%_ } _%>
-<%_ if (builtInUserManagement && !relationships.some(rel => rel.otherEntityName === 'Authority')) { _%>
-  <%# Authorities are exposed by the server even when the Authority entity is not generated (Cassandra). #-%>
-  authorities?: string[] | null;
 <%_ } _%>
 }
 <%_ if (!readOnly && primaryKey) { _%>

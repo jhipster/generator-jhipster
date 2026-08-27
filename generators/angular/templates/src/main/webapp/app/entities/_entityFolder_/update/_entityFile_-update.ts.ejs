@@ -49,8 +49,9 @@ import { I<%- entityAngularName %><%- builtInUserManagement ? `, New${entityAngu
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%# locals.relationships is the unfiltered list: the `relationships` shadow above excludes the Authority relationship -%>
 <%_ const authorityEntity = builtInUserManagement ? locals.relationships.find(rel => rel.otherEntityName === 'Authority')?.otherEntity : undefined; _%>
-<%_ if (builtInUserManagement && fields.some(field => field.fieldName === 'langKey')) { _%>
-import { LANGUAGES } from 'app/config';
+<%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
+<%_ for (const { angularConstantName, angularConstantImportPath } of clientConstants) { _%>
+import { <%- angularConstantName %> } from '<%- angularConstantImportPath %>';
 <%_ } _%>
 <%_ if (authorityEntity) { _%>
 import { <%- authorityEntity.entityAngularName %>Service } from 'app/entities/<%- authorityEntity.entityFolderName %>/service/<%- authorityEntity.entityFileName %>.service';
@@ -65,7 +66,7 @@ import { I<%- uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%
 import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/service/<%- uniqueRel.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
-<%_ const enumImports = generateEntityClientEnumImports(fields.filter(field => !(builtInUserManagement && field.fieldName === 'langKey'))); _%>
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
@@ -97,8 +98,8 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ for (const [importedType] of enumImports) { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ } _%>
-<%_ if (builtInUserManagement && fields.some(field => field.fieldName === 'langKey')) { _%>
-    languagesValues = LANGUAGES;
+<%_ for (const field of fields.filter(field => field.angularFieldClientConstant)) { _%>
+    <%- field.fieldName %>Values = <%- field.angularFieldClientConstant.angularConstantValues %>;
 <%_ } _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>

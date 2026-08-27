@@ -2414,6 +2414,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
         "blobContentTypeImage": false,
         "blobContentTypeText": false,
         "builtIn": true,
+        "clientConstantsAsValues": true,
         "entity": Any<Object>,
         "enumFileName": "languages",
         "enumValues": Any<Array>,

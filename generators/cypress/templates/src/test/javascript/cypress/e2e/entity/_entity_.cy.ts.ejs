@@ -362,7 +362,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
       cy.setFieldImageAsBytesOfEntity('<%- fieldName %>', 'integration-test.png', 'image/png');
 
     <%_ } else if (fieldIsEnum) { _%>
-      cy.get(`[data-cy="<%- fieldName %>"]`).select('<%- fieldValue %>');
+      cy.get(`[data-cy="<%- fieldName %>"]`).select(<%- field.collection ? `['${fieldValue}']` : `'${fieldValue}'` %>);
 
     <%_ } else if (field.fieldTypeString || field.fieldTypeNumeric || field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { _%>
       cy.get(`[data-cy="<%- fieldName %>"]`).type('<%- fieldValue %>');

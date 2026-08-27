@@ -86,7 +86,11 @@ export const generateEntityClientEnumImports = (fields: BaseApplicationField[], 
   const uniqueEnums: Record<string, string> = {};
   for (const field of fields) {
     const { enumFileName, fieldType } = field;
-    if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues?.length !== 0))) {
+    if (
+      field.fieldIsEnum &&
+      !field.clientConstantsAsValues &&
+      (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues?.length !== 0))
+    ) {
       const importType = fieldType;
       const basePath = clientFramework === VUE ? '@' : 'app';
       const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
@@ -130,8 +134,11 @@ export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 
  */
 export const generateTsTestEntityForFields = (fields: ClientField[]): Record<string, string | number | boolean> => {
   const entries = fields.flatMap(field => {
-    const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate } = field;
-    const fakeData = field.generateFakeData!('ts');
+    const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate, collection } = field;
+    let fakeData = field.generateFakeData!('ts');
+    if (collection) {
+      fakeData = fakeData === undefined ? '[]' : `[${fakeData}]`;
+    }
     if (fieldWithContentType) {
       return [
         [field.propertyName, fakeData],
@@ -160,8 +167,11 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
 export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 | 'random' = 'random') => {
   const entries = fields.flatMap(field => {
     if (index === 'random') {
-      const { fieldWithContentType, contentTypeFieldName } = field;
-      const fakeData = field.generateFakeData!('json-serializable');
+      const { fieldWithContentType, contentTypeFieldName, collection } = field;
+      let fakeData = field.generateFakeData!('json-serializable');
+      if (collection) {
+        fakeData = fakeData === undefined ? [] : [fakeData];
+      }
       if (fieldWithContentType) {
         return [
           [field.propertyName, fakeData],

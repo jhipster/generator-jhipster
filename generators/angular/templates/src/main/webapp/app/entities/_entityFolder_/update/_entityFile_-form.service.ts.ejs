@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const formDefaultProperties = [
-      ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id).map(field => field.fieldName),
+      ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id || field.collection).map(field => field.fieldName),
       ...relationships.filter(relationship => relationship.collection && relationship.persistableRelationship).map(relationship => relationship.propertyName),
     ];
     const containDefaultProperties = formDefaultProperties.length > 0;
@@ -206,6 +206,8 @@ export class <%- entityAngularName %>FormService {
         <%- fieldName %>: false,
       <%_ } else if (fieldTypeTimed) { _%>
         <%- fieldName %>: currentTime,
+      <%_ } else if (field.collection) { _%>
+        <%- fieldName %>: [],
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>

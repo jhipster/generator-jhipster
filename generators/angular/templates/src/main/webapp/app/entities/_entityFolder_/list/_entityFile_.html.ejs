@@ -109,7 +109,7 @@
                     </th>
   <%_ } _%>
 <%_ } _%>
-<%_ if (builtInUserManagement) { _%>
+<%_ if (builtInUserManagement && relationships.some(rel => rel.otherEntityName === 'Authority')) { _%>
                     <th scope="col">
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('userManagement.profiles')</span>
@@ -141,7 +141,15 @@
                         <span>{{ <%- entityInstance %>.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>.<%- fieldName %>) }}</span>
                     }
                     </td>
-  <%_ } else if (builtInUserManagement && fieldName === 'langKey') { _%>
+  <%_ } else if (field.collection) { _%>
+                    <td>
+                    @for (<%- field.angularFieldNameSingular %> of <%- entityInstance %>.<%- fieldName %>; track $index) {
+                        <div>
+                            <span class="badge bg-info">{{ <%- field.angularFieldNameSingular %> }}</span>
+                        </div>
+                    }
+                    </td>
+  <%_ } else if (field.clientConstantsAsValues) { _%>
                     <td>{{ <%- entityInstance %>.<%- fieldName %> }}</td>
   <%_ } else if (field.fieldIsEnum) { _%>
                     <%# TODO: import enum and use its key as label -%>
@@ -195,7 +203,7 @@
                     </td>
   <%_ } _%>
 <%_ } _%>
-<%_ if (builtInUserManagement) { _%>
+<%_ if (builtInUserManagement && relationships.some(rel => rel.otherEntityName === 'Authority')) { _%>
                     <td>
                     @for (authority of <%- entityInstance %>.authorities; track $index) {
                         <div>
