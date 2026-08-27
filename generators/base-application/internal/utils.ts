@@ -291,7 +291,7 @@ export function createUserManagementEntity(
         relationshipType: 'many-to-many',
         relationshipIgnoreBackReference: true,
         propertyTranslationKey: 'userManagement.profiles',
-        propertyTsType: 'string',
+        relationshipSerializePrimaryKeyOnly: true,
       },
     ]);
   }

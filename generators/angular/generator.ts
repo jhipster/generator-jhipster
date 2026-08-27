@@ -328,9 +328,13 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       prepareRelationship({ entity, relationship }) {
         mutateData(relationship, {
           __override__: false,
-          propertyTsType: ({ otherEntity }) => `I${otherEntity.entityAngularName}`,
-          relationshipShouldUsePick: ({ otherEntity }) =>
-            !entity.builtInUserManagement && !otherEntity.embedded && ((entity as any).dtoMapstruct || otherEntity.builtInUser),
+          propertyTsType: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
+            relationshipSerializePrimaryKeyOnly ? otherEntity.primaryKey!.tsType : `I${otherEntity.entityAngularName}`,
+          relationshipShouldUsePick: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
+            !relationshipSerializePrimaryKeyOnly &&
+            !entity.builtInUserManagement &&
+            !otherEntity.embedded &&
+            ((entity as any).dtoMapstruct || otherEntity.builtInUser),
         });
       },
     });

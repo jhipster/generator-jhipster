@@ -197,6 +197,8 @@ type BaseApplicationAddedRelationshipProperties = DerivedBooleanPropertiesOf<
     relationshipNameHumanized: string;
 
     relationshipIgnoreBackReference?: boolean;
+    /** The relationship is serialized as the other entity primary key (or a list of them) instead of the entity object. */
+    relationshipSerializePrimaryKeyOnly?: boolean;
 
     relationshipValidate?: boolean;
     relationshipValidateRules?: string[];
