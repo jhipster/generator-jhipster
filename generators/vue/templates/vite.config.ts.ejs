@@ -31,7 +31,7 @@ import federationConfig from './module-federation.config.ts';
 
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
-const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>/', import.meta.url));
+const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url));
 
 const config = defineConfig({
   plugins: [
