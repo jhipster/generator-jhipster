@@ -24,7 +24,7 @@ import { isBinaryFile } from 'isbinaryfile';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
-import { simpleGit } from 'simple-git';
+import { type SimpleGit, simpleGit } from 'simple-git';
 
 import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
 
@@ -75,6 +75,26 @@ export function detectCrLf(filePath: string): Promise<boolean | undefined> {
 }
 
 const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
+  // A git process is spawned for every lookup, cache the git instance by directory.
+  // Directories which are not inside a git repository are cached as undefined.
+  const gitCache = new Map<string, Promise<SimpleGit | undefined>>();
+  const getGit = (baseDir: string): Promise<SimpleGit | undefined> => {
+    let git = gitCache.get(baseDir);
+    if (!git) {
+      git = (async () => {
+        const git = simpleGit({ baseDir }).env({
+          HOME: process.env.HOME,
+          PATH: process.env.PATH,
+          LANG: 'C',
+          LC_ALL: 'C',
+        });
+        return (await git.checkIsRepo()) ? git : undefined;
+      })();
+      gitCache.set(baseDir, git);
+    }
+    return git;
+  };
+
   return transform(async (file: MemFsEditorFile) => {
     if (!isFileStateModified(file)) {
       return file;
@@ -92,12 +112,13 @@ const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
     }
 
     const baseDir = await findExistingParent(file.path);
-    const git = simpleGit({ baseDir }).env({
-      HOME: process.env.HOME,
-      PATH: process.env.PATH,
-      LANG: 'C',
-      LC_ALL: 'C',
-    });
+    const git = await getGit(baseDir);
+    if (!git) {
+      // Attributes cannot be looked up outside a git repository. The repository is initialized at the post writing
+      // priority, `--skip-git` may be used, and the root folder of a workspaces application is never initialized.
+      return file;
+    }
+
     const checkAttrs = await git.raw('check-attr', 'binary', 'eol', '--', file.path);
     const attrs = Object.fromEntries(
       checkAttrs

@@ -18,10 +18,35 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+import { join, relative } from 'node:path';
+import { Readable } from 'node:stream';
 
-import { detectCrLf } from './auto-crlf-transform.ts';
+import type { MemFsEditorFile } from 'mem-fs-editor';
+import { simpleGit } from 'simple-git';
+
+import autoCrlfTransform, { detectCrLf } from './auto-crlf-transform.ts';
 
 import { defaultHelpers as helpers } from '#testing';
+
+const gitAttributes = `* text=auto
+*.bat text eol=crlf
+*.sh text eol=lf
+`;
+
+const runAutoCrlfTransform = async (baseDir: string, filePaths: string[]): Promise<Record<string, string>> => {
+  const files = filePaths.map(filePath => ({
+    path: join(baseDir, filePath),
+    contents: Buffer.from('line1\nline2\n'),
+    state: 'modified',
+  })) as unknown as MemFsEditorFile[];
+
+  const contents: Record<string, string> = {};
+  const stream: AsyncIterable<MemFsEditorFile> = Readable.from(files).pipe(await autoCrlfTransform());
+  for await (const file of stream) {
+    contents[relative(baseDir, file.path).replaceAll('\\', '/')] = file.contents!.toString();
+  }
+  return contents;
+};
 
 describe('generator - bootstrap - utils', () => {
   describe('::detectCrLf', () => {
@@ -49,6 +74,48 @@ describe('generator - bootstrap - utils', () => {
     describe('passing a single line file', () => {
       it('should return undefined', async () => {
         expect(await detectCrLf('lf-single.txt')).toBeUndefined();
+      });
+    });
+  });
+
+  describe('::autoCrlfTransform', () => {
+    const filePaths = ['file.txt', 'file.sh', 'file.bat', 'nested/file.txt', 'nested/file.sh'];
+
+    const prepareBaseDir = async (): Promise<string> => {
+      const result = await helpers.prepareTemporaryDir().withFiles({ '.gitattributes': gitAttributes }).commitFiles();
+      return result.cwd;
+    };
+
+    describe('inside a git repository', () => {
+      let baseDir: string;
+
+      before(async () => {
+        baseDir = await prepareBaseDir();
+        await simpleGit({ baseDir }).init();
+      });
+
+      it('should normalize line endings using gitattributes', async () => {
+        await expect(runAutoCrlfTransform(baseDir, filePaths)).resolves.toMatchObject({
+          'file.txt': 'line1\r\nline2\r\n',
+          'file.sh': 'line1\nline2\n',
+          'file.bat': 'line1\r\nline2\r\n',
+          'nested/file.txt': 'line1\r\nline2\r\n',
+          'nested/file.sh': 'line1\nline2\n',
+        });
+      });
+    });
+
+    describe('outside a git repository', () => {
+      let baseDir: string;
+
+      before(async () => {
+        baseDir = await prepareBaseDir();
+      });
+
+      it('should leave files untouched instead of throwing', async () => {
+        await expect(runAutoCrlfTransform(baseDir, filePaths)).resolves.toMatchObject(
+          Object.fromEntries(filePaths.map(filePath => [filePath, 'line1\nline2\n'])),
+        );
       });
     });
   });
