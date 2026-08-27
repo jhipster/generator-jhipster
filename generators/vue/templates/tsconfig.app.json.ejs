@@ -5,6 +5,7 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/dist",
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
     }
