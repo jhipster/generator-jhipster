@@ -412,6 +412,19 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientSrcDir}app/core/config/application-config.service.ts`,
             `${application.clientSrcDir}app/core/config/application-config.service.spec.ts`,
             [application.clientBundlerEsbuild!, `${application.clientRootDir}build-plugins/package.json`],
+            [
+              application.clientBundlerEsbuild!,
+              // Previously copied into the sources by build-plugins/define-esbuild.ts
+              ...[
+                'axios.min.js',
+                'favicon-16x16.png',
+                'favicon-32x32.png',
+                'index.css',
+                'swagger-ui.css',
+                'swagger-ui-bundle.js',
+                'swagger-ui-standalone-preset.js',
+              ].map(file => `${application.clientSrcDir}swagger-ui/${file}`),
+            ],
             [!application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/login.model.ts`],
             [application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/logout.model.ts`],
           ],
