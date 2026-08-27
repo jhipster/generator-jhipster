@@ -149,13 +149,21 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           this.editFile(routeTemplatePath, { ignoreNonExisting: ignoreNonExistingRoute }, addRouteCallback);
 
           if (application.exposeMicrofrontend) {
+            const adminEntities = application.applicationTypeMicroservice ? [] : param.entities.filter(entity => entity.adminEntity);
+            if (adminEntities.length > 0) {
+              const navbarPath = `${application.clientSrcDir}app/layouts/navbar/navbar.html`;
+              const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
+              this.editFile(navbarPath, { ignoreNonExisting }, addToEntitiesMenu({ ...param, entities: adminEntities }));
+            }
             this.editFile(
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
               createNeedleCallback({
                 needle: 'add-entity-navbar',
-                contentToAdd: param.entities.map(entity => ({
-                  contentToCheck: `route: '/${entity.entityPage}',`,
-                  content: `{
+                contentToAdd: param.entities
+                  .filter(entity => !adminEntities.includes(entity))
+                  .map(entity => ({
+                    contentToCheck: `route: '/${entity.entityPage}',`,
+                    content: `{
   name: '${entity.entityAngularName}',
   route: '/${entity.entityPage}',${
     application.enableTranslation ?
@@ -164,7 +172,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     : ''
   }
   },`,
-                })),
+                  })),
               }),
             );
           } else {

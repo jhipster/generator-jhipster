@@ -33,10 +33,14 @@ const shareDependencies = ({ skipList = [] } = {}) =>
   );
 
 let sharedDependencies = shareDependencies({ skipList: ['@angular/localize'] });
+const ngBootstrapEntryPoints = ['alert', 'collapse', 'datepicker', 'dropdown', 'modal', 'pagination', 'progressbar', 'tooltip'];
 sharedDependencies = {
   ...sharedDependencies,
   '@angular/common/http': sharedDependencies['@angular/common'],
   '@angular/core/rxjs-interop': sharedDependencies['@angular/core'],
+  ...Object.fromEntries(
+    ngBootstrapEntryPoints.map(entryPoint => [`@ng-bootstrap/ng-bootstrap/${entryPoint}`, sharedDependencies['@ng-bootstrap/ng-bootstrap']]),
+  ),
   'dayjs/esm': sharedDependencies.dayjs,
   'rxjs/operators': sharedDependencies.rxjs,
 };
