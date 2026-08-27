@@ -18,9 +18,7 @@
 -%>
 import { fileURLToPath, URL } from 'node:url';
 import path from 'node:path';
-import { normalizePath } from 'vite';
-
-import { defineConfig } from 'vite';
+import { defineConfig, normalizePath } from 'vite';
 import react from '@vitejs/plugin-react';
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -79,8 +77,7 @@ const config = defineConfig({
     modulePreload: false,
     // Allow topLevelAwait by default, Use 'vite-plugin-top-level-await' plugin for lower target
     target: ['chrome89', 'edge89', 'firefox89', 'safari15'],
-    minify: false,
-    cssCodeSplit: false,
+    minify: !development,
 <%_ } _%>
     rollupOptions: {
       input: {
