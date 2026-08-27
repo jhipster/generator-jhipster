@@ -37,13 +37,13 @@
       <tbody>
         @for (bean of beans(); track $index) {
           <tr>
-            <td>
+            <td class="break">
               <span>{{ bean.prefix }}</span>
             </td>
             <td>
               @for (property of bean.properties | keyvalue; track property.key) {
                 <div class="row">
-                  <div class="col-md-4">{{ property.key }}</div>
+                  <div class="col-md-4 break">{{ property.key }}</div>
                   <div class="col-md-8">
                     <span class="float-end bg-secondary break">{{ property.value | json }}</span>
                   </div>
