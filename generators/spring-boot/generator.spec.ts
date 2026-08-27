@@ -22,6 +22,7 @@ import { basename } from 'node:path';
 
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
+import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
 import Generator from './generator.ts';
@@ -124,6 +125,63 @@ describe(`generator - ${generator}`, () => {
         addLanguageCallbacks: expect.any(Array),
         supportedLanguages: expect.any(Array),
       });
+    });
+  });
+
+  describe('with eager load relationship and no pagination', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        { name: 'Parent', changelogDate: '20160926101210', fields: [{ fieldName: 'name', fieldType: 'String' }] },
+        {
+          name: 'ServicedChild',
+          changelogDate: '20160926101212',
+          service: 'serviceImpl',
+          fields: [{ fieldName: 'name', fieldType: 'String' }],
+          relationships: [
+            { relationshipName: 'parent', otherEntityName: 'Parent', relationshipType: 'many-to-one', otherEntityField: 'name' },
+          ],
+        },
+        {
+          name: 'Child',
+          changelogDate: '20160926101211',
+          fields: [{ fieldName: 'name', fieldType: 'String' }],
+          relationships: [
+            { relationshipName: 'parent', otherEntityName: 'Parent', relationshipType: 'many-to-one', otherEntityField: 'name' },
+          ],
+        },
+      ]);
+    });
+
+    it('should eagerly load the relationships from the repository', () => {
+      runResult.assertFileContent(
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/ChildResource.java`,
+        `        if (eagerload) {
+            return childRepository.findAllWithEagerRelationships();
+        } else {
+            return childRepository.findAll();
+        }`,
+      );
+    });
+
+    it('should eagerly load the relationships from the service', () => {
+      runResult.assertFileContent(
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/ServicedChildResource.java`,
+        `        if (eagerload) {
+            return servicedChildService.findAllWithEagerRelationships();
+        } else {
+            return servicedChildService.findAll();
+        }`,
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/ServicedChildService.java`,
+        'List<ServicedChild> findAllWithEagerRelationships();',
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/ServicedChildServiceImpl.java`,
+        `    public List<ServicedChild> findAllWithEagerRelationships() {
+        return servicedChildRepository.findAllWithEagerRelationships();
+    }`,
+      );
     });
   });
 
