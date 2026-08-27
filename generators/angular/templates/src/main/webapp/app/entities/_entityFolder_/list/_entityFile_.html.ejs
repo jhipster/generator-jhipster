@@ -182,7 +182,7 @@
       <%_ if (relationship.collection) { _%>
                     @for (<%- relationshipFieldName %> of <%- entityInstance %>.<%- relationshipFieldNamePlural %>; track $index; let last = $last) {
                         <span>
-                            <a class="form-control-static" [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- relationshipFieldName %><%- relationship.relationshipSerializePrimaryKeyOnly ? '' : `.${relationship.otherEntity.primaryKey.name}` %>, 'view']">{{ <%- relationshipFieldName %><%- relationship.relationshipSerializePrimaryKeyOnly ? '' : `.${relationship.otherEntity.primaryKey.name}` %> }}</a>{{ last ? '' : ', ' }}
+                            <a <%- relationship.otherEntityName === 'Authority' ? 'class="badge bg-info"' : 'class="form-control-static"' %> [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- relationshipFieldName %><%- relationship.relationshipSerializePrimaryKeyOnly ? '' : `.${relationship.otherEntity.primaryKey.name}` %>, 'view']">{{ <%- relationshipFieldName %><%- relationship.relationshipSerializePrimaryKeyOnly ? '' : `.${relationship.otherEntity.primaryKey.name}` %> }}</a>{{ last ? '' : ', ' }}
                         </span>
                     }
       <%_ } else { _%>

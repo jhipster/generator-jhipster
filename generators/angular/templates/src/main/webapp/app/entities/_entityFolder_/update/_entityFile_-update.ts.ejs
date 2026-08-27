@@ -17,6 +17,8 @@
  limitations under the License.
 -%>
 <%_ const relationshipsByOtherEntity = Object.fromEntries(Object.entries(locals.relationshipsByOtherEntity).filter(([, rels]) => !rels[0].relationshipSerializePrimaryKeyOnly)); _%>
+<%# Relationships serialized as primary keys use the other entity store instead of querying options -%>
+<%_ const primaryKeyOnlyRelationships = relationships.filter(rel => rel.relationshipSerializePrimaryKeyOnly); _%>
 <%_ const allRelationshipsByEntityNeedingOptions = Object
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
@@ -47,15 +49,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
 import { I<%- entityAngularName %><%- builtInUserManagement ? `, New${entityAngularName}` : '' %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
-<%# locals.relationships is the unfiltered list: the `relationships` shadow above excludes relationships serialized as primary keys -%>
-<%_ const primaryKeyOnlyRelationship = locals.relationships.find(rel => rel.relationshipSerializePrimaryKeyOnly); _%>
-<%_ const primaryKeyOnlyEntity = primaryKeyOnlyRelationship?.otherEntity; _%>
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
 <%_ for (const { angularConstantName, angularConstantImportPath } of clientConstants) { _%>
 import { <%- angularConstantName %> } from '<%- angularConstantImportPath %>';
 <%_ } _%>
-<%_ if (primaryKeyOnlyRelationship) { _%>
-import { <%- primaryKeyOnlyEntity.entityAngularName %>Service } from 'app/entities/<%- primaryKeyOnlyEntity.entityFolderName %>/service/<%- primaryKeyOnlyEntity.entityFileName %>.service';
+<%_ for (const { otherEntity } of primaryKeyOnlyRelationships) { _%>
+import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { EventManager, EventWithContent, DataUtils, FileLoadError } from 'app/core/util';
@@ -130,10 +129,10 @@ export class <%- entityAngularName %>Update implements OnInit {
     protected elementRef = inject(ElementRef);
 <%_ } _%>
     protected activatedRoute = inject(ActivatedRoute);
-<%_ if (primaryKeyOnlyRelationship) { _%>
-    protected readonly <%- primaryKeyOnlyEntity.entityInstance %>Service = inject(<%- primaryKeyOnlyEntity.entityAngularName %>Service);
+<%_ for (const { otherEntity, propertyName } of primaryKeyOnlyRelationships) { _%>
+    protected readonly <%- otherEntity.entityInstance %>Service = inject(<%- otherEntity.entityAngularName %>Service);
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    readonly <%- primaryKeyOnlyRelationship.propertyName %> = computed(() => this.<%- primaryKeyOnlyEntity.entityInstance %>Service.<%- primaryKeyOnlyEntity.entityInstancePlural %>().map(<%- primaryKeyOnlyEntity.entityInstance %> => <%- primaryKeyOnlyEntity.entityInstance %>.<%- primaryKeyOnlyEntity.primaryKey.name %>));
+    readonly <%- propertyName %> = computed(() => this.<%- otherEntity.entityInstance %>Service.<%- otherEntity.entityInstancePlural %>().map(<%- otherEntity.entityInstance %> => <%- otherEntity.entityInstance %>.<%- otherEntity.primaryKey.name %>));
 <%_ } _%>
 
     // eslint-disable-next-line @typescript-eslint/member-ordering

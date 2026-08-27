@@ -447,7 +447,7 @@ export class UserManagementDetail {
             last = $last) {
             <span>
               <a
-                class="form-control-static"
+                class="badge bg-info"
                 [routerLink]="['/authority', authority, 'view']"
                 >{{ authority }}</a
               >{{ last ? '' : ', ' }}
