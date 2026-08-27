@@ -204,7 +204,10 @@ jobs:
           path: ${{ github.workspace }}/app/**/test-results/**/*.xml
       - name: 'E2E: Store failure cypress assets'
         uses: actions/upload-artifact@v7
-        if: always() && steps.e2e.outcome == 'failure'
+        if: |
+          always() && (
+            contains(github.event.pull_request.labels.*.name, 'ci: always-upload-cypress-assets')
+            || steps.e2e.outcome == 'failure')
         with:
           name: cypress-${{ matrix.sample }}
           path: |

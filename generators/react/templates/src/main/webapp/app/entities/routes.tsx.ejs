@@ -23,17 +23,25 @@ import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
 <%_ if (microfrontend || applicationTypeGateway) { _%>
 import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
+import { useStore } from 'react-redux';
 
-import getStore from 'app/config/store';
+import type { InjectableStore } from 'app/config/store';
 
 import entitiesReducers from './reducers';
+<%_ } _%>
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+import { registerTranslations } from 'app/shared/reducers/locale';
+
+// Register the microfrontend translations before the routes are rendered by the host application.
+await registerTranslations();
 <%_ } _%>
 
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
 <%_ if (microfrontend || applicationTypeGateway) { _%>
-  const store = getStore();
+  // Use the store provided by the host application, microfrontends must not rely on module singletons.
+  const store = useStore() as InjectableStore;
   store.injectReducer('<%- lowercaseBaseName %>', combineReducers(entitiesReducers as ReducersMapObject));
 <%_ } _%>
   return (

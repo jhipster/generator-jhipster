@@ -30,7 +30,7 @@
     "rootDir": "./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app",
     "outDir": "<%- this.relativeDir(clientRootDir, clientDistDir) %>app",
     "lib": ["dom", "es2024"],
-    "types": ["webpack-env"],
+    "types": ["vite/client"],
     "allowJs": true,
     "checkJs": false,
     "paths": {
@@ -39,5 +39,6 @@
     "importHelpers": true
   },
   "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>app"],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "vitest.config.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "vitest.config.ts"],
+  "references": [{ "path": "./tsconfig.vitest.json" }]
 }

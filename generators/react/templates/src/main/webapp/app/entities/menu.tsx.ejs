@@ -16,22 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React<%- applicationTypeMicroservice ? ', { useEffect, useState } ' : '' %> from 'react';
+import React<%- applicationTypeMicroservice && enableTranslation ? ', { useEffect } ' : '' %> from 'react';
 import { Translate } from 'react-jhipster';<%- hasNonBuiltInEntity ? '' : ' // eslint-disable-line' %>
 
 import MenuItem from 'app/shared/layout/menus/menu-item';<%- hasNonBuiltInEntity ? '' : ' // eslint-disable-line' %>
-<%_ if (applicationTypeMicroservice) { _%>
-import { addTranslationSourcePrefix } from 'app/shared/reducers/locale';
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+import { addTranslationSourcePrefix, registerTranslations } from 'app/shared/reducers/locale';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+
+// Register the microfrontend translations before the menu is rendered by the host application.
+await registerTranslations();
 <%_ } _%>
 
 const EntitiesMenu = () => {
-<%_ if (applicationTypeMicroservice) { _%>
-  const lastChange = useAppSelector(state => state.locale.lastChange);
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(addTranslationSourcePrefix('services/<%- lowercaseBaseName %>/'));
-  }, [lastChange]);
+    // Register the microfrontend translations into the host for the current locale.
+    dispatch(addTranslationSourcePrefix('<%- lowercaseBaseName.replaceAll('-', '_') %>/'));
+  }, [currentLocale]);
 
 <%_ } _%>
   return (

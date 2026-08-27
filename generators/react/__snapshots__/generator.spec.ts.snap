@@ -36,13 +36,13 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Vite",
   "clientBundlerRsbuild": false,
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -118,8 +118,8 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -719,27 +719,6 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/utils.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -756,6 +735,16 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load react main",
+      "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
   ],
   "addSonarProperties": [
@@ -830,13 +819,13 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Vite",
   "clientBundlerRsbuild": false,
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -911,8 +900,8 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -1535,27 +1524,6 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/utils.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -1572,6 +1540,16 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load react main",
+      "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
   ],
   "addSonarProperties": [
@@ -1645,13 +1623,13 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Vite",
   "clientBundlerRsbuild": false,
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -1726,8 +1704,8 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -1929,6 +1907,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/module-federation.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
@@ -2330,30 +2311,6 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/utils.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2370,6 +2327,16 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load react main",
+      "resource": "<script type="module" src="./app/main.tsx"></script>",
     },
   ],
   "addSonarProperties": [
@@ -2394,15 +2361,13 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
-    },
-  ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {
+        "@module-federation/runtime": null,
+      },
       "devDependencies": {
-        "@module-federation/enhanced": null,
+        "@module-federation/vite": null,
       },
     },
     {
@@ -2453,13 +2418,13 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Vite",
   "clientBundlerRsbuild": false,
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -2534,8 +2499,8 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -2727,6 +2692,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "eslint.config.ts": {
+    "stateCleared": "modified",
+  },
+  "module-federation.config.ts": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3161,30 +3129,6 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -3198,6 +3142,16 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load react main",
+      "resource": "<script type="module" src="./app/main.tsx"></script>",
     },
   ],
   "addSonarProperties": [
@@ -3222,15 +3176,13 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
-    },
-  ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {
+        "@module-federation/runtime": null,
+      },
       "devDependencies": {
-        "@module-federation/enhanced": null,
+        "@module-federation/vite": null,
       },
     },
     {
@@ -3282,13 +3234,13 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Vite",
   "clientBundlerRsbuild": false,
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -3363,8 +3315,8 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -4048,27 +4000,6 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -4082,6 +4013,16 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load react main",
+      "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
   ],
   "addSonarProperties": [
@@ -4155,13 +4096,13 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Vite",
   "clientBundlerRsbuild": false,
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -4236,8 +4177,8 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -4840,27 +4781,6 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -4874,6 +4794,16 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load react main",
+      "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
   ],
   "addSonarProperties": [
@@ -4947,13 +4877,13 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Vite",
   "clientBundlerRsbuild": false,
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "react",
   "clientFrameworkAngular": false,
@@ -5029,8 +4959,8 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -5627,27 +5557,6 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "webpack/utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -5661,6 +5570,16 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load react main",
+      "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
   ],
   "addSonarProperties": [

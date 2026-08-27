@@ -21,13 +21,13 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { registerRemotes } from '@module-federation/enhanced/runtime';
+import { registerRemotes } from '@module-federation/runtime';
 
 registerRemotes([
   <%_ for (const remote of microfrontends) { _%>
   {
-    name: '<%- remote.lowercaseBaseName %>',
-    entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
+    name: '<%- remote.moduleFederationName %>',
+    entry: '/<%- remote.endpointPrefix %>/mf-manifest.json',
   },
   <%_ } _%>
 ]);
@@ -45,7 +45,8 @@ import { loadIcons } from 'app/config/icon-loader';
 
 const store = getStore();
 <%_ if (enableTranslation) { _%>
-registerLocale(store);
+// Load the translations before rendering.
+await registerLocale(store);
 <%_ } _%>
 
 const actions = bindActionCreators({ clearAuthentication }, store.dispatch);

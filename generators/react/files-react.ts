@@ -30,13 +30,6 @@ export const files = asWriteFilesSection({
         'tsconfig.vitest.json',
         'vite.config.ts',
         'vitest.config.ts',
-        'webpack/package.json',
-        'webpack/environment.js',
-        'webpack/webpack.common.js',
-        'webpack/webpack.dev.js',
-        'webpack/webpack.prod.js',
-        'webpack/utils.js',
-        'webpack/logo-jhipster.png',
       ],
     }),
   ],
@@ -253,7 +246,7 @@ export const files = asWriteFilesSection({
   microfrontend: [
     clientRootTemplatesBlock({
       condition: generator => generator.microfrontend,
-      templates: ['webpack/webpack.microfrontend.js.jhi.react'],
+      templates: ['module-federation.config.ts'],
     }),
     {
       condition: generator => generator.microfrontend,

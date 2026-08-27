@@ -36,7 +36,8 @@ Development Ribbon
   top: 40px;
   white-space: nowrap;
   width: 15em;
-  z-index: 99999;
+  // Above the fixed navbar (1030) but below the toast notifications (9999).
+  z-index: 9000;
   pointer-events: none;
   opacity: 0.75;
   a {
