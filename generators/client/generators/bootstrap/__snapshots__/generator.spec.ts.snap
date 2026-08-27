@@ -2931,7 +2931,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
         "otherEntityName": "Authority",
         "otherEntityUser": false,
         "ownerSide": false,
-        "persistableRelationship": false,
+        "persistableRelationship": true,
         "propertyName": "authorities",
         "propertyNameCapitalized": "Authorities",
         "propertyNameUpperSnakeCase": "AUTHORITIES",

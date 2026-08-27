@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const relationshipsByOtherEntity = Object.fromEntries(Object.entries(locals.relationshipsByOtherEntity).filter(([, rels]) => !(builtInUserManagement && rels[0].otherEntityName === 'Authority'))); _%>
+<%_ const relationshipsByOtherEntity = Object.fromEntries(Object.entries(locals.relationshipsByOtherEntity).filter(([, rels]) => !rels[0].relationshipSerializePrimaryKeyOnly)); _%>
 <%_ const allRelationshipsByEntityNeedingOptions = Object
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))

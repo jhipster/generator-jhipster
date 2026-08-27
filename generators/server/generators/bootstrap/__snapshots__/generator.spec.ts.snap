@@ -3439,7 +3439,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
         "otherEntityName": "Authority",
         "otherEntityUser": false,
         "ownerSide": false,
-        "persistableRelationship": false,
+        "persistableRelationship": true,
         "propertyConsumerName": "setAuthorities",
         "propertyJavaBeanName": "Authorities",
         "propertyName": "authorities",
