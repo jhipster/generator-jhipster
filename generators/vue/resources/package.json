@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@module-federation/enhanced": "2.8.2",
+    "@module-federation/enhanced": "2.9.0",
     "@module-federation/rsbuild-plugin": "2.9.0",
     "@module-federation/vite": "1.20.7",
     "@pinia/testing": "2.0.1",
