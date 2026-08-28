@@ -283,11 +283,12 @@ describe(`generator - ${clientFramework}`, () => {
         .withMockedGenerators(['jhipster:common']);
     });
 
-    it('should add authorities to the model even though the Authority entity is not generated', () => {
+    it('should add authorities to the model as a constants backed collection even though the Authority entity is not generated', () => {
       runResult.assertFileContent(
         `${CLIENT_MAIN_SRC_DIR}app/entities/admin/user-management/user-management.model.ts`,
         'authorities?: string[] | null;',
       );
+      runResult.assertNoFile(`${CLIENT_MAIN_SRC_DIR}app/entities/enumerations/authority.model.ts`);
     });
 
     it('should not reference audit fields, which are not available with cassandra', () => {

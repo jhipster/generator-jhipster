@@ -32,7 +32,16 @@
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%- fieldName %>Ref = editForm.get('<%- fieldName %>')!;<% } %>
                 <div class="mb-3">
                     <label class="form-label" for="field_<%- fieldName %>"<% if (field.documentation && enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else if (field.documentation) { %> ngbTooltip="<%- field.documentation %>"<% } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</label>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (field.clientConstantsAsValues) { _%>
+                    <select class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
+    <%_ if (!field.collection) { _%>
+                        <option [ngValue]="null"></option>
+    <%_ } _%>
+                    @for (<%- field.angularFieldNameSingular %> of <%- fieldName %>Values; track $index) {
+                        <option [value]="<%- field.angularFieldNameSingular %>">{{ <%- field.angularFieldNameSingular %> }}</option>
+                    }
+                    </select>
+  <%_ } else if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>">
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%- enumPrefix %>.null' | translate }}<% } %></option>
@@ -150,13 +159,13 @@
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) { _%>
   <%_ const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship; _%>
-  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
 
                 <div class="mb-3">
-                    <label class="form-label" for="field_authority">__jhiTranslateTag__('<%- i18nKeyPrefix %>.profiles')</label>
-                    <select class="form-control" id="field_authority" multiple name="authority" formControlName="authorities">
-                    @for (authority of authorities(); track $index) {
-                        <option [value]="authority">{{ authority }}</option>
+                    <label class="form-label" for="field_<%- relationshipName %>">__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</label>
+                    <select class="form-control" id="field_<%- relationshipName %>"<%- relationship.collection ? ' multiple' : '' %> name="<%- relationshipName %>" formControlName="<%- propertyName %>">
+                    @for (<%- relationshipFieldName %> of <%- propertyName %>(); track $index) {
+                        <option [value]="<%- relationshipFieldName %>">{{ <%- relationshipFieldName %> }}</option>
                     }
                     </select>
                 </div>

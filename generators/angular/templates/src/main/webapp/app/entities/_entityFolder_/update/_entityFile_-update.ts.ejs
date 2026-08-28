@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const relationshipsByOtherEntity = Object.fromEntries(Object.entries(locals.relationshipsByOtherEntity).filter(([, rels]) => !(builtInUserManagement && rels[0].otherEntityName === 'Authority'))); _%>
+<%_ const relationshipsByOtherEntity = Object.fromEntries(Object.entries(locals.relationshipsByOtherEntity).filter(([, rels]) => !rels[0].relationshipSerializePrimaryKeyOnly)); _%>
+<%# Relationships serialized as primary keys use the other entity store instead of querying options -%>
+<%_ const primaryKeyOnlyRelationships = relationships.filter(rel => rel.relationshipSerializePrimaryKeyOnly); _%>
 <%_ const allRelationshipsByEntityNeedingOptions = Object
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
@@ -47,13 +49,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
 import { I<%- entityAngularName %><%- builtInUserManagement ? `, New${entityAngularName}` : '' %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
-<%# locals.relationships is the unfiltered list: the `relationships` shadow above excludes the Authority relationship -%>
-<%_ const authorityEntity = builtInUserManagement ? locals.relationships.find(rel => rel.otherEntityName === 'Authority')?.otherEntity : undefined; _%>
-<%_ if (builtInUserManagement && fields.some(field => field.fieldName === 'langKey')) { _%>
-import { LANGUAGES } from 'app/config';
+<%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
+<%_ for (const { angularConstantName, angularConstantImportPath } of clientConstants) { _%>
+import { <%- angularConstantName %> } from '<%- angularConstantImportPath %>';
 <%_ } _%>
-<%_ if (authorityEntity) { _%>
-import { <%- authorityEntity.entityAngularName %>Service } from 'app/entities/<%- authorityEntity.entityFolderName %>/service/<%- authorityEntity.entityFileName %>.service';
+<%_ for (const { otherEntity } of primaryKeyOnlyRelationships) { _%>
+import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { EventManager, EventWithContent, DataUtils, FileLoadError } from 'app/core/util';
@@ -65,7 +66,7 @@ import { I<%- uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%
 import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/service/<%- uniqueRel.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
-<%_ const enumImports = generateEntityClientEnumImports(fields.filter(field => !(builtInUserManagement && field.fieldName === 'langKey'))); _%>
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
@@ -97,8 +98,8 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ for (const [importedType] of enumImports) { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ } _%>
-<%_ if (builtInUserManagement && fields.some(field => field.fieldName === 'langKey')) { _%>
-    languagesValues = LANGUAGES;
+<%_ for (const field of fields.filter(field => field.angularFieldClientConstant)) { _%>
+    <%- field.fieldName %>Values = <%- field.angularFieldClientConstant.angularConstantValues %>;
 <%_ } _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
@@ -128,10 +129,10 @@ export class <%- entityAngularName %>Update implements OnInit {
     protected elementRef = inject(ElementRef);
 <%_ } _%>
     protected activatedRoute = inject(ActivatedRoute);
-<%_ if (authorityEntity) { _%>
-    protected readonly authorityService = inject(<%- authorityEntity.entityAngularName %>Service);
+<%_ for (const { otherEntity, propertyName } of primaryKeyOnlyRelationships) { _%>
+    protected readonly <%- otherEntity.entityInstance %>Service = inject(<%- otherEntity.entityAngularName %>Service);
     // eslint-disable-next-line @typescript-eslint/member-ordering
-    readonly authorities = computed(() => this.authorityService.<%- authorityEntity.entityInstancePlural %>().map(authority => authority.name));
+    readonly <%- propertyName %> = computed(() => this.<%- otherEntity.entityInstance %>Service.<%- otherEntity.entityInstancePlural %>().map(<%- otherEntity.entityInstance %> => <%- otherEntity.entityInstance %>.<%- otherEntity.primaryKey.name %>));
 <%_ } _%>
 
     // eslint-disable-next-line @typescript-eslint/member-ordering

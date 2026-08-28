@@ -20,6 +20,7 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
+import pluralize from 'pluralize';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { mutateData } from '../../lib/utils/index.ts';
@@ -44,6 +45,7 @@ import {
   translateAngularFilesTransform,
 } from './support/index.ts';
 import type {
+  AngularFieldClientConstant,
   Application as AngularApplication,
   Config as AngularConfig,
   Entity as AngularEntity,
@@ -52,6 +54,24 @@ import type {
 } from './types.ts';
 
 const { ANGULAR } = clientFrameworkTypes;
+
+/**
+ * Client constants backing the values of `clientConstantsAsValues` fields, by field type.
+ */
+const angularClientConstants: Record<string, AngularFieldClientConstant> = {
+  Languages: {
+    angularConstantName: 'LANGUAGES',
+    angularConstantImportPath: 'app/config',
+    angularConstantTsType: '(typeof LANGUAGES)[number]',
+    angularConstantValues: 'LANGUAGES',
+  },
+  Authority: {
+    angularConstantName: 'Authority',
+    angularConstantImportPath: 'app/shared/jhipster/constants',
+    angularConstantTsType: 'string',
+    angularConstantValues: 'Object.values(Authority)',
+  },
+};
 
 export class AngularApplicationGenerator extends BaseApplicationGenerator<
   AngularEntity,
@@ -268,7 +288,16 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareField({ field }) {
+        if (field.clientConstantsAsValues) {
+          const angularFieldClientConstant = angularClientConstants[field.fieldType];
+          if (!angularFieldClientConstant) {
+            throw new Error(`Field type '${field.fieldType}' has no Angular client constant to back its values`);
+          }
+          field.angularFieldClientConstant = angularFieldClientConstant;
+          field.tsType = angularFieldClientConstant.angularConstantTsType;
+        }
         mutateData(field, {
+          angularFieldNameSingular: ({ fieldName }) => pluralize.singular(fieldName),
           fieldTsDefaultValue: ({ fieldTsDefaultValue, defaultValue, fieldTypeCharSequence, fieldTypeTimed }) => {
             let returnValue: string | undefined;
             if (fieldTsDefaultValue !== undefined || defaultValue !== undefined) {
@@ -307,9 +336,13 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       prepareRelationship({ entity, relationship }) {
         mutateData(relationship, {
           __override__: false,
-          propertyTsType: ({ otherEntity }) => `I${otherEntity.entityAngularName}`,
-          relationshipShouldUsePick: ({ otherEntity }) =>
-            !entity.builtInUserManagement && !otherEntity.embedded && ((entity as any).dtoMapstruct || otherEntity.builtInUser),
+          propertyTsType: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
+            relationshipSerializePrimaryKeyOnly ? otherEntity.primaryKey!.tsType : `I${otherEntity.entityAngularName}`,
+          relationshipShouldUsePick: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
+            !relationshipSerializePrimaryKeyOnly &&
+            !entity.builtInUserManagement &&
+            !otherEntity.embedded &&
+            ((entity as any).dtoMapstruct || otherEntity.builtInUser),
         });
       },
     });

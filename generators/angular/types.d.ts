@@ -25,10 +25,25 @@ import type {
 
 export type { Config, Features, Options, Source } from '../client/types.d.ts';
 
+export type AngularFieldClientConstant = {
+  /** Exported constant name. */
+  angularConstantName: string;
+  /** Import path of the constant. */
+  angularConstantImportPath: string;
+  /** Typescript type of a single value. */
+  angularConstantTsType: string;
+  /** Expression that evaluates to the list of values. */
+  angularConstantValues: string;
+};
+
 export type Field = ClientField & {
   fieldTsDefaultValue?: string;
   defaultValue?: string;
   fieldValidateRulesPatternAngular?: string;
+  /** Client constant backing a `clientConstantsAsValues` field. */
+  angularFieldClientConstant?: AngularFieldClientConstant;
+  /** Singular form of the field name, used to name items of collection fields. */
+  angularFieldNameSingular?: string;
 };
 
 export type Relationship = ClientRelationship & {

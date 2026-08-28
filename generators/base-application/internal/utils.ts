@@ -268,6 +268,7 @@ export function createUserManagementEntity(
         skipServer: true,
         fieldType: 'Languages',
         fieldValues: langKeyFieldValues,
+        clientConstantsAsValues: true,
       },
     ]);
   }
@@ -290,7 +291,25 @@ export function createUserManagementEntity(
         relationshipType: 'many-to-many',
         relationshipIgnoreBackReference: true,
         propertyTranslationKey: 'userManagement.profiles',
-        propertyTsType: 'string',
+        collection: true,
+        persistableRelationship: true,
+        relationshipSerializePrimaryKeyOnly: true,
+      },
+    ]);
+  }
+
+  if (!application.generateBuiltInAuthorityEntity && application.clientFrameworkAngular) {
+    // Without an Authority entity the server exposes the authorities as a string array, expose it as a constants backed enum collection.
+    addOrExtendFields(userManagement.fields!, [
+      {
+        fieldName: 'authorities',
+        fieldType: 'Authority',
+        fieldValues: 'ROLE_ADMIN,ROLE_USER',
+        collection: true,
+        clientConstantsAsValues: true,
+        skipServer: true,
+        builtIn: true,
+        propertyTranslationKey: 'userManagement.profiles',
       },
     ]);
   }

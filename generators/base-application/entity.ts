@@ -87,6 +87,10 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
     id?: boolean;
     autoGenerate?: boolean;
     readonly?: boolean;
+    /** The field holds a list of values (rendered as a multiple select / badges on clients). */
+    collection?: boolean;
+    /** Enum-like field whose values come from client constants instead of a generated enum and its translations. */
+    clientConstantsAsValues?: boolean;
     sequenceGeneratorName?: string;
 
     // Blob
@@ -193,6 +197,8 @@ type BaseApplicationAddedRelationshipProperties = DerivedBooleanPropertiesOf<
     relationshipNameHumanized: string;
 
     relationshipIgnoreBackReference?: boolean;
+    /** The relationship is serialized as the other entity primary key (or a list of them) instead of the entity object. */
+    relationshipSerializePrimaryKeyOnly?: boolean;
 
     relationshipValidate?: boolean;
     relationshipValidateRules?: string[];

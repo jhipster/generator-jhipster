@@ -443,10 +443,15 @@ export class UserManagementDetail {
           <td>{{ userManagement.lastModifiedBy }}</td>
           <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
           <td>
-            @for (authority of userManagement.authorities; track $index) {
-            <div>
-              <span class="badge bg-info">{{ authority }}</span>
-            </div>
+            @for (authority of userManagement.authorities; track $index; let
+            last = $last) {
+            <span>
+              <a
+                class="badge bg-info"
+                [routerLink]="['/authority', authority, 'view']"
+                >{{ authority }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
             }
           </td>
           <td class="text-end">
@@ -1651,6 +1656,7 @@ describe("UserManagement Form Service", () => {
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
             lastModifiedDate: expect.any(Object),
+            authorities: expect.any(Object),
           }),
         );
       });
@@ -1673,6 +1679,7 @@ describe("UserManagement Form Service", () => {
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
             lastModifiedDate: expect.any(Object),
+            authorities: expect.any(Object),
           }),
         );
       });
@@ -1750,7 +1757,7 @@ type NewUserManagementFormRawValue = FormValueOf<NewUserManagement>;
 
 type UserManagementFormDefaults = Pick<
   NewUserManagement,
-  "login" | "activated" | "createdDate" | "lastModifiedDate"
+  "login" | "activated" | "createdDate" | "lastModifiedDate" | "authorities"
 >;
 
 type UserManagementFormGroupContent = {
@@ -1767,6 +1774,7 @@ type UserManagementFormGroupContent = {
   createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
   lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
   lastModifiedDate: FormControl<UserManagementFormRawValue["lastModifiedDate"]>;
+  authorities: FormControl<UserManagementFormRawValue["authorities"]>;
 };
 
 export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
@@ -1824,6 +1832,7 @@ export class UserManagementFormService {
       lastModifiedDate: new FormControl(
         userManagementRawValue.lastModifiedDate,
       ),
+      authorities: new FormControl(userManagementRawValue.authorities ?? []),
     });
   }
 
@@ -1861,6 +1870,7 @@ export class UserManagementFormService {
       activated: true,
       createdDate: currentTime,
       lastModifiedDate: currentTime,
+      authorities: [],
     };
   }
 
@@ -1893,6 +1903,7 @@ export class UserManagementFormService {
       lastModifiedDate: userManagement.lastModifiedDate
         ? userManagement.lastModifiedDate.format(DATE_TIME_FORMAT)
         : undefined,
+      authorities: userManagement.authorities ?? [],
     };
   }
 }
@@ -2211,7 +2222,7 @@ describe("UserManagement Management Update Component", () => {
     "contents": "import { Component, computed, inject, signal, OnInit } from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
-import { finalize, Observable } from "rxjs";
+import { finalize, map, Observable } from "rxjs";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { AlertError } from "app/shared/alert";
