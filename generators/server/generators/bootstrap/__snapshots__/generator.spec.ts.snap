@@ -2815,6 +2815,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
         "builtIn": true,
         "clientConstantsAsValues": true,
         "columnName": "lang_key",
+        "defaultValue": "en",
         "entity": Any<Object>,
         "enumFileName": "languages",
         "enumValues": Any<Array>,

@@ -89,9 +89,6 @@ exports[`generator - entity with default configuration should match files snapsh
   "src/main/webapp/i18n/en/foo.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/user-management.json": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/domain/FooAsserts.java": {
     "stateCleared": "modified",
   },
@@ -115,7 +112,6 @@ exports[`generator - entity with default configuration should match source calls
       "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
@@ -260,7 +256,6 @@ exports[`generator - entity with enableTranslation disabled should match source 
       "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },

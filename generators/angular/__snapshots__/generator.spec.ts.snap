@@ -1792,22 +1792,16 @@ export class UserManagementFormService {
 
     return new FormGroup<UserManagementFormGroupContent>({
       id: new FormControl(userManagementRawValue.id),
-      login: new FormControl(
-        {
-          value: userManagementRawValue.login,
-          disabled: userManagementRawValue.login !== null,
-        },
-        {
-          nonNullable: true,
-          validators: [
-            Validators.required,
-            Validators.maxLength(50),
-            Validators.pattern(
-              "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
-            ), // NOSONAR
-          ],
-        },
-      ),
+      login: new FormControl(userManagementRawValue.login, {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.maxLength(50),
+          Validators.pattern(
+            "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+          ), // NOSONAR
+        ],
+      }),
       firstName: new FormControl(userManagementRawValue.firstName, {
         validators: [Validators.maxLength(50)],
       }),
@@ -1855,10 +1849,6 @@ export class UserManagementFormService {
       });
     form.reset({
       ...userManagementRawValue,
-      login: {
-        value: userManagementRawValue.login,
-        disabled: userManagementRawValue.login !== null,
-      },
     });
   }
 
@@ -1934,7 +1924,6 @@ export class UserManagementFormService {
             id="field_login"
             data-cy="login"
             formControlName="login"
-            [readonly]="editForm.get('login')!.disabled"
           />
           @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
           <div>
@@ -1946,7 +1935,8 @@ export class UserManagementFormService {
             >
             } @if (loginRef.errors?.pattern) {
             <small class="form-text text-danger"
-              >This field should follow pattern for Login.</small
+              >This field can only contain letters, digits and e-mail
+              addresses.</small
             >
             }
           </div>
@@ -2031,16 +2021,18 @@ export class UserManagementFormService {
 
         @if (editForm.controls.activated.value !== null) {
 
-        <div class="mb-3">
-          <label class="form-label" for="field_activated">Activated</label>
+        <div class="mb-3 form-check">
           <input
             type="checkbox"
-            class="form-check"
+            class="form-check-input"
             name="activated"
             id="field_activated"
             data-cy="activated"
             formControlName="activated"
           />
+          <label class="form-check-label" for="field_activated"
+            >Activated</label
+          >
         </div>
         }
 
@@ -2259,6 +2251,8 @@ export class UserManagementUpdate implements OnInit {
     this.userManagementFormService.createUserManagementFormGroup();
 
   ngOnInit(): void {
+    // Load the authorities used by the profiles select.
+    this.authorityService.authoritiesParams.set({});
     this.activatedRoute.data.subscribe(({ userManagement }) => {
       this.userManagement = userManagement;
       if (userManagement) {
@@ -8512,7 +8506,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "Entity[Simple]",
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },

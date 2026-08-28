@@ -34,6 +34,8 @@ export type AngularFieldClientConstant = {
   angularConstantTsType: string;
   /** Expression that evaluates to the list of values. */
   angularConstantValues: string;
+  /** Pipe used to display a value. */
+  angularConstantLabelPipe?: { name: string; importName: string; importPath: string };
 };
 
 export type Field = ClientField & {

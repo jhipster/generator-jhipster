@@ -269,6 +269,7 @@ export function createUserManagementEntity(
         fieldType: 'Languages',
         fieldValues: langKeyFieldValues,
         clientConstantsAsValues: true,
+        defaultValue: application.nativeLanguage,
       },
     ]);
   }

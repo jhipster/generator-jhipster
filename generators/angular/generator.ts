@@ -64,6 +64,7 @@ const angularClientConstants: Record<string, AngularFieldClientConstant> = {
     angularConstantImportPath: 'app/config',
     angularConstantTsType: '(typeof LANGUAGES)[number]',
     angularConstantValues: 'LANGUAGES',
+    angularConstantLabelPipe: { name: 'findLanguageFromKey', importName: 'FindLanguageFromKeyPipe', importPath: 'app/shared/language' },
   },
   Authority: {
     angularConstantName: 'Authority',
@@ -298,7 +299,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         }
         mutateData(field, {
           angularFieldNameSingular: ({ fieldName }) => pluralize.singular(fieldName),
-          fieldTsDefaultValue: ({ fieldTsDefaultValue, defaultValue, fieldTypeCharSequence, fieldTypeTimed }) => {
+          fieldTsDefaultValue: ({ fieldTsDefaultValue, defaultValue, fieldTypeCharSequence, fieldTypeTimed, fieldIsEnum }) => {
             let returnValue: string | undefined;
             if (fieldTsDefaultValue !== undefined || defaultValue !== undefined) {
               let fieldDefaultValue;
@@ -310,7 +311,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
               fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, String.raw`\'`);
 
-              if (fieldTypeCharSequence) {
+              if (fieldTypeCharSequence || fieldIsEnum) {
                 returnValue = `'${fieldDefaultValue}'`;
               } else if (fieldTypeTimed) {
                 returnValue = `dayjs('${fieldDefaultValue}')`;
@@ -360,7 +361,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             enableTranslation && fields.some(field => !field.hidden && Boolean(field.documentation)),
           angularEntityUpdateRequiresTranslationPipe: ({ angularEntityDetailsRequiresTranslationPipe, fields }) =>
             Boolean(angularEntityDetailsRequiresTranslationPipe) ||
-            (enableTranslation && fields.some(field => !field.hidden && field.fieldIsEnum)),
+            (enableTranslation && fields.some(field => !field.hidden && field.fieldIsEnum && !field.clientConstantsAsValues)),
           angularEntityListRequiresTranslationPipe: ({ searchEngineAny, relationships }) =>
             enableTranslation &&
             (Boolean(searchEngineAny) ||
