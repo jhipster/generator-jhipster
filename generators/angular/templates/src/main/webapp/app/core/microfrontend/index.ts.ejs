@@ -26,8 +26,8 @@ export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
 
 export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
   loadRemoteModule<{ default: Type<any> }>(service, './entity-routes').then(routes => routes.default);
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
 
 export const loadTranslation = (service: string, lang: string): Promise<any> =>
   loadRemoteModule<{ loadLocale: (lang: string) => Promise<any> }>(service, './i18n').then(i18n => i18n.loadLocale(lang));
-  <%_ } _%>
+<%_ } _%>

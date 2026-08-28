@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { EnvironmentProviders, Injectable, Provider, effect, inject, provideAppInitializer, signal, untracked } from '@angular/core';
+import { EnvironmentProviders, Provider, Service, effect, inject, provideAppInitializer, signal, untracked } from '@angular/core';
 import { TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { Observable, from } from 'rxjs';
 import { loadLocale } from 'i18n';
@@ -42,7 +42,7 @@ const logTranslationError = (microfrontend: string) => (error: unknown): undefin
 /**
  * Loads the application translations, merged with the microfrontends translations when enabled.
  */
-@Injectable({ providedIn: 'root' })
+@Service()
 export class MicrofrontendTranslationLoader implements TranslateLoader {
   /** Microfrontends are only used by authenticated users, their translations are loaded once enabled. */
   readonly loadMicrofrontends = signal(false);

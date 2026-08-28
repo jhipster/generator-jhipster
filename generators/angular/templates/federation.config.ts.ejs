@@ -16,7 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { mappingsFromWorkspace, <%- enableTranslation ? 'share, ' : '' %>shareAll, withNativeFederation } from '@angular-architects/native-federation/config';
+import { mappingsFromWorkspace, share, shareAll, withNativeFederation } from '@angular-architects/native-federation/config';
+
+const singleton = { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: false };
+
+// The application imports the dayjs esm entry points, which are not covered by sharing the dayjs package.
+// They must be shared explicitly so the shared mappings (app/shared/date, app/shared/language) use the same dayjs instance
+// the plugins and locales are registered in (app/config/dayjs). Plugins and locales are only used by app/config/dayjs,
+// which the unused dependencies scan (started from the exposed modules) does not reach, so they opt out of it.
+const shareDayjs = (locales: string[]) =>
+  share(
+    Object.fromEntries(
+      ['dayjs/esm', 'dayjs/esm/plugin/customParseFormat', 'dayjs/esm/plugin/duration', 'dayjs/esm/plugin/relativeTime']
+        .concat(locales.map(locale => `dayjs/esm/locale/${locale}`))
+        .map(entryPoint => [entryPoint, { ...singleton, includeSecondaries: { keepAll: true } }]),
+    ),
+  );
 
 <%_ if (enableTranslation) { _%>
 // Angular locales are loaded dynamically by the translation loader.
@@ -26,7 +41,7 @@ const shareAngularLocales = (locales: string[]) =>
     Object.fromEntries(
       locales.map(locale => [
         `@angular/common/locales/${locale}`,
-        { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: false },
+        singleton,
       ]),
     ),
   );
@@ -56,6 +71,7 @@ export default withNativeFederation({
         },
       },
     ),
+    ...shareDayjs([<%- [...new Set(languagesDefinition.map(lang => lang.dayjsLocale))].map(locale => `'${locale}'`).join(', ') %>]),
 <%_ if (enableTranslation) { _%>
     ...shareAngularLocales([<%- languagesDefinition.filter(lang => lang.angularLocale).map(lang => `'${lang.angularLocale}'`).join(', ') %>]),
 <%_ } _%>

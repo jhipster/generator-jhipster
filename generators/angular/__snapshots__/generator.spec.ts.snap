@@ -3477,6 +3477,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -4758,6 +4759,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -5828,18 +5830,14 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   ],
   "mergeClientPackageJson": [
     {
-      "devDependencies": {
-        "@angular-builders/custom-esbuild": null,
-        "@angular/build": null,
-        "tinyglobby": null,
-      },
-    },
-    {
       "dependencies": {
         "es-module-shims": null,
       },
       "devDependencies": {
         "@angular-architects/native-federation": null,
+        "@angular-devkit/architect": null,
+        "@angular/build": null,
+        "tinyglobby": null,
       },
     },
     {
@@ -7046,21 +7044,17 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   ],
   "mergeClientPackageJson": [
     {
-      "devDependencies": {
-        "@angular-builders/custom-esbuild": null,
-        "@angular/build": null,
-        "@types/folder-hash": null,
-        "deepmerge": null,
-        "folder-hash": null,
-        "tinyglobby": null,
-      },
-    },
-    {
       "dependencies": {
         "es-module-shims": null,
       },
       "devDependencies": {
         "@angular-architects/native-federation": null,
+        "@angular-devkit/architect": null,
+        "@angular/build": null,
+        "@types/folder-hash": null,
+        "deepmerge": null,
+        "folder-hash": null,
+        "tinyglobby": null,
       },
     },
     {
@@ -8517,6 +8511,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -9551,6 +9546,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -10592,6 +10588,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,

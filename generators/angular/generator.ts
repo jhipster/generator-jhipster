@@ -441,24 +441,23 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         });
       },
       clientBundler({ application, source }) {
-        const { enableTranslation } = application;
+        const { enableTranslation, microfrontend } = application;
         source.mergeClientPackageJson!({
+          dependencies: {
+            ...(microfrontend ? { 'es-module-shims': null } : {}),
+          },
           devDependencies: {
-            '@angular-builders/custom-esbuild': null,
             '@angular/build': null,
             tinyglobby: null,
             ...(enableTranslation ? { '@types/folder-hash': null, 'folder-hash': null, deepmerge: null } : {}),
-          },
-        });
-      },
-      addMicrofrontendDependencies({ application, source }) {
-        if (!application.microfrontend) return;
-        source.mergeClientPackageJson!({
-          dependencies: {
-            'es-module-shims': null,
-          },
-          devDependencies: {
-            '@angular-architects/native-federation': null,
+            ...(microfrontend ?
+              {
+                '@angular-architects/native-federation': null,
+                '@angular-devkit/architect': null,
+              }
+            : {
+                '@angular-builders/custom-esbuild': null,
+              }),
           },
         });
       },
