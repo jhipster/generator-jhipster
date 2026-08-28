@@ -28,35 +28,17 @@ import {
   TranslateService,
   provideTranslateService,
 } from '@ngx-translate/core';
-import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { missingTranslationHandler<%- clientBundlerEsbuild ? ', translatePartialLoader' : '' %> } from 'app/config';
+import { missingTranslationHandler, translatePartialLoader } from 'app/config';
 import { StateStorageService } from 'app/core/auth';
 
 export function provideTranslation(): (Provider | EnvironmentProviders)[] {
   return [
     provideTranslateService({
-<%_ if (clientBundlerEsbuild) { _%>
       loader: {
         provide: TranslateLoader,
         useFactory: translatePartialLoader,
       },
-<%_ } else { _%>
-      loader: provideTranslateHttpLoader(
-        {
-          resources: [
-  <%_ if (!exposeMicrofrontend) { _%>
-            { prefix: './i18n/', suffix: `.json?_=${I18N_HASH}` },
-  <%_ } _%>
-  <%_ if (microfrontend) { _%>
-    <%_ for (const remote of microfrontends) { _%>
-            { prefix: '<%- remote.endpointPrefix %>/i18n/', suffix: `.json?_=${I18N_HASH}` },
-    <%_ } _%>
-  <%_ } _%>
-          ],
-        },
-      ),
-<%_ } _%>
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
         useFactory: missingTranslationHandler,

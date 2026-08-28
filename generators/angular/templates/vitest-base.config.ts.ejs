@@ -19,7 +19,7 @@
 // Learn more about Vitest configuration options at https://vitest.dev/config/
 
 import { defineConfig } from 'vitest/config';
-<%_ if (clientBundlerEsbuild && enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
 
 import { prepareLanguage } from './build-plugins/i18n-esbuild';
 
@@ -27,7 +27,7 @@ const i18nPrefix = '\0i18n/';
 <%_ } _%>
 
 export default defineConfig({
-<%_ if (clientBundlerEsbuild && enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
   plugins: [
     {
       // Resolve the `i18n/<lang>.json` translation bundles provided by build-plugins/i18n-esbuild.ts at build time.

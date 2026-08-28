@@ -21,9 +21,6 @@ import { Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-<%_ if (microfrontend && clientBundlerWebpack) { _%>
-import { registerRemotes } from '@module-federation/enhanced/runtime';
-<%_ } _%>
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap/datepicker';
 <%_ if (authenticationTypeJwt) { _%>
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
@@ -36,24 +33,13 @@ import './config/dayjs';
 <%_ if (enableTranslation) { _%>
 import { provideTranslation, FindLanguageFromKeyPipe } from 'app/shared/language';
 <%_ } _%>
-<%_ if (enableTranslation && microfrontend && clientBundlerEsbuild) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
 import { provideMicrofrontendTranslation } from 'app/core/microfrontend/microfrontend-translation.loader';
 <%_ } _%>
 import { environment } from 'environments/environment';
 import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
-<%_ if (microfrontend && clientBundlerWebpack) { _%>
-
-registerRemotes([
-  <%_ for (const remote of microfrontends) { _%>
-  {
-    name: '<%- remote.lowercaseBaseName %>',
-    entry: '<%- remote.endpointPrefix %>/mf-manifest.json',
-  },
-  <%_ } _%>
-]);
-<%_ } _%>
 
 const routerFeatures: RouterFeatures[] = [
   withComponentInputBinding(),
@@ -78,7 +64,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
 <%_ if (enableTranslation) { _%>
     provideTranslation(),
-  <%_ if (microfrontend && clientBundlerEsbuild) { _%>
+  <%_ if (microfrontend) { _%>
     provideMicrofrontendTranslation(),
   <%_ } _%>
 <%_ } _%>

@@ -16,14 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-// These constants are injected via webpack DefinePlugin variables.
-// You can add more variables in webpack.common.js or in profile specific webpack.<dev|prod>.js files.
-// If you change the values in the webpack config files, you need to re run webpack to update the application
+// These constants are injected by build-plugins/define-esbuild.ts at build time.
 
 declare const __VERSION__: string;
-<%_ if (clientBundlerEsbuild) { _%>
 declare const SERVER_API_URL: string;
-<%_ } _%>
 <%_ if (enableTranslation) { _%>
 declare const I18N_HASH: string;
 <%_ } _%>
