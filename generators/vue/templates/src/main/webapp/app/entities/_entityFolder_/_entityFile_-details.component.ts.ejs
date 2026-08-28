@@ -67,7 +67,6 @@ export default defineComponent({
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>
-      alertService,
       <%- entityInstance %>,
 <% if (anyFieldIsBlobDerived) { %>
       ...dataUtils,
