@@ -78,9 +78,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
 <%_ if (enableTranslation) { _%>
     provideTranslation(),
-<%_ if (microfrontend && clientBundlerEsbuild) { _%>
+  <%_ if (microfrontend && clientBundlerEsbuild) { _%>
     provideMicrofrontendTranslation(),
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
     provideRouter(routes, ...routerFeatures),
     // Set this to true to enable service worker (PWA)
