@@ -16,7 +16,7 @@
   _%>
                     <div class="mb-3<%- field.fieldTypeBoolean ? ' form-check' : '' %>">
   <%_ if (!field.fieldTypeBoolean) { _%>
-                        <label class="form-control-label" for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
+                        <label class="form-control-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
