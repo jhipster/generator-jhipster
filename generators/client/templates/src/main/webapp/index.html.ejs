@@ -20,7 +20,6 @@
 <html class="no-js" lang="<%- nativeLanguage %>" dir="<%- nativeLanguageDefinition.rtl ? 'rtl' : 'ltr' %>">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title><%- baseName %></title>
     <meta name="description" content="Description for <%- baseName %>" />
 <%_ if (enableTranslation) { _%>
@@ -37,12 +36,6 @@
     <!-- jhipster-needle-add-resources-to-root - JHipster will add new resources here -->
   </head>
   <body>
-    <!--[if lt IE 9]>
-      <p class="browserupgrade">
-        You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve
-        your experience.
-      </p>
-    <![endif]-->
 <%_ if (clientFrameworkAngular) { _%>
     <<%- jhiPrefixDashed %>-app>
 <%_ } else { _%>
