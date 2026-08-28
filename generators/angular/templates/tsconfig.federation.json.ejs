@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.app.json",
+  "files": [
+<%_ if (applicationTypeMicroservice || exposeMicrofrontend) { _%>
+    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts",
+    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts",
+  <%_ if (enableTranslation) { _%>
+    "<%- this.relativeDir(clientRootDir, clientI18nDir) %>index.ts",
+  <%_ } _%>
+<%_ } _%>
+    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>main.ts"
+  ],
+  "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.d.ts"]
+}

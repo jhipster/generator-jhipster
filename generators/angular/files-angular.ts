@@ -106,9 +106,23 @@ export const files = asWriteFilesSection({
       condition: generator => generator.clientBundlerWebpack && generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
     }),
+    clientRootTemplatesBlock({
+      condition: generator => generator.clientBundlerEsbuild && generator.microfrontend,
+      templates: [
+        'federation.config.ts',
+        'tsconfig.federation.json',
+        'build-plugins/builders.json',
+        'build-plugins/native-federation.ts',
+        'build-plugins/native-federation.schema.json',
+      ],
+    }),
     clientApplicationTemplatesBlock({
       condition: data => data.microfrontend,
       templates: ['core/microfrontend/index.ts', 'entities/entity-navbar-items.ts'],
+    }),
+    clientApplicationTemplatesBlock({
+      condition: data => data.microfrontend && data.clientBundlerEsbuild && data.enableTranslation,
+      templates: ['core/microfrontend/microfrontend-translation.loader.ts'],
     }),
   ],
   angularMain: [

@@ -17,12 +17,29 @@
  limitations under the License.
 -%>
 import { Type } from '@angular/core';
+<%_ if (clientBundlerEsbuild) { _%>
+import { loadRemoteModule } from '@angular-architects/native-federation';
+<%_ } else { _%>
 import { loadRemote } from '@module-federation/enhanced/runtime';
+<%_ } _%>
 
 import NavbarItem from 'app/layouts/navbar/navbar-item.model';
 
+<%_ if (clientBundlerEsbuild) { _%>
+export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
+  loadRemoteModule<{ default: NavbarItem[] }>(service, './entity-navbar-items').then(items => items.default);
+
+export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
+  loadRemoteModule<{ default: Type<any> }>(service, './entity-routes').then(routes => routes.default);
+  <%_ if (enableTranslation) { _%>
+
+export const loadTranslation = (service: string, lang: string): Promise<any> =>
+  loadRemoteModule<{ loadLocale: (lang: string) => Promise<any> }>(service, './i18n').then(i18n => i18n.loadLocale(lang));
+  <%_ } _%>
+<%_ } else { _%>
 export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
   loadRemote<{ default: NavbarItem[] }>(`${service}/entity-navbar-items`).then(items => items?.default ?? []);
 
 export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
   loadRemote<Type<any>>(`${service}/entity-routes`) as Promise<Type<any>>;
+<%_ } _%>

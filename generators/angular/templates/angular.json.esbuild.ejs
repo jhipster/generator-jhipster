@@ -35,15 +35,40 @@
       "sourceRoot": "<%- this.relativeDir(clientRootDir, clientSrcDir).replace(/\/$/, '') %>",
       "prefix": "<%- jhiPrefixDashed %>",
       "architect": {
+<%_ if (microfrontend) { _%>
+        "build": {
+          "builder": ".:native-federation",
+          "options": {
+            "tsConfig": "tsconfig.federation.json",
+            "federationConfigPath": "federation.config.ts",
+            "entryPoints": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>main.ts"],
+            "cacheExternalArtifacts": true
+          },
+          "configurations": {
+            "production": {
+              "target": "<%- dasherizedBaseName %>:esbuild:production"
+            },
+            "development": {
+              "target": "<%- dasherizedBaseName %>:esbuild:development",
+              "dev": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "esbuild": {
+          "builder": "@angular/build:application",
+          "options": {
+<%_ } else { _%>
         "build": {
           "builder": "@angular-builders/custom-esbuild:application",
           "options": {
             "plugins": [
-<%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
               "build-plugins/i18n-esbuild.ts",
-<%_ } _%>
+  <%_ } _%>
               "build-plugins/define-esbuild.ts"
             ],
+<%_ } _%>
             "outputPath": {
               "base": "<%- this.relativeDir(clientRootDir, clientDistDir) %>",
               "browser": "",
@@ -55,6 +80,9 @@
             "polyfills": [
 <%_ if (communicationSpringWebsocket) { _%>
               "./<%- this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
+<%_ } _%>
+<%_ if (microfrontend) { _%>
+              "es-module-shims",
 <%_ } _%>
               "@angular/localize/init"
             ],
@@ -111,6 +139,40 @@
           },
           "defaultConfiguration": "production"
         },
+<%_ if (microfrontend) { _%>
+        "serve": {
+          "builder": ".:native-federation",
+          "options": {
+            "target": "<%- dasherizedBaseName %>:serve-original:development",
+            "tsConfig": "tsconfig.federation.json",
+            "federationConfigPath": "federation.config.ts",
+            "entryPoints": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>main.ts"],
+            "rebuildDelay": 500,
+            "cacheExternalArtifacts": true,
+            "dev": true,
+            "devServer": true,
+            "port": 0
+          }
+        },
+        "serve-original": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "<%- dasherizedBaseName %>:esbuild:development",
+            "open": true,
+            "proxyConfig": "proxy.config.mjs",
+            "port": <%- devServerPort %>
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "<%- dasherizedBaseName %>:esbuild:production"
+            },
+            "development": {
+              "buildTarget": "<%- dasherizedBaseName %>:esbuild:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+<%_ } else { _%>
         "serve": {
           "builder": "@angular-builders/custom-esbuild:dev-server",
           "options": {
@@ -129,11 +191,12 @@
           },
           "defaultConfiguration": "development"
         },
+<%_ } _%>
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
             "runner": "vitest",
-            "buildTarget": "::development",
+            "buildTarget": "<%- microfrontend ? `${dasherizedBaseName}:esbuild:development` : '::development' %>",
             "runnerConfig": true,
             "coverageReporters": ["text", "lcov"],
             "reporters": [

@@ -24,6 +24,9 @@
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
+<%_ if (clientBundlerEsbuild && microfrontend) { _%>
+  "builders": "./build-plugins/builders.json",
+<%_ } _%>
   "dependencies": {
     "@angular/common": "<%- nodeDependencies['@angular/common'] %>",
     "@angular/compiler": "<%- nodeDependencies['@angular/common'] %>",

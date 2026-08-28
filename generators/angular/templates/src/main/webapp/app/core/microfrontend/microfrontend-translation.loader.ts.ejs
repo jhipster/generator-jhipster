@@ -1,0 +1,88 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { EnvironmentProviders, Injectable, Provider, effect, inject, provideAppInitializer, signal, untracked } from '@angular/core';
+import { TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { Observable, from } from 'rxjs';
+import { loadLocale } from 'i18n';
+
+import { AccountService } from 'app/core/auth';
+
+import { loadTranslation } from './index';
+
+const microfrontends: string[] = [<%- microfrontends.filter(remote => !remote.self).map(remote => `'${remote.moduleFederationName}'`).join(', ') %>];
+
+const mergeTranslations = (target: Record<string, any>, source: Record<string, any>): Record<string, any> => {
+  for (const [key, value] of Object.entries(source)) {
+    target[key] = value && typeof value === 'object' && typeof target[key] === 'object' ? mergeTranslations({ ...target[key] }, value) : value;
+  }
+  return target;
+};
+
+const logTranslationError = (microfrontend: string) => (error: unknown): undefined => {
+  console.error(`Error loading ${microfrontend} translations`, error);
+  return undefined;
+};
+
+/**
+ * Loads the application translations, merged with the microfrontends translations when enabled.
+ */
+@Injectable({ providedIn: 'root' })
+export class MicrofrontendTranslationLoader implements TranslateLoader {
+  /** Microfrontends are only used by authenticated users, their translations are loaded once enabled. */
+  readonly loadMicrofrontends = signal(false);
+
+  getTranslation(lang: string): Observable<any> {
+    return from(this.loadTranslations(lang));
+  }
+
+  private async loadTranslations(lang: string): Promise<Record<string, any>> {
+    const translations = await Promise.all([
+      loadLocale(lang as any),
+      ...(this.loadMicrofrontends()
+        ? microfrontends.map(microfrontend => loadTranslation(microfrontend, lang).catch(logTranslationError(microfrontend)))
+        : []),
+    ]);
+    return translations.reduce<Record<string, any>>((merged, translation) => mergeTranslations(merged, translation ?? {}), {});
+  }
+}
+
+/**
+ * Replaces the translation loader with the microfrontends aware one and reloads the translations once the user logs in.
+ * Must be provided by the application config: the loader relies on the federation runtime initialized by the application.
+ */
+export function provideMicrofrontendTranslation(): (Provider | EnvironmentProviders)[] {
+  return [
+    { provide: TranslateLoader, useClass: MicrofrontendTranslationLoader },
+    provideAppInitializer(() => {
+      const translateService = inject(TranslateService);
+      const translateLoader = inject(TranslateLoader) as MicrofrontendTranslationLoader;
+      const accountService = inject(AccountService);
+      effect(() => {
+        const loadMicrofrontends = accountService.account() !== null;
+        if (untracked(translateLoader.loadMicrofrontends) !== loadMicrofrontends) {
+          translateLoader.loadMicrofrontends.set(loadMicrofrontends);
+          const lang = translateService.getCurrentLang();
+          if (lang) {
+            translateService.reloadLang(lang).subscribe();
+          }
+        }
+      });
+    }),
+  ];
+}

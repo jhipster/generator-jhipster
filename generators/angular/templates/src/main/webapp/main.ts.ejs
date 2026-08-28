@@ -16,4 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (microfrontend && clientBundlerEsbuild) { _%>
+import { initFederation } from '@angular-architects/native-federation';
+
+initFederation(
+  {
+  <%_ for (const remote of microfrontends.filter(remote => !remote.self)) { _%>
+    <%- remote.moduleFederationName %>: './<%- remote.endpointPrefix %>/remoteEntry.json',
+  <%_ } _%>
+  }<%- exposeMicrofrontend ? `,
+  // Expose this application's own modules through federation, registered under the application name so they can be loaded like a remote.
+  { hostRemoteEntry: { name: '${lowercaseBaseName.replaceAll('-', '_')}', url: './remoteEntry.json' } }` : ''; %>,
+)
+  .catch((err: unknown) => console.error(err)) // NOSONAR
+  .then(() => import('./bootstrap'))
+  .catch((err: unknown) => console.error(err)); // NOSONAR
+<%_ } else { _%>
 import('./bootstrap').catch((err: unknown) => console.error(err)); // NOSONAR
+<%_ } _%>

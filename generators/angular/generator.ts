@@ -136,6 +136,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           application.javaNodeBuildPaths?.push('webpack/');
         } else if (application.clientBundlerEsbuild) {
           application.javaNodeBuildPaths?.push('build-plugins/');
+          if (application.microfrontend) {
+            application.javaNodeBuildPaths?.push('federation.config.ts', 'tsconfig.federation.json');
+          }
           if (application.enableI18nRTL) {
             application.javaNodeBuildPaths?.push('postcss.conf.json');
           }
@@ -501,12 +504,21 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerWebpack, microfrontend } = application;
+        const { clientBundlerWebpack, clientBundlerEsbuild, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerWebpack) {
           source.mergeClientPackageJson!({
             devDependencies: {
               '@module-federation/enhanced': null,
+            },
+          });
+        } else if (clientBundlerEsbuild) {
+          source.mergeClientPackageJson!({
+            dependencies: {
+              'es-module-shims': null,
+            },
+            devDependencies: {
+              '@angular-architects/native-federation': null,
             },
           });
         }
