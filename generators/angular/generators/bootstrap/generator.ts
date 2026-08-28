@@ -43,7 +43,7 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
       defaults({ applicationDefaults }) {
         applicationDefaults({
           exposeMicrofrontend: ctx => ctx.microfrontend,
-          clientBundler: ctx => (ctx.microfrontend || ctx.applicationTypeMicroservice ? 'webpack' : 'esbuild'),
+          clientBundler: 'esbuild',
           devServerPort: (_, { data }) => 4200 + (data.applicationIndex ?? 0),
           devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
         });
