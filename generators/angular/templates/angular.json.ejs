@@ -152,7 +152,16 @@
             "dev": true,
             "devServer": true,
             "port": 0
-          }
+          },
+          "configurations": {
+            "production": {
+              "target": "<%- dasherizedBaseName %>:serve-original:production"
+            },
+            "development": {
+              "target": "<%- dasherizedBaseName %>:serve-original:development"
+            }
+          },
+          "defaultConfiguration": "development"
         },
         "serve-original": {
           "builder": "@angular/build:dev-server",
