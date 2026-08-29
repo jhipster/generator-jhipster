@@ -74,7 +74,7 @@ describe('needle API Angular generator : JHipster with blueprint', () => {
       `${CLIENT_MAIN_SRC_DIR}app/entities/entity.routes.ts`,
       '  {\n' +
         "    path: 'entityUrl',\n" +
-        "    data: { pageTitle: 'entity.home.title' },\n" +
+        "    title: 'entity.home.title',\n" +
         "    loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
         '  }',
     );

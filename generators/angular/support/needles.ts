@@ -66,14 +66,14 @@ export function addEntitiesRoute<const E extends ClientEntity, const A extends C
     ...entities.map(entity => {
       const { i18nKeyPrefix, entityNamePlural, entityFolderName, entityFileName, entityUrl } = entity;
 
-      const pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityNamePlural;
+      const title = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityNamePlural;
       const modulePath = `./${entityFolderName}/${entityFileName}.routes`;
 
       return addRoute({
         needle: 'jhipster-needle-add-entity-route',
         route: entityUrl,
         modulePath,
-        pageTitle,
+        title,
       });
     }),
   );
