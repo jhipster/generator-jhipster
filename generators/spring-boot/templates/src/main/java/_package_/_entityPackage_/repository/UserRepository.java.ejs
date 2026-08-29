@@ -320,11 +320,9 @@ interface UserRepositoryInternal<% if (!authenticationTypeOauth2) { %> extends D
     Mono<<%- user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
 
   <%_ if (authenticationTypeOauth2) { _%>
-
     Mono<<%- user.persistClass %>> create(<%- user.persistClass %> user);
   <%_ } else { _%>
     Mono<<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
-
   <%_ } _%>
 
     Flux<<%- user.persistClass %>> findAllWithAuthorities(Pageable pageable);
@@ -386,7 +384,6 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     public Mono<<%- user.persistClass %>> create(<%- user.persistClass %> user) {
         return r2dbcEntityTemplate.insert(<%- user.persistClass %>.class).using(user).defaultIfEmpty(user);
     }
-
   <%_ } else { _%>
     @Override
     public Mono<Void> delete(<%- user.persistClass %> user) {
@@ -397,8 +394,8 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
                 .matching(query(where("id").is(user.getId()))).all()
                 .then());
     }
-
   <%_ } _%>
+
     private Mono<<%- user.persistClass %>> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
         return db.sql("SELECT * FROM <%- jhiTablePrefix %>_user u LEFT JOIN <%- jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
             .bind(fieldName, fieldValue)
