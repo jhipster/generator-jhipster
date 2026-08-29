@@ -27,17 +27,17 @@ spec:
   selector:
     app: <%- app.baseName.toLowerCase() %>
 <%_ if (app.applicationTypeMonolith || app.applicationTypeGateway) { _%>
-  <%_ if (!kubernetesServiceTypeIngress) { _%>
-  type: <%- kubernetesServiceType %>
-  <%_ } else { _%>
+  <%_ if (kubernetesServiceTypeIngress) { _%>
   type: <%- ingressTypeGke ? 'NodePort' : 'ClusterIP' %>
+  <%_ } else { _%>
+  type: <%- kubernetesServiceType %>
   <%_ } _%>
 <%_ } _%>
   ports:
   - name: http
-<%_ if (!app.serviceDiscoveryAny) { _%>
+<%_ if (app.serviceDiscoveryAny) { _%>
+    port: <%- app.serverPort %>
+<%_ } else { _%>
     port: 80
     targetPort: <%- app.serverPort %>
-<%_ } else { _%>
-    port: <%- app.serverPort %>
 <%_ } _%>

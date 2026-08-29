@@ -122,10 +122,10 @@ export default class Navbar implements OnInit {
   }
 
   login(): void {
-<%_ if (!authenticationTypeOauth2) { _%>
-    this.router.navigate(['/login']);
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     this.loginService.login();
+<%_ } else { _%>
+    this.router.navigate(['/login']);
 <%_ } _%>
   }
 

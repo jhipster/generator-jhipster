@@ -344,10 +344,10 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
         if (!(o instanceof <%- persistClass %>)) {
             return false;
         }
-<%_ if (!embedded) { _%>
-        return <%- primaryKey.propertySupplierName %>() != null && <%- primaryKey.propertySupplierName %>().equals(((<%- persistClass %>) o).<%- primaryKey.propertySupplierName %>());
-<%_ } else { _%>
+<%_ if (embedded) { _%>
         return false;
+<%_ } else { _%>
+        return <%- primaryKey.propertySupplierName %>() != null && <%- primaryKey.propertySupplierName %>().equals(((<%- persistClass %>) o).<%- primaryKey.propertySupplierName %>());
 <%_ } _%>
     }
 

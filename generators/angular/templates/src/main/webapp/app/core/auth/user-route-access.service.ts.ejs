@@ -50,10 +50,10 @@ export const userRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapsh
       }
 
       stateStorageService.storeUrl(state.url);
-<%_ if (!authenticationTypeOauth2) { _%>
-      router.navigate(['/login']);
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
       authServerProvider.login();
+<%_ } else { _%>
+      router.navigate(['/login']);
 <%_ } _%>
       return false;
     }),
