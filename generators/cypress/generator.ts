@@ -120,6 +120,12 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       npmScripts({ application }) {
         const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
         this.angularSchematic = Boolean(application.clientFrameworkAngular);
+        // The native federation dev server never reports its url to `ng e2e` (the builder only yields on rebuilds),
+        // so microfrontend applications start the dev server concurrently and wait for its port instead.
+        const ngE2e = this.angularSchematic && !application.microfrontend;
+        // The Angular dev server listens on localhost only (which may resolve to ::1), Vite listens on every address.
+        const devServerHost = this.angularSchematic ? 'localhost' : '127.0.0.1';
+        const coverageEnv = application.cypressCoverage ? ' --env CYPRESS_COVERAGE=true' : '';
 
         Object.assign(application.clientPackageJsonScripts, {
           cypress: 'cypress open --e2e',
@@ -136,9 +142,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
           'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
           'e2e:devserver':
-            this.angularSchematic ?
+            ngE2e ?
               `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await --if-present && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
-            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
+            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://${devServerHost}:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}${coverageEnv}"`,
         });
 
         Object.assign(application.packageJsonScripts, {
@@ -263,7 +269,10 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             },
             scripts: {
               'pree2e:cypress:coverage': 'npm run ci:server:await --if-present',
-              'e2e:cypress:coverage': 'ng e2e --configuration coverage',
+              'e2e:cypress:coverage':
+                application.microfrontend ?
+                  `npm run e2e:headless -- -c baseUrl=http://localhost:${application.devServerPortProxy ?? application.devServerPort} --env CYPRESS_COVERAGE=true`
+                : 'ng e2e --configuration coverage',
             },
           });
         }
