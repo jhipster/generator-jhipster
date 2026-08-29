@@ -813,7 +813,6 @@ import {
 } from "app/shared/date";
 import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
 import { ItemCount } from "app/shared/pagination";
-import { FormsModule } from "@angular/forms";
 import { IUserManagement } from "../user-management.model";
 import {
   ITEMS_PER_PAGE,
@@ -832,7 +831,6 @@ import { UserManagementDeleteDialog } from "../delete/user-management-delete-dia
   templateUrl: "./user-management.html",
   imports: [
     RouterLink,
-    FormsModule,
     FontAwesomeModule,
     AlertError,
     Alert,

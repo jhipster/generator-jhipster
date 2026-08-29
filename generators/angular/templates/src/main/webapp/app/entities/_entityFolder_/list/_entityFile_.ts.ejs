@@ -60,7 +60,7 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 import { ItemCount } from 'app/shared/pagination';
 <%_ } _%>
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
 import { FormsModule } from '@angular/forms';
 <%_ } _%>
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
@@ -100,7 +100,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
     templateUrl: './<%- entityFileName %>.html',
     imports: [
       RouterLink,
-<%_ if (searchEngine) { _%>
+<%_ if (searchEngineAny) { _%>
       FormsModule,
 <%_ } _%>
       FontAwesomeModule,
