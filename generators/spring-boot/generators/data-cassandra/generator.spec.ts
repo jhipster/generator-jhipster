@@ -37,6 +37,58 @@ describe(`generator - ${databaseType}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
+  describe('migration', () => {
+    describe('databaseMigration option', () => {
+      const runCassandra = (config: Record<string, unknown>) =>
+        helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ databaseType, ...config })
+          .commitFiles()
+          .withSkipWritingPriorities()
+          .withMockedJHipsterGenerators();
+
+      describe('application prior to v9.2.1', () => {
+        before(async () => {
+          await runCassandra({ jhipsterVersion: '9.2.0' });
+        });
+
+        it('should keep the cql loader', () => {
+          runResult.assertJHipsterConfigContent({ databaseMigration: 'loader' });
+        });
+      });
+
+      describe('application prior to v9.2.1 without a migration tool', () => {
+        before(async () => {
+          await runCassandra({ jhipsterVersion: '9.2.0', databaseMigration: 'no' });
+        });
+
+        it('should keep the cql loader, databaseMigration was ignored by cassandra', () => {
+          runResult.assertJHipsterConfigContent({ databaseMigration: 'loader' });
+        });
+      });
+
+      describe('application prior to v9.2.1 which opted into liquibase', () => {
+        before(async () => {
+          await runCassandra({ jhipsterVersion: '9.2.0', databaseMigration: 'liquibase' });
+        });
+
+        it('should keep liquibase', () => {
+          runResult.assertJHipsterConfigContent({ databaseMigration: 'liquibase' });
+        });
+      });
+
+      describe('application at v9.2.1', () => {
+        before(async () => {
+          await runCassandra({ jhipsterVersion: '9.2.1' });
+        });
+
+        it('should not force a migration tool, liquibase is the default', () => {
+          runResult.assertJHipsterConfigContent({ databaseMigration: undefined });
+        });
+      });
+    });
+  });
+
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
   });

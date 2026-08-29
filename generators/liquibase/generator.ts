@@ -98,7 +98,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   get preparing() {
     return this.asPreparingTaskGroup({
       checkDatabaseCompatibility({ application }) {
-        if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
+        if (!application.databaseTypeSql && !application.databaseTypeNeo4j && !application.databaseTypeCassandra) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
         }
 
@@ -116,6 +116,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
           prodLiquibaseUrl: data => {
             if (data.databaseTypeNeo4j) {
               return 'jdbc:neo4j:bolt://localhost:7687';
+            }
+            if (data.databaseTypeCassandra) {
+              return `jdbc:cassandra://localhost:9042/${data.cassandraKeyspaceName}?compliancemode=Liquibase&localdatacenter=datacenter1`;
             }
             return getJdbcUrl(data.prodDatabaseType, {
               databaseName: data.prodDatabaseName,
@@ -519,6 +522,15 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               </exclusions>`,
             },
           ]);
+        }
+
+        if (application.databaseTypeCassandra) {
+          source.addMavenDependency?.({
+            groupId: 'org.liquibase.ext',
+            artifactId: 'liquibase-cassandra',
+            // eslint-disable-next-line no-template-curly-in-string
+            version: '${liquibase.version}',
+          });
         }
       },
       injectGradle({ source, application }) {

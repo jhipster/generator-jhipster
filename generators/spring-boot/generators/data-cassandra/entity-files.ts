@@ -19,6 +19,7 @@
 import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../../../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_RES_DIR } from '../../../generator-constants.ts';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/index.ts';
+import type { Application as SpringBootApplication, Entity as SpringBootEntity } from '../../types.ts';
 
 const domainFiles = [
   asWriteFilesBlock({
@@ -39,7 +40,17 @@ const repositoryFiles = [
 export const entityFiles = asWriteFilesSection({
   dbChangelog: [
     {
-      condition: ctx => !ctx.skipDbChangelog,
+      condition: ctx => !ctx.skipDbChangelog && ctx.databaseMigrationLiquibase,
+      path: SERVER_MAIN_RES_DIR,
+      templates: [
+        {
+          file: 'config/liquibase/changelog/added_entity.xml',
+          renameTo: ctx => `config/liquibase/changelog/${ctx.changelogDate}_added_entity_${ctx.entityClass}.xml`,
+        },
+      ],
+    },
+    {
+      condition: ctx => !ctx.skipDbChangelog && ctx.databaseMigrationLoader,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         {
@@ -53,7 +64,19 @@ export const entityFiles = asWriteFilesSection({
   repositoryFiles,
 });
 
-export function cleanupCassandraEntityFilesTask() {}
+export const cleanupCassandraEntityFilesTask = asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(async function ({
+  application,
+  entities,
+  control,
+}) {
+  if (!application.databaseMigrationLiquibase) return;
+  for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+    await control.cleanupFiles({
+      // The custom cql migration was replaced with liquibase
+      '9.2.1': [`${application.srcMainResources}config/cql/changelog/${entity.changelogDate}_added_entity_${entity.entityClass}.cql`],
+    });
+  }
+});
 
 export default asWritingEntitiesTask(async function writeEntityCassandraFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {

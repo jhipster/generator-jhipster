@@ -53,6 +53,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
   "databaseMigrationLiquibase": true,
+  "databaseMigrationLoader": false,
   "databaseMigrationNo": false,
   "databaseType": "sql",
   "databaseTypeAny": true,

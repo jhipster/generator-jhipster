@@ -49,7 +49,12 @@ services:
       - CASSANDRA_CONTACT_POINT=<%- baseName.toLowerCase() %>-cassandra
       - USER=docker-cassandra-migration
       # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
+<%_ if (databaseMigrationLiquibase) { _%>
+      # Single node: the prod keyspace replication factor cannot satisfy the quorum required by the liquibase changelog lock.
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
+<%_ } else { _%>
       - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
+<%_ } _%>
     build:
       context: .
       dockerfile: cassandra/Cassandra-Migration.Dockerfile

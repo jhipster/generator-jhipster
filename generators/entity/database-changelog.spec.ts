@@ -39,7 +39,7 @@ describe('generator - entity database changelogs', () => {
       });
 
       it('should create database changelog for the entity', () => {
-        runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/cql/changelog/20160926101210_added_entity_Foo.cql`]);
+        runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_Foo.xml`]);
       });
     });
     describe('with gateway application type', () => {

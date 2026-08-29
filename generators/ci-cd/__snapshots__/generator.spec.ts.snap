@@ -108,6 +108,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
   "databaseMigrationLiquibase": true,
+  "databaseMigrationLoader": false,
   "databaseMigrationNo": false,
   "databaseType": "sql",
   "databaseTypeAny": true,

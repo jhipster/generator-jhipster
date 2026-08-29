@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { PaginationTypes } from '../../../../lib/jhipster/entity-options.ts';
+import type { Source as LiquibaseSource } from '../../../liquibase/types.d.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 import cleanupCassandraFilesTask from './cleanup.ts';
@@ -35,6 +36,23 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
       await this.dependsOnBootstrap('spring-boot');
       await this.dependsOnJHipster('jhipster:java:domain');
     }
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configMigration({ control }) {
+        // Cassandra switched from the custom CQL loader to liquibase, keep the loader for existing applications.
+        // Cassandra ignored databaseMigration before, so any stored value other than an explicit liquibase
+        // opt-in means the application still relies on the CQL scripts.
+        if (control.isJhipsterVersionLessThan('9.2.1') && this.jhipsterConfig.databaseMigration !== 'liquibase') {
+          this.jhipsterConfig.databaseMigration = 'loader';
+        }
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get configuringEachEntity() {
@@ -57,6 +75,20 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async liquibase() {
+        if (this.jhipsterConfigWithDefaults.databaseMigration === 'liquibase') {
+          await this.composeWithJHipster('jhipster:spring-boot:liquibase');
+        }
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
@@ -65,6 +97,13 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
             `${application.javaPackageTestDir}config/CassandraTestContainersSpringContextCustomizerFactory.java`,
             `${application.javaPackageTestDir}config/EmbeddedCassandra.java`,
             `${application.srcTestResources}META-INF/spring.factories`,
+            // The custom cql migration was replaced with liquibase, the files are kept by the loader migration
+            [
+              application.databaseMigrationLiquibase,
+              `${application.srcMainResources}config/cql/changelog/README.md`,
+              `${application.srcMainResources}config/cql/changelog/00000000000000_create-tables.cql`,
+              `${application.srcMainResources}config/cql/changelog/00000000000001_insert_default_users.cql`,
+            ],
           ],
         });
       },
@@ -88,8 +127,29 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      addLiquibaseChangelogs({ application, entities, source }) {
+        if (!application.databaseMigrationLiquibase) return;
+        for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn && !entity.skipDbChangelog)) {
+          (source as LiquibaseSource).addLiquibaseChangelog?.({
+            changelogName: `${entity.changelogDate}_added_entity_${entity.entityClass}`,
+            section: 'base',
+          });
+        }
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addLog({ source }) {
+        source.addMainLog?.({ name: 'com.datastax.oss.driver', level: 'INFO' });
+      },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
 

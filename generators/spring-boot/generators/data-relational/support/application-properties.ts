@@ -31,7 +31,7 @@ const DATABASE_TYPES = [ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL];
 const DEV_DATABASE_TYPES = [...DATABASE_TYPES, H2_MEMORY, H2_DISK];
 
 export default function prepareSqlApplicationProperties({ application }: { application: SpringDataRelationalApplication }) {
-  if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
+  if (!application.databaseTypeSql && !application.databaseTypeNeo4j && !application.databaseTypeCassandra) {
     return;
   }
 
@@ -48,13 +48,21 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       devDatabaseTypeH2Any: data => data.devDatabaseTypeH2Disk || data.devDatabaseTypeH2Memory,
     },
     context => {
-      if (context.databaseTypeNeo4j) {
+      if (context.databaseTypeNeo4j || context.databaseTypeCassandra) {
         return {
           __override__: false,
           devDatabaseUsername: '',
           devDatabasePassword: '',
-          devJdbcDriver: undefined,
+          devJdbcDriver: context.databaseTypeCassandra ? 'com.ing.data.cassandra.jdbc.CassandraDriver' : undefined,
           devHibernateDialect: undefined,
+          ...(context.databaseTypeCassandra ?
+            {
+              prodDatabaseUsername: '',
+              prodDatabasePassword: '',
+              prodJdbcDriver: 'com.ing.data.cassandra.jdbc.CassandraDriver',
+              prodHibernateDialect: undefined,
+            }
+          : {}),
         };
       }
 
@@ -80,7 +88,7 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       };
     },
     context => {
-      if (context.databaseTypeNeo4j) {
+      if (context.databaseTypeNeo4j || context.databaseTypeCassandra) {
         return {};
       }
 
