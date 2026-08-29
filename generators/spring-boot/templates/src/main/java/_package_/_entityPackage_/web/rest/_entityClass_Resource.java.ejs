@@ -23,15 +23,15 @@ package <%- entityAbsolutePackage %>.web.rest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ } _%>
 import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
-<%_ if (!serviceNo) { _%>
-import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
-<%_ } else { _%>
+<%_ if (serviceNo) { _%>
   <%_ if (isUsingMapsId) { _%>
 import <%- entityAbsolutePackage %>.repository.<%- mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
 import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
   <%_ } _%>
+<%_ } else { _%>
+import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
 <%_ } _%>
 <%_ if (saveUserSnapshot) { _%>
 import <%- entityAbsolutePackage %>.repository.UserRepository;

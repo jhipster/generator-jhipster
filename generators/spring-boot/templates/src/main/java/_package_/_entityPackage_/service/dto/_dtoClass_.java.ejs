@@ -132,24 +132,24 @@ public class <%- dtoClass %> implements Serializable {
         if (!(o instanceof <%- dtoClass %>)) {
             return false;
         }
-<%_ if (!embedded) { _%>
+<%_ if (embedded) { _%>
+        return false;
+<%_ } else { _%>
 
         <%- dtoClass %> <%- dtoInstance %> = (<%- dtoClass %>) o;
         if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>) {
             return false;
         }
         return <%- idNames.map(n => `Objects.equals(this.${n}, ${dtoInstance}.${n})`).join(' &&\n            ') %>;
-<%_ } else { _%>
-        return false;
 <%_ } _%>
     }
 
     @Override
     public int hashCode() {
-<%_ if (!embedded) { _%>
-        return Objects.hash(<%- idNames.map(n => `this.${n}`).join(', ') %>);
-<%_ } else { _%>
+<%_ if (embedded) { _%>
         return getClass().hashCode();
+<%_ } else { _%>
+        return Objects.hash(<%- idNames.map(n => `this.${n}`).join(', ') %>);
 <%_ } _%>
     }
 

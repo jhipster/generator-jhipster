@@ -279,7 +279,9 @@ public class SecurityConfiguration {
                 .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
 <%_ } else if (authenticationTypeOauth2) { _%>
-  <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (applicationTypeMicroservice) { _%>
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+  <%_ } else { _%>
             .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
     <%_ if (communicationSpringWebsocket) { _%>
             // Prevent the SockJS info polling request from being saved and replayed as the
@@ -292,8 +294,6 @@ public class SecurityConfiguration {
                 cache.requestCache(requestCache);
             })
     <%_ } _%>
-  <%_ } else { _%>
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   <%_ } _%>
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt

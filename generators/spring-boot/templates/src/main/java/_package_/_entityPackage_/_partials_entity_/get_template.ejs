@@ -21,9 +21,9 @@
     const entityToDtoReference = `${mapper}::toDto`;
     const returnPrefix = returnDirectly ? 'return' : `${instanceType} ${restInstance} =`;
 _%>
-<%_ if (!viaService) { _%>
+<%_ if (viaService) { _%>
+        <%- returnPrefix %> <%- entityInstance %>Service.findOne(id);
+<%_ } else { _%>
         <%- returnPrefix %> <%- entityInstance %>Repository.<%- implementsEagerLoadApis ? 'findOneWithEagerRelationships(id)' : 'findById(id)' %><% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%- entityToDtoReference %>);<% } %>
-<%_ } else { _%>
-        <%- returnPrefix %> <%- entityInstance %>Service.findOne(id);
 <%_ } _%>

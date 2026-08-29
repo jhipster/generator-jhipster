@@ -20,7 +20,9 @@
     const entityToDtoReference = `${mapper}::` + 'toDto';
 _%>
         try {
-<%_ if (!viaService) { _%>
+<%_ if (viaService) { _%>
+            return <%- entityInstance %>Service.search(query)<%- reactive && fromResource ? '.collectList()' : '' %>;
+<%_ } else { _%>
   <%_ if (reactive) { _%>
             return <%- entityInstance %><%- searchEngineElasticsearch ? 'Search' : '' %>Repository
                 .search(query)
@@ -44,8 +46,6 @@ _%>
                 .toList();
     <%_ } _%>
   <%_ } _%>
-<%_ } else { _%>
-            return <%- entityInstance %>Service.search(query)<%- reactive && fromResource ? '.collectList()' : '' %>;
 <%_ } _%>
         } catch (RuntimeException e) {
     <% if (searchEngineElasticsearch && fromResource) { %>

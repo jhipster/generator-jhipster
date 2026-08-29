@@ -423,12 +423,12 @@ class <%- entityClass %>ResourceIT {
     private static final Boolean <%- updatedValueName %> = true;
   <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
 
-    <%_ if (!databaseTypeCassandra) { _%>
-    private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
-    private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
-    <%_ } else { _%>
+    <%_ if (databaseTypeCassandra) { _%>
     private static final ByteBuffer <%- defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
     private static final ByteBuffer <%- updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
+    <%_ } else { _%>
+    private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
+    private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } _%>
     private static final String <%- defaultValueName %>_CONTENT_TYPE = "image/jpg";
     private static final String <%- updatedValueName %>_CONTENT_TYPE = "image/png";
@@ -525,7 +525,7 @@ class <%- entityClass %>ResourceIT {
      */
     public static <%- persistClass %> create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseTypeSql && anyRelationshipIsRequired) ? 'EntityManager em' : '' %>) {
   <%_ if (fluentMethods) { _%>
-        <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%- persistClass %> <%- createInstance %> = <% } %>new <%- persistClass %>()
+        <% if (anyRelationshipIsRequired) { %><%- persistClass %> <%- createInstance %> = <% } else { %>return <% } %>new <%- persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
             .<%- primaryKey.name %>(UUID.randomUUID())
     <%_ } _%>
@@ -1027,10 +1027,10 @@ class <%- entityClass %>ResourceIT {
   <%_ const eagerLoadMockResult = reactive ? 'Flux.empty()' : paginationNo ? 'new ArrayList<>()' : 'new PageImpl(new ArrayList<>())'; _%>
     @SuppressWarnings({"unchecked"})
     void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <%- reactive ? '' : 'throws Exception ' %>{
-  <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } else { _%>
+  <%_ if (serviceNo) { _%>
         when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
+  <%_ } else { _%>
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1042,19 +1042,19 @@ class <%- entityClass %>ResourceIT {
             .andExpect(status().isOk());
   <%_ } _%>
 
-  <%_ if (!serviceNo) { _%>
-        verify(<%- entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
-  <%_ } else { _%>
+  <%_ if (serviceNo) { _%>
         verify(<%- entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
+  <%_ } else { _%>
+        verify(<%- entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
   <%_ } _%>
     }
 
     @SuppressWarnings({"unchecked"})
     void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <%- reactive ? '' : 'throws Exception ' %>{
-  <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } else { _%>
+  <%_ if (serviceNo) { _%>
         when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
+  <%_ } else { _%>
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1293,15 +1293,15 @@ class <%- entityClass %>ResourceIT {
       <%_ } _%>
       <%_ if (!reactive && (relationship.relationshipManyToMany || relationship.relationshipOneToMany)) { _%>
         <%- persistInstance %>.add<%- relationship.relationshipNameCapitalized %>(<%- relationship.relationshipFieldName %>);
-      <%_ } else if (!reactive) { _%>
+      <%_ } else if (reactive) { _%>
+        <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
+        <%- persistInstance %>.<%- relationship.propertyConsumerName %>Id(<%- relationship.relationshipFieldName %>Id);
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+      <%_ } else { _%>
         <%- persistInstance %>.<%- relationship.propertyConsumerName %>(<%- relationship.relationshipFieldName %>);
         <%_ if (!relationship.ownerSide) { _%>
         <%- relationship.relationshipFieldName %>.<%- relationship.otherRelationship.propertyConsumerName %>(<%- persistInstance %>);
         <%_ } _%>
-      <%_ } else { _%>
-        <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
-        <%- persistInstance %>.<%- relationship.propertyConsumerName %>Id(<%- relationship.relationshipFieldName %>Id);
-        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
       <%_ } _%>
     <%_ } _%>
     <%_ if (!reactive) { _%>

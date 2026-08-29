@@ -90,15 +90,15 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     private static final Logger LOG = LoggerFactory.getLogger(<%- serviceClassName %>.class);
 <%- include('../../_partials_entity_/inject_template', { viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId, mapsIdAssoc, isController: false }) -%>
 
-<%_ if (!serviceImpl) { _%>
+<%_ if (serviceImpl) { _%>
+    @Override
+<%_ } else { _%>
     /**
      * Save a <%- entityInstance %>.
      *
      * @param <%- restInstance %> the entity to save.
      * @return the persisted entity.
      */
-<%_ } else { _%>
-    @Override
 <%_ } _%>
     public <%- reactive ? 'Mono<' : '' %><%- restClass %><%- reactive ? '>' : '' %> save(<%- restClass %> <%- restInstance %>) {
         LOG.debug("Request to save <%- entityClass %> : {}", <%- restInstance %>);
@@ -227,7 +227,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
             .map(<%- entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } %><% } %>;
   <%_ } else { _%>
-        return <%- entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>.map(<%- entityToDtoReference %>);<% } %>
+        return <%- entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dtoMapstruct) { %>.map(<%- entityToDtoReference %>);<% } else { %>;<% } %>
   <%_ } _%>
     }
 <%_ } _%>
@@ -257,15 +257,15 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ } _%>
 
 <%_ } _%>
-<%_ if (!serviceImpl) { _%>
+<%_ if (serviceImpl) { _%>
+    @Override
+<%_ } else { _%>
     /**
      * Get one <%- entityInstance %> by id.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
-<%_ } else { _%>
-    @Override
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
@@ -274,7 +274,9 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
         LOG.debug("Request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService: false, returnDirectly: true, implementsEagerLoadApis }) -%>
     }
 
-<%_ if (!serviceImpl) { _%>
+<%_ if (serviceImpl) { _%>
+    @Override
+<%_ } else { _%>
     /**
      * Delete the <%- entityInstance %> by id.
      *
@@ -283,8 +285,6 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
      * @return a Mono to signal the deletion
   <%_ } _%>
      */
-<%_ } else { _%>
-    @Override
 <%_ } _%>
     public <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%- primaryKey.type %> id) {
         LOG.debug("Request to delete <%- entityClass %> : {}", id);
@@ -292,7 +292,9 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     }
 <%_ if (searchEngineAny) { _%>
 
-  <%_ if (!serviceImpl) { _%>
+  <%_ if (serviceImpl) { _%>
+    @Override
+  <%_ } else { _%>
     /**
      * Search for the <%- entityInstance %> corresponding to the query.
      *
@@ -302,13 +304,11 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     <%_ } _%>
      * @return the list of entities.
      */
-  <%_ } else { _%>
-    @Override
   <%_ } _%>
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- paginationNo ? '' : ', Pageable pageable' %>) {
+    public <%- paginationNo ? listOrFlux : pageOrFlux %><<%- restClass %>> search(String query<%- paginationNo ? '' : ', Pageable pageable' %>) {
   <%_ if (paginationNo) { _%>
         LOG.debug("Request to search <%- entityClassPlural %> for query {}", query);<%- include('../../_partials_entity_/search_stream_template', { viaService: false, fromResource: false }) -%>
   <%_ } else { _%>

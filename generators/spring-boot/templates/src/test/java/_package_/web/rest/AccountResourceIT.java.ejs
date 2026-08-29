@@ -329,7 +329,13 @@ class AccountResourceIT {
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
-<%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
+        accountWebTestClient.post().uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(invalidUser))
+            .exchange()
+            .expectStatus().isBadRequest();
+<%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -339,12 +345,6 @@ class AccountResourceIT {
             .andDo(exportTestSecurityContext())
   <%_ } _%>
             .andExpect(status().isBadRequest());
-<%_ } else { _%>
-        accountWebTestClient.post().uri("/api/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(invalidUser))
-            .exchange()
-            .expectStatus().isBadRequest();
 <%_ } _%>
 
         Optional<<%- user.persistClass %>> user = userRepository.findOneByEmailIgnoreCase("funky@example.com")<%- reactive ? '.blockOptional()' : '' %>;
