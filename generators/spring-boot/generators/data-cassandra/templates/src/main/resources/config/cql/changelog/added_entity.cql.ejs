@@ -47,11 +47,11 @@ CREATE TABLE IF NOT EXISTS <%- entityInstance %> (
   <%_ } else if (field.fieldTypeBoolean) { _%>
     <%- fieldName %> boolean,
   <%_ } else if (field.fieldTypeByteBuffer) { _%>
-    <%_ if (!field.blobContentTypeText) { _%>
+    <%_ if (field.blobContentTypeText) { _%>
+    <%- fieldName %> text,
+    <%_ } else { _%>
     <%- fieldName %> blob,
     <%- fieldNameUnderscored %>_content_type text,
-    <%_ } else { _%>
-    <%- fieldName %> text,
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

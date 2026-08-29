@@ -42,13 +42,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 <%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-<%_ if (!reactive) { _%>
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-<%_ } else { _%>
-import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 
 /**
