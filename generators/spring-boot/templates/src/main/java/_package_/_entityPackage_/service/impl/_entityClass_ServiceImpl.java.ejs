@@ -159,9 +159,15 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- paginationNo ? '' : 'Pageable pageable' %>) {
         LOG.debug("Request to get all <%- entityClassPlural %>");
   <%_ if (paginationNo) { _%>
-        return <%- entityInstance %>Repository.findAll()<% if (dtoMapstruct) { %><%- reactive ? '' : '.stream()' %>
-            .map(<%- entityToDtoReference %>)<% if (!reactive) { %>
-            .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
+        return <%- entityInstance %>Repository
+            .findAll()
+    <%_ if (dtoMapstruct) { _%>
+      <%_ if (!reactive) { _%>
+            .stream()
+      <%_ } _%>
+            .map(<%- entityToDtoReference %>)
+      <%_ if (!reactive) { _%>
+            .collect(Collectors.toCollection(LinkedList::new))<% } %><% } %>;
   <%_ } else { _%>
         return <%- entityInstance %>Repository.findAll<%- reactive ? 'By' : '' %>(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%- entityToDtoReference %>);<% } %>
@@ -219,7 +225,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (paginationNo) { _%>
         return <%- entityInstance %>Repository.findAllWithEagerRelationships()<% if (dtoMapstruct) { %><%- reactive ? '' : '.stream()' %>
             .map(<%- entityToDtoReference %>)<% if (!reactive) { %>
-            .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
+            .collect(Collectors.toCollection(LinkedList::new))<% } %><% } %>;
   <%_ } else { _%>
         return <%- entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>.map(<%- entityToDtoReference %>);<% } %>
   <%_ } _%>
@@ -311,7 +317,8 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     <%_ if (!dtoMapstruct) { _%>;
     <%_ } else { _%>
             .map(<%- entityToDtoReference %>);
-  <%_ } } _%>
+    <%_ } _%>
+  <%_ } _%>
     }
 <%_ } _%>
 <%_ if (updatableEntity && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>

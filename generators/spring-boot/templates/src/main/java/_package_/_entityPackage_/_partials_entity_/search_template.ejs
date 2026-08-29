@@ -29,7 +29,7 @@ _%>
   <%_ if (reactive) { _%>
         return <%- entityInstance %><%- viaService
                 ? `Service.${searchEngineElasticsearch ? 'searchCount' : 'countAll'}`
-                : `${searchEngineElasticsearch ? 'Search' : ''}Repository.count`; %>()
+                : `${searchEngineElasticsearch ? 'Search' : ''}Repository.count` %>()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(<%- entityInstance %><%- viaService ? 'Service' : `${searchEngineElasticsearch ? 'Search' : ''}Repository` %>.search(query, pageable)<% if (!viaService && dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>));

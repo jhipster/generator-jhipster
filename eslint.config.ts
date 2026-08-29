@@ -141,8 +141,8 @@ export default defineConfig(
   ejs.configs.customize(
     {
       html: 'never',
-      prettierBlacklist: true,
-      stylisticBlacklist: true,
+      prettierBlocklist: true,
+      stylisticBlocklist: true,
       experimental: true,
       allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData', 'parseInt'],
     },
@@ -152,8 +152,6 @@ export default defineConfig(
     }),
     {
       rules: {
-        'ejs-templates/no-output-negated-ternary': 'error',
-
         ...js.configs.recommended.rules,
         ...jsRules,
         'no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
