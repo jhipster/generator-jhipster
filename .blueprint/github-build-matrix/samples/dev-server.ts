@@ -26,9 +26,9 @@ export const devServerMatrix = {
       args: '--sample-yorc-folder --entities-sample sqllight --client-bundler esbuild',
       os: 'macos-latest',
     },
-    'ng-default-webpack': {
+    'ng-default-module-federation': {
       sample: 'samples/ng-default',
-      args: '--auth oauth2 --sample-yorc-folder --entities-sample sqllight --client-bundler webpack',
+      args: '--auth oauth2 --sample-yorc-folder --entities-sample sqllight --microfrontend',
     },
   },
   react: {
