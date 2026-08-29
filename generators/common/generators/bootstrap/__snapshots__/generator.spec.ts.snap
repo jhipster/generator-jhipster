@@ -2156,6 +2156,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "blobContentTypeText": false,
         "builtIn": true,
         "clientConstantsAsValues": true,
+        "defaultValue": "en",
         "entity": Any<Object>,
         "enumFileName": "languages",
         "enumValues": Any<Array>,

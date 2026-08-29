@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const formDefaultProperties = [
-      ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id || field.collection).map(field => field.fieldName),
+      ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id || field.collection || field.fieldTsDefaultValue !== undefined).map(field => field.fieldName),
       ...relationships.filter(relationship => relationship.collection && relationship.persistableRelationship).map(relationship => relationship.propertyName),
     ];
     const containDefaultProperties = formDefaultProperties.length > 0;
@@ -104,8 +104,8 @@ export class <%- entityAngularName %>FormService {
       const usesValidators = fieldValidationEmail || fieldValidationRequired || fieldValidationMinLength || fieldValidationMaxLength || fieldValidationMin || fieldValidationMax || fieldValidationPattern || field.id;
   _%>
       <%- fieldName %>: new FormControl(
-  <%_ if (field.id) { _%>
-        { value: <%- entityInstance %>RawValue.<%- fieldName %>, disabled: <% if (field.autoGenerate) { %>true<% } else { %><%- entityInstance %>RawValue.<%- fieldName %> !== null<% } %> },
+  <%_ if (field.id && field.autoGenerate) { _%>
+        { value: <%- entityInstance %>RawValue.<%- fieldName %>, disabled: true },
   <%_ } else { _%>
         <%- entityInstance %>RawValue.<%- fieldName %>,
   <%_ } _%>
@@ -182,7 +182,7 @@ export class <%- entityAngularName %>FormService {
     ;
     form.reset({
       ...<%- entityInstance %>RawValue,
-<%_ for (const field of fields.filter(field => field.id)) { _%>
+<%_ for (const field of fields.filter(field => field.id && !builtInUserManagement)) { _%>
       <%- field.fieldName %>: { value: <%- entityInstance %>RawValue.<%- field.fieldName %>, disabled: <% if (field.autoGenerate) { %>true<% } else { %><%- entityInstance %>RawValue.<%- field.fieldName %> !== null<% } %> },
 <%_ } _%>
     });

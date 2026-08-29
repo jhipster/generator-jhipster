@@ -30,8 +30,12 @@ import { ActivatedRoute } from '@angular/router';
 import { finalize<%- relationships.some(rel => rel.persistableRelationship) ? ', map' : '' %>, Observable } from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
+import { <%- constantLabelPipes.filter(pipe => pipe.importPath === 'app/shared/language').map(pipe => `${pipe.importName}, `).join('') %>TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+<%_ for (const pipe of constantLabelPipes.filter(pipe => pipe.importPath !== 'app/shared/language')) { _%>
+import { <%- pipe.importName %> } from '<%- pipe.importPath %>';
 <%_ } _%>
 <%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
@@ -77,6 +81,9 @@ import { <%- importedType %> } from '<%- importedPath %>';
     imports: [
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
+<%_ } _%>
+<%_ for (const pipe of constantLabelPipes) { _%>
+      <%- pipe.importName %>,
 <%_ } _%>
 <%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
       TranslatePipe,
@@ -146,6 +153,10 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ } _%>
 
     ngOnInit(): void {
+<%_ for (const { otherEntity, propertyTranslationKey } of primaryKeyOnlyRelationships) { _%>
+        // Load the <%- otherEntity.entityInstancePlural %> used by the <%- propertyTranslationKey.split('.').pop() %> select.
+        this.<%- otherEntity.entityInstance %>Service.<%- otherEntity.entityInstancePlural %>Params.set({});
+<%_ } _%>
         this.activatedRoute.data.subscribe(({ <%- entityInstance %> }) => {
             this.<%- entityInstance %> = <%- entityInstance %>;
             if (<%- entityInstance %>) {

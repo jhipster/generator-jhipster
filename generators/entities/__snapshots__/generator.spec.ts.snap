@@ -266,9 +266,6 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/i18n/en/skip.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/user-management.json": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/domain/BarAsserts.java": {
     "stateCleared": "modified",
   },
@@ -318,7 +315,6 @@ exports[`generator - entities regenerating all entities should match source call
         "Entity[Foo]",
         "Entity[Bar]",
         "Entity[Skip]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
@@ -556,9 +552,6 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/i18n/en/foo.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/user-management.json": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/domain/BarAsserts.java": {
     "stateCleared": "modified",
   },
@@ -595,7 +588,6 @@ exports[`generator - entities regenerating some entities should match source cal
       "entities": [
         "Entity[Foo]",
         "Entity[Bar]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },

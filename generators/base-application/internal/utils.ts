@@ -223,7 +223,7 @@ export function createUserManagementEntity(
   const userManagement = {
     ...user,
     name: 'UserManagement',
-    skipClient: true,
+    skipClient: !application.clientFrameworkAngular,
     skipServer: true,
     changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).UserManagement,
     clientRootFolder: 'admin',
@@ -269,6 +269,7 @@ export function createUserManagementEntity(
         fieldType: 'Languages',
         fieldValues: langKeyFieldValues,
         clientConstantsAsValues: true,
+        defaultValue: application.nativeLanguage,
       },
     ]);
   }
