@@ -106,9 +106,6 @@ jobs:
       - run: |
           git config --global core.autocrlf false
           git config --global core.safecrlf true
-      - name: 'WORKAROUND: Node.js 22 require(esm) V8 crash'
-        if: startsWith(matrix.node-version, '22')
-        run: echo "NODE_OPTIONS=${NODE_OPTIONS:+$NODE_OPTIONS }--no-experimental-require-module" >> $GITHUB_ENV
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
