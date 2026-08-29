@@ -154,6 +154,7 @@ export default defineConfig(
       rules: {
         ...js.configs.recommended.rules,
         ...jsRules,
+        'no-negated-condition': 'error',
         'no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
         'prefer-destructuring': ['error', { array: false, object: true }],
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],

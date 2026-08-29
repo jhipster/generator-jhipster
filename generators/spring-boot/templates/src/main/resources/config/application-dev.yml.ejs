@@ -278,7 +278,17 @@ jhipster:
       # cluster: true
   <%_ } _%>
 <%_ } _%>
-<%_ if (!applicationTypeMicroservice) { _%>
+<%_ if (applicationTypeMicroservice) { _%>
+  # CORS is disabled by default on microservices, as you should access them through a gateway.
+  # If you want to enable it, please uncomment the configuration below.
+  # cors:
+  #   allowed-origins: "http://localhost:9000,https://localhost:9000"
+  #   allowed-methods: "*"
+  #   allowed-headers: "*"
+  #   exposed-headers: "Authorization,Link,X-Total-Count"
+  #   allow-credentials: true
+  #   max-age: 1800
+<%_ } else { _%>
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
@@ -297,16 +307,6 @@ jhipster:
   <%_ } _%>
     allow-credentials: true
     max-age: 1800
-<%_ } else { _%>
-  # CORS is disabled by default on microservices, as you should access them through a gateway.
-  # If you want to enable it, please uncomment the configuration below.
-  # cors:
-  #   allowed-origins: "http://localhost:9000,https://localhost:9000"
-  #   allowed-methods: "*"
-  #   allowed-headers: "*"
-  #   exposed-headers: "Authorization,Link,X-Total-Count"
-  #   allow-credentials: true
-  #   max-age: 1800
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
   security:
