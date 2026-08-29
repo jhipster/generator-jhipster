@@ -24,6 +24,8 @@ _%>
 <%_ if (viaService) { _%>
         <%- returnPrefix %> <%- entityInstance %>Service.findOne(id);
 <%_ } else { _%>
-        <%- returnPrefix %> <%- entityInstance %>Repository.<%- implementsEagerLoadApis ? 'findOneWithEagerRelationships(id)' : 'findById(id)' %><% if (!dtoMapstruct) { %>;<% } else { %>
-            .map(<%- entityToDtoReference %>);<% } %>
+        <%- returnPrefix %> <%- entityInstance %>Repository.<%- implementsEagerLoadApis ? 'findOneWithEagerRelationships(id)' : 'findById(id)' %><%- dtoMapstruct ? '' : ';' %>
+  <%_ if (dtoMapstruct) { _%>
+            .map(<%- entityToDtoReference %>);
+  <%_ } _%>
 <%_ } _%>

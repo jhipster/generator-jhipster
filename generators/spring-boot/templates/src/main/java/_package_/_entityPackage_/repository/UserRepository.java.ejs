@@ -157,7 +157,8 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
-      <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+      <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey)<%- databaseTypeCouchbase ? ' {' : ';' %>
+    <%_ if (databaseTypeCouchbase) { _%>
         return findIdByActivationKey(activationKey)
             .map(User::getId)
             .flatMap(this::findById);
@@ -169,7 +170,8 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
 
-    <%- databaseTypeCouchbase ? 'default ' : '' %><%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+    <%- databaseTypeCouchbase ? 'default ' : '' %><%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime)<%- databaseTypeCouchbase ? ' {' : ';' %>
+    <%_ if (databaseTypeCouchbase) { _%>
         return findAllById(toIds(findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(dateTime)));
     }
 
@@ -177,7 +179,8 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     <%- listOrFlux %><User> findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
     <%_ } _%>
 
-    <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+    <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey)<%- databaseTypeCouchbase ? ' {' : ';' %>
+    <%_ if (databaseTypeCouchbase) { _%>
         return findIdByResetKey(resetKey)
             .map(User::getId)
             .flatMap(this::findById);
@@ -192,7 +195,8 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
       <%_ } _%>
     <%_ } _%>
-    <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
+    <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email)<%- databaseTypeCouchbase ? ' {' : ';' %>
+    <%_ if (databaseTypeCouchbase) { _%>
         return findIdByEmailIgnoreCase(email)
             .map(User::getId)
             .flatMap(this::findById);
@@ -315,12 +319,12 @@ interface UserRepositoryInternal<% if (!authenticationTypeOauth2) { %> extends D
 
     Mono<<%- user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
 
-  <%_ if (!authenticationTypeOauth2) { _%>
-    Mono<<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
-
-  <%_ } else { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
 
     Mono<<%- user.persistClass %>> create(<%- user.persistClass %> user);
+  <%_ } else { _%>
+    Mono<<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+
   <%_ } _%>
 
     Flux<<%- user.persistClass %>> findAllWithAuthorities(Pageable pageable);
@@ -377,7 +381,13 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .take(size);
     }
 
-  <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
+    @Override
+    public Mono<<%- user.persistClass %>> create(<%- user.persistClass %> user) {
+        return r2dbcEntityTemplate.insert(<%- user.persistClass %>.class).using(user).defaultIfEmpty(user);
+    }
+
+  <%_ } else { _%>
     @Override
     public Mono<Void> delete(<%- user.persistClass %> user) {
         return db.sql("DELETE FROM <%- jhiTablePrefix %>_user_authority WHERE user_id = :userId")
@@ -386,12 +396,6 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .then(r2dbcEntityTemplate.delete(<%- user.persistClass %>.class)
                 .matching(query(where("id").is(user.getId()))).all()
                 .then());
-    }
-
-  <%_ } else { _%>
-    @Override
-    public Mono<<%- user.persistClass %>> create(<%- user.persistClass %> user) {
-        return r2dbcEntityTemplate.insert(<%- user.persistClass %>.class).using(user).defaultIfEmpty(user);
     }
 
   <%_ } _%>

@@ -169,8 +169,10 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
       <%_ if (!reactive) { _%>
             .collect(Collectors.toCollection(LinkedList::new))<% } %><% } %>;
   <%_ } else { _%>
-        return <%- entityInstance %>Repository.findAll<%- reactive ? 'By' : '' %>(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>
-            .map(<%- entityToDtoReference %>);<% } %>
+        return <%- entityInstance %>Repository.findAll<%- reactive ? 'By' : '' %>(pageable)<%- dtoMapstruct ? '' : ';' %>
+    <%_ if (dtoMapstruct) { _%>
+            .map(<%- entityToDtoReference %>);
+    <%_ } _%>
   <%_ } _%>
     }
 <%_ } _%>
@@ -313,9 +315,8 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
         LOG.debug("Request to search <%- entityClassPlural %> for query {}", query);<%- include('../../_partials_entity_/search_stream_template', { viaService: false, fromResource: false }) -%>
   <%_ } else { _%>
         LOG.debug("Request to search for a page of <%- entityClassPlural %> for query {}", query);
-        return <%- entityInstance %><%- searchEngineElasticsearch ? 'Search' : '' %>Repository.search(query, pageable)
-    <%_ if (!dtoMapstruct) { _%>;
-    <%_ } else { _%>
+        return <%- entityInstance %><%- searchEngineElasticsearch ? 'Search' : '' %>Repository.search(query, pageable)<%- dtoMapstruct ? '' : ';' %>
+    <%_ if (dtoMapstruct) { _%>
             .map(<%- entityToDtoReference %>);
     <%_ } _%>
   <%_ } _%>
