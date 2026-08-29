@@ -45,7 +45,7 @@ export interface I<%- entityAngularName %> {
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship || rel.relationshipEagerLoad)) { _%>
   <%_ const { propertyName, propertyTsType, otherEntity, collection, otherEntityField, relationshipShouldUsePick } = relationship; _%>
-  <%- propertyName %>?: <%- relationshipShouldUsePick ? 'Pick<' : '' %><%- propertyTsType %><%- relationshipShouldUsePick ? `, '${otherEntity.primaryKey.name}'${otherEntity.primaryKey.name !== otherEntityField ? ` | '${otherEntityField}'` : ''}>` : '' %><%- collection ? '[]' : '' %> | null;
+  <%- propertyName %>?: <%- relationshipShouldUsePick ? 'Pick<' : '' %><%- propertyTsType %><%- relationshipShouldUsePick ? `, '${otherEntity.primaryKey.name}'${otherEntity.primaryKey.name === otherEntityField ? '' : ` | '${otherEntityField}'`}>` : '' %><%- collection ? '[]' : '' %> | null;
 <%_ } _%>
 }
 <%_ if (!readOnly && primaryKey) { _%>

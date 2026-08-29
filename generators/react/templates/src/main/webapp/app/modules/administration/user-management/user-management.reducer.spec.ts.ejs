@@ -122,11 +122,11 @@ describe('User management reducer tests', () => {
 
   describe('Success', () => {
     it('should update state according to a successful fetch users request', () => {
-<%_ if (!databaseTypeCassandra) { _%>
+<%_ if (databaseTypeCassandra) { _%>
+      const payload = { data: 'some handsome users' };
+<%_ } else { _%>
       const headers = { ['x-total-count']: 42 };
       const payload = { data: 'some handsome users', headers };
-<%_ } else { _%>
-      const payload = { data: 'some handsome users' };
 <%_ } _%>
       const toTest = userManagement(undefined, { type: getUsers.fulfilled.type, payload });
 

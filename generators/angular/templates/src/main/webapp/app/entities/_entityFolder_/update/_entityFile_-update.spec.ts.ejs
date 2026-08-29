@@ -162,7 +162,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
   <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
   <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
     <%_ const { otherEntity } = relationship; _%>
-            expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%- otherEntity.entityInstancePlural %>Shared<% } else { %><%- relationship.relationshipFieldNamePlural %><% } %>Collection()).toContainEqual(<%- relationship.relationshipName %>);
+            expect(comp.<% if (relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%- relationship.relationshipFieldNamePlural %><% } else { %><%- otherEntity.entityInstancePlural %>Shared<% } %>Collection()).toContainEqual(<%- relationship.relationshipName %>);
   <%_ } _%>
 <%_ } _%>
             expect(comp.<%- entityInstance %>).toEqual(<%- entityInstance %>);

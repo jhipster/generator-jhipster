@@ -176,12 +176,12 @@
                     <select class="form-control" id="field_<%- relationshipName %>" data-cy="<%- propertyName %>" name="<%- relationshipName %>" formControlName="<%- propertyName %>" [compareWith]="compare<%- otherEntity.entityAngularName %>">
     <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
-    <%_ } else if (!relationship.otherRelationship) { _%>
-                    @if (!editForm.get('<%- relationshipName %>')!.value) {
+    <%_ } else if (relationship.otherRelationship) { _%>
+                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value === null) {
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } else { _%>
-                    @if (editForm.get(['<%- relationship.propertyName %>'])!.value === null) {
+                    @if (!editForm.get('<%- relationshipName %>')!.value) {
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>

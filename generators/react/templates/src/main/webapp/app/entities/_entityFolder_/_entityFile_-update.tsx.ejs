@@ -183,10 +183,10 @@ export const <%- entityReactName %>Update = () => {
   <%_ const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
       const { relationshipFieldName, relationshipFieldNamePlural } = rel;
   _%>
-  <%_ if (!rel.collection) { _%>
-          <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
-  <%_ } else { _%>
+  <%_ if (rel.collection) { _%>
           <%- relationshipFieldNamePlural %>: <%- entityInstance %>Entity?.<%- relationshipFieldNamePlural %>?.map(e => e.<%- otherEntityPkName %>.toString()),
+  <%_ } else { _%>
+          <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
   <%_ } _%>
 <%_ } _%>
         };
@@ -263,16 +263,16 @@ export const <%- entityReactName %>Update = () => {
             <%- include('react_validators') %>
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
-    <%_ if (!field.blobContentTypeText) { _%>
+    <%_ if (field.blobContentTypeText) { _%>
+            type="textarea"
+            <%- include('react_validators') %>
+          />
+    <%_ } else { _%>
       <%_ if (field.blobContentTypeImage) { _%>
             isImage accept="image/*"
       <%_ } else { _%>
             openActionLabel={translate('entity.action.open')}
       <%_ } _%>
-            <%- include('react_validators') %>
-          />
-    <%_ } else { _%>
-            type="textarea"
             <%- include('react_validators') %>
           />
     <%_ } _%>
@@ -298,7 +298,31 @@ export const <%- entityReactName %>Update = () => {
       const { relationshipName, relationshipNameHumanized, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = rel;
       const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
   _%>
-  <%_ if (!rel.collection) { _%>
+  <%_ if (rel.collection) { _%>
+          <ValidatedField
+    <%_ if (enableTranslation) { _%>
+            label={translate('<%- i18nKeyPrefix %>.<%- relationshipName %>')}
+    <%_ } else { _%>
+            label="<%- relationshipNameHumanized %>"
+    <%_ } _%>
+            id="<%- entityFileName %>-<%- relationshipName %>"
+            data-cy="<%- relationshipFieldName %>"
+            type="select"
+            multiple
+            name="<%- relationshipFieldNamePlural %>"
+            >
+              <option value="" key="0" />
+              {
+                (<%- rel.otherEntity.entityInstancePlural %>) ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
+                <option
+                    value={otherEntity.<%- otherEntityPkName %>}
+                    key={otherEntity.<%- otherEntityPkName %>}>
+                    {otherEntity.<%- otherEntityField %>}
+                </option>
+                ) : null
+              }
+          </ValidatedField>
+  <%_ } else { _%>
           <ValidatedField
             id="<%- entityFileName %>-<%- relationshipName %>"
             name="<%- relationshipFieldName %>"
@@ -327,30 +351,6 @@ export const <%- entityReactName %>Update = () => {
     <%_ if (relationshipRequired) { _%>
             <FormText><Translate contentKey="entity.validation.required">This field is required.</Translate></FormText>
     <%_ } _%>
-  <%_ } else { _%>
-          <ValidatedField
-    <%_ if (enableTranslation) { _%>
-            label={translate('<%- i18nKeyPrefix %>.<%- relationshipName %>')}
-    <%_ } else { _%>
-            label="<%- relationshipNameHumanized %>"
-    <%_ } _%>
-            id="<%- entityFileName %>-<%- relationshipName %>"
-            data-cy="<%- relationshipFieldName %>"
-            type="select"
-            multiple
-            name="<%- relationshipFieldNamePlural %>"
-            >
-              <option value="" key="0" />
-              {
-                (<%- rel.otherEntity.entityInstancePlural %>) ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
-                <option
-                    value={otherEntity.<%- otherEntityPkName %>}
-                    key={otherEntity.<%- otherEntityPkName %>}>
-                    {otherEntity.<%- otherEntityField %>}
-                </option>
-                ) : null
-              }
-          </ValidatedField>
   <%_ } _%>
 <%_ } _%>
           <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%- entityPage %>" replace variant="info">

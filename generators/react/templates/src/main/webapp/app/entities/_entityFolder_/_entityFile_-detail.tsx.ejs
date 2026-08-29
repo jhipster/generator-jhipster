@@ -90,7 +90,9 @@ export const <%- entityReactName %>Detail = () => {
   <%_ } else if (field.fieldTypeLocalDate) { _%>
               {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}
   <%_ } else if (field.fieldTypeBinary) { _%>
-    <%_ if (!field.blobContentTypeText) { _%>
+    <%_ if (field.blobContentTypeText) { _%>
+                {<%- entityInstance %>Entity.<%- field.fieldName %>}
+    <%_ } else { _%>
                 {<%- entityInstance %>Entity.<%- fieldName %> ? (
                   <div>
                     {<%- entityInstance %>Entity.<%- fieldName %>ContentType ? (
@@ -105,8 +107,6 @@ export const <%- entityReactName %>Detail = () => {
                     <span>{<%- entityInstance %>Entity.<%- fieldName %>ContentType}, {byteSize(<%- entityInstance %>Entity.<%- fieldName %>)}</span>
                   </div>
                 ) : null}
-    <%_ } else { _%>
-                {<%- entityInstance %>Entity.<%- field.fieldName %>}
     <%_ } _%>
   <%_ } else { _%>
             {<%- entityInstance %>Entity.<%- field.fieldName %>}

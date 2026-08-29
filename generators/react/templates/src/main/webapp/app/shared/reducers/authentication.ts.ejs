@@ -224,10 +224,10 @@ export const AuthenticationSlice = createSlice({
 <%_ if (!authenticationTypeJwt) { _%>
       .addCase(logoutServer.fulfilled, (<%- authenticationTypeOauth2 ? 'state, action' : '' %>) => ({
         ...initialState,
-  <%_ if (!authenticationTypeOauth2) { _%>
-        showModalLogin: true
-  <%_ } else { _%>
+  <%_ if (authenticationTypeOauth2) { _%>
         logoutUrl: action.payload.data.logoutUrl
+  <%_ } else { _%>
+        showModalLogin: true
   <%_ } _%>
       }))
 <%_ } _%>

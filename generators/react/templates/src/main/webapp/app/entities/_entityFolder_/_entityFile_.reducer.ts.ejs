@@ -61,10 +61,10 @@ export const searchEntities = createAsyncThunk(
     sort,
   <%_ } _%>
   }: IQueryParams) => {
-  <%_ if (!paginationNo) { _%>
-    const requestUrl = `${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
-  <%_ } else { _%>
+  <%_ if (paginationNo) { _%>
     const requestUrl = `${apiSearchUrl}?query=${query}`;
+  <%_ } else { _%>
+    const requestUrl = `${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
   <%_ } _%>
     return axios.get<I<%- entityReactName %>[]>(requestUrl);
   },
@@ -81,10 +81,10 @@ export const getEntities = createAsyncThunk(
 <%_ } _%>
     sort,
   }: IQueryParams) => {
-<%_ if (!paginationNo) { _%>
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${Date.now()}`;
-<%_ } else { _%>
+<%_ if (paginationNo) { _%>
     const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${Date.now()}`;
+<%_ } else { _%>
+    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${Date.now()}`;
 <%_ } _%>
     return axios.get<I<%- entityReactName %>[]>(requestUrl);
   },
@@ -109,12 +109,12 @@ export const createEntity = createAsyncThunk(
     thunkAPI,
   <%_ } _%>
   ) => {
-  <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
+    return axios.post<I<%- entityReactName %>>(apiUrl, cleanEntity(entity));
+  <%_ } else { _%>
     const result = await axios.post<I<%- entityReactName %>>(apiUrl, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
-  <%_ } else { _%>
-    return axios.post<I<%- entityReactName %>>(apiUrl, cleanEntity(entity));
   <%_ } _%>
   },
   { serializeError: serializeAxiosError }
@@ -128,12 +128,12 @@ export const updateEntity = createAsyncThunk(
     thunkAPI,
   <%_ } _%>
   ) => {
-  <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
+    return axios.put<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
+  <%_ } else { _%>
     const result = await axios.put<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
-  <%_ } else { _%>
-    return axios.put<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
   <%_ } _%>
   },
   { serializeError: serializeAxiosError }
@@ -147,12 +147,12 @@ export const partialUpdateEntity = createAsyncThunk(
     thunkAPI,
   <%_ } _%>
   ) => {
-  <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
+    return axios.patch<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
+  <%_ } else { _%>
     const result = await axios.patch<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
     return result;
-  <%_ } else { _%>
-    return axios.patch<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
   <%_ } _%>
   },
   { serializeError: serializeAxiosError }
@@ -167,12 +167,12 @@ export const deleteEntity = createAsyncThunk(
   <%_ } _%>
   ) => {
     const requestUrl = `${apiUrl}/${id}`;
-  <%_ if (!paginationInfiniteScroll) { _%>
+  <%_ if (paginationInfiniteScroll) { _%>
+    return await axios.delete<I<%- entityReactName %>>(requestUrl);
+  <%_ } else { _%>
     const result = await axios.delete<I<%- entityReactName %>>(requestUrl);
     thunkAPI.dispatch(getEntities({}));
     return result;
-  <%_ } else { _%>
-    return await axios.delete<I<%- entityReactName %>>(requestUrl);
   <%_ } _%>
   },
   { serializeError: serializeAxiosError }

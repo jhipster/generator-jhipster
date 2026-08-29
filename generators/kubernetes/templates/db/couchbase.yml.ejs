@@ -183,11 +183,7 @@ spec:
         imagePullPolicy: IfNotPresent
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
-<%_ if (!kubernetesUseDynamicStorage) { _%>
-      volumes:
-      - name: <%- app.baseName.toLowerCase() %>-couchbase-data
-        emptyDir: {}
-<%_ } else { _%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
   volumeClaimTemplates:
   - metadata:
       name: <%- app.baseName.toLowerCase() %>-couchbase-data
@@ -199,6 +195,10 @@ spec:
   <%_ if (kubernetesStorageClassName !== '') { _%>
       storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
+<%_ } else { _%>
+      volumes:
+      - name: <%- app.baseName.toLowerCase() %>-couchbase-data
+        emptyDir: {}
 <%_ } _%>
 ---
 apiVersion: <%- KUBERNETES_CORE_API_VERSION %>

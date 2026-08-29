@@ -345,7 +345,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     it<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', () => {
   <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) { _%>
     <%_ const { fieldName, fieldIsEnum } = field;
-        let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
+        let fieldValue = entityFakeData ? entityFakeData[field.fieldName] : field.generateFakeData('cypress');
         if (fieldValue === undefined) {
           continue;
         }
