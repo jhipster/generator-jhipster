@@ -21,7 +21,7 @@ import axios from 'axios';
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
 
-const TIMEOUT = 1000000;
+const TIMEOUT = 1 * 60 * 1000;
 const onRequestSuccess = config => {
 <%_ if (authenticationTypeJwt) { _%>
   const token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
