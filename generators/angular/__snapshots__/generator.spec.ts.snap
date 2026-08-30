@@ -4,7 +4,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
 {
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.html": {
     "contents": "@if (userManagement) {
-<form name="deleteForm" (ngSubmit)="confirmDelete(userManagement.login!)">
+<form name="deleteForm" (ngSubmit)="confirmDelete(userManagement.login)">
   <div class="modal-header">
     <h4 class="modal-title" data-cy="userManagementDeleteDialogHeading">
       Confirm delete operation
