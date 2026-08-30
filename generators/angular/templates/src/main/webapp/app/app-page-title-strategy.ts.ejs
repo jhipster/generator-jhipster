@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { inject, Service } from "@angular/core";
+import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from "@angular/router";
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from "@ngx-translate/core";
@@ -27,16 +28,17 @@ export class AppPageTitleStrategy extends TitleStrategy {
 <%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);
 <%_ } _%>
+  private readonly title = inject(Title);
 
   override updateTitle(routerState: RouterStateSnapshot): void {
     let pageTitle = this.buildTitle(routerState);
     pageTitle ??= '<% if (enableTranslation) { %>global.title<% } else { %><%- humanizedBaseName %><% } %>';
 <%_ if (enableTranslation) { _%>
     this.translateService.get(pageTitle).subscribe(title => {
-        document.title = title;
+        this.title.setTitle(title);
     });
 <%_ } else { _%>
-    document.title = pageTitle;
+    this.title.setTitle(pageTitle);
 <%_ } _%>
   }
 }
