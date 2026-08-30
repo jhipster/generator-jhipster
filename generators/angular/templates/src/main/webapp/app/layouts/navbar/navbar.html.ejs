@@ -27,7 +27,7 @@
     class="navbar-toggler d-lg-none"
     href="javascript:void(0);"
     aria-controls="navbarResponsive"
-    aria-expanded="false"
+    [attr.aria-expanded]="!isNavbarCollapsed()"
     aria-label="Toggle navigation"
     (click)="isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed)"
   >
