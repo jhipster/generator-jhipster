@@ -204,7 +204,7 @@ export class UserManagementDeleteDialog {
       </dl>
 
       <button
-        type="submit"
+        type="button"
         (click)="previousState()"
         class="btn btn-info"
         data-cy="entityDetailsBackButton"
@@ -475,7 +475,7 @@ export class UserManagementDetail {
               </a>
 
               <button
-                type="submit"
+                type="button"
                 (click)="delete(userManagement)"
                 class="btn btn-danger btn-sm"
                 [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
