@@ -67,6 +67,10 @@ import org.springframework.util.StringUtils;
 public class LiquibaseConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(LiquibaseConfiguration.class);
+<%_ if (databaseTypeCassandra) { _%>
+
+    private static final int LIQUIBASE_REQUEST_TIMEOUT_MILLIS = 20_000;
+<%_ } _%>
 
     private final Environment env;
 
@@ -161,7 +165,11 @@ public class LiquibaseConfiguration {
                 cassandraProperties.getKeyspaceName() +
                 // The Liquibase compliance mode reports -1 affected rows for the changelog lock LWT update,
                 // otherwise liquibase-cassandra misreads the acquired lock and waits for it forever.
-                "?compliancemode=Liquibase&localdatacenter=" +
+                // Each changeSet is a schema change that must reach schema agreement, which does not fit in the
+                // driver's 2s default request timeout on a loaded machine.
+                "?compliancemode=Liquibase&requesttimeout=" +
+                LIQUIBASE_REQUEST_TIMEOUT_MILLIS +
+                "&localdatacenter=" +
                 connectionDetails.getLocalDatacenter()
             );
         });

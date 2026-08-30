@@ -118,7 +118,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               return 'jdbc:neo4j:bolt://localhost:7687';
             }
             if (data.databaseTypeCassandra) {
-              return `jdbc:cassandra://localhost:9042/${data.cassandraKeyspaceName}?compliancemode=Liquibase&localdatacenter=datacenter1`;
+              return `jdbc:cassandra://localhost:9042/${data.cassandraKeyspaceName}?compliancemode=Liquibase&requesttimeout=20000&localdatacenter=datacenter1`;
             }
             return getJdbcUrl(data.prodDatabaseType, {
               databaseName: data.prodDatabaseName,
