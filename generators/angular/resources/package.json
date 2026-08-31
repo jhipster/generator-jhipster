@@ -45,7 +45,7 @@
     "typescript-eslint": "8.68.0",
     "vitest": "4.1.11",
     "vitest-sonar-reporter": "3.0.0",
-    "webpack": "5.109.2",
+    "webpack": "5.110.1",
     "webpack-bundle-analyzer": "5.3.2",
     "webpack-merge": "6.0.1",
     "webpack-notifier": "1.15.0"
