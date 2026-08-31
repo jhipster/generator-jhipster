@@ -225,7 +225,7 @@
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
-                            <button type="submit" (click)="delete(<%- entityInstance %>)"
+                            <button type="button" (click)="delete(<%- entityInstance %>)"
                                     class="btn btn-danger btn-sm"
   <%_ if (builtInUserManagement) { _%>
                                     [disabled]="!currentAccount() || currentAccount()?.login === <%- entityInstance %>.login"
