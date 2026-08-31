@@ -19,7 +19,7 @@
     "sockjs-client": "1.6.1",
     "vue": "3.5.41",
     "vue-i18n": "11.4.9",
-    "vue-router": "5.2.0"
+    "vue-router": "5.3.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
