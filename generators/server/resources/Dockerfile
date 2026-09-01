@@ -20,7 +20,7 @@ FROM mysql:26.7.0
 
 FROM mariadb:12.3.3
 
-FROM mongo:8.2.12
+FROM mongo:8.3.8
 LABEL ALIAS=mongodb
 
 FROM couchbase/server:8.0.2
