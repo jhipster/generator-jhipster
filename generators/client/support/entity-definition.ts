@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.ts';
+import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.d.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
@@ -26,10 +26,6 @@ import { filterRelevantRelationships } from './template-utils.ts';
 import getTypescriptKeyType from './types-utils.ts';
 
 const dbTypes = fieldTypes;
-const {
-  Validations: { REQUIRED },
-} = validations;
-
 const {
   STRING: TYPE_STRING,
   INTEGER: TYPE_INTEGER,
@@ -108,7 +104,7 @@ const generateEntityClientFields = (
   relevantRelationships.forEach(relationship => {
     let fieldType: string;
     let fieldName: string;
-    const nullable = !relationship.relationshipValidateRules?.includes(REQUIRED);
+    const nullable = !relationship.relationshipRequired;
     const { relationshipType } = relationship;
     if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
       fieldType = `I${relationship.otherEntity.entityAngularName}[]`;

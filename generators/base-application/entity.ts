@@ -201,13 +201,15 @@ type BaseApplicationAddedRelationshipProperties = DerivedBooleanPropertiesOf<
     relationshipSerializePrimaryKeyOnly?: boolean;
 
     relationshipValidate?: boolean;
+    /** Normalized {@link BaseRelationship.relationshipValidateRules}. */
+    relationshipValidateRules?: string[];
   };
 
 /**
  * Represents a relationship with an otherRelationship.
  * Interface is used to allow `this` type in the otherRelationship.
  */
-export interface Relationship extends BaseApplicationAddedRelationshipProperties, BaseRelationship {
+export interface Relationship extends BaseApplicationAddedRelationshipProperties, Omit<BaseRelationship, 'relationshipValidateRules'> {
   otherRelationship: this;
 }
 

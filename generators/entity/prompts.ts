@@ -924,7 +924,7 @@ function logFieldsAndRelationships(this: EntityGenerator) {
     this.log.log(chalk.white('Relationships'));
     this.entityConfig.relationships.forEach(relationship => {
       const validationDetails: string[] = [];
-      if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
+      if ([relationship.relationshipValidateRules ?? []].flat().includes(REQUIRED)) {
         validationDetails.push(REQUIRED);
       }
       this.log.log(
