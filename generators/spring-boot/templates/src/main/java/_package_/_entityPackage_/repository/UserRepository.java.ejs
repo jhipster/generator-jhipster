@@ -655,17 +655,17 @@ public class UserRepository {
                 Flux<ReactiveResultSet> deleteOps = Flux.empty();
     <%_ if (generateUserManagement) { _%>
                 if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
-                    deleteOps.mergeWith(session.execute(deleteByActivationKeyStmt.bind().setString("activation_key", oldUser.getActivationKey())));
+                    deleteOps = deleteOps.mergeWith(session.execute(deleteByActivationKeyStmt.bind().setString("activation_key", oldUser.getActivationKey())));
                 }
                 if (!StringUtils.isEmpty(oldUser.getResetKey()) && !oldUser.getResetKey().equals(user.getResetKey())) {
-                    deleteOps.mergeWith(session.execute(deleteByResetKeyStmt.bind().setString("reset_key", oldUser.getResetKey())));
+                    deleteOps = deleteOps.mergeWith(session.execute(deleteByResetKeyStmt.bind().setString("reset_key", oldUser.getResetKey())));
                 }
     <%_ } _%>
                 if (!StringUtils.isEmpty(oldUser.getLogin()) && !oldUser.getLogin().equals(user.getLogin())) {
-                    deleteOps.mergeWith(session.execute(deleteByLoginStmt.bind().setString("login", oldUser.getLogin())));
+                    deleteOps = deleteOps.mergeWith(session.execute(deleteByLoginStmt.bind().setString("login", oldUser.getLogin())));
                 }
                 if (!StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(user.getEmail())) {
-                    deleteOps.mergeWith(session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase())));
+                    deleteOps = deleteOps.mergeWith(session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase())));
                 }
                 return deleteOps;
             })
