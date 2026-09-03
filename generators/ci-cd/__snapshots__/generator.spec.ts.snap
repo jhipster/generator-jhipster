@@ -42,6 +42,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
+  "cassandraKeyspaceName": undefined,
   "ciCd": [
     "github",
     "jenkins",

@@ -38,6 +38,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
+  "cassandraKeyspaceName": undefined,
   "clientDistDir": "target/classes/static/",
   "clientFramework": "angular",
   "clientPackageJsonScripts": Any<Object>,

@@ -28,6 +28,7 @@ type SpringBootLoadingAddedApplicationProperties = {
 
 type SpringBootPreparingAddedApplicationProperties = {
   springDataDescription: string;
+  cassandraKeyspaceName: string | undefined;
 };
 
 export type SpringBootAddedApplicationProperties = SpringBootLoadingAddedApplicationProperties &
@@ -56,6 +57,9 @@ export const mutateApplicationPreparing = {
       }
     }
     return `Spring Data ${springDataDatabase}`;
+  },
+  cassandraKeyspaceName({ baseName, databaseTypeCassandra }) {
+    return databaseTypeCassandra ? baseName.toLowerCase().replace(/[^a-z0-9_]/g, '') : undefined;
   },
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<SpringBootApplication>,
