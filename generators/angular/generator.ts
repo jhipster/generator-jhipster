@@ -421,16 +421,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           '9.2.1': [
             `${application.clientSrcDir}app/core/config/application-config.service.ts`,
             `${application.clientSrcDir}app/core/config/application-config.service.spec.ts`,
-            `${application.clientRootDir}build-plugins/package.json`,
-            // Webpack was replaced with esbuild
-            `${application.clientRootDir}webpack/environment.js`,
-            `${application.clientRootDir}webpack/package.json`,
-            `${application.clientRootDir}webpack/proxy.conf.js`,
-            `${application.clientRootDir}webpack/webpack.custom.js`,
-            `${application.clientRootDir}webpack/logo-jhipster.png`,
-            [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
+            [application.clientBundlerEsbuild!, `${application.clientRootDir}build-plugins/package.json`],
             [
-              true,
+              application.clientBundlerEsbuild!,
               // Previously copied into the sources by build-plugins/define-esbuild.ts
               ...[
                 'axios.min.js',
@@ -444,6 +437,15 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             ],
             [!application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/login.model.ts`],
             [application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/logout.model.ts`],
+          ],
+          '9.3.1': [
+            // Webpack was replaced with esbuild
+            `${application.clientRootDir}webpack/environment.js`,
+            `${application.clientRootDir}webpack/package.json`,
+            `${application.clientRootDir}webpack/proxy.conf.js`,
+            `${application.clientRootDir}webpack/webpack.custom.js`,
+            `${application.clientRootDir}webpack/logo-jhipster.png`,
+            [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
           ],
         });
       },
