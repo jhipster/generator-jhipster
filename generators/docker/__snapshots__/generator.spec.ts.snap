@@ -861,8 +861,6 @@ services:
     depends_on:
       cassandra:
         condition: service_healthy
-      cassandra-migration:
-        condition: service_completed_successfully
       elasticsearch:
         condition: service_healthy
       keycloak:
@@ -871,10 +869,6 @@ services:
     extends:
       file: ./cassandra.yml
       service: cassandra
-  cassandra-migration:
-    extends:
-      file: ./cassandra.yml
-      service: cassandra-migration
   elasticsearch:
     extends:
       file: ./elasticsearch.yml
@@ -915,19 +909,7 @@ exports[`generator - docker microservice-oauth2-reactive(true)-gradle-enableTran
   "src/main/docker/cassandra-cluster.yml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/cassandra-migration.yml": {
-    "stateCleared": "modified",
-  },
   "src/main/docker/cassandra.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/cassandra/Cassandra-Migration.Dockerfile": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/cassandra/scripts/autoMigrate.sh": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/cassandra/scripts/execute-cql.sh": {
     "stateCleared": "modified",
   },
   "src/main/docker/central-server-config/README.md": {

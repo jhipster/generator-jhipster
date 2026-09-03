@@ -89,6 +89,70 @@ describe(`generator - ${databaseType}`, () => {
     });
   });
 
+  describe('keyspace creation', () => {
+    const javaPackageDir = 'src/main/java/com/mycompany/myapp/';
+    const javaTestPackageDir = 'src/test/java/com/mycompany/myapp/';
+    const dockerDir = 'src/main/docker/';
+    const cqlLoaderFiles = [
+      'src/main/resources/config/cql/create-keyspace.cql',
+      'src/main/resources/config/cql/create-keyspace-prod.cql',
+      'src/main/resources/config/cql/drop-keyspace.cql',
+      `${dockerDir}cassandra-migration.yml`,
+      `${dockerDir}cassandra/Cassandra-Migration.Dockerfile`,
+      `${dockerDir}cassandra/scripts/autoMigrate.sh`,
+      `${dockerDir}cassandra/scripts/execute-cql.sh`,
+    ];
+
+    describe('with liquibase', () => {
+      before(async () => {
+        await helpers.runJHipster('server').withJHipsterConfig({ databaseType, databaseMigration: 'liquibase', skipClient: true });
+      });
+
+      it('should create the keyspace from the application', () => {
+        runResult.assertFileContent(`${javaPackageDir}config/DatabaseConfiguration.java`, 'CqlSessionBuilderCustomizer keyspaceCreator(');
+        runResult.assertFileContent(`${javaPackageDir}config/DatabaseConfiguration.java`, 'CREATE KEYSPACE IF NOT EXISTS');
+        runResult.assertFileContent(`${javaPackageDir}config/ApplicationProperties.java`, 'keyspaceReplication');
+        runResult.assertFileContent('src/main/resources/config/application-prod.yml', 'keyspace-replication:');
+      });
+
+      it('should run liquibase after the session created the keyspace', () => {
+        runResult.assertFileContent(`${javaPackageDir}config/LiquibaseConfiguration.java`, 'CqlSession session');
+        runResult.assertNoFileContent(`${javaPackageDir}config/LiquibaseConfiguration.java`, 'CassandraProperties');
+      });
+
+      it('should not create the keyspace from the test container', () => {
+        runResult.assertNoFileContent(`${javaTestPackageDir}config/CassandraTestContainer.java`, 'createKeyspace');
+      });
+
+      it('should not generate the cql migration container and scripts', () => {
+        runResult.assertNoFile(cqlLoaderFiles);
+        runResult.assertNoFileContent(`${dockerDir}cassandra.yml`, 'cassandra-migration');
+        runResult.assertNoFileContent(`${dockerDir}cassandra-cluster.yml`, 'cassandra-migration');
+        runResult.assertNoFileContent(`${dockerDir}app.yml`, 'cassandra-migration');
+      });
+    });
+
+    describe('with the cql loader', () => {
+      before(async () => {
+        await helpers.runJHipster('server').withJHipsterConfig({ databaseType, databaseMigration: 'loader', skipClient: true });
+      });
+
+      it('should create the keyspace from the cql migration container', () => {
+        runResult.assertFile(cqlLoaderFiles);
+        runResult.assertFileContent(`${dockerDir}cassandra.yml`, 'CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql');
+        runResult.assertFileContent(`${dockerDir}cassandra-cluster.yml`, 'CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql');
+        runResult.assertFileContent(`${dockerDir}app.yml`, 'cassandra-migration');
+        runResult.assertFileContent(`${javaTestPackageDir}config/CassandraTestContainer.java`, 'createKeyspace');
+      });
+
+      it('should not create the keyspace from the application', () => {
+        runResult.assertNoFileContent(`${javaPackageDir}config/DatabaseConfiguration.java`, 'keyspaceCreator');
+        runResult.assertNoFileContent(`${javaPackageDir}config/ApplicationProperties.java`, 'keyspaceReplication');
+        runResult.assertNoFileContent('src/main/resources/config/application-prod.yml', 'keyspace-replication:');
+      });
+    });
+  });
+
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
   });

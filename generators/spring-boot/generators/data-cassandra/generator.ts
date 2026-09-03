@@ -100,6 +100,9 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
             // The custom cql migration was replaced with liquibase, the files are kept by the loader migration
             [
               application.databaseMigrationLiquibase,
+              `${application.srcMainResources}config/cql/create-keyspace-prod.cql`,
+              `${application.srcMainResources}config/cql/create-keyspace.cql`,
+              `${application.srcMainResources}config/cql/drop-keyspace.cql`,
               `${application.srcMainResources}config/cql/changelog/README.md`,
               `${application.srcMainResources}config/cql/changelog/00000000000000_create-tables.cql`,
               `${application.srcMainResources}config/cql/changelog/00000000000001_insert_default_users.cql`,
@@ -149,6 +152,15 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addLog({ source }) {
         source.addMainLog?.({ name: 'com.datastax.oss.driver', level: 'INFO' });
+      },
+      customizeApplicationProperties({ application, source }) {
+        if (application.databaseMigrationLiquibase) {
+          // Replication of the keyspace created by the application when it does not exist yet
+          source.addApplicationPropertiesClass?.({
+            propertyType: 'Cassandra',
+            classStructure: { keyspaceReplication: ['String', `"{'class': 'SimpleStrategy', 'replication_factor': 1}"`] },
+          });
+        }
       },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;

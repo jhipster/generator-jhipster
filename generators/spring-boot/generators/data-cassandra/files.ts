@@ -31,13 +31,15 @@ export const cassandraFiles = asWriteFilesSection<JavaApplication>({
   ],
   serverResource: [
     {
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['config/cql/create-keyspace-prod.cql', 'config/cql/create-keyspace.cql', 'config/cql/drop-keyspace.cql'],
-    },
-    {
+      // The keyspace is created by the application when liquibase is used
       condition: generator => generator.databaseMigrationLoader,
       path: SERVER_MAIN_RES_DIR,
-      templates: ['config/cql/changelog/README.md'],
+      templates: [
+        'config/cql/create-keyspace-prod.cql',
+        'config/cql/create-keyspace.cql',
+        'config/cql/drop-keyspace.cql',
+        'config/cql/changelog/README.md',
+      ],
     },
     {
       condition: generator =>

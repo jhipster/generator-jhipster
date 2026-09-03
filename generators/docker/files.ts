@@ -20,13 +20,14 @@
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { clientRootTemplatesBlock } from '../client/support/files.ts';
 import { TEMPLATES_DOCKER_DIR } from '../generator-constants.ts';
+import type { Application as SpringBootApplication } from '../spring-boot/types.ts';
 
 import type { Application as DockerApplication } from './types.ts';
 
 const renameTo = (ctx: DockerApplication, filepath: string) =>
   `${ctx.dockerServicesDir}${filepath}`.replace('/_eureka_', '').replace('/_consul_', '');
 
-export const dockerFiles = asWriteFilesSection<DockerApplication>({
+export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<SpringBootApplication, 'databaseMigrationLoader'>>>({
   commonFiles: [
     clientRootTemplatesBlock({
       templates: ['eslint.config.ts.jhi.docker'],
@@ -78,10 +79,15 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       condition: ctx => ctx.dockerServices.includes('cassandra'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
+      templates: ['cassandra.yml', 'cassandra-cluster.yml'],
+    },
+    {
+      // The cql loader migration creates the keyspace and applies the cql scripts, liquibase applications do it at startup
+      condition: ctx => ctx.dockerServices.includes('cassandra') && ctx.databaseMigrationLoader,
+      path: TEMPLATES_DOCKER_DIR,
+      renameTo,
       templates: [
         // docker-compose files
-        'cassandra.yml',
-        'cassandra-cluster.yml',
         'cassandra-migration.yml',
         // dockerfiles
         'cassandra/Cassandra-Migration.Dockerfile',

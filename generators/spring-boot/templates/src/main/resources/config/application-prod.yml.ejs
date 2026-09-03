@@ -297,4 +297,11 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
+<%_ if (databaseTypeCassandra && databaseMigrationLiquibase) { _%>
+application:
+  cassandra:
+    # Replication of the keyspace created by the application when it does not exist yet, match it to the cluster topology
+    keyspace-replication: "{'class': 'SimpleStrategy', 'replication_factor': 1}"
+<%_ } else { _%>
 # application:
+<%_ } _%>

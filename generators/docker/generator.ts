@@ -155,6 +155,20 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.2.1': [
+            // The keyspace is created by the application and the tables by liquibase, the cql migration container is not needed
+            [
+              application.databaseTypeCassandra && application.databaseMigrationLiquibase,
+              `${application.dockerServicesDir}cassandra-migration.yml`,
+              `${application.dockerServicesDir}cassandra/Cassandra-Migration.Dockerfile`,
+              `${application.dockerServicesDir}cassandra/scripts/autoMigrate.sh`,
+              `${application.dockerServicesDir}cassandra/scripts/execute-cql.sh`,
+            ],
+          ],
+        });
+      },
       async writeDockerFiles({ application }) {
         await this.writeFiles({
           sections: dockerFiles,
@@ -173,14 +187,19 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
       async dockerServices({ application, source }) {
         if (application.dockerServices.includes('cassandra')) {
           const serviceName = application.databaseType!;
-          source.addDockerExtendedServiceToApplicationAndServices!(
-            { serviceName },
-            { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' },
-          );
-          source.addDockerDependencyToApplication!(
-            { serviceName, condition: SERVICE_HEALTHY },
-            { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY },
-          );
+          if (application.databaseMigrationLoader) {
+            source.addDockerExtendedServiceToApplicationAndServices!(
+              { serviceName },
+              { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' },
+            );
+            source.addDockerDependencyToApplication!(
+              { serviceName, condition: SERVICE_HEALTHY },
+              { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY },
+            );
+          } else {
+            source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
+            source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
+          }
         }
 
         for (const serviceName of intersection(['postgresql', 'mysql', 'mariadb', 'mssql'], application.dockerServices)) {

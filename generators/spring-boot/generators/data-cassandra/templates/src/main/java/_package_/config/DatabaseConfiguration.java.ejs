@@ -18,9 +18,18 @@
 -%>
 package <%- packageName %>.config;
 
+<%_ if (databaseMigrationLiquibase) { _%>
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+<%_ } _%>
 import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.TupleType;
+<%_ if (databaseMigrationLiquibase) { _%>
+import org.springframework.boot.cassandra.autoconfigure.CassandraProperties;
+import org.springframework.boot.cassandra.autoconfigure.CqlSessionBuilderCustomizer;
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -29,6 +38,9 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 
 import jakarta.annotation.Nonnull;
+<%_ if (databaseMigrationLiquibase) { _%>
+import java.time.Duration;
+<%_ } _%>
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -37,6 +49,35 @@ import java.util.List;
 
 @Configuration
 public class DatabaseConfiguration {
+<%_ if (databaseMigrationLiquibase) { _%>
+
+    // CREATE KEYSPACE is a schema change that must reach schema agreement, which does not fit in the driver's 2s default
+    // request timeout on a loaded machine.
+    private static final int KEYSPACE_CREATION_TIMEOUT_SECONDS = 20;
+
+    /**
+     * Creates the keyspace when it does not exist yet.
+     * The application session is bound to the keyspace, so the keyspace is created through a keyspace-less session
+     * before the application session connects. Liquibase creates the tables once the session is available.
+     */
+    @Bean
+    public CqlSessionBuilderCustomizer keyspaceCreator(CassandraProperties cassandraProperties, ApplicationProperties applicationProperties) {
+        return builder -> {
+            String keyspaceName = cassandraProperties.getKeyspaceName();
+            try (CqlSession session = builder.withKeyspace((CqlIdentifier) null).build()) {
+                session.execute(
+                    SimpleStatement.newInstance(
+                        "CREATE KEYSPACE IF NOT EXISTS " +
+                        keyspaceName +
+                        " WITH replication = " +
+                        applicationProperties.getCassandra().getKeyspaceReplication()
+                    ).setTimeout(Duration.ofSeconds(KEYSPACE_CREATION_TIMEOUT_SECONDS))
+                );
+            }
+            builder.withKeyspace(keyspaceName);
+        };
+    }
+<%_ } _%>
 
     @Bean
     public CassandraCustomConversions cassandraCustomConversions() {
