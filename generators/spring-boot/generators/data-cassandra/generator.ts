@@ -44,7 +44,7 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
         // Cassandra switched from the custom CQL loader to liquibase, keep the loader for existing applications.
         // Cassandra ignored databaseMigration before, so any stored value other than an explicit liquibase
         // opt-in means the application still relies on the CQL scripts.
-        if (control.isJhipsterVersionLessThan('9.2.1') && this.jhipsterConfig.databaseMigration !== 'liquibase') {
+        if (control.isJhipsterVersionLessThan('9.3.1') && this.jhipsterConfig.databaseMigration !== 'liquibase') {
           this.jhipsterConfig.databaseMigration = 'loader';
         }
       },
@@ -97,6 +97,8 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
             `${application.javaPackageTestDir}config/CassandraTestContainersSpringContextCustomizerFactory.java`,
             `${application.javaPackageTestDir}config/EmbeddedCassandra.java`,
             `${application.srcTestResources}META-INF/spring.factories`,
+          ],
+          '9.3.1': [
             // The custom cql migration was replaced with liquibase, the files are kept by the loader migration
             [
               application.databaseMigrationLiquibase,

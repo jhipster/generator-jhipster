@@ -47,9 +47,9 @@ describe(`generator - ${databaseType}`, () => {
           .withSkipWritingPriorities()
           .withMockedJHipsterGenerators();
 
-      describe('application prior to v9.2.1', () => {
+      describe('application prior to v9.3.1', () => {
         before(async () => {
-          await runCassandra({ jhipsterVersion: '9.2.0' });
+          await runCassandra({ jhipsterVersion: '9.3.0' });
         });
 
         it('should keep the cql loader', () => {
@@ -57,9 +57,9 @@ describe(`generator - ${databaseType}`, () => {
         });
       });
 
-      describe('application prior to v9.2.1 without a migration tool', () => {
+      describe('application prior to v9.3.1 without a migration tool', () => {
         before(async () => {
-          await runCassandra({ jhipsterVersion: '9.2.0', databaseMigration: 'no' });
+          await runCassandra({ jhipsterVersion: '9.3.0', databaseMigration: 'no' });
         });
 
         it('should keep the cql loader, databaseMigration was ignored by cassandra', () => {
@@ -67,9 +67,9 @@ describe(`generator - ${databaseType}`, () => {
         });
       });
 
-      describe('application prior to v9.2.1 which opted into liquibase', () => {
+      describe('application prior to v9.3.1 which opted into liquibase', () => {
         before(async () => {
-          await runCassandra({ jhipsterVersion: '9.2.0', databaseMigration: 'liquibase' });
+          await runCassandra({ jhipsterVersion: '9.3.0', databaseMigration: 'liquibase' });
         });
 
         it('should keep liquibase', () => {
@@ -77,9 +77,9 @@ describe(`generator - ${databaseType}`, () => {
         });
       });
 
-      describe('application at v9.2.1', () => {
+      describe('application at v9.3.1', () => {
         before(async () => {
-          await runCassandra({ jhipsterVersion: '9.2.1' });
+          await runCassandra({ jhipsterVersion: '9.3.1' });
         });
 
         it('should not force a migration tool, liquibase is the default', () => {

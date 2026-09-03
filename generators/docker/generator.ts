@@ -157,7 +157,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
         await control.cleanupFiles({
-          '9.2.1': [
+          '9.3.1': [
             // The keyspace is created by the application and the tables by liquibase, the cql migration container is not needed
             [
               application.databaseTypeCassandra && application.databaseMigrationLiquibase,

@@ -73,7 +73,7 @@ export const cleanupCassandraEntityFilesTask = asWritingEntitiesTask<SpringBootE
   for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
     await control.cleanupFiles({
       // The custom cql migration was replaced with liquibase
-      '9.2.1': [`${application.srcMainResources}config/cql/changelog/${entity.changelogDate}_added_entity_${entity.entityClass}.cql`],
+      '9.3.1': [`${application.srcMainResources}config/cql/changelog/${entity.changelogDate}_added_entity_${entity.entityClass}.cql`],
     });
   }
 });
