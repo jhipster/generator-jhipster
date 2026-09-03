@@ -38,6 +38,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
+  "cassandraKeyspaceName": undefined,
   "clientDistDir": "target/classes/static/",
   "clientFramework": "no",
   "clientPackageJsonScripts": Any<Object>,

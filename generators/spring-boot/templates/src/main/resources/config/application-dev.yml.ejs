@@ -160,7 +160,7 @@ spring:
   cassandra:
     contact-points: localhost
     compression: LZ4
-    keyspace-name: <%- baseName %>
+    keyspace-name: <%- cassandraKeyspaceName %>
     local-datacenter: datacenter1
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
