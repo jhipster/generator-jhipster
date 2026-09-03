@@ -46,7 +46,8 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%- entityClass %>Repository extends R2dbcRepository<<%- persistClass %>, <%- primaryKey.type %>> {<% if (emptyRepository) { %>}<% } else { %>
+public interface <%- entityClass %>Repository extends R2dbcRepository<<%- persistClass %>, <%- primaryKey.type %>> {
+<%_ if (!emptyRepository) { _%>
   <%_ if (!paginationNo) { _%>
 
     Flux<<%- persistClass %>> findAllBy(Pageable pageable);
@@ -70,4 +71,5 @@ public interface <%- entityClass %>Repository extends R2dbcRepository<<%- persis
     Flux<<%- persistClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull();
     <%_ } _%>
   <%_ } _%>
-}<% } %>
+<%_ } _%>
+}
