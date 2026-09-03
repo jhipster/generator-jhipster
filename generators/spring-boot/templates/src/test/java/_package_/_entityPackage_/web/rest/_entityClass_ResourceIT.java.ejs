@@ -69,14 +69,23 @@ import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
   _%>
   <%_ if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) { _%>
     <%_ if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
+import <%- relationship.otherEntity.entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
       <%_ imported.push(relationship.otherEntity.entityNameCapitalized); _%>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
+<%_ const otherEntityResourceITs = new Set(
+      relationships
+        .filter(relationship => relationship.relationshipValidate === true || relationship.id || (jpaMetamodelFiltering && filterTestableRelationships.includes(relationship)))
+        .map(relationship => relationship.otherEntity)
+        .filter(otherEntity => otherEntity.entityAbsolutePackage !== entityAbsolutePackage),
+    ); _%>
+<%_ for (const otherEntity of otherEntityResourceITs) { _%>
+import <%- otherEntity.entityAbsolutePackage %>.web.rest.<%- otherEntity.entityNameCapitalized %>ResourceIT;
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
   <%_ for (const relationship of filterTestableRelationships) { _%>
-import <%- entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
+import <%- relationship.otherEntity.entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
   <%_ } _%>
 <%_ } _%>
 <%_ if (hasUserRepository) { _%>
@@ -87,7 +96,7 @@ import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 <%_ } _%>
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
-import <%- entityAbsolutePackage %>.repository.<%- mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository;
+import <%- mapsIdAssoc.otherEntity.entityAbsolutePackage %>.repository.<%- mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
@@ -253,7 +262,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 @AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser<% if (entityAuthority) { %>(authorities = {"<%- entityAuthority %>"})<% } %>
-class <%- entityClass %>ResourceIT {
+<%- entityRestIntegrationTestPublic ? 'public ' : '' %>class <%- entityClass %>ResourceIT {
 <%_ if (fieldsToTest.some(field => field.fieldTypeLocalTime)) { _%>
 
     private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");

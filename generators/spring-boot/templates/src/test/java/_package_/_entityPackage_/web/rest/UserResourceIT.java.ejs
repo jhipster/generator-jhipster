@@ -115,7 +115,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } _%>
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
-class UserResourceIT {
+<%- entityRestIntegrationTestPublic ? 'public ' : '' %>class UserResourceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe";
 <%_ if (!authenticationTypeOauth2) { _%>

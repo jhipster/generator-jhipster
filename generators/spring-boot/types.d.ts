@@ -92,6 +92,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   reactiveUniqueEntityTypes: Set<string>;
 
   requiresPersistableImplementation?: boolean;
+  /** The REST integration test is referenced from another package, so it must be public. */
+  entityRestIntegrationTestPublic?: boolean;
 }
 
 export type Source = JavaSource &

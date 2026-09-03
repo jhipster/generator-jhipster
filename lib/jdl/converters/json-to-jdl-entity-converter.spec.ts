@@ -251,7 +251,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           if (!relationship) {
             throw new Error('Relationship not found');
           }
-          expect(relationship.isInjectedFieldInFromRequired).toBeUndefined();
+          expect(relationship.isInjectedFieldInFromRequired).toBe(false);
           expect(relationship.isInjectedFieldInToRequired).toBe(true);
         });
         it('should parse required relationships in owned', () => {
@@ -260,7 +260,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             throw new Error('Relationship not found');
           }
           expect(relationship.isInjectedFieldInToRequired).toBe(true);
-          expect(relationship.isInjectedFieldInFromRequired).toBeUndefined();
+          expect(relationship.isInjectedFieldInFromRequired).toBe(false);
         });
       });
 

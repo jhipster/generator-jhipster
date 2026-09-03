@@ -201,7 +201,6 @@ type BaseApplicationAddedRelationshipProperties = DerivedBooleanPropertiesOf<
     relationshipSerializePrimaryKeyOnly?: boolean;
 
     relationshipValidate?: boolean;
-    relationshipValidateRules?: string[];
   };
 
 /**
