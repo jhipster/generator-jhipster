@@ -76,14 +76,14 @@ describe('generator - entity --single-entity', () => {
 
       it('should create files for entity Foo', () => {
         runResult.assertFile([
-          `${SERVER_MAIN_RES_DIR}config/cql/changelog/20160926101210_added_entity_Foo.cql`,
+          `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_Foo.xml`,
           `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
         ]);
       });
 
       it('should not create files for the entity Bar', () => {
         runResult.assertNoFile([
-          `${SERVER_MAIN_RES_DIR}config/cql/changelog/20160926101211_added_entity_Bar.cql`,
+          `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101211_added_entity_Bar.xml`,
           `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Bar.java`,
         ]);
       });

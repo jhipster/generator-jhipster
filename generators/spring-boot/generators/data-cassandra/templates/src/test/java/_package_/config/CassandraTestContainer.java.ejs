@@ -18,12 +18,14 @@
 -%>
 package <%- packageName %>.config;
 
+<%_ if (databaseMigrationLoader) { _%>
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import java.io.IOException;
+<%_ } _%>
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import org.slf4j.Logger;
@@ -31,8 +33,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
+<%_ if (databaseMigrationLoader) { _%>
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.data.cassandra.core.cql.session.init.ResourceKeyspacePopulator;
+<%_ } _%>
 import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.cassandra.CassandraContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
@@ -43,9 +47,15 @@ public class CassandraTestContainer {
     public static final String DEFAULT_KEYSPACE_NAME = "cassandratestkeyspace";
 
     private static final Logger LOG = LoggerFactory.getLogger(CassandraTestContainer.class);
+<%_ if (databaseMigrationLoader) { _%>
     private static final int DATABASE_REQUEST_TIMEOUT_SECONDS = 20;
+<%_ } _%>
     private static final int CONTAINER_STARTUP_TIMEOUT_MINUTES = 10;
 
+<%_ if (databaseMigrationLiquibase) { _%>
+    // The keyspace is created by the application when its session connects and the tables by liquibase.
+    private static final CassandraContainer CASSANDRA_CONTAINER = new CassandraContainer("<%- dockerContainers.cassandra %>")
+<%_ } else { _%>
     // The keyspace must exist before the application's CqlSession connects, so it is created as part of the
     // container startup instead of an eager bean the application context would have to depend on.
     private static final CassandraContainer CASSANDRA_CONTAINER = new CassandraContainer("<%- dockerContainers.cassandra %>") {
@@ -55,6 +65,7 @@ public class CassandraTestContainer {
             createKeyspace(this);
         }
     }
+<%_ } _%>
         .withStartupTimeout(Duration.of(CONTAINER_STARTUP_TIMEOUT_MINUTES, ChronoUnit.MINUTES))
         .withLogConsumer(new Slf4jLogConsumer(LOG));
 
@@ -68,12 +79,21 @@ public class CassandraTestContainer {
     DynamicPropertyRegistrar cassandraProperties(CassandraContainer cassandraContainer) {
         return registry -> registry.add("spring.cassandra.keyspace-name", () -> DEFAULT_KEYSPACE_NAME);
     }
+<%_ if (databaseMigrationLoader) { _%>
 
     private static void createKeyspace(CassandraContainer container) {
         try (
             CqlSession session = new CqlSessionBuilder()
                 .addContactPoint(container.getContactPoint())
                 .withLocalDatacenter(container.getLocalDatacenter())
+                // CREATE KEYSPACE is a schema change and must reach schema agreement; the driver's 2s default request
+                // timeout is not enough on a loaded CI runner and fails the container startup with a DriverTimeoutException.
+                .withConfigLoader(
+                    DriverConfigLoader
+                        .programmaticBuilder()
+                        .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, Duration.ofSeconds(DATABASE_REQUEST_TIMEOUT_SECONDS))
+                        .build()
+                )
                 .build()
         ) {
             session.execute(
@@ -100,4 +120,5 @@ public class CassandraTestContainer {
             throw new IllegalStateException("Failed to populate the '" + DEFAULT_KEYSPACE_NAME + "' keyspace", e);
         }
     }
+<%_ } _%>
 }

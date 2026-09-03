@@ -129,7 +129,7 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
-    contact-points: localhost
+    contact-points: 127.0.0.1
     compression: LZ4
     keyspace-name: <%- cassandraKeyspaceName %>
     local-datacenter: datacenter1
@@ -297,4 +297,13 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
+<%_ if (databaseTypeCassandra && databaseMigrationLiquibase) { _%>
+application:
+  cassandra:
+    # Create the keyspace at startup when it does not exist yet, disable it when the keyspace is managed outside of the application
+    create-keyspace: true
+    # Replication of the created keyspace, match it to the cluster topology
+    keyspace-replication: "{'class': 'SimpleStrategy', 'replication_factor': 1}"
+<%_ } else { _%>
 # application:
+<%_ } _%>

@@ -29,7 +29,7 @@ import databaseTypes from './database-types.ts';
 import serviceDiscoveryTypes from './service-discovery-types.ts';
 
 const { CONSUL } = serviceDiscoveryTypes;
-const { SQL, POSTGRESQL } = databaseTypes;
+const { SQL, POSTGRESQL, CASSANDRA } = databaseTypes;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
@@ -175,7 +175,7 @@ function getConfigForDatabaseType(options: ApplicationDefaults = {}): Applicatio
   if (options[DATABASE_TYPE] === 'no') {
     options[SKIP_USER_MANAGEMENT] = true;
   }
-  options.databaseMigration ??= options.databaseType === SQL ? 'liquibase' : 'no';
+  options.databaseMigration ??= options.databaseType === SQL || options.databaseType === CASSANDRA ? 'liquibase' : 'no';
 
   return options;
 }

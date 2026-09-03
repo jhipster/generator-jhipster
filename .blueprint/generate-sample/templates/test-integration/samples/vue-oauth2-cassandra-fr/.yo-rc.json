@@ -1,0 +1,26 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "oauth2",
+    "baseName": "jhipster",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "vue",
+    "clientTheme": "none",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1594452153587,
+    "databaseMigration": "loader",
+    "databaseType": "cassandra",
+    "dtoSuffix": "DTO",
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "",
+    "languages": ["fr"],
+    "nativeLanguage": "en",
+    "packageFolder": "tech/jhipster/sample",
+    "packageName": "tech.jhipster.sample",
+    "serverPort": "8080",
+    "serviceDiscoveryType": "no",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

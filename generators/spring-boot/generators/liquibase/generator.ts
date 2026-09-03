@@ -71,7 +71,7 @@ export default class SpringBootLiquibaseGenerator extends SpringBootApplicationG
               groupId: 'org.springframework.boot',
               artifactId: 'spring-boot-starter-liquibase',
               exclusions:
-                application.databaseTypeNeo4j ?
+                application.databaseTypeNeo4j || application.databaseTypeCassandra ?
                   [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-jdbc' }]
                 : undefined,
             },

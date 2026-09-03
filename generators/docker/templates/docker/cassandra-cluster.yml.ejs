@@ -36,6 +36,7 @@ services:
     image: <%- dockerContainers.cassandra %>
     environment:
       - CASSANDRA_SEEDS=<%- baseName.toLowerCase() %>-cassandra
+<%_ if (databaseMigrationLoader) { _%>
   cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%- baseName.toLowerCase() %>-cassandra
@@ -47,3 +48,4 @@ services:
       dockerfile: cassandra/Cassandra-Migration.Dockerfile
     volumes:
       - ../resources/config/cql:/cql:ro
+<%_ } _%>

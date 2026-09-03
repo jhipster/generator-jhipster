@@ -53,6 +53,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
   "databaseMigrationLiquibase": true,
+  "databaseMigrationLoader": false,
   "databaseMigrationNo": false,
   "databaseType": "sql",
   "databaseTypeAny": true,

@@ -190,6 +190,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
 
     databaseMigration: string;
     databaseMigrationLiquibase: boolean;
+    /** Cassandra only: the legacy CQL scripts applied by `ResourceKeyspacePopulator`/the docker migration service. */
+    databaseMigrationLoader: boolean;
 
     communicationSpringWebsocket: boolean;
     requiresDeleteAllUsers: boolean;

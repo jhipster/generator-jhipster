@@ -44,6 +44,7 @@ services:
     labels:
       org.springframework.boot.ignore: true
 <%_ } _%>
+<%_ if (databaseMigrationLoader) { _%>
   cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%- baseName.toLowerCase() %>-cassandra
@@ -55,7 +56,8 @@ services:
       dockerfile: cassandra/Cassandra-Migration.Dockerfile
     volumes:
       - ../resources/config/cql:/cql:ro
-<%_ if (backendTypeSpringBoot) { _%>
+  <%_ if (backendTypeSpringBoot) { _%>
     labels:
       org.springframework.boot.ignore: true
+  <%_ } _%>
 <%_ } _%>

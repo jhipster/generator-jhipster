@@ -80,6 +80,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
   "databaseMigrationLiquibase": true,
+  "databaseMigrationLoader": false,
   "databaseMigrationNo": false,
   "databaseType": "sql",
   "databaseTypeAny": true,

@@ -31,6 +31,8 @@ export const cassandraFiles = asWriteFilesSection<JavaApplication>({
   ],
   serverResource: [
     {
+      // The keyspace is created by the application when liquibase is used
+      condition: generator => generator.databaseMigrationLoader,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         'config/cql/create-keyspace-prod.cql',
@@ -40,7 +42,8 @@ export const cassandraFiles = asWriteFilesSection<JavaApplication>({
       ],
     },
     {
-      condition: ctx => !ctx.applicationTypeMicroservice && ctx.generateBuiltInUserEntity,
+      condition: generator =>
+        generator.databaseMigrationLoader && !generator.applicationTypeMicroservice && generator.generateBuiltInUserEntity,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         { file: 'config/cql/changelog/create-tables.cql', renameTo: () => 'config/cql/changelog/00000000000000_create-tables.cql' },

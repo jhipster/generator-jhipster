@@ -54,6 +54,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
   "databaseMigrationLiquibase": true,
+  "databaseMigrationLoader": false,
   "databaseMigrationNo": false,
   "databaseType": "sql",
   "databaseTypeAny": true,

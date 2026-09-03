@@ -337,18 +337,6 @@ jhipster:
     depends_on:
       mscassandra-cassandra:
         condition: service_healthy
-      mscassandra-cassandra-migration:
-        condition: service_completed_successfully
-  mscassandra-cassandra-migration:
-    environment:
-      - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
-      - USER=docker-cassandra-migration
-      - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
-    build:
-      context: ../05-cassandra/src/main/docker
-      dockerfile: cassandra/Cassandra-Migration.Dockerfile
-    volumes:
-      - ../05-cassandra/src/main/resources/config/cql:/cql:ro
   mscassandra-cassandra:
     image: cassandra-placeholder
     container_name: mscassandra-cassandra

@@ -209,7 +209,7 @@ Options:
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
   --feign-client                           Generate a feign client (default: false)
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
-  --database-migration <value>             Database migration (choices: "liquibase", "no")
+  --database-migration <value>             Database migration (choices: "liquibase", "loader", "no")
   --graalvm-support                        Experimental GraalVM Native support
   --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces

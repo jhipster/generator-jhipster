@@ -200,7 +200,7 @@ const command = {
         tokenType: 'NAME',
         tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
-      choices: ['liquibase', 'no'],
+      choices: ['liquibase', 'loader', 'no'],
       scope: 'storage',
     },
     graalvmSupport: {

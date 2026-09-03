@@ -254,7 +254,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             // Don't export database ports
             delete databaseYamlConfig.ports;
 
-            if (appConfig.databaseTypeCassandra) {
+            if (appConfig.databaseTypeCassandra && appConfig.databaseMigrationLoader) {
               // migration service config
               const cassandraMigrationYaml = parseYaml(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
               const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];

@@ -19,8 +19,16 @@
 package <%- packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
-<%_ if (databaseTypeNeo4j || reactive) { _%>
+<%_ if (databaseTypeNeo4j || databaseTypeCassandra || reactive) { _%>
 import java.util.Optional;
+<%_ } _%>
+<%_ if (databaseTypeCassandra) { _%>
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.ing.data.cassandra.jdbc.CassandraDriver;
+import org.springframework.boot.cassandra.autoconfigure.CassandraConnectionDetails;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+<%_ } else if (databaseTypeNeo4j || reactive) { _%>
 import tech.jhipster.config.liquibase.AsyncSpringLiquibase;
 <%_ } else { _%>
 import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
@@ -39,12 +47,16 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 <%_ } _%>
 
 import javax.sql.DataSource;
+<%_ if (!databaseTypeCassandra) { _%>
 import java.util.concurrent.Executor;
+<%_ } _%>
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ if (!databaseTypeCassandra) { _%>
 import org.springframework.beans.factory.annotation.Qualifier;
+<%_ } _%>
 import org.springframework.boot.liquibase.autoconfigure.LiquibaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,6 +68,10 @@ import org.springframework.util.StringUtils;
 public class LiquibaseConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(LiquibaseConfiguration.class);
+<%_ if (databaseTypeCassandra) { _%>
+
+    private static final int LIQUIBASE_REQUEST_TIMEOUT_MILLIS = 20_000;
+<%_ } _%>
 
     private final Environment env;
 
@@ -65,9 +81,15 @@ public class LiquibaseConfiguration {
 
     @Bean
     public SpringLiquibase liquibase(
+<%_ if (!databaseTypeCassandra) { _%>
         @Qualifier("taskExecutor") Executor executor,
+<%_ } _%>
         LiquibaseProperties liquibaseProperties,
-<%_ if (databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeCassandra) { _%>
+        CassandraConnectionDetails connectionDetails,
+        // The application session creates the keyspace when it connects, liquibase must run after it to find the keyspace.
+        CqlSession session
+<%_ } else if (databaseTypeNeo4j) { _%>
         Neo4jProperties dataSourceProperties
 <%_ } else if (reactive) { _%>
         R2dbcProperties dataSourceProperties
@@ -79,7 +101,11 @@ public class LiquibaseConfiguration {
 <%_ } _%>
     ) {
 
-<%_ if (databaseTypeNeo4j || reactive) { _%>
+<%_ if (databaseTypeCassandra) { _%>
+        // Repositories depend on the liquibase bean: the schema must exist before they are created, so liquibase runs synchronously.
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(createLiquibaseDataSource(liquibaseProperties, connectionDetails, session));
+<%_ } else if (databaseTypeNeo4j || reactive) { _%>
         SpringLiquibase liquibase = new AsyncSpringLiquibase(executor, env);
         liquibase.setDataSource(createLiquibaseDataSource(liquibaseProperties, dataSourceProperties));
 <%_ } else { _%>
@@ -123,8 +149,42 @@ public class LiquibaseConfiguration {
 
         return new SimpleDriverDataSource(new Neo4jDriver(), url, user, password);
     }
-<%_ } _%>
-<%_ if (databaseTypeSql && reactive) { _%>
+<%_ } else if (databaseTypeCassandra) { _%>
+
+    public DataSource createLiquibaseDataSource(
+        LiquibaseProperties liquibaseProperties,
+        CassandraConnectionDetails connectionDetails,
+        CqlSession session
+    ) {
+        String url = Optional.ofNullable(liquibaseProperties.getUrl()).orElseGet(() -> {
+            CassandraConnectionDetails.Node contactPoint = connectionDetails.getContactPoints().get(0);
+            String keyspaceName = session
+                .getKeyspace()
+                .map(CqlIdentifier::asInternal)
+                .orElseThrow(() -> new IllegalStateException("The Cassandra session is not bound to a keyspace, configure spring.cassandra.keyspace-name"));
+            return (
+                "jdbc:cassandra://" +
+                contactPoint.host() +
+                ":" +
+                contactPoint.port() +
+                "/" +
+                keyspaceName +
+                // The Liquibase compliance mode reports -1 affected rows for the changelog lock LWT update,
+                // otherwise liquibase-cassandra misreads the acquired lock and waits for it forever.
+                // Each changeSet is a schema change that must reach schema agreement, which does not fit in the
+                // driver's 2s default request timeout on a loaded machine.
+                "?compliancemode=Liquibase&requesttimeout=" +
+                LIQUIBASE_REQUEST_TIMEOUT_MILLIS +
+                "&localdatacenter=" +
+                connectionDetails.getLocalDatacenter()
+            );
+        });
+        String user = Optional.ofNullable(liquibaseProperties.getUser()).orElseGet(connectionDetails::getUsername);
+        String password = Optional.ofNullable(liquibaseProperties.getPassword()).orElseGet(connectionDetails::getPassword);
+
+        return new SimpleDriverDataSource(new CassandraDriver(), url, user, password);
+    }
+<%_ } else if (databaseTypeSql && reactive) { _%>
 
     private static DataSource createLiquibaseDataSource(LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
         String user = Optional.ofNullable(liquibaseProperties.getUser()).orElse(dataSourceProperties.getUsername());

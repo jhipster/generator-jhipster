@@ -44,7 +44,17 @@ export const liquibaseFiles = asWriteFilesSection({
     {
       condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_RES_DIR,
-      templates: ['config/liquibase/data/user.csv', 'config/liquibase/data/user_authority.csv'],
+      templates: ['config/liquibase/data/user.csv'],
+    },
+    {
+      condition: generator => generator.generateUserManagement && !generator.databaseTypeCassandra,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['config/liquibase/data/user_authority.csv'],
+    },
+    {
+      condition: generator => generator.generateUserManagement && generator.databaseTypeCassandra,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['config/liquibase/data/user_by_login.csv', 'config/liquibase/data/user_by_email.csv'],
     },
     {
       condition: generator => generator.generateBuiltInAuthorityEntity,
