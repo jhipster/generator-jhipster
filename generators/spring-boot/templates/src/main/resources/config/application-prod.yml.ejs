@@ -300,7 +300,9 @@ jhipster:
 <%_ if (databaseTypeCassandra && databaseMigrationLiquibase) { _%>
 application:
   cassandra:
-    # Replication of the keyspace created by the application when it does not exist yet, match it to the cluster topology
+    # Create the keyspace at startup when it does not exist yet, disable it when the keyspace is managed outside of the application
+    create-keyspace: true
+    # Replication of the created keyspace, match it to the cluster topology
     keyspace-replication: "{'class': 'SimpleStrategy', 'replication_factor': 1}"
 <%_ } else { _%>
 # application:

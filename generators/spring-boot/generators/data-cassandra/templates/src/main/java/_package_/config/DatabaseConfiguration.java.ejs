@@ -27,6 +27,7 @@ import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.TupleType;
 <%_ if (databaseMigrationLiquibase) { _%>
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.cassandra.autoconfigure.CassandraProperties;
 import org.springframework.boot.cassandra.autoconfigure.CqlSessionBuilderCustomizer;
 <%_ } _%>
@@ -56,11 +57,13 @@ public class DatabaseConfiguration {
     private static final int KEYSPACE_CREATION_TIMEOUT_SECONDS = 20;
 
     /**
-     * Creates the keyspace when it does not exist yet.
+     * Creates the keyspace when it does not exist yet, disable it with {@code application.cassandra.create-keyspace=false}
+     * when the keyspace is managed outside of the application.
      * The application session is bound to the keyspace, so the keyspace is created through a keyspace-less session
      * before the application session connects. Liquibase creates the tables once the session is available.
      */
     @Bean
+    @ConditionalOnProperty(name = "application.cassandra.create-keyspace", havingValue = "true", matchIfMissing = true)
     public CqlSessionBuilderCustomizer keyspaceCreator(CassandraProperties cassandraProperties, ApplicationProperties applicationProperties) {
         return builder -> {
             String keyspaceName = cassandraProperties.getKeyspaceName();

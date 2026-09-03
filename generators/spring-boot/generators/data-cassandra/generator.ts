@@ -155,10 +155,13 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
       },
       customizeApplicationProperties({ application, source }) {
         if (application.databaseMigrationLiquibase) {
-          // Replication of the keyspace created by the application when it does not exist yet
+          // Creation of the keyspace by the application when it does not exist yet
           source.addApplicationPropertiesClass?.({
             propertyType: 'Cassandra',
-            classStructure: { keyspaceReplication: ['String', `"{'class': 'SimpleStrategy', 'replication_factor': 1}"`] },
+            classStructure: {
+              createKeyspace: ['Boolean', 'true'],
+              keyspaceReplication: ['String', `"{'class': 'SimpleStrategy', 'replication_factor': 1}"`],
+            },
           });
         }
       },

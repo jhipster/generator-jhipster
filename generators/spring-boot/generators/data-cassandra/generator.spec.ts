@@ -111,7 +111,13 @@ describe(`generator - ${databaseType}`, () => {
       it('should create the keyspace from the application', () => {
         runResult.assertFileContent(`${javaPackageDir}config/DatabaseConfiguration.java`, 'CqlSessionBuilderCustomizer keyspaceCreator(');
         runResult.assertFileContent(`${javaPackageDir}config/DatabaseConfiguration.java`, 'CREATE KEYSPACE IF NOT EXISTS');
+        runResult.assertFileContent(
+          `${javaPackageDir}config/DatabaseConfiguration.java`,
+          '@ConditionalOnProperty(name = "application.cassandra.create-keyspace", havingValue = "true", matchIfMissing = true)',
+        );
+        runResult.assertFileContent(`${javaPackageDir}config/ApplicationProperties.java`, 'Boolean createKeyspace = true;');
         runResult.assertFileContent(`${javaPackageDir}config/ApplicationProperties.java`, 'keyspaceReplication');
+        runResult.assertFileContent('src/main/resources/config/application-prod.yml', 'create-keyspace: true');
         runResult.assertFileContent('src/main/resources/config/application-prod.yml', 'keyspace-replication:');
       });
 
