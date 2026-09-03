@@ -78,8 +78,10 @@ export interface EntityAll<F extends FieldAll = FieldAll, R extends Relationship
   otherEntities?: this[];
   otherEntitiesWithPersistableRelationship?: this[];
 
-  regularEagerRelations?: RelationshipWithEntity<R, this>[];
   eagerRelations?: RelationshipWithEntity<R, this>[];
+  /** @deprecated use `eagerRelations` */
+  regularEagerRelations?: RelationshipWithEntity<R, this>[];
+  /** @deprecated use `eagerRelations`, reactive repositories load the relationships according to `relationshipEagerLoad` */
   reactiveRegularEagerRelations?: RelationshipWithEntity<R, this>[];
   persistableRelationships?: RelationshipWithEntity<R, this>[];
 

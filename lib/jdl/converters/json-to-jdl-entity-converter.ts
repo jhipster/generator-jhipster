@@ -233,7 +233,7 @@ function getSourceEntitySideAttributes(entityName: string, relationship: JSONRel
   return {
     sourceEntity: entityName,
     injectedFieldInSourceEntity: getInjectedFieldInSourceEntity(relationship),
-    injectedFieldInSourceIsRequired: relationship.relationshipValidateRules,
+    injectedFieldInSourceIsRequired: !!relationship.relationshipValidateRules,
     commentForSourceEntity: relationship.documentation,
   };
 }

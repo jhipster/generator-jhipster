@@ -16,12 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const relationshipQueries = relationships.filter(
+      rel => rel.relationshipManyToOne || rel.relationshipOneToOne || rel.shouldWriteJoinTable,
+    );
+    const emptyRepository = paginationNo && relationshipQueries.length === 0;
+_%>
 package <%- entityAbsolutePackage %>.repository;
 
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 
+<%_ if (!paginationNo) { _%>
+import org.springframework.data.domain.Pageable;
+<%_ } _%>
+<%_ if (relationshipQueries.length > 0) { _%>
+import org.springframework.data.r2dbc.repository.Query;
+<%_ } _%>
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
+<%_ if (!emptyRepository) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
 
 import java.util.UUID;
@@ -32,4 +46,30 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%- entityClass %>Repository extends R2dbcRepository<<%- persistClass %>, <%- primaryKey.type %>> {}
+public interface <%- entityClass %>Repository extends R2dbcRepository<<%- persistClass %>, <%- primaryKey.type %>> {
+<%_ if (!emptyRepository) { _%>
+  <%_ if (!paginationNo) { _%>
+
+    Flux<<%- persistClass %>> findAllBy(Pageable pageable);
+  <%_ } _%>
+  <%_ for (const relationship of relationships) { _%>
+    <%_ const { ownerSide } = relationship; _%>
+    <%_ if (relationship.relationshipManyToOne || relationship.relationshipOneToOne && ownerSide) { _%>
+
+    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- relationship.joinColumnNames[0] %> = :id")
+    Flux<<%- persistClass %>> findBy<%- relationship.relationshipNameCapitalized %>(<%- primaryKey.type %> id);
+
+    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- relationship.joinColumnNames[0] %> IS NULL")
+    Flux<<%- persistClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull();
+    <%_ } else if (relationship.shouldWriteJoinTable) { _%>
+
+    @Query("SELECT entity.* FROM <%- entityTableName %> entity JOIN <%- relationship.joinTable.name %> joinTable ON entity.<%- primaryKey.fields[0].columnName %> = joinTable.<%- relationship.joinColumnNames[0] %> WHERE joinTable.<%- relationship.joinColumnNames[0] %> = :id")
+    Flux<<%- persistClass %>> findBy<%- relationship.relationshipNameCapitalized %>(<%- primaryKey.type %> id);
+    <%_ } else if (relationship.relationshipOneToOne) { _%>
+
+    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- primaryKey.fields[0].columnName %> not in (select <%- relationship.joinColumnNames[0] %> from <%- relationship.otherEntity.entityTableName %>)")
+    Flux<<%- persistClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull();
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
+}

@@ -8,12 +8,6 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -329,12 +323,6 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -872,12 +860,6 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -1406,12 +1388,6 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -1908,12 +1884,6 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -2501,18 +2471,6 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -3138,18 +3096,6 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -3467,18 +3413,6 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -3793,18 +3727,6 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -4086,18 +4008,6 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/UserSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/UserRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -4399,12 +4309,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
@@ -4654,12 +4558,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
@@ -5165,12 +5063,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
@@ -5642,12 +5534,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -6139,12 +6025,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
@@ -6588,12 +6468,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -7134,12 +7008,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -7436,12 +7304,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -7735,12 +7597,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -8001,12 +7857,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -8584,12 +8434,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
@@ -9126,12 +8970,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
@@ -9650,12 +9488,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
@@ -10142,12 +9974,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
@@ -10654,12 +10480,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
@@ -11103,12 +10923,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -11649,12 +11463,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -12175,12 +11983,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -12694,12 +12496,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -13181,12 +12977,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -13762,12 +13552,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -14372,12 +14156,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -14962,12 +14740,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -15522,12 +15294,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -16073,12 +15839,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/EntityManager.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {

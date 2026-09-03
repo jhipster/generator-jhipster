@@ -21,7 +21,7 @@ package <%- entityAbsolutePackage %>.web.rest;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
 import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
-<%_ const filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
+<%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     const hasUserRepository
       = (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser)
@@ -38,10 +38,11 @@ import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
     if (!reactive && databaseTypeSql) {
       saveMethod = 'saveAndFlush';
     }
+    const entityManagerVariable = databaseTypeSql && reactive ? 'template' : 'em';
     let createEntityPrefix = '';
     let createEntityPostfix = '';
     if (databaseTypeSql && reactive) {
-      createEntityPrefix = 'em.insert(';
+      createEntityPrefix = 'template.insert(';
       createEntityPostfix = ').block()';
     }
     let idValue = `${persistInstance}.${primaryKey.propertySupplierName}()`;
@@ -68,14 +69,24 @@ import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
   _%>
   <%_ if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) { _%>
     <%_ if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
+import <%- relationship.otherEntity.entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
       <%_ imported.push(relationship.otherEntity.entityNameCapitalized); _%>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
+<%_ const otherEntityResourceITs = new Set(
+      relationships
+        .filter(relationship => relationship.relationshipValidate === true || relationship.id || (jpaMetamodelFiltering && filterTestableRelationships.includes(relationship)))
+        .map(relationship => relationship.otherEntity)
+        .filter(otherEntity => otherEntity.entityAbsolutePackage !== entityAbsolutePackage),
+    );
+_%>
+<%_ for (const otherEntity of otherEntityResourceITs) { _%>
+import <%- otherEntity.entityAbsolutePackage %>.web.rest.<%- otherEntity.entityNameCapitalized %>ResourceIT;
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
   <%_ for (const relationship of filterTestableRelationships) { _%>
-import <%- entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
+import <%- relationship.otherEntity.entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
   <%_ } _%>
 <%_ } _%>
 <%_ if (hasUserRepository) { _%>
@@ -83,10 +94,10 @@ import <%- user.entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
 import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%- packageName %>.repository.EntityManager;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 <%_ } _%>
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
-import <%- entityAbsolutePackage %>.repository.<%- mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository;
+import <%- mapsIdAssoc.otherEntity.entityAbsolutePackage %>.repository.<%- mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
@@ -252,7 +263,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 @AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser<% if (entityAuthority) { %>(authorities = {"<%- entityAuthority %>"})<% } %>
-class <%- entityClass %>ResourceIT {
+<%- entityRestIntegrationTestPublic ? 'public ' : '' %>class <%- entityClass %>ResourceIT {
 <%_ if (fieldsToTest.some(field => field.fieldTypeLocalTime)) { _%>
 
     private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -495,7 +506,7 @@ class <%- entityClass %>ResourceIT {
 <%_ if (databaseTypeSql) { _%>
 
     @Autowired
-    private EntityManager em;
+    private <%- reactive ? 'R2dbcEntityTemplate template' : 'EntityManager em' %>;
 <%_ } _%>
 
     @Autowired
@@ -523,7 +534,7 @@ class <%- entityClass %>ResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%- persistClass %> create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseTypeSql && anyRelationshipIsRequired) ? 'EntityManager em' : '' %>) {
+    public static <%- persistClass %> create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseTypeSql && anyRelationshipIsRequired) ? `${reactive ? 'R2dbcEntityTemplate template' : 'EntityManager em'}` : '' %>) {
   <%_ if (fluentMethods) { _%>
         <% if (anyRelationshipIsRequired) { %><%- persistClass %> <%- createInstance %> = <% } else { %>return <% } %>new <%- persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
@@ -566,7 +577,7 @@ class <%- entityClass %>ResourceIT {
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
-        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- (databaseTypeSql && otherEntity.anyRelationshipIsRequired) ? 'em' : '' %>)<%- createEntityPostfix %>;
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- (databaseTypeSql && otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- otherEntityName %>);
         em.flush();
@@ -580,7 +591,7 @@ class <%- entityClass %>ResourceIT {
             <%_ if (!isUsingMapsId || fieldStatus !== 'UPDATED_') { _%>
         if (TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%_ } _%>
-            <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- relationship.otherEntity.anyRelationshipIsRequired ? 'em' : '' %>)<%- createEntityPostfix %>;
+            <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
             em.persist(<%- otherEntityName %>);
             em.flush();
             <%_ if (!isUsingMapsId || fieldStatus !== 'UPDATED_') { _%>
@@ -589,7 +600,7 @@ class <%- entityClass %>ResourceIT {
         }
             <%_ } _%>
           <%_ } else { _%>
-        <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) ? 'em' : '' %>)<%- createEntityPostfix %>;
+        <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
         <%- otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
@@ -610,20 +621,20 @@ class <%- entityClass %>ResourceIT {
 
 <%_ if (databaseTypeSql && reactive) { _%>
   <%_ const alreadyGeneratedDeletionCalls = []; _%>
-    public static void deleteEntities(EntityManager em) {
+    public static void deleteEntities(R2dbcEntityTemplate template) {
         try {
   <%_ for (const rel of relationships) { _%>
     <%_ if (rel.shouldWriteJoinTable) { _%>
-                em.deleteAll("<%- rel.joinTable.name %>").block();
+                template.getDatabaseClient().sql("DELETE FROM <%- rel.joinTable.name %>").then().block();
     <%_ } _%>
   <%_ } _%>
-                em.deleteAll(<%- persistClass %>.class).block();
+                template.delete(<%- persistClass %>.class).all().block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
   <%_ for (const rel of relationships) { _%>
     <%_ if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
-        <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
+        <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(template);
       <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName); _%>
     <%_ } _%>
   <%_ } _%>
@@ -639,7 +650,7 @@ class <%- entityClass %>ResourceIT {
 <%_ } _%>
     @BeforeEach
     void initTest() {
-        <%- persistInstance %> = createEntity(<%- (databaseTypeSql && anyRelationshipIsRequired) ? 'em' : '' %>);
+        <%- persistInstance %> = createEntity(<%- (databaseTypeSql && anyRelationshipIsRequired) ? entityManagerVariable : '' %>);
     }
 
     @AfterEach
@@ -652,7 +663,7 @@ class <%- entityClass %>ResourceIT {
             inserted<%- persistClass %> = null;
         }
 <%_ if (databaseTypeSql && reactive) { _%>
-        deleteEntities(em);
+        deleteEntities(template);
 <%_ } _%>
 <%_ if (requiresDeleteAllUsers && hasUserRepository) { _%>
   <%_ if (databaseTypeSql && reactive) { _%>
@@ -798,7 +809,7 @@ class <%- entityClass %>ResourceIT {
       <%_ if (mapsIdUse) { _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
-        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- relationship.otherEntityUser ? '' : 'Updated' %>Entity(<%- (databaseTypeSql && otherEntity.anyRelationshipIsRequired) ? 'em' : '' %>);
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- relationship.otherEntityUser ? '' : 'Updated' %>Entity(<%- (databaseTypeSql && otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- otherEntityName %>);
         em.flush();
@@ -1278,12 +1289,12 @@ class <%- entityClass %>ResourceIT {
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %>;
         if (TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%- entityInstance %>Repository.saveAndFlush(<%- persistInstance %>);
-            <%- relationship.relationshipFieldName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? 'em' : '' %>);
+            <%- relationship.relationshipFieldName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
         } else {
             <%- relationship.relationshipFieldName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).get(0);
         }
       <%_ } else { _%>
-        <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? 'em' : '' %>);
+        <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
       <%_ } _%>
       <%_ if (reactive) { _%>
         <%- relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;

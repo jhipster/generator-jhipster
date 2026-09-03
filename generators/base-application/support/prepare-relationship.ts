@@ -105,6 +105,10 @@ export default function prepareRelationship(
     );
   }
 
+  if (typeof relationship.relationshipValidateRules === 'string') {
+    // JDL stores the validation rules as a string, entity prompts as a list
+    relationship.relationshipValidateRules = [relationship.relationshipValidateRules];
+  }
   if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
       this.log.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);

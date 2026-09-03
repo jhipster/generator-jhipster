@@ -621,6 +621,28 @@ ${classProperties
     return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
+  get default() {
+    return this.asDefaultTaskGroup({
+      publicRestIntegrationTests({ entities }) {
+        // Integration tests of entities referenced from another package are used across packages, so they must be public.
+        for (const entity of entities) {
+          entity.entityRestIntegrationTestPublic ??= false;
+        }
+        for (const entity of entities) {
+          for (const relationship of entity.relationships) {
+            if (relationship.otherEntity.entityAbsolutePackage !== entity.entityAbsolutePackage) {
+              relationship.otherEntity.entityRestIntegrationTestPublic = true;
+            }
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,

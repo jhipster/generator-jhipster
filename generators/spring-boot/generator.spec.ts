@@ -185,6 +185,63 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  for (const reactive of [false, true]) {
+    describe(`with ${reactive ? 'reactive ' : ''}entities in different packages`, () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, reactive }, [
+          {
+            name: 'Parent',
+            entityPackage: 'parent',
+            changelogDate: '20160926101210',
+            fields: [{ fieldName: 'name', fieldType: 'String' }],
+          },
+          {
+            name: 'Child',
+            entityPackage: 'child',
+            changelogDate: '20160926101211',
+            jpaMetamodelFiltering: true,
+            fields: [{ fieldName: 'name', fieldType: 'String' }],
+            relationships: [
+              {
+                relationshipName: 'parent',
+                otherEntityName: 'Parent',
+                relationshipType: 'many-to-one',
+                relationshipValidateRules: 'required',
+              },
+              { relationshipName: 'user', otherEntityName: 'User', relationshipType: 'many-to-one' },
+            ],
+          },
+        ]);
+      });
+
+      it('should import the related entities from their own packages in the integration test', () => {
+        const childResourceIT = 'src/test/java/com/mycompany/myapp/child/web/rest/ChildResourceIT.java';
+        runResult.assertFileContent(childResourceIT, 'import com.mycompany.myapp.parent.domain.Parent;');
+        runResult.assertFileContent(childResourceIT, 'import com.mycompany.myapp.parent.web.rest.ParentResourceIT;');
+        runResult.assertFileContent(childResourceIT, 'import com.mycompany.myapp.domain.User;');
+        runResult.assertFileContent(childResourceIT, 'import com.mycompany.myapp.web.rest.UserResourceIT;');
+        runResult.assertNoFileContent(childResourceIT, 'import com.mycompany.myapp.child.domain.Parent;');
+        runResult.assertNoFileContent(childResourceIT, 'import com.mycompany.myapp.child.domain.User;');
+        if (reactive) {
+          runResult.assertFileContent(childResourceIT, 'import com.mycompany.myapp.parent.repository.ParentRepository;');
+          runResult.assertNoFileContent(childResourceIT, 'import com.mycompany.myapp.child.repository.ParentRepository;');
+        }
+      });
+
+      it('should make the integration tests referenced from another package public', () => {
+        runResult.assertFileContent(
+          'src/test/java/com/mycompany/myapp/parent/web/rest/ParentResourceIT.java',
+          'public class ParentResourceIT',
+        );
+        runResult.assertFileContent('src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java', 'public class UserResourceIT');
+        runResult.assertNoFileContent(
+          'src/test/java/com/mycompany/myapp/child/web/rest/ChildResourceIT.java',
+          'public class ChildResourceIT',
+        );
+      });
+    });
+  }
+
   describe('source api', () => {
     describe('editJavaFile with springBeans', () => {
       before(async () => {

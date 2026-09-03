@@ -34,20 +34,6 @@ export const sqlFiles = asWriteFilesSection<Application>({
       templates: ['config/DatabaseConfiguration.java'],
     },
   ],
-  reactiveJavaUserManagement: [
-    {
-      condition: generator => generator.reactive && generator.generateBuiltInUserEntity,
-      ...javaMainPackageTemplatesBlock(),
-      templates: ['repository/UserSqlHelper_reactive.java', 'repository/rowmapper/UserRowMapper_reactive.java'],
-    },
-  ],
-  reactiveCommon: [
-    {
-      condition: generator => generator.reactive,
-      ...javaMainPackageTemplatesBlock(),
-      templates: ['repository/rowmapper/ColumnConverter_reactive.java', 'repository/EntityManager_reactive.java'],
-    },
-  ],
   hibernate: [
     javaMainPackageTemplatesBlock({
       condition: ctx => !ctx.reactive,

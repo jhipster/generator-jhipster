@@ -84,11 +84,16 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   isUsingMapsId?: boolean;
   mapsIdAssoc?: R;
+  /** @deprecated the reactive repositories load the relationships according to `relationshipEagerLoad`, see `eagerRelations` */
   reactiveEagerRelations: RelationshipWithEntity<R, this>[];
-
+  /** @deprecated derived from the deprecated `reactiveEagerRelations` */
   reactiveOtherEntities: Set<this>;
+  /** @deprecated derived from the deprecated `reactiveEagerRelations` */
   reactiveUniqueEntityTypes: Set<string>;
+
   requiresPersistableImplementation?: boolean;
+  /** The REST integration test is referenced from another package, so it must be public. */
+  entityRestIntegrationTestPublic?: boolean;
 }
 
 export type Source = JavaSource &

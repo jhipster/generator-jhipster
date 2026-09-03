@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const joinTableRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
+    const populateRelations = relationships.some(rel => rel.ownerSide && !rel.collection) || joinTableRelationships.some(rel => rel.relationshipEagerLoad);
+_%>
 package <%- entityAbsolutePackage %>.repository;
 
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
@@ -24,7 +27,6 @@ import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
@@ -90,15 +92,17 @@ public interface <%- entityClass %>Repository extends ReactiveCrudRepository<<%-
 }
 
 interface <%- entityClass %>RepositoryInternal {
+<%_ if (isUsingMapsId || joinTableRelationships.length > 0) { _%>
     <S extends <%- persistClass %>> Mono<S> save(S entity);
 
+<%_ } _%>
+<%_ if (populateRelations) { _%>
     Flux<<%- persistClass %>> findAllBy(Pageable pageable);
 
     Flux<<%- persistClass %>> findAll();
 
     Mono<<%- persistClass %>> findById(<%- primaryKey.type %> id);
-    // this is not supported at the moment because of https://github.com/jhipster/generator-jhipster/issues/18269
-    // Flux<<%- persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering) { _%>
     Flux<<%- persistClass %>> findByCriteria(<%- entityClass %>Criteria criteria, Pageable pageable);
 
@@ -111,6 +115,8 @@ interface <%- entityClass %>RepositoryInternal {
     Flux<<%- persistClass %>> findAllWithEagerRelationships();
 
     Flux<<%- persistClass %>> findAllWithEagerRelationships(Pageable page);
+<%_ } _%>
+<%_ if (joinTableRelationships.length > 0) { _%>
 
     Mono<Void> deleteById(<%- primaryKey.type %> id);
 <%_ } _%>

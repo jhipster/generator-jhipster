@@ -149,6 +149,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<
             [application.prodDatabaseTypeMssql!, `${application.javaPackageTestDir}config/MsSqlTestContainer.java`],
             [application.prodDatabaseTypePostgresql!, `${application.javaPackageTestDir}config/PostgreSqlTestContainer.java`],
           ],
+          '9.3.1': [
+            [
+              application.reactive,
+              `${application.javaPackageSrcDir}repository/EntityManager.java`,
+              `${application.javaPackageSrcDir}repository/rowmapper/ColumnConverter.java`,
+            ],
+            [
+              Boolean(application.reactive && application.generateBuiltInUserEntity),
+              `${application.javaPackageSrcDir}repository/UserSqlHelper.java`,
+              `${application.javaPackageSrcDir}repository/rowmapper/UserRowMapper.java`,
+            ],
+          ],
         });
       },
       cleanupTask,

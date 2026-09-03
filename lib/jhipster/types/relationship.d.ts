@@ -27,6 +27,8 @@ export type Relationship = Property & {
   relationshipSide?: 'left' | 'right';
   otherEntityRelationshipName?: string;
   otherEntityField?: string;
+  /** Validation rules of the relationship, `required` is the only supported rule. Stored as a string by JDL and as a list by the entity prompts. */
+  relationshipValidateRules?: string | string[];
 
   options?: Record<string, boolean | string | number>;
 };
