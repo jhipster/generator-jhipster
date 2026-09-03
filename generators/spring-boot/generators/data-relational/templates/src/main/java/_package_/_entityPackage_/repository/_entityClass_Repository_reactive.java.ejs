@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const populateRelations = reactiveEagerRelations.length > 0;
-    const linkRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
+    const joinTableRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
 _%>
 package <%- entityAbsolutePackage %>.repository;
 
@@ -92,7 +92,7 @@ public interface <%- entityClass %>Repository extends ReactiveCrudRepository<<%-
 }
 
 interface <%- entityClass %>RepositoryInternal {
-<%_ if (isUsingMapsId || linkRelationships.length > 0) { _%>
+<%_ if (isUsingMapsId || joinTableRelationships.length > 0) { _%>
     <S extends <%- persistClass %>> Mono<S> save(S entity);
 
 <%_ } _%>
@@ -116,7 +116,7 @@ interface <%- entityClass %>RepositoryInternal {
 
     Flux<<%- persistClass %>> findAllWithEagerRelationships(Pageable page);
 <%_ } _%>
-<%_ if (linkRelationships.length > 0) { _%>
+<%_ if (joinTableRelationships.length > 0) { _%>
 
     Mono<Void> deleteById(<%- primaryKey.type %> id);
 <%_ } _%>

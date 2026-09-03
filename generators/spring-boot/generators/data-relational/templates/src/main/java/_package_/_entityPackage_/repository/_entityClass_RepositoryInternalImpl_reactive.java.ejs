@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ const populateRelations = reactiveEagerRelations.length > 0;
-    const linkRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
+    const joinTableRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
     const ownDomainImport = `${entityAbsolutePackage}.domain.${persistClass}`;
     const otherDomainImports = [
       ...new Set(
-        [...reactiveEagerRelations, ...linkRelationships]
+        [...reactiveEagerRelations, ...joinTableRelationships]
           .map(rel => `${rel.otherEntity.entityAbsolutePackage}.domain.${rel.otherEntity.persistClass}`)
           .filter(domainImport => domainImport !== ownDomainImport),
       ),
@@ -29,7 +29,7 @@
 _%>
 package <%- entityAbsolutePackage %>.repository;
 
-<%_ if (populateRelations || linkRelationships.length > 0) { _%>
+<%_ if (populateRelations || joinTableRelationships.length > 0) { _%>
 import java.util.List;
 <%_ } _%>
 <%_ if (populateRelations) { _%>
@@ -88,11 +88,11 @@ class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<
         Map.entry("<%- rel.relationshipName %>.<%- rel.relatedField.fieldName %>", "<%- rel.relationshipSqlSafeName %>.<%- rel.relatedField.fieldNameAsDatabaseColumn %>")<% } %><% } %>
     );
 <%_ } _%>
-<%_ if (linkRelationships.length > 0) { _%>
+<%_ if (joinTableRelationships.length > 0) { _%>
 
-    private static final List<LinkTable<<%- persistClass %>>> LINK_TABLES = List.of(
-  <%_ for (const [index, rel] of linkRelationships.entries()) { _%>
-        new LinkTable<>("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>", <%- entityInstance %> -> <%- entityInstance %>.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>).toList())<%- index < linkRelationships.length - 1 ? ',' : '' %>
+    private static final List<JoinTable<<%- persistClass %>>> JOIN_TABLES = List.of(
+  <%_ for (const [index, rel] of joinTableRelationships.entries()) { _%>
+        new JoinTable<>("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>", <%- entityInstance %> -> <%- entityInstance %>.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>).toList())<%- index < joinTableRelationships.length - 1 ? ',' : '' %>
   <%_ } _%>
     );
 <%_ } _%>
@@ -120,11 +120,11 @@ class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<
   <%_ } _%>
     }
 <%_ } _%>
-<%_ if (linkRelationships.length > 0) { _%>
+<%_ if (joinTableRelationships.length > 0) { _%>
 
     @Override
-    protected List<LinkTable<<%- persistClass %>>> linkTables() {
-        return LINK_TABLES;
+    protected List<JoinTable<<%- persistClass %>>> joinTables() {
+        return JOIN_TABLES;
     }
 <%_ } _%>
 <%_ if (isUsingMapsId) { _%>

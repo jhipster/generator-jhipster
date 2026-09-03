@@ -43,16 +43,16 @@ import reactor.core.publisher.Mono;
 
 /**
  * Base class of the entity repository fragments. On top of {@link SimpleR2dbcRepository} it populates the to-one
- * relationships after the entity query, maintains the many-to-many link tables, filters by {@link Criteria} and
+ * relationships after the entity query, maintains the many-to-many join tables, filters by {@link Criteria} and
  * supports sorting by a related entity property, which Spring Data R2DBC queries do not support.
  */
 public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcRepository<T, ID> {
 
     /**
-     * A many-to-many link table: the table name, the column referencing the entity, the column referencing the
+     * A many-to-many join table: the table name, the column referencing the entity, the column referencing the
      * related entity and the function extracting the related ids from the entity.
      */
-    public record LinkTable<T>(String table, String entityColumn, String referenceColumn, Function<T, Collection<?>> referenceIds) {}
+    public record JoinTable<T>(String table, String entityColumn, String referenceColumn, Function<T, Collection<?>> referenceIds) {}
 
     protected final R2dbcEntityTemplate template;
     protected final DatabaseClient db;
@@ -73,9 +73,9 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
     }
 
     /**
-     * The many-to-many link tables maintained by {@link #save(Object)} and {@link #deleteById(Object)}.
+     * The many-to-many join tables maintained by {@link #save(Object)} and {@link #deleteById(Object)}.
      */
-    protected List<LinkTable<T>> linkTables() {
+    protected List<JoinTable<T>> joinTables() {
         return List.of();
     }
 
@@ -147,12 +147,12 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
 
     @Override
     public <S extends T> Mono<S> save(S entity) {
-        return super.save(entity).flatMap(saved -> Flux.fromIterable(linkTables()).concatMap(link -> updateLinkTable(link, saved)).then(Mono.just(saved)));
+        return super.save(entity).flatMap(saved -> Flux.fromIterable(joinTables()).concatMap(joinTable -> updateJoinTable(joinTable, saved)).then(Mono.just(saved)));
     }
 
     @Override
     public Mono<Void> deleteById(ID id) {
-        return Flux.fromIterable(linkTables()).concatMap(link -> deleteFromLinkTable(link, id)).then(super.deleteById(id));
+        return Flux.fromIterable(joinTables()).concatMap(joinTable -> deleteFromJoinTable(joinTable, id)).then(super.deleteById(id));
     }
 
     /**
@@ -218,13 +218,13 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
         return populated(db.sql(sql).map((row, metadata) -> template.getConverter().read(entityType, row, metadata)).all());
     }
 
-    private Mono<Void> updateLinkTable(LinkTable<T> link, T entity) {
+    private Mono<Void> updateJoinTable(JoinTable<T> joinTable, T entity) {
         Object entityId = mappingEntity(entityType).getIdentifierAccessor(entity).getRequiredIdentifier();
-        return deleteFromLinkTable(link, entityId).then(
-            Flux.fromIterable(link.referenceIds().apply(entity))
+        return deleteFromJoinTable(joinTable, entityId).then(
+            Flux.fromIterable(joinTable.referenceIds().apply(entity))
                 .concatMap(referenceId ->
                     db
-                        .sql("INSERT INTO " + link.table() + " (" + link.entityColumn() + ", " + link.referenceColumn() + ") VALUES (:entityId, :referenceId)")
+                        .sql("INSERT INTO " + joinTable.table() + " (" + joinTable.entityColumn() + ", " + joinTable.referenceColumn() + ") VALUES (:entityId, :referenceId)")
                         .bind("entityId", entityId)
                         .bind("referenceId", referenceId)
                         .then()
@@ -233,8 +233,8 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
         );
     }
 
-    private Mono<Void> deleteFromLinkTable(LinkTable<T> link, Object entityId) {
-        return db.sql("DELETE FROM " + link.table() + " WHERE " + link.entityColumn() + " = :entityId").bind("entityId", entityId).then();
+    private Mono<Void> deleteFromJoinTable(JoinTable<T> joinTable, Object entityId) {
+        return db.sql("DELETE FROM " + joinTable.table() + " WHERE " + joinTable.entityColumn() + " = :entityId").bind("entityId", entityId).then();
     }
 
     private RelationalPersistentEntity<?> mappingEntity(Class<?> type) {
