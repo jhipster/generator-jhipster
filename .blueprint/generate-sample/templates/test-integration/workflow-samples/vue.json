@@ -39,8 +39,8 @@
       }
     },
     {
-      "name": "vue-session-cassandra-fr",
-      "app-sample": "vue-session-cassandra-fr",
+      "name": "vue-oauth2-cassandra-fr",
+      "app-sample": "vue-oauth2-cassandra-fr",
       "entity": "cassandra",
       "generatorOptions": {
         "defaultEnvironment": "dev"

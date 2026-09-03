@@ -9,6 +9,7 @@
     "clientTheme": "none",
     "clientThemeVariant": "",
     "creationTimestamp": 1596513172471,
+    "databaseMigration": "loader",
     "databaseType": "cassandra",
     "devDatabaseType": "cassandra",
     "dtoSuffix": "DTO",
