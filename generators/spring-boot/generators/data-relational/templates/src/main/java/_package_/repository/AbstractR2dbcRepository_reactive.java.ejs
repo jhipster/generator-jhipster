@@ -1,0 +1,243 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.repository;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.r2dbc.dialect.R2dbcDialect;
+import org.springframework.data.r2dbc.repository.support.SimpleR2dbcRepository;
+import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
+import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.data.relational.core.query.Query;
+import org.springframework.data.relational.repository.support.MappingRelationalEntityInformation;
+import org.springframework.r2dbc.core.DatabaseClient;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+/**
+ * Base class of the entity repository fragments. On top of {@link SimpleR2dbcRepository} it populates the to-one
+ * relationships after the entity query, maintains the many-to-many link tables, filters by {@link Criteria} and
+ * supports sorting by a related entity property, which Spring Data R2DBC queries do not support.
+ */
+public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcRepository<T, ID> {
+
+    /**
+     * A many-to-many link table: the table name, the column referencing the entity, the column referencing the
+     * related entity and the function extracting the related ids from the entity.
+     */
+    public record LinkTable<T>(String table, String entityColumn, String referenceColumn, Function<T, Collection<?>> referenceIds) {}
+
+    protected final R2dbcEntityTemplate template;
+    protected final DatabaseClient db;
+    private final Class<T> entityType;
+    private final R2dbcDialect dialect;
+
+    @SuppressWarnings("unchecked")
+    protected AbstractR2dbcRepository(Class<T> entityType, R2dbcEntityTemplate template, R2dbcConverter converter, R2dbcDialect dialect) {
+        super(
+            new MappingRelationalEntityInformation<>((RelationalPersistentEntity<T>) converter.getMappingContext().getRequiredPersistentEntity(entityType)),
+            template,
+            converter
+        );
+        this.entityType = entityType;
+        this.template = template;
+        this.db = template.getDatabaseClient();
+        this.dialect = dialect;
+    }
+
+    /**
+     * The many-to-many link tables maintained by {@link #save(Object)} and {@link #deleteById(Object)}.
+     */
+    protected List<LinkTable<T>> linkTables() {
+        return List.of();
+    }
+
+    /**
+     * Populates the to-one relationships of the entities, see {@link #populate}.
+     */
+    protected Mono<List<T>> populateRelationships(List<T> entities) {
+        return Mono.just(entities);
+    }
+
+    /**
+     * SQL selecting the entity columns (alias {@code e}) joined with the related tables, used when sorting by a
+     * related entity property.
+     */
+    protected String selectWithRelationsSql() {
+        return null;
+    }
+
+    /**
+     * Maps the sort properties to the columns of {@link #selectWithRelationsSql()}.
+     */
+    protected Map<String, String> sortColumns() {
+        return Map.of();
+    }
+
+    @Override
+    public Flux<T> findAll() {
+        return populated(super.findAll());
+    }
+
+    @Override
+    public Mono<T> findById(ID id) {
+        return populated(super.findById(id));
+    }
+
+    public Flux<T> findAllBy(Pageable pageable) {
+        if (hasRelationshipSort(pageable.getSort())) {
+            return findAllByRelationshipSort(pageable);
+        }
+        return populated(template.select(entityType).matching(Query.empty().with(pageable)).all());
+    }
+
+    public Mono<T> findOneWithEagerRelationships(ID id) {
+        return findById(id);
+    }
+
+    public Flux<T> findAllWithEagerRelationships() {
+        return findAll();
+    }
+
+    public Flux<T> findAllWithEagerRelationships(Pageable page) {
+        return findAllBy(page);
+    }
+
+    protected Flux<T> findAllBy(Criteria criteria, Pageable pageable) {
+        Query query = Query.query(criteria);
+        if (pageable != null) {
+            if (hasRelationshipSort(pageable.getSort())) {
+                throw new IllegalArgumentException("Cannot sort by a related entity property when filtering by criteria");
+            }
+            query = query.with(pageable);
+        }
+        return populated(template.select(entityType).matching(query).all());
+    }
+
+    protected Mono<Long> countBy(Criteria criteria) {
+        return template.count(Query.query(criteria), entityType);
+    }
+
+    @Override
+    public <S extends T> Mono<S> save(S entity) {
+        return super.save(entity).flatMap(saved -> Flux.fromIterable(linkTables()).concatMap(link -> updateLinkTable(link, saved)).then(Mono.just(saved)));
+    }
+
+    @Override
+    public Mono<Void> deleteById(ID id) {
+        return Flux.fromIterable(linkTables()).concatMap(link -> deleteFromLinkTable(link, id)).then(super.deleteById(id));
+    }
+
+    /**
+     * Populates a to-one relationship of the entities with a single query.
+     * @param entities the entities to populate.
+     * @param referenceId extracts the related entity id from an entity.
+     * @param relatedType the related entity type.
+     * @param relatedId extracts the id from a related entity.
+     * @param setter sets the related entity on an entity.
+     */
+    protected <R, K> Mono<List<T>> populate(
+        List<T> entities,
+        Function<T, K> referenceId,
+        Class<R> relatedType,
+        Function<R, K> relatedId,
+        BiConsumer<T, R> setter
+    ) {
+        List<K> ids = entities.stream().map(referenceId).filter(Objects::nonNull).distinct().toList();
+        if (ids.isEmpty()) {
+            return Mono.just(entities);
+        }
+        String idProperty = mappingEntity(relatedType).getRequiredIdProperty().getName();
+        return template
+            .select(relatedType)
+            .matching(Query.query(Criteria.where(idProperty).in(ids)))
+            .all()
+            .collectMap(relatedId)
+            .map(related -> {
+                entities.forEach(entity -> setter.accept(entity, related.get(referenceId.apply(entity))));
+                return entities;
+            });
+    }
+
+    private Flux<T> populated(Flux<T> entities) {
+        return entities.collectList().flatMap(this::populateRelationships).flatMapMany(Flux::fromIterable);
+    }
+
+    private Mono<T> populated(Mono<T> entity) {
+        return entity.flatMap(found -> populateRelationships(List.of(found)).map(List::getFirst));
+    }
+
+    private static boolean hasRelationshipSort(Sort sort) {
+        return sort.stream().anyMatch(order -> order.getProperty().contains("."));
+    }
+
+    private Flux<T> findAllByRelationshipSort(Pageable pageable) {
+        Map<String, String> sortColumns = sortColumns();
+        String orderBy = pageable
+            .getSort()
+            .stream()
+            .map(order -> {
+                String column = sortColumns.get(order.getProperty());
+                if (column == null) {
+                    throw new IllegalArgumentException("Cannot sort by '%s'".formatted(order.getProperty()));
+                }
+                return column + (order.isAscending() ? " ASC" : " DESC");
+            })
+            .collect(Collectors.joining(", "));
+        String sql = selectWithRelationsSql() + " ORDER BY " + orderBy;
+        if (pageable.isPaged()) {
+            sql += " " + dialect.limit().getLimitOffset(pageable.getPageSize(), pageable.getOffset());
+        }
+        return populated(db.sql(sql).map((row, metadata) -> template.getConverter().read(entityType, row, metadata)).all());
+    }
+
+    private Mono<Void> updateLinkTable(LinkTable<T> link, T entity) {
+        Object entityId = mappingEntity(entityType).getIdentifierAccessor(entity).getRequiredIdentifier();
+        return deleteFromLinkTable(link, entityId).then(
+            Flux.fromIterable(link.referenceIds().apply(entity))
+                .concatMap(referenceId ->
+                    db
+                        .sql("INSERT INTO " + link.table() + " (" + link.entityColumn() + ", " + link.referenceColumn() + ") VALUES (:entityId, :referenceId)")
+                        .bind("entityId", entityId)
+                        .bind("referenceId", referenceId)
+                        .then()
+                )
+                .then()
+        );
+    }
+
+    private Mono<Void> deleteFromLinkTable(LinkTable<T> link, Object entityId) {
+        return db.sql("DELETE FROM " + link.table() + " WHERE " + link.entityColumn() + " = :entityId").bind("entityId", entityId).then();
+    }
+
+    private RelationalPersistentEntity<?> mappingEntity(Class<?> type) {
+        return template.getConverter().getMappingContext().getRequiredPersistentEntity(type);
+    }
+}

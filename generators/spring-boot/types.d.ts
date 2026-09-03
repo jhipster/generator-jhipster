@@ -86,8 +86,6 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   mapsIdAssoc?: R;
   reactiveEagerRelations: RelationshipWithEntity<R, this>[];
 
-  reactiveOtherEntities: Set<this>;
-  reactiveUniqueEntityTypes: Set<string>;
   requiresPersistableImplementation?: boolean;
 }
 

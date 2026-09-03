@@ -19,6 +19,23 @@
 import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../../../base-application/support/task-type-inference.ts';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/index.ts';
 
+import type { Application, Entity } from './types.ts';
+
+/**
+ * Entities that don't need a custom repository implementation use a plain Spring Data R2DBC repository interface.
+ * A custom implementation is required to populate to-one relationships, maintain many-to-many link tables,
+ * insert entities with a client provided id (maps id), and to filter by criteria.
+ */
+const useSimpleR2dbcRepository = (ctx: any): boolean =>
+  ctx.entityR2dbcRepository ??
+  !(
+    ctx.reactiveEagerRelations.length > 0 ||
+    ctx.relationships.some((rel: any) => rel.shouldWriteJoinTable) ||
+    ctx.implementsEagerLoadApis ||
+    ctx.jpaMetamodelFiltering ||
+    ctx.isUsingMapsId
+  );
+
 const domainFiles = asWriteFilesBlock([
   {
     condition: generator => !generator.reactive && generator.entityDomainLayer,
@@ -70,26 +87,41 @@ const sqlFiles = asWriteFilesSection({
       ],
     },
     {
-      condition: ctx => ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer && !ctx.entityR2dbcRepository,
+      condition: ctx => ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer && !useSimpleR2dbcRepository(ctx),
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: [
-        'repository/_entityClass_Repository_reactive.java',
-        'repository/_entityClass_RepositoryInternalImpl_reactive.java',
-        'repository/_entityClass_SqlHelper_reactive.java',
-        'repository/rowmapper/_entityClass_RowMapper_reactive.java',
-      ],
+      templates: ['repository/_entityClass_Repository_reactive.java', 'repository/_entityClass_RepositoryInternalImpl_reactive.java'],
     },
     {
-      condition: ctx => ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer && ctx.entityR2dbcRepository,
+      condition: ctx => ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer && useSimpleR2dbcRepository(ctx),
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['repository/_entityClass_Repository_r2dbc.java'],
     },
   ],
 });
 
-export function cleanupEntitiesTask() {}
+export const cleanupEntitiesTask = asWritingEntitiesTask<Entity, Application>(async function cleanupEntitiesTask({
+  application,
+  control,
+  entities,
+}) {
+  if (!application.reactive) return;
+  for (const entity of entities.filter(
+    entity => !entity.builtIn && !entity.skipServer && !entity.embedded && entity.entityPersistenceLayer,
+  )) {
+    await control.cleanupFiles({
+      '9.3.1': [
+        `${application.srcMainJava}/${entity.entityAbsoluteFolder}/repository/${entity.entityClass}SqlHelper.java`,
+        `${application.srcMainJava}/${entity.entityAbsoluteFolder}/repository/rowmapper/${entity.entityClass}RowMapper.java`,
+        [
+          useSimpleR2dbcRepository(entity),
+          `${application.srcMainJava}/${entity.entityAbsoluteFolder}/repository/${entity.entityClass}RepositoryInternalImpl.java`,
+        ],
+      ],
+    });
+  }
+});
 
-export default asWritingEntitiesTask(async function writeEntitiesTask({ application, entities }) {
+export default asWritingEntitiesTask<Entity, Application>(async function writeEntitiesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     if (entity.builtInUser) {
       await this.writeFiles({
@@ -106,6 +138,29 @@ export default asWritingEntitiesTask(async function writeEntitiesTask({ applicat
       await this.writeFiles({
         sections: sqlFiles,
         context: { ...application, ...entity },
+      });
+    }
+  }
+
+  if (application.reactive) {
+    const customRepositoryEntities = entities.filter(
+      entity =>
+        !entity.skipServer && !entity.builtIn && !entity.embedded && entity.entityPersistenceLayer && !useSimpleR2dbcRepository(entity),
+    );
+    if (customRepositoryEntities.length > 0) {
+      await this.writeFiles({
+        blocks: [
+          {
+            ...javaMainPackageTemplatesBlock(),
+            templates: [
+              'repository/AbstractR2dbcRepository_reactive.java',
+              ...(customRepositoryEntities.some(entity => entity.jpaMetamodelFiltering) ?
+                ['repository/CriteriaBuilder_reactive.java']
+              : []),
+            ],
+          },
+        ],
+        context: application,
       });
     }
   }

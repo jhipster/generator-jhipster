@@ -196,15 +196,6 @@ exports[`generator - sql - entities gateway-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -217,28 +208,19 @@ exports[`generator - sql - entities gateway-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AbstractR2dbcRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
+  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
@@ -333,15 +315,6 @@ exports[`generator - sql - entities gateway-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -366,16 +339,16 @@ exports[`generator - sql - entities gateway-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AbstractR2dbcRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
@@ -384,16 +357,7 @@ exports[`generator - sql - entities gateway-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/repository/SimpleRepositoryInternalImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
@@ -667,15 +631,6 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -691,40 +646,22 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AbstractR2dbcRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
+  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/MicroserviceRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
@@ -837,15 +774,6 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -861,40 +789,22 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/main/java/com/mycompany/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AbstractR2dbcRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
+  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/MicroserviceRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
@@ -1201,15 +1111,6 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -1225,40 +1126,22 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AbstractR2dbcRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
+  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/MicroserviceRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
@@ -1508,15 +1391,6 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -1532,40 +1406,22 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AbstractR2dbcRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
+  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/MicroserviceRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
@@ -1872,15 +1728,6 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -1896,40 +1743,22 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/domain/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AbstractR2dbcRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
+  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceSqlHelper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/MicroserviceRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/service/AnotherSimpleService.java": {

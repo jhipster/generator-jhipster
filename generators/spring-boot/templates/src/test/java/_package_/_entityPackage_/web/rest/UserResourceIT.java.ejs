@@ -40,7 +40,7 @@ import <%- packageName %>.repository.search.UserSearchRepository;
 import <%- packageName %>.security.AuthoritiesConstants;
 import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%- packageName %>.repository.EntityManager;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 <%_ } _%>
 import <%- packageName %>.service.mapper.UserMapper;
 
@@ -181,7 +181,7 @@ class UserResourceIT {
 <%_ if (databaseTypeSql) { _%>
 
     @Autowired
-    private EntityManager em;
+    private <%- reactive ? 'R2dbcEntityTemplate template' : 'EntityManager em' %>;
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 
@@ -235,7 +235,7 @@ class UserResourceIT {
     /**
      * Delete all the users from the database.
      */
-    public static void deleteEntities(EntityManager em) {
+    public static void deleteEntities(R2dbcEntityTemplate template) {
     }
 <%_ } _%>
 
