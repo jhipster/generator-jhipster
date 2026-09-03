@@ -87,7 +87,8 @@ export default defineComponent({
   <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         res.<%- fieldName %> = new Date(res.<%- fieldName %>);
-<%_ } } _%>
+  <%_ } _%>
+<%_ } _%>
         <%- entityInstance %>.value = res;
       } catch (error) {
         alertService.showHttpError(error.response);
@@ -191,7 +192,8 @@ export default defineComponent({
     <%_ if (relationship.collection && relationship.persistableRelationship) { _%>
       <%_ const { relationshipFieldNamePlural } = relationship; _%>
     this.<%- entityInstance %>.<%- relationshipFieldNamePlural %> = [];
-  <%_ } } _%>
+    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
   },
   methods: {

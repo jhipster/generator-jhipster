@@ -26,16 +26,8 @@ _%>
 <%_ if (jpaMetamodelFiltering) { _%>
     public <% if (reactiveNoPagination) { %>Flux<<%- restClass %>><% } else if (reactivePagination) { %>Mono<ResponseEntity<List<<%- restClass %>>>><% } else { %>ResponseEntity<List<<%- restClass %>>><% } %> getAll<%- entityClassPlural %>(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.core.annotations.ParameterObject Pageable pageable<%- reactive ? ', ServerHttpRequest request' : '' %><% } %>) {
         LOG.debug("REST request to get <%- entityClassPlural %> by criteria: {}", criteria);
-  <% if (!reactive) { %>
-    <%_ if (paginationNo) { _%>
-        List<<%- restClass %>> entityList = <%- entityInstance %>QueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
-    <%_ } else { _%>
-        Page<<%- restClass %>> page = <%- entityInstance %>QueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    <%_ } _%>
-  <%_ } else { _%>
+
+  <%_ if (reactive) { %>
     <%_ if (paginationNo) { _%>
       return <%- entityInstance %>Service.findByCriteria(criteria);
     <%_ } else { _%>
@@ -50,6 +42,15 @@ _%>
               ).body(countWithEntities.getT2())
       );
     <%_ } _%>
+  <%_ } else { _%>
+    <%_ if (paginationNo) { _%>
+        List<<%- restClass %>> entityList = <%- entityInstance %>QueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    <%_ } else { _%>
+        Page<<%- restClass %>> page = <%- entityInstance %>QueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    <%_ } _%>
   <%_ } _%>
     }
 
@@ -62,11 +63,11 @@ _%>
     @GetMapping("/count")
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<Long><%- reactive ? '>' : '' %> count<%- entityClassPlural %>(<%- entityClass %>Criteria criteria) {
         LOG.debug("REST request to count <%- entityClassPlural %> by criteria: {}", criteria);
-  <%_ if (!reactive) { _%>
-        return ResponseEntity.ok().body(<%- entityInstance %>QueryService.countByCriteria(criteria));
-  <%_ } else { _%>
+  <%_ if (reactive) { _%>
         return <%- entityInstance %>Service.countByCriteria(criteria)
                 .map(count -> ResponseEntity.status(HttpStatus.OK).body(count));
+  <%_ } else { _%>
+        return ResponseEntity.ok().body(<%- entityInstance %>QueryService.countByCriteria(criteria));
   <%_ } _%>
     }
 <%_ } else { _%>

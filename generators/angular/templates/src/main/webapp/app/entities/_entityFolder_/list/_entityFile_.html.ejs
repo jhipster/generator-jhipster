@@ -94,27 +94,20 @@
                     </th>
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded && !builtInUserManagement)) { _%>
-  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo || relationship.relationshipSerializePrimaryKeyOnly)) { _%>
     <%_ const fieldName = `.${relationship.otherEntityField}`;
         const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
     _%>
-                    <th scope="col"<% if (relatedFieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- relationship.relationshipName + fieldName %>"<% } %>>
+                    <th scope="col"<% if (relatedFieldSupportsSortBy && !relationship.collection) { %> <%- jhiPrefix %>SortBy="<%- relationship.relationshipName + fieldName %>"<% } %>>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span>
-    <%_ if (relatedFieldSupportsSortBy) { _%>
+    <%_ if (relatedFieldSupportsSortBy && !relationship.collection) { _%>
                             <fa-icon class="p-1" icon="sort" />
     <%_ } _%>
                         </div>
                     </th>
   <%_ } _%>
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-                    <th scope="col">
-                        <div class="d-flex">
-                            <span>__jhiTranslateTag__('userManagement.profiles')</span>
-                        </div>
-                    </th>
 <%_ } _%>
                    <th scope="col"></th>
                </tr>
@@ -141,7 +134,15 @@
                         <span>{{ <%- entityInstance %>.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>.<%- fieldName %>) }}</span>
                     }
                     </td>
-  <%_ } else if (builtInUserManagement && fieldName === 'langKey') { _%>
+  <%_ } else if (field.collection) { _%>
+                    <td>
+                    @for (<%- field.angularFieldNameSingular %> of <%- entityInstance %>.<%- fieldName %>; track $index) {
+                        <div>
+                            <span class="badge bg-info">{{ <%- field.angularFieldNameSingular %> }}</span>
+                        </div>
+                    }
+                    </td>
+  <%_ } else if (field.clientConstantsAsValues) { _%>
                     <td>{{ <%- entityInstance %>.<%- fieldName %> }}</td>
   <%_ } else if (field.fieldIsEnum) { _%>
                     <%# TODO: import enum and use its key as label -%>
@@ -165,9 +166,9 @@
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<%- field.id ? '</a>' : '' %></td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded && !builtInUserManagement)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
-  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo || relationship.relationshipSerializePrimaryKeyOnly)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.collection) { _%>
@@ -181,7 +182,7 @@
       <%_ if (relationship.collection) { _%>
                     @for (<%- relationshipFieldName %> of <%- entityInstance %>.<%- relationshipFieldNamePlural %>; track $index; let last = $last) {
                         <span>
-                            <a class="form-control-static" [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- relationshipFieldName %>.<%- otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+                            <a <%- relationship.otherEntityName === 'Authority' ? 'class="badge bg-info"' : 'class="form-control-static"' %> [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- relationshipFieldName %><%- relationship.relationshipSerializePrimaryKeyOnly ? '' : `.${relationship.otherEntity.primaryKey.name}` %>, 'view']">{{ <%- relationshipFieldName %><%- relationship.relationshipSerializePrimaryKeyOnly ? '' : `.${relationship.otherEntity.primaryKey.name}` %> }}</a>{{ last ? '' : ', ' }}
                         </span>
                     }
       <%_ } else { _%>
@@ -194,15 +195,6 @@
     <%_ } _%>
                     </td>
   <%_ } _%>
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-                    <td>
-                    @for (authority of <%- entityInstance %>.authorities; track $index) {
-                        <div>
-                            <span class="badge bg-info">{{ authority }}</span>
-                        </div>
-                    }
-                    </td>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
@@ -233,7 +225,7 @@
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
-                            <button type="submit" (click)="delete(<%- entityInstance %>)"
+                            <button type="button" (click)="delete(<%- entityInstance %>)"
                                     class="btn btn-danger btn-sm"
   <%_ if (builtInUserManagement) { _%>
                                     [disabled]="!currentAccount() || currentAccount()?.login === <%- entityInstance %>.login"

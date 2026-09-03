@@ -72,12 +72,12 @@ describe('login page', () => {
   it('requires password', () => {
     cy.get(usernameLoginSelector).should('be.visible').type('a-login');
     cy.get(submitLoginSelector).click();
-<%_ if (!clientFrameworkReact) { _%>
-    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<%- authenticationTypeSession ? '401' : '400' %>));
-    cy.get(errorLoginSelector).should('be.visible');
-<%_ } else { _%>
+<%_ if (clientFrameworkReact) { _%>
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
+<%_ } else { _%>
+    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<%- authenticationTypeSession ? '401' : '400' %>));
+    cy.get(errorLoginSelector).should('be.visible');
 <%_ } _%>
   });
 

@@ -31,7 +31,7 @@ import federationConfig from './module-federation.config.ts';
 
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
-const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>/', import.meta.url));
+const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url));
 
 const config = defineConfig({
   plugins: [
@@ -82,10 +82,9 @@ const config = defineConfig({
     },
   },
   resolve: {
+    tsconfigPaths: true,
     alias: {
       vue: 'vue/dist/vue.esm-bundler.js',
-      '@': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url)),
-      '@content': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/', import.meta.url)),
     },
   },
   define: {

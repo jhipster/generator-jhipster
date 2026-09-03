@@ -36,7 +36,7 @@ import packageJson from './package.json' with { type: 'json' };
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
-const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>/', import.meta.url));
+const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url));
 
 <%_ } _%>
 const development = process.env.NODE_ENV !== 'production';

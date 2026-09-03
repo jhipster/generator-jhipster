@@ -50,6 +50,8 @@ jobs:
         shell: bash
         # Scripts will be executed later by npm pack
       - run: npm ci --engine-strict --ignore-scripts
+        # Check for package.json conflicts, dependabot updates the lock file and npm ci ignores lock file checks.
+      - run: npm install --ignore-scripts
       - run: npm run prettier:check
       - run: npm pack
       - run: npx -y --package generator-jhipster-$(./bin/jhipster.cjs --version).tgz jhipster --version

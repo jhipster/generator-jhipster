@@ -22,10 +22,10 @@ import { Route<%- communicationSpringWebsocket ? ', useLocation' : '' %> } from 
 import { loadRemote } from '@module-federation/runtime';
 <%_ } _%>
 
-<%_ if (!authenticationTypeOauth2) { _%>
-import Login from 'app/modules/login/login';
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
 import LoginRedirect from 'app/modules/login/login-redirect';
+<%_ } else { _%>
+import Login from 'app/modules/login/login';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
 import Register from 'app/modules/account/register/register';
@@ -38,7 +38,6 @@ import Home from 'app/modules/home/home';
 import EntitiesRoutes from 'app/entities/routes';
 import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
-import PageNotFound from 'app/shared/error/page-not-found';
 import { Authority } from 'app/shared/jhipster/constants';
 <%_ if (communicationSpringWebsocket) { _%>
 import { sendActivity } from 'app/config/websocket-middleware';
@@ -124,7 +123,6 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
-          <Route path="*" element={<PageNotFound />} />
         </ErrorBoundaryRoutes>
       </Suspense>
     </div>

@@ -52,17 +52,17 @@ import { AccountService } from 'app/core/auth';
 export default class Home {
   public readonly account = inject(AccountService).account;
 
-<%_ if (!authenticationTypeOauth2) { _%>
-  private readonly router = inject(Router);
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   private readonly loginService = inject(LoginService);
+<%_ } else { _%>
+  private readonly router = inject(Router);
 <%_ } _%>
 
   login(): void {
-<%_ if (!authenticationTypeOauth2) { _%>
-    this.router.navigate(['/login']);
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     this.loginService.login();
+<%_ } else { _%>
+    this.router.navigate(['/login']);
 <%_ } _%>
   }
 }

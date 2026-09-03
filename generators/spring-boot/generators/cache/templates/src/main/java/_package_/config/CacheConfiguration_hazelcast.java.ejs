@@ -61,7 +61,7 @@ public class CacheConfiguration {
     private Registration registration;
 <%_ } _%>
 
-    public CacheConfiguration(<% if (cacheProviderHazelcast) { %>Environment env<% if (serviceDiscoveryAny) { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
+    public CacheConfiguration(<% if (cacheProviderHazelcast) { %>Environment env<%- serviceDiscoveryAny ? ', ServerProperties serverProperties, DiscoveryClient discoveryClient' : '' %><% } %>) {
         this.env = env;
 <%_ if (serviceDiscoveryAny) { _%>
         this.serverProperties = serverProperties;

@@ -91,10 +91,10 @@ spec:
   - name: http
     port: 3000
     targetPort: 3000
-<%_ if (!kubernetesServiceTypeIngress) { _%>
-  type: <%- kubernetesServiceType %>
-<%_ } else { _%>
+<%_ if (kubernetesServiceTypeIngress) { _%>
   type: ClusterIP
+<%_ } else { _%>
+  type: <%- kubernetesServiceType %>
 <%_ } _%>
   selector:
     app: jhipster-grafana

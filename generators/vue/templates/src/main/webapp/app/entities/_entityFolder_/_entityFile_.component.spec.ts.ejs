@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount, type MountingOptions } from '@vue/test-utils';
 
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';

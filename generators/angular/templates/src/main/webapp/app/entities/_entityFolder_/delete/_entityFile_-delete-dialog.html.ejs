@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 @if (<%- entityInstance %>) {
-<form name="deleteForm" (ngSubmit)="confirmDelete(<%- entityInstance %>.<%- primaryKey.name %>!)">
+<form name="deleteForm" (ngSubmit)="confirmDelete(<%- entityInstance %>.<%- primaryKey.name %>)">
     <div class="modal-header">
         <h4 class="modal-title" data-cy="<%- entityInstance %>DeleteDialogHeading">__jhiTranslateTag__('entity.delete.title')</h4>
     </div>

@@ -345,7 +345,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     it<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', () => {
   <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) { _%>
     <%_ const { fieldName, fieldIsEnum } = field;
-        let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
+        let fieldValue = entityFakeData ? entityFakeData[field.fieldName] : field.generateFakeData('cypress');
         if (fieldValue === undefined) {
           continue;
         }
@@ -362,7 +362,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
       cy.setFieldImageAsBytesOfEntity('<%- fieldName %>', 'integration-test.png', 'image/png');
 
     <%_ } else if (fieldIsEnum) { _%>
-      cy.get(`[data-cy="<%- fieldName %>"]`).select('<%- fieldValue %>');
+      cy.get(`[data-cy="<%- fieldName %>"]`).select(<%- field.collection ? `['${fieldValue}']` : `'${fieldValue}'` %>);
 
     <%_ } else if (field.fieldTypeString || field.fieldTypeNumeric || field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { _%>
       cy.get(`[data-cy="<%- fieldName %>"]`).type('<%- fieldValue %>');

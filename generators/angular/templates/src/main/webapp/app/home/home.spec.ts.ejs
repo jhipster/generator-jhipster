@@ -35,10 +35,10 @@ import Home from './home';
 describe('Home Component', () => {
   let comp: Home;
   let fixture: ComponentFixture<Home>;
-<%_ if (!authenticationTypeOauth2) { _%>
-  let mockRouter: Router;
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   let mockLoginService: LoginService;
+<%_ } else { _%>
+  let mockRouter: Router;
 <%_ } _%>
 
   beforeEach(() => {
@@ -65,32 +65,32 @@ describe('Home Component', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(Home);
     comp = fixture.componentInstance;
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
+    mockLoginService = TestBed.inject(LoginService);
+<%_ } else { _%>
 
     mockRouter = TestBed.inject(Router);
     vi.spyOn(mockRouter, 'navigate');
 
-<%_ } else { _%>
-    mockLoginService = TestBed.inject(LoginService);
 <%_ } _%>
   });
 
   describe('login', () => {
-<%_ if (!authenticationTypeOauth2) { _%>
-    it('should navigate to /login on login', () => {
-      // WHEN
-      comp.login();
-
-      // THEN
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
-    });
-<%_ } else { _%>
+<%_ if (authenticationTypeOauth2) { _%>
     it('should call loginService.login on login', () => {
       // WHEN
       comp.login();
 
       // THEN
       expect(mockLoginService.login).toHaveBeenCalled();
+    });
+<%_ } else { _%>
+    it('should navigate to /login on login', () => {
+      // WHEN
+      comp.login();
+
+      // THEN
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
     });
 <%_ } _%>
   });

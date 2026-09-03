@@ -192,7 +192,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         }
 
         mutateData(field, {
-          fieldSupportsSortBy: !field.transient,
+          fieldSupportsSortBy: !field.transient && !field.collection,
         });
       },
     });

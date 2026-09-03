@@ -33,7 +33,15 @@
   <%_ const { fieldName, fieldType } = field; _%>
         <dt><span<% if (field.documentation && enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else if (field.documentation) { %> ngbTooltip="<%- field.documentation %>"<% } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
-  <%_ if (builtInUserManagement && fieldName === 'langKey') { _%>
+  <%_ if (field.collection) { _%>
+            <ul class="list-unstyled">
+            @for (<%- field.angularFieldNameSingular %> of <%- entityInstance %>Ref.<%- fieldName %>; track $index) {
+                <li>
+                    <span class="badge bg-info">{{ <%- field.angularFieldNameSingular %> }}</span>
+                </li>
+            }
+            </ul>
+  <%_ } else if (field.clientConstantsAsValues) { _%>
           {{ <%- entityInstance %>Ref.<%- fieldName %> }}
   <%_ } else if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label -%>
@@ -74,14 +82,14 @@
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { persistableRelationship, relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
-  <%_ if (builtInUserManagement && relationship.otherEntityName === 'Authority') { _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
 
-        <dt><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.profiles')</span></dt>
+        <dt><span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span></dt>
         <dd>
             <ul class="list-unstyled">
-            @for (authority of <%- entityInstance %>Ref.authorities; track $index) {
+            @for (<%- relationshipFieldName %> of <%- entityInstance %>Ref.<%- relationship.propertyName %>; track $index) {
                 <li>
-                    <span class="badge bg-info">{{ authority }}</span>
+                    <span class="badge bg-info">{{ <%- relationshipFieldName %> }}</span>
                 </li>
             }
             </ul>
@@ -119,7 +127,7 @@
 <%_ } _%>
       </dl>
 
-      <button type="submit"
+      <button type="button"
           (click)="previousState()"
           class="btn btn-info"
           data-cy="entityDetailsBackButton">

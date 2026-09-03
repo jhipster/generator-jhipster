@@ -278,7 +278,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             .filter(entity => !entity.skipClient && !entity.builtInUser)
             .flatMap(entity =>
               entity.fields.flatMap(field => {
-                if (!field.fieldIsEnum) return [];
+                if (!field.fieldIsEnum || field.clientConstantsAsValues) return [];
                 return this.languagesToGenerate.map(({ languageTag }) =>
                   this.writeFiles({
                     sections: {
@@ -317,7 +317,9 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       addEntities({ entities, source }) {
-        for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
+        for (const entity of entities.filter(
+          entity => !entity.skipClient && !entity.builtInUser && entity.entityTranslationKeyMenuPath.startsWith('global'),
+        )) {
           for (const { languageTag } of this.languagesToGenerate) {
             source.addEntityTranslationKey?.({
               language: languageTag,

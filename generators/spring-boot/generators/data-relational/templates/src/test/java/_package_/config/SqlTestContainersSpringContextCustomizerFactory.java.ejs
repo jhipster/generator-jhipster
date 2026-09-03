@@ -51,11 +51,11 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                 ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
-<%_ if (prodDatabaseType !== devDatabaseType) { _%>
+<%_ if (prodDatabaseType === devDatabaseType) { _%>
+                if (null != sqlAnnotation) {
+<%_ } else { _%>
                 boolean usingTestProdProfile = List.of(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
                 if (null != sqlAnnotation && usingTestProdProfile) {
-<%_ } else { _%>
-                if (null != sqlAnnotation) {
 <%_ } _%>
                     log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
                     log.info("Warming up the sql database");

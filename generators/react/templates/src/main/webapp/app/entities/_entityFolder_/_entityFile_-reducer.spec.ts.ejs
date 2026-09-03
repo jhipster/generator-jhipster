@@ -20,7 +20,7 @@
     const entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { configureStore } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>

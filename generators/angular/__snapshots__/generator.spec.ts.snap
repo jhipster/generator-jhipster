@@ -4,7 +4,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
 {
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.html": {
     "contents": "@if (userManagement) {
-<form name="deleteForm" (ngSubmit)="confirmDelete(userManagement.login!)">
+<form name="deleteForm" (ngSubmit)="confirmDelete(userManagement.login)">
   <div class="modal-header">
     <h4 class="modal-title" data-cy="userManagementDeleteDialogHeading">
       Confirm delete operation
@@ -204,7 +204,7 @@ export class UserManagementDeleteDialog {
       </dl>
 
       <button
-        type="submit"
+        type="button"
         (click)="previousState()"
         class="btn btn-info"
         data-cy="entityDetailsBackButton"
@@ -443,10 +443,15 @@ export class UserManagementDetail {
           <td>{{ userManagement.lastModifiedBy }}</td>
           <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
           <td>
-            @for (authority of userManagement.authorities; track $index) {
-            <div>
-              <span class="badge bg-info">{{ authority }}</span>
-            </div>
+            @for (authority of userManagement.authorities; track $index; let
+            last = $last) {
+            <span>
+              <a
+                class="badge bg-info"
+                [routerLink]="['/authority', authority, 'view']"
+                >{{ authority }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
             }
           </td>
           <td class="text-end">
@@ -470,7 +475,7 @@ export class UserManagementDetail {
               </a>
 
               <button
-                type="submit"
+                type="button"
                 (click)="delete(userManagement)"
                 class="btn btn-danger btn-sm"
                 [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
@@ -808,7 +813,6 @@ import {
 } from "app/shared/date";
 import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
 import { ItemCount } from "app/shared/pagination";
-import { FormsModule } from "@angular/forms";
 import { IUserManagement } from "../user-management.model";
 import {
   ITEMS_PER_PAGE,
@@ -827,7 +831,6 @@ import { UserManagementDeleteDialog } from "../delete/user-management-delete-dia
   templateUrl: "./user-management.html",
   imports: [
     RouterLink,
-    FormsModule,
     FontAwesomeModule,
     AlertError,
     Alert,
@@ -1651,6 +1654,7 @@ describe("UserManagement Form Service", () => {
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
             lastModifiedDate: expect.any(Object),
+            authorities: expect.any(Object),
           }),
         );
       });
@@ -1673,6 +1677,7 @@ describe("UserManagement Form Service", () => {
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
             lastModifiedDate: expect.any(Object),
+            authorities: expect.any(Object),
           }),
         );
       });
@@ -1750,7 +1755,7 @@ type NewUserManagementFormRawValue = FormValueOf<NewUserManagement>;
 
 type UserManagementFormDefaults = Pick<
   NewUserManagement,
-  "login" | "activated" | "createdDate" | "lastModifiedDate"
+  "login" | "activated" | "createdDate" | "lastModifiedDate" | "authorities"
 >;
 
 type UserManagementFormGroupContent = {
@@ -1767,6 +1772,7 @@ type UserManagementFormGroupContent = {
   createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
   lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
   lastModifiedDate: FormControl<UserManagementFormRawValue["lastModifiedDate"]>;
+  authorities: FormControl<UserManagementFormRawValue["authorities"]>;
 };
 
 export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
@@ -1784,22 +1790,16 @@ export class UserManagementFormService {
 
     return new FormGroup<UserManagementFormGroupContent>({
       id: new FormControl(userManagementRawValue.id),
-      login: new FormControl(
-        {
-          value: userManagementRawValue.login,
-          disabled: userManagementRawValue.login !== null,
-        },
-        {
-          nonNullable: true,
-          validators: [
-            Validators.required,
-            Validators.maxLength(50),
-            Validators.pattern(
-              "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
-            ), // NOSONAR
-          ],
-        },
-      ),
+      login: new FormControl(userManagementRawValue.login, {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.maxLength(50),
+          Validators.pattern(
+            "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+          ), // NOSONAR
+        ],
+      }),
       firstName: new FormControl(userManagementRawValue.firstName, {
         validators: [Validators.maxLength(50)],
       }),
@@ -1824,6 +1824,7 @@ export class UserManagementFormService {
       lastModifiedDate: new FormControl(
         userManagementRawValue.lastModifiedDate,
       ),
+      authorities: new FormControl(userManagementRawValue.authorities ?? []),
     });
   }
 
@@ -1846,10 +1847,6 @@ export class UserManagementFormService {
       });
     form.reset({
       ...userManagementRawValue,
-      login: {
-        value: userManagementRawValue.login,
-        disabled: userManagementRawValue.login !== null,
-      },
     });
   }
 
@@ -1861,6 +1858,7 @@ export class UserManagementFormService {
       activated: true,
       createdDate: currentTime,
       lastModifiedDate: currentTime,
+      authorities: [],
     };
   }
 
@@ -1893,6 +1891,7 @@ export class UserManagementFormService {
       lastModifiedDate: userManagement.lastModifiedDate
         ? userManagement.lastModifiedDate.format(DATE_TIME_FORMAT)
         : undefined,
+      authorities: userManagement.authorities ?? [],
     };
   }
 }
@@ -1923,7 +1922,6 @@ export class UserManagementFormService {
             id="field_login"
             data-cy="login"
             formControlName="login"
-            [readonly]="editForm.get('login')!.disabled"
           />
           @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
           <div>
@@ -1935,7 +1933,8 @@ export class UserManagementFormService {
             >
             } @if (loginRef.errors?.pattern) {
             <small class="form-text text-danger"
-              >This field should follow pattern for Login.</small
+              >This field can only contain letters, digits and e-mail
+              addresses.</small
             >
             }
           </div>
@@ -2020,16 +2019,18 @@ export class UserManagementFormService {
 
         @if (editForm.controls.activated.value !== null) {
 
-        <div class="mb-3">
-          <label class="form-label" for="field_activated">Activated</label>
+        <div class="mb-3 form-check">
           <input
             type="checkbox"
-            class="form-check"
+            class="form-check-input"
             name="activated"
             id="field_activated"
             data-cy="activated"
             formControlName="activated"
           />
+          <label class="form-check-label" for="field_activated"
+            >Activated</label
+          >
         </div>
         }
 
@@ -2211,7 +2212,7 @@ describe("UserManagement Management Update Component", () => {
     "contents": "import { Component, computed, inject, signal, OnInit } from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
-import { finalize, Observable } from "rxjs";
+import { finalize, map, Observable } from "rxjs";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { AlertError } from "app/shared/alert";
@@ -2248,6 +2249,8 @@ export class UserManagementUpdate implements OnInit {
     this.userManagementFormService.createUserManagementFormGroup();
 
   ngOnInit(): void {
+    // Load the authorities used by the profiles select.
+    this.authorityService.authoritiesParams.set({});
     this.activatedRoute.data.subscribe(({ userManagement }) => {
       this.userManagement = userManagement;
       if (userManagement) {
@@ -7913,6 +7916,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
     "stateCleared": "modified",
   },
@@ -8478,11 +8487,11 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "application": "Application[jhipster]",
       "control": "TaskParameter[control]",
       "entities": [
+        "Entity[UserManagement]",
         "Entity[Authority]",
         "Entity[Simple]",
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },

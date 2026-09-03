@@ -59,10 +59,7 @@ import org.springframework.core.env.Profiles;
 <%_ } _%>
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
-<%_ if (!reactive) { _%>
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-<%_ } else { _%>
+<%_ if (reactive) { _%>
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
@@ -70,6 +67,9 @@ import org.springframework.web.reactive.result.method.HandlerMethodArgumentResol
 import org.springframework.web.server.WebExceptionHandler;
 import <%- packageName %>.web.rest.errors.ExceptionTranslator;
 import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
+<%_ } else { _%>
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 

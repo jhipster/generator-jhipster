@@ -26,7 +26,7 @@ gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.1.0' }
 
 gradle-sonarqube = { id = 'org.sonarqube', version = '7.4.0.8496' }
 
-spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '8.10.0' }
+spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '8.10.1' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.15.0' }
 
@@ -34,8 +34,8 @@ gradle-develocity = { id = 'com.gradle.develocity', version = '4.5.0' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.8.0' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.15.1.2' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.15.1.3' }
 
-gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.24.0' }
+gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.25.0' }
 
 gradle-jib = { id = "com.google.cloud.tools.jib", version = "3.5.4" }
