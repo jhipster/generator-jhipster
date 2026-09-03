@@ -32,34 +32,34 @@
 <%_ for (const field of fields) { _%>
   <%_ const { fieldName, fieldNameUnderscored } = field;
       let columnType;
-      if (field.fieldTypeUUID) {
-        columnType = 'uuid';
-      } else if (field.fieldTypeString || field.fieldIsEnum || field.fieldTypeDuration) {
-        columnType = 'text';
-      } else if (field.fieldTypeInteger) {
-        columnType = 'int';
-      } else if (field.fieldTypeLong) {
-        columnType = 'bigint';
-      } else if (field.fieldTypeFloat) {
-        columnType = 'float';
-      } else if (field.fieldTypeDouble) {
-        columnType = 'double';
-      } else if (field.fieldTypeBigDecimal) {
-        columnType = 'decimal';
-      } else if (field.fieldTypeLocalDate) {
-        columnType = 'date';
-      } else if (field.fieldTypeInstant) {
-        columnType = 'timestamp';
-      } else if (field.fieldTypeZonedDateTime) {
-        columnType = 'tuple&lt;timestamp,varchar&gt;';
-      } else if (field.fieldTypeLocalTime) {
-        columnType = 'time';
-      } else if (field.fieldTypeBoolean) {
-        columnType = 'boolean';
-      } else if (field.fieldTypeByteBuffer) {
-        columnType = field.blobContentTypeText ? 'text' : 'blob';
-      }
   _%>
+  <%_ if (field.fieldTypeUUID) { _%>
+    <%_ columnType = 'uuid'; _%>
+  <%_ } else if (field.fieldTypeString || field.fieldIsEnum || field.fieldTypeDuration) { _%>
+    <%_ columnType = 'text'; _%>
+  <%_ } else if (field.fieldTypeInteger) { _%>
+    <%_ columnType = 'int'; _%>
+  <%_ } else if (field.fieldTypeLong) { _%>
+    <%_ columnType = 'bigint'; _%>
+  <%_ } else if (field.fieldTypeFloat) { _%>
+    <%_ columnType = 'float'; _%>
+  <%_ } else if (field.fieldTypeDouble) { _%>
+    <%_ columnType = 'double'; _%>
+  <%_ } else if (field.fieldTypeBigDecimal) { _%>
+    <%_ columnType = 'decimal'; _%>
+  <%_ } else if (field.fieldTypeLocalDate) { _%>
+    <%_ columnType = 'date'; _%>
+  <%_ } else if (field.fieldTypeInstant) { _%>
+    <%_ columnType = 'timestamp'; _%>
+  <%_ } else if (field.fieldTypeZonedDateTime) { _%>
+    <%_ columnType = 'tuple&lt;timestamp,varchar&gt;'; _%>
+  <%_ } else if (field.fieldTypeLocalTime) { _%>
+    <%_ columnType = 'time'; _%>
+  <%_ } else if (field.fieldTypeBoolean) { _%>
+    <%_ columnType = 'boolean'; _%>
+  <%_ } else if (field.fieldTypeByteBuffer) { _%>
+    <%_ columnType = field.blobContentTypeText ? 'text' : 'blob'; _%>
+  <%_ } _%>
   <%_ if (columnType) { _%>
     <%_ if (field.id) { _%>
             <column name="<%- fieldName %>" type="<%- columnType %>">
