@@ -129,7 +129,7 @@
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
     "@types/lodash-es": "4.17.12",
-    "@yeoman/adapter": "4.0.2",
+    "@yeoman/adapter": "5.0.0",
     "@yeoman/conflicter": "4.2.0",
     "@yeoman/namespace": "2.1.0",
     "@yeoman/transform": "2.1.2",
