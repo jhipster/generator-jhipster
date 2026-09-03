@@ -53,6 +53,10 @@ export function preparePostEntityServerDerivedProperties(
     entity.isUsingMapsId = false;
     entity.mapsIdAssoc = undefined;
   }
+  // Deprecated: kept for blueprints, not used by the generator anymore.
+  entity.reactiveOtherEntities = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity));
+  entity.reactiveUniqueEntityTypes = new Set(entity.reactiveEagerRelations.map(rel => rel.otherEntity.entityNameCapitalized));
+  entity.reactiveUniqueEntityTypes.add(entity.entityClass);
   if (entity.databaseType === 'sql') {
     for (const relationship of entity.relationships) {
       if (!relationship.otherEntity.embedded) {

@@ -64,6 +64,8 @@ const expectedEntity = (entity: any) => ({
   fields: entity?.fields?.map(expectedField),
   relationships: expect.any(Array),
   primaryKey: expectedPrimaryKey(entity.primaryKey),
+  reactiveOtherEntities: expect.any(Set),
+  reactiveUniqueEntityTypes: expect.any(Set),
 });
 
 describe(`generator - ${generator}`, () => {
