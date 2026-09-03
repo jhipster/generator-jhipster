@@ -93,6 +93,8 @@ describe(`generator - ${databaseType}`, () => {
     const javaPackageDir = 'src/main/java/com/mycompany/myapp/';
     const javaTestPackageDir = 'src/test/java/com/mycompany/myapp/';
     const dockerDir = 'src/main/docker/';
+    const initialSchema = 'src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml';
+    const liquibaseDataDir = 'src/main/resources/config/liquibase/data/';
     const cqlLoaderFiles = [
       'src/main/resources/config/cql/create-keyspace.cql',
       'src/main/resources/config/cql/create-keyspace-prod.cql',
@@ -135,6 +137,55 @@ describe(`generator - ${databaseType}`, () => {
         runResult.assertNoFileContent(`${dockerDir}cassandra.yml`, 'cassandra-migration');
         runResult.assertNoFileContent(`${dockerDir}cassandra-cluster.yml`, 'cassandra-migration');
         runResult.assertNoFileContent(`${dockerDir}app.yml`, 'cassandra-migration');
+      });
+
+      it('should create the schema with liquibase changes and load the default users from csv files', () => {
+        runResult.assertFileContent(initialSchema, '<createTable tableName="user">');
+        runResult.assertFileContent(initialSchema, '<createTable tableName="user_by_activation_key">');
+        runResult.assertFileContent(initialSchema, 'file="config/liquibase/data/user.csv"');
+        runResult.assertNoFileContent(initialSchema, '<sql ');
+        runResult.assertNoFileContent(initialSchema, 'persistent_token');
+        runResult.assertFile([
+          `${liquibaseDataDir}user.csv`,
+          `${liquibaseDataDir}user_by_login.csv`,
+          `${liquibaseDataDir}user_by_email.csv`,
+        ]);
+        runResult.assertNoFile(`${liquibaseDataDir}user_authority.csv`);
+        runResult.assertFileContent(
+          `${liquibaseDataDir}user.csv`,
+          "1;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost;true;en;{'ROLE_USER','ROLE_ADMIN'}",
+        );
+        runResult.assertFileContent(`${javaPackageDir}repository/UserRepository.java`, 'user_by_activation_key');
+      });
+    });
+
+    describe('with liquibase, session authentication', () => {
+      before(async () => {
+        await helpers.runJHipster('server').withJHipsterConfig({ databaseType, authenticationType: 'session', skipClient: true });
+      });
+
+      it('should create the persistent token tables', () => {
+        runResult.assertFileContent(initialSchema, '<createTable tableName="persistent_token">');
+        runResult.assertFileContent(initialSchema, '<createTable tableName="persistent_token_by_user">');
+      });
+    });
+
+    describe('with liquibase, oauth2 and user synchronization', () => {
+      before(async () => {
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig({ databaseType, authenticationType: 'oauth2', syncUserWithIdp: true, skipClient: true });
+      });
+
+      it('should not create the user management tables nor load default users', () => {
+        runResult.assertFileContent(initialSchema, '<createTable tableName="user_by_login">');
+        runResult.assertNoFileContent(initialSchema, 'user_by_activation_key');
+        runResult.assertNoFileContent(initialSchema, 'user_by_reset_key');
+        runResult.assertNoFileContent(initialSchema, 'activation_key_by_creation_date');
+        runResult.assertNoFileContent(initialSchema, '<loadData');
+        runResult.assertNoFile(`${liquibaseDataDir}user.csv`);
+        runResult.assertNoFileContent(`${javaPackageDir}repository/UserRepository.java`, 'user_by_activation_key');
+        runResult.assertNoFileContent(`${javaPackageDir}repository/UserRepository.java`, 'ResetKey');
       });
     });
 

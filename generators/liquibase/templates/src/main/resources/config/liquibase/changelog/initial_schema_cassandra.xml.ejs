@@ -24,70 +24,85 @@
         The initial schema has the '00000000000000' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000000" author="jhipster">
-        <sql splitStatements="true" endDelimiter=";"><![CDATA[
-            CREATE TABLE IF NOT EXISTS user (
-                id text,
-                login text,
-                password text,
-                firstname text,
-                lastname text,
-                email text,
-                activated boolean,
-                lang_key text,
-                activation_key text,
-                reset_key text,
-                reset_date timestamp,
-                authorities set<text>,
-                PRIMARY KEY(id)
-            );
-
-            CREATE TABLE IF NOT EXISTS user_by_login (
-                login text,
-                id text,
-                PRIMARY KEY(login, id)
-            );
-
-            CREATE TABLE IF NOT EXISTS user_by_email (
-                email text,
-                id text,
-                PRIMARY KEY(email, id)
-            );
-
-            CREATE TABLE IF NOT EXISTS user_by_activation_key (
-                activation_key text,
-                id text,
-                PRIMARY KEY(activation_key, id)
-            );
-
-            CREATE TABLE IF NOT EXISTS user_by_reset_key (
-                reset_key text,
-                id text,
-                PRIMARY KEY(reset_key, id)
-            );
-
-            CREATE TABLE IF NOT EXISTS activation_key_by_creation_date (
-                creation_date timeuuid,
-                activation_key text,
-                PRIMARY KEY(creation_date, activation_key)
-            );
-
-            CREATE TABLE IF NOT EXISTS persistent_token (
-                series text,
-                token_date timestamp,
-                user_agent text,
-                token_value text,
-                login text,
-                user_id text,
-                ip_address text,
-                PRIMARY KEY(series)
-            );
-
-            CREATE TABLE IF NOT EXISTS persistent_token_by_user (
-                user_id text,
-                persistent_token_series text,
-                PRIMARY KEY(user_id, persistent_token_series)
-            );
-]]></sql>
+        <createTable tableName="user">
+            <column name="id" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="text"/>
+            <column name="password" type="text"/>
+            <column name="firstname" type="text"/>
+            <column name="lastname" type="text"/>
+            <column name="email" type="text"/>
+            <column name="activated" type="boolean"/>
+            <column name="lang_key" type="text"/>
+            <column name="activation_key" type="text"/>
+            <column name="reset_key" type="text"/>
+            <column name="reset_date" type="timestamp"/>
+            <column name="authorities" type="set&lt;text&gt;"/>
+        </createTable>
+        <createTable tableName="user_by_login">
+            <column name="login" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="id" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="user_by_email">
+            <column name="email" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="id" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+  <%_ if (generateUserManagement) { _%>
+        <createTable tableName="user_by_activation_key">
+            <column name="activation_key" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="id" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="user_by_reset_key">
+            <column name="reset_key" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="id" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="activation_key_by_creation_date">
+            <column name="creation_date" type="timeuuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="activation_key" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+  <%_ } _%>
+  <%_ if (generateUserManagement && authenticationTypeSession && !reactive) { _%>
+        <createTable tableName="persistent_token">
+            <column name="series" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="token_date" type="timestamp"/>
+            <column name="user_agent" type="text"/>
+            <column name="token_value" type="text"/>
+            <column name="login" type="text"/>
+            <column name="user_id" type="text"/>
+            <column name="ip_address" type="text"/>
+        </createTable>
+        <createTable tableName="persistent_token_by_user">
+            <column name="user_id" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="persistent_token_series" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+  <%_ } _%>
     </changeSet>
   <%_ if (generateUserManagement) { _%>
 
@@ -95,25 +110,24 @@
         Default users.
     -->
     <changeSet id="00000000000001" author="jhipster">
-        <sql splitStatements="true" endDelimiter=";"><![CDATA[
-            INSERT INTO user (id,login,password,firstname,lastname,email,activated,lang_key,activation_key,authorities)
-            VALUES('1','admin','$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC','Administrator','Administrator','admin@localhost',true,'<%- nativeLanguage %>','',{'ROLE_USER','ROLE_ADMIN'});
-
-            INSERT INTO user_by_login (login, id)
-            VALUES('admin','1');
-
-            INSERT INTO user_by_email (email, id)
-            VALUES('admin@localhost','1');
-
-            INSERT INTO user (id,login,password,firstname,lastname,email,activated,lang_key,activation_key,authorities)
-            VALUES('2','user','$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K','User','User','user@localhost',true,'<%- nativeLanguage %>','',{'ROLE_USER'});
-
-            INSERT INTO user_by_login (login, id)
-            VALUES('user','2');
-
-            INSERT INTO user_by_email (email, id)
-            VALUES('user@localhost','2');
-]]></sql>
+        <loadData
+                  file="config/liquibase/data/user.csv"
+                  separator=";"
+                  tableName="user"
+                  usePreparedStatements="false">
+            <column name="activated" type="boolean"/>
+            <column name="authorities" type="computed"/>
+        </loadData>
+        <loadData
+                  file="config/liquibase/data/user_by_login.csv"
+                  separator=";"
+                  tableName="user_by_login"
+                  usePreparedStatements="false"/>
+        <loadData
+                  file="config/liquibase/data/user_by_email.csv"
+                  separator=";"
+                  tableName="user_by_email"
+                  usePreparedStatements="false"/>
     </changeSet>
   <%_ } _%>
 <%_ } _%>
