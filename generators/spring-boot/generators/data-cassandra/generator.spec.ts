@@ -107,7 +107,17 @@ describe(`generator - ${databaseType}`, () => {
 
     describe('with liquibase', () => {
       before(async () => {
-        await helpers.runJHipster('server').withJHipsterConfig({ databaseType, databaseMigration: 'liquibase', skipClient: true });
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig({ databaseType, databaseMigration: 'liquibase', skipClient: true }, entities);
+      });
+
+      it('should create the entity tables with liquibase changes', () => {
+        const entityChangelog = 'src/main/resources/config/liquibase/changelog/20220129000100_added_entity_Simple.xml';
+        runResult.assertFileContent(entityChangelog, '<createTable tableName="simple">');
+        runResult.assertFileContent(entityChangelog, '<column name="id" type="uuid">');
+        runResult.assertFileContent(entityChangelog, '<replace replace="char(36)" with="uuid"/>');
+        runResult.assertNoFileContent(entityChangelog, '<sql ');
       });
 
       it('should create the keyspace from the application', () => {
