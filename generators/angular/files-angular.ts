@@ -48,34 +48,16 @@ export const files = asWriteFilesSection({
       templates: ['vitest-base.config.ts'],
     }),
   ],
-  webpack: [
-    clientRootTemplatesBlock({
-      condition: ctx => ctx.clientBundlerWebpack,
-      templates: [
-        'angular.json',
-        'webpack/environment.js',
-        'webpack/package.json',
-        'webpack/proxy.conf.js',
-        'webpack/webpack.custom.js',
-        'webpack/logo-jhipster.png',
-      ],
-    }),
-  ],
   esbuild: [
     clientRootTemplatesBlock({
-      condition: ctx => ctx.clientBundlerEsbuild,
-      templates: [
-        { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
-        'proxy.config.mjs',
-        'build-plugins/define-esbuild.ts',
-      ],
+      templates: ['angular.json', 'proxy.config.mjs', 'build-plugins/define-esbuild.ts'],
     }),
     clientRootTemplatesBlock({
-      condition: ctx => ctx.clientBundlerEsbuild && ctx.enableTranslation,
+      condition: ctx => ctx.enableTranslation,
       templates: ['build-plugins/i18n-esbuild.ts'],
     }),
     clientSrcTemplatesBlock({
-      condition: ctx => ctx.clientBundlerEsbuild && ctx.enableTranslation,
+      condition: ctx => ctx.enableTranslation,
       templates: ['i18n/index.ts'],
     }),
   ],
@@ -103,12 +85,22 @@ export const files = asWriteFilesSection({
   ],
   microfrontend: [
     clientRootTemplatesBlock({
-      condition: generator => generator.clientBundlerWebpack && generator.microfrontend,
-      templates: ['webpack/webpack.microfrontend.js'],
+      condition: generator => generator.microfrontend,
+      templates: [
+        'federation.config.ts',
+        'tsconfig.federation.json',
+        'build-plugins/builders.json',
+        'build-plugins/native-federation.ts',
+        'build-plugins/native-federation.schema.json',
+      ],
     }),
     clientApplicationTemplatesBlock({
       condition: data => data.microfrontend,
       templates: ['core/microfrontend/index.ts', 'entities/entity-navbar-items.ts'],
+    }),
+    clientApplicationTemplatesBlock({
+      condition: data => data.microfrontend && data.enableTranslation,
+      templates: ['core/microfrontend/microfrontend-translation.loader.ts'],
     }),
   ],
   angularMain: [

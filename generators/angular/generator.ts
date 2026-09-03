@@ -98,13 +98,11 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      migrateWebpackAndEsbuild({ control }) {
-        if (control.isJhipsterVersionLessThan('9.0.0-alpha.0')) {
-          this.jhipsterConfig.clientBundler ??= 'webpack';
-        }
+      migrateToEsbuild() {
         // @ts-expect-error renamed option
-        if (this.jhipsterConfig.clientBundler === 'experimentalEsbuild') {
-          this.jhipsterConfig.clientBundler = 'esbuild';
+        if (this.jhipsterConfig.clientBundler === 'experimentalEsbuild' || this.jhipsterConfig.clientBundler === 'webpack') {
+          // Webpack support was replaced with esbuild.
+          delete this.jhipsterConfig.clientBundler;
         }
       },
     });
@@ -145,21 +143,19 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
         application.prettierExtensions.push('html', 'css', 'scss');
-        application.prettierFolders.push(application.clientBundlerWebpack ? 'webpack/**/' : 'build-plugins/**/');
+        application.prettierFolders.push('build-plugins/**/');
         if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
           // When we have a java backend, 'src/**' is already added by java:bootstrap
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
       async javaNodeBuildPaths({ application }) {
-        application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');
-        if (application.clientBundlerWebpack) {
-          application.javaNodeBuildPaths?.push('webpack/');
-        } else if (application.clientBundlerEsbuild) {
-          application.javaNodeBuildPaths?.push('build-plugins/');
-          if (application.enableI18nRTL) {
-            application.javaNodeBuildPaths?.push('postcss.conf.json');
-          }
+        application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json', 'build-plugins/');
+        if (application.microfrontend) {
+          application.javaNodeBuildPaths?.push('federation.config.ts', 'tsconfig.federation.json');
+        }
+        if (application.enableI18nRTL) {
+          application.javaNodeBuildPaths?.push('postcss.conf.json');
         }
       },
       addNeedles({ source, application }) {
@@ -232,31 +228,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           const ignoreNonExisting = this.ignoreNeedlesError && 'Icon imports not updated with icon';
           this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
         };
-
-        if (application.clientBundlerWebpack) {
-          source.addWebpackConfig = args => {
-            const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
-            const ignoreNonExisting = this.ignoreNeedlesError && 'Webpack configuration file not found';
-            this.editFile(
-              webpackPath,
-              { ignoreNonExisting },
-              createNeedleCallback({
-                needle: 'jhipster-needle-add-webpack-config',
-                contentToAdd: `${args.config},`,
-              }),
-            );
-          };
-        }
-
-        if (application.clientRootDir) {
-          // Overrides only works if added in root package.json
-          this.packageJson.merge({
-            overrides: {
-              'browser-sync': application.nodeDependencies['browser-sync'],
-              webpack: application.nodeDependencies.webpack,
-            },
-          });
-        }
       },
     });
   }
@@ -412,11 +383,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             // Try to remove possibles old eslint config files
             'eslint.config.js',
             'eslint.config.mjs',
-            [
-              application.clientBundlerEsbuild!,
-              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
-              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
-            ],
+            `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
+            `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
             [
               !application.microfrontend || !application.applicationTypeMicroservice,
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
@@ -470,6 +438,15 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             [!application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/login.model.ts`],
             [application.authenticationTypeOauth2, `${application.clientSrcDir}app/login/logout.model.ts`],
           ],
+          '9.3.1': [
+            // Webpack was replaced with esbuild
+            `${application.clientRootDir}webpack/environment.js`,
+            `${application.clientRootDir}webpack/package.json`,
+            `${application.clientRootDir}webpack/proxy.conf.js`,
+            `${application.clientRootDir}webpack/webpack.custom.js`,
+            `${application.clientRootDir}webpack/logo-jhipster.png`,
+            [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -500,50 +477,25 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         });
       },
       clientBundler({ application, source }) {
-        const { clientBundlerEsbuild, enableTranslation, nodeDependencies } = application;
-        if (clientBundlerEsbuild) {
-          source.mergeClientPackageJson!({
-            devDependencies: {
-              '@angular-builders/custom-esbuild': null,
-              '@angular/build': null,
-              tinyglobby: null,
-              ...(enableTranslation ? { '@types/folder-hash': null, 'folder-hash': null, deepmerge: null } : {}),
-            },
-          });
-        } else {
-          source.mergeClientPackageJson!({
-            dependencies:
-              enableTranslation ?
-                {
-                  '@ngx-translate/http-loader': null,
-                }
-              : {},
-            devDependencies: {
-              '@angular-builders/custom-webpack': null,
-              'browser-sync-webpack-plugin': null,
-              'copy-webpack-plugin': null,
-              'webpack-bundle-analyzer': null,
-              'webpack-merge': null,
-              'webpack-notifier': null,
-              ...(enableTranslation ? { 'folder-hash': null, 'merge-jsons-webpack-plugin': null } : {}),
-            },
-            overrides: {
-              'browser-sync': nodeDependencies['browser-sync'],
-              webpack: nodeDependencies.webpack,
-            },
-          });
-        }
-      },
-      addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerWebpack, microfrontend } = application;
-        if (!microfrontend) return;
-        if (clientBundlerWebpack) {
-          source.mergeClientPackageJson!({
-            devDependencies: {
-              '@module-federation/enhanced': null,
-            },
-          });
-        }
+        const { enableTranslation, microfrontend } = application;
+        source.mergeClientPackageJson!({
+          dependencies: {
+            ...(microfrontend ? { 'es-module-shims': null } : {}),
+          },
+          devDependencies: {
+            '@angular/build': null,
+            tinyglobby: null,
+            ...(enableTranslation ? { '@types/folder-hash': null, 'folder-hash': null, deepmerge: null } : {}),
+            ...(microfrontend ?
+              {
+                '@angular-architects/native-federation': null,
+                '@angular-devkit/architect': null,
+              }
+            : {
+                '@angular-builders/custom-esbuild': null,
+              }),
+          },
+        });
       },
       addWebsocketDependencies({ application, source }) {
         const { authenticationUsesCsrf, communicationSpringWebsocket, nodeDependencies } = application;
@@ -599,7 +551,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       end({ application }) {
         this.log.ok(`Angular ${application.nodeDependencies['@angular/common']} application generated successfully.`);
         this.log.log(
-          chalk.green(`  Start your Webpack development server with:
+          chalk.green(`  Start your Angular development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `),
         );

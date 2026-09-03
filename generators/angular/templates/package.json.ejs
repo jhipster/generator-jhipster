@@ -24,6 +24,9 @@
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
+<%_ if (microfrontend) { _%>
+  "builders": "./build-plugins/builders.json",
+<%_ } _%>
   "dependencies": {
     "@angular/common": "<%- nodeDependencies['@angular/common'] %>",
     "@angular/compiler": "<%- nodeDependencies['@angular/common'] %>",
@@ -37,7 +40,6 @@
     "@ng-bootstrap/ng-bootstrap": "<%- nodeDependencies['@ng-bootstrap/ng-bootstrap'] %>",
 <%_ if (enableTranslation) { _%>
     "@ngx-translate/core": "<%- nodeDependencies['@ngx-translate/core'] %>",
-    "@ngx-translate/http-loader": "<%- nodeDependencies['@ngx-translate/http-loader'] %>",
 <%_ } _%>
     "bootstrap": "<%- nodeDependencies.bootstrap %>",
 <%_ if (!clientThemeNone) { _%>
@@ -61,7 +63,6 @@
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
     "angular-eslint": "<%- nodeDependencies['angular-eslint'] %>",
     "axios": "<%- nodeDependencies.axios %>",
-    "browser-sync": "<%- nodeDependencies['browser-sync'] %>",
     "eslint": "<%- nodeDependencies.eslint %>",
     "eslint-config-prettier": "<%- nodeDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",

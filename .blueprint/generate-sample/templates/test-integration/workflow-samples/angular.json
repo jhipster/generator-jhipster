@@ -8,14 +8,13 @@
     },
     {
       "name": "ng-default-additional",
-      "job-name": "ng-default-additional-webpack",
+      "job-name": "ng-default-additional",
       "entity": "none",
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
         "removeNeedles": true,
-        "clientTestFramework": "vitest",
-        "clientBundler": "webpack"
+        "clientTestFramework": "vitest"
       }
     },
     {
@@ -79,13 +78,11 @@
     },
     {
       "name": "ng-webflux-gradle-mongodb-oauth2",
-      "job-name": "ng-webflux-gradle-mongodb-oauth2-webpack",
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb"
     },
     {
       "name": "ng-webflux-psql-default",
-      "job-name": "ng-webflux-psql-default-webpack",
       "app-sample": "webflux-psql",
       "entity": "sql"
     },
@@ -95,7 +92,6 @@
     },
     {
       "name": "ng-webflux-gradle-session-h2mem-es",
-      "job-name": "ng-webflux-gradle-session-h2mem-es-webpack",
       "app-sample": "webflux-gradle-session-h2mem-es",
       "generatorOptions": {
         "defaultEnvironment": "dev"

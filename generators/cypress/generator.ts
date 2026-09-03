@@ -23,7 +23,6 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import { generateTestEntity } from '../client/support/index.ts';
 import type { Source as ClientSource } from '../client/types.ts';
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
 import { cypressEntityFiles, cypressFiles } from './files.ts';
@@ -116,12 +115,17 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           cypressDir: ({ clientTestDir }) => (clientTestDir ? `${clientTestDir}cypress/` : 'cypress/'),
           cypressTemporaryDir: ({ temporaryDir }) => (temporaryDir ? `${temporaryDir}cypress/` : '.cypress/'),
           cypressBootstrapEntities: true,
-          cypressCoverageWebpack: data => Boolean(data.cypressCoverage && data.clientFrameworkAngular && data.clientBundlerWebpack),
         });
       },
       npmScripts({ application }) {
         const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
-        this.angularSchematic = Boolean(application.clientFrameworkAngular && application.clientBundlerEsbuild);
+        this.angularSchematic = Boolean(application.clientFrameworkAngular);
+        // The native federation dev server never reports its url to `ng e2e` (the builder only yields on rebuilds),
+        // so microfrontend applications start the dev server concurrently and wait for its port instead.
+        const ngE2e = this.angularSchematic && !application.microfrontend;
+        // The Angular dev server listens on localhost only (which may resolve to ::1), Vite listens on every address.
+        const devServerHost = this.angularSchematic ? 'localhost' : '127.0.0.1';
+        const coverageEnv = application.cypressCoverage ? ' --env CYPRESS_COVERAGE=true' : '';
 
         Object.assign(application.clientPackageJsonScripts, {
           cypress: 'cypress open --e2e',
@@ -138,9 +142,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
           'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
           'e2e:devserver':
-            this.angularSchematic ?
+            ngE2e ?
               `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await --if-present && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
-            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
+            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://${devServerHost}:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}${coverageEnv}"`,
         });
 
         Object.assign(application.packageJsonScripts, {
@@ -265,7 +269,10 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             },
             scripts: {
               'pree2e:cypress:coverage': 'npm run ci:server:await --if-present',
-              'e2e:cypress:coverage': 'ng e2e --configuration coverage',
+              'e2e:cypress:coverage':
+                application.microfrontend ?
+                  `npm run e2e:headless -- -c baseUrl=http://localhost:${application.devServerPortProxy ?? application.devServerPort} --env CYPRESS_COVERAGE=true`
+                : 'ng e2e --configuration coverage',
             },
           });
         }
@@ -289,58 +296,6 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             'e2e:cypress:audits': 'cypress run --e2e --browser chrome --config-file cypress-audits.config.ts',
           },
         });
-      },
-      configureWebpackCoverage({ application, source }) {
-        const { cypressCoverageWebpack, clientFrameworkAngular, clientRootDir, dasherizedBaseName } = application;
-        if (!cypressCoverageWebpack) return;
-        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
-        clientPackageJson.merge({
-          devDependencies: {
-            '@cypress/code-coverage': application.nodeDependencies['@cypress/code-coverage'],
-            'babel-loader': application.nodeDependencies['babel-loader'],
-            'babel-plugin-istanbul': application.nodeDependencies['babel-plugin-istanbul'],
-            nyc: application.nodeDependencies.nyc,
-          },
-          scripts: {
-            'clean-coverage': 'rimraf .nyc_output coverage',
-            'pree2e:cypress:coverage': 'npm run clean-coverage && npm run ci:server:await --if-present',
-            'e2e:cypress:coverage': 'npm run e2e:cypress:headed',
-            'poste2e:cypress:coverage': 'nyc report',
-            'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',
-            'webapp:instrumenter': 'ng build --configuration instrumenter',
-          },
-        });
-        if (clientFrameworkAngular) {
-          // Add 'ng build --configuration instrumenter' support
-          this.createStorage(`${clientRootDir}angular.json`).setPath(
-            `projects.${dasherizedBaseName}.architect.build.configurations.instrumenter`,
-            {},
-          );
-          (source as ClientSource).addWebpackConfig?.({
-            config: String.raw`targetOptions.configuration === 'instrumenter'
-      ? {
-          module: {
-            rules: [
-              {
-                test: /\.(js|ts)$/,
-                use: [
-                  {
-                    loader: 'babel-loader',
-                    options: {
-                      plugins: ['istanbul'],
-                    },
-                  }
-                ],
-                enforce: 'post',
-                include: path.resolve(__dirname, '../${CLIENT_MAIN_SRC_DIR}'),
-                exclude: [/\.(e2e|spec)\.ts$/, /node_modules/, /(ngfactory|ngstyle)\.js/],
-              },
-            ],
-          },
-        }
-      : {}`,
-          });
-        }
       },
       cypressSchematics({ application, source }) {
         const { applicationTypeMicroservice, dasherizedBaseName, clientRootDir, gatewayServerPort, serverPort } = application;

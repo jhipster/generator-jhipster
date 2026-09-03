@@ -17,10 +17,7 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
-import {
-  createDayjsUpdateLanguagesEditFileCallback,
-  createWebpackUpdateLanguagesNeedleCallback,
-} from '../../../client/support/update-languages.ts';
+import { createDayjsUpdateLanguagesEditFileCallback } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
 import { AngularApplicationGenerator } from '../../generator.ts';
 import type { Features, Options } from '../../types.ts';
@@ -43,14 +40,13 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
       defaults({ applicationDefaults }) {
         applicationDefaults({
           exposeMicrofrontend: ctx => ctx.microfrontend,
-          clientBundler: ctx => (ctx.microfrontend || ctx.applicationTypeMicroservice ? 'webpack' : 'esbuild'),
+          clientBundler: 'esbuild',
           devServerPort: (_, { data }) => 4200 + (data.applicationIndex ?? 0),
-          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
         });
       },
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientRootDir, clientI18nDir } = application;
+          const { enableTranslation, clientSrcDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -75,13 +71,7 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
 
           this.editFile(`${clientSrcDir}app/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, false));
 
-          if (application.clientBundlerWebpack) {
-            this.editFile(
-              `${clientRootDir}webpack/webpack.custom.js`,
-              { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
-            );
-          } else if (application.clientBundlerEsbuild) {
+          {
             this.editFile(
               `${application.clientI18nDir}index.ts`,
               createNeedleCallback({

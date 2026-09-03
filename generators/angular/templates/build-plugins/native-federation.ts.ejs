@@ -16,6 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-  "type": "commonjs"
-}
+import { createBuilder } from '@angular-devkit/architect';
+import { runBuilder } from '@angular-architects/native-federation/internal';
+
+import defineEsbuild from './define-esbuild.ts';
+<%_ if (enableTranslation) { _%>
+import i18nEsbuild from './i18n-esbuild.ts';
+<%_ } _%>
+
+// Native federation delegates to the Angular application builder, the custom esbuild plugins are injected here.
+const plugins = [defineEsbuild<%- enableTranslation ? ', i18nEsbuild' : '' %>];
+
+export default createBuilder(async function* nativeFederationBuilder(options, context) {
+  yield* runBuilder({ ...options, plugins }, context);
+});

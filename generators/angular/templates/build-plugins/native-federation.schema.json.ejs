@@ -1,0 +1,96 @@
+{
+  "version": 2,
+  "outputCapture": "direct-nodejs",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "native federation browser builder",
+  "description": "builder for native federation browser apps",
+  "type": "object",
+  "properties": {
+    "target": {
+      "type": "string",
+      "description": "target configured for the esbuild builder"
+    },
+    "dev": {
+      "type": "boolean",
+      "description": "Set this to true to start the builder in dev mode",
+      "default": false
+    },
+    "watch": {
+      "type": "boolean"
+    },
+    "port": {
+      "type": "number",
+      "default": 0
+    },
+    "entryPoints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Fallback entry points, used only when the project has nothing federated of its own (no exposes, no shared mappings). They seed the federation tsconfig's 'files' and the unused-dependency scan. Exposes from federation.config always take precedence, so this cannot override or narrow them; to add extra files to the TypeScript program, use 'include' in the federation tsconfig instead. Defaults to 'src/main.ts' resolved next to the federation tsconfig."
+    },
+    "rebuildDelay": {
+      "type": "number",
+      "default": 2000,
+      "description": "The delay for rebuilding federation artifacts. This allows to have more resources for refreshing your micro frontend in the browser."
+    },
+    "skipHtmlTransform": {
+      "type": "boolean",
+      "default": false
+    },
+    "baseHref": {
+      "type": "string"
+    },
+    "projectName": {
+      "type": "string"
+    },
+    "outputPath": {
+      "type": "string"
+    },
+    "esmsInitOptions": {
+      "type": "object",
+      "description": "Options for esms-module-shims https://github.com/guybedford/es-module-shims?tab=readme-ov-file#init-options",
+      "default": {
+        "shimMode": true
+      }
+    },
+    "ssr": {
+      "type": "boolean",
+      "description": "uses federation for ssr in ApplicationBuilder too",
+      "default": false
+    },
+    "devServer": {
+      "type": "boolean",
+      "description": "can be used to disable the dev server when dev=true"
+    },
+    "tsConfig": {
+      "type": "string",
+      "description": "A specific tsconfig file for the nf remotes and exposed modules. It also drives esbuild's module resolution, so it must declare or extend the workspace baseUrl/paths. The builder owns this file's `files` array and rewrites it on every build; comments are not preserved. Leave it unset to compile against the Angular target's own tsconfig, which the builder never rewrites."
+    },
+    "cacheExternalArtifacts": {
+      "type": "boolean",
+      "default": true,
+      "description": "Will cache the shared externals so they can be re-used between builds",
+      "alias": "cache"
+    },
+    "buildNotifications": {
+      "type": "object",
+      "description": "Opt in to build completion notifications. Omitting this option leaves them off; the defaults below only apply once it is present.",
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable build completion notifications for local development. It will send events to notify when the federation build is complete. Each connected browser tab holds an event stream open, so the runtime also has to opt in with 'sse: true'."
+        },
+        "endpoint": {
+          "type": "string",
+          "default": "/@angular-architects/native-federation:build-notifications",
+          "description": "You can override the default endpoint to send build completion events to."
+        }
+      }
+    },
+    "federationConfigPath": {
+      "type": "string",
+      "description": "The path to the federation config file. If not provided, the default path will be used.",
+      "default": "federation.config.mjs"
+    }
+  }
+}

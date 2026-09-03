@@ -3480,6 +3480,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -4761,6 +4762,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -4831,13 +4833,13 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "esbuild",
   "clientBundlerAny": true,
-  "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerEsbuild": true,
+  "clientBundlerName": "esbuild",
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -4913,7 +4915,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
   "devServerPort": 4200,
-  "devServerPortProxy": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -5124,13 +5126,31 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/angular.json": {
     "stateCleared": "modified",
   },
+  "clientRoot/build-plugins/builders.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/build-plugins/define-esbuild.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/build-plugins/native-federation.schema.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/build-plugins/native-federation.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/eslint.config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/federation.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/proxy.config.mjs": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -5757,6 +5777,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/tsconfig.app.json": {
     "stateCleared": "modified",
   },
+  "clientRoot/tsconfig.federation.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/tsconfig.json": {
     "stateCleared": "modified",
   },
@@ -5764,24 +5787,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/vitest-base.config.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/proxy.conf.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.custom.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.microfrontend.js": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -5826,30 +5831,16 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "targetOptions.target === 'serve' ? {} : require('./webpack.microfrontend')(config, options, targetOptions)",
-    },
-  ],
   "mergeClientPackageJson": [
     {
-      "dependencies": {},
-      "devDependencies": {
-        "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
-        "copy-webpack-plugin": null,
-        "webpack-bundle-analyzer": null,
-        "webpack-merge": null,
-        "webpack-notifier": null,
+      "dependencies": {
+        "es-module-shims": null,
       },
-      "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
-        "webpack": "WEBPACK_VERSION",
-      },
-    },
-    {
       "devDependencies": {
-        "@module-federation/enhanced": null,
+        "@angular-architects/native-federation": null,
+        "@angular-devkit/architect": null,
+        "@angular/build": null,
+        "tinyglobby": null,
       },
     },
     {
@@ -5913,13 +5904,13 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "esbuild",
   "clientBundlerAny": true,
-  "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerEsbuild": true,
+  "clientBundlerName": "esbuild",
   "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -5995,7 +5986,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
   "devServerPort": 4200,
-  "devServerPortProxy": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -6196,13 +6187,34 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "angular.json": {
     "stateCleared": "modified",
   },
+  "build-plugins/builders.json": {
+    "stateCleared": "modified",
+  },
+  "build-plugins/define-esbuild.ts": {
+    "stateCleared": "modified",
+  },
+  "build-plugins/i18n-esbuild.ts": {
+    "stateCleared": "modified",
+  },
+  "build-plugins/native-federation.schema.json": {
+    "stateCleared": "modified",
+  },
+  "build-plugins/native-federation.ts": {
+    "stateCleared": "modified",
+  },
   "eslint.config.ts": {
+    "stateCleared": "modified",
+  },
+  "federation.config.ts": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
     "stateCleared": "modified",
   },
   "package.json": {
+    "stateCleared": "modified",
+  },
+  "proxy.config.mjs": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -6425,6 +6437,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/microfrontend/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/microfrontend/microfrontend-translation.loader.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/index.ts": {
@@ -6958,6 +6973,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
@@ -6976,6 +6994,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "tsconfig.app.json": {
     "stateCleared": "modified",
   },
+  "tsconfig.federation.json": {
+    "stateCleared": "modified",
+  },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
@@ -6983,24 +7004,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "vitest-base.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/environment.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "webpack/proxy.conf.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.custom.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": {
     "stateCleared": "modified",
   },
 }
@@ -7042,34 +7045,19 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "targetOptions.target === 'serve' ? {} : require('./webpack.microfrontend')(config, options, targetOptions)",
-    },
-  ],
   "mergeClientPackageJson": [
     {
       "dependencies": {
-        "@ngx-translate/http-loader": null,
+        "es-module-shims": null,
       },
       "devDependencies": {
-        "@angular-builders/custom-webpack": null,
-        "browser-sync-webpack-plugin": null,
-        "copy-webpack-plugin": null,
+        "@angular-architects/native-federation": null,
+        "@angular-devkit/architect": null,
+        "@angular/build": null,
+        "@types/folder-hash": null,
+        "deepmerge": null,
         "folder-hash": null,
-        "merge-jsons-webpack-plugin": null,
-        "webpack-bundle-analyzer": null,
-        "webpack-merge": null,
-        "webpack-notifier": null,
-      },
-      "overrides": {
-        "browser-sync": "BROWSER_SYNC_VERSION",
-        "webpack": "WEBPACK_VERSION",
-      },
-    },
-    {
-      "devDependencies": {
-        "@module-federation/enhanced": null,
+        "tinyglobby": null,
       },
     },
     {
@@ -8532,6 +8520,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -9566,6 +9555,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
@@ -10607,6 +10597,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   ],
   "mergeClientPackageJson": [
     {
+      "dependencies": {},
       "devDependencies": {
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,

@@ -1,0 +1,113 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { mappingsFromWorkspace, share, shareAll, withNativeFederation } from '@angular-architects/native-federation/config';
+
+const singleton = { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: false };
+
+// The application imports the dayjs esm entry points, which are not covered by sharing the dayjs package.
+// They must be shared explicitly so the shared mappings (app/shared/date, app/shared/language) use the same dayjs instance
+// the plugins and locales are registered in (app/config/dayjs). Plugins and locales are only used by app/config/dayjs,
+// which the unused dependencies scan (started from the exposed modules) does not reach, so they opt out of it.
+const shareDayjs = (locales: string[]) =>
+  share(
+    Object.fromEntries(
+      ['dayjs/esm', 'dayjs/esm/plugin/customParseFormat', 'dayjs/esm/plugin/duration', 'dayjs/esm/plugin/relativeTime']
+        .concat(locales.map(locale => `dayjs/esm/locale/${locale}`))
+        .map(entryPoint => [entryPoint, { ...singleton, includeSecondaries: { keepAll: true } }]),
+    ),
+  );
+
+<%_ if (enableTranslation) { _%>
+// Angular locales are loaded dynamically by the translation loader.
+// Unlike shareAngularLocales(), the entry points are inferred by node resolution, so hoisted node_modules (npm workspaces) work.
+const shareAngularLocales = (locales: string[]) =>
+  share(
+    Object.fromEntries(
+      locales.map(locale => [
+        `@angular/common/locales/${locale}`,
+        singleton,
+      ]),
+    ),
+  );
+
+<%_ } _%>
+export default withNativeFederation({
+  name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
+
+<%_ if (applicationTypeMicroservice || exposeMicrofrontend) { _%>
+  exposes: {
+    './entity-navbar-items': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts',
+    './entity-routes': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts',
+  <%_ if (enableTranslation) { _%>
+    './i18n': './<%- this.relativeDir(clientRootDir, clientI18nDir) %>index.ts',
+  <%_ } _%>
+    // jhipster-needle-expose
+  },
+
+<%_ } _%>
+  shared: {
+    ...shareAll(
+      { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+      {
+        overrides: {
+          // includeSecondaries is an opt-out of ignoreUnusedDeps, so all of @angular/core is shared to prevent mismatches.
+          '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: { keepAll: true } },
+        },
+      },
+    ),
+    ...shareDayjs([<%- [...new Set(languagesDefinition.map(lang => lang.dayjsLocale))].map(locale => `'${locale}'`).join(', ') %>]),
+<%_ if (enableTranslation) { _%>
+    ...shareAngularLocales([<%- languagesDefinition.filter(lang => lang.angularLocale).map(lang => `'${lang.angularLocale}'`).join(', ') %>]),
+<%_ } _%>
+  },
+
+  // Application modules shared as singletons across the gateway and the microfrontends, see tsconfig.json paths.
+  sharedMappings: mappingsFromWorkspace({ singleton: true, strictVersion: false })
+    .filter([
+      'app/config',
+      'app/core/auth',
+      'app/core/request',
+      'app/core/util',
+      'app/shared/alert',
+      'app/shared/auth',
+      'app/shared/date',
+<%_ if (enableTranslation) { _%>
+      'app/shared/language',
+<%_ } _%>
+      'app/shared/pagination',
+      'app/shared/sort',
+    ])
+    .get(),
+
+  skip: [
+    '@angular/localize',
+    'es-module-shims',
+    'rxjs/ajax',
+    'rxjs/fetch',
+    'rxjs/testing',
+    'rxjs/webSocket',
+    // Add further packages you don't need at runtime
+  ],
+
+  features: {
+    // Application modules are not versioned libraries.
+    mappingVersion: false,
+    denseChunking: true,
+  },
+});

@@ -306,20 +306,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           }
         }
       },
-
-      microfrontend({ application, source }) {
-        if (!application.microfrontend || !application.clientFrameworkBuiltIn || !application.clientBundlerWebpack) {
-          return;
-        }
-        if (application.clientFrameworkAngular) {
-          const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
-          source.addWebpackConfig!({
-            config: `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
-          });
-        } else {
-          throw new Error(`Client framework ${application.clientFramework} doesn't support microfrontends`);
-        }
-      },
     });
   }
 
