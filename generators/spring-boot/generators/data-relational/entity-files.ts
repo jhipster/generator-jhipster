@@ -29,7 +29,7 @@ import type { Application, Entity } from './types.ts';
 const useSimpleR2dbcRepository = (ctx: any): boolean =>
   ctx.entityR2dbcRepository ??
   !(
-    ctx.reactiveEagerRelations.length > 0 ||
+    ctx.relationships.some((rel: any) => rel.ownerSide && !rel.collection) ||
     ctx.relationships.some((rel: any) => rel.shouldWriteJoinTable) ||
     ctx.implementsEagerLoadApis ||
     ctx.jpaMetamodelFiltering ||

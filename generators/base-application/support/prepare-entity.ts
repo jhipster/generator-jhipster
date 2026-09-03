@@ -526,6 +526,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
     (entity.reactive || ([SQL, MONGODB] as string[]).includes(entity.databaseType)) &&
     entity.relationshipsContainEagerLoad;
   entity.eagerRelations = entity.relationships.filter(rel => rel.relationshipEagerLoad);
+  // Deprecated: kept for blueprints, not used by the generator anymore.
   entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);
 
   entity.reactiveEagerRelations = entity.relationships.filter(

@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const populateRelations = reactiveEagerRelations.length > 0;
-    const joinTableRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
+<%_ const joinTableRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
+    const populateRelations = relationships.some(rel => rel.ownerSide && !rel.collection) || joinTableRelationships.some(rel => rel.relationshipEagerLoad);
 _%>
 package <%- entityAbsolutePackage %>.repository;
 

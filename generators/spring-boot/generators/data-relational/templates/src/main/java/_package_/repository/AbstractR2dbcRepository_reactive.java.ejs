@@ -19,11 +19,14 @@
 package <%- packageName %>.repository;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
@@ -42,9 +45,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Base class of the entity repository fragments. On top of {@link SimpleR2dbcRepository} it populates the to-one
- * relationships after the entity query, maintains the many-to-many join tables, filters by {@link Criteria} and
- * supports sorting by a related entity property, which Spring Data R2DBC queries do not support.
+ * Base class of the entity repository fragments. On top of {@link SimpleR2dbcRepository} it populates the eagerly
+ * loaded relationships after the entity query, references the other to-one relationships by id, maintains the
+ * many-to-many join tables, filters by {@link Criteria} and supports sorting by a related entity property, which
+ * Spring Data R2DBC queries do not support.
  */
 public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcRepository<T, ID> {
 
@@ -80,7 +84,7 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
     }
 
     /**
-     * Populates the to-one relationships of the entities, see {@link #populate}.
+     * Populates the relationships of the entities, see {@link #reference} and {@link #populate}.
      */
     protected Mono<List<T>> populateRelationships(List<T> entities) {
         return Mono.just(entities);
@@ -156,6 +160,32 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
     }
 
     /**
+     * References a to-one relationship of the entities by a related entity holding only its id, like a lazily loaded
+     * relationship.
+     * @param entities the entities to populate.
+     * @param referenceId extracts the related entity id from an entity.
+     * @param relatedFactory creates a related entity.
+     * @param relatedIdSetter sets the id on a related entity.
+     * @param setter sets the related entity on an entity.
+     */
+    protected <R, K> void reference(
+        List<T> entities,
+        Function<T, K> referenceId,
+        Supplier<R> relatedFactory,
+        BiConsumer<R, K> relatedIdSetter,
+        BiConsumer<T, R> setter
+    ) {
+        entities.forEach(entity -> {
+            K id = referenceId.apply(entity);
+            if (id != null) {
+                R related = relatedFactory.get();
+                relatedIdSetter.accept(related, id);
+                setter.accept(entity, related);
+            }
+        });
+    }
+
+    /**
      * Populates a to-one relationship of the entities with a single query.
      * @param entities the entities to populate.
      * @param referenceId extracts the related entity id from an entity.
@@ -183,6 +213,53 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
             .map(related -> {
                 entities.forEach(entity -> setter.accept(entity, related.get(referenceId.apply(entity))));
                 return entities;
+            });
+    }
+
+    /**
+     * Populates a many-to-many relationship of the entities with two queries: the join table rows of the entities and
+     * the related entities.
+     * @param entities the entities to populate.
+     * @param joinTable the join table of the relationship.
+     * @param relatedType the related entity type.
+     * @param relatedId extracts the id from a related entity.
+     * @param setter sets the related entities on an entity.
+     */
+    @SuppressWarnings("unchecked")
+    protected <R, K> Mono<List<T>> populate(
+        List<T> entities,
+        JoinTable<T> joinTable,
+        Class<R> relatedType,
+        Function<R, K> relatedId,
+        BiConsumer<T, Set<R>> setter
+    ) {
+        if (entities.isEmpty()) {
+            return Mono.just(entities);
+        }
+        RelationalPersistentEntity<?> mappingEntity = mappingEntity(entityType);
+        Class<?> entityIdType = mappingEntity.getRequiredIdProperty().getType();
+        Map<Object, T> entitiesById = new LinkedHashMap<>();
+        entities.forEach(entity -> entitiesById.put(mappingEntity.getIdentifierAccessor(entity).getRequiredIdentifier(), entity));
+        RelationalPersistentEntity<?> relatedEntity = mappingEntity(relatedType);
+        Class<K> relatedIdType = (Class<K>) relatedEntity.getRequiredIdProperty().getType();
+        String relatedIdProperty = relatedEntity.getRequiredIdProperty().getName();
+        return db
+            .sql("SELECT " + joinTable.entityColumn() + ", " + joinTable.referenceColumn() + " FROM " + joinTable.table() + " WHERE " + joinTable.entityColumn() + " IN (:entityIds)")
+            .bind("entityIds", entitiesById.keySet())
+            .map((row, metadata) -> Map.entry((Object) row.get(joinTable.entityColumn(), entityIdType), row.get(joinTable.referenceColumn(), relatedIdType)))
+            .all()
+            .collectMultimap(Map.Entry::getKey, Map.Entry::getValue)
+            .flatMap(references -> {
+                Set<K> ids = references.values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
+                Mono<Map<K, R>> related = ids.isEmpty() ?
+                    Mono.just(Map.of()) :
+                    template.select(relatedType).matching(Query.query(Criteria.where(relatedIdProperty).in(ids))).all().collectMap(relatedId);
+                return related.map(relatedById -> {
+                    entitiesById.forEach((id, entity) ->
+                        setter.accept(entity, references.getOrDefault(id, List.of()).stream().map(relatedById::get).filter(Objects::nonNull).collect(Collectors.toSet()))
+                    );
+                    return entities;
+                });
             });
     }
 

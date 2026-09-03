@@ -84,6 +84,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   isUsingMapsId?: boolean;
   mapsIdAssoc?: R;
+  /** @deprecated the reactive repositories load the relationships according to `relationshipEagerLoad`, see `eagerRelations` */
   reactiveEagerRelations: RelationshipWithEntity<R, this>[];
 
   requiresPersistableImplementation?: boolean;

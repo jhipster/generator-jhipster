@@ -16,12 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const populateRelations = reactiveEagerRelations.length > 0;
+<%_ const toOneRelationships = relationships.filter(rel => rel.ownerSide && !rel.collection);
+    const eagerToOneRelationships = toOneRelationships.filter(rel => rel.relationshipEagerLoad);
+    const referencedRelationships = toOneRelationships.filter(rel => !rel.relationshipEagerLoad);
     const joinTableRelationships = relationships.filter(rel => rel.shouldWriteJoinTable);
+    const eagerJoinTableRelationships = joinTableRelationships.filter(rel => rel.relationshipEagerLoad);
+    const populateRelations = toOneRelationships.length > 0 || eagerJoinTableRelationships.length > 0;
+    const populateCount = eagerToOneRelationships.length + eagerJoinTableRelationships.length;
+    const joinTableConstant = rel => `${rel.relationshipName.replace(/[A-Z]/g, letter => `_${letter}`).toUpperCase()}_JOIN_TABLE`;
     const ownDomainImport = `${entityAbsolutePackage}.domain.${persistClass}`;
     const otherDomainImports = [
       ...new Set(
-        [...reactiveEagerRelations, ...joinTableRelationships]
+        [...toOneRelationships, ...joinTableRelationships]
           .map(rel => `${rel.otherEntity.entityAbsolutePackage}.domain.${rel.otherEntity.persistClass}`)
           .filter(domainImport => domainImport !== ownDomainImport),
       ),
@@ -32,7 +38,7 @@ package <%- entityAbsolutePackage %>.repository;
 <%_ if (populateRelations || joinTableRelationships.length > 0) { _%>
 import java.util.List;
 <%_ } _%>
-<%_ if (populateRelations) { _%>
+<%_ if (toOneRelationships.length > 0) { _%>
 import java.util.Map;
 <%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
@@ -75,32 +81,32 @@ import reactor.core.publisher.Mono;
  */
 @SuppressWarnings("unused")
 class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<%- persistClass %>, <%- primaryKey.type %>> implements <%- entityClass %>RepositoryInternal {
-<%_ if (populateRelations) { _%>
+<%_ if (toOneRelationships.length > 0) { _%>
 
     private static final String SELECT_WITH_RELATIONS_SQL =
-        "SELECT e.* FROM <%- entityTableName %> e"<% for (const rel of reactiveEagerRelations) { %> +
+        "SELECT e.* FROM <%- entityTableName %> e"<% for (const rel of eagerToOneRelationships) { %> +
         " LEFT JOIN <%- rel.otherEntity.entityTableName %> <%- rel.relationshipSqlSafeName %> ON e.<%- rel.joinColumnNames[0] %> = <%- rel.relationshipSqlSafeName %>.<%- rel.otherEntity.primaryKey.fields[0].columnName %>"<% } %>;
 
     // The clients sort by the related entity display field, with the entity id as secondary sort.
     private static final Map<String, String> SORT_COLUMNS = Map.ofEntries(
-        Map.entry("<%- primaryKey.name %>", "e.<%- primaryKey.fields[0].columnName %>")<% for (const rel of reactiveEagerRelations) { %>,
-        Map.entry("<%- rel.relationshipName %>.<%- rel.otherEntity.primaryKey.name %>", "<%- rel.relationshipSqlSafeName %>.<%- rel.otherEntity.primaryKey.fields[0].columnName %>")<% if (rel.relatedField?.fieldSupportsSortBy && rel.relatedField.fieldName !== rel.otherEntity.primaryKey.name) { %>,
+        Map.entry("<%- primaryKey.name %>", "e.<%- primaryKey.fields[0].columnName %>")<% for (const rel of toOneRelationships) { %>,
+        Map.entry("<%- rel.relationshipName %>.<%- rel.otherEntity.primaryKey.name %>", "<% if (rel.relationshipEagerLoad) { %><%- rel.relationshipSqlSafeName %>.<%- rel.otherEntity.primaryKey.fields[0].columnName %><% } else { %>e.<%- rel.joinColumnNames[0] %><% } %>")<% if (rel.relationshipEagerLoad && rel.relatedField?.fieldSupportsSortBy && rel.relatedField.fieldName !== rel.otherEntity.primaryKey.name) { %>,
         Map.entry("<%- rel.relationshipName %>.<%- rel.relatedField.fieldName %>", "<%- rel.relationshipSqlSafeName %>.<%- rel.relatedField.fieldNameAsDatabaseColumn %>")<% } %><% } %>
     );
 <%_ } _%>
 <%_ if (joinTableRelationships.length > 0) { _%>
 
-    private static final List<JoinTable<<%- persistClass %>>> JOIN_TABLES = List.of(
-  <%_ for (const [index, rel] of joinTableRelationships.entries()) { _%>
-        new JoinTable<>("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>", <%- entityInstance %> -> <%- entityInstance %>.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>).toList())<%- index < joinTableRelationships.length - 1 ? ',' : '' %>
+  <%_ for (const rel of joinTableRelationships) { _%>
+    private static final JoinTable<<%- persistClass %>> <%- joinTableConstant(rel) %> = new JoinTable<>("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>", <%- entityInstance %> -> <%- entityInstance %>.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>).toList());
   <%_ } _%>
-    );
+
+    private static final List<JoinTable<<%- persistClass %>>> JOIN_TABLES = List.of(<%- joinTableRelationships.map(joinTableConstant).join(', ') %>);
 <%_ } _%>
 
     public <%- entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, R2dbcConverter converter, R2dbcDialect dialect) {
         super(<%- persistClass %>.class, template, converter, dialect);
     }
-<%_ if (populateRelations) { _%>
+<%_ if (toOneRelationships.length > 0) { _%>
 
     @Override
     protected String selectWithRelationsSql() {
@@ -111,12 +117,21 @@ class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<
     protected Map<String, String> sortColumns() {
         return SORT_COLUMNS;
     }
+<%_ } _%>
+<%_ if (populateRelations) { _%>
 
     @Override
     protected Mono<List<<%- persistClass %>>> populateRelationships(List<<%- persistClass %>> entities) {
-        return Mono.just(entities)
-  <%_ for (const [index, rel] of reactiveEagerRelations.entries()) { _%>
-            .flatMap(populated -> populate(populated, <%- persistClass %>::<%- rel.id ? primaryKey.propertySupplierName : `${rel.propertySupplierName}Id` %>, <%- rel.otherEntity.persistClass %>.class, <%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>, <%- persistClass %>::<%- rel.propertyConsumerName %>))<%- index === reactiveEagerRelations.length - 1 ? ';' : '' %>
+  <%_ for (const rel of referencedRelationships) { _%>
+        reference(entities, <%- persistClass %>::<%- rel.id ? primaryKey.propertySupplierName : `${rel.propertySupplierName}Id` %>, <%- rel.otherEntity.persistClass %>::new, <%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertyConsumerName %>, <%- persistClass %>::<%- rel.propertyConsumerName %>);
+  <%_ } _%>
+        return Mono.just(entities)<%- populateCount === 0 ? ';' : '' %>
+  <%_ let populateIndex = 0; _%>
+  <%_ for (const rel of eagerToOneRelationships) { populateIndex++; _%>
+            .flatMap(populated -> populate(populated, <%- persistClass %>::<%- rel.id ? primaryKey.propertySupplierName : `${rel.propertySupplierName}Id` %>, <%- rel.otherEntity.persistClass %>.class, <%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>, <%- persistClass %>::<%- rel.propertyConsumerName %>))<%- populateIndex === populateCount ? ';' : '' %>
+  <%_ } _%>
+  <%_ for (const rel of eagerJoinTableRelationships) { populateIndex++; _%>
+            .flatMap(populated -> populate(populated, <%- joinTableConstant(rel) %>, <%- rel.otherEntity.persistClass %>.class, <%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>, <%- persistClass %>::<%- rel.propertyConsumerName %>))<%- populateIndex === populateCount ? ';' : '' %>
   <%_ } _%>
     }
 <%_ } _%>
@@ -161,7 +176,7 @@ class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<
             }
     <%_ } _%>
   <%_ } _%>
-  <%_ for (const relationship of reactiveEagerRelations) { _%>
+  <%_ for (const relationship of toOneRelationships) { _%>
             if (criteria.<%- relationship.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterCriteriaForField(criteria.<%- relationship.propertyFilterSupplierName %>(), "<%- relationship.id ? primaryKey.name : `${relationship.relationshipFieldName}Id` %>");
             }
