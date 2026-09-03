@@ -1,3 +1,4 @@
+<%# eslint-disable ejs-templates/no-global-function-call -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -127,10 +128,12 @@ class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<
   <%_ } _%>
         return Mono.just(entities)<%- populateCount === 0 ? ';' : '' %>
   <%_ let populateIndex = 0; _%>
-  <%_ for (const rel of eagerToOneRelationships) { populateIndex++; _%>
+  <%_ for (const rel of eagerToOneRelationships) { _%>
+    <%_ populateIndex++; _%>
             .flatMap(populated -> populate(populated, <%- persistClass %>::<%- rel.id ? primaryKey.propertySupplierName : `${rel.propertySupplierName}Id` %>, <%- rel.otherEntity.persistClass %>.class, <%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>, <%- persistClass %>::<%- rel.propertyConsumerName %>))<%- populateIndex === populateCount ? ';' : '' %>
   <%_ } _%>
-  <%_ for (const rel of eagerJoinTableRelationships) { populateIndex++; _%>
+  <%_ for (const rel of eagerJoinTableRelationships) { _%>
+    <%_ populateIndex++; _%>
             .flatMap(populated -> populate(populated, <%- joinTableConstant(rel) %>, <%- rel.otherEntity.persistClass %>.class, <%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>, <%- persistClass %>::<%- rel.propertyConsumerName %>))<%- populateIndex === populateCount ? ';' : '' %>
   <%_ } _%>
     }

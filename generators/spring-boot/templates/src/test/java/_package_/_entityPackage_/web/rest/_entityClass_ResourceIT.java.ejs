@@ -79,7 +79,8 @@ import <%- relationship.otherEntity.entityAbsolutePackage %>.domain.<%- relation
         .filter(relationship => relationship.relationshipValidate === true || relationship.id || (jpaMetamodelFiltering && filterTestableRelationships.includes(relationship)))
         .map(relationship => relationship.otherEntity)
         .filter(otherEntity => otherEntity.entityAbsolutePackage !== entityAbsolutePackage),
-    ); _%>
+    );
+_%>
 <%_ for (const otherEntity of otherEntityResourceITs) { _%>
 import <%- otherEntity.entityAbsolutePackage %>.web.rest.<%- otherEntity.entityNameCapitalized %>ResourceIT;
 <%_ } _%>
