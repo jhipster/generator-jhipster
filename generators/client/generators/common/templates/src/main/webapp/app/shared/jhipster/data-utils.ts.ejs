@@ -46,9 +46,31 @@ export const toBase64 = (file: File, callback: (base64Data: string) => void): vo
   fileReader.readAsDataURL(file);
 }
 
-export const openFile = (data: string, contentType: string | null | undefined): void => {
-  contentType ??= '';
+export type BlobType = 'image' | 'text' | 'any';
 
+const DOWNLOAD_CONTENT_TYPE = 'application/octet-stream';
+
+/**
+ * Resolves the content type used to open a stored blob in a new window.
+ * Image blobs are opened as images, except XML based images like SVG which could execute scripts under the application origin.
+ * Text blobs are opened as plain text.
+ * Any other blob is opened as a download.
+ */
+export const toOpenableContentType = (contentType: string | null | undefined, blobType: BlobType = 'any'): string => {
+  const type = (contentType ?? '').split(';')[0].trim().toLowerCase();
+  if (type.endsWith('+xml')) {
+    return DOWNLOAD_CONTENT_TYPE;
+  }
+  if (blobType === 'image' && type.startsWith('image/') && !type.endsWith('+xml')) {
+    return type;
+  }
+  if (blobType === 'text' && type === 'text/plain') {
+    return type;
+  }
+  return DOWNLOAD_CONTENT_TYPE;
+};
+
+export const openFile = (data: string, contentType: string | null | undefined, blobType: BlobType = 'any'): void => {
   const byteCharacters = atob(data);
   const byteNumbers = new Array(byteCharacters.length);
   for (let i = 0; i < byteCharacters.length; i++) {
@@ -56,7 +78,7 @@ export const openFile = (data: string, contentType: string | null | undefined): 
   }
   const byteArray = new Uint8Array(byteNumbers);
   const blob = new Blob([byteArray], {
-    type: contentType,
+    type: toOpenableContentType(contentType, blobType),
   });
   const fileURL = globalThis.URL.createObjectURL(blob);
   const win = globalThis.open(fileURL);

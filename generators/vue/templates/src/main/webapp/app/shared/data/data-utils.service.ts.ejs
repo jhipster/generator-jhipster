@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { getPageNumberFromLinkHeader } from '@/shared/jhipster/link-header';
-import { byteSize, openFile, toBase64 } from '@/shared/jhipster/data-utils';
+import { type BlobType, byteSize, openFile, toBase64 } from '@/shared/jhipster/data-utils';
 
 /**
  * A composable utility for data.
@@ -43,8 +43,8 @@ const useDataUtils = () => ({
   /**
    * Method to open file
    */
-  openFile(contentType, data) {
-    openFile(data, contentType);
+  openFile(contentType, data, blobType?: BlobType) {
+    openFile(data, contentType, blobType);
   },
 
   /**

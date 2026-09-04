@@ -118,10 +118,10 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
       const fakeBase64 = 'fake base64';
 
       // WHEN
-      comp.openFile(fakeBase64, fakeContentType);
+      comp.openFile(fakeBase64, fakeContentType, 'image');
 
       // THEN
-      expect(dataUtils.openFile).toHaveBeenCalledWith(fakeBase64, fakeContentType);
+      expect(dataUtils.openFile).toHaveBeenCalledWith(fakeBase64, fakeContentType, 'image');
     });
   });
 <%_ } _%>
