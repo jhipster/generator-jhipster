@@ -24,9 +24,6 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { Button, <%- searchEngineAny ? 'FormControl, InputGroup, Form, Row, Col, ' : '' %>Table } from 'react-bootstrap';
 import {
 <%_ if (anyFieldIsBlobDerived) { _%>
-  <%_ if (anyFieldHasFileBasedContentType) { _%>
-  openFile,
-  <%_ } _%>
   byteSize,
 <%_ } _%>
   Translate<%- searchEngineAny ? ', translate' : '' %>
@@ -40,6 +37,9 @@ import {
   <%_ } _%>
 <%_ } _%>
 } from 'react-jhipster';
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+import { openFile } from 'app/shared/jhipster/data-utils';
+<%_ } _%>
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 <%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
@@ -417,10 +417,11 @@ export const <%- entityReactName %> = () => {
                         {<%- entityInstance %>.<%- fieldName %> ? (
                           <div>
                             {<%- entityInstance %>.<%- fieldName %>ContentType ? (
-                              <a onClick={openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)}>
         <%_ if (field.blobContentTypeImage) { _%>
+                              <a onClick={() => openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType, 'image')}>
                                   <img src={`data:${<%- entityInstance %>.<%- fieldName %>ContentType};base64,${<%- entityInstance %>.<%- fieldName %>}`} style={{ maxHeight: '30px' }} />
         <%_ } else { _%>
+                              <a onClick={() => openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType)}>
                                   <Translate contentKey="entity.action.open">Open</Translate>
         <%_ } _%>
                                 &nbsp;
