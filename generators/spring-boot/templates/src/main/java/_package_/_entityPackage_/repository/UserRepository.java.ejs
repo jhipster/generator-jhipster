@@ -83,11 +83,6 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
 <%_ } _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login);
 
-<%_ if (databaseTypeNeo4j) { _%>
-    <%- reactive ? '' : '// See https://github.com/neo4j/sdn-rx/issues/51' %>
-    <%- listOrFlux %><<%- user.persistClass %>> findAll();
-
-<%_ } _%>
 <%_ if (reactive) { _%>
     Flux<<%- user.persistClass %>> findAllByIdNotNull(Pageable pageable);
 
