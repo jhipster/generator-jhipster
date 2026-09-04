@@ -1,0 +1,119 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.repository;
+
+import <%- user.entityAbsoluteClass %>;
+
+<%_ if (cacheProviderAny) { _%>
+import org.springframework.cache.annotation.Cacheable;
+<%_ } _%>
+import org.springframework.data.domain.*;
+import org.springframework.data.couchbase.repository.Query;
+import org.springframework.stereotype.Repository;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
+
+<%_ if (!reactive) { _%>
+import java.util.List;
+import java.util.Optional;
+<%_ } _%>
+<%_ if (user.primaryKey.hasUUID) { _%>
+import java.util.UUID;
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+import java.time.Instant;
+<%_ } _%>
+/**
+ * <%- springDataDescription %> repository for the {@link <%- user.persistClass %>} entity.
+ */
+@Repository
+public interface UserRepository extends JHipsterCouchbaseRepository<<%- user.persistClass %>, String><% if (searchEngineCouchbase) { %>, CouchbaseSearchRepository<<%- user.persistClass %>, String><% } %> {
+<%_ if (cacheProviderAny) { _%>
+
+    String USERS_BY_LOGIN_CACHE = "usersByLogin";
+
+    String USERS_BY_EMAIL_CACHE = "usersByEmail";
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+    default <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey) {
+        return findIdByActivationKey(activationKey)
+            .map(User::getId)
+            .flatMap(this::findById);
+    }
+
+    @Query(FIND_IDS_QUERY + " AND activationKey = $1")
+    <%- optionalOrMono %><User> findIdByActivationKey(String activationKey);
+
+    default <%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime) {
+        return findAllById(toIds(findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(dateTime)));
+    }
+
+    @Query(FIND_IDS_QUERY + " AND activated = false AND activationKey IS NOT NULL AND createdDate < $1")
+    <%- listOrFlux %><User> findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
+
+    default <%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey) {
+        return findIdByResetKey(resetKey)
+            .map(User::getId)
+            .flatMap(this::findById);
+    }
+
+    @Query(FIND_IDS_QUERY + " AND resetKey = $1")
+    <%- optionalOrMono %><User> findIdByResetKey(String resetKey);
+
+  <%_ if (cacheProviderAny) { _%>
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
+  <%_ } _%>
+    default <%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email) {
+        return findIdByEmailIgnoreCase(email)
+            .map(User::getId)
+            .flatMap(this::findById);
+    }
+
+    @Query(FIND_IDS_QUERY + " AND LOWER(email) = LOWER($1)")
+    <%- optionalOrMono %><User> findIdByEmailIgnoreCase(String email);
+
+<%_ } _%>
+<%_ if (cacheProviderAny) { _%>
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
+<%_ } _%>
+    default <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login) {
+        return findById(login);
+    }
+
+<%_ if (reactive) { _%>
+    default Flux<User> findAllByActivatedIsTrue(Pageable pageable) {
+        return findAllById(toIds(findAllIdsByActivatedIsTrue(pageable)));
+    }
+
+    @Query(FIND_IDS_QUERY + " AND activated = true")
+    Flux<User> findAllIdsByActivatedIsTrue(Pageable pageable);
+
+    Mono<Long> count();
+<%_ } else { _%>
+    default Page<User> findAllByActivatedIsTrue(Pageable pageable) {
+        Page<User> page = findAllIdsByActivatedIsTrue(pageable);
+        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
+    }
+
+    @Query(FIND_IDS_QUERY + " AND activated = true")
+    Page<User> findAllIdsByActivatedIsTrue(Pageable pageable);
+<%_ } _%>
+}

@@ -189,8 +189,12 @@ const userFiles = javaWriteFileSection({
       templates: ['service/UserService.java', 'web/rest/PublicUserResource.java'],
     },
     {
-      // The cassandra and reactive sql UserRepository are written by their database generators
-      condition: data => data.generateBuiltInUserEntity && !data.databaseTypeCassandra && !(data.databaseTypeSql && data.reactive),
+      // The cassandra, couchbase and reactive sql UserRepository are written by their database generators
+      condition: data =>
+        data.generateBuiltInUserEntity &&
+        !data.databaseTypeCassandra &&
+        !data.databaseTypeCouchbase &&
+        !(data.databaseTypeSql && data.reactive),
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['repository/UserRepository.java'],
     },

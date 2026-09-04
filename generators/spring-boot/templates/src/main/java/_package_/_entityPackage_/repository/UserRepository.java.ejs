@@ -34,9 +34,6 @@ import org.springframework.data.mongodb.repository.<%- reactive ? 'Reactive' : '
 <%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.repository.<%- reactive ? 'Reactive' : '' %>Neo4jRepository;
 <%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.couchbase.repository.Query;
-<%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
@@ -57,7 +54,7 @@ import java.time.Instant;
  * <%- springDataDescription %> repository for the {@link <%- user.persistClass %>} entity.
  */
 @Repository
-public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%- user.persistClass %>, <%- user.primaryKey.type %>><% } %><%- reactive && !databaseTypeCouchbase ? 'Reactive' : '' %><% if (databaseTypeMongodb) { %>MongoRepository<<%- user.persistClass %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%- user.persistClass %>, String><% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<<%- user.persistClass %>, String><% } %><% if (searchEngineCouchbase) { %>, CouchbaseSearchRepository<<%- user.persistClass %>, String><% } %> {
+public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%- user.persistClass %>, <%- user.primaryKey.type %>><% } %><%- reactive ? 'Reactive' : '' %><% if (databaseTypeMongodb) { %>MongoRepository<<%- user.persistClass %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%- user.persistClass %>, String><% } %> {
   <%_ if (cacheProviderAny) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -65,64 +62,23 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
-      <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey)<%- databaseTypeCouchbase ? ' {' : ';' %>
-    <%_ if (databaseTypeCouchbase) { _%>
-        return findIdByActivationKey(activationKey)
-            .map(User::getId)
-            .flatMap(this::findById);
-    }
-
-    @Query(FIND_IDS_QUERY + " AND activationKey = $1")
-    <%- optionalOrMono %><User> findIdByActivationKey(String activationKey);
-    <%_ } _%>
+      <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey);
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
 
-    <%- databaseTypeCouchbase ? 'default ' : '' %><%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime)<%- databaseTypeCouchbase ? ' {' : ';' %>
-    <%_ if (databaseTypeCouchbase) { _%>
-        return findAllById(toIds(findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(dateTime)));
-    }
+    <%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
-    @Query(FIND_IDS_QUERY + " AND activated = false AND activationKey IS NOT NULL AND createdDate < $1")
-    <%- listOrFlux %><User> findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
-    <%_ } _%>
+    <%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey);
 
-    <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey)<%- databaseTypeCouchbase ? ' {' : ';' %>
-    <%_ if (databaseTypeCouchbase) { _%>
-        return findIdByResetKey(resetKey)
-            .map(User::getId)
-            .flatMap(this::findById);
-    }
-
-    @Query(FIND_IDS_QUERY + " AND resetKey = $1")
-    <%- optionalOrMono %><User> findIdByResetKey(String resetKey);
-    <%_ } _%>
-
-    <%_ if (databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+    <%_ if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
       <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
       <%_ } _%>
     <%_ } _%>
-    <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email)<%- databaseTypeCouchbase ? ' {' : ';' %>
-    <%_ if (databaseTypeCouchbase) { _%>
-        return findIdByEmailIgnoreCase(email)
-            .map(User::getId)
-            .flatMap(this::findById);
-    }
-
-    @Query(FIND_IDS_QUERY + " AND LOWER(email) = LOWER($1)")
-    <%- optionalOrMono %><User> findIdByEmailIgnoreCase(String email);
-    <%_ } _%>
+    <%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email);
 
   <%_ } _%>
-  <%_ if (databaseTypeCouchbase) { _%>
-    <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
-    <%_ } _%>
-    default <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login) {
-        return findById(login);
-    }
-  <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
+  <%_ if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
     <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
     <%_ } _%>
@@ -154,33 +110,12 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
 
   <% if (reactive) { %>
-    <%_ if (!databaseTypeCouchbase) { _%>
     Flux<<%- user.persistClass %>>findAllByIdNotNull(Pageable pageable);
-    <%_ } _%>
 
-    <%_ if (databaseTypeCouchbase) { _%>
-    default Flux<User> findAllByActivatedIsTrue(Pageable pageable) {
-        return findAllById(toIds(findAllIdsByActivatedIsTrue(pageable)));
-    }
-
-    @Query(FIND_IDS_QUERY + " AND activated = true")
-    Flux<User> findAllIdsByActivatedIsTrue(Pageable pageable);
-    <%_ } else { _%>
     Flux<<%- user.persistClass %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
-    <%_ } _%>
 
     Mono<Long> count();
   <% } else { %>
-    <%_ if (databaseTypeCouchbase) { _%>
-    default Page<User> findAllByActivatedIsTrue(Pageable pageable) {
-        Page<User> page = findAllIdsByActivatedIsTrue(pageable);
-        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
-    }
-
-    @Query(FIND_IDS_QUERY + " AND activated = true")
-    Page<User> findAllIdsByActivatedIsTrue(Pageable pageable);
-    <%_ } else { _%>
     Page<<%- user.persistClass %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
-    <%_ } _%>
   <% } %>
 }

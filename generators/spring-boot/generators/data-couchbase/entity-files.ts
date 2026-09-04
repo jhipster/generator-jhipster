@@ -36,6 +36,14 @@ const repositoryFiles = [
   }),
 ];
 
+const userFiles = [
+  asWriteFilesBlock({
+    condition: ctx => ctx.builtInUser && ctx.generateBuiltInUserEntity,
+    ...javaMainPackageTemplatesBlock('_entityPackage_'),
+    templates: ['repository/UserRepository.java'],
+  }),
+];
+
 export const entityFiles = asWriteFilesSection({
   dbChangelog: [
     {
@@ -62,6 +70,7 @@ export const entityFiles = asWriteFilesSection({
   ],
   domainFiles,
   repositoryFiles,
+  userFiles,
 });
 
 export const cleanupCouchbaseEntityFilesTask = asWritingEntitiesTask(function ({ application, control, entities }) {
