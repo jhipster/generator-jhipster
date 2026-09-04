@@ -76,6 +76,13 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   get preparing() {
     return this.asPreparingTaskGroup({
       async preparing({ application, applicationDefaults }) {
+        applicationDefaults({
+          springBootBaseRepositoryClass: ({ reactive }) => (reactive ? 'R2dbcRepository' : 'JpaRepository'),
+          springBootBaseRepositoryImport: ({ reactive }) =>
+            reactive ?
+              'org.springframework.data.r2dbc.repository.R2dbcRepository'
+            : 'org.springframework.data.jpa.repository.JpaRepository',
+        });
         application.devDatabaseExtraOptions = getDBCExtraOption(application.devDatabaseType);
         application.prodDatabaseExtraOptions = getDBCExtraOption(application.prodDatabaseType);
 

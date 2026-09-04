@@ -32,6 +32,22 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
     }
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      baseRepository({ applicationDefaults }) {
+        applicationDefaults({
+          springBootBaseRepositoryClass: ({ reactive }) => `${reactive ? 'Reactive' : ''}MongoRepository`,
+          springBootBaseRepositoryImport: ({ springBootBaseRepositoryClass }) =>
+            `org.springframework.data.mongodb.repository.${springBootBaseRepositoryClass}`,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async cleanupMongodbFilesTask({ application, control }) {

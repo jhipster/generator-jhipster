@@ -49,6 +49,22 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      baseRepository({ applicationDefaults }) {
+        applicationDefaults({
+          springBootBaseRepositoryClass: ({ reactive }) => `${reactive ? 'Reactive' : ''}Neo4jRepository`,
+          springBootBaseRepositoryImport: ({ springBootBaseRepositoryClass }) =>
+            `org.springframework.data.neo4j.repository.${springBootBaseRepositoryClass}`,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
       async configuringEachEntity({ entityConfig }) {

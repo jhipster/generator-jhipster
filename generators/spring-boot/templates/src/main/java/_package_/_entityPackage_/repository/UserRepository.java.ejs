@@ -26,14 +26,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 <%_ if (databaseTypeSql) { _%>
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
 <%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-import org.springframework.data.mongodb.repository.<%- reactive ? 'Reactive' : '' %>MongoRepository;
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import org.springframework.data.neo4j.repository.<%- reactive ? 'Reactive' : '' %>Neo4jRepository;
-<%_ } _%>
+import <%- springBootBaseRepositoryImport %>;
 import org.springframework.stereotype.Repository;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
@@ -54,52 +48,52 @@ import java.time.Instant;
  * <%- springDataDescription %> repository for the {@link <%- user.persistClass %>} entity.
  */
 @Repository
-public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%- user.persistClass %>, <%- user.primaryKey.type %>><% } %><%- reactive ? 'Reactive' : '' %><% if (databaseTypeMongodb) { %>MongoRepository<<%- user.persistClass %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%- user.persistClass %>, String><% } %> {
-  <%_ if (cacheProviderAny) { _%>
+public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%- user.persistClass %>, <%- user.primaryKey.type %>> {
+<%_ if (cacheProviderAny) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
-  <%_ } _%>
-  <%_ if (!authenticationTypeOauth2) { _%>
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey);
 
     <%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey);
 
-    <%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
+  <%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
-    <%_ } _%>
+  <%_ } _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email);
 
-  <%_ } _%>
-  <%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
+<%_ } _%>
+<%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
-  <%_ } _%>
+<%_ } _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login);
 
-  <%_ if (databaseTypeNeo4j) { _%>
+<%_ if (databaseTypeNeo4j) { _%>
     <%- reactive ? '' : '// See https://github.com/neo4j/sdn-rx/issues/51' %>
     <%- listOrFlux %><<%- user.persistClass %>> findAll();
 
-  <%_ } _%>
-  <%_ if (databaseTypeSql) { _%>
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
     @EntityGraph(attributePaths = "authorities")
-    <%_ if (cacheProviderAny) { _%>
+  <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
-    <%_ } _%>
+  <%_ } _%>
     Optional<<%- user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
 
-    <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
     @EntityGraph(attributePaths = "authorities")
-      <%_ if (cacheProviderAny) { _%>
+    <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
-      <%_ } _%>
+    <%_ } _%>
     Optional<<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
   <% if (reactive) { %>
     Flux<<%- user.persistClass %>> findAllByIdNotNull(Pageable pageable);
 

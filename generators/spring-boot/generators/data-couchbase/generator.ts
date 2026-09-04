@@ -32,6 +32,21 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
     }
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      baseRepository({ applicationDefaults }) {
+        applicationDefaults({
+          springBootBaseRepositoryClass: 'JHipsterCouchbaseRepository',
+          springBootBaseRepositoryImport: ({ packageName }) => `${packageName}.repository.JHipsterCouchbaseRepository`,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
