@@ -44,6 +44,7 @@ import java.util.UUID;
 <%_ if (!authenticationTypeOauth2) { _%>
 import java.time.Instant;
 <%_ } _%>
+
 /**
  * <%- springDataDescription %> repository for the {@link <%- user.persistClass %>} entity.
  */
@@ -54,22 +55,33 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
+
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (generateAuthenticationApi) { _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey);
 
     <%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey);
 
-  <%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
+  <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
+  <%_ } _%>
+  <%_ if (databaseTypeSql) { _%>
+    @EntityGraph(attributePaths = "authorities")
+    <%- optionalOrMono %><<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+
   <%_ } _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email);
 
 <%_ } _%>
-<%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
+<%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
+<%_ } _%>
+<%_ if (databaseTypeSql) { _%>
+    @EntityGraph(attributePaths = "authorities")
+    <%- optionalOrMono %><<%- user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
+
 <%_ } _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login);
 
@@ -78,28 +90,12 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
     <%- listOrFlux %><<%- user.persistClass %>> findAll();
 
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-    @EntityGraph(attributePaths = "authorities")
-  <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
-  <%_ } _%>
-    Optional<<%- user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
-
-  <%_ if (!authenticationTypeOauth2) { _%>
-    @EntityGraph(attributePaths = "authorities")
-    <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
-    <%_ } _%>
-    Optional<<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
-
-  <%_ } _%>
-<%_ } _%>
-  <% if (reactive) { %>
+<%_ if (reactive) { _%>
     Flux<<%- user.persistClass %>> findAllByIdNotNull(Pageable pageable);
 
     Mono<Long> count();
 
-  <% } %>
+<%_ } _%>
     <%- pageOrFlux %><<%- user.persistClass %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 
 }
