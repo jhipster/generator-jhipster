@@ -8,7 +8,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "prodActiveProfiles": [],
   "springBootBaseRepositoryClass": undefined,
   "springBootBaseRepositoryImport": undefined,
-  "springDataDescription": "Spring Data Unknown reactive",
+  "springDataDescription": undefined,
 }
 `;
 

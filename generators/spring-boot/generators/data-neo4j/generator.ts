@@ -53,6 +53,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       baseRepository({ applicationDefaults }) {
         applicationDefaults({
+          springDataDescription: ({ reactive }) => `Spring Data Neo4j${reactive ? ' reactive' : ''}`,
           springBootBaseRepositoryClass: ({ reactive }) => `${reactive ? 'Reactive' : ''}Neo4jRepository`,
           springBootBaseRepositoryImport: ({ springBootBaseRepositoryClass }) =>
             `org.springframework.data.neo4j.repository.${springBootBaseRepositoryClass}`,

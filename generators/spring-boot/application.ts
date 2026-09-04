@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { getDatabaseTypeData } from '../server/support/database.ts';
 
 import type { Application as SpringBootApplication, Field as SpringBootField, Relationship as SpringBootRelationship } from './types.ts';
 
@@ -27,7 +26,7 @@ type SpringBootLoadingAddedApplicationProperties = {
 };
 
 type SpringBootPreparingAddedApplicationProperties = {
-  springDataDescription: string;
+  springDataDescription?: string | undefined;
   cassandraKeyspaceName: string | undefined;
   springBootBaseRepositoryClass?: string | undefined;
   springBootBaseRepositoryImport?: string | undefined;
@@ -48,22 +47,11 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
   backendType: 'Java',
-  springDataDescription: ({ databaseType, reactive }) => {
-    let springDataDatabase: string;
-    if (databaseType === 'sql') {
-      springDataDatabase = reactive ? 'R2DBC' : 'JPA';
-    } else {
-      springDataDatabase = getDatabaseTypeData(databaseType as string).name;
-      if (reactive) {
-        springDataDatabase += ' reactive';
-      }
-    }
-    return `Spring Data ${springDataDatabase}`;
-  },
   cassandraKeyspaceName({ baseName, databaseTypeCassandra }) {
     return databaseTypeCassandra ? baseName.toLowerCase().replace(/[^a-z0-9_]/g, '') : undefined;
   },
   // Populated by the data generators
+  springDataDescription: undefined,
   springBootBaseRepositoryClass: undefined,
   springBootBaseRepositoryImport: undefined,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<

@@ -36,6 +36,7 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       baseRepository({ applicationDefaults }) {
         applicationDefaults({
+          springDataDescription: ({ reactive }) => `Spring Data Couchbase${reactive ? ' reactive' : ''}`,
           springBootBaseRepositoryClass: 'JHipsterCouchbaseRepository',
           springBootBaseRepositoryImport: ({ packageName }) => `${packageName}.repository.JHipsterCouchbaseRepository`,
         });

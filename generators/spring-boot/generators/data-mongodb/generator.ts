@@ -36,6 +36,7 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       baseRepository({ applicationDefaults }) {
         applicationDefaults({
+          springDataDescription: ({ reactive }) => `Spring Data MongoDB${reactive ? ' reactive' : ''}`,
           springBootBaseRepositoryClass: ({ reactive }) => `${reactive ? 'Reactive' : ''}MongoRepository`,
           springBootBaseRepositoryImport: ({ springBootBaseRepositoryClass }) =>
             `org.springframework.data.mongodb.repository.${springBootBaseRepositoryClass}`,
