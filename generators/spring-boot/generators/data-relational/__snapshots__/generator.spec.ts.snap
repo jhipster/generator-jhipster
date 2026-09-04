@@ -2473,6 +2473,9 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -3096,6 +3099,9 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -3413,6 +3419,9 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -3727,6 +3736,9 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -4008,6 +4020,9 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
