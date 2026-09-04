@@ -38,7 +38,7 @@
     "rimraf": "6.1.3",
     "tinyglobby": "0.2.17",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.68.0",
+    "typescript-eslint": "8.69.0",
     "vitest": "4.1.11",
     "vitest-sonar-reporter": "3.0.0"
   },
