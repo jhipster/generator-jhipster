@@ -57,7 +57,7 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
 
 <%_ } _%>
-<%_ if (generateAuthenticationApi) { _%>
+<%_ if (generateUserManagement) { _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey);
 
     <%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);

@@ -94,6 +94,7 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
       baseRepository({ applicationDefaults }) {
         applicationDefaults({
           springDataDescription: ({ reactive }) => `Spring Data Cassandra${reactive ? ' reactive' : ''}`,
+          cassandraKeyspaceName: ({ baseName }) => baseName.toLowerCase().replace(/[^a-z0-9_]/g, ''),
           springBootBaseRepositoryClass: ({ reactive }) => `${reactive ? 'Reactive' : ''}CassandraRepository`,
           springBootBaseRepositoryImport: ({ springBootBaseRepositoryClass }) =>
             `org.springframework.data.cassandra.repository.${springBootBaseRepositoryClass}`,
