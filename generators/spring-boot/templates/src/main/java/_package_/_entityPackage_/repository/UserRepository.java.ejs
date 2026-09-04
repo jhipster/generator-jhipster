@@ -62,30 +62,22 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
-      <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey);
-  <%_ } _%>
-  <%_ if (!authenticationTypeOauth2) { _%>
+    <%- optionalOrMono %><<%- user.persistClass %>> findOneByActivationKey(String activationKey);
 
     <%- listOrFlux %><<%- user.persistClass %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
 
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey);
 
-    <%_ if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
-      <%_ if (cacheProviderAny) { _%>
+    <%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
-      <%_ } _%>
     <%_ } _%>
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByEmailIgnoreCase(String email);
 
   <%_ } _%>
-  <%_ if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
-    <%_ if (cacheProviderAny) { _%>
+  <%_ if (cacheProviderAny && (databaseTypeMongodb || databaseTypeNeo4j)) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
-    <%_ } _%>
-    <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login);
-  <%_ } else { _%>
-    <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login);
   <%_ } _%>
+    <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login);
 
   <%_ if (databaseTypeNeo4j) { _%>
     <%- reactive ? '' : '// See https://github.com/neo4j/sdn-rx/issues/51' %>
@@ -108,14 +100,12 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
 
     <%_ } _%>
   <%_ } _%>
-
   <% if (reactive) { %>
-    Flux<<%- user.persistClass %>>findAllByIdNotNull(Pageable pageable);
-
-    Flux<<%- user.persistClass %>>findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+    Flux<<%- user.persistClass %>> findAllByIdNotNull(Pageable pageable);
 
     Mono<Long> count();
-  <% } else { %>
-    Page<<%- user.persistClass %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+
   <% } %>
+    <%- pageOrFlux %><<%- user.persistClass %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
+
 }
