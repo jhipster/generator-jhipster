@@ -448,7 +448,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "springBoot4": true,
   "springBootBaseRepositoryClass": undefined,
   "springBootBaseRepositoryImport": undefined,
-  "springDataDescription": "Spring Data JPA",
+  "springDataDescription": undefined,
   "srcMain": "src/main/",
   "srcMainJava": "src/main/java/",
   "srcMainResources": "src/main/resources/",
