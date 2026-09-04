@@ -32,16 +32,14 @@ import org.springframework.stereotype.Repository;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-<%_ } _%>
-
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import java.util.List;
 import java.util.Optional;
 <%_ } _%>
 <%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (generateUserManagement) { _%>
 import java.time.Instant;
 <%_ } _%>
 
