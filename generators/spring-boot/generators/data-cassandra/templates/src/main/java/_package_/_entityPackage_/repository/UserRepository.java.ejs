@@ -35,8 +35,9 @@ import com.datastax.oss.driver.api.core.cql.DefaultBatchType;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 <%_ if (reactive) { _%>
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-<%_ } _%>
-<%_ if (!reactive) { _%>
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
+<%_ } else { _%>
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.DaoFactory;
@@ -45,10 +46,6 @@ import com.datastax.oss.driver.api.mapper.annotations.Delete;
 import com.datastax.oss.driver.api.mapper.annotations.Insert;
 import com.datastax.oss.driver.api.mapper.annotations.Mapper;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
-<%_ } _%>
-<%_ if (reactive) { _%>
-import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
-import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.annotation.Cacheable;
@@ -59,11 +56,10 @@ import org.springframework.data.cassandra.ReactiveSession;
 import org.springframework.data.cassandra.core.ReactiveCassandraTemplate;
 import org.springframework.data.cassandra.core.convert.CassandraConverter;
 import org.springframework.data.cassandra.core.mapping.CassandraPersistentEntity;
-<%_ } _%>
-import org.springframework.stereotype.Repository;
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import org.springframework.boot.cassandra.autoconfigure.CassandraProperties;
 <%_ } _%>
+import org.springframework.stereotype.Repository;
 <%_ if (databaseMigrationLiquibase) { _%>
 import org.springframework.context.annotation.DependsOn;
 <%_ } _%>
@@ -76,19 +72,19 @@ import reactor.core.publisher.Mono;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
-<%_ if (!reactive) { _%>
-import java.util.List;
-import java.util.Optional;
-<%_ } _%>
 <%_ if (reactive) { _%>
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+<%_ } else { _%>
+import java.util.List;
+import java.util.Optional;
 <%_ } _%>
 import java.util.Set;
 <%_ if (user.primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
+
 /**
  * <%- springDataDescription %> repository for the {@link <%- user.persistClass %>} entity.
  */
@@ -180,20 +176,20 @@ public class UserRepository {
         findOneByActivationKeyStmt = session.prepare("""
             SELECT id
             FROM user_by_activation_key
-            WHERE activation_key = :activation_key""")<%- reactive ? '.block()' : '' %>;
+            WHERE activation_key = :activation_key""")<%- reactorBlock %>;
 
         findOneByResetKeyStmt = session.prepare("""
             SELECT id
             FROM user_by_reset_key
-            WHERE reset_key = :reset_key""")<%- reactive ? '.block()' : '' %>;
+            WHERE reset_key = :reset_key""")<%- reactorBlock %>;
 
         insertByActivationKeyStmt = session.prepare("""
             INSERT INTO user_by_activation_key (activation_key, id)
-            VALUES (:activation_key, :id)""")<%- reactive ? '.block()' : '' %>;
+            VALUES (:activation_key, :id)""")<%- reactorBlock %>;
 
         insertByResetKeyStmt = session.prepare("""
             INSERT INTO user_by_reset_key (reset_key, id)
-            VALUES (:reset_key, :id)""")<%- reactive ? '.block()' : '' %>;
+            VALUES (:reset_key, :id)""")<%- reactorBlock %>;
 
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -205,48 +201,48 @@ public class UserRepository {
 <%_ if (generateUserManagement) { _%>
         deleteByActivationKeyStmt = session.prepare("""
             DELETE FROM user_by_activation_key
-            WHERE activation_key = :activation_key""")<%- reactive ? '.block()' : '' %>;
+            WHERE activation_key = :activation_key""")<%- reactorBlock %>;
 
         deleteByResetKeyStmt = session.prepare("""
             DELETE FROM user_by_reset_key
-            WHERE reset_key = :reset_key""")<%- reactive ? '.block()' : '' %>;
+            WHERE reset_key = :reset_key""")<%- reactorBlock %>;
 
 <%_ } _%>
         findOneByLoginStmt = session.prepare("""
             SELECT id
             FROM user_by_login
-            WHERE login = :login""")<%- reactive ? '.block()' : '' %>;
+            WHERE login = :login""")<%- reactorBlock %>;
 
         insertByLoginStmt = session.prepare("""
             INSERT INTO user_by_login (login, id)
-            VALUES (:login, :id)""")<%- reactive ? '.block()' : '' %>;
+            VALUES (:login, :id)""")<%- reactorBlock %>;
 
         deleteByLoginStmt = session.prepare("""
             DELETE FROM user_by_login
-            WHERE login = :login""")<%- reactive ? '.block()' : '' %>;
+            WHERE login = :login""")<%- reactorBlock %>;
 
         findOneByEmailStmt = session.prepare("""
             SELECT id
             FROM user_by_email
-            WHERE email     = :email""")<%- reactive ? '.block()' : '' %>;
+            WHERE email     = :email""")<%- reactorBlock %>;
 
         insertByEmailStmt = session.prepare("""
             INSERT INTO user_by_email (email, id)
-            VALUES (:email, :id)""")<%- reactive ? '.block()' : '' %>;
+            VALUES (:email, :id)""")<%- reactorBlock %>;
 
         deleteByEmailStmt = session.prepare("""
             DELETE FROM user_by_email
-            WHERE email = :email""")<%- reactive ? '.block()' : '' %>;
+            WHERE email = :email""")<%- reactorBlock %>;
 
-        truncateStmt = session.prepare("TRUNCATE user")<%- reactive ? '.block()' : '' %>;
+        truncateStmt = session.prepare("TRUNCATE user")<%- reactorBlock %>;
 <%_ if (generateUserManagement) { _%>
 
-        truncateByResetKeyStmt = session.prepare("TRUNCATE user_by_reset_key")<%- reactive ? '.block()' : '' %>;
+        truncateByResetKeyStmt = session.prepare("TRUNCATE user_by_reset_key")<%- reactorBlock %>;
 <%_ } _%>
 
-        truncateByLoginStmt = session.prepare("TRUNCATE user_by_login")<%- reactive ? '.block()' : '' %>;
+        truncateByLoginStmt = session.prepare("TRUNCATE user_by_login")<%- reactorBlock %>;
 
-        truncateByEmailStmt = session.prepare("TRUNCATE user_by_email")<%- reactive ? '.block()' : '' %>;
+        truncateByEmailStmt = session.prepare("TRUNCATE user_by_email")<%- reactorBlock %>;
     }
 
     public <%- optionalOrMono %><<%- user.persistClass %>> findById(String id) {

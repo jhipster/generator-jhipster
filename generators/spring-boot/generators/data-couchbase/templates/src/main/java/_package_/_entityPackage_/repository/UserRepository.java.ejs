@@ -29,9 +29,7 @@ import org.springframework.stereotype.Repository;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-<%_ } _%>
-
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import java.util.List;
 import java.util.Optional;
 <%_ } _%>
@@ -98,22 +96,19 @@ public interface UserRepository extends JHipsterCouchbaseRepository<<%- user.per
         return findById(login);
     }
 
+    default <%- pageOrFlux %><<%- user.persistClass %>> findAllByActivatedIsTrue(Pageable pageable) {
 <%_ if (reactive) { _%>
-    default Flux<User> findAllByActivatedIsTrue(Pageable pageable) {
         return findAllById(toIds(findAllIdsByActivatedIsTrue(pageable)));
+<%_ } else { _%>
+        Page<<%- user.persistClass %>> page = findAllIdsByActivatedIsTrue(pageable);
+        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
+<%_ } _%>
     }
 
     @Query(FIND_IDS_QUERY + " AND activated = true")
-    Flux<User> findAllIdsByActivatedIsTrue(Pageable pageable);
+    <%- pageOrFlux %><<%- user.persistClass %>> findAllIdsByActivatedIsTrue(Pageable pageable);
+<%_ if (reactive) { _%>
 
     Mono<Long> count();
-<%_ } else { _%>
-    default Page<User> findAllByActivatedIsTrue(Pageable pageable) {
-        Page<User> page = findAllIdsByActivatedIsTrue(pageable);
-        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
-    }
-
-    @Query(FIND_IDS_QUERY + " AND activated = true")
-    Page<User> findAllIdsByActivatedIsTrue(Pageable pageable);
 <%_ } _%>
 }
