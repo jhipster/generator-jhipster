@@ -55,6 +55,11 @@ import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
     if (databaseTypeSql && !reactive) {
       transactionalAnnotation = '\n    @Transactional';
     }
+    let searchIndexingAnnotation = transactionalAnnotation;
+    if (searchEngineElasticsearch && databaseTypeSql && !reactive) {
+      // no @Transactional: the search index is only updated after the transaction commits
+      searchIndexingAnnotation = '';
+    }
 _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%- packageName %>.web.rest.TestUtil;
@@ -674,7 +679,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 <%_ if (!readOnly) { _%>
 
-    @Test<%- transactionalAnnotation %>
+    @Test<%- searchIndexingAnnotation %>
     void create<%- entityClass %>() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
@@ -1475,7 +1480,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 <%_ if (!readOnly && updatableEntity) { _%>
 
-    @Test<%- transactionalAnnotation %>
+    @Test<%- searchIndexingAnnotation %>
     void putExisting<%- entityClass %>() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -1831,7 +1836,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
-    @Test<%- transactionalAnnotation %>
+    @Test<%- searchIndexingAnnotation %>
     void delete<%- entityClass %>() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
@@ -1872,8 +1877,15 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (reactive) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+    <%_ } else { _%>
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+            assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+        });
+    <%_ } _%>
   <%_ } _%>
 
     }
