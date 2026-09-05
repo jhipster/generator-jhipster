@@ -13,6 +13,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "emptyOrReactive": "",
   "entityPackages": [],
   "graalvmReachabilityMetadata": Any<String>,
+  "graalvmVersion": "25.3",
   "imperativeOrReactive": "imperative",
   "javaCompatibleVersions": Any<Array>,
   "javaDependencies": {},

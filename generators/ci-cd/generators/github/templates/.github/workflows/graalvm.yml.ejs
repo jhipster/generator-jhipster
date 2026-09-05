@@ -53,7 +53,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        java-version: ['25']
+        java-version: ['<%- javaVersion %>']
         include:
           - os: ubuntu-latest
             executable-suffix: ''
@@ -72,12 +72,14 @@ jobs:
       # Make sure that the script-shell is set to bash, otherwise npm scripts will fail on Windows runners
       - run: npm config -L project set script-shell=bash
       - name: Set up GraalVM (Java ${{ matrix.java-version }})
-        uses: graalvm/setup-graalvm@v1
+        uses: <%- githubActions['graalvm/setup-graalvm'] %>
         with:
+          version: '<%- graalvmVersion %>'
           java-version: '${{ matrix.java-version }}'
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: '<%- buildTool %>'
+          native-image-job-reports: 'true'
 <%_ if (!skipClient) { _%>
       - name: Install node.js packages
         run: npm install

@@ -76,6 +76,17 @@ const command = {
       },
       scope: 'generator',
     },
+    graalvmSupport: {
+      description: 'Experimental GraalVM Native support',
+      cli: {
+        type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
+      scope: 'storage',
+    },
   },
   import: ['jhipster:java-simple-application:build-tool'],
 } as const satisfies JHipsterCommandDefinition<any>;

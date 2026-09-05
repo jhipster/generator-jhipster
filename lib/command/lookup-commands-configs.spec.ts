@@ -34,11 +34,11 @@ describe('jdl options', () => {
   "removeNeedles",
   "clientBundler",
   "clientTestFramework",
+  "graalvmSupport",
   "incrementalChangelog",
   "feignClient",
   "syncUserWithIdp",
   "databaseMigration",
-  "graalvmSupport",
   "messageBroker",
   "routes",
 ]

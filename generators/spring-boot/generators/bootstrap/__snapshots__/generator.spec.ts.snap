@@ -122,6 +122,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "generateUserManagement": true,
   "graalvmReachabilityMetadata": "GRAALVM_REACHABILITY_METADATA_VERSION",
   "graalvmSupport": undefined,
+  "graalvmVersion": "25.3",
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
   "hibernateNamingImplicitStrategy": "org.springframework.boot.hibernate.SpringImplicitNamingStrategy",

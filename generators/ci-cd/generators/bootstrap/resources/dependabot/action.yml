@@ -26,6 +26,7 @@ runs:
     - uses: actions/setup-node@v7
     - uses: actions/setup-java@v6.0.0
     - uses: actions/upload-artifact@v7
+    - uses: graalvm/setup-graalvm@v1
     - uses: jhipster/actions/cache-npm-dependencies@v2
     - uses: jhipster/actions/compare-sample@v2
     - uses: jhipster/actions/save-cache@v2

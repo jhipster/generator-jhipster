@@ -25,6 +25,7 @@ import { normalizePathEnd } from '../../lib/utils/path.ts';
 import {
   CLIENT_MAIN_SRC_DIR,
   CLIENT_TEST_SRC_DIR,
+  GRAALVM_RECOMMENDED_JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
   JHIPSTER_DEPENDENCIES_VERSION,
   RECOMMENDED_JAVA_VERSION,
@@ -58,6 +59,7 @@ export type JavaSimpleApplicationLoadingAddedApplicationProperties = {
 export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
   buildTool: string;
   javaVersion: string;
+  graalvmVersion: string;
   mainClass: string;
 
   packageFolder: string;
@@ -120,7 +122,8 @@ export const mutateApplicationPreparing = {
 
   backendTypeJavaAny: true,
 
-  javaVersion: RECOMMENDED_JAVA_VERSION,
+  javaVersion: ({ graalvmSupport }) => (graalvmSupport ? GRAALVM_RECOMMENDED_JAVA_VERSION : RECOMMENDED_JAVA_VERSION),
+  graalvmVersion: '25.3',
   mainClass: ({ baseName }) => getMainClassName({ baseName }),
 
   packageName: 'com.mycompany.myapp',
