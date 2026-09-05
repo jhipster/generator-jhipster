@@ -193,12 +193,6 @@ Unit tests are run by <%- clientTestFrameworkName %>. They're located near compo
 ```
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>
-<%_ if (clientBundlerWebpack) { _%>
-- [Webpack](https://webpack.js.org/)
-<%_ } -%>
-<%_ if (clientFrameworkReact || microfrontend) { _%>
-- [BrowserSync](https://www.browsersync.io/)
-<%_ } -%>
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
 - [Jest](https://jestjs.io)
 <%_ } -%>

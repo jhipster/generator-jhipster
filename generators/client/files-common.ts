@@ -18,7 +18,7 @@
  */
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
 
-import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.ts';
+import { clientSrcTemplatesBlock } from './support/files.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.ts';
 
 export const files = asWriteFilesSection({
@@ -26,11 +26,6 @@ export const files = asWriteFilesSection({
     {
       templates: ['README.md.jhi.client', '.prettierignore.jhi.client'],
     },
-    clientRootTemplatesBlock({
-      condition: generator =>
-        generator.microfrontend && generator.clientBundlerWebpack && (generator.clientFrameworkVue || generator.clientFrameworkReact),
-      templates: ['webpack/webpack.microfrontend.js.jhi'],
-    }),
     {
       ...clientSrcTemplatesBlock(),
       templates: [

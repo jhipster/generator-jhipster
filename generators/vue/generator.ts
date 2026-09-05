@@ -80,12 +80,12 @@ export default class VueGenerator extends VueApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      configMigration({ control }) {
-        if (
-          control.isJhipsterVersionLessThan('9.0.1') &&
-          (this.jhipsterConfig.microfrontend || this.jhipsterConfig.applicationType === 'microservice')
-        ) {
-          this.jhipsterConfig.clientBundler ??= 'webpack';
+      migrateFromWebpack() {
+        if (this.jhipsterConfig.clientBundler === 'webpack') {
+          // Webpack support was removed, use the default bundler.
+          this.jhipsterConfig.clientBundler = undefined;
+          // Webpack dev server used a different port range, reset it to the new bundler default.
+          this.jhipsterConfig.devServerPort = undefined;
         }
       },
       configureDevServerPort({ control }) {
@@ -133,23 +133,17 @@ export default class VueGenerator extends VueApplicationGenerator {
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
 
-        if (application.clientBundlerWebpack) {
-          application.prettierFolders.push('webpack/');
-        }
         if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
           // When we have a java backend, 'src/**' is already added by java:bootstrap
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
       async javaNodeBuildPaths({ application }) {
-        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, microfrontend, javaNodeBuildPaths } = application;
 
         javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
         if (microfrontend) {
-          javaNodeBuildPaths?.push(`module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`);
-        }
-        if (clientBundlerWebpack) {
-          javaNodeBuildPaths?.push('webpack/');
+          javaNodeBuildPaths?.push('module-federation.config.ts');
         }
         if (clientBundlerVite) {
           javaNodeBuildPaths?.push('vite.config.ts');
@@ -160,22 +154,6 @@ export default class VueGenerator extends VueApplicationGenerator {
       },
       prepareForTemplates({ application, source }) {
         application.prettierExtensions.push('html', 'vue', 'css', 'scss');
-
-        source.addWebpackConfig = args => {
-          if (!application.clientBundlerWebpack) {
-            throw new Error('This application is not webpack based');
-          }
-          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
-          const ignoreNonExisting = this.ignoreNeedlesError && 'Webpack configuration file not found';
-          this.editFile(
-            webpackPath,
-            { ignoreNonExisting },
-            createNeedleCallback({
-              needle: 'jhipster-needle-add-webpack-config',
-              contentToAdd: `,${args.config}`,
-            }),
-          );
-        };
 
         source.addEntitiesToClient = ({ application, entities }) => {
           const { enableTranslation } = application;
@@ -333,6 +311,17 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             `${application.clientSrcDir}app/shared/security/authority.ts`,
           ],
           '9.0.1': [`${application.clientSrcDir}app/entities/entities-menu.spec.ts`],
+          '9.3.1': [
+            // Webpack support was removed
+            'webpack/package.json',
+            'webpack/config.js',
+            'webpack/webpack.common.js',
+            'webpack/webpack.dev.js',
+            'webpack/webpack.prod.js',
+            'webpack/vue.utils.js',
+            [application.microfrontend, 'webpack/webpack.microfrontend.js'],
+            [application.microfrontend, 'module-federation.config.cjs'],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -359,7 +348,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPackageJsonScripts({ application, source }) {
-        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, nodePackageManager } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, nodePackageManager } = application;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
             scripts: {
@@ -369,17 +358,6 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'webapp:serve': `${nodePackageManager} run vite-serve`,
               'vite-serve': 'vite',
               'vite-build': 'vite build',
-            },
-          });
-        }
-        if (clientBundlerWebpack) {
-          source.mergeClientPackageJson!({
-            scripts: {
-              'webapp:build:dev': `${nodePackageManager} run webpack -- --mode development --env stats=minimal`,
-              'webapp:build:prod': `${nodePackageManager} run webpack -- --mode production --env stats=minimal`,
-              'webapp:dev': `${nodePackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
-              'webpack-dev-server': 'webpack serve --config webpack/webpack.common.js',
-              webpack: 'webpack --config webpack/webpack.common.js',
             },
           });
         }
@@ -402,7 +380,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
@@ -411,31 +389,6 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             },
             devDependencies: {
               '@module-federation/vite': null,
-            },
-          });
-        }
-        if (clientBundlerWebpack) {
-          source.mergeClientPackageJson!({
-            devDependencies: {
-              '@module-federation/enhanced': null,
-              'browser-sync-webpack-plugin': null,
-              'copy-webpack-plugin': null,
-              'css-loader': null,
-              'css-minimizer-webpack-plugin': null,
-              'html-webpack-plugin': null,
-              'mini-css-extract-plugin': null,
-              'postcss-loader': null,
-              'sass-loader': null,
-              'terser-webpack-plugin': null,
-              'ts-loader': null,
-              'vue-loader': null,
-              'vue-style-loader': null,
-              webpack: null,
-              'webpack-bundle-analyzer': null,
-              'webpack-cli': null,
-              'webpack-dev-server': null,
-              'webpack-merge': null,
-              'workbox-webpack-plugin': null,
             },
           });
         }
@@ -494,7 +447,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
       end({ application }) {
         this.log.ok(`Vue ${application.nodeDependencies.vue} application generated successfully.`);
         this.log.log(
-          chalk.green(`  Start your Webpack development server with:
+          chalk.green(`  Start your development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `),
         );

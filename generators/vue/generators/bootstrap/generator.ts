@@ -36,18 +36,7 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
       defaults({ applicationDefaults }) {
         applicationDefaults(mutateApplication, {
           clientBundler: ctx => (ctx.microfrontend || ctx.applicationTypeMicroservice ? 'rsbuild' : 'vite'),
-          devServerPort: (ctx, { data }) => {
-            let port;
-            if (ctx.clientBundlerWebpack) {
-              port = 9060;
-            } else if (ctx.clientBundlerRsbuild) {
-              port = 3000;
-            } else {
-              port = 9000;
-            }
-            return port + (data.applicationIndex ?? 0);
-          },
-          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
+          devServerPort: (ctx, { data }) => (ctx.clientBundlerRsbuild ? 3000 : 9000) + (data.applicationIndex ?? 0),
           nodeWebappBuildTarget: ({ clientBundlerRsbuild }) => `webapp:build${clientBundlerRsbuild ? ':prod' : ''}`,
         });
       },
@@ -71,12 +60,11 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
 
           if (application.microfrontend && (application.applicationTypeMicroservice || application.exposeMicrofrontend)) {
             this.editFile(
-              `${clientRootDir}module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`,
+              `${clientRootDir}module-federation.config.ts`,
               { ignoreNonExisting },
               createNeedleCallback({
                 contentToAdd: newLanguages.map(
-                  lang =>
-                    `    './i18n-${lang.languageTag}': './${application.clientBundlerWebpack ? this.relativeDir(clientRootDir, clientSrcDir) : ''}i18n/${lang.languageTag}/${lang.languageTag}.js',`,
+                  lang => `    './i18n-${lang.languageTag}': './i18n/${lang.languageTag}/${lang.languageTag}.js',`,
                 ),
                 needle: 'jhipster-needle-expose',
               }),

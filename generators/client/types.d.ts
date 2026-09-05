@@ -59,6 +59,8 @@ export type Source = JavascriptSource &
     addItemToAdminMenu?(args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>): void;
     /**
      * Add webpack config.
+     *
+     * @deprecated webpack is not supported by any client framework anymore.
      */
     addWebpackConfig?(args: { config: string }): void;
     addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
