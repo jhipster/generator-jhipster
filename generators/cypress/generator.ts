@@ -265,7 +265,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         if (application.cypressCoverage && this.angularSchematic) {
           clientPackageJson.merge({
             devDependencies: {
-              'cypress-monocart-coverage': null,
+              'monocart-coverage-reports': null,
             },
             scripts: {
               'pree2e:cypress:coverage': 'npm run ci:server:await --if-present',

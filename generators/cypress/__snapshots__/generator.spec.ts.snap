@@ -130,9 +130,6 @@ exports[`generator - cypress jwt-cypressAudit(true)-vue-withAdminUi(true)-cypres
   "clientRoot/test/cypress/fixtures/integration-test.png": {
     "stateCleared": "modified",
   },
-  "clientRoot/test/cypress/plugins/global.d.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/test/cypress/plugins/index.ts": {
     "stateCleared": "modified",
   },
@@ -249,9 +246,6 @@ exports[`generator - cypress oauth2-cypressAudit(true)-vue-withAdminUi(true)-cyp
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/fixtures/integration-test.png": {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/cypress/plugins/global.d.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/plugins/index.ts": {
@@ -477,9 +471,6 @@ exports[`generator - cypress session-cypressAudit(true)-vue-withAdminUi(true)-cy
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/fixtures/integration-test.png": {
-    "stateCleared": "modified",
-  },
-  "src/test/javascript/cypress/plugins/global.d.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/plugins/index.ts": {

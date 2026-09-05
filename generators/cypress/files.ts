@@ -93,14 +93,6 @@ export const cypressFiles = asWriteFilesSection({
       templates: ['cypress-audits.config.ts'],
     }),
   ],
-  coverage: [
-    {
-      condition: generator => generator.cypressCoverage,
-      path: CYPRESS_TEMPLATE_SOURCE_DIR,
-      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
-      templates: ['plugins/global.d.ts'],
-    },
-  ],
 });
 
 export const cypressEntityFiles = asWriteFilesSection({
