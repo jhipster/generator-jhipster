@@ -157,12 +157,7 @@ export default asWritingEntitiesTask<Entity, Application>(async function writeEn
         blocks: [
           {
             ...javaMainPackageTemplatesBlock(),
-            templates: [
-              'repository/AbstractR2dbcRepository_reactive.java',
-              ...(customRepositoryEntities.some(entity => entity.jpaMetamodelFiltering) ?
-                ['repository/CriteriaBuilder_reactive.java']
-              : []),
-            ],
+            templates: ['repository/AbstractR2dbcRepository_reactive.java'],
           },
         ],
         context: application,
