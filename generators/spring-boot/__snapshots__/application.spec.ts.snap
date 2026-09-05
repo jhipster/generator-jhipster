@@ -6,7 +6,9 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "cassandraKeyspaceName": "basename",
   "devActiveProfiles": [],
   "prodActiveProfiles": [],
-  "springDataDescription": "Spring Data Unknown reactive",
+  "springBootBaseRepositoryClass": undefined,
+  "springBootBaseRepositoryImport": undefined,
+  "springDataDescription": undefined,
 }
 `;
 

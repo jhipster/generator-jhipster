@@ -179,6 +179,10 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
   SearchEngine &
   DatabaseTypeApplication &
   SpringBootAddedApplicationProperties & {
+    /** Spring Data repository the generated repositories extend, populated by the data generators */
+    springBootBaseRepositoryClass?: string;
+    /** Import of springBootBaseRepositoryClass */
+    springBootBaseRepositoryImport?: string;
     springBootDependencies: Record<string, string>;
 
     addSpringMilestoneRepository: boolean;

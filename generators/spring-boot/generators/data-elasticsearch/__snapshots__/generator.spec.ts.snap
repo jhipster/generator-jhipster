@@ -2207,9 +2207,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/search/AnotherSimpleSearchRepository.java": {
     "stateCleared": "modified",
   },

@@ -89,6 +89,24 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      baseRepository({ applicationDefaults }) {
+        applicationDefaults({
+          springDataDescription: ({ reactive }) => `Spring Data Cassandra${reactive ? ' reactive' : ''}`,
+          cassandraKeyspaceName: ({ baseName }) => baseName.toLowerCase().replace(/[^a-z0-9_]/g, ''),
+          springBootBaseRepositoryClass: ({ reactive }) => `${reactive ? 'Reactive' : ''}CassandraRepository`,
+          springBootBaseRepositoryImport: ({ springBootBaseRepositoryClass }) =>
+            `org.springframework.data.cassandra.repository.${springBootBaseRepositoryClass}`,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {

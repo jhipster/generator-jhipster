@@ -131,6 +131,11 @@ export default asWritingEntitiesTask<Entity, Application>(async function writeEn
             ...javaMainPackageTemplatesBlock('_entityPackage_'),
             templates: ['domain/_persistClass_Callback.java'],
           },
+          {
+            condition: (generator: any) => generator.reactive && generator.generateBuiltInUserEntity,
+            ...javaMainPackageTemplatesBlock('_entityPackage_'),
+            templates: ['repository/UserRepository_reactive.java'],
+          },
         ],
         context: { ...application, ...entity },
       });

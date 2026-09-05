@@ -37,6 +37,14 @@ const repositoryFiles = [
   }),
 ];
 
+const userFiles = [
+  asWriteFilesBlock({
+    condition: ctx => ctx.generateBuiltInUserEntity,
+    ...javaMainPackageTemplatesBlock('_entityPackage_'),
+    templates: ['repository/UserRepository.java'],
+  }),
+];
+
 export const entityFiles = asWriteFilesSection({
   dbChangelog: [
     {
@@ -80,8 +88,14 @@ export const cleanupCassandraEntityFilesTask = asWritingEntitiesTask<SpringBootE
 
 export default asWritingEntitiesTask(async function writeEntityCassandraFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
+    let sections = entityFiles;
+    if (entity.builtInUser) {
+      sections = { domainFiles, userFiles };
+    } else if (entity.builtIn) {
+      sections = { domainFiles };
+    }
     await this.writeFiles({
-      sections: entity.builtIn ? { domainFiles } : entityFiles,
+      sections,
       context: { ...application, ...entity },
     });
   }
