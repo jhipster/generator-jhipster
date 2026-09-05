@@ -27,6 +27,7 @@ export const BLUEPRINT_API_VERSION = 'jhipster-8';
 export const JHIPSTER_DEPENDENCIES_VERSION = '9.3.0';
 // Version of Java
 export const RECOMMENDED_JAVA_VERSION = '21';
+export const GRAALVM_RECOMMENDED_JAVA_VERSION = '25';
 // Supported Java versions, https://www.oracle.com/java/technologies/java-se-support-roadmap.html
 export const JAVA_COMPATIBLE_VERSIONS = ['21', '25'];
 // Force spring milestone repository. Spring Boot milestones are detected.

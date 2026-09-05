@@ -203,17 +203,6 @@ const command = {
       choices: ['liquibase', 'loader', 'no'],
       scope: 'storage',
     },
-    graalvmSupport: {
-      description: 'Experimental GraalVM Native support',
-      cli: {
-        type: Boolean,
-      },
-      jdl: {
-        type: 'boolean',
-        tokenType: 'BOOLEAN',
-      },
-      scope: 'storage',
-    },
     messageBroker: {
       description: 'message broker',
       cli: {
