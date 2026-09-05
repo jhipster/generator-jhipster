@@ -22,15 +22,15 @@ import { Button, <%- anyFieldHasDocumentation ? 'OverlayTrigger, Tooltip, ' : ''
 import {
   Translate,
 <%_ if (anyFieldIsBlobDerived) { _%>
-  <%_ if (anyFieldHasFileBasedContentType) { _%>
-  openFile,
-  <%_ } _%>
   byteSize,
 <%_ } _%>
 <%_ if (anyFieldIsDateDerived) { _%>
   TextFormat
 <%_ } _%>
 } from 'react-jhipster';
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+import { openFile } from 'app/shared/jhipster/data-utils';
+<%_ } _%>
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 <%_ if (anyFieldIsDateDerived) { _%>
@@ -96,10 +96,11 @@ export const <%- entityReactName %>Detail = () => {
                 {<%- entityInstance %>Entity.<%- fieldName %> ? (
                   <div>
                     {<%- entityInstance %>Entity.<%- fieldName %>ContentType ? (
-                      <a onClick={openFile(<%- entityInstance %>Entity.<%- fieldName %>ContentType, <%- entityInstance %>Entity.<%- fieldName %>)}>
       <%_ if (field.blobContentTypeImage) { _%>
+                      <a onClick={() => openFile(<%- entityInstance %>Entity.<%- fieldName %>, <%- entityInstance %>Entity.<%- fieldName %>ContentType, 'image')}>
                         <img src={`data:${<%- entityInstance %>Entity.<%- fieldName %>ContentType};base64,${<%- entityInstance %>Entity.<%- fieldName %>}`} style={{ maxHeight: '30px' }} />
       <%_ } else { _%>
+                      <a onClick={() => openFile(<%- entityInstance %>Entity.<%- fieldName %>, <%- entityInstance %>Entity.<%- fieldName %>ContentType)}>
                         <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
       <%_ } _%>
                       </a>

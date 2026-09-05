@@ -62,6 +62,7 @@ import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- ot
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { EventManager, EventWithContent, DataUtils, FileLoadError } from 'app/core/util';
+import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const uniqueRel = relationshipsByEntityNeedingOptions[0]; _%>
@@ -174,8 +175,8 @@ export class <%- entityAngularName %>Update implements OnInit {
         return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(base64String: string, contentType: string | null | undefined): void {
-        this.dataUtils.openFile(base64String, contentType);
+    openFile(base64String: string, contentType: string | null | undefined, blobType?: BlobType): void {
+        this.dataUtils.openFile(base64String, contentType, blobType);
     }
 
     setFileData(event: Event, field: string, isImage: boolean): void {

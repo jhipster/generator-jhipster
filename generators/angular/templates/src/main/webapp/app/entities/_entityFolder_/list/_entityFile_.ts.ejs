@@ -88,6 +88,9 @@ import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileNa
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import { <%- [anyFieldIsBlobDerived ? 'DataUtils' : undefined, paginationInfiniteScroll ? 'ParseLinks' : undefined].filter(Boolean).join(', ') %> } from 'app/core/util';
 <%_ } _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { type BlobType } from 'app/shared/jhipster/data-utils';
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
 import { Filter, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
 <%_ } _%>
@@ -276,8 +279,8 @@ export class <%- componentName %> {
       return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(base64String: string, contentType: string | null | undefined): void {
-      return this.dataUtils.openFile(base64String, contentType);
+    openFile(base64String: string, contentType: string | null | undefined, blobType?: BlobType): void {
+      return this.dataUtils.openFile(base64String, contentType, blobType);
     }
 
 <%_ } _%>
