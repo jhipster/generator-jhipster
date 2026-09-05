@@ -208,6 +208,26 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('migration', () => {
+    describe('webpack application', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ clientFramework, clientBundler: 'webpack' })
+          .commitFiles()
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withSkipWritingPriorities()
+          .withMockedJHipsterGenerators();
+      });
+
+      it('should remove clientBundler', () => {
+        runResult.assertJHipsterConfigContent({
+          clientBundler: undefined,
+        });
+      });
+    });
+  });
+
   describe('enableTranslation: false', () => {
     before(async () => {
       await helpers

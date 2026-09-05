@@ -176,6 +176,27 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('migration', () => {
+    describe('webpack application', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ clientFramework, jhipsterVersion: '9.2.0', clientBundler: 'webpack', devServerPort: 9060 })
+          .commitFiles()
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withSkipWritingPriorities()
+          .withMockedJHipsterGenerators();
+      });
+
+      it('should remove clientBundler and reset devServerPort', () => {
+        runResult.assertJHipsterConfigContent({
+          clientBundler: undefined,
+          devServerPort: 9000,
+        });
+      });
+    });
+  });
+
   describe('entity with a relationship to an embedded entity', () => {
     before(async () => {
       await helpers
