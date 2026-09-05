@@ -26,7 +26,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     NODE_VERSION: NODE_VERSION
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
-    JHI_DISABLE_WEBPACK_LOGS: true
     NG_CLI_ANALYTICS: "false"
     JHI_E2E_HEADLESS: true
 
@@ -142,7 +141,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     NODE_VERSION: NODE_VERSION
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
-    JHI_DISABLE_WEBPACK_LOGS: true
     NG_CLI_ANALYTICS: "false"
     JHI_E2E_HEADLESS: true
 
@@ -270,7 +268,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     NODE_VERSION: NODE_VERSION
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
-    JHI_DISABLE_WEBPACK_LOGS: true
     NG_CLI_ANALYTICS: "false"
     JHI_E2E_HEADLESS: true
 
@@ -386,7 +383,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     NODE_VERSION: NODE_VERSION
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
-    JHI_DISABLE_WEBPACK_LOGS: true
     NG_CLI_ANALYTICS: "false"
     JHI_E2E_HEADLESS: true
 
@@ -514,7 +510,6 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
     NODE_VERSION: NODE_VERSION
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
-    JHI_DISABLE_WEBPACK_LOGS: true
     NG_CLI_ANALYTICS: "false"
     JHI_E2E_HEADLESS: true
 
@@ -949,7 +944,6 @@ jobs:
             NODE_VERSION: NODE_VERSION
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
-            JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
             - uses: actions/checkout@VERSION
@@ -1014,7 +1008,6 @@ jobs:
             NODE_VERSION: NODE_VERSION
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
-            JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
             - uses: actions/checkout@VERSION
@@ -1161,7 +1154,6 @@ jobs:
             NODE_VERSION: NODE_VERSION
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
-            JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
             - uses: actions/checkout@VERSION
@@ -1226,7 +1218,6 @@ jobs:
             NODE_VERSION: NODE_VERSION
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
-            JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
             - uses: actions/checkout@VERSION
@@ -1392,7 +1383,6 @@ jobs:
             NODE_VERSION: NODE_VERSION
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
-            JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
             - uses: actions/checkout@VERSION
@@ -3152,7 +3142,6 @@ env:
     - JHI_JDK=JAVA_VERSION
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
-    - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
     - CYPRESS_ENABLE_RECORD: false
 before_install:
@@ -3226,7 +3215,6 @@ env:
     - JHI_JDK=JAVA_VERSION
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
-    - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
     - MAVEN_USER_HOME=$HOME/.m2/repository/
     - CYPRESS_ENABLE_RECORD: false
@@ -3301,7 +3289,6 @@ env:
     - JHI_JDK=JAVA_VERSION
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
-    - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
     - MAVEN_USER_HOME=$HOME/.m2/repository/
     - CYPRESS_ENABLE_RECORD: true

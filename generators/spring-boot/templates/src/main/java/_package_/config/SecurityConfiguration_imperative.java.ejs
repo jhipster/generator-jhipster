@@ -217,7 +217,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/api/**").authenticated()
 <%_ if (applicationTypeGateway) { _%>
   <%_ if (microfrontend) { _%>
-                    // microfrontend resources are loaded by webpack without authentication, they need to be public
+                    // microfrontend resources are loaded without authentication, they need to be public
                     .requestMatchers("/services/*/*.js").permitAll()
                     .requestMatchers("/services/*/*.txt").permitAll()
                     .requestMatchers("/services/*/*.json").permitAll()

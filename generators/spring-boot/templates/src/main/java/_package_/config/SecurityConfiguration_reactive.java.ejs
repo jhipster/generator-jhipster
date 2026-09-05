@@ -266,10 +266,6 @@ public class SecurityConfiguration {
   <%_ } else if (clientBundlerRsbuild) { _%>
                         "/static/**",
                         "/content/**",
-  <%_ } else if (clientBundlerWebpack) { _%>
-                        "/app/**",
-                        "/i18n/**",
-                        "/content/**",
   <%_ } _%>
                         "/swagger-ui/**"
                     ).permitAll()

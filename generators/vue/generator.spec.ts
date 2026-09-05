@@ -80,56 +80,40 @@ describe(`generator - ${clientFramework}`, () => {
 
   describe('migration', () => {
     describe('clientBundler option', () => {
-      describe('microservice application prior to v9.0.1', () => {
+      describe('webpack application', () => {
         before(async () => {
           await helpers
             .runJHipster()
-            .withJHipsterConfig({ jhipsterVersion: '9.0.0', applicationType: 'microservice' })
+            .withJHipsterConfig({ jhipsterVersion: '9.3.0', microfrontend: true, clientBundler: 'webpack', devServerPort: 9060 })
             .commitFiles()
             .withSharedApplication({ getWebappTranslation: () => 'translations' })
             .withSkipWritingPriorities()
             .withMockedJHipsterGenerators();
         });
 
-        it('should set clientBundler to webpack', () => {
-          runResult.assertJHipsterConfigContent({
-            clientBundler: 'webpack',
-          });
-        });
-      });
-
-      describe('microfrontend application prior to v9.0.1', () => {
-        before(async () => {
-          await helpers
-            .runJHipster()
-            .withJHipsterConfig({ jhipsterVersion: '9.0.0', microfrontend: true })
-            .commitFiles()
-            .withSharedApplication({ getWebappTranslation: () => 'translations' })
-            .withSkipWritingPriorities()
-            .withMockedJHipsterGenerators();
-        });
-
-        it('should set clientBundler to webpack', () => {
-          runResult.assertJHipsterConfigContent({
-            clientBundler: 'webpack',
-          });
-        });
-      });
-
-      describe('microservice/microfrontend application after v9.0.1', () => {
-        before(async () => {
-          await helpers
-            .runJHipster()
-            .withJHipsterConfig({ jhipsterVersion: '9.0.1', applicationType: 'microservice', microfrontend: true })
-            .commitFiles()
-            .withSharedApplication({ getWebappTranslation: () => 'translations' })
-            .withSkipWritingPriorities()
-            .withMockedJHipsterGenerators();
-        });
-
-        it('should not set clientBundler', () => {
+        it('should remove clientBundler and devServerPort', () => {
           runResult.assertJHipsterConfigContent({
             clientBundler: undefined,
+            devServerPort: undefined,
+          });
+        });
+      });
+
+      describe('rsbuild application', () => {
+        before(async () => {
+          await helpers
+            .runJHipster()
+            .withJHipsterConfig({ jhipsterVersion: '9.3.0', microfrontend: true, clientBundler: 'rsbuild', devServerPort: 3001 })
+            .commitFiles()
+            .withSharedApplication({ getWebappTranslation: () => 'translations' })
+            .withSkipWritingPriorities()
+            .withMockedJHipsterGenerators();
+        });
+
+        it('should keep clientBundler and devServerPort', () => {
+          runResult.assertJHipsterConfigContent({
+            clientBundler: 'rsbuild',
+            devServerPort: 3001,
           });
         });
       });

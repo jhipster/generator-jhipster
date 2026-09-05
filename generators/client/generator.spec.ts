@@ -121,6 +121,27 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('migration', () => {
+    describe('clientTestFrameworks config', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ clientTestFrameworks: ['cypress'] } as any)
+          .commitFiles()
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withSkipWritingPriorities()
+          .withMockedJHipsterGenerators();
+      });
+
+      it('should merge clientTestFrameworks into testFrameworks', () => {
+        runResult.assertJHipsterConfigContent({
+          clientTestFrameworks: undefined,
+          testFrameworks: ['cypress'],
+        });
+      });
+    });
+  });
+
   describe('with microservices', () => {
     const mockedComposedGenerators = [
       'jhipster:common',

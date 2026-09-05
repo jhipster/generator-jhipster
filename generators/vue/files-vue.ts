@@ -39,24 +39,8 @@ export const vueFiles = asWriteFilesSection({
   ],
   microfrontend: [
     clientRootTemplatesBlock({
-      condition: data => data.microfrontend && data.clientBundlerWebpack,
-      templates: ['module-federation.config.cjs'],
-    }),
-    clientRootTemplatesBlock({
-      condition: data => data.microfrontend && !data.clientBundlerWebpack,
+      condition: data => data.microfrontend,
       templates: ['module-federation.config.ts'],
-    }),
-    clientRootTemplatesBlock({
-      condition: ctx => ctx.clientBundlerWebpack,
-      templates: [
-        // webpack config files are commonjs, add a package.json in the webpack folder to set "type": "commonjs"
-        'webpack/package.json',
-        'webpack/config.js',
-        'webpack/webpack.common.js',
-        'webpack/webpack.dev.js',
-        'webpack/webpack.prod.js',
-        'webpack/vue.utils.js',
-      ],
     }),
     {
       condition: generator => generator.microfrontend,

@@ -18,7 +18,7 @@
 -%>
 import { type ComputedRef, inject, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import <%- clientBundlerWebpack ? '* as ' : '' %>SockJS from 'sockjs-client';
+import SockJS from 'sockjs-client';
 import { map } from 'rxjs';
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import Cookies from 'js-cookie';

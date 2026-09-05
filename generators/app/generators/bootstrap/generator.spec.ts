@@ -124,7 +124,6 @@ describe(`generator - ${generator}`, () => {
   "annotations": {
     "changelogDate": "20220129025419"
   },
-  "changelogDate": "20220129025419",
   "dto": "mapstruct",
   "fields": [
     {
@@ -154,7 +153,6 @@ describe(`generator - ${generator}`, () => {
   "annotations": {
     "changelogDate": "20220129025420"
   },
-  "changelogDate": "20220129025420",
   "fields": [
     {
       "fieldName": "id",
@@ -223,7 +221,6 @@ describe(`generator - ${generator}`, () => {
     "angularJSSuffix": "js-suffix",
     "changelogDate": "20220129025419"
   },
-  "changelogDate": "20220129025419",
   "fields": [
     {
       "fieldName": "id",
