@@ -214,9 +214,6 @@ exports[`generator - sql - entities gateway-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -346,9 +343,6 @@ exports[`generator - sql - entities gateway-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
@@ -652,9 +646,6 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
@@ -793,9 +784,6 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
@@ -1132,9 +1120,6 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
     "stateCleared": "modified",
   },
@@ -1410,9 +1395,6 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
@@ -1747,9 +1729,6 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/CriteriaBuilder.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {

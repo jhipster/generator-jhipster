@@ -65,13 +65,11 @@ import <%- domainImport %>;
 <%_ } _%>
 <%_ if (packageName !== entityAbsolutePackage) { _%>
 import <%- packageName %>.repository.AbstractR2dbcRepository;
-  <%_ if (jpaMetamodelFiltering) { _%>
-import <%- packageName %>.repository.CriteriaBuilder;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) { _%>
 
 import reactor.core.publisher.Flux;
+import tech.jhipster.service.CriteriaBuilder;
 <%_ } _%>
 <%_ if (populateRelations || isUsingMapsId || jpaMetamodelFiltering) { _%>
 import reactor.core.publisher.Mono;
