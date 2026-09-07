@@ -197,6 +197,8 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
           this.packageJson.merge({
             devDependencies: {
               typescript: mainDependencies.typescript,
+              '@vitest/browser-preview': mainDependencies['@vitest/browser-preview'],
+              '@vitest/expect': mainDependencies['@vitest/expect'],
             },
           });
         }
