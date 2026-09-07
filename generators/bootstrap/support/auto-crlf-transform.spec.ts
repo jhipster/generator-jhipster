@@ -33,7 +33,13 @@ import { defaultHelpers as helpers } from '#testing';
 const gitAttributes = `* text=auto
 *.bat text eol=crlf
 *.sh text eol=lf
+*.noeol -eol
+*.nobinary -binary
+*.native eol=native
+*.bin binary
 `;
+
+const binaryContents = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0a, 0x00, 0x1a, 0x0a, 0x00]);
 
 const runAutoCrlfTransform = async (
   baseDir: string,
@@ -42,7 +48,7 @@ const runAutoCrlfTransform = async (
 ): Promise<Record<string, string>> => {
   const files = filePaths.map(filePath => ({
     path: join(baseDir, filePath),
-    contents: Buffer.from('line1\nline2\n'),
+    contents: filePath.endsWith('.png') ? binaryContents : Buffer.from('line1\nline2\n'),
     state: 'modified',
     editorMetadata,
   })) as unknown as MemFsEditorFile[];
@@ -86,45 +92,28 @@ describe('generator - bootstrap - utils', () => {
   });
 
   describe('::autoCrlfTransform', () => {
-    const filePaths = ['file.txt', 'file.sh', 'file.bat', 'nested/file.txt', 'nested/file.sh'];
+    const filePaths = [
+      'file.txt',
+      'file.sh',
+      'file.bat',
+      'nested/file.txt',
+      'nested/file.sh',
+      'file.noeol',
+      'file.nobinary',
+      'file.native',
+      'file.bin',
+      'colon: file.txt',
+      'image.png',
+    ];
+    // Without attributes every text file gets CRLF, binary contents are detected and left untouched.
+    const fallback = Object.fromEntries(
+      filePaths.map(filePath => [filePath, filePath.endsWith('.png') ? binaryContents.toString() : 'line1\r\nline2\r\n']),
+    );
 
     const prepareBaseDir = async (): Promise<string> => {
       const result = await helpers.prepareTemporaryDir().withFiles({ '.gitattributes': gitAttributes }).commitFiles();
       return result.cwd;
     };
-
-    describe('inside a git repository', () => {
-      let baseDir: string;
-
-      before(async () => {
-        baseDir = await prepareBaseDir();
-        await simpleGit({ baseDir }).init();
-      });
-
-      it('should normalize line endings using gitattributes', async () => {
-        await expect(runAutoCrlfTransform(baseDir, filePaths)).resolves.toMatchObject({
-          'file.txt': 'line1\r\nline2\r\n',
-          'file.sh': 'line1\nline2\n',
-          'file.bat': 'line1\r\nline2\r\n',
-          'nested/file.txt': 'line1\r\nline2\r\n',
-          'nested/file.sh': 'line1\nline2\n',
-        });
-      });
-    });
-
-    describe('outside a git repository', () => {
-      let baseDir: string;
-
-      before(async () => {
-        baseDir = await prepareBaseDir();
-      });
-
-      it('should leave files untouched instead of throwing', async () => {
-        await expect(runAutoCrlfTransform(baseDir, filePaths)).resolves.toMatchObject(
-          Object.fromEntries(filePaths.map(filePath => [filePath, 'line1\nline2\n'])),
-        );
-      });
-    });
 
     describe('with gitRoot metadata', () => {
       let repoDir: string;
@@ -141,25 +130,43 @@ describe('generator - bootstrap - utils', () => {
         await rm(plainDir, { recursive: true, force: true });
       });
 
-      it('should look up attributes from the git root', async () => {
-        await expect(runAutoCrlfTransform(repoDir, filePaths, { gitRoot: repoDir })).resolves.toMatchObject({
+      it('should normalize line endings using the gitattributes of the git root', async () => {
+        await expect(runAutoCrlfTransform(repoDir, filePaths, { gitRoot: repoDir })).resolves.toEqual({
           'file.txt': 'line1\r\nline2\r\n',
           'file.sh': 'line1\nline2\n',
+          'file.bat': 'line1\r\nline2\r\n',
           'nested/file.txt': 'line1\r\nline2\r\n',
           'nested/file.sh': 'line1\nline2\n',
+          // unset, native and paths containing `: ` are treated as unspecified
+          'file.noeol': 'line1\r\nline2\r\n',
+          'file.nobinary': 'line1\r\nline2\r\n',
+          'file.native': 'line1\r\nline2\r\n',
+          'colon: file.txt': 'line1\r\nline2\r\n',
+          // binary files are left untouched
+          'file.bin': 'line1\nline2\n',
+          'image.png': binaryContents.toString(),
         });
       });
 
-      it('should leave files untouched when the git root is not a git repository', async () => {
-        await expect(runAutoCrlfTransform(repoDir, filePaths, { gitRoot: plainDir })).resolves.toMatchObject(
-          Object.fromEntries(filePaths.map(filePath => [filePath, 'line1\nline2\n'])),
-        );
+      it('should fall back to content detection when the git root is not a git repository', async () => {
+        await expect(runAutoCrlfTransform(repoDir, filePaths, { gitRoot: plainDir })).resolves.toEqual(fallback);
       });
 
-      it('should fall back to the parent lookup when the git root does not exist', async () => {
-        await expect(runAutoCrlfTransform(repoDir, ['file.txt'], { gitRoot: join(repoDir, 'missing') })).resolves.toMatchObject({
-          'file.txt': 'line1\r\nline2\r\n',
-        });
+      it('should fall back to content detection when the git root does not exist', async () => {
+        await expect(runAutoCrlfTransform(repoDir, filePaths, { gitRoot: join(repoDir, 'missing') })).resolves.toEqual(fallback);
+      });
+    });
+
+    describe('without gitRoot metadata', () => {
+      let repoDir: string;
+
+      before(async () => {
+        repoDir = await prepareBaseDir();
+        await simpleGit({ baseDir: repoDir }).init();
+      });
+
+      it('should fall back to content detection even inside a git repository', async () => {
+        await expect(runAutoCrlfTransform(repoDir, filePaths)).resolves.toEqual(fallback);
       });
     });
   });
