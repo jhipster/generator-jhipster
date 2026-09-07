@@ -18,7 +18,7 @@
  */
 
 import { after, before, describe, expect, it } from 'esmocha';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { Readable } from 'node:stream';
@@ -167,6 +167,20 @@ describe('generator - bootstrap - utils', () => {
 
       it('should fall back to content detection even inside a git repository', async () => {
         await expect(runAutoCrlfTransform(repoDir, filePaths)).resolves.toEqual(fallback);
+      });
+
+      it('should keep the line endings of existing files', async () => {
+        await writeFile(join(repoDir, 'existing-lf.txt'), 'a\nb\n');
+        await writeFile(join(repoDir, 'existing-crlf.txt'), 'a\r\nb\r\n');
+        await writeFile(join(repoDir, 'existing-single-line.txt'), 'a');
+        await expect(
+          runAutoCrlfTransform(repoDir, ['existing-lf.txt', 'existing-crlf.txt', 'existing-single-line.txt', 'new.txt']),
+        ).resolves.toEqual({
+          'existing-lf.txt': 'line1\nline2\n',
+          'existing-crlf.txt': 'line1\r\nline2\r\n',
+          'existing-single-line.txt': 'line1\r\nline2\r\n',
+          'new.txt': 'line1\r\nline2\r\n',
+        });
       });
     });
   });

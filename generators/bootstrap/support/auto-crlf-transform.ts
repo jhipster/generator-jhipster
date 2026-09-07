@@ -60,14 +60,21 @@ const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
     const { gitRoot } = file.editorMetadata ?? {};
     const attrs = typeof gitRoot === 'string' ? await checkAttributes(gitRoot, file.path) : undefined;
 
-    // Only explicit attribute values drive the decision. `unset` (`-binary`, `-eol`), `unspecified`, `native` and
-    // anything unexpected are treated as unspecified: line endings are best effort and must not abort the commit.
-    // Without a repository to look up attributes from (Storage writes like `.yo-rc.json`, `--skip-git`, failed
-    // initialization) binary files are detected from their contents and text files get the default line endings.
-    const isBinary = attrs ? attrs.binary === 'set' : await isBinaryFile(file.contents!);
-    const eol = attrs?.eol;
+    let useCrlf: boolean;
+    if (attrs) {
+      // Only explicit attribute values drive the decision. `unset` (`-binary`, `-eol`), `unspecified`, `native` and
+      // anything unexpected are treated as unspecified: line endings are best effort and must not abort the commit.
+      const isBinary = attrs.binary === 'set';
+      useCrlf = attrs.eol === 'crlf' || (!isBinary && attrs.eol !== 'lf');
+    } else {
+      // Without a repository to look up attributes from (Storage writes like `.yo-rc.json`, `--skip-git`, failed
+      // initialization) binary files are detected from their contents, text files keep the line endings of the
+      // existing file on disk and new files get the default line endings.
+      const isBinary = await isBinaryFile(file.contents!);
+      useCrlf = !isBinary && ((await detectCrLf(file.path).catch(() => undefined)) ?? true);
+    }
 
-    if (eol === 'crlf' || (!isBinary && eol !== 'lf')) {
+    if (useCrlf) {
       file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), CRLF));
     }
 
