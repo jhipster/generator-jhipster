@@ -927,6 +927,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
 
   /**
    * write the given files using provided options.
+   *
+   * @todo Convert to sync in v10.
    */
   async writeFiles<DataType>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
@@ -988,7 +990,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       binary?: boolean;
     };
 
-    const renderTemplate = async ({
+    const renderTemplate = ({
       condition,
       sourceFile,
       destinationFile,
@@ -996,7 +998,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       noEjs,
       transform,
       binary,
-    }: RenderTemplateParam): Promise<undefined | string> => {
+    }: RenderTemplateParam): undefined | string => {
       if (condition !== undefined && !resolveCallback(condition)) {
         return undefined;
       }
@@ -1214,7 +1216,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       }) as RenderTemplateParam[];
     }
 
-    const files = (await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean))) as string[];
+    const files = parsedTemplates.map(template => renderTemplate(template)).filter(Boolean) as string[];
     this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
     return files.filter(Boolean);
   }
