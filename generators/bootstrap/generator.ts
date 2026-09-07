@@ -64,10 +64,6 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   prettierJava = false;
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
-  // TODO: This feature is project-specific; it depends on https://github.com/SBoudrias/mem-fs/issues/67 being implemented so we can add a transform to remove needles based on file metadata.
-  // Metadata should be set on the writeFiles API based on the application.removeNeedles config.
-  /** @experimental This should be dropped if a meta-based transform is implemented */
-  removeNeedles = false;
 
   constructor(args?: string[], options?: BaseOptions, features?: BaseFeatures) {
     super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitTask(), ...features });
@@ -183,7 +179,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     { log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {},
     ...transforms: FileTransform<MemFsEditorFile>[]
   ) {
-    const { autoCrlf = isWin32, devBlueprintEnabled, removeNeedles, skipYoResolve } = this.options;
+    const { autoCrlf = isWin32, devBlueprintEnabled, skipYoResolve } = this.options;
     const pipelineOptions: GeneratorPipelineOptions = {
       refresh: false,
       // Let pending files pass through.
@@ -230,11 +226,13 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
         transformStreams.push(createYoResolveTransform());
       }
 
-      transformStreams.push(forceYoFiles(), createSortConfigFilesTransform(), createForceWriteConfigFilesTransform());
-
-      if (removeNeedles) {
-        transformStreams.push(createNeedleTransform());
-      }
+      transformStreams.push(
+        forceYoFiles(),
+        createSortConfigFilesTransform(),
+        createForceWriteConfigFilesTransform(),
+        // Needles are removed from the files whose project enabled `removeNeedles`, see `editorMetadata` at base-core.
+        createNeedleTransform({ filter: file => Boolean(file.editorMetadata?.removeNeedles) }),
+      );
 
       if (!this.skipPrettier) {
         const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;

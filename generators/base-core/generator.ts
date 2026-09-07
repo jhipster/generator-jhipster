@@ -70,6 +70,7 @@ import type {
   CascadedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
+  EditorMetadata,
   ValidationResult,
   WriteContext,
   WriteFileOptions,
@@ -77,7 +78,7 @@ import type {
 import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
-import { type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
+import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
 const {
@@ -237,6 +238,21 @@ export default class CoreGenerator<
    */
   usage(): string {
     return super.usage().replace('yo jhipster:', 'jhipster ');
+  }
+
+  /**
+   * Metadata attached by yeoman-generator to the files written through the write helpers (`writeFiles`, `editFile`,
+   * `writeDestination`, `renderTemplate`, `copyTemplate`, ...), available as `file.editorMetadata` to the
+   * `jhipster:bootstrap` commit transforms. Generators that are not bound to a project (`uniqueGlobally` feature)
+   * attach no metadata. `gitRoot` is the directory where the `jhipster:git` generator of the current context
+   * initializes the repository, if any.
+   */
+  override get editorMetadata(): EditorMetadata | undefined {
+    if (this.features.uniqueGlobally) {
+      return undefined;
+    }
+    const gitRoot = this.getContextData<string | undefined>(CONTEXT_DATA_GIT_ROOT_KEY, { factory: () => undefined });
+    return gitRoot ? { gitRoot } : {};
   }
 
   /**

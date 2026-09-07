@@ -28,6 +28,16 @@ import { type SimpleGit, simpleGit } from 'simple-git';
 
 import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
 
+async function pathExists(filePath: string): Promise<boolean> {
+  try {
+    await stat(filePath);
+    return true;
+  } catch (error: any) {
+    if (error.code !== 'ENOENT') throw error;
+    return false;
+  }
+}
+
 async function findExistingParent(filePath: string): Promise<string> {
   let currentPath = path.resolve(path.dirname(filePath));
 
@@ -111,7 +121,10 @@ const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
       // File doesn't exist.
     }
 
-    const baseDir = await findExistingParent(file.path);
+    // The generator that wrote the file knows the git root of its project, look up attributes from there.
+    // Files written without metadata fall back to the closest existing parent directory.
+    const { gitRoot } = file.editorMetadata ?? {};
+    const baseDir = typeof gitRoot === 'string' && (await pathExists(gitRoot)) ? gitRoot : await findExistingParent(file.path);
     const git = await getGit(baseDir);
     if (!git) {
       // Attributes cannot be looked up outside a git repository. The repository is initialized at the post writing

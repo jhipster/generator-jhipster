@@ -4,6 +4,17 @@ export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, cont
 
 export type EditFileOptions = { create?: boolean; ignoreNonExisting?: boolean | string; assertModified?: boolean; autoCrlf?: boolean };
 
+/**
+ * Metadata attached to the files written through the generator write helpers.
+ * Available as `file.editorMetadata` to the `jhipster:bootstrap` commit transforms.
+ */
+export type EditorMetadata = {
+  /** Git repository root of the project the file belongs to, used to look up git attributes. */
+  gitRoot?: string;
+  /** Remove the `jhipster-needle-` lines from the file when committing. */
+  removeNeedles?: boolean;
+};
+
 export type CascadedEditFileCallback<Generator = CoreGenerator> = (
   ...callbacks: EditFileCallback<Generator>[]
 ) => CascadedEditFileCallback<Generator>;

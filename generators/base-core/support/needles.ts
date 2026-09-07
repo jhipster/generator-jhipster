@@ -397,7 +397,11 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
   return callback;
 }
 
-export const createNeedleTransform = () =>
+/**
+ * Transform that removes needles from file contents.
+ * Files not matching the `filter` are passed through untouched.
+ */
+export const createNeedleTransform = (options?: { filter?: (file: MemFsEditorFile) => boolean }) =>
   transformContents<MemFsEditorFile>(content => {
     if (content) {
       let contentAsString = content.toString();
@@ -410,4 +414,4 @@ export const createNeedleTransform = () =>
       }
     }
     return content;
-  });
+  }, options);

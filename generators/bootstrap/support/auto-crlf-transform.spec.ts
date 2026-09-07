@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 import { Readable } from 'node:stream';
 
@@ -33,11 +35,16 @@ const gitAttributes = `* text=auto
 *.sh text eol=lf
 `;
 
-const runAutoCrlfTransform = async (baseDir: string, filePaths: string[]): Promise<Record<string, string>> => {
+const runAutoCrlfTransform = async (
+  baseDir: string,
+  filePaths: string[],
+  editorMetadata?: Record<string, unknown>,
+): Promise<Record<string, string>> => {
   const files = filePaths.map(filePath => ({
     path: join(baseDir, filePath),
     contents: Buffer.from('line1\nline2\n'),
     state: 'modified',
+    editorMetadata,
   })) as unknown as MemFsEditorFile[];
 
   const contents: Record<string, string> = {};
@@ -116,6 +123,43 @@ describe('generator - bootstrap - utils', () => {
         await expect(runAutoCrlfTransform(baseDir, filePaths)).resolves.toMatchObject(
           Object.fromEntries(filePaths.map(filePath => [filePath, 'line1\nline2\n'])),
         );
+      });
+    });
+
+    describe('with gitRoot metadata', () => {
+      let repoDir: string;
+      let plainDir: string;
+
+      before(async () => {
+        repoDir = await prepareBaseDir();
+        await simpleGit({ baseDir: repoDir }).init();
+        // Created outside the yeoman-test lifecycle: preparing another temporary dir would drop `repoDir`.
+        plainDir = await mkdtemp(join(tmpdir(), 'jhipster-auto-crlf-'));
+      });
+
+      after(async () => {
+        await rm(plainDir, { recursive: true, force: true });
+      });
+
+      it('should look up attributes from the git root', async () => {
+        await expect(runAutoCrlfTransform(repoDir, filePaths, { gitRoot: repoDir })).resolves.toMatchObject({
+          'file.txt': 'line1\r\nline2\r\n',
+          'file.sh': 'line1\nline2\n',
+          'nested/file.txt': 'line1\r\nline2\r\n',
+          'nested/file.sh': 'line1\nline2\n',
+        });
+      });
+
+      it('should leave files untouched when the git root is not a git repository', async () => {
+        await expect(runAutoCrlfTransform(repoDir, filePaths, { gitRoot: plainDir })).resolves.toMatchObject(
+          Object.fromEntries(filePaths.map(filePath => [filePath, 'line1\nline2\n'])),
+        );
+      });
+
+      it('should fall back to the parent lookup when the git root does not exist', async () => {
+        await expect(runAutoCrlfTransform(repoDir, ['file.txt'], { gitRoot: join(repoDir, 'missing') })).resolves.toMatchObject({
+          'file.txt': 'line1\r\nline2\r\n',
+        });
       });
     });
   });
