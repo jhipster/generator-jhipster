@@ -60,19 +60,16 @@ const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
     const { gitRoot } = file.editorMetadata ?? {};
     const attrs = typeof gitRoot === 'string' ? await checkAttributes(gitRoot, file.path) : undefined;
 
-    let useCrlf: boolean;
-    if (attrs) {
-      // Only explicit attribute values drive the decision. `unset` (`-binary`, `-eol`), `unspecified`, `native` and
-      // anything unexpected are treated as unspecified: line endings are best effort and must not abort the commit.
-      const isBinary = attrs.binary === 'set';
-      useCrlf = attrs.eol === 'crlf' || (!isBinary && attrs.eol !== 'lf');
-    } else {
-      // Without a repository to look up attributes from (Storage writes like `.yo-rc.json`, `--skip-git`, failed
-      // initialization) binary files are detected from their contents, text files keep the line endings of the
-      // existing file on disk and new files get the default line endings.
-      const isBinary = await isBinaryFile(file.contents!);
-      useCrlf = !isBinary && ((await detectCrLf(file.path).catch(() => undefined)) ?? true);
-    }
+    // An explicit `binary` attribute wins (`set`, or `unset` for `-binary`); otherwise, and without a repository
+    // (Storage writes like `.yo-rc.json`, `--skip-git`, failed initialization), binary files are detected from
+    // their contents. Only explicit `eol` values drive the decision: `unset` (`-eol`), `unspecified`, `native`
+    // and anything unexpected are treated as unspecified, line endings are best effort and must not abort the
+    // commit. Without attributes, existing files keep the line endings found on disk and new files get CRLF.
+    const isBinary = attrs?.binary === 'set' || (attrs?.binary !== 'unset' && (await isBinaryFile(file.contents!)));
+    const useCrlf =
+      attrs ?
+        attrs.eol === 'crlf' || (!isBinary && attrs.eol !== 'lf')
+      : !isBinary && ((await detectCrLf(file.path).catch(() => undefined)) ?? true);
 
     if (useCrlf) {
       file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), CRLF));
