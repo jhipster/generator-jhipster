@@ -328,8 +328,14 @@ export function prepareCommonFieldForTemplates(
     const re = faker.createRandexp(field.fieldValidateRulesPattern!);
     if (!re) {
       generator.log.warn(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
+      return undefined;
     }
-    return re?.gen();
+    // Patterns accepting an empty value (`*`, `?`, ...) may generate one, retry a few times to get a usable value.
+    let value = re.gen();
+    for (let attempt = 0; value.length === 0 && attempt < 10; attempt++) {
+      value = re.gen();
+    }
+    return value;
   };
 
   field.uniqueValue = [];
