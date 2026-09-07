@@ -208,7 +208,7 @@ public class DatabaseConfiguration {
 
     @Bean
     public R2dbcDialect dialect(ConnectionFactory connectionFactory) {
-<%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
         R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
         if (dialect instanceof MySqlDialect) {
             // Spring Data renders an insert without values as `VALUES (DEFAULT)`, which MySQL and MariaDB reject for
@@ -221,9 +221,9 @@ public class DatabaseConfiguration {
             };
         }
         return dialect;
-<%_ } else { _%>
+  <%_ } else { _%>
         return DialectResolver.getDialect(connectionFactory);
-<%_ } _%>
+  <%_ } _%>
     }
 
     @WritingConverter
