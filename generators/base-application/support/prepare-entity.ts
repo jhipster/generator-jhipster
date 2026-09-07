@@ -477,7 +477,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   entity.relationshipsByOtherEntity = relationshipsByOtherEntity;
   entity.differentRelationships = relationshipsByOtherEntity;
 
-  entity.anyPropertyHasValidation ||= fields.some(({ fieldValidate }) => fieldValidate);
+  entity.anyPropertyHasValidation ||= fields.some(({ fieldValidate, blobContentTypeImage }) => fieldValidate || blobContentTypeImage);
 
   entity.otherEntities = uniq(entity.relationships.map(rel => rel.otherEntity));
 
