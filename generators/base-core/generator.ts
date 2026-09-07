@@ -1074,8 +1074,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       }
 
       try {
-        if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
-          await this.copyTemplateAsync(sourceFileFrom, targetFile);
+        if (noEjs || (!appendEjs && extname(sourceFileFrom) !== '.ejs')) {
+          this.copyTemplate(sourceFileFrom, targetFile, { noGlob: true });
         } else {
           if ((templateData as any).entityClass) {
             if (!(templateData as any).baseName) {
@@ -1093,11 +1093,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             cache: templatesRoots.length === 1,
           };
           const copyOptions = { noGlob: true, transformOptions };
-          if (noEjs) {
-            this.copyTemplate(sourceFileFrom, targetFile, copyOptions);
-          } else {
-            this.renderTemplate(appendEjs ? `${sourceFileFrom}.ejs` : sourceFileFrom, targetFile, templateData as any, copyOptions);
-          }
+          this.renderTemplate(appendEjs ? `${sourceFileFrom}.ejs` : sourceFileFrom, targetFile, templateData as any, copyOptions);
         }
       } catch (error) {
         throw new Error(`Error rendering template ${sourceFileFrom} to ${targetFile}: ${error}`, { cause: error });
