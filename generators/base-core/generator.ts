@@ -1077,15 +1077,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
           await this.copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
-          let useAsync = true;
           if ((templateData as any).entityClass) {
             if (!(templateData as any).baseName) {
               throw new Error('baseName is required at templates context');
             }
             const sourceBasename = basename(sourceFileFrom);
             this.emit('before:render', sourceBasename, templateData);
-            // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
-            useAsync = false;
           }
 
           const transformOptions = {
@@ -1096,17 +1093,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             cache: templatesRoots.length === 1,
           };
           const copyOptions = { noGlob: true, transformOptions };
-          if (appendEjs) {
-            sourceFileFrom = `${sourceFileFrom}.ejs`;
-          }
-          if (noEjs && useAsync) {
-            await this.copyTemplateAsync(sourceFileFrom, targetFile, copyOptions);
-          } else if (noEjs) {
+          if (noEjs) {
             this.copyTemplate(sourceFileFrom, targetFile, copyOptions);
-          } else if (useAsync) {
-            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData as any, copyOptions);
           } else {
-            this.renderTemplate(sourceFileFrom, targetFile, templateData as any, copyOptions);
+            this.renderTemplate(appendEjs ? `${sourceFileFrom}.ejs` : sourceFileFrom, targetFile, templateData as any, copyOptions);
           }
         }
       } catch (error) {
