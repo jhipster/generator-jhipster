@@ -40,15 +40,18 @@ import {
     const otherEntities = this._.uniq(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity));
     // We cannot generate a required entity with relationship with required relationships.
     const skipCreateTest
-      = graalvmSupport
-      || !cypressBootstrapEntities
-      || requiredRelationships.some(rel => rel.otherEntity.primaryKey?.derived)
+      = !cypressBootstrapEntities
+    // Cannnot create a required relationship with itself.
       || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
-      || requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired)
+    // Required relationships that contains another required relationship is complex to handle.
+      || requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired))
+    // Same as above.
+      || requiredOtherEntities.some(otherEntity => otherEntity.primaryKey?.derived)
+    // Cannot generate the required data to test.
       || !entityFakeData
       ? '.skip' : '';
 
-    const reason = graalvmSupport ? 'graalvm is failing.' : 'cannot create a required entity with relationship with required relationships.';
+    const reason = 'cannot create a required entity with relationship with required relationships.';
 
     const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 

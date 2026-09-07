@@ -28,7 +28,6 @@ import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
 import type { Source as CommonSource } from '../common/types.ts';
-import type { Entity as CypressEntity } from '../cypress/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
 import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
@@ -603,15 +602,6 @@ ${classProperties
             ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
           ],
           entityJavaCustomFilters: sortedUniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
-        });
-
-        mutateData(entity as unknown as CypressEntity, {
-          __override__: true,
-          // Reactive with some r2dbc databases doesn't allow insertion without data.
-          workaroundEntityCannotBeEmpty: ({ reactive, prodDatabaseType }: any) =>
-            reactive && ['postgresql', 'mysql', 'mariadb'].includes(prodDatabaseType),
-          // Reactive with MariaDB doesn't allow null value at Instant fields.
-          workaroundInstantReactiveMariaDB: ({ reactive, prodDatabaseType }: any) => reactive && prodDatabaseType === 'mariadb',
         });
       },
     });
