@@ -30,6 +30,7 @@ import type { PackageJson } from 'type-fest';
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
+import type { EditorMetadata } from '../base-core/api.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
@@ -165,6 +166,14 @@ export default class BaseGenerator<
    */
   delegateTasksToBlueprint<TaskGroupType>(tasksGetter: () => TaskGroupType): TaskGroupType {
     return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();
+  }
+
+  /**
+   * Adds the `removeNeedles` project configuration to the written files metadata.
+   */
+  get editorMetadata(): EditorMetadata | undefined {
+    const editorMetadata = super.editorMetadata;
+    return this.jhipsterConfig?.removeNeedles ? { ...editorMetadata, removeNeedles: true } : editorMetadata;
   }
 
   get #control(): Control {

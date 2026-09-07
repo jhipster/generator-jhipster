@@ -22,6 +22,7 @@ import chalk from 'chalk';
 import { CheckRepoActions } from 'simple-git';
 
 import BaseGenerator from '../base/index.ts';
+import { CONTEXT_DATA_GIT_ROOT_KEY } from '../base-core/support/index.ts';
 
 import { files } from './files.ts';
 import type { Config as GitConfig, GeneratorProperties as GitGeneratorProperties, Options as GitOptions } from './types.ts';
@@ -53,6 +54,15 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
       async initializeMonorepository() {
         if (!this.skipGit && this.jhipsterConfig.monorepository) {
           await this.initializeGitRepository();
+        }
+      },
+      async registerGitRoot() {
+        if (!this.skipGit) {
+          // Files written to this context belong to the repository `initializeGitRepository` will initialize, or to
+          // the existing repository it reuses (a child application of a monorepository uses the root one).
+          const git = this.createGit();
+          const gitRoot = (await git.checkIsRepo()) ? await git.revparse(['--show-toplevel']) : this.destinationPath();
+          this.getContextData(CONTEXT_DATA_GIT_ROOT_KEY, { override: gitRoot });
         }
       },
     });

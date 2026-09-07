@@ -16,14 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { shouldSupportFeatures } from '../../test/support/tests.ts';
+import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
-import { defaultHelpers as helpers } from '#testing';
+import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -45,6 +46,40 @@ describe(`generator - ${generator}`, () => {
       expect(() => bootstrapGenerator.jhipsterConfigWithDefaults).toThrow(
         'jhipsterConfigWithDefaults is not available in uniqueGlobally generators',
       );
+    });
+  });
+
+  describe('removeNeedles', () => {
+    const content = 'first\n// jhipster-needle-add-content - JHipster will add content here\nlast\n';
+
+    class NeedleGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('file.txt', content);
+          },
+        });
+      }
+    }
+
+    describe('with removeNeedles config', () => {
+      before(async () => {
+        await helpers.run(NeedleGenerator).withJHipsterConfig({ removeNeedles: true }).withJHipsterGenerators();
+      });
+
+      it('should remove needles from the committed file', () => {
+        result.assertEqualsFileContent('file.txt', 'first\nlast\n');
+      });
+    });
+
+    describe('without removeNeedles config', () => {
+      before(async () => {
+        await helpers.run(NeedleGenerator).withJHipsterGenerators();
+      });
+
+      it('should keep needles', () => {
+        result.assertEqualsFileContent('file.txt', content);
+      });
     });
   });
 });

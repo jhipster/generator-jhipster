@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
-import { access } from 'node:fs/promises';
-import { basename, resolve } from 'node:path';
+import { after, before, describe, expect, it } from 'esmocha';
+import { access, mkdir, mkdtemp, realpath, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { basename, join, resolve } from 'node:path';
+
+import { simpleGit } from 'simple-git';
 
 import { testBlueprintSupport } from '../../test/support/tests.ts';
 
@@ -46,11 +49,40 @@ describe(`generator - ${generator}`, () => {
       it('should create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
       });
+      it('should attach the git root to written files', () => {
+        const { generator } = runResult;
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+          gitRoot: generator.destinationPath(),
+        });
+      });
       it('should create 1 commit', async () => {
         const git = runResult.generator.createGit();
         await expect(git.log()).resolves.toMatchObject({
           total: 1,
           latest: { message: expect.stringMatching(/^Initial version of/) },
+        });
+      });
+    });
+    describe('inside an existing repository at a parent folder', () => {
+      let parentDir: string;
+
+      before(async () => {
+        // Created outside the yeoman-test lifecycle: starting the run context would drop a prepared temporary dir.
+        parentDir = await mkdtemp(join(tmpdir(), 'jhipster-git-parent-'));
+        await simpleGit({ baseDir: parentDir }).init();
+        await mkdir(resolve(parentDir, 'child'));
+        await helpers.runJHipster(generator).cd(resolve(parentDir, 'child')).withOptions({ skipGit: false });
+      });
+      after(async () => {
+        await rm(parentDir, { recursive: true, force: true });
+      });
+      it('should not create a nested .git', async () => {
+        await expect(access(resolve(parentDir, 'child', '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
+      });
+      it('should attach the parent repository root to written files', async () => {
+        const { generator } = runResult;
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+          gitRoot: await realpath(parentDir),
         });
       });
     });
@@ -60,6 +92,10 @@ describe(`generator - ${generator}`, () => {
       });
       it('should not create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
+      });
+      it('should not attach a git root to written files', () => {
+        const { generator } = runResult;
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({});
       });
     });
     describe('regenerating', () => {

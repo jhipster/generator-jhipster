@@ -16,9 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './constants.ts';
-export * from './needles.ts';
-// TODO Backwards compatibility, to be removed in v10
-export * from '../../../lib/utils/os.ts';
-export * from './properties-file.ts';
-export * from './write-files.ts';
+/** Context data key holding the directory where the `jhipster:git` generator initializes the repository. */
+export const CONTEXT_DATA_GIT_ROOT_KEY = 'jhipster:git:root';

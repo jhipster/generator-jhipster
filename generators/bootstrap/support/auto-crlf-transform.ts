@@ -17,38 +17,14 @@
  * limitations under the License.
  */
 import { createReadStream } from 'node:fs';
-import { stat } from 'node:fs/promises';
-import path from 'node:path';
 
 import { isBinaryFile } from 'isbinaryfile';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
-import { type SimpleGit, simpleGit } from 'simple-git';
+import { simpleGit } from 'simple-git';
 
 import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
-
-async function findExistingParent(filePath: string): Promise<string> {
-  let currentPath = path.resolve(path.dirname(filePath));
-
-  while (currentPath) {
-    try {
-      await stat(currentPath);
-      return currentPath;
-    } catch (error: any) {
-      // Ignore error if directory doesn't exist, continue moving up
-      if (error.code !== 'ENOENT') throw error;
-    }
-
-    const parentPath = path.dirname(currentPath);
-    if (parentPath === currentPath) {
-      break;
-    }
-    currentPath = parentPath;
-  }
-
-  throw new Error(`No existing parent directory found for path: ${filePath}`);
-}
 
 /**
  * Detect the file first line endings
@@ -75,70 +51,54 @@ export function detectCrLf(filePath: string): Promise<boolean | undefined> {
 }
 
 const autoCrlfTransform = async (_config: { baseDir?: string } = {}) => {
-  // A git process is spawned for every lookup, cache the git instance by directory.
-  // Directories which are not inside a git repository are cached as undefined.
-  const gitCache = new Map<string, Promise<SimpleGit | undefined>>();
-  const getGit = (baseDir: string): Promise<SimpleGit | undefined> => {
-    let git = gitCache.get(baseDir);
-    if (!git) {
-      git = (async () => {
-        const git = simpleGit({ baseDir }).env({
-          HOME: process.env.HOME,
-          PATH: process.env.PATH,
-          LANG: 'C',
-          LC_ALL: 'C',
-        });
-        return (await git.checkIsRepo()) ? git : undefined;
-      })();
-      gitCache.set(baseDir, git);
-    }
-    return git;
-  };
-
   return transform(async (file: MemFsEditorFile) => {
     if (!isFileStateModified(file)) {
       return file;
     }
 
-    try {
-      const fstat = await stat(file.path);
-      if (fstat.isFile()) {
-        if (await isBinaryFile(file.contents!)) {
-          return file;
-        }
-      }
-    } catch {
-      // File doesn't exist.
-    }
+    // The generator that wrote the file registered the repository root as `gitRoot` metadata, trust it.
+    const { gitRoot } = file.editorMetadata ?? {};
+    const attrs = typeof gitRoot === 'string' ? await checkAttributes(gitRoot, file.path) : undefined;
 
-    const baseDir = await findExistingParent(file.path);
-    const git = await getGit(baseDir);
-    if (!git) {
-      // Attributes cannot be looked up outside a git repository. The repository is initialized at the post writing
-      // priority, `--skip-git` may be used, and the root folder of a workspaces application is never initialized.
-      return file;
-    }
+    // An explicit `binary` attribute wins (`set`, or `unset` for `-binary`); otherwise, and without a repository
+    // (Storage writes like `.yo-rc.json`, `--skip-git`, failed initialization), binary files are detected from
+    // their contents. Only explicit `eol` values drive the decision: `unset` (`-eol`), `unspecified`, `native`
+    // and anything unexpected are treated as unspecified, line endings are best effort and must not abort the
+    // commit. Without attributes, existing files keep the line endings found on disk and new files get CRLF.
+    const isBinary = attrs?.binary === 'set' || (attrs?.binary !== 'unset' && (await isBinaryFile(file.contents!)));
+    const useCrlf =
+      attrs ?
+        attrs.eol === 'crlf' || (!isBinary && attrs.eol !== 'lf')
+      : !isBinary && ((await detectCrLf(file.path).catch(() => undefined)) ?? true);
 
-    const checkAttrs = await git.raw('check-attr', 'binary', 'eol', '--', file.path);
-    const attrs = Object.fromEntries(
-      checkAttrs
-        .split(/\r\n|\r|\n/)
-        .map(attr => attr.split(': '))
-        .map(([_file, attr, value]) => [attr, value]),
-    );
-    if (!['set', 'unspecified'].includes(attrs.binary)) {
-      throw new Error(`Unexpected value for binary attribute: ${attrs.binary}`);
-    }
-    if (!['lf', 'crlf', 'unspecified'].includes(attrs.eol)) {
-      throw new Error(`Unexpected value for eol attribute: ${attrs.eol}`);
-    }
-
-    if (attrs.eol === 'crlf' || (attrs.binary !== 'set' && attrs.eol !== 'lf')) {
+    if (useCrlf) {
       file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), CRLF));
     }
 
     return file;
   });
 };
+
+/**
+ * Look up the `binary` and `eol` git attributes of a file, undefined when git cannot answer.
+ */
+async function checkAttributes(gitRoot: string, filePath: string): Promise<Record<string, string> | undefined> {
+  let checkAttrs: string;
+  try {
+    // `-z` output is `<path>\0<attribute>\0<value>\0` triples, paths may contain `: `.
+    checkAttrs = await simpleGit({ baseDir: gitRoot })
+      .env({ HOME: process.env.HOME, PATH: process.env.PATH, LANG: 'C', LC_ALL: 'C' })
+      .raw('check-attr', '-z', 'binary', 'eol', '--', filePath);
+  } catch {
+    // Not a repository (initialization failed), missing directory or git cannot be executed.
+    return undefined;
+  }
+  const fields = checkAttrs.split('\0');
+  const attrs: Record<string, string> = {};
+  for (let index = 0; index + 2 < fields.length; index += 3) {
+    attrs[fields[index + 1]] = fields[index + 2];
+  }
+  return attrs;
+}
 
 export default autoCrlfTransform;

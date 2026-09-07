@@ -204,4 +204,41 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+
+  describe('editorMetadata', () => {
+    class WritingGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('written.txt', 'content');
+            this.editFile('edited.txt', { create: true }, () => 'content');
+          },
+        });
+      }
+    }
+
+    const editorMetadataOf = (file: string) => result.memFs.get(result.generator.destinationPath(file)).editorMetadata;
+
+    describe('by default', () => {
+      before(async () => {
+        await helpers.run(WritingGenerator).withJHipsterGenerators({ useDefaultMocks: true });
+      });
+
+      it('should attach empty metadata to written files', () => {
+        expect(editorMetadataOf('written.txt')).toEqual({});
+        expect(editorMetadataOf('edited.txt')).toEqual({});
+      });
+    });
+
+    describe('with removeNeedles config', () => {
+      before(async () => {
+        await helpers.run(WritingGenerator).withJHipsterConfig({ removeNeedles: true }).withJHipsterGenerators({ useDefaultMocks: true });
+      });
+
+      it('should attach removeNeedles to written files', () => {
+        expect(editorMetadataOf('written.txt')).toEqual({ removeNeedles: true });
+        expect(editorMetadataOf('edited.txt')).toEqual({ removeNeedles: true });
+      });
+    });
+  });
 });
