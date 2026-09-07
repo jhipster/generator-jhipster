@@ -173,7 +173,7 @@ export default class BaseGenerator<
    */
   get editorMetadata(): EditorMetadata | undefined {
     const editorMetadata = super.editorMetadata;
-    return editorMetadata && this.jhipsterConfig?.removeNeedles ? { ...editorMetadata, removeNeedles: true } : editorMetadata;
+    return this.jhipsterConfig?.removeNeedles ? { ...editorMetadata, removeNeedles: true } : editorMetadata;
   }
 
   get #control(): Control {
