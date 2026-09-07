@@ -51,7 +51,13 @@ import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+import org.springframework.data.r2dbc.convert.R2dbcConverter;
+  <%_ } _%>
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+  <%_ } _%>
 import org.springframework.data.r2dbc.dialect.DialectResolver;
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
 import org.springframework.data.r2dbc.dialect.MySqlDialect;
@@ -65,6 +71,9 @@ import org.springframework.data.relational.core.dialect.InsertRenderContext;
   <%_ } _%>
 import org.springframework.data.relational.core.mapping.DefaultNamingStrategy;
 import org.springframework.data.relational.core.mapping.NamingStrategy;
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+import org.springframework.r2dbc.core.DatabaseClient;
+  <%_ } _%>
 <%_ } else { _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -225,6 +234,17 @@ public class DatabaseConfiguration {
         return DialectResolver.getDialect(connectionFactory);
   <%_ } _%>
     }
+  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+
+    /**
+     * Spring Boot resolves the dialect itself when creating the {@link R2dbcEntityTemplate}, create it with the
+     * customized dialect so it renders inserts without values as `() VALUES ()`.
+     */
+    @Bean
+    public R2dbcEntityTemplate r2dbcEntityTemplate(DatabaseClient databaseClient, R2dbcDialect dialect, R2dbcConverter converter) {
+        return new R2dbcEntityTemplate(databaseClient, dialect, converter);
+    }
+  <%_ } _%>
 
     @WritingConverter
     public enum InstantWriteConverter implements Converter<Instant, LocalDateTime> {
