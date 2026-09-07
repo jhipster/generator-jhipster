@@ -1092,8 +1092,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             ...options?.renderOptions,
             // Set root for ejs to lookup for partials.
             root: templatesRoots,
-            // multiple roots causes ejs caching issues due to cache key issues.
-            cache: templatesRoots.length === 1,
+            // Caching is not applicable for JHipster: the generator is passed as `context`, and ejs caches it
+            // together with the compiled template function.
+            cache: false,
           };
           const copyOptions = { noGlob: true, transformOptions };
           if (appendEjs) {
