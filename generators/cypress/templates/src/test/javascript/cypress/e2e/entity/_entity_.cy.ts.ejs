@@ -54,18 +54,6 @@ import {
     const reason = 'cannot create a required entity with relationship with required relationships.';
 
     const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
-
-    if (workaroundEntityCannotBeEmpty && sampleFields.length === 0) {
-      const sample = fields.find(f => !f.autoGenerate);
-      if (sample) {
-        sampleFields.push(sample);
-      }
-    } else if (workaroundInstantReactiveMariaDB) {
-      const samples = fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant');
-      if (samples.length > 0) {
-        sampleFields.push(...samples);
-      }
-    }
 _%>
 
 describe('<%- entityNameCapitalized %> e2e test', () => {

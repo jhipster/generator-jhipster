@@ -16,8 +16,6 @@ export type Config = JavascriptConfig & Command['Config'];
 export type Options = JavascriptOptions & Command['Options'];
 
 export interface Entity extends JavascriptEntity {
-  workaroundEntityCannotBeEmpty?: boolean;
-  workaroundInstantReactiveMariaDB?: boolean;
   generateEntityCypress?: boolean;
 }
 
