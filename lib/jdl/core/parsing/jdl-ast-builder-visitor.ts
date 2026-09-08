@@ -54,9 +54,10 @@ type VisitorContext = {
 };
 
 /**
- * Drop the quotes of a STRING token and unescape the escaped double quotes.
+ * Drop the quotes of a STRING token. The content is kept as written, an escaped quote stays `\"`: a
+ * `@MapstructExpression` is copied into a java string literal.
  */
-const parseStringLiteral = (image: string): string => image.slice(1, -1).replaceAll('\\"', '"');
+const parseStringLiteral = (image: string): string => image.slice(1, -1);
 
 export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();

@@ -136,9 +136,9 @@ describe('jdl - JDLField', () => {
   });
   describe('toString', () => {
     describe('with a quoted annotation value', () => {
-      it('should escape the quotes', () => {
-        const field = new JDLField({ name: 'abc', type: 'String', options: { mapstructExpression: 'java("a" + b)' } });
-        expect(field.toString()).toBe('@MapstructExpression("java(\\"a\\" + b)")\nabc String');
+      it('should escape the quotes that are not escaped yet', () => {
+        const field = new JDLField({ name: 'abc', type: 'String', options: { mapstructExpression: 'java("a" + \\"b\\")' } });
+        expect(field.toString()).toBe('@MapstructExpression("java(\\"a\\" + \\"b\\")")\nabc String');
       });
     });
     describe('without comment', () => {

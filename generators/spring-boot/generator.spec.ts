@@ -133,7 +133,7 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with a mapstruct expression containing quotes (#24910)', () => {
+  describe('with a mapstruct expression containing escaped quotes (#24910)', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
         {
@@ -142,13 +142,18 @@ describe(`generator - ${generator}`, () => {
           dto: 'mapstruct',
           fields: [
             { fieldName: 'name', fieldType: 'String' },
-            { fieldName: 'details', fieldType: 'String', options: { mapstructExpression: 'java(s.getId() + " | " + s.getName())' } },
+            {
+              fieldName: 'details',
+              fieldType: 'String',
+              // The expression is written as a java string literal, like the JDL `@MapstructExpression("java(\\" | \\")")`.
+              options: { mapstructExpression: 'java(s.getId() + \\" | \\" + s.getName())' },
+            },
           ],
         },
       ]);
     });
 
-    it('should escape the quotes of the expression', () => {
+    it('should write the expression as written', () => {
       runResult.assertFileContent(
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/StreamRightsMapper.java`,
         'expression = "java(s.getId() + \\" | \\" + s.getName())"',

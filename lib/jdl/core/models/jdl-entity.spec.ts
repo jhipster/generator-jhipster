@@ -204,9 +204,9 @@ describe('jdl - JDLEntity', () => {
   });
   describe('toString', () => {
     describe('with a quoted annotation value', () => {
-      it('should escape the quotes', () => {
-        const entity = new JDLEntity({ name: 'Abc', tableName: 'abc', annotations: { expression: 'java("a" + b)' } });
-        expect(entity.toString()).toBe('@Expression("java(\\"a\\" + b)")\nentity Abc (abc)');
+      it('should escape the quotes that are not escaped yet', () => {
+        const entity = new JDLEntity({ name: 'Abc', tableName: 'abc', annotations: { expression: 'java("a" + \\"b\\")' } });
+        expect(entity.toString()).toBe('@Expression("java(\\"a\\" + \\"b\\")")\nentity Abc (abc)');
       });
     });
     describe('without a comment', () => {
