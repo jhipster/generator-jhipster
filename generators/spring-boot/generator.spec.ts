@@ -133,6 +133,29 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a mapstruct expression containing quotes (#24910)', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'StreamRights',
+          changelogDate: '20160926101213',
+          dto: 'mapstruct',
+          fields: [
+            { fieldName: 'name', fieldType: 'String' },
+            { fieldName: 'details', fieldType: 'String', options: { mapstructExpression: 'java(s.getId() + " | " + s.getName())' } },
+          ],
+        },
+      ]);
+    });
+
+    it('should escape the quotes of the expression', () => {
+      runResult.assertFileContent(
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/StreamRightsMapper.java`,
+        'expression = "java(s.getId() + \\" | \\" + s.getName())"',
+      );
+    });
+  });
+
   describe('with eager load relationship and no pagination', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [

@@ -71,7 +71,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
   <%_ } _%>
   <%_ for (const field of fields.filter(field => field.mapstructExpression)) { _%>
     <%_ renMapAnotEnt = true; _%>
-    @Mapping( target = "<%- field.propertyName %>", expression = "<%- field.mapstructExpression %>")
+    @Mapping( target = "<%- field.propertyName %>", expression = "<%- field.mapstructExpression.replaceAll('"', '\\"') %>")
   <%_ } _%>
   <%_ if (renMapAnotEnt) { _%>
     <%- dtoClass %> toDto(<%- persistClass %> s);
@@ -106,7 +106,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     @Mapping(target = "<%- field.propertyName %>", source = "<%- field.propertyName %>")
     <%_ } _%>
     <%_ if (!relatedField.id && relatedField.mapstructExpression) { _%>
-    @Mapping(target = "<%- relatedField.propertyName %>", expression = "<%- relatedField.mapstructExpression %>")
+    @Mapping(target = "<%- relatedField.propertyName %>", expression = "<%- relatedField.mapstructExpression.replaceAll('"', '\\"') %>")
     <%_ } else if (!relatedField.id) { _%>
     @Mapping(target = "<%- relatedField.propertyName %>", source = "<%- relatedField.propertyName %>")
     <%_ } _%>

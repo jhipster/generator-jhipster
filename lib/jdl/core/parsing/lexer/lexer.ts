@@ -128,8 +128,8 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
   createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\// });
   createTokenFromConfig({ name: 'DECIMAL', pattern: /-?\d+\.\d+/ });
   createTokenFromConfig({ name: 'INTEGER', pattern: /-?\d+/ });
-  // No escaping, no unicode, just a plain string literal
-  createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"])*"/ });
+  // A double quote inside the literal is escaped with a backslash, e.g. "java(\"a\")".
+  createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"\\]|\\.)*"/ });
 
   // punctuation
   createTokenFromConfig({ name: 'LPAREN', pattern: '(' });

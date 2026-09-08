@@ -470,6 +470,7 @@ entity C
 @customAnnotation2(2)
 @customAnnotation3(2.42)
 @customAnnotation4("foo bar $")
+@customAnnotation5("java(\\"a\\" + b)")
 entity A`);
         parsedEntity = content.entities[0];
       });
@@ -510,6 +511,11 @@ entity A`);
     {
       "optionName": "customAnnotation4",
       "optionValue": "foo bar $",
+      "type": "BINARY",
+    },
+    {
+      "optionName": "customAnnotation5",
+      "optionValue": "java("a" + b)",
       "type": "BINARY",
     },
   ],
