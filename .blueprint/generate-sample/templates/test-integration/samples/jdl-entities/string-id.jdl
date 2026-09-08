@@ -1,0 +1,9 @@
+/*
+ * User provided String id, like User.login (#32434)
+ */
+@ChangelogDate(20200805000900)
+entity EntityWithStringId {
+  @AutoGenerate(false)
+  id String required
+  name String
+}
