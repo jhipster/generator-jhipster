@@ -28,13 +28,6 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
         builder.allowBlockingCallsInside("<%- packageName %>.service.MailService", "sendEmailFromTemplate");
         builder.allowBlockingCallsInside("<%- packageName %>.security.DomainUserDetailsService", "createSpringSecurityUser");
-<%_ if (databaseTypeCouchbase) { _%>
-        builder.allowBlockingCallsInside("org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter", "read");
-        builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");
-        builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$importFtsIndex$1");
-        // The SDK creates its latency metrics lazily on the first response, contending a lock on an io thread.
-        builder.allowBlockingCallsInside("com.couchbase.client.core.deps.org.LatencyUtils.PauseDetector", "addListener");
-<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
         builder.allowBlockingCallsInside("org.elasticsearch.client.indices.CreateIndexRequest", "settings");
 <%_ } _%>
