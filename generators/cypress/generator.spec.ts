@@ -24,7 +24,15 @@ import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/ind
 import Generator from './generator.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
-import { AuthenticationTypeMatrix, type Matrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '#testing';
+import {
+  AuthenticationTypeMatrix,
+  type Matrix,
+  defaultHelpers as helpers,
+  entityStringId,
+  extendMatrix,
+  fromMatrix,
+  runResult,
+} from '#testing';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -157,6 +165,36 @@ describe(`generator - ${generator}`, () => {
             'e2e:headless': `npm run -w ${clientRootDir} e2e:headless`,
           },
         });
+      });
+    });
+  });
+
+  describe('entity with a user provided id (#32434)', () => {
+    const spec = 'src/test/javascript/cypress/e2e/entity/entity-with-string-id.cy.ts';
+
+    describe('with angular', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ clientFramework: 'angular', testFrameworks: ['cypress'] }, [entityStringId]);
+      });
+
+      it('should type the id and create the entity', () => {
+        runResult.assertFileContent(spec, /it\('should create an instance of EntityWithStringId'/);
+        runResult.assertFileContent(spec, /cy\.get\(`\[data-cy="id"\]`\)\.type\(/);
+      });
+    });
+
+    describe('with react', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ clientFramework: 'react', testFrameworks: ['cypress'] }, [entityStringId]);
+      });
+
+      it('should skip the create test', () => {
+        runResult.assertFileContent(spec, /\/\/ Reason: the client does not support user provided ids\./);
+        runResult.assertFileContent(spec, /it\.skip\('should create an instance of EntityWithStringId'/);
       });
     });
   });

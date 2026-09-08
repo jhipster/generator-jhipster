@@ -26,7 +26,14 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 import Generator from './index.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
-import { buildClientSamples, defaultHelpers as helpers, dryRunHelpers, entitiesClientSamples as entities, runResult } from '#testing';
+import {
+  buildClientSamples,
+  defaultHelpers as helpers,
+  dryRunHelpers,
+  entitiesClientSamples as entities,
+  entityStringId,
+  runResult,
+} from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -243,6 +250,38 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should add value title in *.routes.ts files', () => {
       runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin.routes.ts`, /title: 'translated-value'/);
+    });
+  });
+
+  describe('entity with a user provided id (#32434)', () => {
+    const updateComponent = `${CLIENT_MAIN_SRC_DIR}app/entities/entity-with-string-id/update/entity-with-string-id-update.ts`;
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework }, [entityStringId])
+        .withSharedApplication({ getWebappTranslation: () => 'translated-value' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should create a new entity and update an existing one', () => {
+      runResult.assertFileContent(
+        updateComponent,
+        /if \(this\.entityWithStringId === null\) \{\s*this\.subscribeToSaveResponse\(this\.entityWithStringIdService\.create\(/,
+      );
+      runResult.assertFileContent(updateComponent, /this\.entityWithStringIdService\.update\(entityWithStringId as IEntityWithStringId\)/);
+      runResult.assertFileContent(
+        updateComponent.replace('.ts', '.spec.ts'),
+        /should call create service on save for new entity with a user provided id/,
+      );
+    });
+
+    it('should keep the id editable for a new entity', () => {
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/entities/entity-with-string-id/update/entity-with-string-id-form.service.ts`,
+        /id: \{ value: entityWithStringIdRawValue\.id, disabled: entityWithStringIdRawValue\.id !== null \}/,
+      );
     });
   });
 
