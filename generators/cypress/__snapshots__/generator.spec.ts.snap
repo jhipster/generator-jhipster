@@ -130,6 +130,9 @@ exports[`generator - cypress jwt-cypressAudit(true)-vue-withAdminUi(true)-cypres
   "clientRoot/test/cypress/fixtures/integration-test.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/test/cypress/plugins/coverage.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/test/cypress/plugins/index.ts": {
     "stateCleared": "modified",
   },
@@ -137,6 +140,9 @@ exports[`generator - cypress jwt-cypressAudit(true)-vue-withAdminUi(true)-cypres
     "stateCleared": "modified",
   },
   "clientRoot/test/cypress/support/commands.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/cypress/support/coverage.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/test/cypress/support/entity.ts": {
@@ -248,10 +254,16 @@ exports[`generator - cypress oauth2-cypressAudit(true)-vue-withAdminUi(true)-cyp
   "src/test/javascript/cypress/fixtures/integration-test.png": {
     "stateCleared": "modified",
   },
+  "src/test/javascript/cypress/plugins/coverage.ts": {
+    "stateCleared": "modified",
+  },
   "src/test/javascript/cypress/plugins/index.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/support/commands.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/coverage.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/support/entity.ts": {
@@ -473,6 +485,9 @@ exports[`generator - cypress session-cypressAudit(true)-vue-withAdminUi(true)-cy
   "src/test/javascript/cypress/fixtures/integration-test.png": {
     "stateCleared": "modified",
   },
+  "src/test/javascript/cypress/plugins/coverage.ts": {
+    "stateCleared": "modified",
+  },
   "src/test/javascript/cypress/plugins/index.ts": {
     "stateCleared": "modified",
   },
@@ -480,6 +495,9 @@ exports[`generator - cypress session-cypressAudit(true)-vue-withAdminUi(true)-cy
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/support/commands.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/support/coverage.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/support/entity.ts": {

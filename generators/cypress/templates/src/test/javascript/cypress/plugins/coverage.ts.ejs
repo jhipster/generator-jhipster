@@ -1,0 +1,72 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import MCR, { type CoverageReportOptions } from 'monocart-coverage-reports';
+
+/**
+ * Collects v8 coverage of the browser controlled by Cypress and generates the report with monocart-coverage-reports.
+ *
+ * cypress-monocart-coverage collects css coverage too, and its `CSS.enable` CDP call breaks Cypress's privileged
+ * channel: cy.task and cy.env then fail with `must only be invoked from the spec file or support file`. Only js
+ * entries are reported, so monocart-coverage-reports is driven directly with js coverage only.
+ *
+ * The `coverageBefore` and `coverageAfter` tasks are called by `support/coverage.ts` for every spec, the report is
+ * generated once the run finishes. Cypress keeps a single handler per event (tasks excepted), so the returned `on`
+ * must be used to register the `before:browser:launch` handler: it chains the remote debugging port lookup.
+ */
+export default (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions, options: CoverageReportOptions): Cypress.PluginEvents => {
+  const coverageReport = MCR(options);
+  coverageReport.cleanCache();
+
+  let remoteDebuggingPort: number | undefined;
+  let coverageClient: Awaited<ReturnType<typeof MCR.CDPClient>>;
+
+  on('task', {
+    coverageBefore: async () => {
+      if (coverageClient || !remoteDebuggingPort) return null;
+      coverageClient = await MCR.CDPClient({ port: remoteDebuggingPort });
+      await coverageClient?.startJSCoverage();
+      return null;
+    },
+    coverageAfter: async () => {
+      if (!coverageClient) return null;
+      await coverageReport.add(await coverageClient.stopJSCoverage());
+      await coverageClient.close();
+      coverageClient = undefined;
+      return null;
+    },
+  });
+
+  on('after:run', async () => {
+    if (coverageReport.hasCache()) {
+      await coverageReport.generate();
+    }
+  });
+
+  return ((event, handler) => {
+    if (event === 'before:browser:launch') {
+      return on(event, (browser, launchOptions) => {
+        // Cypress controls Chrome through this port, the coverage client reuses it to collect v8 coverage.
+        const remoteDebuggingArg = launchOptions.args.find(arg => arg.startsWith('--remote-debugging-port='));
+        remoteDebuggingPort = remoteDebuggingArg ? Number(remoteDebuggingArg.split('=')[1]) : undefined;
+        return handler(browser, launchOptions);
+      });
+    }
+    return on(event, handler);
+  }) as Cypress.PluginEvents;
+};
