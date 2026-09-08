@@ -138,6 +138,11 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
         '**/node_modules/**': false,
         '**/swagger-ui/**': false,
         '**/polyfills.js': false,
+        // Cypress runner scripts.
+        '**/__cypress/**': false,
+        '**/__/**': false,
+        // Dependencies served individually by the native federation dev server.
+        '**/*-dev.js': false,
         '**/*.js': true,
       },
       sourceFilter: {
