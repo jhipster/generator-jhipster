@@ -163,27 +163,6 @@ const command = {
       default: false,
       scope: 'storage',
     },
-    syncUserWithIdp: {
-      description: 'Allow relationships with User for oauth2 applications',
-      cli: {
-        type: Boolean,
-      },
-      prompt: gen => ({
-        type: 'confirm',
-        message: 'Do you want to allow relationships with User entity?',
-        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === OAUTH2,
-      }),
-      jdl: {
-        type: 'boolean',
-        tokenType: 'BOOLEAN',
-      },
-      configure: gen => {
-        if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.authenticationType !== OAUTH2) {
-          throw new Error('syncUserWithIdp is only supported with authenticationType oauth2');
-        }
-      },
-      scope: 'storage',
-    },
     serverTestFrameworks: {
       description: 'Server test frameworks',
       cli: {
@@ -253,6 +232,28 @@ const command = {
           ];
         },
       }),
+    },
+    syncUserWithIdp: {
+      description: 'Allow relationships with User for oauth2 applications',
+      cli: {
+        type: Boolean,
+      },
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        type: 'confirm',
+        message: 'Do you want to allow relationships with User entity?',
+        when: ({ authenticationType, databaseType }) =>
+          (authenticationType ?? config.authenticationType) === OAUTH2 && (databaseType ?? config.databaseType) !== NO_DATABASE,
+      }),
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
+      configure: gen => {
+        if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.authenticationType !== OAUTH2) {
+          throw new Error('syncUserWithIdp is only supported with authenticationType oauth2');
+        }
+      },
+      scope: 'storage',
     },
     cacheProvider: {
       ...cacheCommand.configs.cacheProvider,

@@ -28,9 +28,14 @@ import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 import Generator from './generator.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
-import { defaultHelpers as helpers, runResult } from '#testing';
+import { createTestHelpers, typedResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
+
+const helpers = createTestHelpers<Generator>({
+  importMeta: import.meta,
+});
+const runResult = typedResult<Generator>();
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
@@ -281,6 +286,28 @@ describe(`generator - ${generator}`, () => {
 
       it('should inject content', () => {
         runResult.assertFileContent('src/main/resources/config/application.yml', `---\n${content}`);
+      });
+    });
+  });
+
+  describe('prompts', () => {
+    describe('oauth2 and sql database should ask for syncUserWithIdp', () => {
+      before(async () => {
+        await helpers.runJHipster().withAnswers({ authenticationType: 'oauth2', databaseType: 'sql' }).withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toContain('syncUserWithIdp');
+      });
+    });
+
+    describe('oauth2 and no database should not ask for syncUserWithIdp', () => {
+      before(async () => {
+        await helpers.runJHipster().withAnswers({ authenticationType: 'oauth2', databaseType: 'no' }).withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).not.toContain('syncUserWithIdp');
       });
     });
   });
