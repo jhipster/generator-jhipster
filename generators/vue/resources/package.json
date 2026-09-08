@@ -37,7 +37,7 @@
     "@vue/tsconfig": "0.9.1",
     "autoprefixer": "10.5.4",
     "axios-mock-adapter": "2.1.0",
-    "eslint": "10.9.1",
+    "eslint": "10.10.0",
     "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-vue": "10.10.0",
     "globals": "17.12.0",
