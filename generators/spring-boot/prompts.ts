@@ -17,157 +17,15 @@
  * limitations under the License.
  */
 
-import chalk from 'chalk';
-import { intersection } from 'lodash-es';
-
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
-import { applicationOptions, authenticationTypes, cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { applicationOptions, databaseTypes } from '../../lib/jhipster/index.ts';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
-import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
 
 import type SpringBootGenerator from './generator.ts';
-import type { Config as SpringDataRelationalConfig } from './generators/data-relational/types.ts';
 
 const { OptionNames } = applicationOptions;
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
-const { OAUTH2 } = authenticationTypes;
-const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
+const { MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
 const { WEBSOCKET, SEARCH_ENGINE, ENABLE_SWAGGER_CODEGEN } = OptionNames;
-const NO_DATABASE = databaseTypes.NO;
-const NO_CACHE_PROVIDER = cacheTypes.NO;
-const { GATLING, CUCUMBER } = testFrameworkTypes;
-
-export const askForServerSideOpts = asPromptingTask(async function (this: SpringBootGenerator, { control }) {
-  if (control.existingProject && !this.options.askAnswered) return;
-
-  const { applicationType, authenticationType, reactive } = this.jhipsterConfigWithDefaults;
-
-  await this.prompt(
-    [
-      {
-        type: 'select',
-        name: 'databaseType',
-        message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-        choices: () => {
-          const opts: { value: string; name: string }[] = [];
-          if (reactive) {
-            opts.push({
-              value: SQL,
-              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, MSSQL)',
-            });
-          } else {
-            opts.push({
-              value: SQL,
-              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
-            });
-          }
-          opts.push({
-            value: MONGODB,
-            name: 'MongoDB',
-          });
-          if (authenticationType !== OAUTH2) {
-            opts.push({
-              value: CASSANDRA,
-              name: 'Cassandra',
-            });
-          }
-          opts.push(
-            {
-              value: 'couchbase',
-              name: '[BETA] Couchbase',
-            },
-            {
-              value: NEO4J,
-              name: '[BETA] Neo4j',
-            },
-            {
-              value: NO_DATABASE,
-              name: 'No database',
-            },
-          );
-          return opts;
-        },
-        default: this.jhipsterConfigWithDefaults.databaseType,
-      },
-      {
-        when: response => response.databaseType === SQL,
-        type: 'select',
-        name: 'prodDatabaseType',
-        message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-        choices: reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS,
-        default: (this.jhipsterConfigWithDefaults as SpringDataRelationalConfig).prodDatabaseType,
-      },
-      {
-        when: response => response.databaseType === SQL,
-        type: 'select',
-        name: 'devDatabaseType',
-        message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-        choices: response => {
-          const currentDatabase = SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)!;
-          return [
-            {
-              ...currentDatabase,
-              name: `${currentDatabase.name} (requires Docker or manually configured database)`,
-            },
-          ].concat([
-            { value: H2_DISK, name: `H2 with disk-based persistence` },
-            { value: H2_MEMORY, name: `H2 with in-memory persistence` },
-          ]);
-        },
-        default: (this.jhipsterConfigWithDefaults as SpringDataRelationalConfig).devDatabaseType,
-      },
-      {
-        when: !reactive,
-        type: 'select',
-        name: 'cacheProvider',
-        message: 'Which cache do you want to use? (Spring cache abstraction)',
-        choices: [
-          {
-            value: EHCACHE,
-            name: 'Ehcache (local cache, for a single node)',
-          },
-          {
-            value: CAFFEINE,
-            name: 'Caffeine (local cache, for a single node)',
-          },
-          {
-            value: HAZELCAST,
-            name: 'Hazelcast (distributed cache for multiple nodes)',
-          },
-          {
-            value: INFINISPAN,
-            name: 'Infinispan (hybrid cache, for multiple nodes)',
-          },
-          {
-            value: MEMCACHED,
-            name: 'Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
-          },
-          {
-            value: REDIS,
-            name: 'Redis (distributed cache)',
-          },
-          {
-            value: NO_CACHE_PROVIDER,
-            name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
-          },
-        ],
-        default: this.jhipsterConfigWithDefaults.cacheProvider,
-      },
-      {
-        when: answers =>
-          ((answers.cacheProvider !== NO_CACHE_PROVIDER && answers.cacheProvider !== MEMCACHED) ||
-            applicationType === APPLICATION_TYPE_GATEWAY) &&
-          answers.databaseType === SQL &&
-          !reactive,
-        type: 'confirm',
-        name: 'enableHibernateCache',
-        message: 'Do you want to use Hibernate 2nd level cache?',
-        default: this.jhipsterConfigWithDefaults.enableHibernateCache,
-      },
-    ],
-    this.config,
-  );
-});
 
 export const askForOptionalItems = asPromptingTask(async function askForOptionalItems(this: SpringBootGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
@@ -236,23 +94,4 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
       ),
     );
   }
-});
-
-export const askForServerTestOpts = asPromptingTask(async function (this: SpringBootGenerator, { control }) {
-  if (control.existingProject && this.options.askAnswered !== true) return;
-
-  const testFrameworks = this.jhipsterConfigWithDefaults.testFrameworks ?? [];
-  const answers = await this.prompt([
-    {
-      type: 'checkbox',
-      name: 'serverTestFrameworks',
-      message: 'Besides JUnit, which testing frameworks would you like to use?',
-      choices: [
-        { name: 'Gatling', value: GATLING, checked: testFrameworks.includes(GATLING) },
-        { name: 'Cucumber', value: CUCUMBER, checked: testFrameworks.includes(CUCUMBER) },
-      ],
-      default: intersection([GATLING, CUCUMBER], this.jhipsterConfigWithDefaults.testFrameworks),
-    },
-  ]);
-  this.jhipsterConfig.testFrameworks = [...new Set([...(this.jhipsterConfig.testFrameworks ?? []), ...answers.serverTestFrameworks])];
 });

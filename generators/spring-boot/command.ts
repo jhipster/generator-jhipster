@@ -17,14 +17,23 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import { intersection } from 'lodash-es';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
+import { cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret.ts';
+import serverCommand from '../server/command.ts';
+import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
+
+import cacheCommand from './generators/cache/command.ts';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE_PROVIDER } = cacheTypes;
+const { CASSANDRA, COUCHBASE, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
+const { GATLING, CUCUMBER } = testFrameworkTypes;
 
 const command = {
   configs: {
@@ -174,6 +183,117 @@ const command = {
         }
       },
       scope: 'storage',
+    },
+    serverTestFrameworks: {
+      description: 'Server test frameworks',
+      cli: {
+        type: Array,
+        hide: true,
+      },
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        type: 'checkbox',
+        message: 'Besides JUnit, which testing frameworks would you like to use?',
+        default: () => intersection([GATLING, CUCUMBER], config.testFrameworks),
+      }),
+      choices: [
+        { name: 'Gatling', value: GATLING },
+        { name: 'Cucumber', value: CUCUMBER },
+      ],
+      scope: 'storage',
+    },
+    databaseType: {
+      ...serverCommand.configs.databaseType,
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        type: 'select',
+        message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
+        choices: answers => {
+          const reactive = answers.reactive ?? config.reactive;
+          const authenticationType = answers.authenticationType ?? config.authenticationType;
+          const choices: { value: string; name: string }[] = [
+            {
+              value: SQL,
+              name: reactive ? 'SQL (H2, PostgreSQL, MySQL, MariaDB, MSSQL)' : 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
+            },
+            { value: MONGODB, name: 'MongoDB' },
+          ];
+          if (authenticationType !== OAUTH2) {
+            choices.push({ value: CASSANDRA, name: 'Cassandra' });
+          }
+          choices.push(
+            { value: COUCHBASE, name: '[BETA] Couchbase' },
+            { value: NEO4J, name: '[BETA] Neo4j' },
+            { value: NO_DATABASE, name: 'No database' },
+          );
+          return choices;
+        },
+      }),
+    },
+    prodDatabaseType: {
+      ...serverCommand.configs.prodDatabaseType,
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        when: answers => (answers.databaseType ?? config.databaseType) === SQL,
+        type: 'select',
+        message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
+        choices: answers => ((answers.reactive ?? config.reactive) ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
+      }),
+    },
+    devDatabaseType: {
+      ...serverCommand.configs.devDatabaseType,
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        when: answers => (answers.databaseType ?? config.databaseType) === SQL,
+        type: 'select',
+        message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
+        choices: answers => {
+          const prodDatabaseType = answers.prodDatabaseType ?? config.prodDatabaseType;
+          const currentDatabase = SQL_DB_OPTIONS.find(it => it.value === prodDatabaseType)!;
+          return [
+            { ...currentDatabase, name: `${currentDatabase.name} (requires Docker or manually configured database)` },
+            { value: H2_DISK, name: 'H2 with disk-based persistence' },
+            { value: H2_MEMORY, name: 'H2 with in-memory persistence' },
+          ];
+        },
+      }),
+    },
+    cacheProvider: {
+      ...cacheCommand.configs.cacheProvider,
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        when: answers => !(answers.reactive ?? config.reactive),
+        type: 'select',
+        message: 'Which cache do you want to use? (Spring cache abstraction)',
+        choices: [
+          { value: EHCACHE, name: 'Ehcache (local cache, for a single node)' },
+          { value: CAFFEINE, name: 'Caffeine (local cache, for a single node)' },
+          { value: HAZELCAST, name: 'Hazelcast (distributed cache for multiple nodes)' },
+          { value: INFINISPAN, name: 'Infinispan (hybrid cache, for multiple nodes)' },
+          {
+            value: MEMCACHED,
+            name: 'Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
+          },
+          { value: REDIS, name: 'Redis (distributed cache)' },
+          {
+            value: NO_CACHE_PROVIDER,
+            name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
+          },
+        ],
+      }),
+    },
+    enableHibernateCache: {
+      ...cacheCommand.configs.enableHibernateCache,
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        when: answers => {
+          const reactive = answers.reactive ?? config.reactive;
+          const databaseType = answers.databaseType ?? config.databaseType;
+          if (reactive || databaseType !== SQL) {
+            return false;
+          }
+          const cacheProvider = answers.cacheProvider ?? config.cacheProvider;
+          return (
+            (cacheProvider !== NO_CACHE_PROVIDER && cacheProvider !== MEMCACHED) || config.applicationType === APPLICATION_TYPE_GATEWAY
+          );
+        },
+        type: 'confirm',
+        message: 'Do you want to use Hibernate 2nd level cache?',
+      }),
     },
     defaultPackaging: {
       description: 'Default packaging for the application',
