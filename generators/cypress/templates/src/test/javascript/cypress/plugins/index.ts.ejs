@@ -39,8 +39,9 @@ const VALID_CATEGORIES = new Set(['performance', 'accessibility', 'best-practice
 export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
   installLogsPrinter(on);
 <%_ if (cypressCoverage) { _%>
-  if (config.env.CYPRESS_COVERAGE) {
-    on = (await import('./coverage')).default(on, config, {
+  const coverage =
+    config.env.CYPRESS_COVERAGE &&
+    (await import('./coverage')).default(on, config, {
       name: 'Cypress Coverage Report',
       entryFilter: {
         '**/node_modules/**': false,
@@ -61,9 +62,13 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
       outputDir: './<%- temporaryDir %>/cypress-coverage-reports',
       reports: ['v8', 'console-details'],
     });
-  }
 <%_ } _%>
   on('before:browser:launch', (browser, launchOptions) => {
+<%_ if (cypressCoverage) { _%>
+    if (coverage) {
+      coverage.beforeBrowserLaunch(launchOptions);
+    }
+<%_ } _%>
 <%_ if (cypressAudit) { _%>
     prepareAudit(launchOptions);
 <%_ } _%>

@@ -26,10 +26,10 @@ import MCR, { type CoverageReportOptions } from 'monocart-coverage-reports';
  * entries are reported, so monocart-coverage-reports is driven directly with js coverage only.
  *
  * The `coverageBefore` and `coverageAfter` tasks are called by `support/coverage.ts` for every spec, the report is
- * generated once the run finishes. Cypress keeps a single handler per event (tasks excepted), so the returned `on`
- * must be used to register the `before:browser:launch` handler: it chains the remote debugging port lookup.
+ * generated once the run finishes. Cypress keeps a single handler per event (tasks excepted), so the caller's
+ * `before:browser:launch` handler must call the returned `beforeBrowserLaunch` to capture the remote debugging port.
  */
-export default (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions, options: CoverageReportOptions): Cypress.PluginEvents => {
+export default (on: Cypress.PluginEvents, _config: Cypress.PluginConfigOptions, options: CoverageReportOptions) => {
   const coverageReport = MCR(options);
   coverageReport.cleanCache();
 
@@ -58,15 +58,11 @@ export default (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions, o
     }
   });
 
-  return ((event, handler) => {
-    if (event === 'before:browser:launch') {
-      return on(event, (browser, launchOptions) => {
-        // Cypress controls Chrome through this port, the coverage client reuses it to collect v8 coverage.
-        const remoteDebuggingArg = launchOptions.args.find(arg => arg.startsWith('--remote-debugging-port='));
-        remoteDebuggingPort = remoteDebuggingArg ? Number(remoteDebuggingArg.split('=')[1]) : undefined;
-        return handler(browser, launchOptions);
-      });
-    }
-    return on(event, handler);
-  }) as Cypress.PluginEvents;
+  return {
+    beforeBrowserLaunch(launchOptions: Cypress.BeforeBrowserLaunchOptions): void {
+      // Cypress controls Chrome through this port, the coverage client reuses it to collect v8 coverage.
+      const remoteDebuggingArg = launchOptions.args.find(arg => arg.startsWith('--remote-debugging-port='));
+      remoteDebuggingPort = remoteDebuggingArg ? Number(remoteDebuggingArg.split('=')[1]) : undefined;
+    },
+  };
 };
