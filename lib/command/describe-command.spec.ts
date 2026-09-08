@@ -83,7 +83,7 @@ describe('command - describe command', () => {
       const skipGit = command.configs.find(({ name }) => name === 'skipGit');
       expect(skipGit).toMatchObject({ owner: 'git', description: 'Skip git repository initialization' });
       expect(command.configs.find(({ name }) => name === 'skipGit')?.blueprint).toBeUndefined();
-      // Positioned at the last declaration, the git command order.
+      // Positioned at the last declaration, which follows the git command order.
       expect(command.configs.map(({ name }) => name).slice(0, 2)).toEqual(['skipGit', 'forceGit']);
     });
   });

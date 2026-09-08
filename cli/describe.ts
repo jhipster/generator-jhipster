@@ -150,7 +150,7 @@ const describeCliCommand = async (
   }
 
   const commands: Record<string, CliCommand> = { ...defaultCommands, ...(await envBuilder?.getBlueprintCommands()) };
-  // `jhipster` without a command runs the default one, `.yo-rc.json` can change it (`defaultCommand`).
+  // `jhipster` without a command runs the default one; `.yo-rc.json` can change it (`defaultCommand`).
   const defaultCommand = resolveDefaultCommand();
   if (!generator) {
     const generators = Object.entries(commands)

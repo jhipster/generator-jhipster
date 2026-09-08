@@ -39,7 +39,7 @@ export type ConfigDescription = {
   type?: string;
   choices?: (string | { value: string; name: string })[];
   default?: unknown;
-  /** Prompt message, `(dynamic)` when it cannot be computed without a generator. */
+  /** Prompt message, or `(dynamic)` when it cannot be computed without a generator. */
   prompt?: string;
   /** Names of the derived properties (`databaseTypeSql`, ...) added to the application context. */
   derivedProperties?: string[];
@@ -129,7 +129,7 @@ export const describeCommand = ({
   const configs = new Map<string, ConfigDescription>();
   for (const dependency of dependencies) {
     for (const [name, config] of Object.entries(dependency.command?.configs ?? {})) {
-      // The owning command asks the prompt, keep the position of the last declaration.
+      // The owning command asks the prompt; keep the position of the last declaration.
       configs.delete(name);
       configs.set(name, describeConfig(name, config, dependency.namespace, dependency.blueprintNamespace));
     }

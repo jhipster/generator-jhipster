@@ -30,7 +30,7 @@ export const resolveDefaultCommand = ({ cwd = process.cwd() }: { cwd?: string } 
     const yoRc = JSON.parse(readFileSync(join(cwd, '.yo-rc.json'), 'utf8'));
     return yoRc?.['generator-jhipster']?.defaultCommand ?? DEFAULT_COMMAND;
   } catch {
-    // No .yo-rc.json file or invalid content, the default command applies.
+    // No .yo-rc.json file or invalid content; the default command applies.
     return DEFAULT_COMMAND;
   }
 };

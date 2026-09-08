@@ -32,7 +32,7 @@ export type GeneratorDependency = {
 export type ResolveGeneratorDependenciesOptions = {
   getGeneratorMeta: (namespace: string) => GeneratorMeta | undefined;
   blueprintNamespaces?: string[];
-  /** Namespace prefix of the generators without one, defaults to `jhipster`. */
+  /** Namespace prefix of the generators without one; defaults to `jhipster`. */
   namespacePrefix?: string;
   /** Called for a generator that is not registered. */
   onMissing?: (namespace: string) => void;

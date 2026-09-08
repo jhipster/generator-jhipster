@@ -32,7 +32,7 @@ export type CliCommand = {
   help?: string;
   cliOnly?: boolean;
   removed?: string;
-  /** Do not print the logo, e.g. commands with machine readable output. */
+  /** Do not print the logo, e.g. for commands with machine-readable output. */
   silentLogo?: boolean;
   useOptions?: Record<string, any>;
 };
