@@ -19,20 +19,109 @@
 import type Environment from 'yeoman-environment';
 
 import {
+  type CommandDescription,
+  type ConfigDescription,
+  type ConfigOwners,
   describeCommand,
   findConfigOwners,
-  formatCommandDescription,
-  formatConfigOwners,
-  formatGenerators,
-  readUsage,
-  resolveGeneratorDependencies,
-} from '../lib/command/describe.ts';
+} from '../lib/command/describe-command.ts';
+import { readUsage } from '../lib/resolver/generator-commands.ts';
+import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import defaultCommands from './commands.ts';
 import type EnvironmentBuilder from './environment-builder.ts';
 import type { CliCommand } from './types.ts';
 import { CLI_NAME, logger } from './utils.ts';
+
+const formatChoices = (choices: ConfigDescription['choices']) =>
+  choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)).join(', ');
+
+const formatDefault = (value: unknown): string => {
+  if (value === undefined) return '';
+  return typeof value === 'string' ? value : JSON.stringify(value);
+};
+
+const table = (rows: string[][]): string => {
+  const widths = rows[0].map((_cell, column) => Math.max(...rows.map(row => row[column].length)));
+  return rows
+    .map(row =>
+      row
+        .map((cell, column) => cell.padEnd(widths[column]))
+        .join('  ')
+        .trimEnd(),
+    )
+    .join('\n');
+};
+
+const formatGenerators = (generators: { namespace: string; description?: string }[]): string =>
+  table(generators.map(({ namespace, description }) => [namespace, description ?? '']));
+
+const formatConfigRows = (configs: ConfigDescription[], { owner }: { owner: boolean }): string => {
+  const header = ['config', 'cli', 'scope', 'type', 'choices', 'default', ...(owner ? ['owner'] : [])];
+  const rows = configs.map(config => [
+    config.name,
+    config.argument ? '<argument>' : (config.cliOption ?? '') + (config.cliHidden ? ' (hidden)' : ''),
+    config.scope ?? '',
+    config.type ?? '',
+    formatChoices(config.choices) ?? '',
+    formatDefault(config.default),
+    ...(owner ? [config.owner] : []),
+  ]);
+  return table([header, ...rows]);
+};
+
+const formatCommandDescription = (command: CommandDescription, { prompts = false }: { prompts?: boolean } = {}): string => {
+  const lines = [`${command.namespace}${command.description ? `: ${command.description}` : ''}`];
+  const others = command.dependencies.filter(dependency => dependency !== command.namespace);
+  if (others.length > 0) {
+    lines.push(`with the options of: ${others.join(', ')}`);
+  }
+  if (command.arguments.length > 0) {
+    lines.push(
+      '',
+      'arguments:',
+      ...command.arguments.map(
+        argument => `  ${argument.name}${argument.required ? ' (required)' : ''}${argument.description ? `: ${argument.description}` : ''}`,
+      ),
+    );
+  }
+  const configs = prompts ? command.configs.filter(config => config.prompt) : command.configs;
+  if (configs.length === 0) {
+    lines.push('', prompts ? 'no prompts' : 'no configs');
+    return lines.join('\n');
+  }
+  const owner = configs.some(config => config.owner !== command.namespace);
+  if (prompts) {
+    lines.push(
+      '',
+      owner ?
+        'prompts, in the order they are asked by each command (the composition order applies across commands):'
+      : 'prompts, in the order they are asked:',
+      ...configs.map(config => `  ${config.name}: ${config.prompt}${config.owner !== command.namespace ? ` (${config.owner})` : ''}`),
+    );
+    return lines.join('\n');
+  }
+  lines.push('', formatConfigRows(configs, { owner }));
+  const derived = configs.filter(config => config.derivedProperties);
+  if (derived.length > 0) {
+    lines.push('', 'derived properties:', ...derived.map(config => `  ${config.name}: ${config.derivedProperties!.join(', ')}`));
+  }
+  const described = configs.filter(config => config.description);
+  if (described.length > 0) {
+    lines.push('', 'descriptions:', ...described.map(config => `  ${config.name}: ${config.description}`));
+  }
+  return lines.join('\n');
+};
+
+const formatConfigOwners = ({ name, owners }: ConfigOwners): string => {
+  if (owners.length === 0) {
+    return `no command declares the config ${name}`;
+  }
+  return [`${name} is declared by: ${owners.map(owner => owner.owner).join(', ')}`, '', formatConfigRows(owners, { owner: true })].join(
+    '\n',
+  );
+};
 
 type DescribeOptions = { config?: string; imports?: boolean; prompts?: boolean; json?: boolean };
 

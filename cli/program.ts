@@ -26,10 +26,10 @@ import didYouMean from 'didyoumean';
 import type Environment from 'yeoman-environment';
 
 import baseCommand from '../generators/base/command.ts';
-import { resolveGeneratorDependencies } from '../lib/command/describe.ts';
 import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
+import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
