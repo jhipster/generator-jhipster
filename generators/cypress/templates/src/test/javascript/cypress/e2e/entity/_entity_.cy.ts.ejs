@@ -40,29 +40,20 @@ import {
     const otherEntities = this._.uniq(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity));
     // We cannot generate a required entity with relationship with required relationships.
     const skipCreateTest
-      = graalvmSupport
-      || !cypressBootstrapEntities
-      || requiredRelationships.some(rel => rel.otherEntity.primaryKey?.derived)
+      = !cypressBootstrapEntities
+    // Cannot create a required relationship with itself.
       || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
-      || requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired)
+    // Required relationships that contain another required relationship are complex to handle.
+      || requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired))
+    // Same as above.
+      || requiredOtherEntities.some(otherEntity => otherEntity.primaryKey?.derived)
+    // Cannot generate the required data to test.
       || !entityFakeData
       ? '.skip' : '';
 
-    const reason = graalvmSupport ? 'graalvm is failing.' : 'cannot create a required entity with relationship with required relationships.';
+    const reason = 'cannot create a required entity with relationship with required relationships.';
 
     const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
-
-    if (workaroundEntityCannotBeEmpty && sampleFields.length === 0) {
-      const sample = fields.find(f => !f.autoGenerate);
-      if (sample) {
-        sampleFields.push(sample);
-      }
-    } else if (workaroundInstantReactiveMariaDB) {
-      const samples = fields.filter(f => !f.autoGenerate && f.nullable && f.fieldType === 'Instant');
-      if (samples.length > 0) {
-        sampleFields.push(...samples);
-      }
-    }
 _%>
 
 describe('<%- entityNameCapitalized %> e2e test', () => {

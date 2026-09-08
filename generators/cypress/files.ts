@@ -81,6 +81,14 @@ export const cypressFiles = asWriteFilesSection({
       templates: ['support/oauth2.ts'],
     },
   ],
+  coverage: [
+    {
+      condition: generator => generator.cypressCoverage,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
+      templates: ['plugins/coverage.ts', 'support/coverage.ts'],
+    },
+  ],
   audit: [
     {
       condition: generator => generator.cypressAudit,

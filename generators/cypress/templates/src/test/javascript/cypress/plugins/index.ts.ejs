@@ -39,16 +39,38 @@ const VALID_CATEGORIES = new Set(['performance', 'accessibility', 'best-practice
 export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
   installLogsPrinter(on);
 <%_ if (cypressCoverage) { _%>
-  let remoteDebuggingPort: number | undefined;
+  const coverage =
+    config.env.CYPRESS_COVERAGE &&
+    (await import('./coverage')).default(on, config, {
+      name: 'Cypress Coverage Report',
+      entryFilter: {
+        '**/node_modules/**': false,
+        '**/swagger-ui/**': false,
+        '**/polyfills.js': false,
+        // Cypress runner scripts.
+        '**/__cypress/**': false,
+        '**/__/**': false,
+  <%_ if (clientFrameworkAngular && microfrontend) { _%>
+        // Shared dependencies bundled individually by native federation in dev mode.
+        '**/*-dev.js': false,
+  <%_ } _%>
+        '**/*.js': true,
+      },
+      sourceFilter: {
+        '**/<%- clientSrcDir %>**': true,
+      },
+      outputDir: './<%- temporaryDir %>/cypress-coverage-reports',
+      reports: ['v8', 'console-details'],
+    });
 <%_ } _%>
   on('before:browser:launch', (browser, launchOptions) => {
+<%_ if (cypressCoverage) { _%>
+    if (coverage) {
+      coverage.beforeBrowserLaunch(launchOptions);
+    }
+<%_ } _%>
 <%_ if (cypressAudit) { _%>
     prepareAudit(launchOptions);
-<%_ } _%>
-<%_ if (cypressCoverage) { _%>
-    // Cypress controls Chrome through this port, the coverage client reuses it to collect v8 coverage.
-    const remoteDebuggingArg = launchOptions.args.find(arg => arg.startsWith('--remote-debugging-port='));
-    remoteDebuggingPort = remoteDebuggingArg ? Number(remoteDebuggingArg.split('=')[1]) : undefined;
 <%_ } _%>
     if (browser.name === 'chrome' && browser.isHeadless) {
       launchOptions.args.push('--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage');
@@ -124,54 +146,6 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
     },
     pa11y: pa11y(),
   });
-<%_ } _%>
-<%_ if (cypressCoverage) { _%>
-  if (config.env.CYPRESS_COVERAGE) {
-    // cypress-monocart-coverage collects css coverage too, and its `CSS.enable` CDP call breaks Cypress's
-    // privileged channel: cy.task and cy.env then fail with `must only be invoked from the spec file or
-    // support file`. Only js entries are reported here, so monocart-coverage-reports is driven directly
-    // with js coverage only.
-    const MCR = (await import('monocart-coverage-reports')).default;
-    const coverageReport = MCR({
-      name: 'Cypress Coverage Report',
-      entryFilter: {
-        '**/node_modules/**': false,
-        '**/swagger-ui/**': false,
-        '**/polyfills.js': false,
-        '**/*.js': true,
-      },
-      sourceFilter: {
-        '**/<%- clientSrcDir %>**': true,
-      },
-      outputDir: './<%- temporaryDir %>/cypress-coverage-reports',
-      reports: ['v8', 'console-details'],
-    });
-    coverageReport.cleanCache();
-
-    let coverageClient: Awaited<ReturnType<typeof MCR.CDPClient>>;
-
-    on('task', {
-      coverageBefore: async () => {
-        if (coverageClient || !remoteDebuggingPort) return null;
-        coverageClient = await MCR.CDPClient({ port: remoteDebuggingPort });
-        await coverageClient?.startJSCoverage();
-        return null;
-      },
-      coverageAfter: async () => {
-        if (!coverageClient) return null;
-        await coverageReport.add(await coverageClient.stopJSCoverage());
-        await coverageClient.close();
-        coverageClient = undefined;
-        return null;
-      },
-    });
-
-    on('after:run', async () => {
-      if (coverageReport.hasCache()) {
-        await coverageReport.generate();
-      }
-    });
-  }
 <%_ } _%>
   return config;
 }
