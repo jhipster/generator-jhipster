@@ -3,7 +3,7 @@
     "@vitest/browser-preview": "5.0.0",
     "@vitest/expect": "5.0.0",
     "ejs-lint": "2.0.1",
-    "eslint": "10.9.1",
+    "eslint": "10.10.0",
     "globals": "17.12.0",
     "typescript-eslint": "8.69.0",
     "vitest": "5.0.0"
