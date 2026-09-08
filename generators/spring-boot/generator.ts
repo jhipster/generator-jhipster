@@ -41,7 +41,6 @@ import { mutateFilterableField, mutateFilterableRelationship } from './applicati
 import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
-import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.ts';
 import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
 import type {
   Application as SpringBootApplication,
@@ -91,20 +90,16 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
     }
   }
 
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      askForServerTestOpts,
-      askForServerSideOpts,
-      askForOptionalItems,
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get configuring() {
     return this.asConfiguringTaskGroup({
+      mergeTestConfig() {
+        if (this.jhipsterConfig.serverTestFrameworks) {
+          this.jhipsterConfig.testFrameworks = [
+            ...new Set([...(this.jhipsterConfig.testFrameworks ?? []), ...this.jhipsterConfig.serverTestFrameworks]),
+          ];
+          delete this.jhipsterConfig.serverTestFrameworks;
+        }
+      },
       syncUserWithIdpMigration({ control }) {
         if (
           this.jhipsterConfig.syncUserWithIdp === undefined &&

@@ -46,6 +46,8 @@ Options:
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
   --feign-client                           Generate a feign client (default: false)
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
+  --cache-provider <value>                 Cache provider (choices: "no", "caffeine", "ehcache", "hazelcast", "infinispan", "memcached", "redis")
+  --enable-hibernate-cache                 Enable hibernate cache
   --database-migration <value>             Database migration (choices: "liquibase", "loader", "no")
   --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
@@ -59,8 +61,6 @@ Options:
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --skip-db-changelog                      Skip the generation of database migrations
   --incremental-changelog                  Creates incremental database changelogs
-  --cache-provider <value>                 Cache provider (choices: "no", "caffeine", "ehcache", "hazelcast", "infinispan", "memcached", "redis")
-  --enable-hibernate-cache                 Enable hibernate cache
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
