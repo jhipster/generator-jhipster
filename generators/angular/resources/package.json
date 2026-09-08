@@ -27,7 +27,7 @@
     "@types/sockjs-client": "1.5.4",
     "angular-eslint": "22.2.0",
     "deepmerge": "4.3.1",
-    "eslint": "10.9.1",
+    "eslint": "10.10.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
     "folder-hash": "4.1.3",
