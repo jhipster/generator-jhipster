@@ -113,6 +113,11 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
           ],
         });
       },
+      blockHound({ application, source }) {
+        if (!application.reactive) return;
+
+        source.addAllowBlockingCallsInside!({ classPath: 'org.elasticsearch.client.indices.CreateIndexRequest', method: 'settings' });
+      },
       addDependencies({ source }) {
         source.addSpringBootModule?.('spring-boot-starter-data-elasticsearch', 'spring-boot-testcontainers');
         source.addJavaDependencies?.([
