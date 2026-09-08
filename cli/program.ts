@@ -29,6 +29,7 @@ import baseCommand from '../generators/base/command.ts';
 import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
+import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';
 import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
@@ -187,15 +188,7 @@ export const buildCommands = ({
   createEnvBuilder,
   silent,
 }: BuildCommands) => {
-  if (!defaultCommand) {
-    try {
-      const yoRcFile = fs.readFileSync('.yo-rc.json', 'utf8');
-      defaultCommand = JSON.parse(yoRcFile)?.['generator-jhipster']?.defaultCommand;
-    } catch {
-      // No .yo-rc.json file or no defaultCommand field, we can ignore it
-    }
-    defaultCommand ??= 'app';
-  }
+  defaultCommand ??= resolveDefaultCommand();
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
     const {

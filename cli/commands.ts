@@ -91,6 +91,7 @@ Examples:
     jhipster describe app                      every option and .yo-rc.json key of an application
     jhipster describe spring-boot --prompts    the questions asked by the spring-boot generator
     jhipster describe --config databaseType    which command declares databaseType
+    jhipster describe default                  the command run by \`jhipster\` alone (\`defaultCommand\` of .yo-rc.json)
 `,
   },
   download: {

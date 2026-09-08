@@ -25,6 +25,7 @@ import {
   describeCommand,
   findConfigOwners,
 } from '../lib/command/describe-command.ts';
+import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';
 import { readUsage } from '../lib/resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
@@ -54,8 +55,10 @@ const table = (rows: string[][]): string => {
     .join('\n');
 };
 
-const formatGenerators = (generators: { namespace: string; description?: string }[]): string =>
-  table(generators.map(({ namespace, description }) => [namespace, description ?? '']));
+const formatGenerators = (generators: { namespace: string; description?: string; default?: boolean }[]): string =>
+  table(
+    generators.map(generator => [generator.namespace, `${generator.description ?? ''}${generator.default ? ' (default command)' : ''}`]),
+  );
 
 const formatConfigRows = (configs: ConfigDescription[], { owner }: { owner: boolean }): string => {
   const header = ['config', 'cli', 'scope', 'type', 'choices', 'default', ...(owner ? ['owner'] : [])];
@@ -147,14 +150,24 @@ const describeCliCommand = async (
   }
 
   const commands: Record<string, CliCommand> = { ...defaultCommands, ...(await envBuilder?.getBlueprintCommands()) };
+  // `jhipster` without a command runs the default one, `.yo-rc.json` can change it (`defaultCommand`).
+  const defaultCommand = resolveDefaultCommand();
   if (!generator) {
     const generators = Object.entries(commands)
       .filter(([_name, command]) => !command.removed)
-      .map(([namespace, command]) => ({ namespace, description: command.desc }));
+      // The static `[Default]` prefix of `app` is replaced by the resolved default command.
+      .map(([namespace, command]) => ({
+        namespace,
+        description: command.desc.replace(/^\[Default\] /, ''),
+        default: namespace === defaultCommand || undefined,
+      }));
     print(options.json ? generators : formatGenerators(generators));
     return;
   }
 
+  if (generator === 'default') {
+    generator = defaultCommand;
+  }
   const command = commands[generator];
   const namespace = command?.blueprint ? `${packageNameToNamespace(command.blueprint)}:${generator}` : generator;
   const meta = env.getGeneratorMeta(namespace.includes(':') ? namespace : `${CLI_NAME}:${namespace}`);
