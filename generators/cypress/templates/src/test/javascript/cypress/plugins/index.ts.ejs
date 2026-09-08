@@ -141,8 +141,10 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
         // Cypress runner scripts.
         '**/__cypress/**': false,
         '**/__/**': false,
-        // Dependencies served individually by the native federation dev server.
+  <%_ if (microfrontend) { _%>
+        // Shared dependencies bundled individually by native federation in dev mode.
         '**/*-dev.js': false,
+  <%_ } _%>
         '**/*.js': true,
       },
       sourceFilter: {
