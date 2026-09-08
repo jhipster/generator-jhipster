@@ -69,7 +69,8 @@ export type Field = ServerField &
     filterableField?: boolean;
     autoGenerateByService?: boolean;
     autoGenerateByRepository?: boolean;
-    mapstructExpression?: boolean;
+    /** Java expression of a mapstruct `@Mapping`, written inside a string literal. */
+    mapstructExpression?: string;
 
     requiresPersistableImplementation?: boolean;
     fieldNameAsDatabaseColumn?: string;

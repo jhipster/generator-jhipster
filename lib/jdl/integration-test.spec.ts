@@ -72,6 +72,7 @@ describe('jdl - integration tests', () => {
 @Decimal(10.1)
 @Escaped("a.b")
 @Quoted("java(\\"a\\" + b)")
+@DoubleEscaped("java(\\\\"a\\\\" + b)")
 @String(foo)
 @Unary
 entity A
@@ -100,6 +101,7 @@ Map {
         "booleanFalse": false,
         "booleanTrue": true,
         "decimal": 10.1,
+        "doubleEscaped": "java(\\\\"a\\\\" + b)",
         "escaped": "a.b",
         "integer": 1,
         "quoted": "java(\\"a\\" + b)",
