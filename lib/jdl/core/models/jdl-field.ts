@@ -87,7 +87,7 @@ export default class JDLField {
       if (value === true) {
         string += `@${key}\n`;
       } else if (typeof value === 'string') {
-        string += `@${key}("${value}")\n`;
+        string += `@${key}("${value.replaceAll('"', '\\"')}")\n`;
       } else {
         string += `@${key}(${value})\n`;
       }
