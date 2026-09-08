@@ -141,6 +141,10 @@ import java.util.Objects;
 class UserServiceIT {
 
     private static final String DEFAULT_LOGIN = "johndoe_service";
+<%_ if (authenticationTypeOauth2) { _%>
+
+    private static final String DEFAULT_USERNAME = "TEST";
+<%_ } _%>
 
     private static final String DEFAULT_EMAIL = "johndoe_service@localhost";
 
@@ -261,11 +265,14 @@ class UserServiceIT {
         persistentTokenRepository.deleteAll();
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
+        // The synced user gets the `sub` or the lower-cased `preferred_username` of the token as login.
+        for (String login : List.of(DEFAULT_LOGIN, DEFAULT_USERNAME.toLowerCase())) {
   <%_ if (reactive) { _%>
-        userRepository.findOneByLogin(DEFAULT_LOGIN).flatMap(userRepository::delete).block();
+            userRepository.findOneByLogin(login).flatMap(userRepository::delete).block();
   <%_ } else { _%>
-        userRepository.findOneByLogin(DEFAULT_LOGIN).ifPresent(userRepository::delete);
+            userRepository.findOneByLogin(login).ifPresent(userRepository::delete);
   <%_ } _%>
+        }
 <%_ } else { _%>
         userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;
 <%_ } _%>
@@ -480,7 +487,7 @@ class UserServiceIT {
     @Transactional
   <%_ } _%>
     void testUserDetailsWithUsername() {
-        userDetails.put("preferred_username", "TEST");
+        userDetails.put("preferred_username", DEFAULT_USERNAME);
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         <%- user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<%- reactive ? '.block()' : '' %>;
