@@ -287,9 +287,7 @@ const command = {
             return false;
           }
           const cacheProvider = answers.cacheProvider ?? config.cacheProvider;
-          return (
-            (cacheProvider !== NO_CACHE_PROVIDER && cacheProvider !== MEMCACHED) || config.applicationType === APPLICATION_TYPE_GATEWAY
-          );
+          return cacheProvider !== NO_CACHE_PROVIDER && cacheProvider !== MEMCACHED;
         },
         type: 'confirm',
         message: 'Do you want to use Hibernate 2nd level cache?',
