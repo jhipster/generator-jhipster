@@ -35,7 +35,7 @@
     "@vitejs/plugin-vue": "6.0.8",
     "@vue/test-utils": "2.5.0",
     "@vue/tsconfig": "0.9.1",
-    "autoprefixer": "10.5.4",
+    "autoprefixer": "10.5.5",
     "axios-mock-adapter": "2.1.0",
     "eslint": "10.10.0",
     "eslint-plugin-prettier": "5.5.6",
