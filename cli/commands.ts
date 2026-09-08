@@ -81,7 +81,7 @@ const defaultCommands = {
     argument: ['[generator]'],
     options: [
       { option: '--imports', desc: 'Include the configuration of the imported (composed) generators' },
-      { option: '--prompts', desc: 'List the prompts in the order they are asked' },
+      { option: '--prompts', desc: 'List the prompts in the order they are asked, including the imported generators' },
       { option: '--config <name>', desc: 'Find the commands declaring the config' },
       { option: '--json', desc: 'Print the description as json' },
     ],

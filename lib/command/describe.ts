@@ -266,9 +266,12 @@ export const formatCommandDescription = (command: CommandDescription, { prompts 
     return lines.join('\n');
   }
   if (prompts) {
+    const imported = configs.some(config => config.owner !== command.namespace);
     lines.push(
       '',
-      'prompts, in the order they are asked:',
+      imported ?
+        'prompts, in the order they are asked by each command (the composition order applies across commands):'
+      : 'prompts, in the order they are asked:',
       ...configs.map(config => `  ${config.name}: ${config.prompt}${config.owner !== command.namespace ? ` (${config.owner})` : ''}`),
     );
     return lines.join('\n');
