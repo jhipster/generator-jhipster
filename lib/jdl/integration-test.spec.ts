@@ -102,7 +102,7 @@ Map {
         "decimal": 10.1,
         "escaped": "a.b",
         "integer": 1,
-        "quoted": "java("a" + b)",
+        "quoted": "java(\\"a\\" + b)",
         "string": "foo",
         "unary": true,
       },

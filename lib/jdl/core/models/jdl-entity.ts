@@ -77,7 +77,7 @@ export default class JDLEntity {
       if (value === true) {
         stringifiedEntity += `@${key}\n`;
       } else if (typeof value === 'string') {
-        stringifiedEntity += `@${key}("${value.replaceAll('"', '\\"')}")\n`;
+        stringifiedEntity += `@${key}("${value.replace(/(?<!\\)"/g, '\\"')}")\n`;
       } else {
         stringifiedEntity += `@${key}(${value})\n`;
       }
