@@ -80,7 +80,7 @@ const defaultCommands = {
     silentLogo: true,
     argument: ['[generator]'],
     options: [
-      { option: '--imports', desc: 'Include the configuration of the imported (composed) generators' },
+      { option: '--no-imports', desc: 'Only the configuration declared by the command itself' },
       { option: '--prompts', desc: 'List the prompts in the order they are asked, including the imported generators' },
       { option: '--config <name>', desc: 'Find the commands declaring the config' },
       { option: '--json', desc: 'Print the description as json' },
@@ -88,7 +88,7 @@ const defaultCommands = {
     help: `
 Examples:
     jhipster describe                          list the generators
-    jhipster describe app --imports            every option and .yo-rc.json key of an application
+    jhipster describe app                      every option and .yo-rc.json key of an application
     jhipster describe spring-boot --prompts    the questions asked by the spring-boot generator
     jhipster describe --config databaseType    which command declares databaseType
 `,

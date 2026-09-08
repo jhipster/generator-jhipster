@@ -20,13 +20,32 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
+import type { GeneratorMeta } from '@yeoman/types';
 import { kebabCase } from 'lodash-es';
 
 import { lookupGeneratorsWithNamespace } from '../utils/lookup.ts';
 
-import { convertConfigToOption } from './converter.ts';
+import { convertConfigToOption, extractArgumentsFromConfigs } from './converter.ts';
 import { getCommandDerivedPropertyMutations } from './mutations.ts';
 import type { JHipsterCommandDefinition, JHipsterConfig } from './types.ts';
+
+export type GeneratorDependency = {
+  /** Namespace as requested, `app`, `jhipster:spring-boot:cache` or `jhipster-foo:app` for a blueprint override. */
+  namespace: string;
+  meta: GeneratorMeta;
+  /** Set when the generator comes from a blueprint. */
+  blueprintNamespace?: string;
+  command?: JHipsterCommandDefinition;
+};
+
+export type ResolveGeneratorDependenciesOptions = {
+  getGeneratorMeta: (namespace: string) => GeneratorMeta | undefined;
+  blueprintNamespaces?: string[];
+  /** Namespace prefix of the generators without one, defaults to `jhipster`. */
+  namespacePrefix?: string;
+  /** Called for a generator that is not registered. */
+  onMissing?: (namespace: string) => void;
+};
 
 export type GeneratorDescription = {
   namespace: string;
@@ -39,6 +58,8 @@ export type ConfigDescription = {
   name: string;
   /** Namespace of the command declaring the config. */
   owner: string;
+  /** Blueprint providing the command, when any. */
+  blueprint?: string;
   description?: string;
   scope?: string;
   cliOption?: string;
@@ -47,7 +68,7 @@ export type ConfigDescription = {
   type?: string;
   choices?: (string | { value: string; name: string })[];
   default?: unknown;
-  /** Prompt message, `(dynamic)` when the prompt is built at runtime. */
+  /** Prompt message, `(dynamic)` when it cannot be computed without a generator. */
   prompt?: string;
   /** Names of the derived properties (`databaseTypeSql`, ...) added to the application context. */
   derivedProperties?: string[];
@@ -58,19 +79,84 @@ export type CommandDescription = {
   namespace: string;
   description?: string;
   usage?: string;
-  imports: string[];
+  /** Generators contributing configs, in the order the cli registers their options. */
+  dependencies: string[];
   arguments: { name: string; description?: string; type?: string; required?: boolean }[];
   configs: ConfigDescription[];
 };
 
 export type ConfigOwners = { name: string; owners: ConfigDescription[] };
 
+type JHipsterModule = { command?: JHipsterCommandDefinition };
+
+/**
+ * Resolve the generators contributing options to a command the way the cli does: the generators, their `import`s
+ * recursively, and the blueprint generators overriding them (a blueprint command with `override` replaces the
+ * original). The result is ordered as the cli registers the options.
+ */
+export const resolveGeneratorDependencies = async (
+  generatorNames: string[],
+  { getGeneratorMeta, blueprintNamespaces = [], namespacePrefix = 'jhipster', onMissing }: ResolveGeneratorDependenciesOptions,
+): Promise<GeneratorDependency[]> => {
+  const dependencies: GeneratorDependency[] = [];
+  const isRegistered = (namespace: string) => dependencies.some(dependency => dependency.namespace === namespace);
+
+  const register = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
+    const meta = getGeneratorMeta(namespace.includes(':') ? namespace : `${namespacePrefix}:${namespace}`);
+    if (!meta) {
+      if (!blueprintNamespace) onMissing?.(namespace);
+      return undefined;
+    }
+    const module = (await meta.importModule?.()) as JHipsterModule | undefined;
+    dependencies.push({ namespace, meta, blueprintNamespace, command: module?.command });
+    return module;
+  };
+
+  const lookup = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
+    const lookupGeneratorAndImports = async (options: { namespace: string; blueprintNamespace?: string }) => {
+      const module = await register(options);
+      for (const imported of module?.command?.import ?? []) {
+        await lookup({ namespace: imported, blueprintNamespace: options.blueprintNamespace });
+      }
+      return module?.command?.override;
+    };
+
+    let overridden = false;
+    if (!namespace.includes(':')) {
+      for (const nextBlueprint of blueprintNamespaces) {
+        const blueprintSubGenerator = `${nextBlueprint}:${namespace}`;
+        if (
+          !isRegistered(blueprintSubGenerator) &&
+          (await lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint }))
+        ) {
+          overridden = true;
+        }
+      }
+    }
+    if (!overridden && !isRegistered(namespace)) {
+      await lookupGeneratorAndImports({ namespace, blueprintNamespace });
+    }
+  };
+
+  for (const generatorName of generatorNames) {
+    await lookup({ namespace: generatorName });
+  }
+  return dependencies;
+};
+
+/**
+ * Read the USAGE file next to a generator file.
+ */
+export const readUsage = (generatorFile: string): string | undefined => {
+  const usagePath = join(dirname(generatorFile), 'USAGE');
+  return existsSync(usagePath) ? readFileSync(usagePath, 'utf8').trim() : undefined;
+};
+
 let generatorsCache: Promise<GeneratorDescription[]> | undefined;
 
 const readUsageDescription = (generatorFile: string): string | undefined => {
-  const usagePath = join(dirname(generatorFile), 'USAGE');
-  if (!existsSync(usagePath)) return undefined;
-  const description = /Description:\s*\n([^\n]+)/.exec(readFileSync(usagePath, 'utf8'));
+  const usage = readUsage(generatorFile);
+  const description = usage ? /Description:\s*\n([^\n]+)/.exec(usage) : undefined;
   return description?.[1].trim();
 };
 
@@ -94,17 +180,6 @@ export const describeGenerators = async ({ descriptions = {} }: { descriptions?:
   }));
 };
 
-const normalizeNamespace = (namespace: string) => namespace.replace(/^jhipster:/, '');
-
-export const findGenerator = async (namespace: string): Promise<GeneratorDescription> => {
-  const name = normalizeNamespace(namespace);
-  const generator = (await describeGenerators()).find(entry => entry.namespace === name);
-  if (!generator) {
-    throw new Error(`Generator ${name} not found`);
-  }
-  return generator;
-};
-
 const describeCliOption = (name: string, config: JHipsterConfig): string | undefined => {
   const option = convertConfigToOption(name, config);
   if (!option) return undefined;
@@ -115,13 +190,10 @@ const describeCliOption = (name: string, config: JHipsterConfig): string | undef
 /**
  * Prompt factories receive the generator; a stub with empty configurations recovers the message of most of them.
  */
-const promptGeneratorStub = () =>
-  new Proxy(
-    { jhipsterConfig: {}, jhipsterConfigWithDefaults: {}, options: {} },
-    {
-      get: (target, property) => (property in target ? target[property as string] : undefined),
-    },
-  );
+const promptGeneratorStub = () => {
+  const stub: Record<string, unknown> = { jhipsterConfig: {}, jhipsterConfigWithDefaults: {}, options: {} };
+  return new Proxy(stub, { get: (target, property) => (typeof property === 'string' ? target[property] : undefined) });
+};
 
 const describePrompt = (config: JHipsterConfig): string | undefined => {
   if (!config.prompt) return undefined;
@@ -140,11 +212,12 @@ const describeDerivedProperties = (name: string, config: JHipsterConfig): string
   return derived.length > 0 ? derived : undefined;
 };
 
-export const describeConfig = (name: string, config: JHipsterConfig, owner: string): ConfigDescription => {
+export const describeConfig = (name: string, config: JHipsterConfig, owner: string, blueprint?: string): ConfigDescription => {
   const option = convertConfigToOption(name, config);
   return {
     name,
     owner,
+    blueprint,
     description: config.description ?? config.cli?.description,
     scope: config.scope,
     cliOption: describeCliOption(name, config),
@@ -160,42 +233,42 @@ export const describeConfig = (name: string, config: JHipsterConfig, owner: stri
 };
 
 /**
- * Describe a command: arguments, configs and, with `includeImports`, the configs of the imported commands.
- * A config declared by several commands is reported once, the first declaration wins like the runtime merge.
+ * Describe a command from its resolved dependencies: the arguments of the command itself and the configs of every
+ * dependency. Like the runtime configs merge, a config declared by several commands keeps the last declaration.
  */
-export const describeCommand = async (
-  namespace: string,
-  { includeImports = false }: { includeImports?: boolean } = {},
-): Promise<CommandDescription> => {
-  const generator = await findGenerator(namespace);
-  const configs: ConfigDescription[] = [];
-  const visited = new Set<string>();
-  const collect = async (entry: GeneratorDescription) => {
-    if (visited.has(entry.namespace)) return;
-    visited.add(entry.namespace);
-    for (const [name, config] of Object.entries(entry.command?.configs ?? {})) {
-      if (!configs.some(existing => existing.name === name)) {
-        configs.push(describeConfig(name, config, entry.namespace));
-      }
+export const describeCommand = ({
+  namespace,
+  description,
+  usage,
+  dependencies,
+}: {
+  namespace: string;
+  description?: string;
+  usage?: string;
+  dependencies: GeneratorDependency[];
+}): CommandDescription => {
+  const rootCommand = dependencies.find(dependency => dependency.namespace === namespace)?.command;
+  const configs = new Map<string, ConfigDescription>();
+  for (const dependency of dependencies) {
+    for (const [name, config] of Object.entries(dependency.command?.configs ?? {})) {
+      // The owning command asks the prompt, keep the position of the last declaration.
+      configs.delete(name);
+      configs.set(name, describeConfig(name, config, dependency.namespace, dependency.blueprintNamespace));
     }
-    if (includeImports) {
-      for (const imported of entry.command?.import ?? []) {
-        await collect(await findGenerator(imported));
-      }
-    }
-  };
-  await collect(generator);
+  }
+  const commandArguments = rootCommand?.arguments ?? extractArgumentsFromConfigs(rootCommand?.configs);
   return {
-    namespace: generator.namespace,
-    description: generator.description,
-    imports: [...(generator.command?.import ?? [])],
-    arguments: Object.entries(generator.command?.arguments ?? {}).map(([name, argument]) => ({
+    namespace,
+    description,
+    usage,
+    dependencies: dependencies.map(dependency => dependency.namespace),
+    arguments: Object.entries(commandArguments).map(([name, argument]) => ({
       name,
       description: argument.description,
       type: argument.type?.name,
       required: argument.required,
     })),
-    configs,
+    configs: [...configs.values()],
   };
 };
 
@@ -229,7 +302,7 @@ const table = (rows: string[][]): string => {
     .join('\n');
 };
 
-export const formatGenerators = (generators: GeneratorDescription[]): string =>
+export const formatGenerators = (generators: { namespace: string; description?: string }[]): string =>
   table(generators.map(({ namespace, description }) => [namespace, description ?? '']));
 
 const formatConfigRows = (configs: ConfigDescription[], { owner }: { owner: boolean }): string => {
@@ -248,8 +321,9 @@ const formatConfigRows = (configs: ConfigDescription[], { owner }: { owner: bool
 
 export const formatCommandDescription = (command: CommandDescription, { prompts = false }: { prompts?: boolean } = {}): string => {
   const lines = [`${command.namespace}${command.description ? `: ${command.description}` : ''}`];
-  if (command.imports.length > 0) {
-    lines.push(`imports: ${command.imports.join(', ')}`);
+  const others = command.dependencies.filter(dependency => dependency !== command.namespace);
+  if (others.length > 0) {
+    lines.push(`with the options of: ${others.join(', ')}`);
   }
   if (command.arguments.length > 0) {
     lines.push(
@@ -265,18 +339,17 @@ export const formatCommandDescription = (command: CommandDescription, { prompts 
     lines.push('', prompts ? 'no prompts' : 'no configs');
     return lines.join('\n');
   }
+  const owner = configs.some(config => config.owner !== command.namespace);
   if (prompts) {
-    const imported = configs.some(config => config.owner !== command.namespace);
     lines.push(
       '',
-      imported ?
+      owner ?
         'prompts, in the order they are asked by each command (the composition order applies across commands):'
       : 'prompts, in the order they are asked:',
       ...configs.map(config => `  ${config.name}: ${config.prompt}${config.owner !== command.namespace ? ` (${config.owner})` : ''}`),
     );
     return lines.join('\n');
   }
-  const owner = configs.some(config => config.owner !== command.namespace);
   lines.push('', formatConfigRows(configs, { owner }));
   const derived = configs.filter(config => config.derivedProperties);
   if (derived.length > 0) {

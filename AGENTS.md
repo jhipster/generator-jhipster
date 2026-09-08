@@ -29,7 +29,7 @@ Two options (see `DEVELOPMENT.md`):
 - Linked build: `npm run build && npm link`; rebuild after changes.
   On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link generator-jhipster` so the dev version is picked up. `jhipster --install-path` shows which copy is active.
 
-`jhipster describe` prints the generators; `jhipster describe <generator> [--imports] [--prompts] [--json]` the arguments, options, `.yo-rc.json` keys, choices, defaults, derived properties and prompts of a command (logic in `lib/command/describe.ts`); `jhipster describe --config <name>` finds the command declaring a config. Use it instead of reading `command.ts` files when you need the option catalog or the prompt order.
+`jhipster describe` prints the generators; `jhipster describe <generator> [--no-imports] [--prompts] [--json]` the arguments, options, `.yo-rc.json` keys, choices, defaults, derived properties and prompts of a command (logic in `lib/command/describe.ts`); `jhipster describe --config <name>` finds the command declaring a config. Use it instead of reading `command.ts` files when you need the option catalog or the prompt order.
 
 ## Big-picture architecture
 
