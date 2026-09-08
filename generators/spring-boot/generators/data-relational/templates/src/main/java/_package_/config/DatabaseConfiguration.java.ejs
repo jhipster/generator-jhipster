@@ -18,6 +18,7 @@
 -%>
 
 <%_ const uuidConversionNeeded = reactive && !prodDatabaseTypePostgresql; _%>
+<%_ const customizeInsertRenderContext = reactive && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb || devDatabaseTypeH2Any); _%>
 package <%- packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
@@ -51,14 +52,17 @@ import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  <%_ if (customizeInsertRenderContext) { _%>
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
   <%_ } _%>
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  <%_ if (customizeInsertRenderContext) { _%>
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
   <%_ } _%>
 import org.springframework.data.r2dbc.dialect.DialectResolver;
+  <%_ if (devDatabaseTypeH2Any) { _%>
+import org.springframework.data.r2dbc.dialect.H2Dialect;
+  <%_ } _%>
   <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
 import org.springframework.data.r2dbc.dialect.MySqlDialect;
   <%_ } _%>
@@ -66,12 +70,12 @@ import org.springframework.data.r2dbc.dialect.R2dbcDialect;
 import org.springframework.data.r2dbc.mapping.R2dbcMappingContext;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.data.relational.RelationalManagedTypes;
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  <%_ if (customizeInsertRenderContext) { _%>
 import org.springframework.data.relational.core.dialect.InsertRenderContext;
   <%_ } _%>
 import org.springframework.data.relational.core.mapping.DefaultNamingStrategy;
 import org.springframework.data.relational.core.mapping.NamingStrategy;
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  <%_ if (customizeInsertRenderContext) { _%>
 import org.springframework.r2dbc.core.DatabaseClient;
   <%_ } _%>
 <%_ } else { _%>
@@ -217,8 +221,9 @@ public class DatabaseConfiguration {
 
     @Bean
     public R2dbcDialect dialect(ConnectionFactory connectionFactory) {
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  <%_ if (customizeInsertRenderContext) { _%>
         R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
+    <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
         if (dialect instanceof MySqlDialect) {
             // Spring Data renders an insert without values as `VALUES (DEFAULT)`, which MySQL and MariaDB reject for
             // tables with more than one column. Use `() VALUES ()` so an entity with only null fields can be inserted.
@@ -229,16 +234,29 @@ public class DatabaseConfiguration {
                 }
             };
         }
+    <%_ } _%>
+    <%_ if (devDatabaseTypeH2Any) { _%>
+        if (dialect instanceof H2Dialect) {
+            // Spring Data renders an insert without values as `VALUES (DEFAULT)`, which H2 rejects for tables with
+            // more than one column. Use `DEFAULT VALUES` so an entity with only null fields can be inserted.
+            return new H2Dialect() {
+                @Override
+                public InsertRenderContext getInsertRenderContext() {
+                    return () -> " DEFAULT VALUES";
+                }
+            };
+        }
+    <%_ } _%>
         return dialect;
   <%_ } else { _%>
         return DialectResolver.getDialect(connectionFactory);
   <%_ } _%>
     }
-  <%_ if (prodDatabaseTypeMysql || prodDatabaseTypeMariadb) { _%>
+  <%_ if (customizeInsertRenderContext) { _%>
 
     /**
      * Spring Boot resolves the dialect itself when creating the {@link R2dbcEntityTemplate}, create it with the
-     * customized dialect so it renders inserts without values as `() VALUES ()`.
+     * customized dialect so it renders inserts without values in a form the database accepts.
      */
     @Bean
     public R2dbcEntityTemplate r2dbcEntityTemplate(DatabaseClient databaseClient, R2dbcDialect dialect, R2dbcConverter converter) {
