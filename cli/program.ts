@@ -254,7 +254,18 @@ export const buildCommands = ({
   }
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
-    const { desc, blueprint, argument, options: commandOptions, alias, help: commandHelp, cliOnly, removed, useOptions = {} } = opts;
+    const {
+      desc,
+      blueprint,
+      argument,
+      options: commandOptions,
+      alias,
+      help: commandHelp,
+      cliOnly,
+      removed,
+      silentLogo,
+      useOptions = {},
+    } = opts;
     program
       .command(cmdName, '', { isDefault: cmdName === defaultCommand, hidden: Boolean(removed) })
       .description(desc + (blueprint ? chalk.yellow(` (blueprint: ${blueprint})`) : ''))
@@ -272,7 +283,7 @@ export const buildCommands = ({
           return;
         }
 
-        if (!silent) {
+        if (!silent && !silentLogo) {
           await printLogo();
           await printBlueprintLogo();
         }

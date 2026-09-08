@@ -74,6 +74,25 @@ const defaultCommands = {
   'docker-compose': {
     desc: 'Create all required Docker deployment configuration for the selected applications',
   },
+  describe: {
+    desc: 'Describe the generators, the arguments, options and configuration of a command, or find the command declaring a config',
+    cliOnly: true,
+    silentLogo: true,
+    argument: ['[generator]'],
+    options: [
+      { option: '--imports', desc: 'Include the configuration of the imported (composed) generators' },
+      { option: '--prompts', desc: 'List the prompts in the order they are asked' },
+      { option: '--config <name>', desc: 'Find the commands declaring the config' },
+      { option: '--json', desc: 'Print the description as json' },
+    ],
+    help: `
+Examples:
+    jhipster describe                          list the generators
+    jhipster describe app --imports            every option and .yo-rc.json key of an application
+    jhipster describe spring-boot --prompts    the questions asked by the spring-boot generator
+    jhipster describe --config databaseType    which command declares databaseType
+`,
+  },
   download: {
     desc: 'Download jdl file from template repository',
     cliOnly: true,
