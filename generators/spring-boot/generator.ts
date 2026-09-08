@@ -42,7 +42,6 @@ import { mutateFilterableField, mutateFilterableRelationship } from './applicati
 import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
-import { askForOptionalItems } from './prompts.ts';
 import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
 import type {
   Application as SpringBootApplication,
@@ -90,16 +89,6 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       await this.dependsOnJHipster('jhipster:java-simple-application:build-tool');
       await this.dependsOnJHipster('jhipster:java:server');
     }
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      askForOptionalItems,
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {

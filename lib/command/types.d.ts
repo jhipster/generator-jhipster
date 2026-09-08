@@ -134,7 +134,8 @@ export type PromptSpec = {
   readonly message: string | ((arg: any) => string);
   readonly when?: boolean | ((arg: any) => boolean);
   /** Overrides the config `choices`, a function receives the current answers. */
-  readonly choices?: JHipsterChoices | ((arg: any) => JHipsterChoices | readonly (string | JHipsterNamedChoice)[] | undefined);
+  readonly choices?:
+    JHipsterChoices | ((arg: any) => JHipsterChoices | readonly (string | (JHipsterNamedChoice & { checked?: boolean }))[] | undefined);
   readonly default?: any;
   readonly filter?: any;
   readonly transformer?: any;

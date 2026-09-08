@@ -293,6 +293,60 @@ const command = {
         message: 'Do you want to use Hibernate 2nd level cache?',
       }),
     },
+    serverSideOptions: {
+      description: 'Other server side technologies',
+      cli: {
+        type: Array,
+        hide: true,
+      },
+      prompt: ({ jhipsterConfig, jhipsterConfigWithDefaults: config }) => {
+        const selectedChoices = (['websocket', 'searchEngine', 'messageBroker', 'enableSwaggerCodegen'] as const)
+          .filter(property => jhipsterConfig[property] !== undefined)
+          .map(property => `${property}:${jhipsterConfig[property]}`);
+        return {
+          type: 'checkbox',
+          message: 'Which other technologies would you like to use?',
+          choices: answers => {
+            const reactive = answers.reactive ?? config.reactive;
+            const databaseType = answers.databaseType ?? config.databaseType;
+            const choices: { value: string; name: string; checked?: boolean }[] = [];
+            if (databaseType === SQL || databaseType === MONGODB || databaseType === NEO4J) {
+              choices.push({ value: 'searchEngine:elasticsearch', name: 'Elasticsearch as search engine' });
+            }
+            if (databaseType === COUCHBASE) {
+              choices.push({ value: 'searchEngine:couchbase', name: 'Couchbase FTS as search engine' });
+            }
+            if (
+              !reactive &&
+              (config.applicationType === APPLICATION_TYPE_MONOLITH || config.applicationType === APPLICATION_TYPE_GATEWAY)
+            ) {
+              choices.push({ value: 'websocket:spring-websocket', name: 'WebSockets using Spring Websocket' });
+            }
+            choices.push(
+              { value: 'messageBroker:kafka', name: 'Apache Kafka as asynchronous messages broker' },
+              { value: 'messageBroker:pulsar', name: 'Apache Pulsar as asynchronous messages broker' },
+              { value: 'enableSwaggerCodegen:true', name: 'API first development using OpenAPI-generator' },
+            );
+            return choices.map(choice => ({ ...choice, checked: selectedChoices.includes(choice.value) }));
+          },
+          default: selectedChoices,
+        };
+      },
+      configure: gen => {
+        const serverSideOptions = gen.serverSideOptions as string[] | undefined;
+        if (serverSideOptions) {
+          Object.assign(
+            gen.jhipsterConfig,
+            Object.fromEntries(
+              serverSideOptions
+                .map(it => it.split(':'))
+                .map(([key, value]) => [key, ['true', 'false'].includes(value) ? value === 'true' : value]),
+            ),
+          );
+        }
+      },
+      scope: 'generator',
+    },
     defaultPackaging: {
       description: 'Default packaging for the application',
       cli: {
