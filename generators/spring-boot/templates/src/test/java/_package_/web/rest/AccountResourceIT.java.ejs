@@ -140,7 +140,7 @@ class AccountResourceIT {
     private MockMvc restAccountMockMvc;
 <%_ } _%>
 
-<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+<%_ if (!databaseTypeCassandra) { _%>
     private Long numberOfUsers;
 
     @BeforeEach
@@ -156,18 +156,14 @@ class AccountResourceIT {
     }
 
 <%_ } _%>
+<%_ if (!databaseTypeCassandra) { _%>
     @AfterEach
-    void cleanupAndCheck() {
-<%_ if (requiresDeleteAllUsers) { _%>
-  <%_ if (databaseTypeSql && reactive) { _%>
-        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-  <%_ } _%>
-        userRepository.deleteAll()<%- reactorBlock %>;
-<%_ } else if (!databaseTypeCassandra) { _%>
+    void checkUsers() {
         assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
         numberOfUsers = null;
-<%_ } _%>
     }
+
+<%_ } _%>
 
     @Test
     @WithUnauthenticatedMockUser

@@ -198,7 +198,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     databaseMigrationLoader: boolean;
 
     communicationSpringWebsocket: boolean;
-    requiresDeleteAllUsers: boolean;
 
     /** @deprecated Spring Boot 3 is no longer supported, always true. */
     springBoot4: boolean;
