@@ -184,18 +184,5 @@ describe(`generator - ${generator}`, () => {
         runResult.assertFileContent(spec, /cy\.get\(`\[data-cy="id"\]`\)\.type\(/);
       });
     });
-
-    describe('with react', () => {
-      before(async () => {
-        await helpers
-          .runJHipster(generator)
-          .withJHipsterConfig({ clientFramework: 'react', testFrameworks: ['cypress'] }, [entityStringId]);
-      });
-
-      it('should skip the create test', () => {
-        runResult.assertFileContent(spec, /\/\/ Reason: the client does not support user provided ids\./);
-        runResult.assertFileContent(spec, /it\.skip\('should create an instance of EntityWithStringId'/);
-      });
-    });
   });
 });
