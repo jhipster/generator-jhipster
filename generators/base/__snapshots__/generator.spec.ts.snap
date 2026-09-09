@@ -41,6 +41,7 @@ Commands:
   ci-cd:jenkins                   Create a Jenkins CI/CD pipeline
   ci-cd:travis                    Create a Travis CI/CD pipeline
   docker-compose                  Create all required Docker deployment configuration for the selected applications
+  describe [options] [generator]  Describe the generators, the arguments, options and configuration of a command, or find the command declaring a config
   download <jdlFiles...>          Download jdl file from template repository
   ci-utils [options]              Download jdl file from template repository
   entity                          Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components

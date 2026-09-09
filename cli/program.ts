@@ -29,6 +29,8 @@ import baseCommand from '../generators/base/command.ts';
 import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
+import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';
+import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
@@ -77,63 +79,6 @@ type JHipsterModule = {
 export const printJHipsterLogo = () => {
   // eslint-disable-next-line no-console
   console.log(`\n${logo}`);
-};
-
-const buildAllDependencies = async (
-  generatorNames: string[],
-  { env, blueprintNamespaces = [] }: { env: Environment; blueprintNamespaces?: string[] },
-): Promise<Record<string, { meta: GeneratorMeta; blueprintNamespace?: string }>> => {
-  const allDependencies: Record<string, { meta: GeneratorMeta; blueprintNamespace?: string }> = {};
-
-  const registerDependency = async ({
-    namespace,
-    blueprintNamespace,
-  }: {
-    namespace: string;
-    blueprintNamespace?: string;
-  }): Promise<JHipsterModule> => {
-    const meta = env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);
-    if (meta) {
-      allDependencies[namespace] = { meta, blueprintNamespace };
-    } else if (!blueprintNamespace) {
-      logger.warn(`Generator ${namespace} not found.`);
-    }
-    return (await meta?.importModule?.()) as JHipsterModule;
-  };
-
-  const lookupDependencyOptions = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
-    const lookupGeneratorAndImports = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
-      const module = await registerDependency({ namespace, blueprintNamespace });
-      if (module?.command?.import) {
-        for (const generator of module?.command?.import ?? []) {
-          await lookupDependencyOptions({ namespace: generator, blueprintNamespace });
-        }
-      }
-      return module?.command?.override;
-    };
-
-    let overridden = false;
-    if (!namespace.includes(':')) {
-      for (const nextBlueprint of blueprintNamespaces) {
-        const blueprintSubGenerator = `${nextBlueprint}:${namespace}`;
-        if (
-          !allDependencies[blueprintSubGenerator] &&
-          (await lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint }))
-        ) {
-          overridden = true;
-        }
-      }
-    }
-
-    if (!overridden && !allDependencies[namespace]) {
-      await lookupGeneratorAndImports({ namespace, blueprintNamespace });
-    }
-  };
-
-  for (const generatorName of generatorNames) {
-    await lookupDependencyOptions({ namespace: generatorName });
-  }
-  return allDependencies;
 };
 
 const addCommandGeneratorOptions = async (
@@ -243,18 +188,21 @@ export const buildCommands = ({
   createEnvBuilder,
   silent,
 }: BuildCommands) => {
-  if (!defaultCommand) {
-    try {
-      const yoRcFile = fs.readFileSync('.yo-rc.json', 'utf8');
-      defaultCommand = JSON.parse(yoRcFile)?.['generator-jhipster']?.defaultCommand;
-    } catch {
-      // No .yo-rc.json file or no defaultCommand field, we can ignore it
-    }
-    defaultCommand ??= 'app';
-  }
+  defaultCommand ??= resolveDefaultCommand();
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
-    const { desc, blueprint, argument, options: commandOptions, alias, help: commandHelp, cliOnly, removed, useOptions = {} } = opts;
+    const {
+      desc,
+      blueprint,
+      argument,
+      options: commandOptions,
+      alias,
+      help: commandHelp,
+      cliOnly,
+      removed,
+      silentLogo,
+      useOptions = {},
+    } = opts;
     program
       .command(cmdName, '', { isDefault: cmdName === defaultCommand, hidden: Boolean(removed) })
       .description(desc + (blueprint ? chalk.yellow(` (blueprint: ${blueprint})`) : ''))
@@ -272,7 +220,7 @@ export const buildCommands = ({
           return;
         }
 
-        if (!silent) {
+        if (!silent && !silentLogo) {
           await printLogo();
           await printBlueprintLogo();
         }
@@ -315,11 +263,12 @@ export const buildCommands = ({
           if (cmdName === GENERATOR_JDL) {
             bootstrapGen.push(entrypointGenerator ?? GENERATOR_APP);
           }
-          const allDependencies = await buildAllDependencies(bootstrapGen, {
-            env,
+          const allDependencies = await resolveGeneratorDependencies(bootstrapGen, {
+            getGeneratorMeta: namespace => env.getGeneratorMeta(namespace),
             blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
+            onMissing: namespace => logger.warn(`Generator ${namespace} not found.`),
           });
-          for (const [_metaName, { meta: generatorMeta, blueprintNamespace }] of Object.entries(allDependencies)) {
+          for (const { meta: generatorMeta, blueprintNamespace } of allDependencies) {
             if (blueprintNamespace) {
               const blueprintOptionDescription = chalk.yellow(` (blueprint option: ${blueprintNamespace.replace(/^jhipster-/, '')})`);
               await addCommandGeneratorOptions(command, generatorMeta, {

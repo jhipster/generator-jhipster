@@ -16,23 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type CliCommandOptions = {
-  desc: string;
-  blueprint?: string;
-  option: string;
-  default?: any;
-};
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import process from 'node:process';
 
-export type CliCommand = {
-  desc: string;
-  blueprint?: string;
-  argument?: string[];
-  options?: CliCommandOptions[];
-  alias?: string;
-  help?: string;
-  cliOnly?: boolean;
-  removed?: string;
-  /** Do not print the logo, e.g. for commands with machine-readable output. */
-  silentLogo?: boolean;
-  useOptions?: Record<string, any>;
+export const DEFAULT_COMMAND = 'app';
+
+/**
+ * The command `jhipster` runs without one: the `defaultCommand` of the `.yo-rc.json` in the directory, `app` otherwise.
+ */
+export const resolveDefaultCommand = ({ cwd = process.cwd() }: { cwd?: string } = {}): string => {
+  try {
+    const yoRc = JSON.parse(readFileSync(join(cwd, '.yo-rc.json'), 'utf8'));
+    return yoRc?.['generator-jhipster']?.defaultCommand ?? DEFAULT_COMMAND;
+  } catch {
+    // No .yo-rc.json file or invalid content; the default command applies.
+    return DEFAULT_COMMAND;
+  }
 };

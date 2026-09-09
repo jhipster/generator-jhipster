@@ -29,6 +29,8 @@ Two options (see `DEVELOPMENT.md`):
 - Linked build: `npm run build && npm link`; rebuild after changes.
   On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link generator-jhipster` so the dev version is picked up. `jhipster --install-path` shows which copy is active.
 
+`jhipster describe` prints the generators; `jhipster describe <generator> [--no-imports] [--prompts] [--json]` the arguments, options, `.yo-rc.json` keys, choices, defaults, derived properties and prompts of a command (model in `lib/command/describe-command.ts`, generator resolution in `lib/resolver/`); `jhipster describe --config <name>` finds the command declaring a config. Use it instead of reading `command.ts` files when you need the option catalog or the prompt order.
+
 ## Big-picture architecture
 
 - CLI entry: `cli/jhipster.cjs` → `cli/cli.ts` (env checks) → `cli/program.ts` (commander parsing, generator/blueprint lookup) → spawns a Yeoman Environment which runs the selected generator.
