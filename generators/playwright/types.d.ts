@@ -1,0 +1,24 @@
+import type { CommandTypeMap } from '../../lib/command/index.ts';
+import type {
+  Application as JavascriptApplication,
+  Config as JavascriptConfig,
+  Entity as JavascriptEntity,
+  Options as JavascriptOptions,
+} from '../client/types.ts';
+
+export type { Features, Field, Relationship, Source } from '../client/types.ts';
+import type command from './command.ts';
+
+type Command = CommandTypeMap<typeof command>;
+
+export type Config = JavascriptConfig & Command['Config'];
+
+export type Options = JavascriptOptions & Command['Options'];
+
+export type Entity = JavascriptEntity;
+
+export type Application<E extends Entity = Entity> = JavascriptApplication<E> &
+  Command['Application'] & {
+    playwrightDir: string;
+    playwrightTemporaryDir: string;
+  };
