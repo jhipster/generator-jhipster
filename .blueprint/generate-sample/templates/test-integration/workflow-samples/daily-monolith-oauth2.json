@@ -1,0 +1,20 @@
+{
+  "include": [
+    {
+      "name": "ngx-oauth2",
+      "entity": "sqllight"
+    },
+    {
+      "name": "react-oauth2",
+      "entity": "sqllight"
+    },
+    {
+      "name": "gradle-ngx-oauth2",
+      "entity": "sqllight"
+    },
+    {
+      "name": "gradle-react-oauth2",
+      "entity": "sqllight"
+    }
+  ]
+}

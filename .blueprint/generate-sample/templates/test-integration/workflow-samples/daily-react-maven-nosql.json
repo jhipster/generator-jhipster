@@ -1,0 +1,12 @@
+{
+  "include": [
+    {
+      "name": "react-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "react-cassandra",
+      "entity": "cassandra"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "include": [
+    {
+      "name": "gradle-ngx-mysql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "gradle-ngx-sass-noi18n",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-ngx-websocket",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-ngx-hazelcast-cucumber",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-ngx-mariadb-kafka-nol2",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-ngx-session",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-ngx-infinispan",
+      "entity": "sql"
+    }
+  ]
+}

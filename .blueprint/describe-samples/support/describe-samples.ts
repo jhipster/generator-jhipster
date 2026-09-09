@@ -27,7 +27,7 @@ import {
   getGithubSamplesGroup,
 } from '../../../lib/ci/index.ts';
 import { getPackageRoot } from '../../../lib/index.ts';
-import { getWorkflowSamples, isDaily } from '../../generate-sample/support/get-workflow-samples.ts';
+import { getWorkflowNames, getWorkflowSamples, isDaily } from '../../generate-sample/support/get-workflow-samples.ts';
 import { type ResolvedSample, resolveSample } from '../../generate-sample/support/resolve-sample.ts';
 import { workflowChoices } from '../../github-build-matrix/command.ts';
 import { devServerMatrix } from '../../github-build-matrix/samples/dev-server.ts';
@@ -130,10 +130,15 @@ const describeResolved = (
   };
 };
 
+/** Java version the jhipster-daily-builds workflows pass to `jhipster/actions/setup-runner`. */
+const DAILY_BUILDS_JAVA_VERSION = '25';
+
 /** Samples of the json workflows (`workflow-samples/<workflow>.json`), with the matrix values the workflow computes. */
 const describeWorkflowSamples = (workflow: string): SampleDescription[] => {
   const samples: WorkflowSample[] = Object.values(getWorkflowSamples([workflow])[workflow]);
-  const group = buildWorkflowMatrix(samples);
+  const group = buildWorkflowMatrix(
+    isDaily(workflow) ? samples.map(sample => ({ ...sample, 'java-version': DAILY_BUILDS_JAVA_VERSION })) : samples,
+  );
   const matrix = convertToGitHubMatrix(group, { randomEnvironment: !isDaily(workflow) });
   return samples.map(sample => {
     const jobName = sample['job-name'] ?? sample.name;
@@ -171,9 +176,11 @@ const describeGroupSamples = async (workflow: string, samplesFolder: string): Pr
   });
 };
 
-export const WORKFLOWS = [...workflowChoices.filter(workflow => workflow !== 'generators'), 'daily-ms-oauth2', 'daily-neo4j'];
+/** Workflows defined by a `workflow-samples/<workflow>.json` file. */
+const JSON_WORKFLOWS = new Set(getWorkflowNames());
 
-const JSON_WORKFLOWS = new Set(['angular', 'react', 'vue', 'daily-ms-oauth2', 'daily-neo4j']);
+/** Every described workflow: the group workflows of this repository, then the `daily-` workflows of jhipster-daily-builds. */
+export const WORKFLOWS = [...workflowChoices.filter(workflow => workflow !== 'generators'), ...getWorkflowNames().filter(isDaily)];
 
 /**
  * Describe the CI samples: what each job generates and the environment it runs on.

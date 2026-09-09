@@ -1,0 +1,12 @@
+{
+  "include": [
+    {
+      "name": "gradle-react-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "gradle-react-cassandra",
+      "entity": "cassandra"
+    }
+  ]
+}

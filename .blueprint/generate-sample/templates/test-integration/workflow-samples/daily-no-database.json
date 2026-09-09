@@ -1,0 +1,36 @@
+{
+  "include": [
+    {
+      "name": "ngx-nodatabase-jwt",
+      "entity": "none"
+    },
+    {
+      "name": "ngx-nodatabase-oauth2",
+      "entity": "none"
+    },
+    {
+      "name": "ngx-nodatabase-session",
+      "entity": "none"
+    },
+    {
+      "name": "ngx-nodatabase-gateway-eureka-oauth2",
+      "entity": "none"
+    },
+    {
+      "name": "react-nodatabase-jwt-gradle",
+      "entity": "none"
+    },
+    {
+      "name": "react-nodatabase-oauth2-gradle",
+      "entity": "none"
+    },
+    {
+      "name": "react-nodatabase-session-gradle",
+      "entity": "none"
+    },
+    {
+      "name": "gradle-ngx-nodatabase-gateway-consul-jwt",
+      "entity": "none"
+    }
+  ]
+}

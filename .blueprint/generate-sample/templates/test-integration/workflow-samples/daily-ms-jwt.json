@@ -1,0 +1,36 @@
+{
+  "include": [
+    {
+      "name": "ms-ngx-gateway-eureka",
+      "entity": "sqllight"
+    },
+    {
+      "name": "ms-micro-eureka",
+      "entity": "micro"
+    },
+    {
+      "name": "ms-ngx-gateway-consul",
+      "entity": "sqllight"
+    },
+    {
+      "name": "ms-micro-consul",
+      "entity": "micro"
+    },
+    {
+      "name": "gradle-ms-ngx-gateway-eureka",
+      "entity": "sqllight"
+    },
+    {
+      "name": "gradle-ms-micro-eureka",
+      "entity": "micro"
+    },
+    {
+      "name": "gradle-ms-ngx-gateway-consul",
+      "entity": "sqllight"
+    },
+    {
+      "name": "gradle-ms-micro-consul",
+      "entity": "micro"
+    }
+  ]
+}

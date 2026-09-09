@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { getWorkflowNames, isDaily } from '../generate-sample/support/get-workflow-samples.ts';
 import { workflowChoices } from '../github-build-matrix/command.ts';
 
 export default {
@@ -33,7 +34,7 @@ export default {
       cli: {
         type: String,
       },
-      choices: [...workflowChoices, 'daily-ms-oauth2', 'daily-neo4j'],
+      choices: [...workflowChoices, ...getWorkflowNames().filter(isDaily)],
       scope: 'generator',
     },
     json: {

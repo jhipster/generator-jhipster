@@ -1,0 +1,40 @@
+{
+  "include": [
+    {
+      "name": "vue-maven-psql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-maven-mysql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-maven-noi18n",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-maven-fulli18n-fr",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-maven-oauth2",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-maven-session",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-maven-es",
+      "entity": "sql"
+    },
+    {
+      "name": "vue-maven-websocket",
+      "entity": "sql"
+    },
+    {
+      "name": "vue-maven-theme",
+      "entity": "sql"
+    }
+  ]
+}

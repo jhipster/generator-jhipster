@@ -1,0 +1,32 @@
+{
+  "include": [
+    {
+      "name": "react-mysql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "react-sass-noi18n",
+      "entity": "sql"
+    },
+    {
+      "name": "react-websocket",
+      "entity": "sql"
+    },
+    {
+      "name": "react-hazelcast-cucumber",
+      "entity": "sql"
+    },
+    {
+      "name": "react-mariadb-kafka",
+      "entity": "sql"
+    },
+    {
+      "name": "react-session",
+      "entity": "sql"
+    },
+    {
+      "name": "react-infinispan",
+      "entity": "sql"
+    }
+  ]
+}

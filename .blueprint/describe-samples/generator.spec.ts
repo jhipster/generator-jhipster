@@ -44,8 +44,25 @@ describe(`generator - ${generator}`, () => {
         'react',
         'docker-compose-integration',
         'vue',
+        'daily-couchbase',
+        'daily-elasticsearch',
+        'daily-monolith-oauth2',
+        'daily-ms-jwt',
         'daily-ms-oauth2',
         'daily-neo4j',
+        'daily-ng-gradle-nosql',
+        'daily-ng-gradle-sql',
+        'daily-ng-maven-nosql',
+        'daily-ng-maven-sql',
+        'daily-no-database',
+        'daily-react-gradle-nosql',
+        'daily-react-gradle-sql',
+        'daily-react-maven-nosql',
+        'daily-react-maven-sql',
+        'daily-vue-gradle-nosql',
+        'daily-vue-gradle-sql',
+        'daily-vue-maven-nosql',
+        'daily-vue-maven-sql',
       ]);
       for (const sample of runResult.generator.samples) {
         expect(sample.matrix).toEqual({ os: expect.any(String), node: expect.any(String), java: expect.any(String) });
@@ -55,6 +72,26 @@ describe(`generator - ${generator}`, () => {
 
     it('should print json', () => {
       expect(JSON.parse(runResult.generator.format())).toHaveLength(runResult.generator.samples.length);
+    });
+  });
+
+  describe('with workflow daily-neo4j', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withOptions({ workflow: 'daily-neo4j', json: true });
+    });
+
+    it('should describe the daily samples with the daily-builds environment', () => {
+      expect(runResult.generator.samples.map(sample => sample.name)).toContain('daily-webflux-neo4j');
+      const sample = runResult.generator.samples.find(sample => sample.name === 'daily-ngx-neo4j');
+      expect(sample).toMatchObject({
+        workflow: 'daily-neo4j',
+        command: 'jhipster generate-sample daily-ngx-neo4j',
+        entitiesSample: 'neo4j',
+        yoRcFile: '.blueprint/generate-sample/templates/test-integration/daily-builds/ngx-neo4j/.yo-rc.json',
+        matrix: { os: 'ubuntu-latest', node: expect.any(String), java: '25' },
+      });
     });
   });
 

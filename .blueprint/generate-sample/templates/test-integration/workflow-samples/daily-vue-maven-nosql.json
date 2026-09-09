@@ -1,0 +1,12 @@
+{
+  "include": [
+    {
+      "name": "vue-maven-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "vue-maven-cassandra",
+      "entity": "cassandra"
+    }
+  ]
+}
