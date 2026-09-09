@@ -118,11 +118,12 @@ class AccountResourceIT {
 <%_ if (syncUserWithIdp) { _%>
     @AfterEach
     void cleanup() {
-        // Remove syncUserWithIdp users
-  <%_ if (databaseTypeSql && reactive) { _%>
-        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+        // Remove the user synced from the IdP
+  <%_ if (reactive) { _%>
+        userRepository.findOneByLogin("jane").flatMap(userRepository::delete).block();
+  <%_ } else { _%>
+        userRepository.findOneByLogin(TEST_USER_LOGIN).ifPresent(userRepository::delete);
   <%_ } _%>
-        userRepository.deleteAll()<%- reactorBlock %>;
     }
 
 <%_ } _%>

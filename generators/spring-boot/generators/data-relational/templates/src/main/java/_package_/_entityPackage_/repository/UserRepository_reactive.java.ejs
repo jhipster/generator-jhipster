@@ -80,21 +80,16 @@ public interface UserRepository extends R2dbcRepository<<%- user.persistClass %>
     @Query("INSERT INTO <%- jhiTablePrefix %>_user_authority VALUES(:userId, :authority)")
     Mono<Void> saveUserAuthority(<%- user.primaryKey.type %> userId, String authority);
 
-    @Query("DELETE FROM <%- jhiTablePrefix %>_user_authority")
-    Mono<Void> deleteAllUserAuthorities();
-
     @Query("DELETE FROM <%- jhiTablePrefix %>_user_authority WHERE user_id = :userId")
     Mono<Void> deleteUserAuthorities(<%- user.primaryKey.type %> userId);
 
 }
 
-<%_ if (!authenticationTypeOauth2) { _%>
 interface DeleteExtended<T> {
     Mono<Void> delete(T user);
 }
 
-<%_ } _%>
-interface UserRepositoryInternal<% if (!authenticationTypeOauth2) { %> extends DeleteExtended<<%- user.persistClass %>><% } %> {
+interface UserRepositoryInternal extends DeleteExtended<<%- user.persistClass %>> {
 
     Mono<<%- user.persistClass %>> findOneWithAuthoritiesByLogin(String login);
 
@@ -163,7 +158,8 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     public Mono<<%- user.persistClass %>> create(<%- user.persistClass %> user) {
         return r2dbcEntityTemplate.insert(<%- user.persistClass %>.class).using(user).defaultIfEmpty(user);
     }
-<%_ } else { _%>
+
+<%_ } _%>
     @Override
     public Mono<Void> delete(<%- user.persistClass %> user) {
         return db.sql("DELETE FROM <%- jhiTablePrefix %>_user_authority WHERE user_id = :userId")
@@ -173,7 +169,6 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
                 .matching(query(where("id").is(user.getId()))).all()
                 .then());
     }
-<%_ } _%>
 
     private Mono<<%- user.persistClass %>> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
         return db.sql("SELECT * FROM <%- jhiTablePrefix %>_user u LEFT JOIN <%- jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)

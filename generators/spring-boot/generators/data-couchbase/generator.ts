@@ -97,6 +97,23 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-couchbase' },
         ]);
       },
+      blockHound({ application, source }) {
+        if (!application.reactive) return;
+
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter',
+          method: 'read',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'com.github.couchmove.repository.CouchbaseRepositoryImpl',
+          method: ['lambda$query$2', 'lambda$importFtsIndex$1'],
+        });
+        // The SDK creates its latency metrics lazily on the first response, contending a lock on an io thread.
+        source.addAllowBlockingCallsInside!({
+          classPath: 'com.couchbase.client.core.deps.org.LatencyUtils.PauseDetector',
+          method: 'addListener',
+        });
+      },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
           annotations: [

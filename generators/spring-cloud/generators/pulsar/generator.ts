@@ -57,6 +57,11 @@ export default class PulsarGenerator extends SpringBootApplicationGenerator {
           value: `${application.packageName}.config.PulsarTestContainersSpringContextCustomizerFactory`,
         });
       },
+      blockHound({ application, source }) {
+        if (!application.reactive) return;
+
+        source.addAllowBlockingCallsInside!({ classPath: 'com.scurrilous.circe.utils.NativeUtils', method: 'loadLibraryFromJar' });
+      },
       applyPulsarGradleConventionPlugin({ source, application }) {
         if (application.buildToolGradle) {
           source.addGradlePlugin?.({ id: 'jhipster.pulsar-conventions' });
