@@ -52,7 +52,7 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('playwright', 'resources', 'package.json'),
         );
       },
       prepareForTemplates({ applicationDefaults }) {

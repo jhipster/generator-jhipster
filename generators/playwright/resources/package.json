@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "@playwright/test": "1.60.0",
+    "eslint-plugin-playwright": "2.10.2"
+  },
+  "packageManager": "npm@12"
+}
