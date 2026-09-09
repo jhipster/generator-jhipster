@@ -126,6 +126,9 @@ type CliSpecType = CliOptionSpec['type'] | typeof Object | typeof Array;
  */
 export type JHipsterChoices = readonly [...(string | JHipsterNamedChoice)[]];
 
+/** Choices shown by a prompt, plain values or named entries, optionally pre-checked. */
+export type PromptChoices = JHipsterChoices | readonly (string | (JHipsterNamedChoice & { checked?: boolean }))[] | undefined;
+
 /**
  * Describes the interactive Inquirer prompt shown to the user for a config property.
  */
@@ -133,9 +136,8 @@ export type PromptSpec = {
   readonly type: 'input' | 'select' | 'confirm' | 'checkbox';
   readonly message: string | ((arg: any) => string);
   readonly when?: boolean | ((arg: any) => boolean);
-  /** Overrides the config `choices`, a function receives the current answers. */
-  readonly choices?:
-    JHipsterChoices | ((arg: any) => JHipsterChoices | readonly (string | (JHipsterNamedChoice & { checked?: boolean }))[] | undefined);
+  /** Overrides the config `choices`, a function receives the current answers and may be asynchronous. */
+  readonly choices?: JHipsterChoices | ((arg: any) => PromptChoices | Promise<PromptChoices>);
   readonly default?: any;
   readonly filter?: any;
   readonly transformer?: any;

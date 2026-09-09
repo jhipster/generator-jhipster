@@ -70,7 +70,7 @@ export default class extends BaseGenerator {
                 disabled: !springBootDefaults,
               },
               'generate-blueprint': {
-                disabled: !generateBlueprint && !devBlueprint,
+                disabled: !generateBlueprint && !devBlueprint && !base,
               },
               graalvm: {
                 disabled: !graalvm,
