@@ -65,7 +65,7 @@ describe('command - describe command', () => {
     it('should describe the application configuration through the imports', async () => {
       const command = describeCommand({ namespace: 'app', dependencies: await resolve(['bootstrap', 'app']) });
       expect(command.configs.find(({ name }) => name === 'databaseType')).toMatchObject({
-        owner: 'server',
+        owner: 'spring-boot',
         choices: expect.arrayContaining(['sql', 'mongodb', 'no']),
       });
       expect(command.configs.some(({ name }) => name === 'clientFramework')).toBe(true);
@@ -91,7 +91,7 @@ describe('command - describe command', () => {
   describe('findConfigOwners', () => {
     it('should find the config owners', async () => {
       const owners = await findConfigOwners('databaseType');
-      expect(owners.owners.map(({ owner }) => owner)).toEqual(['server']);
+      expect(owners.owners.map(({ owner }) => owner)).toEqual(['server', 'spring-boot']);
       expect((await findConfigOwners('unknown')).owners).toEqual([]);
     });
   });
