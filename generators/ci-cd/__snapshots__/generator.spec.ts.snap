@@ -89,6 +89,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
+  "clientTestFrameworksPlaywright": false,
   "clientTheme": "none",
   "clientThemeAny": false,
   "clientThemeNone": true,
