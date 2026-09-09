@@ -23,7 +23,6 @@ import { join } from 'node:path';
 import BaseGenerator from '../../generators/base-core/index.ts';
 import {
   type GitHubMatrixGroup,
-  type GitHubMatrixGroupItem,
   type WorkflowSamples,
   convertToGitHubMatrix,
   getGithubOutputFile,
@@ -36,6 +35,7 @@ import type { eventNameChoices, workflowChoices } from './command.ts';
 import { devServerMatrix } from './samples/dev-server.ts';
 import { getGitChanges } from './support/git-changes.ts';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from './support/integration-test-constants.ts';
+import { buildWorkflowMatrix } from './support/workflow-matrix.ts';
 
 export default class extends BaseGenerator {
   workflow!: (typeof workflowChoices)[number];
@@ -115,33 +115,12 @@ export default class extends BaseGenerator {
             if (enableAnyTest || hasSonarPrChanges) {
               const content = await readFile(join(testIntegrationFolder, `workflow-samples/${this.workflow}.json`));
               const parsed: WorkflowSamples = JSON.parse(content.toString());
-              matrix = Object.fromEntries(
-                parsed.include
-                  .filter(sample => enableAnyTest || sample['sonar-analyse'])
-                  .map((sample): [string, GitHubMatrixGroupItem] => {
-                    const { 'job-name': jobName = sample.name, 'sonar-analyse': sonarAnalyse, generatorOptions } = sample;
-                    const enableSonar = sonarAnalyse === 'true';
-                    const workspaces = generatorOptions?.workspaces ? 'true' : 'false';
-                    if (enableSonar && workspaces === 'true') {
-                      throw new Error('Sonar is not supported with workspaces');
-                    }
-                    return [
-                      jobName,
-                      {
-                        'skip-compare': `${changes.sonarPr && enableSonar}`,
-                        // Force tests if sonar is enabled
-                        'skip-backend-tests': `${!(enableBackendTests || enableSonar)}`,
-                        // Force tests if sonar is enabled
-                        'skip-frontend-tests': `${!(enableFrontendTests || enableSonar)}`,
-                        'gradle-cache': generatorOptions?.workspaces || jobName.includes('gradle') ? true : undefined,
-                        ...sample,
-                        sample: sample.name ?? jobName,
-                        workspaces,
-                        disabled: Boolean(sample.disabled),
-                      },
-                    ];
-                  }),
-              );
+              matrix = buildWorkflowMatrix(parsed.include, {
+                enableBackendTests,
+                enableFrontendTests,
+                sonarOnly: !enableAnyTest,
+                skipSonarCompare: changes.sonarPr,
+              });
             }
             break;
           }

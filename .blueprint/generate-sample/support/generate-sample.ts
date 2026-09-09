@@ -16,19 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import process from 'node:process';
 
 import type { MemFsEditor } from 'mem-fs-editor';
-import { globSync } from 'tinyglobby';
 
-import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, samplesFolder } from '../../constants.ts';
+import { jdlSamplesFolder } from '../../constants.ts';
 
 import copyEntitySamples from './copy-entity-samples.ts';
 import copyJdlEntitySamples from './copy-jdl-entity-samples.ts';
-import getSamples, { DAILY_PREFIX, isDaily } from './get-workflow-samples.ts';
+import { resolveSample } from './resolve-sample.ts';
 
 export const generateSample = async (
   sampleName = process.env.JHI_APP,
@@ -46,44 +44,31 @@ export const generateSample = async (
     throw new Error('Sample name is required');
   }
 
-  const samples = getSamples();
-
-  const sample = samples[sampleName];
+  const resolved = resolveSample(sampleName, { entity: passedEntity });
+  const { sample, profile, war, entitiesSample, jdlEntityNames, jdlSampleNames, yoRcFile } = resolved;
 
   if (!sample) {
     // eslint-disable-next-line no-console
     console.log(`Sample ${sampleName} was not found`);
   }
 
-  const profile = sample?.environment;
-  const war = sample?.war;
-  const entity = passedEntity ?? sample?.entity;
-  const jdlEntity = sample?.['jdl-entity'];
-  const jdlSamples = sample?.['jdl-samples'];
-  const appSample = sample?.['app-sample'] ?? sample?.name ?? sampleName;
-
   if (profile) {
     process.env.JHI_PROFILE = profile;
   }
-  if (war === true || war === 1 || war === '1') {
+  if (war) {
     process.env.JHI_WAR = '1';
   }
 
-  if (entity && entity !== 'none') {
-    copyEntitySamples(memFs, destProjectFolder, entity);
+  if (entitiesSample) {
+    copyEntitySamples(memFs, destProjectFolder, entitiesSample);
   }
 
-  if (jdlEntity && jdlEntity !== 'none') {
-    if (jdlEntity === '*') {
-      const files = globSync('*', { cwd: jdlEntitiesSamplesFolder });
-      copyJdlEntitySamples(memFs, destProjectFolder, ...files);
-    } else {
-      copyJdlEntitySamples(memFs, destProjectFolder, ...jdlEntity.split(','));
-    }
+  if (jdlEntityNames.length > 0) {
+    copyJdlEntitySamples(memFs, destProjectFolder, ...jdlEntityNames);
   }
 
-  if (jdlSamples) {
-    for (const jdlSample of jdlSamples.split(',')) {
+  if (resolved.generator === 'jdl') {
+    for (const jdlSample of jdlSampleNames) {
       if (existsSync(join(jdlSamplesFolder, jdlSample))) {
         memFs.copy(join(jdlSamplesFolder, jdlSample, '**'), destProjectFolder);
       } else {
@@ -98,23 +83,14 @@ export const generateSample = async (
     };
   }
 
-  if (appSample !== 'none') {
-    const isDailySample = isDaily(appSample);
-
-    memFs.copy(
-      join(
-        isDailySample ? dailyBuildsFolder : samplesFolder,
-        isDailySample ? appSample.replace(DAILY_PREFIX, '') : appSample,
-        '.yo-rc.json',
-      ),
-      join(destProjectFolder, '.yo-rc.json'),
-    );
+  if (yoRcFile) {
+    memFs.copy(yoRcFile, join(destProjectFolder, '.yo-rc.json'));
   }
 
   // Generate the application
   return {
     generator: 'app',
-    jdlFiles: Boolean(jdlEntity),
+    jdlFiles: jdlEntityNames.length > 0,
     sample,
   };
 };

@@ -115,14 +115,15 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         if (extname(this.sampleName) === '.jdl' || this.sampleYorcFolder || this.sampleOnly) return;
 
         const { sample } = this;
-        assert.ok(sample, `Sample ${this.sampleName} not found`);
+        assert.ok(sample?.sample, `Sample ${this.sampleName} not found`);
 
+        const workflowSample = sample.sample;
         let generatorOptions: any = {
           projectVersion: this.projectVersion,
           destinationRoot: this.projectFolder,
-          ...sample.sample.generatorOptions,
+          ...workflowSample.generatorOptions,
         };
-        if (sample.sample.workspaces && sample.sample.workspaces !== 'false') {
+        if (workflowSample.workspaces && workflowSample.workspaces !== 'false') {
           generatorOptions = { ...generatorOptions, workspaces: true, monorepository: true };
         }
         if (sample.generator === 'jdl') {
