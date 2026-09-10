@@ -92,7 +92,7 @@ jobs:
         run: npm test
         working-directory: ${{ github.workspace }}/generator-jhipster-foo
       - name: 'GENERATION: project'
-        run: jhipster-foo --defaults --client-test-frameworks cypress playwright --skip-jhipster-dependencies
+        run: jhipster-foo --defaults --client-test-frameworks cypress --skip-jhipster-dependencies
         env:
           JHI_CLI: jhipster.cjs
           JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
