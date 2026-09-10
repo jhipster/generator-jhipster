@@ -24,9 +24,11 @@ import { NavLink as Link } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 
+import logo from '/content/images/logo-jhipster.png';
+
 export const BrandIcon = props => (
   <div {...props} className="brand-icon">
-    <img src="content/images/logo-jhipster.png" alt="Logo" />
+    <img src={logo} alt="Logo" />
   </div>
 );
 
