@@ -1,0 +1,101 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { titleLoginSelector, errorLoginSelector, usernameLoginSelector, passwordLoginSelector, submitLoginSelector } from '../../support/commands';
+import { test, expect } from '../../support/fixtures';
+
+<%_ const authUrl = `/api/${authenticationTypeSession ? 'authentication' : 'authenticate'}`; _%>
+const authenticate = (page: import('@playwright/test').Page) =>
+  page.waitForResponse(response => response.url().includes('<%- authUrl %>') && response.request().method() === 'POST');
+
+test.describe('login page', () => {
+  test.beforeEach(async ({ page, jhi }) => {
+    await page.goto('');
+    await jhi.navbar.clickOnLoginItem();
+<%_ if (clientFrameworkVue) { _%>
+    // The login modal moves focus to the username field once its enter transition ends;
+    // typing before that lands part of the input in the wrong field.
+    await expect(page.locator(usernameLoginSelector)).toBeFocused();
+<%_ } _%>
+  });
+
+  test('greets with signin', async ({ page }) => {
+    await expect(page.locator(titleLoginSelector)).toBeVisible();
+  });
+<%_ if (clientFrameworkAngular) { _%>
+
+  test('greets visiting /login directly', async ({ page }) => {
+    await page.goto('/login');
+    await expect(page.locator(titleLoginSelector)).toBeVisible();
+  });
+<%_ } _%>
+
+  test('requires username', async ({ page }) => {
+<%_ if (!clientFrameworkReact) { _%>
+    const response = authenticate(page);
+<%_ } _%>
+    await expect(page.locator(passwordLoginSelector)).toBeVisible();
+    await page.locator(passwordLoginSelector).fill('a-password');
+    await page.locator(submitLoginSelector).click();
+<%_ if (!clientFrameworkReact) { _%>
+    expect((await response).status()).toBe(<%- authenticationTypeSession ? '401' : '400' %>);
+<%_ } _%>
+    // login page should stay open when login fails
+    await expect(page.locator(titleLoginSelector)).toBeVisible();
+  });
+
+  test('requires password', async ({ page }) => {
+<%_ if (!clientFrameworkReact) { _%>
+    const response = authenticate(page);
+<%_ } _%>
+    await expect(page.locator(usernameLoginSelector)).toBeVisible();
+    await page.locator(usernameLoginSelector).fill('a-login');
+    await page.locator(submitLoginSelector).click();
+<%_ if (clientFrameworkReact) { _%>
+    // login page should stay open when login fails
+    await expect(page.locator(titleLoginSelector)).toBeVisible();
+<%_ } else { _%>
+    expect((await response).status()).toBe(<%- authenticationTypeSession ? '401' : '400' %>);
+    await expect(page.locator(errorLoginSelector)).toBeVisible();
+<%_ } _%>
+  });
+
+  test('errors when password is incorrect', async ({ page, jhi }) => {
+    const { username } = jhi.credentials();
+    const response = authenticate(page);
+    await expect(page.locator(usernameLoginSelector)).toBeVisible();
+    await page.locator(usernameLoginSelector).fill(username);
+    await expect(page.locator(passwordLoginSelector)).toBeVisible();
+    await page.locator(passwordLoginSelector).fill('bad-password');
+    await page.locator(submitLoginSelector).click();
+    expect((await response).status()).toBe(401);
+    await expect(page.locator(errorLoginSelector)).toBeVisible();
+  });
+
+  test('go to home page when successfully logs in', async ({ page, jhi }) => {
+    const { username, password } = jhi.credentials();
+    const response = authenticate(page);
+    await expect(page.locator(usernameLoginSelector)).toBeVisible();
+    await page.locator(usernameLoginSelector).fill(username);
+    await expect(page.locator(passwordLoginSelector)).toBeVisible();
+    await page.locator(passwordLoginSelector).fill(password);
+    await page.locator(submitLoginSelector).click();
+    expect((await response).status()).toBe(200);
+    await expect(page).toHaveURL(url => url.hash === '');
+  });
+});

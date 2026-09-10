@@ -138,6 +138,8 @@ type GeneratorsByNamespace = {
   'jhipster:languages:bootstrap': import('./languages/generators/bootstrap/generator.ts').default;
   liquibase: import('./liquibase/generator.ts').default;
   'jhipster:liquibase': import('./liquibase/generator.ts').default;
+  playwright: import('./playwright/generator.ts').default;
+  'jhipster:playwright': import('./playwright/generator.ts').default;
   'project-name': import('./project-name/generator.ts').default;
   'jhipster:project-name': import('./project-name/generator.ts').default;
   'jhipster:project-name:bootstrap': import('./project-name/generators/bootstrap/generator.ts').default;

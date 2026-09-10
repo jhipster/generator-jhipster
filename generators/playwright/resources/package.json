@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "eslint-plugin-playwright": "2.11.0",
+    "playwright-ng-schematics": "22.1.2"
+  },
+  "packageManager": "npm@12"
+}

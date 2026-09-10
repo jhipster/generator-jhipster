@@ -32,7 +32,7 @@ application {
     packageName com.okta.developer.gateway
     prodDatabaseType postgresql
     serviceDiscoveryType eureka
-    testFrameworks [cypress]
+    testFrameworks [playwright]
     microfrontends [blog, notification, store]
   }
   entities UserData
@@ -55,7 +55,7 @@ application {
     prodDatabaseType postgresql
     serverPort 8081
     serviceDiscoveryType eureka
-    testFrameworks [cypress]
+    testFrameworks [playwright]
     feignClient true
   }
   entities Blog, Post, Tag
@@ -80,7 +80,7 @@ application {
     prodDatabaseType postgresql
     serverPort 8082
     serviceDiscoveryType eureka
-    testFrameworks [cypress]
+    testFrameworks [playwright]
     feignClient true
   }
   entities Product
@@ -105,7 +105,7 @@ application {
     reactive true
     serverPort 8083
     serviceDiscoveryType eureka
-    testFrameworks [cypress]
+    testFrameworks [playwright]
   }
   entities Notification
 }

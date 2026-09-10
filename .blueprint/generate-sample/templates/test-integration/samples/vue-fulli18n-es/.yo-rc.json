@@ -79,6 +79,6 @@
     "serverPort": "8080",
     "serverSideOptions": ["searchEngine:elasticsearch"],
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cypress"]
+    "testFrameworks": ["gatling", "playwright"]
   }
 }

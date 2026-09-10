@@ -744,6 +744,30 @@ exports[`git-changes generators/liquibase/index.ts should match changes snapshot
 }
 `;
 
+exports[`git-changes generators/playwright/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": true,
+  "generateBlueprint": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "springBootDefaults": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
 exports[`git-changes generators/project-name/index.ts should match changes snapshot 1`] = `
 {
   "angular": false,

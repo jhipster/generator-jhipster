@@ -19,6 +19,7 @@
 
 const testFrameworkTypes = {
   CYPRESS: 'cypress',
+  PLAYWRIGHT: 'playwright',
   CUCUMBER: 'cucumber',
   GATLING: 'gatling',
   NO: 'no',

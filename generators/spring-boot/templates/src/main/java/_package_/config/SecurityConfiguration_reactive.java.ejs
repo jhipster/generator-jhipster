@@ -244,7 +244,7 @@ public class SecurityConfiguration {
 <%_ } _%>
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
-                .frameOptions(frameOptions -> frameOptions.mode(Mode.DENY))
+                .frameOptions(frameOptions -> frameOptions.mode(Mode.SAMEORIGIN))
                 .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyServerHttpHeadersWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 .permissionsPolicy(permissions ->
                     permissions.policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")))

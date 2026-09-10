@@ -210,6 +210,7 @@ jobs:
           path: |
             ${{ github.workspace }}/app/**/cypress/screenshots
             ${{ github.workspace }}/app/**/cypress/videos
+            ${{ github.workspace }}/app/**/playwright/results
       - name: Dump docker logs
         if: always() && runner.os == 'Linux'
         uses: jwalton/gh-docker-logs@v2

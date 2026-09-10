@@ -158,6 +158,7 @@ jobs:
           path: |
             ${{ github.workspace }}/app/**/cypress/screenshots
             ${{ github.workspace }}/app/**/cypress/videos
+            ${{ github.workspace }}/app/**/playwright/results
       - name: Dump docker logs
         if: steps.compare.outputs.has-backend-changes == 'true' && always() && contains(matrix.os, 'ubuntu')
         uses: jwalton/gh-docker-logs@v2

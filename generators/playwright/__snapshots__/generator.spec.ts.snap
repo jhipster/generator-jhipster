@@ -1,0 +1,231 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - playwright jwt-vue-withAdminUi(true)- should match generated files snapshot 1`] = `
+{
+  ".jhipster/EntityA.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "playwright.config.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/account/login-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/account/logout.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/account/password-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/account/register-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/account/reset-password-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/account/settings-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/administration/administration.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/entity/entity-a.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/entity/user-management.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/fixtures/integration-test.png": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/account.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/commands.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/entity.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/fixtures.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/management.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/navbar.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - playwright oauth2-angular-withAdminUi(false) should match generated files snapshot 1`] = `
+{
+  ".jhipster/EntityA.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "angular.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "playwright.config.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/account/logout.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/administration/administration.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/e2e/entity/entity-a.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/fixtures/integration-test.png": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/commands.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/entity.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/fixtures.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/management.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/navbar.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/support/oauth2.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/playwright/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - playwright samples matrix should match snapshot 1`] = `
+{
+  "jwt-vue-withAdminUi(true)-": {
+    "authenticationType": "jwt",
+    "clientFramework": "vue",
+    "clientRootDir": "",
+    "testFrameworks": [
+      "playwright",
+    ],
+    "withAdminUi": true,
+  },
+  "oauth2-angular-withAdminUi(false)": {
+    "authenticationType": "oauth2",
+    "clientFramework": "angular",
+    "clientRootDir": undefined,
+    "testFrameworks": [
+      "playwright",
+    ],
+    "withAdminUi": false,
+  },
+  "session-angular-withAdminUi(false)-clientRoot/": {
+    "authenticationType": "session",
+    "clientFramework": "angular",
+    "clientRootDir": "clientRoot/",
+    "testFrameworks": [
+      "playwright",
+    ],
+    "withAdminUi": false,
+  },
+}
+`;
+
+exports[`generator - playwright session-angular-withAdminUi(false)-clientRoot/ should match generated files snapshot 1`] = `
+{
+  ".jhipster/EntityA.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/angular.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/package.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/playwright.config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/account/login-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/account/logout.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/account/password-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/account/register-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/account/reset-password-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/account/settings-page.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/administration/administration.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/entity/authority.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/entity/entity-a.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/e2e/entity/user-management.pw.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/fixtures/integration-test.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/support/account.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/support/commands.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/support/entity.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/support/fixtures.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/support/management.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/support/navbar.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/test/playwright/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
