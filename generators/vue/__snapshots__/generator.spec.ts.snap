@@ -783,10 +783,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   ],
   "addExternalResourceToRoot": [
     {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
-    {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
@@ -1680,10 +1676,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     },
   ],
   "addExternalResourceToRoot": [
-    {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
     {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
@@ -4410,10 +4402,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   ],
   "addExternalResourceToRoot": [
     {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
-    {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
     },
@@ -5220,10 +5208,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     },
   ],
   "addExternalResourceToRoot": [
-    {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
     {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",
@@ -6047,10 +6031,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     },
   ],
   "addExternalResourceToRoot": [
-    {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
     {
       "comment": "Load vue main",
       "resource": "<script type="module" src="./app/main.ts"></script>",

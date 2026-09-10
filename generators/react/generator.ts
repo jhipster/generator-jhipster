@@ -300,10 +300,12 @@ ${comment}
         });
       },
       addIndexAsset({ application, source }) {
-        source.addExternalResourceToRoot!({
-          resource: '<script>const global = globalThis;</script>',
-          comment: 'Workaround https://github.com/axios/axios/issues/5622',
-        });
+        if (application.communicationSpringWebsocket) {
+          source.addExternalResourceToRoot!({
+            resource: '<script>const global = globalThis;</script>',
+            comment: 'sockjs-client requires the global object to be defined',
+          });
+        }
         source.addExternalResourceToRoot!({
           resource: `<script type="module" src="./app/${application.microfrontend ? 'main.tsx' : 'index.tsx'}"></script>`,
           comment: 'Load react main',
