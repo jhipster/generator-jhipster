@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { after, before, describe, esmocha, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
 import Generator from './generator.ts';
@@ -29,6 +29,14 @@ const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
+
+  // The generator prints the description on stdout; keep the test output clean.
+  before(() => {
+    esmocha.spyOn(console, 'log').mockReturnValue(undefined);
+  });
+  after(() => {
+    esmocha.restoreAllMocks();
+  });
 
   describe('without arguments', () => {
     before(async () => {
