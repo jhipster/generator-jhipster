@@ -32,15 +32,21 @@ const isDirectory = (dir: string) => {
   }
 };
 
+/** The file or folder copied for a jdl entity sample name: a folder, a `.jdl` file, or `<name>.jdl`. */
+export const jdlEntitySamplePath = (entity: string): string => {
+  const samplePath = join(jdlEntitiesSamplesFolder, entity);
+  return isDirectory(samplePath) || extname(samplePath) === '.jdl' ? samplePath : `${samplePath}.jdl`;
+};
+
 export default function copyJdlEntitySamples(memFs: MemFsEditor, dest: string, ...entities: string[]) {
   for (const entity of entities) {
-    const samplePath = join(jdlEntitiesSamplesFolder, entity);
+    const samplePath = jdlEntitySamplePath(entity);
     if (isDirectory(samplePath)) {
       memFs.copy(`${samplePath}/**`, dest);
-    } else if (extname(samplePath) === '.jdl') {
+    } else if (extname(entity) === '.jdl') {
       memFs.copy(samplePath, join(dest, entity));
-    } else if (!extname(samplePath)) {
-      memFs.copy(`${samplePath}.jdl`, join(dest, `${entity}.jdl`));
+    } else if (!extname(entity)) {
+      memFs.copy(samplePath, join(dest, `${entity}.jdl`));
     }
   }
 }

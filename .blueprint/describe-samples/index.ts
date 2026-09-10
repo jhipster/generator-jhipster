@@ -16,8 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export * from './copy-entity-samples.ts';
-export * from './generate-sample.ts';
-export * from './get-workflow-samples.ts';
-export * from './resolve-sample.ts';
+export { default } from './generator.ts';
+export { default as command } from './command.ts';
