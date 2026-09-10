@@ -20,7 +20,7 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
-import { workflowChoices } from './command.ts';
+import { dailyWorkflowChoices, workflowChoices } from './command.ts';
 import Generator from './generator.ts';
 
 import { shouldSupportFeatures } from '#test-support';
@@ -32,7 +32,7 @@ const generator = basename(import.meta.dirname);
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
 
-  for (const workflow of workflowChoices) {
+  for (const workflow of [...workflowChoices, ...dailyWorkflowChoices]) {
     describe(`with ${workflow}`, () => {
       before(async () => {
         await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true }).withArguments(workflow);

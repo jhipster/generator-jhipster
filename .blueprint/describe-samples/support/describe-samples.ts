@@ -31,7 +31,7 @@ import { getWorkflowNames, getWorkflowSamples, isDaily } from '../../generate-sa
 import { type ResolvedSample, resolveSample } from '../../generate-sample/support/resolve-sample.ts';
 import { workflowChoices } from '../../github-build-matrix/command.ts';
 import { devServerMatrix } from '../../github-build-matrix/samples/dev-server.ts';
-import { buildWorkflowMatrix } from '../../github-build-matrix/support/workflow-matrix.ts';
+import { buildDailyWorkflowMatrix, buildWorkflowMatrix } from '../../github-build-matrix/support/workflow-matrix.ts';
 
 const packageRoot = getPackageRoot();
 const relativeToRoot = (file: string) => relative(packageRoot, file);
@@ -130,15 +130,10 @@ const describeResolved = (
   };
 };
 
-/** Java version the jhipster-daily-builds workflows pass to `jhipster/actions/setup-runner`. */
-const DAILY_BUILDS_JAVA_VERSION = '25';
-
 /** Samples of the json workflows (`workflow-samples/<workflow>.json`), with the matrix values the workflow computes. */
 const describeWorkflowSamples = (workflow: string): SampleDescription[] => {
   const samples: WorkflowSample[] = Object.values(getWorkflowSamples([workflow])[workflow]);
-  const group = buildWorkflowMatrix(
-    isDaily(workflow) ? samples.map(sample => ({ ...sample, 'java-version': DAILY_BUILDS_JAVA_VERSION })) : samples,
-  );
+  const group = isDaily(workflow) ? buildDailyWorkflowMatrix(workflow) : buildWorkflowMatrix(samples);
   const matrix = convertToGitHubMatrix(group, { randomEnvironment: !isDaily(workflow) });
   return samples.map(sample => {
     const jobName = sample['job-name'] ?? sample.name;

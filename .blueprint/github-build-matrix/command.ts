@@ -18,8 +18,11 @@
  */
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { getWorkflowNames, isDaily } from '../generate-sample/support/get-workflow-samples.ts';
 
 export const workflowChoices = ['angular', 'devserver', 'generators', 'graalvm', 'react', 'docker-compose-integration', 'vue'] as const;
+/** The jhipster-daily-builds workflows, defined by `workflow-samples/daily-<workflow>.json` files. */
+export const dailyWorkflowChoices = getWorkflowNames().filter(isDaily);
 export const eventNameChoices = ['push', 'pull_request', 'daily'] as const;
 
 export default {
@@ -30,7 +33,7 @@ export default {
         type: String,
       },
       scope: 'generator',
-      choices: workflowChoices,
+      choices: [...workflowChoices, ...dailyWorkflowChoices],
     },
     eventName: {
       cli: {
