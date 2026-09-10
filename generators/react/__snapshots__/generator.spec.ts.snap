@@ -744,10 +744,6 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   ],
   "addExternalResourceToRoot": [
     {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
-    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -1554,10 +1550,6 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   ],
   "addExternalResourceToRoot": [
     {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
-    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -2345,10 +2337,6 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     },
   ],
   "addExternalResourceToRoot": [
-    {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
     {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/main.tsx"></script>",
@@ -3165,10 +3153,6 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     },
   ],
   "addExternalResourceToRoot": [
-    {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
     {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/main.tsx"></script>",
@@ -4042,10 +4026,6 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   ],
   "addExternalResourceToRoot": [
     {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
-    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -4828,10 +4808,6 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   ],
   "addExternalResourceToRoot": [
     {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
-    {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",
     },
@@ -5608,10 +5584,6 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     },
   ],
   "addExternalResourceToRoot": [
-    {
-      "comment": "Workaround https://github.com/axios/axios/issues/5622",
-      "resource": "<script>const global = globalThis;</script>",
-    },
     {
       "comment": "Load react main",
       "resource": "<script type="module" src="./app/index.tsx"></script>",

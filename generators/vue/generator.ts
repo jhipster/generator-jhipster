@@ -403,10 +403,12 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
       },
       addIndexAsset({ source, application }) {
         if (!application.clientBundlerVite) return;
-        source.addExternalResourceToRoot!({
-          resource: '<script>const global = globalThis;</script>',
-          comment: 'Workaround https://github.com/axios/axios/issues/5622',
-        });
+        if (application.communicationSpringWebsocket) {
+          source.addExternalResourceToRoot!({
+            resource: '<script>const global = globalThis;</script>',
+            comment: 'sockjs-client requires the global object to be defined',
+          });
+        }
         source.addExternalResourceToRoot!({
           resource: `<script type="module" src="./app/${application.microfrontend ? 'index.ts' : 'main.ts'}"></script>`,
           comment: 'Load vue main',
