@@ -73,6 +73,18 @@ describe('generator > java', () => {
         ).toBe(`
   Foo(String bar) {}`);
       });
+      for (const modifier of ['public', 'protected', 'private']) {
+        it(`should add param to ${modifier} constructor`, () => {
+          expect(
+            injectJavaConstructorParam(
+              `
+  ${modifier} Foo() {}`,
+              { className: 'Foo', param: 'String bar' },
+            ),
+          ).toBe(`
+  ${modifier} Foo(String bar) {}`);
+        });
+      }
     });
   });
 
