@@ -92,12 +92,20 @@ jobs:
       - run: jhipster.cjs info
       - run: ${{ matrix.cmd-e2e }}
         id: e2e
+        env:
+          CYPRESS_video: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
+          PLAYWRIGHT_VIDEO: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
       - name: Upload cypress screenshots
         uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.name }}
-          path: ${{ github.workspace }}app//*/cypress/screenshots
+          path: |
+            ${{ github.workspace }}/app/**/cypress/screenshots
+            ${{ github.workspace }}/app/**/playwright/results
+            ${{ github.workspace }}/app/**/playwright/report
   check-workflow:
     permissions:
       contents: none

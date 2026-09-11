@@ -130,6 +130,11 @@ jobs:
         run: |
           ./npmw install
           ./npmw run e2e:devserver --if-present
+        env:
+          CYPRESS_video: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
+          PLAYWRIGHT_VIDEO: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
@@ -138,6 +143,7 @@ jobs:
           path: |
             ${{ github.workspace }}/app/*/cypress/screenshots
             ${{ github.workspace }}/app/**/playwright/results
+            ${{ github.workspace }}/app/**/playwright/report
   check-dev-server:
     permissions:
       contents: none

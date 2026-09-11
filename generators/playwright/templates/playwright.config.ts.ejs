@@ -38,7 +38,8 @@ export default defineConfig({
     viewport: { width: 1200, height: 720 },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'off',
+    // Off like cypress; the ci workflows turn it on through the `ci: e2e-video` pull request label.
+    video: process.env.PLAYWRIGHT_VIDEO === 'true' ? 'on' : 'off',
   },
   projects: [
     {

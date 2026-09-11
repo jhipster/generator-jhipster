@@ -102,9 +102,17 @@ jobs:
       - name: 'E2E: Run'
         id: e2e
         run: npm run ci:e2e:run --if-present
+        env:
+          CYPRESS_video: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
+          PLAYWRIGHT_VIDEO: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.app-type }}
-          path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
+          path: |
+            ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
+            ${{ steps.setup.outputs.application-path }}/*/playwright/results
+            ${{ steps.setup.outputs.application-path }}/*/playwright/report

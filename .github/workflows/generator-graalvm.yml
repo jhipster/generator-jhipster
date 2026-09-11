@@ -134,7 +134,9 @@ jobs:
         continue-on-error: ${{ matrix.ignore-e2e-failures == 'true' }}
         env:
           CYPRESS_video: >-
-            ${{ contains(github.event.pull_request.labels.*.name, 'ci: cypress-video') && 'true' || 'false' }}
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
+          PLAYWRIGHT_VIDEO: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
       - name: Store the application
         uses: actions/upload-artifact@v7
         if: steps.compare.outputs.has-backend-changes == 'true' && always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
@@ -150,15 +152,16 @@ jobs:
             !**/app/target/**
             !**/app/*/target/**
             !**/node_modules/**
-      - name: 'E2E: Store failure cypress assets'
+      - name: 'E2E: Store failure e2e assets'
         uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: cypress-${{ matrix.sample }}
+          name: e2e-${{ matrix.sample }}
           path: |
             ${{ github.workspace }}/app/**/cypress/screenshots
             ${{ github.workspace }}/app/**/cypress/videos
             ${{ github.workspace }}/app/**/playwright/results
+            ${{ github.workspace }}/app/**/playwright/report
       - name: Dump docker logs
         if: steps.compare.outputs.has-backend-changes == 'true' && always() && contains(matrix.os, 'ubuntu')
         uses: jwalton/gh-docker-logs@v2

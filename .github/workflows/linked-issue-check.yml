@@ -129,6 +129,11 @@ jobs:
         id: e2e
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
+        env:
+          CYPRESS_video: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
+          PLAYWRIGHT_VIDEO: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
       - name: 'BACKEND: Store failure logs'
         uses: actions/upload-artifact@v7
         if: always() && steps.backend.outcome == 'failure' && steps.project.outputs.contains-sample != 'false'
@@ -140,7 +145,10 @@ jobs:
         if: always() && steps.e2e.outcome == 'failure' && steps.project.outputs.contains-sample != 'false'
         with:
           name: screenshots-${{ matrix.number }}
-          path: app/**/cypress/screenshots
+          path: |
+            app/**/cypress/screenshots
+            app/**/playwright/results
+            app/**/playwright/report
       - name: Dump docker logs
         if: always() && steps.project.outputs.contains-sample != 'false'
         uses: jwalton/gh-docker-logs@v2
