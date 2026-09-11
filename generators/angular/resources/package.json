@@ -25,7 +25,7 @@
     "@types/folder-hash": "4.0.4",
     "@types/node": "22.20.1",
     "@types/sockjs-client": "1.5.4",
-    "angular-eslint": "22.2.0",
+    "angular-eslint": "22.5.0",
     "deepmerge": "4.3.1",
     "eslint": "10.10.0",
     "eslint-config-prettier": "10.1.8",
