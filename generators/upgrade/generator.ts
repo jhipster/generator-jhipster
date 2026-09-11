@@ -326,7 +326,9 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
     const envOptions = { sharedFs, adapter };
     const generatorOptions = { ...inheritedOptions, ...DEFAULT_NON_INTERACTIVE_OPTIONS };
 
-    const envBuilder = await this.createEnvBuilder(envOptions);
+    const envBuilder = await this.createEnvBuilder(envOptions, {
+      disableBlueprints: inherit ? this.options.disableBlueprints : undefined,
+    });
     const env = envBuilder.getEnvironment();
     await env.run([`jhipster:app`], generatorOptions);
   }

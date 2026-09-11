@@ -57,6 +57,20 @@ const defaultLookupOptions = Object.freeze({
 
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
 
+/**
+ * Options used to lookup and load generators, blueprints and shared options.
+ */
+export type PrepareOptions = {
+  blueprints?: Record<string, string | undefined>;
+  lookups?: Parameters<Environment['lookup']>[0][];
+  devBlueprintPath?: string;
+  /**
+   * Disables blueprints support.
+   * Defaults to the `--disable-blueprints` flag from argv, since commander has not parsed yet.
+   */
+  disableBlueprints?: boolean;
+};
+
 const createEnvironment = (options: EnvironmentOptions = {}) => {
   options.adapter ??= new QueuedAdapter({ log: createJHipsterLogger() });
   return new Environment({
@@ -97,8 +111,8 @@ export default class EnvironmentBuilder {
   /**
    * Creates a new EnvironmentBuilder with a new Environment and load jhipster, blueprints and sharedOptions.
    */
-  static async createDefaultBuilder(...args: Parameters<typeof EnvironmentBuilder.create>): Promise<EnvironmentBuilder> {
-    return EnvironmentBuilder.create(...args).prepare();
+  static async createDefaultBuilder(options?: EnvironmentOptions, prepareOptions?: PrepareOptions): Promise<EnvironmentBuilder> {
+    return EnvironmentBuilder.create(options).prepare(prepareOptions);
   }
 
   static async run(
@@ -127,12 +141,7 @@ export default class EnvironmentBuilder {
     lookups,
     devBlueprintPath = jhipsterDevBlueprintPath,
     disableBlueprints = this._getDisableBlueprintsFromArgv(),
-  }: {
-    blueprints?: Record<string, string | undefined>;
-    lookups?: Parameters<Environment['lookup']>[0][];
-    devBlueprintPath?: string;
-    disableBlueprints?: boolean;
-  } = {}) {
+  }: PrepareOptions = {}) {
     this.disableBlueprints = disableBlueprints;
     const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
