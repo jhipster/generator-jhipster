@@ -53,6 +53,13 @@ const command = {
       },
       scope: 'generator',
     },
+    exportApplication: {
+      description: 'Serialize the generated application instead of writing it to disk',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
   },
 } as const satisfies JHipsterCommandDefinition;
 

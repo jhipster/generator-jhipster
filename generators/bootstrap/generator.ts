@@ -16,10 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { rm } from 'node:fs/promises';
+import { rm, writeFile } from 'node:fs/promises';
+import { isAbsolute, relative, sep } from 'node:path';
 
 import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
 import { transform } from '@yeoman/transform';
+import { zipSync } from 'fflate';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
@@ -60,6 +62,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
   skipEslint?: boolean;
+  exportApplication?: boolean;
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
   prettierJava = false;
   prettierOptions: PrettierOptions = { plugins: [] };
@@ -159,6 +162,10 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   }
 
   async commitPrettierConfig() {
+    if (this.exportApplication) {
+      // In export mode nothing is written to disk; the prettier config files are captured with the rest of the application.
+      return;
+    }
     await this.commitSharedFs({
       log: 'prettier configuration files committed to disk',
       filter: file => isPrettierConfigFilePath(file.path),
@@ -166,6 +173,10 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   }
 
   async commitTask() {
+    if (this.exportApplication) {
+      await this.exportSharedFs();
+      return;
+    }
     await this.commitSharedFs(
       { refresh: this.refreshOnCommit },
       ...this.env.findFeature('commitTransformFactory').flatMap(({ feature }) => feature()),
@@ -173,12 +184,54 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   }
 
   /**
+   * Serializes the in-memory application to a single zip archive instead of committing it to disk.
+   *
+   * Reuses the {@link commitSharedFs} pipeline so the archived files go through the same transforms as a
+   * regular generation (prettier, eslint, needles, ...); only the disk-commit transforms (`forceYoFiles`,
+   * conflicter, commit) are skipped and replaced by an in-memory collector.
+   *
+   * This lets server-side consumers generate from an untrusted `.yo-rc.json` without the generator writing
+   * attacker-controlled paths onto the host filesystem: every generated path becomes a zip entry (data),
+   * not a real file write.
+   */
+  async exportSharedFs() {
+    const entries: Record<string, Uint8Array> = {};
+    await this.commitSharedFs({ exportFiles: entries });
+    const archivePath = this.destinationPath('export-application.zip');
+    await writeFile(archivePath, zipSync(entries));
+    this.log.ok(`application exported to ${archivePath} (${Object.keys(entries).length} files)`);
+  }
+
+  /**
+   * Collects committed files into `entries` (a zip-entries map) instead of writing them to disk.
+   * Files resolving outside the destination root are warned about and ignored.
+   */
+  private createExportTransform(entries: Record<string, Uint8Array>): FileTransform<MemFsEditorFile> {
+    const root = this.destinationPath();
+    return transform((file: MemFsEditorFile) => {
+      if (!file.contents) {
+        // Deleted or empty files have nothing to add to a fresh archive.
+        return file;
+      }
+      const relativePath = relative(root, file.path);
+      if (isAbsolute(relativePath) || relativePath === '..' || relativePath.startsWith(`..${sep}`)) {
+        this.log.warn(`Ignoring file outside of the destination root: ${file.path}`);
+        return file;
+      }
+      // Zip entries always use forward slashes, regardless of the host platform.
+      entries[relativePath.split(sep).join('/')] = new Uint8Array(file.contents);
+      return file;
+    });
+  }
+
+  /**
    * Commits the MemFs to the disc.
    */
   async commitSharedFs(
-    { log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {},
+    { log, exportFiles, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string; exportFiles?: Record<string, Uint8Array> } = {},
     ...transforms: FileTransform<MemFsEditorFile>[]
   ) {
+    const exportMode = Boolean(exportFiles);
     const { autoCrlf = isWin32, devBlueprintEnabled, skipYoResolve } = this.options;
     const pipelineOptions: GeneratorPipelineOptions = {
       refresh: false,
@@ -190,7 +243,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     };
 
     let customizeActions: NonNullable<Parameters<typeof createConflicterTransform>[1]>['customizeActions'];
-    if (devBlueprintEnabled) {
+    if (devBlueprintEnabled && !exportMode) {
       customizeActions = (actions, { separator }) => {
         return [
           ...(actions as any),
@@ -227,7 +280,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       }
 
       transformStreams.push(
-        forceYoFiles(),
+        // forceYoFiles only matters when committing to disk through the conflicter, skip it when exporting.
+        ...(exportMode ? [] : [forceYoFiles()]),
         createSortConfigFilesTransform(),
         createForceWriteConfigFilesTransform(),
         // Needles are removed from the files whose project enabled `removeNeedles`, see `editorMetadata` at base-core.
@@ -254,15 +308,20 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
         transformStreams.push(await autoCrlfTransform());
       }
 
-      transformStreams.push(
-        createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),
-        createCommitTransform(),
-      );
+      if (exportMode) {
+        // Collect the transformed files in memory instead of committing them to disk.
+        transformStreams.push(this.createExportTransform(exportFiles!));
+      } else {
+        transformStreams.push(
+          createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),
+          createCommitTransform(),
+        );
+      }
 
       return transformStreams;
     };
 
-    if (autoCrlf) {
+    if (autoCrlf && !exportMode) {
       this.log.info('autoCrlf is enabled, line endings will be detected and normalized');
       await this.pipeline(
         {
@@ -283,6 +342,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       transform((file: MemFsEditorFile) => (isFilePending(file) ? file : undefined)),
       ...(await createTransformStreams()),
     );
-    this.log.ok(log ?? 'files committed to disk');
+    if (!exportMode) {
+      this.log.ok(log ?? 'files committed to disk');
+    }
   }
 }

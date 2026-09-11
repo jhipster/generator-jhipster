@@ -17,14 +17,17 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { basename, join } from 'node:path';
+
+import { unzipSync } from 'fflate';
 
 import { shouldSupportFeatures } from '../../test/support/tests.ts';
 import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
-import { defaultHelpers as helpers, result } from '#testing';
+import { basicHelpers, defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -80,6 +83,64 @@ describe(`generator - ${generator}`, () => {
       it('should keep needles', () => {
         result.assertEqualsFileContent('file.txt', content);
       });
+    });
+  });
+
+  describe('exportApplication', () => {
+    class WriteGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('file.txt', 'exported content\n');
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      // basicHelpers keeps dryRun disabled, so files would be written to disk without export mode.
+      await basicHelpers.run(WriteGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+    });
+
+    it('does not write the generated file to disk', () => {
+      expect(existsSync(join(result.cwd, 'file.txt'))).toBe(false);
+    });
+
+    it('writes an export-application.zip archive instead', () => {
+      expect(existsSync(join(result.cwd, 'export-application.zip'))).toBe(true);
+    });
+
+    it('includes the generated file in the archive', () => {
+      const archive = unzipSync(readFileSync(join(result.cwd, 'export-application.zip')));
+      expect(Object.keys(archive)).toContain('file.txt');
+      expect(Buffer.from(archive['file.txt']).toString('utf8')).toBe('exported content\n');
+    });
+  });
+
+  describe('exportApplication with a file outside the destination root', () => {
+    class EscapeGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('inside.txt', 'inside\n');
+            this.writeDestination(this.destinationPath('..', 'escaped.txt'), 'escaped\n');
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await basicHelpers.run(EscapeGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+    });
+
+    it('does not write the escaped file to disk', () => {
+      expect(existsSync(join(result.cwd, '..', 'escaped.txt'))).toBe(false);
+    });
+
+    it('ignores the escaped file and keeps the ones inside the root', () => {
+      const archive = unzipSync(readFileSync(join(result.cwd, 'export-application.zip')));
+      expect(Object.keys(archive)).toContain('inside.txt');
+      expect(Object.keys(archive).some(entry => entry.includes('escaped.txt'))).toBe(false);
     });
   });
 });
