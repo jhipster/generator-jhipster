@@ -83,8 +83,7 @@ function parse(content: string, runtime: JDLRuntime) {
     throw new Error('File content must be passed, it is currently empty.');
   }
   try {
-    const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
-    const parsedContent = apiParser(processedInput, runtime);
+    const parsedContent = apiParser(content, runtime);
     return performJDLPostParsingTasks(parsedContent);
   } catch (error) {
     if (error instanceof SyntaxError) {
@@ -99,26 +98,13 @@ function getCst(content: string, runtime: JDLRuntime) {
     throw new Error('File content must be passed, it is currently empty.');
   }
   try {
-    const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
-    return apiGetCst(processedInput, runtime);
+    return apiGetCst(content, runtime);
   } catch (error) {
     if (error instanceof SyntaxError) {
       logger.error(`Syntax error message:\n\t${error.message}`);
     }
     throw error;
   }
-}
-
-function removeInternalJDLComments(content: string) {
-  // Removing an internal Comment will not affect line/column location info
-  // as no lines are removed and the comments consumes the rest of the line.
-  return content.replace(/\/\/[^\n\r]*/gm, '');
-}
-
-function filterJDLDirectives(content: string) {
-  // We are only removing the directive not the whole line to avoid modifying line/column
-  // location information in parsers errors.
-  return content.replace(/^\u0023.*/gm, '');
 }
 
 /**

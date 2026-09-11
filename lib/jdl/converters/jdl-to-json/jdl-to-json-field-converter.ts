@@ -61,7 +61,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
       fieldData.documentation = comment;
     }
     if (jdlObject.hasEnum(jdlField.type)) {
-      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType)?.getValuesAsString();
+      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType)?.getValues();
       const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType)?.comment;
       if (fieldTypeComment) {
         fieldData.fieldTypeDocumentation = fieldTypeComment;

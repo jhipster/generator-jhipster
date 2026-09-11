@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { type EnumValues, serializeEnumValues } from '../../../utils/enum.ts';
 import type { ParsedJDLEnumValue } from '../types/parsed.ts';
 import { merge } from '../utils/object-utils.ts';
 
@@ -39,8 +40,17 @@ export default class JDLEnum {
     );
   }
 
+  /** Legacy-only storage. Use getValues() when writing entity JSON with arbitrary custom values. */
   getValuesAsString(): string {
-    return stringifyValues(this.values).join(',');
+    const values = this.getValues();
+    if (typeof values !== 'string') {
+      throw new Error(`The enum ${this.name} requires structured entity JSON values. Use getValues() instead.`);
+    }
+    return values;
+  }
+
+  getValues(): EnumValues {
+    return serializeEnumValues(Array.from(this.values.values(), ({ name, value }) => (value === undefined ? { name } : { name, value })));
   }
 
   getValueJavadocs(): Record<string, string> {

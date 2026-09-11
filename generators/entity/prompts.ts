@@ -19,7 +19,7 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
+import { isArray, lowerFirst, snakeCase, upperFirst } from 'lodash-es';
 
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.ts';
@@ -27,7 +27,7 @@ import { asPromptingTask } from '../base-application/support/task-type-inference
 import type { Field as BaseApplicationField } from '../base-application/types.ts';
 
 import type EntityGenerator from './generator.ts';
-import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.ts';
+import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber, parseEnumValuesInput } from './support/index.ts';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { NO: NO_DATABASE, CASSANDRA, SQL } = databaseTypes;
@@ -517,30 +517,22 @@ async function askForField(this: EntityGenerator) {
         if (input === '') {
           return 'You must specify values for your enumeration';
         }
-        // Commas allowed so that user can input a list of values split by commas.
-        if (!/^[A-Za-z0-9_,]+$/.test(input)) {
-          return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
-        }
-        const enums = input.replace(/\s/g, '').split(',');
-        if (uniq(enums).length !== enums.length) {
-          return `Enum values cannot contain duplicates (typed values: ${input})`;
-        }
-        for (const enumValue of enums) {
-          if (/^\d.*/.test(enumValue)) {
-            return `Enum value "${enumValue}" cannot start with a number`;
+        try {
+          parseEnumValuesInput(input);
+        } catch (error) {
+          if (error instanceof Error) {
+            return error.message;
           }
-          if (enumValue === '') {
-            return 'Enum value cannot be empty (did you accidentally type "," twice in a row?)';
-          }
+          throw error;
         }
 
         return true;
       },
       message: () => {
         if (!context.existingEnum) {
-          return 'What are the values of your enumeration (separated by comma, no spaces)?';
+          return 'What are the values of your enumeration (comma-separated NAME or NAME(value), or a JSON array of { "name": "NAME", "value": "custom value" })?';
         }
-        return 'What are the new values of your enumeration (separated by comma, no spaces)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
+        return 'What are the new values of your enumeration (comma-separated NAME or NAME(value), or a JSON array of { "name": "NAME", "value": "custom value" })?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
       },
     },
     {
@@ -694,7 +686,7 @@ async function askForField(this: EntityGenerator) {
 
   if ((answers as any).fieldIsEnum) {
     answers.fieldType = upperFirst(answers.fieldType);
-    answers.fieldValues = answers.fieldValues.toUpperCase();
+    answers.fieldValues = answers.fieldValues === '' ? '' : parseEnumValuesInput(answers.fieldValues);
   }
 
   const field = {

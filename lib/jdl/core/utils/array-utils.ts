@@ -25,5 +25,5 @@ export function join(set: unknown[], separator = ',', quoted = false) {
   if (!set) {
     throw new Error('An Array must be passed so as to join elements.');
   }
-  return set.map(val => (quoted ? `"${val}"` : val)).join(separator);
+  return set.map(val => (quoted ? JSON.stringify(String(val)) : val)).join(separator);
 }

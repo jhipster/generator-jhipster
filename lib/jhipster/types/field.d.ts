@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 import type { ValidationType } from '../../jdl/core/built-in-options/validations.ts';
+import type { EnumValues } from '../../utils/enum.ts';
 
 import type { Property } from './property.ts';
 
 type FieldEnum = {
-  fieldValues: string;
+  fieldValues: EnumValues;
   fieldTypeDocumentation?: string;
   fieldValuesJavadocs?: Record<string, string>;
 };

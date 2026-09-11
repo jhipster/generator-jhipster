@@ -19,6 +19,9 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import { parseFromContent } from '../readers/jdl-reader.ts';
+import { createRuntime } from '../runtime.ts';
+
 import { JDLEnum } from './index.ts';
 
 describe('jdl - JDLEnum', () => {
@@ -55,6 +58,43 @@ describe('jdl - JDLEnum', () => {
     it('should return the values separated by a comma', () => {
       expect(result).toBe('A (aaaa),B');
     });
+
+    it('should preserve raw custom values in entity JSON', () => {
+      const jdlEnum = new JDLEnum({
+        name: 'Language',
+        values: [
+          { key: 'SPECIAL', value: '\u00dc' },
+          { key: 'SPACE', value: 'two words' },
+        ],
+      });
+
+      expect(jdlEnum.getValuesAsString()).toBe('SPECIAL (\u00dc),SPACE (two words)');
+    });
+
+    for (const value of ['', ',', ', ', 'a), InjectedEnum(a', 'a)b', 'a\nb', 'a\rb', 'a\u2028b', 'a\u2029b']) {
+      it(`should direct legacy-only callers to structured storage for ${JSON.stringify(value)}`, () => {
+        const jdlEnum = new JDLEnum({ name: 'Example', values: [{ key: 'VALUE', value }] });
+
+        expect(() => jdlEnum.getValuesAsString()).toThrow(
+          'The enum Example requires structured entity JSON values. Use getValues() instead.',
+        );
+      });
+    }
+
+    it('should reject malformed enum names in entity JSON', () => {
+      const jdlEnum = new JDLEnum({ name: 'Example', values: [{ key: 'VALUE, INJECTED' }] });
+
+      expect(() => jdlEnum.getValuesAsString()).toThrow('Invalid enum entry in entity JSON');
+    });
+  });
+  describe('getValues', () => {
+    for (const value of ['', '"', ', ', 'a), InjectedEnum(a', '(', ')', 'a\nb', 'a\rb', 'a\u2028b', 'a\u2029b']) {
+      it(`should preserve complex custom values in structured entity JSON: ${JSON.stringify(value)}`, () => {
+        const jdlEnum = new JDLEnum({ name: 'Example', values: [{ key: 'VALUE', value }, { key: 'OTHER' }] });
+
+        expect(jdlEnum.getValues()).toEqual([{ name: 'VALUE', value }, { name: 'OTHER' }]);
+      });
+    }
   });
   describe('getValueJavadocs', () => {
     let result: Record<string, string>;
@@ -80,6 +120,28 @@ describe('jdl - JDLEnum', () => {
     });
   });
   describe('toString', () => {
+    it('should preserve the top-level declaration payload from PR 34901 as one value', () => {
+      const value = 'x)\n}\nentity Injected {\n  secret String\n}\nenum Dummy {\n  A(a';
+      const exported = new JDLEnum({ name: 'Colors', values: [{ key: 'RED', value }] }).toString();
+      const parsed = parseFromContent(exported, createRuntime());
+
+      expect(parsed.entities).toEqual([]);
+      expect(parsed.enums.map(enumDefinition => enumDefinition.name)).toEqual(['Colors']);
+      expect(parsed.enums[0].values).toEqual([{ key: 'RED', value }]);
+    });
+
+    it('should round-trip special characters and injection payloads', () => {
+      const runtime = createRuntime();
+      const original = parseFromContent('enum SpecialChars { Ue ("\u00dc"), Injected ("a), InjectedEnum(a") }', runtime);
+      const exported = new JDLEnum(original.enums[0]).toString();
+
+      expect(parseFromContent(exported, runtime)).toEqual(original);
+      expect(parseFromContent(exported, runtime).enums[0].values).toEqual([
+        { key: 'Ue', value: '\u00dc' },
+        { key: 'Injected', value: 'a), InjectedEnum(a' },
+      ]);
+    });
+
     describe('with simple enum values', () => {
       let values: any[] = [];
       let jdlEnum: JDLEnum;

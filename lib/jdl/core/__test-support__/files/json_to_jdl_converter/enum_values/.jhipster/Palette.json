@@ -1,0 +1,19 @@
+{
+  "name": "Palette",
+  "fields": [
+    {
+      "fieldName": "color",
+      "fieldType": "Colors",
+      "fieldValues": [
+        {
+          "name": "RED",
+          "value": "x)\n}\nentity Injected {\n  secret String\n}\nenum Dummy {\n  A(a"
+        },
+        {
+          "name": "BLUE"
+        }
+      ]
+    }
+  ],
+  "relationships": []
+}

@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { ENUM_VALUE_NAME_PATTERN as ENUM_PROP_NAME_PATTERN } from '../../../utils/enum.ts';
 
-export const ALPHABETIC = /^[A-Za-z]+$/;
-export const ALPHABETIC_LOWER = /^[a-z]+$/;
-export const ALPHANUMERIC = /^[A-Za-z][A-Za-z0-9]*$/;
-export const ALPHANUMERIC_DASH = /^[A-Za-z][A-Za-z0-9-]*$/;
-export const ALPHABETIC_DASH_LOWER = /^[a-z][a-z-]*$/;
-export const ALPHANUMERIC_SPACE = /^"?[A-Za-z][A-Za-z0-9- ]*"?$/;
-export const ALPHANUMERIC_UNDERSCORE = /^[A-Za-z]\w*$/;
+import { type EnumValues, parseEnumValues, serializeEnumValues } from '../../../lib/utils/enum.ts';
+
+/** Accept legacy entries or a JSON array at the prompt; uppercase names, never custom values. */
+export function parseEnumValuesInput(input: EnumValues): EnumValues {
+  const values = typeof input === 'string' && input.trimStart().startsWith('[') ? JSON.parse(input) : input;
+  return serializeEnumValues(
+    parseEnumValues(values, { clientConstants: true }).map(entry => ({ ...entry, name: entry.name.toUpperCase() })),
+  );
+}

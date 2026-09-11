@@ -20,6 +20,7 @@ import { defaults, kebabCase } from 'lodash-es';
 
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
+import { type EnumValues, parseEnumValues } from '../../../lib/utils/enum.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
@@ -299,7 +300,7 @@ export function prepareCommonFieldForTemplates(
       throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
     }
     field.enumFileName = kebabCase(field.fieldType);
-    field.enumValues = getEnumValuesWithCustomValues(field.fieldValues!);
+    field.enumValues = getEnumValuesWithCustomValues(field.fieldValues!, { clientConstants: field.clientConstantsAsValues });
   }
 
   field.fieldWithContentType = (fieldType === BYTES || fieldType === BYTE_BUFFER) && field.fieldTypeBlobContent !== TEXT;
@@ -368,22 +369,14 @@ export function prepareCommonFieldForTemplates(
 }
 
 /**
- * From an enum's values (with or without custom values), returns the enum's values without custom values.
- * @param {String} [enumValues] - an enum's values.
- * @return {Array<String>} the formatted enum's values.
+ * Resolve each enum value, falling back to its name only when no custom value is present.
  */
-export function getEnumValuesWithCustomValues(enumValues: string): { name: string; value: string }[] {
+export function getEnumValuesWithCustomValues(
+  enumValues: EnumValues,
+  options: Parameters<typeof parseEnumValues>[1] = {},
+): { name: string; value: string }[] {
   if (!enumValues || enumValues === '') {
     throw new Error('Enumeration values must be passed to get the formatted values.');
   }
-  return enumValues.split(',').map(enumValue => {
-    if (!enumValue.includes('(')) {
-      return { name: enumValue.trim(), value: enumValue.trim() };
-    }
-    const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-    return {
-      name: matched![1],
-      value: matched![2],
-    };
-  });
+  return parseEnumValues(enumValues, options).map(({ name, value }) => ({ name, value: value ?? name }));
 }

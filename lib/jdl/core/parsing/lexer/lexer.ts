@@ -20,6 +20,7 @@
 import { type ITokenConfig, Lexer, type TokenType } from 'chevrotain';
 
 import { relationshipOptions } from '../../built-in-options/index.ts';
+import { JDL_STRING_PATTERN } from '../../utils/jdl-string.ts';
 
 import OptionTokens from './option-tokens.ts';
 import RelationshipTypeTokens from './relationship-type-tokens.ts';
@@ -70,6 +71,25 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
   createTokenFromConfig({
     name: 'BLOCK_COMMENT',
     pattern: /\/\*([\s\S]*?)\*\//,
+    group: Lexer.SKIPPED,
+  });
+
+  createTokenFromConfig({
+    name: 'LINE_COMMENT',
+    pattern: /\/\/[^\n\r]*/,
+    group: Lexer.SKIPPED,
+  });
+
+  createTokenFromConfig({
+    name: 'DIRECTIVE',
+    pattern: (text, offset) => {
+      if (offset > 0 && !/[\n\r\u2028\u2029]/.test(text[offset - 1])) {
+        return null;
+      }
+      return /^#[^\n\r\u2028\u2029]*/.exec(text.slice(offset));
+    },
+    start_chars_hint: ['#'],
+    line_breaks: false,
     group: Lexer.SKIPPED,
   });
 
@@ -128,8 +148,7 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
   createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\// });
   createTokenFromConfig({ name: 'DECIMAL', pattern: /-?\d+\.\d+/ });
   createTokenFromConfig({ name: 'INTEGER', pattern: /-?\d+/ });
-  // No escaping, no unicode, just a plain string literal
-  createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"])*"/ });
+  createTokenFromConfig({ name: 'STRING', pattern: JDL_STRING_PATTERN, line_breaks: true });
 
   // punctuation
   createTokenFromConfig({ name: 'LPAREN', pattern: '(' });

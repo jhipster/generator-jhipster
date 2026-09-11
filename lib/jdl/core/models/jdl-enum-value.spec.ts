@@ -19,7 +19,12 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import { parseFromContent } from '../readers/jdl-reader.ts';
+import { createRuntime } from '../runtime.ts';
+
 import JDLEnumValue from './jdl-enum-value.ts';
+
+const runtime = createRuntime();
 
 describe('jdl - JDLEnumValue', () => {
   describe('new', () => {
@@ -53,5 +58,44 @@ describe('jdl - JDLEnumValue', () => {
         expect(enumValue.toString()).toBe('FRENCH (frenchy)');
       });
     });
+    for (const [value, literal] of [
+      ['frenchy', 'frenchy'],
+      ['value_123', 'value_123'],
+      ['entity', 'entity'],
+      ['\u00dc', '"\u00dc"'],
+      ['two words', '"two words"'],
+      ['a), InjectedEnum(a', '"a), InjectedEnum(a"'],
+      ['a) }\nentity Unexpected\n enum Tail { Value(a', '"a) }\\nentity Unexpected\\n enum Tail { Value(a"'],
+      ['123', '"123"'],
+      ['_value', '"_value"'],
+      ['a-b', '"a-b"'],
+      ['a.b', '"a.b"'],
+      ['value\n', '"value\\n"'],
+      [' value ', '" value "'],
+      ['a\\b', '"a\\\\b"'],
+      ['"', '"\\""'],
+      ['a"b', '"a\\"b"'],
+      ['a\\"b', '"a\\\\\\"b"'],
+      ['a"), InjectedEnum("a', '"a\\"), InjectedEnum(\\"a"'],
+      ['', '""'],
+    ]) {
+      describe(`with value ${JSON.stringify(value)}`, () => {
+        it('should emit a valid enum value literal', () => {
+          expect(new JDLEnumValue('VALUE', value).toString()).toBe(`VALUE (${literal})`);
+        });
+
+        it('should round-trip without introducing JDL declarations', () => {
+          const original = parseFromContent(`enum Example { VALUE (${JSON.stringify(value)}) }`, runtime);
+          const exported = `enum Example { ${new JDLEnumValue('VALUE', value)} }`;
+
+          expect(parseFromContent(exported, runtime)).toEqual(original);
+        });
+      });
+    }
+    for (const name of ['VALUE (a), INJECTED (b)', 'VALUE\n', 'VALUE } entity Unexpected {']) {
+      it(`should reject an invalid enum value name ${JSON.stringify(name)}`, () => {
+        expect(() => new JDLEnumValue(name).toString()).toThrow('Invalid enum value name');
+      });
+    }
   });
 });

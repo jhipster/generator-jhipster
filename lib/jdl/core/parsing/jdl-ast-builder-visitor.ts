@@ -30,6 +30,7 @@ import type {
 } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 import deduplicate from '../utils/array-utils.ts';
+import { parseJDLString } from '../utils/jdl-string.ts';
 import logger from '../utils/objects/logger.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
@@ -213,8 +214,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         case 'FALSE':
           optionValue = false;
           break;
+        case 'STRING':
+          optionValue = parseJDLString(valueImage);
+          break;
         default:
-          optionValue = valueImage.replace(/"/g, '');
+          optionValue = valueImage;
       }
       return { optionName, optionValue, type: 'BINARY' };
     }
@@ -416,7 +420,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         prop.value = context.enumPropValue[0].image;
       }
       if (context.enumPropValueWithQuotes) {
-        prop.value = context.enumPropValueWithQuotes[0].image.replace(/"/g, '');
+        prop.value = parseJDLString(context.enumPropValueWithQuotes[0].image);
       }
       return prop;
     }
@@ -634,8 +638,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         return context.INTEGER[0].image;
       }
       if (context.STRING) {
-        const stringImage = context.STRING[0].image;
-        return stringImage.substring(1, stringImage.length - 1);
+        return parseJDLString(context.STRING[0].image);
       }
       if (context.BOOLEAN) {
         return context.BOOLEAN[0].image === 'true';
@@ -683,8 +686,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         return context.INTEGER[0].image;
       }
       if (context.STRING) {
-        const stringImage = context.STRING[0].image;
-        return stringImage.substring(1, stringImage.length - 1);
+        return parseJDLString(context.STRING[0].image);
       }
       if (context.BOOLEAN) {
         return context.BOOLEAN[0].image === 'true';
@@ -709,7 +711,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       if (!context.STRING) {
         return [];
       }
-      return context.STRING.map(namePart => namePart.image.slice(1, -1));
+      return context.STRING.map(namePart => parseJDLString(namePart.image));
     }
   }
 

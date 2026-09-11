@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`enum template escaping should escape Java custom values from legacy storage 1`] = `
+"package com.example.domain.enumeration;
+
+/**
+ * The CustomEnum enumeration.
+ */
+public enum CustomEnum {
+    UNICODE("Ü"),
+    SPACES("two words"),
+    QUOTE("\\""),
+    BACKSLASH("a\\\\nb"),
+    APOSTROPHE("it's a value"),
+    OTHER;
+    private String value;
+
+    CustomEnum() {}
+
+    CustomEnum(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+}
+"
+`;
+
+exports[`enum template escaping should escape Java custom values from structured storage 1`] = `
+"package com.example.domain.enumeration;
+
+/**
+ * The CustomEnum enumeration.
+ */
+public enum CustomEnum {
+    UNICODE("Ü"),
+    QUOTE("\\""),
+    BACKSLASH("\\\\"),
+    COMMA(", "),
+    DELIMITERS("a), InjectedEnum(a"),
+    PARENTHESES("()"),
+    EMPTY(""),
+    NEWLINES("a\\r\\nb"),
+    SEPARATORS("a b c"),
+    CONTROLS("\\t\\b\\f\\u0000"),
+    APOSTROPHE("it's a value"),
+    UNICODE_ESCAPE("\\\\u000a"),
+    OTHER;
+    private String value;
+
+    CustomEnum() {}
+
+    CustomEnum(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+}
+"
+`;
+
+exports[`enum template escaping should generate executable TypeScript enums from legacy storage 1`] = `
+"export enum CustomEnum {
+
+  UNICODE = "Ü",
+
+  SPACES = "two words",
+
+  QUOTE = "\\"",
+
+  BACKSLASH = "a\\\\nb",
+
+  APOSTROPHE = "it's a value",
+
+  OTHER = "OTHER"
+
+}
+"
+`;
+
+exports[`enum template escaping should generate executable TypeScript enums from structured storage 1`] = `
+"export enum CustomEnum {
+
+  UNICODE = "Ü",
+
+  QUOTE = "\\"",
+
+  BACKSLASH = "\\\\",
+
+  COMMA = ", ",
+
+  DELIMITERS = "a), InjectedEnum(a",
+
+  PARENTHESES = "()",
+
+  EMPTY = "",
+
+  NEWLINES = "a\\r\\nb",
+
+  SEPARATORS = "a b c",
+
+  CONTROLS = "\\t\\b\\f\\u0000",
+
+  APOSTROPHE = "it's a value",
+
+  UNICODE_ESCAPE = "\\\\u000a",
+
+  OTHER = "OTHER"
+
+}
+"
+`;
+
+exports[`enum template escaping should generate valid i18n JSON from legacy storage 1`] = `
+"{
+    "sampleApp": {
+        "CustomEnum" : {
+            "null": "",
+            "UNICODE": "Ü",
+            "SPACES": "two words",
+            "QUOTE": "\\"",
+            "BACKSLASH": "a\\\\nb",
+            "APOSTROPHE": "it's a value",
+            "OTHER": "OTHER"
+        }
+    }
+}
+"
+`;
+
+exports[`enum template escaping should generate valid i18n JSON from structured storage 1`] = `
+"{
+    "sampleApp": {
+        "CustomEnum" : {
+            "null": "",
+            "UNICODE": "Ü",
+            "QUOTE": "\\"",
+            "BACKSLASH": "\\\\",
+            "COMMA": ", ",
+            "DELIMITERS": "a), InjectedEnum(a",
+            "PARENTHESES": "()",
+            "EMPTY": "",
+            "NEWLINES": "a\\r\\nb",
+            "SEPARATORS": "a b c",
+            "CONTROLS": "\\t\\b\\f\\u0000",
+            "APOSTROPHE": "it's a value",
+            "UNICODE_ESCAPE": "\\\\u000a",
+            "OTHER": "OTHER"
+        }
+    }
+}
+"
+`;

@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { parseJDLString } from '../utils/jdl-string.ts';
+
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.ts';
 
 export default class StringJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<string> {
@@ -28,7 +30,8 @@ export default class StringJDLApplicationConfigurationOption extends JDLApplicat
   }
 
   toString(): string {
-    const value = this.quoted && !this.value.includes('"') ? `"${this.value}"` : this.value;
+    const unquotedValue = this.value.startsWith('"') && this.value.endsWith('"') ? parseJDLString(this.value) : this.value;
+    const value = this.quoted ? JSON.stringify(unquotedValue) : this.value;
     return `${this.name} ${value}`;
   }
 }

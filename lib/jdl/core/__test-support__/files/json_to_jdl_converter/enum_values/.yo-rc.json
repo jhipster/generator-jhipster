@@ -1,0 +1,6 @@
+{
+  "generator-jhipster": {
+    "baseName": "enumRoundtrip",
+    "entities": ["Palette"]
+  }
+}

@@ -41,7 +41,7 @@ public enum <%- enumName %> {
     <%_ if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
     <%- enumWithCustomValue.name %><%- index < enumValues.length - 1 ? ',' : ';' %>
     <%_ } else { _%>
-    <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<%- index < enumValues.length - 1 ? ',' : ';' %>
+    <%- enumWithCustomValue.name %>(<%- JSON.stringify(enumWithCustomValue.value) %>)<%- index < enumValues.length - 1 ? ',' : ';' %>
     <%_ } _%>
   <%_ } _%>
   <%_ if (!withoutCustomValues) { _%>

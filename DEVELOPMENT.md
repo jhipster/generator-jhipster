@@ -1,6 +1,44 @@
 # JHipster development
 
 - [Generator development setup](#setup)
+- [Entity enum values](#entity-enum-values)
+
+## Entity enum values
+
+An entity's `fieldValues` accepts either the legacy raw string (`"FIRST,SECOND (two words)"`) or an array of entries:
+
+```json
+[{ "name": "FIRST" }, { "name": "SECOND", "value": "a), other(a" }, { "name": "EMPTY", "value": "" }]
+```
+
+Entity field definitions are stored in `.jhipster/<Entity>.json`. `.yo-rc.json` contains application configuration and entity names, not embedded enum field definitions.
+
+JDL import retains legacy strings for simple values, including spaces, Unicode and literal backslashes. It uses structured entries when custom values contain quotes, commas, parentheses or line breaks, or are empty. An omitted `value` means no custom value; `""` is an explicitly empty custom value.
+
+Use `parseEnumValues` and `serializeEnumValues` from `generator-jhipster/utils` rather than splitting `fieldValues` in generators or blueprints. Legacy strings are not JDL strings: quotes and backslashes are literal characters, not escapes. Ambiguous legacy delimiter sequences cannot be recovered automatically; convert them to structured entries with the intended values.
+
+The entity enum prompt also accepts a JSON array for custom values containing special characters. Only enum names are uppercased, not custom values.
+
+### Quoted JDL strings
+
+Quoted strings in enum values, annotations and configuration support JSON-style escapes: `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t` and `\uXXXX`. For example:
+
+```jdl
+enum SpecialChars {
+  QUOTES ("\"")
+  BACKSLASH ("\\")
+  COMMA_SPACE (", ")
+}
+
+entity StreamRights {
+  @MapstructExpression("java(s.getId() + \" | \" + s.getName())")
+  details String
+}
+```
+
+Literal Unicode and multiline strings remain supported. Escape literal backslashes as `\\`; unknown escape sequences such as `\d` retain their legacy literal meaning. Comment and directive markers inside quoted strings are data, not JDL syntax. Export escapes string values, and generated Java, TypeScript and translation JSON escape them for their target languages.
+
+Existing JDL that relied on a literal recognized sequence such as `\n` must use `\\n` to keep the backslash rather than insert a newline. Legacy entity JSON values are not reinterpreted this way.
 
 ## <a name="setup"></a> Generator development setup
 

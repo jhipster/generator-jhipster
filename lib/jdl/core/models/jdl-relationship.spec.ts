@@ -402,7 +402,7 @@ describe('jdl - JDLRelationship', () => {
         it('should add them', () => {
           expect(relationship.toString()).toBe(
             `relationship ${relationship.type} {
-  @Id ${relationship.from}{${relationship.injectedFieldInFrom}} to @Id @IdGenerator(sequence) ${relationship.to}{${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
+  @Id ${relationship.from}{${relationship.injectedFieldInFrom}} to @Id @IdGenerator("sequence") ${relationship.to}{${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
 }`,
           );
         });

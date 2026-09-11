@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { ALPHANUMERIC_UNDERSCORE, ENUM_PROP_NAME_PATTERN } from '../built-in-options/validation-patterns.ts';
+
 export default class JDLEnumValue {
   name: string;
   value?: string;
@@ -32,7 +34,15 @@ export default class JDLEnumValue {
   }
 
   toString() {
-    const value = this.value ? ` (${this.value})` : '';
-    return `${this.name}${value}`;
+    if (this.name.match(ENUM_PROP_NAME_PATTERN)?.[0] !== this.name) {
+      throw new Error(`Invalid enum value name ${JSON.stringify(this.name)}.`);
+    }
+    if (this.value === undefined) {
+      return this.name;
+    }
+    // Bare values must also satisfy the enum validator, which is stricter than the NAME token.
+    const unquotedValue = this.value.match(ALPHANUMERIC_UNDERSCORE)?.[0];
+    const value = unquotedValue === this.value ? this.value : JSON.stringify(this.value);
+    return `${this.name} (${value})`;
   }
 }

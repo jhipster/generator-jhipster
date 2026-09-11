@@ -50,6 +50,22 @@ describe('generator - base-application - support - prepareField', () => {
   });
 
   describe('getEnumValuesWithCustomValues', () => {
+    it('should consume structured values without losing empty values or delimiter characters', () => {
+      const entries = [{ name: 'SPECIAL', value: 'Ü, "a)\\\nb(' }, { name: 'EMPTY', value: '' }, { name: 'OTHER' }];
+      expect(getEnumValuesWithCustomValues(entries)).toEqual([entries[0], entries[1], { name: 'OTHER', value: 'OTHER' }]);
+    });
+    it('should preserve literal legacy quotes and backslashes', () => {
+      expect(getEnumValuesWithCustomValues(String.raw`VALUE ("a\nb")`)).toEqual([{ name: 'VALUE', value: String.raw`"a\nb"` }]);
+    });
+    it('should support built-in client language constants', () => {
+      expect(getEnumValuesWithCustomValues('en,pt-br', { clientConstants: true })).toEqual([
+        { name: 'en', value: 'en' },
+        { name: 'pt-br', value: 'pt-br' },
+      ]);
+    });
+    it('should reject invalid names', () => {
+      expect(() => getEnumValuesWithCustomValues([{ name: 'VALUE,INJECTED' }])).toThrow('Invalid enum entry');
+    });
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error testing invalid arguments
