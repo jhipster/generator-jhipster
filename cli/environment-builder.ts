@@ -70,6 +70,7 @@ export default class EnvironmentBuilder {
   devBlueprintPath?: string;
   localBlueprintPath?: string;
   localBlueprintExists?: boolean;
+  disableBlueprints?: boolean;
   _blueprintsWithVersion: Record<string, string | undefined> = {};
 
   /**
@@ -125,11 +126,14 @@ export default class EnvironmentBuilder {
     blueprints,
     lookups,
     devBlueprintPath = jhipsterDevBlueprintPath,
+    disableBlueprints = this._getDisableBlueprintsFromArgv(),
   }: {
     blueprints?: Record<string, string | undefined>;
     lookups?: Parameters<Environment['lookup']>[0][];
     devBlueprintPath?: string;
+    disableBlueprints?: boolean;
   } = {}) {
+    this.disableBlueprints = disableBlueprints;
     const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
     this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
@@ -261,6 +265,12 @@ export default class EnvironmentBuilder {
    * Load blueprints from argv, .yo-rc.json.
    */
   _loadBlueprints(blueprints: Record<string, string | undefined> | undefined): this {
+    if (this.disableBlueprints) {
+      // Blueprints are executable npm packages: when disabled, none must be loaded, resolved, installed or executed.
+      // This has to short-circuit here, before lookup/install, not only at generator composition time.
+      this._blueprintsWithVersion = {};
+      return this;
+    }
     this._blueprintsWithVersion = {
       ...this._getAllBlueprintsWithVersion(),
       ...blueprints,
@@ -351,6 +361,14 @@ export default class EnvironmentBuilder {
       return [];
     }
     return blueprintNames.map(v => parseBlueprintInfo(v));
+  }
+
+  /**
+   * Detect the `--disable-blueprints` flag from argv.
+   * At this point, commander has not parsed yet because we are building it.
+   */
+  private _getDisableBlueprintsFromArgv(): boolean {
+    return process.argv.includes('--disable-blueprints');
   }
 
   /**
