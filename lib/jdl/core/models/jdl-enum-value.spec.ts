@@ -53,5 +53,27 @@ describe('jdl - JDLEnumValue', () => {
         expect(enumValue.toString()).toBe('FRENCH (frenchy)');
       });
     });
+    describe('with a value that is not a valid NAME token', () => {
+      it('should quote a value holding a special character', () => {
+        expect(new JDLEnumValue('Ue', '\u00dc').toString()).toBe('Ue ("\u00dc")');
+      });
+
+      it('should quote a value holding a space', () => {
+        expect(new JDLEnumValue('COMMA_SPACE', ', ').toString()).toBe('COMMA_SPACE (", ")');
+      });
+
+      it('should quote a value that would otherwise inject another enum entry', () => {
+        // Unquoted, `a), InjectedEnum(a` closes the parentheses and opens a second entry,
+        // so a single value would be exported as two enum values.
+        expect(new JDLEnumValue('Injected', 'a), InjectedEnum(a').toString()).toBe('Injected ("a), InjectedEnum(a")');
+      });
+    });
+    describe('with a value holding a double quote', () => {
+      it('should fail, as JDL strings have no escape sequence', () => {
+        expect(() => new JDLEnumValue('QUOTES', '"').toString()).toThrow(
+          /^The enum value '"' contains a double quote, which JDL cannot represent\.$/,
+        );
+      });
+    });
   });
 });
