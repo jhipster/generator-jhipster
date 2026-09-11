@@ -106,7 +106,6 @@ jobs:
           ls template-file-client
           ls template-file-common
           ls template-file-cypress
-          ls template-file-playwright
           ls template-file-server
       - name: 'TESTS: backend'
         id: backend
