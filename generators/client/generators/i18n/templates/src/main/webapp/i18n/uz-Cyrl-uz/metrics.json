@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Тозалаш",
-        "marksweepcount": "Mark Sweep сони",
-        "marksweeptime": "Mark Sweep вақти",
-        "scavengecount": "Тозалаш сони",
-        "scavengetime": "Тозалаш вақти"
+        "title": "Тозалаш"
       },
       "http": {
         "title": "HTTP сўровлар (милисекунд бирлигида)",

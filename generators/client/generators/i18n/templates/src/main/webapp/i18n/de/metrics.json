@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Speicherbereinigung (GC)",
-        "marksweepcount": "Durchlaufmarkierungs (Mark Sweep) Anzahl",
-        "marksweeptime": "Durchlaufmarkierungs (Mark Sweep) Zeit",
-        "scavengecount": "Bereinigungslauf (Scavenge) Anzahl",
-        "scavengetime": "Bereinigungslauf (Scavenge) Zeit"
+        "title": "Speicherbereinigung (GC)"
       },
       "http": {
         "title": "HTTP Anfragen (Ereignisse pro Sekunde)",

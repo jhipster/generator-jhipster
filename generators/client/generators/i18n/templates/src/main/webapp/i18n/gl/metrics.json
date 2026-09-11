@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Colectas de lixo",
-        "marksweepcount": "Mark Sweep count",
-        "marksweeptime": "Mark Sweep time",
-        "scavengecount": "Scavenge count",
-        "scavengetime": "Scavenge time"
+        "title": "Colectas de lixo"
       },
       "http": {
         "title": "Peticións HTTP (eventos por segundo)",

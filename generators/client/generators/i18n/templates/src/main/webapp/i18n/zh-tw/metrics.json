@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "GC 記憶體回收",
-        "marksweepcount": "Mark Sweep 計數",
-        "marksweeptime": "Mark Sweep 時間",
-        "scavengecount": "Scavenge 計數",
-        "scavengetime": "Scavenge 時間"
+        "title": "GC 記憶體回收"
       },
       "http": {
         "title": "HTTP 要求 (事件 / 秒)",

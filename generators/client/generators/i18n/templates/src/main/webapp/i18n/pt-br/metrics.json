@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Coletor de lixo",
-        "marksweepcount": "Número de marcados para coleta",
-        "marksweeptime": "Tempo de marcação para coleta",
-        "scavengecount": "Número de varreduras",
-        "scavengetime": "Tempo de varreduras"
+        "title": "Coletor de lixo"
       },
       "http": {
         "title": "Requisições HTTP (eventos em milissegundo)",

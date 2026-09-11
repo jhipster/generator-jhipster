@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Garbage kolekce",
-        "marksweepcount": "Počet Mark Sweep",
-        "marksweeptime": "Čas Mark Sweep",
-        "scavengecount": "Počet Scavenge",
-        "scavengetime": "Čas Scavenge"
+        "title": "Garbage kolekce"
       },
       "http": {
         "title": "HTTP požadavky (událostí za sekundu)",

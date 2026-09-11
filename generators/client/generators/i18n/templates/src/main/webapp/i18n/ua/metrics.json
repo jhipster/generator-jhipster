@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Прибиральники сміття",
-        "marksweepcount": "Mark Sweep кількість",
-        "marksweeptime": "Mark Sweep час",
-        "scavengecount": "Прибирання сміття: кількість",
-        "scavengetime": "Прибирання сміття: час"
+        "title": "Прибиральники сміття"
       },
       "http": {
         "title": "HTTP запити (подій за секунду)",

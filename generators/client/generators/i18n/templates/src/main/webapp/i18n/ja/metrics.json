@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "ガベージコレクション",
-        "marksweepcount": "\"Mark Sweep\"合計",
-        "marksweeptime": "\"Mark Sweep\"時間",
-        "scavengecount": "\"Scavenge\"合計",
-        "scavengetime": "\"Scavenge\"時間"
+        "title": "ガベージコレクション"
       },
       "http": {
         "title": "HTTPリクエスト（時間単位：ミリ秒）",

@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Tự động dọn dẹp",
-        "marksweepcount": "Số lần kiểm tra",
-        "marksweeptime": "Thời gian kiểm tra",
-        "scavengecount": "Số lần dọn dẹp",
-        "scavengetime": "Thời gian dọn dẹp"
+        "title": "Tự động dọn dẹp"
       },
       "http": {
         "title": "Số lượng yêu cầu HTTP (số sự kiện trên giây)",

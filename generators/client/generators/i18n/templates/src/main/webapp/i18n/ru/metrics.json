@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Сборщики мусора",
-        "marksweepcount": "Mark Sweep количество",
-        "marksweeptime": "Mark Sweep время",
-        "scavengecount": "Сборка мусора количество",
-        "scavengetime": "Сборка мусора время"
+        "title": "Сборщики мусора"
       },
       "http": {
         "title": "HTTP запросы (событий в секунду)",
