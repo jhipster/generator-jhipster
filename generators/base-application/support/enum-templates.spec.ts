@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-import ejs from 'ejs';
 import { describe, expect, it } from 'esmocha';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
+
+import ejs from 'ejs';
 import ts from 'typescript';
 
 import type { EnumValues } from '../../../lib/utils/enum.ts';

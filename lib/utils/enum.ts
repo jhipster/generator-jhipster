@@ -38,18 +38,21 @@ export function parseEnumValues(fieldValues: unknown, { clientConstants = false 
   const invalidEntry = (entry: unknown): never => {
     throw new Error(`Invalid enum entry in entity JSON: ${JSON.stringify(entry)}.`);
   };
-  const values: unknown[] =
-    typeof fieldValues === 'string' ?
-      fieldValues.split(',').map(entry => {
-        const trimmed = entry.trim();
-        const match = /^([\w-]+)(?:[ \t]*\(([^,)\r\n\u2028\u2029]*)\))?$/.exec(trimmed);
-        if (!match || match[0] !== trimmed) {
-          return invalidEntry(entry);
-        }
-        return match[2] === undefined ? { name: match[1] } : { name: match[1], value: match[2] };
-      })
-    : Array.isArray(fieldValues) ? fieldValues
-    : invalidEntry(fieldValues);
+  let values: unknown[];
+  if (typeof fieldValues === 'string') {
+    values = fieldValues.split(',').map(entry => {
+      const trimmed = entry.trim();
+      const match = /^([\w-]+)(?:[ \t]*\(([^,)\r\n\u2028\u2029]*)\))?$/.exec(trimmed);
+      if (match?.[0] !== trimmed) {
+        return invalidEntry(entry);
+      }
+      return match[2] === undefined ? { name: match[1] } : { name: match[1], value: match[2] };
+    });
+  } else if (Array.isArray(fieldValues)) {
+    values = fieldValues;
+  } else {
+    return invalidEntry(fieldValues);
+  }
 
   if (values.length === 0) {
     return invalidEntry(fieldValues);

@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-import ejs from 'ejs';
 import { describe, expect, it } from 'esmocha';
-import { uniq, uniqWith, upperFirst } from 'lodash-es';
 import { readFileSync } from 'node:fs';
+
+import ejs from 'ejs';
+import { uniq, uniqWith, upperFirst } from 'lodash-es';
 
 import { parseFromContent } from '../../lib/jdl/core/readers/jdl-reader.ts';
 import { createRuntime } from '../../lib/jdl/core/runtime.ts';
