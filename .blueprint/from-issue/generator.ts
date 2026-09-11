@@ -89,8 +89,11 @@ export default class extends BaseGenerator {
         const issue = await getGithubIssue({ owner: this.owner, repository: this.repository, issue: this.issueNumber });
 
         if (this.projectFolder || this._globalConfig.get('samplesFolder')) {
+          // The samples folder is usually outside of the current destination root.
           this.destinationRoot(
-            this.destinationPath(this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issueNumber}`)),
+            this.destinationPath(this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issueNumber}`), {
+              allowOutsideRoot: true,
+            }),
           );
         }
 

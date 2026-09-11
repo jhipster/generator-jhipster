@@ -91,7 +91,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       setWorkspacesRoot() {
-        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath));
+        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath, { allowOutsideRoot: true }));
       },
     });
   }
@@ -296,7 +296,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           }
           // Add Memcached support
           if (appConfig.cacheProviderMemcached) {
-            const memcachedYaml = parseYaml(this.readDestination(`${path}/src/main/docker/memcached.yml`));
+            const memcachedYaml = parseYaml(this.readDestination(`${path}/src/main/docker/memcached.yml`, { allowOutsideRoot: true }));
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
@@ -304,7 +304,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = parseYaml(this.readDestination(`${path}/src/main/docker/redis.yml`));
+            const redisYaml = parseYaml(this.readDestination(`${path}/src/main/docker/redis.yml`, { allowOutsideRoot: true }));
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
