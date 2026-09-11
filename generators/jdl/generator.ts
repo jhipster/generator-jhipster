@@ -192,6 +192,13 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         } else {
           this.writeConfig(...this.applications.map(app => (this.ignoreApplication ? { ...app, config: undefined } : app)));
         }
+
+        if (!this.ignoreDeployments) {
+          // Deployment configuration must be in place before the workspaces generator looks deployments up.
+          for (const deployment of this.exportedDeployments ?? []) {
+            this.writeDeploymentConfig(deployment[GENERATOR_JHIPSTER].deploymentType, deployment);
+          }
+        }
       },
       async generate() {
         if (this.jsonOnly) {
@@ -261,7 +268,6 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           const { deploymentType } = deploymentConfig;
           this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
-          this.writeDeploymentConfig(deploymentType, deployment);
           await this.composeWithJHipster(deploymentType, {
             generatorOptions: {
               destinationRoot: this.destinationPath(deploymentType),

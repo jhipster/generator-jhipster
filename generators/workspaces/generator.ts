@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
-import { existsSync } from 'node:fs';
 
 import { packageJson } from '../../lib/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
@@ -77,7 +76,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
       async configureUsingFiles() {
         if (!this.generateWorkspaces) return;
 
-        if (existsSync(this.destinationPath('docker-compose'))) {
+        // The deployment configuration may have been written by the jdl generator and not committed to disk yet.
+        if (this.fs.exists(this.destinationPath('docker-compose', '.yo-rc.json'))) {
           this.workspacesConfig.dockerCompose = true;
         }
         this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders])];
