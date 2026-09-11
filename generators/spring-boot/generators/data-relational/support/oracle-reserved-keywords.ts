@@ -101,7 +101,7 @@ export const oracleReservedKeywords = [
   'CREATE',
   'CURRENT',
   'CURRENT_SCHEMA',
-  'CURREN_USER',
+  'CURRENT_USER',
   'CURSOR',
   'CYCLE',
   ' ',
