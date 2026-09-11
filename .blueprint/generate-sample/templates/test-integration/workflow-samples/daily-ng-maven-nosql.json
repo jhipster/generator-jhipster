@@ -1,0 +1,12 @@
+{
+  "include": [
+    {
+      "name": "ngx-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "ngx-cassandra",
+      "entity": "cassandra"
+    }
+  ]
+}

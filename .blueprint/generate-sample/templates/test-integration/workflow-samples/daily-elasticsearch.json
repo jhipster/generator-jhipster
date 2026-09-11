@@ -1,0 +1,12 @@
+{
+  "include": [
+    {
+      "name": "ng-mysql-es-noi18n-mapsid",
+      "entity": "sqllight"
+    },
+    {
+      "name": "gradle-ngx-psql-es-noi18n",
+      "entity": "sqllight"
+    }
+  ]
+}

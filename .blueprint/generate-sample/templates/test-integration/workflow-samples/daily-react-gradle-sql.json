@@ -1,0 +1,32 @@
+{
+  "include": [
+    {
+      "name": "gradle-react-mysql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "gradle-react-sass-noi18n",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-react-websocket",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-react-hazelcast-cucumber",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-react-mariadb-kafka-nol2",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-react-session",
+      "entity": "sql"
+    },
+    {
+      "name": "gradle-react-infinispan",
+      "entity": "sql"
+    }
+  ]
+}

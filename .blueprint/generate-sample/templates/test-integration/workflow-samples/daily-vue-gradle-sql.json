@@ -1,0 +1,40 @@
+{
+  "include": [
+    {
+      "name": "vue-gradle-psql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-gradle-mysql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-gradle-noi18n",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-gradle-fulli18n-fr",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-gradle-oauth2",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-gradle-session",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "vue-gradle-es",
+      "entity": "sql"
+    },
+    {
+      "name": "vue-gradle-websocket",
+      "entity": "sql"
+    },
+    {
+      "name": "vue-gradle-theme",
+      "entity": "sql"
+    }
+  ]
+}

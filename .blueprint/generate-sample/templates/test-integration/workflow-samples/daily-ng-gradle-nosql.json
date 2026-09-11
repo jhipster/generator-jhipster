@@ -1,0 +1,12 @@
+{
+  "include": [
+    {
+      "name": "gradle-ngx-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "gradle-ngx-cassandra",
+      "entity": "cassandra"
+    }
+  ]
+}

@@ -17,23 +17,35 @@
  * limitations under the License.
  */
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 import type { WorkflowSample, WorkflowSamples } from '../../../lib/ci/index.ts';
 import { testIntegrationFolder } from '../../constants.ts';
 
-const WORKFLOW_NAMES = ['angular', 'react', 'vue', 'daily-ms-oauth2', 'daily-neo4j'];
+const workflowSamplesFolder = join(testIntegrationFolder, 'workflow-samples');
 export const DAILY_PREFIX = 'daily-';
 
 export const isDaily = (workflow: string): boolean => workflow.startsWith(DAILY_PREFIX);
 
-export const getWorkflowSamples = (workflows: string[] = WORKFLOW_NAMES): Record<string, Record<string, WorkflowSample>> =>
+/**
+ * Workflows with a `workflow-samples/<workflow>.json` file: the client workflows of this repository first, then the
+ * `daily-` workflows of jhipster-daily-builds.
+ */
+export const getWorkflowNames = (): string[] => {
+  const workflows = readdirSync(workflowSamplesFolder)
+    .filter(file => file.endsWith('.json'))
+    .map(file => file.slice(0, -'.json'.length))
+    .sort();
+  return [...workflows.filter(workflow => !isDaily(workflow)), ...workflows.filter(isDaily)];
+};
+
+export const getWorkflowSamples = (workflows: string[] = getWorkflowNames()): Record<string, Record<string, WorkflowSample>> =>
   Object.fromEntries(
     workflows.map(workflow => [
       workflow,
       Object.fromEntries(
-        (JSON.parse(readFileSync(join(testIntegrationFolder, `workflow-samples/${workflow}.json`)).toString()) as WorkflowSamples).include
+        (JSON.parse(readFileSync(join(workflowSamplesFolder, `${workflow}.json`)).toString()) as WorkflowSamples).include
           .map(sample =>
             isDaily(workflow) ?
               {

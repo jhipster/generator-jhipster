@@ -1,0 +1,32 @@
+{
+  "include": [
+    {
+      "name": "ngx-mysql",
+      "entity": "sqlfull"
+    },
+    {
+      "name": "ngx-sass-noi18n",
+      "entity": "sql"
+    },
+    {
+      "name": "ngx-websocket",
+      "entity": "sql"
+    },
+    {
+      "name": "ngx-hazelcast-cucumber",
+      "entity": "sql"
+    },
+    {
+      "name": "ngx-mariadb-kafka-nol2",
+      "entity": "sql"
+    },
+    {
+      "name": "ngx-session",
+      "entity": "sql"
+    },
+    {
+      "name": "ngx-infinispan",
+      "entity": "sql"
+    }
+  ]
+}

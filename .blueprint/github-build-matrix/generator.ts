@@ -30,15 +30,16 @@ import {
   setGithubTaskOutput,
 } from '../../lib/ci/index.ts';
 import { testIntegrationFolder } from '../constants.ts';
+import { isDaily } from '../generate-sample/support/get-workflow-samples.ts';
 
 import type { eventNameChoices, workflowChoices } from './command.ts';
 import { devServerMatrix } from './samples/dev-server.ts';
 import { getGitChanges } from './support/git-changes.ts';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from './support/integration-test-constants.ts';
-import { buildWorkflowMatrix } from './support/workflow-matrix.ts';
+import { buildDailyWorkflowMatrix, buildWorkflowMatrix } from './support/workflow-matrix.ts';
 
 export default class extends BaseGenerator {
-  workflow!: (typeof workflowChoices)[number];
+  workflow!: (typeof workflowChoices)[number] | `daily-${string}`;
   eventName?: (typeof eventNameChoices)[number];
   matrix!: string;
 
@@ -121,6 +122,12 @@ export default class extends BaseGenerator {
                 sonarOnly: !enableAnyTest,
                 skipSonarCompare: changes.sonarPr,
               });
+            }
+            break;
+          }
+          default: {
+            if (isDaily(this.workflow)) {
+              matrix = buildDailyWorkflowMatrix(this.workflow);
             }
             break;
           }

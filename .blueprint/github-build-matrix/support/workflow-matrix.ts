@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { GitHubMatrixGroup, GitHubMatrixGroupItem, WorkflowSample } from '../../../lib/ci/index.ts';
+import { getWorkflowSamples } from '../../generate-sample/support/get-workflow-samples.ts';
 
 export type WorkflowMatrixOptions = {
   /** Backend tests are skipped when false, unless the sample runs sonar. */
@@ -63,4 +64,16 @@ export const buildWorkflowMatrix = (
           },
         ];
       }),
+  );
+
+/** Java version the jhipster-daily-builds workflows pass to `jhipster/actions/setup-runner`. */
+export const DAILY_BUILDS_JAVA_VERSION = '25';
+
+/**
+ * Convert the samples of a jhipster-daily-builds workflow (`workflow-samples/daily-<workflow>.json`) to the GitHub matrix
+ * group the workflow runs: every sample, with every test, on the Java version the daily workflows pin.
+ */
+export const buildDailyWorkflowMatrix = (workflow: string): GitHubMatrixGroup =>
+  buildWorkflowMatrix(
+    Object.values(getWorkflowSamples([workflow])[workflow]).map(sample => ({ ...sample, 'java-version': DAILY_BUILDS_JAVA_VERSION })),
   );

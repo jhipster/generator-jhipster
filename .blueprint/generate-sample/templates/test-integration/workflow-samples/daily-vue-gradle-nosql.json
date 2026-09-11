@@ -1,0 +1,12 @@
+{
+  "include": [
+    {
+      "name": "vue-gradle-mongodb",
+      "entity": "mongodb"
+    },
+    {
+      "name": "vue-gradle-cassandra",
+      "entity": "cassandra"
+    }
+  ]
+}

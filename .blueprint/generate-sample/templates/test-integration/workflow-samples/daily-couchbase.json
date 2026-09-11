@@ -1,0 +1,16 @@
+{
+  "include": [
+    {
+      "name": "ngx-couchbase",
+      "entity": "couchbase"
+    },
+    {
+      "name": "gradle-ngx-couchbase",
+      "entity": "couchbase"
+    },
+    {
+      "name": "webflux-couchbase",
+      "entity": "couchbase"
+    }
+  ]
+}

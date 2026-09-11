@@ -36,6 +36,7 @@ export default class extends BaseGenerator {
         if (this.sampleName && this.samples.length === 0) {
           throw new Error(`Sample ${this.sampleName} not found in the ${this.workflow ?? WORKFLOWS.join(', ')} workflow samples`);
         }
+        // Print on stdout so `--json` can be piped; `this.log` writes to stderr.
         // eslint-disable-next-line no-console
         console.log(this.format());
       },
