@@ -22,6 +22,7 @@ import { extname } from 'node:path';
 import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, type MemFsEditorFile, create as createMemFsEditor } from 'mem-fs-editor';
+import { isFilePending } from 'mem-fs-editor/state';
 
 import { downloadJdlFile } from '../../cli/download.ts';
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
@@ -32,6 +33,7 @@ import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import BaseGenerator from '../base/index.ts';
 import { normalizeBlueprintName } from '../base/internal/blueprint.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
+import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 
@@ -135,6 +137,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           {
             applicationName: this.options.baseName ?? (this.existingProject ? this.jhipsterConfig.baseName : undefined),
             applicationType: this.options.applicationType ?? (this.existingProject ? this.jhipsterConfig.applicationType : undefined),
+            // Deployment configuration is written through the in-memory file system, like the application one.
+            skipDeploymentFileGeneration: true,
           },
           this.options.jdlDefinition,
         );
@@ -257,6 +261,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           const { deploymentType } = deploymentConfig;
           this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
+          this.writeDeploymentConfig(deploymentType, deployment);
           await this.composeWithJHipster(deploymentType, {
             generatorOptions: {
               destinationRoot: this.destinationPath(deploymentType),
@@ -273,6 +278,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   }
 
   async runNonInteractive(applications: ApplicationWithEntitiesAndPath[], options: any) {
+    // The archive is written once, by the workspace root, children defer their commit and hand the files over.
+    const deferCommit = Boolean((this.options as BootstrapOptions).exportApplication) && applications.length > 1;
     await Promise.all(
       applications.map(async application => {
         const rootCwd = this.destinationPath();
@@ -281,6 +288,11 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 
+        if (deferCommit) {
+          generatorOptions.exportApplication = undefined;
+          generatorOptions.deferCommit = true;
+        }
+
         // Install should happen at the root of the monorepository. Force skip install at children.
         if ((this.options as GitOptions).monorepository) {
           generatorOptions.skipInstall = true;
@@ -288,8 +300,36 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const envBuilder = await this.createEnvBuilder(envOptions);
         const env = envBuilder.getEnvironment();
         await env.run([this.entrypointGenerator], generatorOptions);
+
+        if (deferCommit && application.sharedFs) {
+          // Every environment commits its own mem-fs: the files must be moved to this environment's mem-fs before it
+          // commits, otherwise they are never exported.
+          this.adoptPendingFiles(application.sharedFs);
+        }
       }),
     );
+  }
+
+  /**
+   * Moves the files a child environment left pending to this environment's mem-fs, so that they are committed
+   * (exported) with the rest of the workspace.
+   */
+  private adoptPendingFiles(childFs: MemFs<MemFsEditorFile>) {
+    childFs.each(file => {
+      if (isFilePending(file)) {
+        this.env.sharedFs.add(file);
+      }
+    });
+  }
+
+  /**
+   * Writes the deployment `.yo-rc.json` through the in-memory file system, so that it goes through the commit
+   * pipeline like every other generated file.
+   */
+  writeDeploymentConfig(deploymentType: string, deployment: Record<string, any>) {
+    const configFile = this.destinationPath(deploymentType, '.yo-rc.json');
+    const oldConfig: YoRcFileContent = this.fs.readJSON(configFile, {}) as YoRcFileContent;
+    this.fs.writeJSON(configFile, mergeYoRcContent(oldConfig, deployment as YoRcFileContent));
   }
 
   writeConfig(...applications: Partial<ApplicationWithEntitiesAndPath>[]) {

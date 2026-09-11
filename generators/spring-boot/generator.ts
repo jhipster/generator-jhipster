@@ -29,7 +29,7 @@ import { editPropertiesFileCallback } from '../base-core/support/properties-file
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
 import type { Source as CommonSource } from '../common/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
-import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
+import { addJavaImport, generateKeyStoreContents, javaBeanCase } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
   getJavaValueGeneratorForType,
@@ -643,8 +643,16 @@ ${classProperties
         const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
         if (this.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
+        } else if (this.fs.exists(keyStoreFile)) {
+          this.log.info(`KeyStore '${keyStoreFile}' already exists. Leaving unchanged.`);
         } else {
-          this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName! }));
+          // `keytool` writes to the filesystem, route the KeyStore through the in-memory file system so that it goes
+          // through the commit pipeline like any other generated file, `--export-application` included.
+          const { contents, result } = await generateKeyStoreContents(keyStoreFile, { packageName: application.packageName! });
+          if (contents) {
+            this.writeDestination(keyStoreFile, contents);
+          }
+          this.validateResult(result);
         }
       },
     });

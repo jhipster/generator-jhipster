@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 
-import { lstat, mkdir } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { lstat, mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 
 import { execa } from 'execa';
 
@@ -69,5 +70,33 @@ export async function generateKeyStore(keyStoreFile: string, { packageName }: { 
     return { info: [...result.stderr.split('\n').filter(Boolean), `KeyStore '${keyStoreFile}' generated successfully.`] };
   } catch (error) {
     return { debug: error, warning: `Failed to create a KeyStore with 'keytool': ${(error as Error).message}` };
+  }
+}
+
+/**
+ * Generates a KeyStore without touching the destination: `keytool` can only write to a file (`-keystore /dev/stdout`
+ * is rejected with `keystore file exists, but is empty`), so it is generated in a temporary folder and read back.
+ *
+ * Lets the caller write the contents through the in-memory file system, which is what `--export-application` needs.
+ */
+export async function generateKeyStoreContents(
+  keyStoreFile: string,
+  { packageName }: { packageName: string },
+): Promise<{ contents?: Buffer; result: ValidationResult }> {
+  const temporaryFolder = await mkdtemp(join(tmpdir(), 'jhipster-keystore-'));
+  const temporaryFile = join(temporaryFolder, 'keystore.p12');
+  try {
+    const result = await generateKeyStore(temporaryFile, { packageName });
+    if (!Array.isArray(result.info)) {
+      // `keytool` failed, the result holds the warning.
+      return { result };
+    }
+    return {
+      contents: await readFile(temporaryFile),
+      // Report the destination, not the temporary file the KeyStore was generated into.
+      result: { ...result, info: [...result.info.slice(0, -1), `KeyStore '${keyStoreFile}' generated successfully.`] },
+    };
+  } finally {
+    await rm(temporaryFolder, { recursive: true, force: true });
   }
 }

@@ -58,6 +58,11 @@ type JDLApplicationConfiguration = {
     };
   };
   forSeveralApplications?: boolean;
+  /**
+   * Returns the deployments without writing their `.yo-rc.json` files, letting the caller write them through its
+   * own file system. Deployment files are written to the disk otherwise.
+   */
+  skipDeploymentFileGeneration?: boolean;
 };
 
 /**
@@ -137,7 +142,7 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
         importState = importApplicationsAndEntities(jdlObject);
       }
       if (jdlObject.getDeploymentQuantity()) {
-        importState.exportedDeployments = importDeployments(jdlObject.deployments);
+        importState.exportedDeployments = importDeployments(jdlObject.deployments, configuration);
       }
       return importState;
     },
@@ -248,8 +253,8 @@ function importApplicationsAndEntities(jdlObject: JDLObject) {
   return importState;
 }
 
-function importDeployments(deployments: Record<string, JDLDeployment>) {
-  return exportDeployments(deployments);
+function importDeployments(deployments: Record<string, JDLDeployment>, configuration: JDLApplicationConfiguration) {
+  return exportDeployments(deployments, { skipFileGeneration: configuration.skipDeploymentFileGeneration });
 }
 
 function exportJSONEntities(entities: JDLJSONEntity[], configuration: JDLApplicationConfiguration): JSONEntity[] {

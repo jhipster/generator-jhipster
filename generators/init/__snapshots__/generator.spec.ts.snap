@@ -7,6 +7,7 @@ Init project (alpha)
 
 Options:
   --auto-crlf                   Detect line endings (default: false)
+  --export-application          Serialize the generated application instead of writing it to disk
   --skip-git                    Skip git repository initialization
   --force-git                   Force commit to git repository
   --commit-msg <value>          Commit changes (implies forceGit)

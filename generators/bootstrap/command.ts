@@ -60,6 +60,14 @@ const command = {
       },
       scope: 'generator',
     },
+    deferCommit: {
+      description: 'Apply the commit transforms but leave the files in the shared mem-fs for the parent generator to commit',
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      scope: 'generator',
+    },
   },
 } as const satisfies JHipsterCommandDefinition;
 

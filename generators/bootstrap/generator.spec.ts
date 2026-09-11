@@ -117,6 +117,66 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('deferCommit', () => {
+    class WriteGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('deferred.txt', 'deferred content\n');
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await basicHelpers.run(WriteGenerator).withOptions({ deferCommit: true }).withJHipsterGenerators();
+    });
+
+    it('does not write the generated file to disk', () => {
+      expect(existsSync(join(result.cwd, 'deferred.txt'))).toBe(false);
+    });
+
+    it('does not write an archive, the parent generator owns the export', () => {
+      expect(existsSync(join(result.cwd, 'export-application.zip'))).toBe(false);
+    });
+
+    it('leaves the file in the shared mem-fs', () => {
+      expect(result.getStateSnapshot()).toMatchObject({ 'deferred.txt': { state: 'modified' } });
+    });
+  });
+
+  describe('exportApplication with a registered path outside of the destination root', () => {
+    class SiblingGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          async write() {
+            // A deployment or a blueprint generating a sibling application registers its own destination root.
+            const siblingRoot = this.destinationPath('..', 'exported-sibling');
+            const bootstrapGenerator = await this.composeWithJHipster('bootstrap');
+            bootstrapGenerator.registerExportPath(siblingRoot);
+
+            this.writeDestination('inside.txt', 'inside\n');
+            this.writeDestination(join(siblingRoot, 'sibling.txt'), 'sibling\n');
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await basicHelpers.run(SiblingGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+    });
+
+    it('does not write the generated file to disk', () => {
+      expect(existsSync(join(result.cwd, '..', 'exported-sibling', 'sibling.txt'))).toBe(false);
+    });
+
+    it('exports the registered path under its folder name', () => {
+      const archive = unzipSync(readFileSync(join(result.cwd, 'export-application.zip')));
+      expect(Object.keys(archive)).toContain('inside.txt');
+      expect(Object.keys(archive)).toContain('exported-sibling/sibling.txt');
+    });
+  });
+
   describe('exportApplication with a file outside the destination root', () => {
     class EscapeGenerator extends BaseGenerator {
       get [BaseGenerator.WRITING]() {

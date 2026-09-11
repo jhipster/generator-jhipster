@@ -7,6 +7,7 @@ Generate a blueprint
 
 Options:
   --auto-crlf                          Detect line endings (default: false)
+  --export-application                 Serialize the generated application instead of writing it to disk
   --javascript-blueprint               Generate a javascript blueprint
   --caret                              Use caret in package.json engines
   --defaults                           Use default values for the generator

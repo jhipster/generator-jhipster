@@ -121,10 +121,17 @@ export default class BaseGenerator<
 
     if (jhipsterBootstrap) {
       // jhipster:bootstrap is always required. Run it once the environment starts.
-      this.env.queueTask('environment:run', async () => this.composeWithJHipster('bootstrap').then(), {
-        once: 'queueJhipsterBootstrap',
-        startQueue: false,
-      });
+      this.env.queueTask(
+        'environment:run',
+        async () => {
+          const bootstrapGenerator = await this.composeWithJHipster('bootstrap');
+          // The bootstrap generator can be replaced by a blueprint or mocked at tests.
+          bootstrapGenerator.registerExportPath?.(this.destinationPath());
+        },
+        {
+          startQueue: false,
+        },
+      );
     }
 
     this.on('before:queueOwnTasks', () => {
