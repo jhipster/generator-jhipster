@@ -49,7 +49,7 @@ LABEL ALIAS=pulsar
 FROM sonarqube:26.9.0.129388-community
 LABEL ALIAS=sonar
 
-FROM hashicorp/consul:2.0.3
+FROM hashicorp/consul:2.0.4
 LABEL ALIAS=consul
 
 FROM prom/prometheus:v3.14.0
