@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Garbage collections",
-        "marksweepcount": "Total de \"Mark Sweep\"",
-        "marksweeptime": "Temps \"Mark Sweep\"",
-        "scavengecount": "Total \"Scavenge\"",
-        "scavengetime": "Temps \"Scavenge\""
+        "title": "Garbage collections"
       },
       "http": {
         "title": "Requêtes HTTP (temps en millisecondes)",

@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Зборшчыкі смецця",
-        "marksweepcount": "Mark Sweep колькасць",
-        "marksweeptime": "Mark Sweep час",
-        "scavengecount": "Зборшчыкі смецця колькасць",
-        "scavengetime": "Зборшчыкі смецця час"
+        "title": "Зборшчыкі смецця"
       },
       "http": {
         "title": "HTTP запыты (падзей секунду)",

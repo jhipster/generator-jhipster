@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Garbage collections",
-        "marksweepcount": "Mark Sweep aantal",
-        "marksweeptime": "Mark Sweep tijd",
-        "scavengecount": "Scavenge aantal",
-        "scavengetime": "Scavenge tijd"
+        "title": "Garbage collections"
       },
       "http": {
         "title": "HTTP verzoeken (gebeurtenissen per seconde)",

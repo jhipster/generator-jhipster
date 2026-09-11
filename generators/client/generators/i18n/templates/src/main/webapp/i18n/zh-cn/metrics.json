@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "垃圾回收",
-        "marksweepcount": "标记清除次数",
-        "marksweeptime": "标记清除耗时",
-        "scavengecount": "回收次数",
-        "scavengetime": "回收耗时"
+        "title": "垃圾回收"
       },
       "http": {
         "title": "HTTP 请求 (事件 / 秒)",

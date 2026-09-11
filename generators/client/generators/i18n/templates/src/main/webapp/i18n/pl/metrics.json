@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Odśmiecanie pamięci",
-        "marksweepcount": "Licznik Mark Sweep",
-        "marksweeptime": "Czas Mark Sweep",
-        "scavengecount": "Licznik Scavenge",
-        "scavengetime": "Czas Scavenge"
+        "title": "Odśmiecanie pamięci"
       },
       "http": {
         "title": "Zapytania HTTP (zdarzenia na sekundę)",

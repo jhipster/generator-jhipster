@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "가비지 콜렉션",
-        "marksweepcount": "Mark Sweep 횟수",
-        "marksweeptime": "Mark Sweep 시간",
-        "scavengecount": "청소 횟수",
-        "scavengetime": "청소 시간"
+        "title": "가비지 콜렉션"
       },
       "http": {
         "title": "HTTP 요청 (초당 이벤트)",

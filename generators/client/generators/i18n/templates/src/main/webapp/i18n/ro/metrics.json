@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Garbage collections",
-        "marksweepcount": "Mark Sweep count",
-        "marksweeptime": "Mark Sweep time",
-        "scavengecount": "Scavenge count",
-        "scavengetime": "Scavenge time"
+        "title": "Garbage collections"
       },
       "http": {
         "title": "Conexiuni HTTP (evenimente pe secundă)",

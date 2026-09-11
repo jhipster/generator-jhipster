@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Garbage collector",
-        "marksweepcount": "Mark Sweep sanı",
-        "marksweeptime": "Mark Sweep waqıtı",
-        "scavengecount": "Garbage collector sanı",
-        "scavengetime": "Garbage collector waqıtı"
+        "title": "Garbage collector"
       },
       "http": {
         "title": "HTTP sorawlar (sekundta júz bergen waqıyalar)",

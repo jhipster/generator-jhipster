@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "איסוף זבל (GC)",
-        "marksweepcount": "כמות איסוף Mark Sweep",
-        "marksweeptime": "זמן איסוף Mark Sweep",
-        "scavengecount": "כמות Scavenge",
-        "scavengetime": "זמן Scavenge"
+        "title": "איסוף זבל (GC)"
       },
       "http": {
         "title": "בקשות HTTP (באלפיות שנייה)",

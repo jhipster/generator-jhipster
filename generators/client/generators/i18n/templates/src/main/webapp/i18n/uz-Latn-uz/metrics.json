@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Axlat yig'uvchi",
-        "marksweepcount": "Mark Sweep soni",
-        "marksweeptime": "Mark Sweep vaqti",
-        "scavengecount": "Axlat yig'ish soni",
-        "scavengetime": "Axlat yig'ish vaqti"
+        "title": "Axlat yig'uvchi"
       },
       "http": {
         "title": "HTTP so'rovlar (soniyada sodir bo'lgan voqealar)",

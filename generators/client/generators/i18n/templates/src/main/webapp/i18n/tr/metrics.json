@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "Çöp toplayıcılar",
-        "marksweepcount": "Mark Sweep count",
-        "marksweeptime": "Mark Sweep time",
-        "scavengecount": "Scavenge count",
-        "scavengetime": "Scavenge time"
+        "title": "Çöp toplayıcılar"
       },
       "http": {
         "title": "HTTP istekleri (saniyedeki istek sayısı)",

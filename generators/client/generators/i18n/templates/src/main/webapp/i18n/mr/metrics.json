@@ -32,11 +32,7 @@
         }
       },
       "gc": {
-        "title": "कचरा संग्रह",
-        "marksweepcount": "मार्क स्वीप मोजणी",
-        "marksweeptime": "मार्क स्वीप वेळ",
-        "scavengecount": "संख्या झाडणे",
-        "scavengetime": "वेळ झाडणे"
+        "title": "कचरा संग्रह"
       },
       "http": {
         "title": "HTTP विनंत्या (प्रति सेकंद घटना)",
