@@ -18,7 +18,7 @@
  */
 
 /**
- * Verifies is the text is wrapped between ><: used in Api docs and liquibase changelogs templates.
+ * Verifies if the text is wrapped between ><: used in Api docs and liquibase changelogs templates.
  * @param previousLine the previous line (potentially finishing with the wrapper character '>'
  * @param text the text to check, which should not begin with the closing wrapper character '<'
  * @return {boolean} true if the text is considered wrapped, false otherwise

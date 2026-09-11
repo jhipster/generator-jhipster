@@ -156,7 +156,7 @@ export const getNeedlesPositions = (content: string, needle = String.raw`jhipste
   const positions: NeedleLinePosition[] = [];
   let match: RegExpExecArray | null;
   while ((match = regexp.exec(content))) {
-    if (needlesWhiteList.some(whileList => match![0].includes(whileList))) {
+    if (needlesWhiteList.some(whiteList => match![0].includes(whiteList))) {
       continue;
     }
     positions.unshift(getMatchedNeedleLinePosition(content, match.index));
@@ -263,20 +263,20 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   }
   const contentIndent = firstContent.length - firstContent.trimStart().length;
   if (needleIndent > contentIndent) {
-    const identToApply = ' '.repeat(needleIndent - contentIndent);
-    contentToAdd = contentToAdd.map(line => (line ? identToApply + line : line));
+    const indentToApply = ' '.repeat(needleIndent - contentIndent);
+    contentToAdd = contentToAdd.map(line => (line ? indentToApply + line : line));
   } else if (needleIndent < contentIndent) {
-    let identToRemove = contentIndent - needleIndent;
+    let indentToRemove = contentIndent - needleIndent;
     contentToAdd
       .filter(line => line.trimStart())
       .forEach(line => {
         const trimmedLine = line.trimStart();
         const lineIndent = line.length - trimmedLine.length;
-        if (lineIndent < identToRemove) {
-          identToRemove = lineIndent;
+        if (lineIndent < indentToRemove) {
+          indentToRemove = lineIndent;
         }
       });
-    contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.slice(identToRemove) : ''));
+    contentToAdd = contentToAdd.map(line => (line.length > indentToRemove ? line.slice(indentToRemove) : ''));
   }
 
   return `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
