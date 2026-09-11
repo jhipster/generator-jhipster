@@ -17,14 +17,13 @@
  limitations under the License.
 -%>
 import { Component, inject, OnInit<%- enableTranslation ? ', DOCUMENT, RendererFactory2, Renderer2' : '' %> } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, TitleStrategy } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 
 import { AccountService } from 'app/core/auth';
-import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/language';
 <%_ } _%>
@@ -34,7 +33,6 @@ import PageRibbon from '../profiles/page-ribbon';
 @Component({
   selector: '<%- jhiPrefixDashed %>-main',
   templateUrl: './main.html',
-  providers: [AppPageTitleStrategy],
   imports: [RouterOutlet, Footer, PageRibbon],
 })
 export default class Main implements OnInit {
@@ -44,7 +42,7 @@ export default class Main implements OnInit {
 <%_ } _%>
 
   private readonly router = inject(Router);
-  private readonly appPageTitleStrategy = inject(AppPageTitleStrategy);
+  private readonly titleStrategy = inject(TitleStrategy);
   private readonly accountService = inject(AccountService);
 <%_ if (enableI18nRTL) { _%>
   private readonly findLanguageFromKeyPipe = inject(FindLanguageFromKeyPipe);
@@ -66,7 +64,7 @@ export default class Main implements OnInit {
 
 <%_ if (enableTranslation) { _%>
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
-      this.appPageTitleStrategy.updateTitle(this.router.routerState.snapshot);
+      this.titleStrategy.updateTitle(this.router.routerState.snapshot);
       dayjs.locale(langChangeEvent.lang);
       this.renderer.setAttribute(this.htmlElement, 'lang', langChangeEvent.lang);
 
