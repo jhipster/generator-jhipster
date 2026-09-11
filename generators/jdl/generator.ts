@@ -285,7 +285,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         if ((this.options as GitOptions).monorepository) {
           generatorOptions.skipInstall = true;
         }
-        const envBuilder = await this.createEnvBuilder(envOptions);
+        const envBuilder = await this.createEnvBuilder(envOptions, { disableBlueprints: this.options.disableBlueprints });
         const env = envBuilder.getEnvironment();
         await env.run([this.entrypointGenerator], generatorOptions);
       }),

@@ -57,6 +57,20 @@ const defaultLookupOptions = Object.freeze({
 
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
 
+/**
+ * Options used to lookup and load generators, blueprints and shared options.
+ */
+export type PrepareOptions = {
+  blueprints?: Record<string, string | undefined>;
+  lookups?: Parameters<Environment['lookup']>[0][];
+  devBlueprintPath?: string;
+  /**
+   * Disables blueprints support.
+   * Defaults to the `--disable-blueprints` flag from argv, since commander has not parsed yet.
+   */
+  disableBlueprints?: boolean;
+};
+
 const createEnvironment = (options: EnvironmentOptions = {}) => {
   options.adapter ??= new QueuedAdapter({ log: createJHipsterLogger() });
   return new Environment({
@@ -70,6 +84,7 @@ export default class EnvironmentBuilder {
   devBlueprintPath?: string;
   localBlueprintPath?: string;
   localBlueprintExists?: boolean;
+  disableBlueprints?: boolean;
   _blueprintsWithVersion: Record<string, string | undefined> = {};
 
   /**
@@ -96,8 +111,8 @@ export default class EnvironmentBuilder {
   /**
    * Creates a new EnvironmentBuilder with a new Environment and load jhipster, blueprints and sharedOptions.
    */
-  static async createDefaultBuilder(...args: Parameters<typeof EnvironmentBuilder.create>): Promise<EnvironmentBuilder> {
-    return EnvironmentBuilder.create(...args).prepare();
+  static async createDefaultBuilder(options?: EnvironmentOptions, prepareOptions?: PrepareOptions): Promise<EnvironmentBuilder> {
+    return EnvironmentBuilder.create(options).prepare(prepareOptions);
   }
 
   static async run(
@@ -125,11 +140,9 @@ export default class EnvironmentBuilder {
     blueprints,
     lookups,
     devBlueprintPath = jhipsterDevBlueprintPath,
-  }: {
-    blueprints?: Record<string, string | undefined>;
-    lookups?: Parameters<Environment['lookup']>[0][];
-    devBlueprintPath?: string;
-  } = {}) {
+    disableBlueprints = this._getDisableBlueprintsFromArgv(),
+  }: PrepareOptions = {}) {
+    this.disableBlueprints = disableBlueprints;
     const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
     this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
@@ -261,6 +274,12 @@ export default class EnvironmentBuilder {
    * Load blueprints from argv, .yo-rc.json.
    */
   _loadBlueprints(blueprints: Record<string, string | undefined> | undefined): this {
+    if (this.disableBlueprints) {
+      // Blueprints are executable npm packages: when disabled, none must be loaded, resolved, installed or executed.
+      // This has to short-circuit here, before lookup/install, not only at generator composition time.
+      this._blueprintsWithVersion = {};
+      return this;
+    }
     this._blueprintsWithVersion = {
       ...this._getAllBlueprintsWithVersion(),
       ...blueprints,
@@ -351,6 +370,14 @@ export default class EnvironmentBuilder {
       return [];
     }
     return blueprintNames.map(v => parseBlueprintInfo(v));
+  }
+
+  /**
+   * Detect the `--disable-blueprints` flag from argv.
+   * At this point, commander has not parsed yet because we are building it.
+   */
+  private _getDisableBlueprintsFromArgv(): boolean {
+    return process.argv.includes('--disable-blueprints');
   }
 
   /**

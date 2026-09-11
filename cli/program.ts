@@ -34,7 +34,7 @@ import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependen
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
-import EnvironmentBuilder from './environment-builder.ts';
+import EnvironmentBuilder, { type PrepareOptions } from './environment-builder.ts';
 import JHipsterCommand from './jhipster-command.ts';
 import logo from './logo.ts';
 import type { CliCommand } from './types.ts';
@@ -60,7 +60,7 @@ type BuildCommands = {
   silent?: boolean;
   printLogo?: () => void | Promise<void>;
   printBlueprintLogo?: () => void | Promise<void>;
-  createEnvBuilder: (options?: BaseEnvironmentOptions) => Promise<EnvironmentBuilder>;
+  createEnvBuilder: (options?: BaseEnvironmentOptions, prepareOptions?: PrepareOptions) => Promise<EnvironmentBuilder>;
 };
 
 type BuildJHipsterOptions = Partial<BuildCommands> & {
@@ -353,7 +353,8 @@ export const buildJHipster = async ({
   env,
   ...buildOptions
 }: BuildJHipsterOptions = {}) => {
-  createEnvBuilder ??= async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath });
+  createEnvBuilder ??= async (options, prepareOptions) =>
+    EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath, ...prepareOptions });
   if (env) {
     commands = { ...SUB_GENERATORS, ...commands };
   } else {

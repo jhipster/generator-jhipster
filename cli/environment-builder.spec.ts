@@ -280,6 +280,87 @@ describe('cli - EnvironmentBuilder', () => {
         });
       });
     });
+
+    describe('when blueprints are disabled', () => {
+      let oldArgv: string[];
+      let blueprintsWithVersion: typeof envBuilder._blueprintsWithVersion;
+
+      before(async () => {
+        await helpers.prepareTemporaryDir();
+        oldArgv = process.argv;
+        process.argv = ['--blueprints', 'vuejs,dotnet'];
+        const yoRcContent = {
+          'generator-jhipster': {
+            blueprints: [{ name: 'generator-jhipster-h2g2-answer', version: '42' }],
+          },
+        };
+        fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
+      });
+      after(() => {
+        process.argv = oldArgv;
+      });
+      beforeEach(() => {
+        const builder = EnvironmentBuilder.create();
+        builder.disableBlueprints = true;
+        // @ts-expect-error testing without prepare()
+        blueprintsWithVersion = builder._loadBlueprints()._blueprintsWithVersion;
+      });
+
+      it('ignores blueprints from both command and .yo-rc.json', () => {
+        expect(blueprintsWithVersion).toEqual({});
+      });
+    });
+
+    describe('when blueprints are disabled through the prepare option', () => {
+      let oldArgv: string[];
+      let blueprintsWithVersion: typeof envBuilder._blueprintsWithVersion;
+
+      before(async () => {
+        await helpers.prepareTemporaryDir();
+        oldArgv = process.argv;
+        // The flag is not in argv, the option is the only source.
+        process.argv = ['--blueprints', 'vuejs,dotnet'];
+        const yoRcContent = {
+          'generator-jhipster': {
+            blueprints: [{ name: 'generator-jhipster-h2g2-answer', version: '42' }],
+          },
+        };
+        fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
+      });
+      after(() => {
+        process.argv = oldArgv;
+      });
+      beforeEach(async () => {
+        const builder = await EnvironmentBuilder.createDefaultBuilder(undefined, { disableBlueprints: true });
+        blueprintsWithVersion = builder._blueprintsWithVersion;
+      });
+
+      it('ignores blueprints from both command and .yo-rc.json', () => {
+        expect(blueprintsWithVersion).toEqual({});
+      });
+    });
+
+    describe('_getDisableBlueprintsFromArgv', () => {
+      let oldArgv: string[];
+      beforeEach(() => {
+        oldArgv = process.argv;
+      });
+      afterEach(() => {
+        process.argv = oldArgv;
+      });
+
+      it('is true when --disable-blueprints is passed', () => {
+        process.argv = ['node', 'jhipster', 'app', '--disable-blueprints'];
+        // @ts-expect-error private method
+        expect(EnvironmentBuilder.create([])._getDisableBlueprintsFromArgv()).toBe(true);
+      });
+
+      it('is false otherwise', () => {
+        process.argv = ['node', 'jhipster', 'app'];
+        // @ts-expect-error private method
+        expect(EnvironmentBuilder.create([])._getDisableBlueprintsFromArgv()).toBe(false);
+      });
+    });
   });
 
   describe('_lookupBlueprints', () => {
