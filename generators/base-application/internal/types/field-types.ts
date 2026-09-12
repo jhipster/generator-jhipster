@@ -49,10 +49,10 @@ export const isFieldBinaryType = (field: BaseApplicationField): field is SetFiel
   isBlobType(field.fieldType) || field.fieldType === 'byte[]';
 
 export const isFieldEnumType = (field: BaseApplicationField): field is SetRequired<BaseApplicationField, 'enumFileName' | 'enumValues'> =>
-  Boolean(field.fieldValues);
+  field.fieldValues !== undefined && field.fieldValues !== '';
 
 export const isFieldNotEnumType = (field: BaseApplicationField): field is SetFieldType<BaseApplicationField, 'fieldType', FieldType> =>
-  !field.fieldValues;
+  !isFieldEnumType(field);
 
 export function convertFieldBlobType<const F extends BaseApplicationField = BaseApplicationField>(field: F): F {
   // Convert fieldTypes to correct fieldTypes

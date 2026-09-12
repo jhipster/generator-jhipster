@@ -22,3 +22,4 @@ export {
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
   isSignedNumber as inputIsSignedNumber,
 } from './asserts.ts';
+export { parseEnumValuesInput } from './enum.ts';

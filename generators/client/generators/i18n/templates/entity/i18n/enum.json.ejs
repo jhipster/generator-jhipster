@@ -20,7 +20,7 @@
     "<%- frontendAppName %>": {
         "<%- enumName %>" : {
             "null": ""<% for (const enumValue of enumValues) { %>,
-            "<%- enumValue.name %>": "<%- enumValue.value %>"<% } %>
+            <%- JSON.stringify(enumValue.name) %>: <%- JSON.stringify(enumValue.value) %><% } %>
         }
     }
 }

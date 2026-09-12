@@ -18,8 +18,14 @@
  */
 import { lowerFirst } from 'lodash-es';
 
+import type { Field } from '../../../lib/jhipster/types/field.d.ts';
+import { type EnumValue, parseEnumValues } from '../../../lib/utils/enum.ts';
 import { formatDocAsJavaDoc } from '../../java/support/doc.ts';
-import type { Field as BaseApplicationField } from '../types.d.ts';
+
+type EnumField = Pick<Field, 'fieldType' | 'fieldValues' | 'fieldValuesJavadocs' | 'fieldTypeDocumentation'> & {
+  enumInstance?: string;
+  clientConstantsAsValues?: boolean;
+};
 
 type EnumValuesData = {
   withoutCustomValues: boolean;
@@ -33,15 +39,13 @@ type EnumNameValue = {
   comment?: string;
 };
 
-const doesTheEnumValueHaveACustomValue = (enumValue: string) => enumValue.includes('(');
-
-const getCustomValuesState = (enumValues: string[]): EnumValuesData => {
+const getCustomValuesState = (enumValues: EnumValue[]): EnumValuesData => {
   const state = {
     withoutCustomValue: 0,
     withCustomValue: 0,
   };
   enumValues.forEach(enumValue => {
-    if (doesTheEnumValueHaveACustomValue(enumValue)) {
+    if (enumValue.value !== undefined) {
       state.withCustomValue++;
     } else {
       state.withoutCustomValue++;
@@ -54,39 +58,17 @@ const getCustomValuesState = (enumValues: string[]): EnumValuesData => {
   };
 };
 
-const getEnums = (enums: string[], customValuesState: EnumValuesData, comments?: Record<string, string>): EnumNameValue[] => {
-  if (customValuesState.withoutCustomValues) {
-    return enums.map(enumValue => ({
-      name: enumValue,
-      value: enumValue,
-      comment: comments?.[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
-    }));
-  }
-  return enums.map(enumValue => {
-    if (!doesTheEnumValueHaveACustomValue(enumValue)) {
-      return {
-        name: enumValue.trim(),
-        value: enumValue.trim(),
-        comment: comments?.[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
-      };
-    }
+const getEnums = (enums: EnumValue[], comments?: Record<string, string>): EnumNameValue[] =>
+  enums.map(({ name, value }) => ({
+    name,
+    value: value ?? name,
+    comment: comments?.[name] && formatDocAsJavaDoc(comments[name], 4),
+  }));
 
-    const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
-    return {
-      name: matched![1],
-      value: matched![2],
-      comment: comments?.[matched![1]] && formatDocAsJavaDoc(comments[matched![1]], 4),
-    };
-  });
-};
-
-const extractEnumInstance = (field: Pick<BaseApplicationField, 'fieldType'>): string => {
+const extractEnumInstance = (field: Pick<EnumField, 'fieldType'>): string => {
   const { fieldType } = field;
   return lowerFirst(fieldType);
 };
-
-const extractEnumEntries = (field: Pick<BaseApplicationField, 'fieldValues'>): string[] =>
-  field.fieldValues!.split(',').map((fieldValue: string) => fieldValue.trim());
 
 /**
  * Build an enum object
@@ -96,7 +78,7 @@ const extractEnumEntries = (field: Pick<BaseApplicationField, 'fieldValues'>): s
  */
 
 export const getEnumInfo = (
-  field: Pick<BaseApplicationField, 'enumInstance' | 'fieldType' | 'fieldValues' | 'fieldValuesJavadocs' | 'fieldTypeDocumentation'>,
+  field: EnumField,
   clientRootFolder?: string,
 ): EnumValuesData & {
   enumName: string;
@@ -107,15 +89,18 @@ export const getEnumInfo = (
   enumJavadoc?: string;
 } => {
   field.enumInstance = extractEnumInstance(field); // TODO remove side effect
-  const enums = extractEnumEntries(field);
-  const customValuesState = getCustomValuesState(enums);
+  const entries = parseEnumValues(field.fieldValues, { clientConstants: field.clientConstantsAsValues });
+  const customValuesState = getCustomValuesState(entries);
   return {
     enumName: field.fieldType,
     enumJavadoc: field.fieldTypeDocumentation && formatDocAsJavaDoc(field.fieldTypeDocumentation),
     enumInstance: field.enumInstance,
-    enums,
+    enums:
+      typeof field.fieldValues === 'string' ?
+        field.fieldValues.split(',').map(value => value.trim())
+      : entries.map(({ name, value }) => `${name}${value === undefined ? '' : `(${value})`}`),
     ...customValuesState,
-    enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),
+    enumValues: getEnums(entries, field.fieldValuesJavadocs),
     clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
   };
 };

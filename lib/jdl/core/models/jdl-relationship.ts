@@ -162,7 +162,8 @@ export default class JDLRelationship implements JDLRelationshipModel {
       .map(name => {
         const value = options[name];
         const capitalizedName = upperFirst(name);
-        return `@${capitalizedName}${value != null && value !== true ? `(${value}) ` : ' '}`;
+        const literal = typeof value === 'string' ? JSON.stringify(value) : value;
+        return `@${capitalizedName}${value != null && value !== true ? `(${literal}) ` : ' '}`;
       })
       .join('');
   }

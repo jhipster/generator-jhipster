@@ -19,6 +19,7 @@
 
 import { lowerFirst, upperFirst } from 'lodash-es';
 
+import { parseEnumValues } from '../../utils/enum.ts';
 import { asJdlRelationshipType } from '../core/basic-types/relationship-types.ts';
 import type { JDLOptionName } from '../core/built-in-options/binary-options.ts';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.ts';
@@ -127,27 +128,11 @@ function addEnumsToJDL(entity: JSONEntity): void {
       jdlObject.addEnum(
         new JDLEnum({
           name: field.fieldType,
-          values: getEnumValuesFromString(field.fieldValues),
+          values: parseEnumValues(field.fieldValues).map(({ name: key, value }) => (value === undefined ? { key } : { key, value })),
           comment: field.fieldTypeDocumentation,
         }),
       );
     }
-  });
-}
-
-function getEnumValuesFromString(valuesAsString: string): any[] {
-  return valuesAsString.split(',').map(fieldValue => {
-    // if fieldValue looks like ENUM_VALUE (something)
-    if (fieldValue.includes('(')) {
-      const [key, value] = fieldValue
-        .replace(/^(\w+)\s\((\w+)\)$/, (_match, matchedKey, matchedValue) => `${matchedKey},${matchedValue}`)
-        .split(',');
-      return {
-        key,
-        value,
-      };
-    }
-    return { key: fieldValue };
   });
 }
 

@@ -16,12 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { ENUM_VALUE_NAME_PATTERN as ENUM_PROP_NAME_PATTERN } from '../../../utils/enum.ts';
 
-export const ALPHABETIC = /^[A-Za-z]+$/;
-export const ALPHABETIC_LOWER = /^[a-z]+$/;
-export const ALPHANUMERIC = /^[A-Za-z][A-Za-z0-9]*$/;
-export const ALPHANUMERIC_DASH = /^[A-Za-z][A-Za-z0-9-]*$/;
-export const ALPHABETIC_DASH_LOWER = /^[a-z][a-z-]*$/;
-export const ALPHANUMERIC_SPACE = /^"?[A-Za-z][A-Za-z0-9- ]*"?$/;
-export const ALPHANUMERIC_UNDERSCORE = /^[A-Za-z]\w*$/;
+export const JDL_STRING_PATTERN = /"(?:[^"\\]|\\[\s\S])*"/;
+
+const escapedCharacters: Record<string, string> = {
+  '"': '"',
+  '\\': '\\',
+  '/': '/',
+  b: '\b',
+  f: '\f',
+  n: '\n',
+  r: '\r',
+  t: '\t',
+};
+
+export function parseJDLString(literal: string): string {
+  // Preserve unknown escape sequences used by existing JDL, such as \d in regular expressions.
+  return literal
+    .slice(1, -1)
+    .replace(/\\(["\\/bfnrt]|u[\dA-Fa-f]{4})/g, (_match, escaped: string) =>
+      escaped.startsWith('u') ? String.fromCharCode(Number.parseInt(escaped.slice(1), 16)) : escapedCharacters[escaped],
+    );
+}

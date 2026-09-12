@@ -27,6 +27,7 @@ import {
   ALPHANUMERIC_DASH,
   ALPHANUMERIC_SPACE,
   ALPHANUMERIC_UNDERSCORE,
+  ENUM_PROP_NAME_PATTERN,
 } from '../built-in-options/validation-patterns.ts';
 import type { JDLValidatorOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
@@ -35,7 +36,6 @@ const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const TYPE_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
-const ENUM_PROP_NAME_PATTERN = /^[A-Z]\w*$/;
 const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z]\w*$/;
 const METHOD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 

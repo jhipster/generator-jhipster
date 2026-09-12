@@ -25,6 +25,8 @@ import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
 import JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
+import { parseFromContent } from '../../core/readers/jdl-reader.ts';
+import { createRuntime } from '../../core/runtime.ts';
 
 import { convert } from './jdl-to-json-field-converter.ts';
 
@@ -203,6 +205,52 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 `);
         });
       });
+      it('should not add JDL quotes to custom enum values in entity JSON', () => {
+        const jdlObject = new JDLObject();
+        const entity = new JDLEntity({ name: 'A' });
+        entity.addField(new JDLField({ name: 'enumField', type: 'CustomEnum' }));
+        jdlObject.addEntity(entity);
+        jdlObject.addEnum(
+          new JDLEnum({
+            name: 'CustomEnum',
+            values: [
+              { key: 'SPECIAL', value: '\u00dc' },
+              { key: 'SPACE', value: 'two words' },
+            ],
+          }),
+        );
+
+        expect(convert(jdlObject).get('A')).toMatchInlineSnapshot(`
+[
+  {
+    "fieldName": "enumField",
+    "fieldType": "CustomEnum",
+    "fieldValues": "SPECIAL (Ü),SPACE (two words)",
+  },
+]
+`);
+      });
+      for (const value of [
+        '"',
+        'a), InjectedEnum(a',
+        'a) }\nentity Unexpected\n enum Tail { Value(a',
+        ', ',
+        '()',
+        '',
+        'a\r\nb',
+        'a\u2028b',
+      ]) {
+        it(`should preserve arbitrary enum values using structured storage for ${JSON.stringify(value)}`, () => {
+          const parsed = parseFromContent(`enum CustomEnum { VALUE (${JSON.stringify(value)}), OTHER }`, createRuntime());
+          const jdlObject = new JDLObject();
+          const entity = new JDLEntity({ name: 'A' });
+          entity.addField(new JDLField({ name: 'enumField', type: 'CustomEnum' }));
+          jdlObject.addEntity(entity);
+          jdlObject.addEnum(new JDLEnum(parsed.enums[0]));
+
+          expect(convert(jdlObject).get('A')?.[0].fieldValues).toEqual([{ name: 'VALUE', value }, { name: 'OTHER' }]);
+        });
+      }
       describe('with comments', () => {
         let convertedField: any;
 

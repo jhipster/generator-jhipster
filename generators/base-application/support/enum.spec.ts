@@ -17,13 +17,59 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import assert from 'node:assert';
 
 import { getEnumInfo } from './enum.ts';
 
 describe('base-application - support - enum', () => {
   describe('::getEnumInfo', () => {
+    it('preserves custom values and their presence in structured entries', () => {
+      const values = ['Ü', '"', '\\', ', ', 'a), InjectedEnum(a', '()', '', 'a\nb', "it's a value"];
+      const fieldValues = [...values.map((value, index) => ({ name: `VALUE${index}`, value })), { name: 'OTHER' }];
+      const info = getEnumInfo({
+        fieldType: 'CustomEnum',
+        fieldValues,
+        fieldValuesJavadocs: { VALUE6: 'Empty custom value' },
+      });
+
+      expect(info.withoutCustomValues).toBe(false);
+      expect(info.withSomeCustomValues).toBe(true);
+      expect(info.withCustomValues).toBe(false);
+      expect(info.enumValues.map(({ name, value }) => ({ name, value }))).toEqual([
+        ...fieldValues.slice(0, -1),
+        { name: 'OTHER', value: 'OTHER' },
+      ]);
+      expect(info.enumValues[6].comment).toBe('    /**\n     * Empty custom value\n     */');
+    });
+
+    it('recognizes an explicitly empty custom value as a custom value', () => {
+      const info = getEnumInfo({ fieldType: 'CustomEnum', fieldValues: [{ name: 'EMPTY', value: '' }] });
+
+      expect(info.withCustomValues).toBe(true);
+      expect(info.withoutCustomValues).toBe(false);
+      expect(info.enumValues).toEqual([{ name: 'EMPTY', value: '', comment: undefined }]);
+    });
+
+    it('does not decode legacy custom values', () => {
+      expect(getEnumInfo({ fieldType: 'CustomEnum', fieldValues: String.raw`VALUE ("a\nb")` }).enumValues).toEqual([
+        { name: 'VALUE', value: String.raw`"a\nb"`, comment: undefined },
+      ]);
+    });
+
+    it('supports built-in client language constants', () => {
+      expect(getEnumInfo({ fieldType: 'Languages', fieldValues: 'en,pt-br', clientConstantsAsValues: true }).enumValues).toEqual([
+        { name: 'en', value: 'en', comment: undefined },
+        { name: 'pt-br', value: 'pt-br', comment: undefined },
+      ]);
+    });
+
+    it('rejects malformed entries before rendering templates', () => {
+      for (const fieldValues of [[{ name: 'VALUE,INJECTED' }], [{ name: 'VALUE\n' }], 'VALUE (a)b)']) {
+        expect(() => getEnumInfo({ fieldType: 'CustomEnum', fieldValues })).toThrow('Invalid enum entry');
+      }
+    });
+
     describe('when passing field data', () => {
       let enumInfo: ReturnType<typeof getEnumInfo>;
 

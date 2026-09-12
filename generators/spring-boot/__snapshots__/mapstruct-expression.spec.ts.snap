@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`spring-boot - MapstructExpression escaping should render escaped expressions for direct fields 1`] = `
+"package com.example.service.mapper;
+
+
+
+import com.example.StreamRights;
+import com.example.service.dto.StreamRightsDTO;
+
+
+import org.mapstruct.*;
+
+/**
+ * Mapper for the entity {@link StreamRights} and its DTO {@link StreamRightsDTO}.
+ */
+@Mapper(componentModel = "spring")
+public interface StreamRightsMapper extends EntityMapper<StreamRightsDTO, StreamRights> {
+    @Mapping( target = "details", expression = "java(s.getId() + \\" | \\" + s.getName())")
+    StreamRightsDTO toDto(StreamRights s);
+
+}
+"
+`;
+
+exports[`spring-boot - MapstructExpression escaping should render escaped expressions for related fields 1`] = `
+"package com.example.service.mapper;
+
+
+
+import com.example.StreamRights;
+import com.example.service.dto.StreamRightsDTO;
+
+import com.example.Owner;
+import com.example.service.dto.OwnerDTO;
+
+import org.mapstruct.*;
+
+/**
+ * Mapper for the entity {@link StreamRights} and its DTO {@link StreamRightsDTO}.
+ */
+@Mapper(componentModel = "spring")
+public interface StreamRightsMapper extends EntityMapper<StreamRightsDTO, StreamRights> {
+    @Mapping(target = "owner", source = "owner", qualifiedByName="ownerDetails")
+    StreamRightsDTO toDto(StreamRights s);
+
+
+    @Named("ownerDetails")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "details", expression = "java(s.getId() + \\" | \\" + s.getName())")
+    OwnerDTO toDtoOwnerDetails(Owner s);
+}
+"
+`;

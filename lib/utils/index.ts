@@ -19,6 +19,7 @@
 export * from './basename.ts';
 export * from './contents.ts';
 export * from './derived-property.ts';
+export * from './enum.ts';
 export { default as getGenerator } from './get-generator.ts';
 export * from './logger.ts';
 export * from './lookup.ts';
