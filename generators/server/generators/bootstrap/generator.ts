@@ -88,7 +88,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
       },
       checkSuffix({ application }) {
         if (application.entitySuffix === application.dtoSuffix) {
-          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');
+          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equal!');
         }
       },
       prepareForTemplates({ applicationDefaults }) {

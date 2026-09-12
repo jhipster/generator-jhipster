@@ -347,7 +347,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       end({ applications }) {
         this.checkApplicationsDockerImages({ applications });
 
-        this.log.verboseInfo(`You can launch all your infrastructure by running : ${chalk.cyan('docker compose up -d')}`);
+        this.log.verboseInfo(`You can launch all your infrastructure by running: ${chalk.cyan('docker compose up -d')}`);
         const uiApplications = applications.filter(
           app => (app.applicationTypeGateway || app.applicationTypeMonolith) && app.clientFrameworkAny,
         );
