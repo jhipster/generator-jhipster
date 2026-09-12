@@ -479,12 +479,12 @@ export default class EnvironmentBuilder {
           result = { ...result, ...blueprintCommands };
         } catch {
           const msg = `Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsUrl}`;
-          /* eslint-disable no-console */
+          // eslint-disable-next-line no-console
           console.info(`${chalk.green.bold('INFO!')} ${msg}`);
         }
       } else {
         const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
-        /* eslint-disable no-console */
+        // eslint-disable-next-line no-console
         console.info(`${chalk.green.bold('INFO!')} ${msg}`);
       }
     }
@@ -517,14 +517,15 @@ export default class EnvironmentBuilder {
         const baseExtension = ['.js', '.cjs', '.mjs'].find(extension => existsSync(resolve(`${sharedOptionsBase}${extension}`)));
         if (baseExtension) {
           const { default: opts } = await import(pathToFileURL(resolve(`${sharedOptionsBase}${baseExtension}`)).href);
-          /* eslint-disable no-console */
           if (msg) {
+            // eslint-disable-next-line no-console
             console.info(`${chalk.green.bold('INFO!')} ${msg}`);
           }
           return opts;
         }
       } catch (e) {
         if (errorMsg) {
+          // eslint-disable-next-line no-console
           console.info(`${chalk.green.bold('INFO!')} ${errorMsg}`, e);
         }
       }

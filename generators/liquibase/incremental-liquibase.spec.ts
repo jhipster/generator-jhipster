@@ -1196,7 +1196,7 @@ entity Customer {
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
-        /* eslint-disable no-template-curly-in-string */
+        // eslint-disable-next-line no-template-curly-in-string
         'column name="computed_date" type="${datetimeType}" defaultValueComputed="NOW(6)"',
       );
     });
@@ -1249,7 +1249,7 @@ entity Customer {
       );
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
-        /* eslint-disable no-template-curly-in-string */
+        // eslint-disable-next-line no-template-curly-in-string
         'column name="computed_date" type="${datetimeType}" defaultValueComputed="NOW(6)"',
       );
     });
