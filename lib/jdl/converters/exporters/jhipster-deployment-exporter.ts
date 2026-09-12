@@ -28,7 +28,7 @@ import { GENERATOR_NAME, writeConfigFile } from './export-utils.ts';
 
 /**
  * Exports JDL deployments to .yo-rc.json files in separate folders (based on deployment type).
- * @param deployments the deployments to exporters (key: deployment type, value: JDLDeployment- deployment config).
+ * @param deployments the deployments to export (key: deployment type, value: JDLDeployment- deployment config).
  * @return object[] exported deployments in their final form.
  */
 export default function exportDeployments(deployments: Record<string, JDLDeployment>): Partial<YoRcJHipsterDeploymentContent>[] {
