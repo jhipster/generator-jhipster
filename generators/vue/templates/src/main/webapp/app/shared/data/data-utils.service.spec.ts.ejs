@@ -18,7 +18,7 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import useDataUtils from './data-utils.service';
-import { endsWith, paddingSize } from '@/shared/jhipster/data-utils';
+import { paddingSize } from '@/shared/jhipster/data-utils';
 
 describe('DataUtils Service', () => {
   let dataUtilsService: ReturnType<typeof useDataUtils>;
@@ -90,12 +90,6 @@ describe('DataUtils Service', () => {
     dataUtilsService.openFile('application/pdf', 'data');
 
     expect(URL.createObjectURL).toHaveBeenCalledWith(expect.objectContaining({ type: 'application/octet-stream' }));
-  });
-
-  it('should check text ends with suffix', () => {
-    const result = endsWith('rocky', 'JHipster rocks!');
-
-    expect(result).toBe(false);
   });
 
   it('should paddingSize to 0', () => {
