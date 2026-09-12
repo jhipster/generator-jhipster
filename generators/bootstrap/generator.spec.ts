@@ -151,12 +151,12 @@ describe(`generator - ${generator}`, () => {
         return this.asWritingTaskGroup({
           async write() {
             // A deployment or a blueprint generating a sibling application registers its own destination root.
-            const siblingRoot = this.destinationPath('..', 'exported-sibling');
+            const siblingRoot = this.destinationPath('..', 'exported-sibling', { allowOutsideRoot: true });
             const bootstrapGenerator = await this.composeWithJHipster('bootstrap');
             bootstrapGenerator.registerExportPath(siblingRoot);
 
             this.writeDestination('inside.txt', 'inside\n');
-            this.writeDestination(join(siblingRoot, 'sibling.txt'), 'sibling\n');
+            this.writeDestination(join(siblingRoot, 'sibling.txt'), 'sibling\n', { allowOutsideRoot: true });
           },
         });
       }
@@ -183,7 +183,9 @@ describe(`generator - ${generator}`, () => {
         return this.asWritingTaskGroup({
           write() {
             this.writeDestination('inside.txt', 'inside\n');
-            this.writeDestination(this.destinationPath('..', 'escaped.txt'), 'escaped\n');
+            this.writeDestination(this.destinationPath('..', 'escaped.txt', { allowOutsideRoot: true }), 'escaped\n', {
+              allowOutsideRoot: true,
+            });
           },
         });
       }
