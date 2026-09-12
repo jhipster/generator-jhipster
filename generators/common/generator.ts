@@ -58,7 +58,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
       async configureMonorepository() {
         if (this.jhipsterConfig.monorepository) return;
 
-        const git = this.createGit();
+        const git = this.createSimpleGit();
         if ((await git.checkIsRepo()) && !(await git.checkIsRepo(CheckRepoActions.IS_REPO_ROOT))) {
           this.jhipsterConfig.monorepository = true;
         }

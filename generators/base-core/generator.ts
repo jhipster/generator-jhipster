@@ -26,7 +26,7 @@ import chalk from 'chalk';
 import latestVersion from 'latest-version';
 import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
-import { simpleGit } from 'simple-git';
+import type { simpleGit } from 'simple-git';
 import type { PackageJson, SetRequired } from 'type-fest';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
@@ -1497,15 +1497,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
+   * @deprecated Use `createSimpleGit` from the superclass instead.
    * Create a simple-git instance using current destinationPath as baseDir.
    */
   createGit(options?: Parameters<typeof simpleGit>[0]) {
-    return simpleGit({ baseDir: this.destinationPath(), ...options }).env({
-      HOME: process.env.HOME,
-      PATH: process.env.PATH,
-      LANG: 'C',
-      LC_ALL: 'C',
-    });
+    return super.createSimpleGit(options);
   }
 }
 

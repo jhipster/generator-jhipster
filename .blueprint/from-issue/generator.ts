@@ -151,7 +151,7 @@ export default class extends BaseGenerator {
             const diffs: string[] = [];
             for (const file of files.filter(file => file.type === 'jdl')) {
               await EnvironmentBuilder.run([`jhipster:jdl`], { ...generatorOptions, ...workspaceOpts, inline: file.content }, envOptions);
-              const git = this.createGit();
+              const git = this.createSimpleGit();
               const status = await git.status();
               if (!status.isClean()) {
                 await git.add('.').commit(`chore: generate application from ${file.filename}`);
