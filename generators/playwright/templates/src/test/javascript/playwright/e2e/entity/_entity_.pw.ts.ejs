@@ -1,0 +1,375 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import {
+  entityTableSelector,
+  entityDetailsButtonSelector,
+  entityDetailsBackButtonSelector,
+<%_ if (!readOnly) { _%>
+  entityCreateButtonSelector,
+  entityCreateSaveButtonSelector,
+  entityCreateCancelButtonSelector,
+  <%_ if (updatableEntity) { _%>
+  entityEditButtonSelector,
+  <%_ } _%>
+  entityDeleteButtonSelector,
+  entityConfirmDeleteButtonSelector,
+<%_ } _%>
+} from '../../support/entity';
+import { test, expect } from '../../support/fixtures';
+<%_ const baseApi = `${entityApi}api/`;
+
+    const entityFakeData = generateFakeData('cypress');
+    const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
+    const requiredOtherEntities = this._.uniq(requiredRelationships.map(rel => rel.otherEntity));
+    const otherEntities = this._.uniq(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity));
+    // We cannot generate a required entity with relationship with required relationships.
+    const skipCreateTest = [
+      !playwrightBootstrapEntities,
+      // Cannot create a required relationship with itself.
+      requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity),
+      // Required relationships that contain another required relationship are complex to handle.
+      requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired)),
+      // Same as above.
+      requiredOtherEntities.some(otherEntity => otherEntity.primaryKey?.derived),
+      // Cannot generate the required data to test.
+      !entityFakeData,
+    ].some(Boolean) ? '.skip' : '';
+
+    const reason = 'cannot create a required entity with relationship with required relationships.';
+
+    const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
+
+    // Only the image fields use the jhi fixture in the create test; destructuring it otherwise
+    // leaves an unused parameter, which is an error in the generated application's eslint config.
+    const createTestFields = fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly);
+    const createTestBinaryFields = createTestFields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText);
+    const createTestUsesFixture = createTestBinaryFields.some(field => (entityFakeData ? entityFakeData[field.fieldName] : field.generateFakeData('cypress')) !== undefined);
+_%>
+
+const <%- entityInstance %>PageUrl = '/<%- entityPage %>';
+<%_ if (!readOnly) { _%>
+<%- skipCreateTest ? '// ' : '' %>const <%- entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
+<%_ } _%>
+
+const <%- entityInstance %>ApiUrl = '/<%- baseApi + entityApiUrl %>';
+
+const entitiesRequest = (page: import('@playwright/test').Page) =>
+  page.waitForResponse(
+    response => new URL(response.url()).pathname === <%- entityInstance %>ApiUrl && response.request().method() === 'GET',
+  );
+
+test.describe('<%- entityNameCapitalized %> e2e test', () => {
+  let <%- entityInstance %>;
+<%_ for (otherEntity of requiredOtherEntities) { _%>
+  <%- skipCreateTest ? '// ' : '' %>let <%- otherEntity.entityInstance %>;
+<%_ } _%>
+
+  test.beforeEach(async ({ jhi }) => {
+    const { <%- adminEntity ? 'adminUsername: username, adminPassword: password' : 'username, password' %> } = jhi.credentials();
+    await jhi.login(username, password);
+  });
+
+<%_ if (requiredOtherEntities.length > 0) { _%>
+  <%_ if (skipCreateTest) { _%>
+  /* Disabled due to incompatibility
+  <%_ } _%>
+  test.beforeEach(async ({ jhi }) => {
+  <%_ for (otherEntity of requiredOtherEntities) { _%>
+    // create an instance at the required relationship entity:
+    <%- otherEntity.entityInstance %> = await (
+      await jhi.authenticatedRequest({
+        method: 'POST',
+        url: '/<%- baseApi + otherEntity.entityApiUrl %>',
+        body: <%- JSON.stringify(this.generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate))) %>,
+      })
+    ).json();
+  <%_ } _%>
+  });
+
+  test.beforeEach(async ({ page }) => {
+    // Simulate relationships api for better performance and reproducibility.
+  <%_ for (otherEntity of otherEntities) { _%>
+    // A url predicate rather than a glob: a glob's wildcards would close the "Disabled due to
+    // incompatibility" block comment that wraps this section when the create test is skipped.
+    await page.route(
+      url => url.pathname === '/<%- baseApi + otherEntity.entityApiUrl %>',
+      route => route.fulfill({ status: 200, json: [<%- requiredOtherEntities.includes(otherEntity) ? otherEntity.entityInstance : '' %>].filter(Boolean) }),
+    );
+  <%_ } _%>
+  });
+  <%_ if (skipCreateTest) { _%>
+   */
+  <%_ } _%>
+
+<%_ } _%>
+  test.afterEach(async ({ jhi }) => {
+    if (<%- entityInstance %>) {
+      await jhi.authenticatedRequest({
+        method: 'DELETE',
+        url: `/<%- baseApi + entityApiUrl %>/${<%- entityInstance %>.<%- primaryKey.name %>}`,
+      });
+      <%- entityInstance %> = undefined;
+    }
+  });
+
+<%_ if (requiredOtherEntities.length > 0) { _%>
+  <%_ if (skipCreateTest) { _%>
+  /* Disabled due to incompatibility
+  <%_ } _%>
+  test.afterEach(async ({ jhi }) => {
+  <%_ for (otherEntity of requiredOtherEntities) { _%>
+    if (<%- otherEntity.entityInstance %>) {
+      await jhi.authenticatedRequest({
+        method: 'DELETE',
+        url: `/<%- baseApi + otherEntity.entityApiUrl %>/${<%- otherEntity.entityInstance %>.<%- otherEntity.primaryKey.name %>}`,
+      });
+      <%- otherEntity.entityInstance %> = undefined;
+    }
+  <%_ } _%>
+  });
+  <%_ if (skipCreateTest) { _%>
+   */
+  <%_ } _%>
+
+<%_ } _%>
+  test('<%- entityNamePlural %> menu should load <%- entityNamePlural %> page', async ({ page, jhi }) => {
+    const response = entitiesRequest(page);
+    await page.goto('/');
+    await jhi.navbar.clickOn<%- adminEntity && !applicationTypeMicroservice ? 'Admin' : 'Entity' %>MenuItem('<%- entityPage %>');
+    // Chrome drops the response body once the page navigates, unlike the cypress proxy, so the table
+    // assertion is only made when the payload is still readable.
+    const body = (await (await response).json().catch(() => undefined)) as unknown[] | undefined;
+    if (Array.isArray(body)) {
+      if (body.length === 0) {
+        await expect(page.locator(entityTableSelector)).toHaveCount(0);
+      } else {
+        // The clients render one entityTable element per row, so match the first one.
+        await expect(page.locator(entityTableSelector).first()).toBeVisible();
+      }
+    }
+    await expect(jhi.entity.getEntityHeading('<%- entityNameCapitalized %>')).toBeVisible();
+    await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+  });
+
+  test.describe('<%- entityNameCapitalized %> page', () => {
+<%_ if (enableTranslation) { _%>
+    test('should have translated page title', async ({ page, jhi }) => {
+      await page.goto(<%- entityInstance %>PageUrl);
+      await expect(jhi.entity.getEntityHeading('<%- entityNameCapitalized %>')).not.toContainText('<%- i18nKeyPrefix %>.home.title');
+    });
+
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+    test.describe('create button click', () => {
+      test.beforeEach(async ({ page }) => {
+        const response = entitiesRequest(page);
+        await page.goto(<%- entityInstance %>PageUrl);
+        await response;
+      });
+
+      test('should load create <%- entityNameCapitalized %> page', async ({ page, jhi }) => {
+        await page.locator(entityCreateButtonSelector).click();
+        await expect(page).toHaveURL(url => url.pathname === `${<%- entityInstance %>PageUrl}/new`);
+        await expect(jhi.entity.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>')).toBeVisible();
+        await expect(page.locator(entityCreateSaveButtonSelector)).toBeVisible();
+        const response = entitiesRequest(page);
+        await page.locator(entityCreateCancelButtonSelector).click();
+        expect((await response).status()).toBe(200);
+        await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+      });
+    });
+
+<%_ } _%>
+    test.describe('with existing value', () => {
+<%_ if (!readOnly) { _%>
+  <%_ if (skipCreateTest) { _%>
+      /* Disabled due to incompatibility
+  <%_ } _%>
+      test.beforeEach(async ({ page, jhi }) => {
+        <%- entityInstance %> = await (
+          await jhi.authenticatedRequest({
+            method: 'POST',
+            url: '/<%- baseApi + entityApiUrl %>',
+  <%_ if (requiredRelationships.length > 0) { _%>
+            body: {
+              ...<%- entityInstance %>Sample,
+    <%_ for (relationship of requiredRelationships) { _%>
+              <%- relationship.propertyName %>: <%- relationship.collection ? '[' : '' %><%- relationship.otherEntity.entityInstance %><%- relationship.collection ? ']' : '' %>,
+    <%_ } _%>
+            },
+  <%_ } else { _%>
+            body: <%- entityInstance %>Sample,
+  <%_ } _%>
+          })
+        ).json();
+
+        await page.route(
+          url => url.pathname === <%- entityInstance %>ApiUrl,
+          route =>
+            route.fulfill({
+              status: 200,
+  <%_ if (!paginationNo) { _%>
+              headers: {
+                link: '<http://localhost/<%- baseApi + entityApiUrl %>?page=0&size=20>; rel="last",<http://localhost/<%- baseApi + entityApiUrl %>?page=0&size=20>; rel="first"',
+              },
+  <%_ } _%>
+              json: [<%- entityInstance %>],
+            }),
+          { times: 1 },
+        );
+
+        // Cypress waited on the stubbed request (cy.wait('@entitiesRequestInternal')); without it the test
+        // can act before the row is rendered.
+        const stubbedRequest = entitiesRequest(page);
+        await page.goto(<%- entityInstance %>PageUrl);
+        await stubbedRequest;
+      });
+  <%_ if (skipCreateTest) { _%>
+       */
+
+  <%_ } _%>
+<%_ } _%>
+<%_ if (readOnly || skipCreateTest) { _%>
+      test.beforeEach(async ({ page }) => {
+        const response = entitiesRequest(page);
+        await page.goto(<%- entityInstance %>PageUrl);
+        const body = (await (await response).json().catch(() => undefined)) as unknown[] | undefined;
+        test.skip(Array.isArray(body) && body.length === 0, 'no existing <%- entityNameCapitalized %> to exercise');
+      });
+<%_ } _%>
+
+      test('detail button click should load details <%- entityNameCapitalized %> page', async ({ page, jhi }) => {
+        await page.locator(entityDetailsButtonSelector).first().click();
+        await expect(jhi.entity.getEntityDetailsHeading('<%- entityInstance %>')).toBeVisible();
+        const response = entitiesRequest(page);
+        await page.locator(entityDetailsBackButtonSelector).click();
+        expect((await response).status()).toBe(200);
+        await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+      });
+
+<%_ if (!readOnly && updatableEntity) { _%>
+      test('edit button click should load edit <%- entityNameCapitalized %> page and go back', async ({ page, jhi }) => {
+        await page.locator(entityEditButtonSelector).first().click();
+        await expect(jhi.entity.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>')).toBeVisible();
+        await expect(page.locator(entityCreateSaveButtonSelector)).toBeVisible();
+        const response = entitiesRequest(page);
+        await page.locator(entityCreateCancelButtonSelector).click();
+        expect((await response).status()).toBe(200);
+        await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+      });
+
+      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship missbehavior' : '' %>
+      test<%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '.skip' : '' %>('edit button click should load edit <%- entityNameCapitalized %> page and save', async ({ page, jhi }) => {
+        await page.locator(entityEditButtonSelector).first().click();
+        await expect(jhi.entity.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>')).toBeVisible();
+        const response = entitiesRequest(page);
+        await page.locator(entityCreateSaveButtonSelector).click();
+        expect((await response).status()).toBe(200);
+        await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+      });
+
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+      <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
+      test<%- skipCreateTest %>('last delete button click should delete instance of <%- entityNameCapitalized %>', async ({ page, jhi }) => {
+        const deleteRequest = page.waitForResponse(
+          response =>
+            new URL(response.url()).pathname.startsWith(`${<%- entityInstance %>ApiUrl}/`) && response.request().method() === 'DELETE',
+        );
+        const listRequest = entitiesRequest(page);
+        await page.locator(entityDeleteButtonSelector).last().click();
+        await expect(jhi.entity.getEntityDeleteDialogHeading('<%- entityInstance %>')).toBeVisible();
+        await page.locator(entityConfirmDeleteButtonSelector).click();
+        expect((await deleteRequest).status()).toBe(204);
+        expect((await listRequest).status()).toBe(200);
+        await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+  <% if (playwrightBootstrapEntities) { %>
+        <%- entityInstance %> = undefined;
+  <%_ } _%>
+      });
+<%_ } _%>
+    });
+  });
+<%_ if (!readOnly) { _%>
+
+  test.describe('new <%- entityNameCapitalized %> page', () => {
+    test.beforeEach(async ({ page, jhi }) => {
+      await page.goto(<%- entityInstance %>PageUrl);
+      await page.locator(entityCreateButtonSelector).click();
+      await expect(jhi.entity.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>')).toBeVisible();
+    });
+
+    <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
+    test<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', async ({ page<%- createTestUsesFixture ? ', jhi' : '' %> }) => {
+  <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) { _%>
+    <%_ const { fieldName, fieldIsEnum } = field;
+        let fieldValue = entityFakeData ? entityFakeData[field.fieldName] : field.generateFakeData('cypress');
+        if (fieldValue === undefined) {
+          continue;
+        }
+        fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll('\\', '\\\\').replaceAll("'", "\\'") : fieldValue;
+    _%>
+
+    <%_ if (field.fieldTypeBoolean) { _%>
+      <%_ const checkedByDefault = field.fieldTsDefaultValue === 'true' || field.defaultValue === true; _%>
+      await expect(page.locator(`[data-cy="<%- fieldName %>"]`)).<%- checkedByDefault ? '' : 'not.' %>toBeChecked();
+      await page.locator(`[data-cy="<%- fieldName %>"]`).click();
+      await expect(page.locator(`[data-cy="<%- fieldName %>"]`)).<%- checkedByDefault ? 'not.' : '' %>toBeChecked();
+
+    <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+      await jhi.entity.setFieldImageAsBytesOfEntity('<%- fieldName %>', 'integration-test.png', 'image/png');
+
+    <%_ } else if (fieldIsEnum) { _%>
+      await page.locator(`[data-cy="<%- fieldName %>"]`).selectOption(<%- field.collection ? `['${fieldValue}']` : `'${fieldValue}'` %>);
+
+    <%_ } else if (field.fieldTypeString || field.fieldTypeNumeric || field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { _%>
+      await page.locator(`[data-cy="<%- fieldName %>"]`).fill('<%- fieldValue %>');
+      <% if (field.fieldTypeLocalDate || field.fieldTypeTimed || field.fieldTypeDuration) { %>await page.locator(`[data-cy="<%- fieldName %>"]`).blur();<% } %> await expect(page.locator(`[data-cy="<%- fieldName %>"]`)).toHaveValue('<%- fieldValue %>');
+
+    <%_ } else { _%>
+      await page.locator(`[data-cy="<%- fieldName %>"]`).fill('<%- fieldValue %>');
+      await expect(page.locator(`[data-cy="<%- fieldName %>"]`)).toHaveValue(new RegExp('<%- fieldValue %>'));
+
+    <%_ } _%>
+  <%_ } _%>
+  <%_ for (const relationship of requiredRelationships) { _%>
+      await page.locator(`[data-cy="<%- relationship.relationshipFieldName %>"]`).selectOption(<%- relationship.collection ? '{ index: 0 }' : '{ index: 1 }' %>);
+  <%_ } _%>
+
+  <%_ if (anyFieldHasFileBasedContentType) { _%>
+      // The blob fields are validated asynchronously; wait for the form to become valid
+      // (save button enabled) instead of a fixed delay before submitting.
+      await expect(page.locator(entityCreateSaveButtonSelector)).toBeEnabled();
+  <%_ } _%>
+      const postRequest = page.waitForResponse(
+        response => new URL(response.url()).pathname === <%- entityInstance %>ApiUrl && response.request().method() === 'POST',
+      );
+      const listRequest = entitiesRequest(page);
+      await page.locator(entityCreateSaveButtonSelector).click();
+
+      const postResponse = await postRequest;
+      expect(postResponse.status()).toBe(201);
+      // Best effort: the body is only needed to delete the instance again in afterEach.
+      <%- entityInstance %> = await postResponse.json().catch(() => undefined);
+      expect((await listRequest).status()).toBe(200);
+      await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+    });
+  });
+<%_ } _%>
+});

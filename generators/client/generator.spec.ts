@@ -36,7 +36,7 @@ describe(`generator - ${generator}`, () => {
   checkEnforcements({ client: true }, generator);
 
   describe('composing', () => {
-    const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress'];
+    const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress', 'jhipster:playwright'];
 
     describe('with translation disabled', () => {
       const options = { enableTranslation: false };

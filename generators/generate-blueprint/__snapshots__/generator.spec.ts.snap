@@ -1353,6 +1353,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/liquibase/templates/template-file-liquibase.ejs": {
     "stateCleared": "modified",
   },
+  "generators/playwright/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/playwright/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/playwright/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/playwright/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/playwright/templates/template-file-playwright.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/project-name/command.ts": {
     "stateCleared": "modified",
   },

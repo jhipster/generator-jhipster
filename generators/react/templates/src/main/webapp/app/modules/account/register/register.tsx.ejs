@@ -77,7 +77,7 @@ export const RegisterPage = () => {
       </Row>
       <Row className="justify-content-center">
         <Col md="8">
-          <ValidatedForm id="register-form" onSubmit={handleValidSubmit}>
+          <ValidatedForm mode="all" id="register-form" onSubmit={handleValidSubmit}>
             <ValidatedField
               name="username"
               label={translate('global.form.username.label')}

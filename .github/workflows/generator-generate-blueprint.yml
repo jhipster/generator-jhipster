@@ -117,9 +117,3 @@ jobs:
         with:
           name: log-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
-      - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v7
-        if: always() && steps.e2e.outcome == 'failure'
-        with:
-          name: screenshots-${{ matrix.app-sample }}
-          path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots

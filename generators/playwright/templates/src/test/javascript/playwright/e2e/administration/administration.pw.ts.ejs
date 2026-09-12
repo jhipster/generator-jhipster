@@ -1,0 +1,101 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import {
+<%_ if (withAdminUi) { _%>
+  metricsPageHeadingSelector,
+  healthPageHeadingSelector,
+  logsPageHeadingSelector,
+  configurationPageHeadingSelector,
+<%_ } _%>
+  swaggerPageSelector,
+  swaggerFrameSelector,
+} from '../../support/commands';
+import { test, expect } from '../../support/fixtures';
+
+// Swagger UI fetches and renders the api definition, which is slow on a gateway.
+const SWAGGER_TIMEOUT = 30000;
+
+test.describe('/admin', () => {
+  test.beforeEach(async ({ page, jhi }) => {
+    const { adminUsername, adminPassword } = jhi.credentials();
+    await jhi.login(adminUsername, adminPassword);
+    await page.goto('');
+  });
+
+<%_ if (withAdminUi) { _%>
+  test.describe('/metrics', () => {
+    test('should load the page', async ({ page, jhi }) => {
+      await jhi.navbar.clickOnAdminMenuItem('admin/metrics');
+      await expect(page.locator(metricsPageHeadingSelector)).toBeVisible();
+    });
+  });
+
+  test.describe('/health', () => {
+    test('should load the page', async ({ page, jhi }) => {
+      await jhi.navbar.clickOnAdminMenuItem('admin/health');
+      await expect(page.locator(healthPageHeadingSelector)).toBeVisible();
+    });
+  });
+
+  test.describe('/logs', () => {
+    test('should load the page', async ({ page, jhi }) => {
+      await jhi.navbar.clickOnAdminMenuItem('admin/logs');
+      await expect(page.locator(logsPageHeadingSelector)).toBeVisible();
+    });
+  });
+
+  test.describe('/configuration', () => {
+    test('should load the page', async ({ page, jhi }) => {
+      await jhi.navbar.clickOnAdminMenuItem('admin/configuration');
+      await expect(page.locator(configurationPageHeadingSelector)).toBeVisible();
+    });
+  });
+<%_ } _%>
+
+  test.describe('/docs', () => {
+    test('should load the page', async ({ page, jhi }) => {
+      const info = (await jhi.managementInfo()) as { activeProfiles?: string[] };
+      test.skip(!info.activeProfiles?.includes('api-docs'), 'the api-docs profile is not active');
+
+      await jhi.navbar.clickOnAdminMenuItem('admin/docs');
+      await expect(page.locator(swaggerFrameSelector)).toBeVisible({ timeout: SWAGGER_TIMEOUT });
+
+      // Swagger UI renders the definition asynchronously. Cypress retried each of these through `should`;
+      // a count() read is a single sample, so assert on the locators instead.
+      const swagger = page.frameLocator(swaggerFrameSelector);
+      // Cypress waited for the iframe body to stop being empty before looking inside it.
+      await expect(swagger.locator('body')).not.toBeEmpty({ timeout: SWAGGER_TIMEOUT });
+      await expect(swagger.locator(swaggerPageSelector)).toBeVisible({ timeout: SWAGGER_TIMEOUT });
+      await expect(swagger.locator('[id="select"] > option').first()).toBeAttached({ timeout: SWAGGER_TIMEOUT });
+      await expect(swagger.locator(`${swaggerPageSelector} .information-container`).first()).toBeVisible({
+        timeout: SWAGGER_TIMEOUT,
+      });
+    });
+  });
+<%_ if (communicationSpringWebsocket) { _%>
+
+  test.describe('/tracker', () => {
+    test('should load the page', async ({ page, jhi }) => {
+      await jhi.navbar.clickOnAdminMenuItem('admin/tracker');
+      await expect(page.locator('[data-cy="trackerPageHeading"]')).toBeVisible();
+      await expect(page.locator('[data-cy="trackerTable"] > tbody > tr')).toHaveCount(1);
+    });
+  });
+<%_ } _%>
+});

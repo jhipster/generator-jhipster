@@ -1,0 +1,139 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { test as base, expect } from '@playwright/test';
+import type { Page, APIRequestContext, APIResponse } from '@playwright/test';
+
+import { credentials } from './commands';
+import type { Credentials } from './commands';
+import { Navbar } from './navbar';
+import { EntityHelper } from './entity';
+import { managementInfo } from './management';
+
+export interface AuthenticatedRequest {
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  url: string;
+  body?: unknown;
+  form?: Record<string, string>;
+  headers?: Record<string, string>;
+  failOnStatusCode?: boolean;
+}
+
+/**
+ * The Cypress suite relies on custom commands (`cy.login`, `cy.authenticatedRequest`, …). Playwright has no
+ * command registry, so the same surface is exposed through fixtures and the specs stay a line-by-line port.
+ */
+export class JHipster {
+  constructor(readonly page: Page) {}
+
+  /**
+   * `cy.request` shares the browser's cookie jar. The standalone `request` fixture does not: it is an isolated
+   * context, so session and oauth2 applications would answer 401. `page.request` is the sharing equivalent.
+   */
+  get request(): APIRequestContext {
+    return this.page.request;
+  }
+
+  readonly navbar = new Navbar(this.page);
+  readonly entity = new EntityHelper(this.page);
+
+  credentials(): Credentials {
+    return credentials();
+  }
+
+<%_ if (authenticationTypeJwt) { _%>
+  private async bearerToken(): Promise<string | undefined> {
+    const raw = await this.page.evaluate(name => window.sessionStorage.getItem(name), '<%- jhiPrefixDashed %>-authenticationToken');
+    if (!raw) return undefined;
+  <%_ if (clientFrameworkVue) { _%>
+    return raw;
+  <%_ } else { _%>
+    return JSON.parse(raw) as string;
+  <%_ } _%>
+  }
+<%_ } _%>
+
+  /** Mirrors `cy.authenticatedRequest`: attaches the credentials the client stores after a login. */
+  async authenticatedRequest({ method = 'GET', url, body, form, headers = {} }: AuthenticatedRequest): Promise<APIResponse> {
+<%_ if (authenticationTypeJwt) { _%>
+    const token = await this.bearerToken();
+    return this.request.fetch(url, {
+      method,
+      headers: { ...headers, ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      ...(form === undefined ? {} : { form }),
+      ...(body === undefined ? {} : { data: body }),
+    });
+<%_ } else { _%>
+    const cookies = await this.page.context().cookies();
+    const csrf = cookies.find(cookie => cookie.name === 'XSRF-TOKEN')?.value;
+    return this.request.fetch(url, {
+      method,
+      headers: { ...headers, ...(csrf ? { 'X-XSRF-TOKEN': csrf } : {}) },
+      ...(form === undefined ? {} : { form }),
+      ...(body === undefined ? {} : { data: body }),
+    });
+<%_ } _%>
+  }
+
+  /** Mirrors `cy.login`. Cypress caches this with `cy.session`; Playwright reuses the browser context per file. */
+  async login(username: string, password: string): Promise<void> {
+<%_ if (authenticationTypeOauth2) { _%>
+    const { oauthLogin } = await import('./oauth2');
+    await oauthLogin(this.page, username, password);
+<%_ } else { _%>
+    await this.page.goto('/');
+    // Cypress warms the cookie jar with a GET and then posts through its authenticatedRequest command, which
+    // carries the csrf header. Posting directly is rejected by a session application.
+    await this.request.get('/api/account');
+    const response = await this.authenticatedRequest({
+      method: 'POST',
+      url: '<%- authenticationTypeSession ? '/api/authentication' : '/api/authenticate' %>',
+  <%_ if (authenticationTypeSession) { _%>
+      form: { username, password },
+  <%_ } else { _%>
+      body: { username, password },
+  <%_ } _%>
+    });
+    expect(response.status()).toBe(200);
+  <%_ if (!authenticationTypeSession) { _%>
+    const { id_token: idToken } = (await response.json()) as { id_token: string };
+    await this.page.evaluate(
+      ([name, token]) => window.sessionStorage.setItem(name, token),
+    <%_ if (clientFrameworkVue) { _%>
+      ['<%- jhiPrefixDashed %>-authenticationToken', idToken],
+    <%_ } else { _%>
+      ['<%- jhiPrefixDashed %>-authenticationToken', JSON.stringify(idToken)],
+    <%_ } _%>
+    );
+  <%_ } _%>
+<%_ } _%>
+  }
+
+  /** Mirrors `cy.getManagementInfo`. */
+  async managementInfo(): Promise<Record<string, unknown>> {
+    return managementInfo(this.request);
+  }
+}
+
+export const test = base.extend<{ jhi: JHipster }>({
+  jhi: async ({ page }, use) => {
+    await use(new JHipster(page));
+  },
+});
+
+export { expect };

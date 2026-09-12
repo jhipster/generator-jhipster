@@ -71,6 +71,7 @@ const command = {
     'client',
     'git',
     'cypress',
+    'playwright',
     'languages',
   ],
 } as const satisfies JHipsterCommandDefinition<any>;

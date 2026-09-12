@@ -86,7 +86,7 @@ export const UserManagementUpdate = () => {
       <Row className="justify-content-center">
         <Col md="8">
         { loading ? <p>Loading...</p>
-        : <ValidatedForm onSubmit={saveUser} defaultValues={user}>
+        : <ValidatedForm mode="all" onSubmit={saveUser} defaultValues={user}>
           {user.id && (
             <ValidatedField
               type="text"

@@ -64,6 +64,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
+  "clientTestFrameworksPlaywright": false,
   "clientTheme": "none",
   "clientThemeAny": false,
   "clientThemeNone": true,

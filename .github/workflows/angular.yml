@@ -177,7 +177,9 @@ jobs:
         timeout-minutes: 15
         env:
           CYPRESS_video: >-
-            ${{ contains(github.event.pull_request.labels.*.name, 'ci: cypress-video') && 'true' || 'false' }}
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
+          PLAYWRIGHT_VIDEO: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: e2e-video') && 'true' || 'false' }}
       - name: Store the application
         uses: actions/upload-artifact@v7
         if: always() && (steps.backend.outcome == 'failure' || steps.e2e.outcome == 'failure' || steps.frontend.outcome == 'failure' || steps.packaging.outcome == 'failure' || steps.docker-compose.outcome == 'failure')
@@ -199,17 +201,19 @@ jobs:
         with:
           name: log-${{ matrix.sample }}
           path: ${{ github.workspace }}/app/**/test-results/**/*.xml
-      - name: 'E2E: Store failure cypress assets'
+      - name: 'E2E: Store failure e2e assets'
         uses: actions/upload-artifact@v7
         if: |
           always() && (
-            contains(github.event.pull_request.labels.*.name, 'ci: always-upload-cypress-assets')
+            contains(github.event.pull_request.labels.*.name, 'ci: always-upload-e2e-assets')
             || steps.e2e.outcome == 'failure')
         with:
-          name: cypress-${{ matrix.sample }}
+          name: e2e-${{ matrix.sample }}
           path: |
             ${{ github.workspace }}/app/**/cypress/screenshots
             ${{ github.workspace }}/app/**/cypress/videos
+            ${{ github.workspace }}/app/**/playwright/results
+            ${{ github.workspace }}/app/**/playwright/report
       - name: Dump docker logs
         if: always() && runner.os == 'Linux'
         uses: jwalton/gh-docker-logs@v2

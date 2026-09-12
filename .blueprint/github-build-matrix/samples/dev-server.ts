@@ -30,6 +30,13 @@ export const devServerMatrix = {
       sample: 'samples/ng-default',
       args: '--auth oauth2 --sample-yorc-folder --entities-sample sqllight --microfrontend',
     },
+    // `e2e:devserver` runs `ng e2e` for angular without microfrontends only - a microfrontend dev
+    // server never reports its url to the builder - so each e2e framework needs a non microfrontend
+    // angular job to exercise its own angular schematic.
+    'ng-default-playwright': {
+      sample: 'samples/ng-default-playwright',
+      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler esbuild',
+    },
   },
   react: {
     'react-default': {
