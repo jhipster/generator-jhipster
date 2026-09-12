@@ -60,13 +60,14 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
     if (comment) {
       fieldData.documentation = comment;
     }
-    if (jdlObject.hasEnum(jdlField.type)) {
-      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType)?.getValuesAsString();
-      const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType)?.comment;
+    const jdlEnum = jdlObject.getEnum(jdlField.type);
+    if (jdlEnum) {
+      fieldData.fieldValues = jdlEnum.getValuesAsString();
+      const fieldTypeComment = jdlEnum.comment;
       if (fieldTypeComment) {
         fieldData.fieldTypeDocumentation = fieldTypeComment;
       }
-      const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType)?.getValueJavadocs();
+      const fieldValuesJavadocs = jdlEnum.getValueJavadocs();
       if (fieldValuesJavadocs && Object.keys(fieldValuesJavadocs).length > 0) {
         fieldData.fieldValuesJavadocs = fieldValuesJavadocs;
       }
