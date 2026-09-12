@@ -133,6 +133,41 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a mapstruct expression containing escaped quotes (#24910)', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        {
+          name: 'StreamRights',
+          changelogDate: '20160926101213',
+          dto: 'mapstruct',
+          fields: [
+            { fieldName: 'name', fieldType: 'String' },
+            {
+              fieldName: 'details',
+              fieldType: 'String',
+              // The expression is written as a java string literal, like the JDL `@MapstructExpression("java(\\" | \\")")`.
+              options: { mapstructExpression: 'java(s.getId() + \\" | \\" + s.getName())' },
+            },
+            // Bare quotes and doubly escaped quotes (a `jhipster info` copy) are escaped once.
+            { fieldName: 'bare', fieldType: 'String', options: { mapstructExpression: 'java(s.getId() + " | " + s.getName())' } },
+            {
+              fieldName: 'doubled',
+              fieldType: 'String',
+              options: { mapstructExpression: 'java(s.getId() + \\\\" | \\\\" + s.getName())' },
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should escape every quote of the expressions exactly once', () => {
+      const mapper = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/StreamRightsMapper.java`;
+      runResult.assertFileContent(mapper, 'target = "details", expression = "java(s.getId() + \\" | \\" + s.getName())"');
+      runResult.assertFileContent(mapper, 'target = "bare", expression = "java(s.getId() + \\" | \\" + s.getName())"');
+      runResult.assertFileContent(mapper, 'target = "doubled", expression = "java(s.getId() + \\" | \\" + s.getName())"');
+    });
+  });
+
   describe('with eager load relationship and no pagination', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
