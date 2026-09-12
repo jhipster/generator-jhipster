@@ -595,7 +595,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             em.flush();
             <%_ if (!isUsingMapsId || fieldStatus !== 'UPDATED_') { _%>
         } else {
-            <%- otherEntityName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).get(0);
+            <%- otherEntityName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).getFirst();
         }
             <%_ } _%>
           <%_ } else { _%>
@@ -968,7 +968,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
         assertThat(<%- entityInstance %>List).isNotNull();
         assertThat(<%- entityInstance %>List).hasSize(1);
-        <%- persistClass %> test<%- entityClass %> = <%- entityInstance %>List.get(0);
+        <%- persistClass %> test<%- entityClass %> = <%- entityInstance %>List.getFirst();
 
   <%_ if (reactive && databaseTypeSql) { _%>
         // Test fails because reactive api returns an empty object instead of null
@@ -1284,7 +1284,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- entityInstance %>Repository.saveAndFlush(<%- persistInstance %>);
             <%- relationship.relationshipFieldName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
         } else {
-            <%- relationship.relationshipFieldName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).get(0);
+            <%- relationship.relationshipFieldName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).getFirst();
         }
       <%_ } else { _%>
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
