@@ -7,6 +7,7 @@ exports[`generator - app help should print expected information 1`] = `
 
 Options:
   --auto-crlf                              Detect line endings (default: false)
+  --export-application                     Serialize the generated application instead of writing it to disk
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name

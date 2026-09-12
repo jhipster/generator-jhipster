@@ -63,6 +63,24 @@ describe(`generator - ${generator}`, () => {
         });
       });
     });
+    describe('with exportApplication', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withOptions({ skipGit: false, exportApplication: true });
+      });
+      it('should not create .git, the application is exported as an archive', async () => {
+        await expect(access(resolve(runResult.cwd, '.git'))).rejects.toThrow();
+      });
+    });
+
+    describe('with deferCommit, the child of an exported workspace', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withOptions({ skipGit: false, deferCommit: true });
+      });
+      it('should not create .git, the parent generator writes the archive', async () => {
+        await expect(access(resolve(runResult.cwd, '.git'))).rejects.toThrow();
+      });
+    });
+
     describe('inside an existing repository at a parent folder', () => {
       let parentDir: string;
 

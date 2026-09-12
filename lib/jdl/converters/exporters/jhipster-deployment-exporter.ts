@@ -31,14 +31,19 @@ import { GENERATOR_NAME, writeConfigFile } from './export-utils.ts';
  * @param deployments the deployments to export (key: deployment type, value: JDLDeployment- deployment config).
  * @return object[] exported deployments in their final form.
  */
-export default function exportDeployments(deployments: Record<string, JDLDeployment>): Partial<YoRcJHipsterDeploymentContent>[] {
+export default function exportDeployments(
+  deployments: Record<string, JDLDeployment>,
+  { skipFileGeneration = false }: { skipFileGeneration?: boolean } = {},
+): Partial<YoRcJHipsterDeploymentContent>[] {
   if (!deployments) {
     throw new Error('Deployments have to be passed to be exported.');
   }
   return Object.values(deployments).map(deployment => {
     checkForErrors(deployment);
     const yoRcDeployment: Partial<YoRcJHipsterDeploymentContent> = setUpDeploymentStructure(deployment);
-    writeDeploymentConfigs(yoRcDeployment);
+    if (!skipFileGeneration) {
+      writeDeploymentConfigs(yoRcDeployment);
+    }
     return yoRcDeployment;
   });
 }

@@ -16,10 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { rm } from 'node:fs/promises';
+import { rm, writeFile } from 'node:fs/promises';
+import { basename, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
 import { transform } from '@yeoman/transform';
+import { zipSync } from 'fflate';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
@@ -52,6 +54,9 @@ const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
 
+// Zip entries always use forward slashes, regardless of the host platform.
+const toArchiveEntry = (filePath: string) => filePath.split(sep).join('/');
+
 export default class BootstrapGenerator extends CommandBaseGenerator<typeof command> {
   static readonly MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
@@ -60,6 +65,10 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
   skipEslint?: boolean;
+  exportApplication?: boolean;
+  deferCommit?: boolean;
+  /** Paths, outside of the destination root, whose files must be part of the exported archive. */
+  private exportPaths: string[] = [];
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
   prettierJava = false;
   prettierOptions: PrettierOptions = { plugins: [] };
@@ -159,6 +168,10 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   }
 
   async commitPrettierConfig() {
+    if (this.exportApplication || this.deferCommit) {
+      // Nothing is written to disk; the prettier config files are captured with the rest of the application.
+      return;
+    }
     await this.commitSharedFs({
       log: 'prettier configuration files committed to disk',
       filter: file => isPrettierConfigFilePath(file.path),
@@ -166,6 +179,14 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   }
 
   async commitTask() {
+    if (this.deferCommit) {
+      await this.deferSharedFs();
+      return;
+    }
+    if (this.exportApplication) {
+      await this.exportSharedFs();
+      return;
+    }
     await this.commitSharedFs(
       { refresh: this.refreshOnCommit },
       ...this.env.findFeature('commitTransformFactory').flatMap(({ feature }) => feature()),
@@ -173,12 +194,105 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   }
 
   /**
+   * Serializes the in-memory application to a single zip archive instead of committing it to disk.
+   *
+   * Reuses the {@link commitSharedFs} pipeline so the archived files go through the same transforms as a
+   * regular generation (prettier, eslint, needles, ...); only the disk-commit transforms (`forceYoFiles`,
+   * conflicter, commit) are skipped and replaced by an in-memory collector.
+   *
+   * This lets server-side consumers generate from an untrusted `.yo-rc.json` without the generator writing
+   * attacker-controlled paths onto the host filesystem: every generated path becomes a zip entry (data),
+   * not a real file write.
+   */
+  async exportSharedFs() {
+    const entries: Record<string, Uint8Array> = {};
+    await this.commitSharedFs({ exportFiles: entries });
+    const archivePath = this.destinationPath('export-application.zip');
+    await writeFile(archivePath, zipSync(entries));
+    this.log.ok(`application exported to ${archivePath} (${Object.keys(entries).length} files)`);
+  }
+
+  /**
+   * Applies the commit transforms without writing anything, leaving the files pending in this environment's mem-fs.
+   *
+   * A parent generator running the application in a child environment (`jhipster jdl` with multiple applications) then
+   * copies the pending files to its own mem-fs and exports them along with the rest of the workspace.
+   */
+  async deferSharedFs() {
+    await this.commitSharedFs({ defer: true });
+  }
+
+  /**
+   * Registers a path whose files must be part of the exported archive.
+   *
+   * Deployments are generated in a destination root of their own (`jhipster jdl` composes them with a
+   * `destinationRoot` option), which is not necessarily below the root being exported.
+   */
+  registerExportPath(exportPath: string) {
+    const resolved = resolve(exportPath);
+    if (!this.isOutsidePath(this.destinationPath(), resolved) || this.exportPaths.some(path => !this.isOutsidePath(path, resolved))) {
+      // Already exported, through the destination root or through a registered parent path.
+      return;
+    }
+
+    // Keep a single entry per tree: the registered paths below the new one are exported through it.
+    this.exportPaths = this.exportPaths.filter(path => this.isOutsidePath(resolved, path));
+    this.exportPaths.push(resolved);
+  }
+
+  /**
+   * Returns the archive entry a file must be written at, or `undefined` when the file is not exportable.
+   */
+  private exportEntryName(root: string, filePath: string): string | undefined {
+    if (!this.isOutsidePath(root, filePath)) {
+      return toArchiveEntry(relative(root, filePath));
+    }
+    const exportPath = this.exportPaths.find(exportPath => !this.isOutsidePath(exportPath, filePath));
+    // A registered path is not below the archive root, keep its folder name so the entries don't escape the archive.
+    return exportPath === undefined ? undefined : toArchiveEntry(join(basename(exportPath), relative(exportPath, filePath)));
+  }
+
+  private isOutsidePath(root: string, filePath: string): boolean {
+    const relativePath = relative(root, filePath);
+    return isAbsolute(relativePath) || relativePath === '..' || relativePath.startsWith(`..${sep}`);
+  }
+
+  /**
+   * Collects committed files into `entries` (a zip-entries map) instead of writing them to disk.
+   * Files resolving outside the destination root are warned about and ignored.
+   */
+  private createExportTransform(entries: Record<string, Uint8Array>): FileTransform<MemFsEditorFile> {
+    const root = this.destinationPath();
+    return transform((file: MemFsEditorFile) => {
+      if (!file.contents) {
+        // Deleted or empty files have nothing to add to a fresh archive.
+        return file;
+      }
+      const entry = this.exportEntryName(root, file.path);
+      if (entry === undefined) {
+        this.log.warn(`Ignoring file outside of the destination root: ${file.path}`);
+        return file;
+      }
+      entries[entry] = new Uint8Array(file.contents);
+      return file;
+    });
+  }
+
+  /**
    * Commits the MemFs to the disc.
    */
   async commitSharedFs(
-    { log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {},
+    {
+      log,
+      exportFiles,
+      defer,
+      ...options
+    }: PipelineOptions<MemFsEditorFile> & { log?: string; exportFiles?: Record<string, Uint8Array>; defer?: boolean } = {},
     ...transforms: FileTransform<MemFsEditorFile>[]
   ) {
+    const exportMode = Boolean(exportFiles);
+    // Neither export nor defer write to disk, the disk only transforms must be skipped in both.
+    const diskMode = !exportMode && !defer;
     const { autoCrlf = isWin32, devBlueprintEnabled, skipYoResolve } = this.options;
     const pipelineOptions: GeneratorPipelineOptions = {
       refresh: false,
@@ -190,7 +304,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     };
 
     let customizeActions: NonNullable<Parameters<typeof createConflicterTransform>[1]>['customizeActions'];
-    if (devBlueprintEnabled) {
+    if (devBlueprintEnabled && diskMode) {
       customizeActions = (actions, { separator }) => {
         return [
           ...(actions as any),
@@ -227,7 +341,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       }
 
       transformStreams.push(
-        forceYoFiles(),
+        // forceYoFiles only matters when committing to disk through the conflicter, skip it otherwise.
+        ...(diskMode ? [forceYoFiles()] : []),
         createSortConfigFilesTransform(),
         createForceWriteConfigFilesTransform(),
         // Needles are removed from the files whose project enabled `removeNeedles`, see `editorMetadata` at base-core.
@@ -254,15 +369,22 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
         transformStreams.push(await autoCrlfTransform());
       }
 
-      transformStreams.push(
-        createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),
-        createCommitTransform(),
-      );
+      if (defer) {
+        // Nothing to do, the files are left pending for the parent generator.
+      } else if (exportMode) {
+        // Collect the transformed files in memory instead of committing them to disk.
+        transformStreams.push(this.createExportTransform(exportFiles!));
+      } else {
+        transformStreams.push(
+          createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),
+          createCommitTransform(),
+        );
+      }
 
       return transformStreams;
     };
 
-    if (autoCrlf) {
+    if (autoCrlf && diskMode) {
       this.log.info('autoCrlf is enabled, line endings will be detected and normalized');
       await this.pipeline(
         {
@@ -283,6 +405,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       transform((file: MemFsEditorFile) => (isFilePending(file) ? file : undefined)),
       ...(await createTransformStreams()),
     );
-    this.log.ok(log ?? 'files committed to disk');
+    if (diskMode) {
+      this.log.ok(log ?? 'files committed to disk');
+    }
   }
 }

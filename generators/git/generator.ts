@@ -23,6 +23,7 @@ import { CheckRepoActions } from 'simple-git';
 
 import BaseGenerator from '../base/index.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY } from '../base-core/support/index.ts';
+import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 
 import { files } from './files.ts';
 import type { Config as GitConfig, GeneratorProperties as GitGeneratorProperties, Options as GitOptions } from './types.ts';
@@ -43,6 +44,13 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   get initializing() {
     return this.asInitializingTaskGroup({
       async checkGit() {
+        const { exportApplication, deferCommit } = this.options as BootstrapOptions;
+        if (!this.skipGit && (exportApplication || deferCommit)) {
+          // The exported application is an archive, a git repository would be the only thing written to disk.
+          // `deferCommit` is the child of an export: the parent generator writes the archive.
+          this.log.info('Git repository will not be created, as the application is being exported');
+          this.skipGit = true;
+        }
         if (!this.skipGit) {
           const gitInstalled = (await this.createGit().version()).installed;
           if (!gitInstalled) {
