@@ -66,7 +66,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
   get preparing() {
     return this.asPreparingTaskGroup({
       setWorkspacesRoot() {
-        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath));
+        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath, { allowOutsideRoot: true }));
       },
     });
   }

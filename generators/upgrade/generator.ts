@@ -126,7 +126,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
       },
 
       async assertGitRepository() {
-        const git = this.createGit();
+        const git = this.createSimpleGit();
         if (!(await git.checkIsRepo())) {
           this.log.warn('Current directory is not a git repository. Initializing git.');
           await git.init().add('.').commit('initial commit', ['--allow-empty', '--no-verify']);
@@ -134,7 +134,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
       },
 
       async assertNoLocalChanges() {
-        const result = await this.createGit().status();
+        const result = await this.createSimpleGit().status();
         if (!result.isClean()) {
           throw new Error(
             ` local changes found.\n\tPlease commit/stash them before upgrading\n\t${result.files
@@ -145,7 +145,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
       },
 
       async detectCurrentBranch() {
-        this.actualApplicationBranch = await this.createGit().revparse(['--abbrev-ref', 'HEAD']);
+        this.actualApplicationBranch = await this.createSimpleGit().revparse(['--abbrev-ref', 'HEAD']);
         if (this.actualApplicationBranch === UPGRADE_BRANCH) {
           throw new Error('You are on the upgrade branch, please switch to another branch before upgrading.');
         }
@@ -160,7 +160,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   get default() {
     return this.asDefaultTaskGroup({
       async prepareUpgradeBranch() {
-        const git = this.createGit();
+        const git = this.createSimpleGit();
 
         // Checkout upgrade branch
         try {
@@ -204,7 +204,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
       },
 
       async prepareSourceBranch() {
-        const git = this.createGit();
+        const git = this.createSimpleGit();
         await git
           .checkout(this.actualApplicationBranch, ['-f'])
           .merge([
@@ -222,7 +222,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
       },
 
       async updateUpgradeBranch() {
-        const git = this.createGit();
+        const git = this.createSimpleGit();
         // Switch back to upgrade branch
         await git.checkout(UPGRADE_BRANCH);
 
@@ -244,7 +244,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
       },
 
       async upgradeSourceBranch() {
-        const git = this.createGit();
+        const git = this.createSimpleGit();
         await git
           .checkout(this.actualApplicationBranch, ['-f'])
           .merge([UPGRADE_BRANCH, '-m', `upgrade merge of ${UPGRADE_BRANCH} branch into ${this.actualApplicationBranch}`])
@@ -270,7 +270,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   get end() {
     return this.asEndTaskGroup({
       async end() {
-        const diff = await this.createGit().diff(['--name-only', '--diff-filter', 'U']);
+        const diff = await this.createSimpleGit().diff(['--name-only', '--diff-filter', 'U']);
         this.log.ok(chalk.bold('upgraded successfully.'));
         if (diff) {
           this.log.warn(`please fix conflicts listed below and commit!\n${diff}`);
@@ -300,7 +300,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
    * Remove every generated file not related to the generation.
    */
   async cleanUp() {
-    const gitignoreContent = this.readDestination('.gitignore', { defaults: '' }) as string;
+    const gitignoreContent = this.readDestination('.gitignore', { defaults: '' });
     const ignoredFiles = gitignoreContent ? (gitignore(gitignoreContent).patterns ?? []) : [];
     const filesToKeep = new Set(['.yo-rc.json', '.jhipster', 'package.json', 'package-lock.json', 'node_modules', '.git', ...ignoredFiles]);
     for (const file of await readdir(this.destinationPath())) {
@@ -338,7 +338,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
    */
   async checkGitVersion(minVersion?: string): Promise<boolean> {
     try {
-      const rawVersion = await this.createGit().raw('--version');
+      const rawVersion = await this.createSimpleGit().raw('--version');
       const gitVersion = String(rawVersion.match(/(\d+\.\d+\.\d+)/g));
       if (minVersion) {
         return semver.gte(gitVersion, minVersion);

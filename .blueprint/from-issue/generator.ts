@@ -89,8 +89,11 @@ export default class extends BaseGenerator {
         const issue = await getGithubIssue({ owner: this.owner, repository: this.repository, issue: this.issueNumber });
 
         if (this.projectFolder || this._globalConfig.get('samplesFolder')) {
+          // The samples folder is usually outside of the current destination root.
           this.destinationRoot(
-            this.destinationPath(this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issueNumber}`)),
+            this.destinationPath(this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issueNumber}`), {
+              allowOutsideRoot: true,
+            }),
           );
         }
 
@@ -148,7 +151,7 @@ export default class extends BaseGenerator {
             const diffs: string[] = [];
             for (const file of files.filter(file => file.type === 'jdl')) {
               await EnvironmentBuilder.run([`jhipster:jdl`], { ...generatorOptions, ...workspaceOpts, inline: file.content }, envOptions);
-              const git = this.createGit();
+              const git = this.createSimpleGit();
               const status = await git.status();
               if (!status.isClean()) {
                 await git.add('.').commit(`chore: generate application from ${file.filename}`);

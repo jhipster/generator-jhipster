@@ -71,7 +71,8 @@ export const askForDirectoryPath = asPromptingTask(async function askForDirector
           appsFolders = (await findApplicationFolders(this, directoryPath)).filter(
             app => app !== 'jhipster-registry' && app !== 'registry',
           );
-          this.log.log(chalk.green(`${appsFolders.length} applications found at ${this.destinationPath(directoryPath)}\n`));
+          const workspacesRoot = this.destinationPath(directoryPath, { allowOutsideRoot: true });
+          this.log.log(chalk.green(`${appsFolders.length} applications found at ${workspacesRoot}\n`));
           return true;
         },
         message: 'Which applications do you want to include in your configuration?',
@@ -85,12 +86,10 @@ export const askForDirectoryPath = asPromptingTask(async function askForDirector
 });
 
 async function findApplicationFolders(generator: BaseWorkspacesGenerator, directoryPath: string): Promise<string[]> {
-  return (await readdir(generator.destinationPath(directoryPath), { withFileTypes: true }))
+  // The applications are siblings of this deployment folder, outside of the destination root.
+  const workspacesPath = (...dest: string[]) => generator.destinationPath(directoryPath, ...dest, { allowOutsideRoot: true });
+  return (await readdir(workspacesPath(), { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
-    .filter(
-      folder =>
-        existsSync(generator.destinationPath(directoryPath, folder, 'package.json')) &&
-        existsSync(generator.destinationPath(directoryPath, folder, YO_RC_FILE)),
-    );
+    .filter(folder => existsSync(workspacesPath(folder, 'package.json')) && existsSync(workspacesPath(folder, YO_RC_FILE)));
 }

@@ -201,7 +201,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
       async gitInit() {
         if (this.jhipsterConfig.herokuDeployType !== 'git') return;
 
-        const git = this.createGit();
+        const git = this.createSimpleGit();
         if (await git.checkIsRepo()) {
           this.log.log(chalk.bold('\nUsing existing Git repository'));
         } else {
@@ -441,7 +441,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         if (this.herokuDeployType === 'git') {
           try {
             this.log.log(chalk.bold('\nUpdating Git repository'));
-            const git = this.createGit().outputHandler((_command, stdout, stderr) => this.printChildOutput({ stdout, stderr }));
+            const git = this.createSimpleGit().outputHandler((_command, stdout, stderr) => this.printChildOutput({ stdout, stderr }));
             await git.add('.').commit('Deploy to Heroku', { '--allow-empty': null });
 
             let buildpack = 'heroku/java';

@@ -115,7 +115,8 @@ export const askForPath = asPromptingTask(async function askForPath(this: BaseKu
 export const askForApps = asPromptingTask(async function askForApps(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const workspacesRoot = this.destinationPath(this.jhipsterConfig.directoryPath);
+  // The workspaces root holds this deployment folder, it is looked up outside of the destination root.
+  const workspacesRoot = this.destinationPath(this.jhipsterConfig.directoryPath, { allowOutsideRoot: true });
   const appsFolders = getAppFolders
     .call(this, workspacesRoot, this.jhipsterConfigWithDefaults.deploymentApplicationType)
     .filter(appFolder => appFolder !== 'jhipster-registry' && appFolder !== 'registry');
