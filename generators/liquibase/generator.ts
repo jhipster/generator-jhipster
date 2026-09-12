@@ -366,7 +366,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       customizeMaven({ source, application }) {
         if (!application.buildToolMaven || !this.injectBuildTool) return;
         if (!application.javaDependencies) {
-          throw new Error('Some application fields are be mandatory');
+          throw new Error('Some application fields are mandatory');
         }
 
         const { javaDependencies } = application;
@@ -536,7 +536,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       injectGradle({ source, application }) {
         if (!application.buildToolGradle || !this.injectBuildTool) return;
         if (!application.javaDependencies) {
-          throw new Error('Some application fields are be mandatory');
+          throw new Error('Some application fields are mandatory');
         }
 
         const { liquibase: liquibaseVersion, 'gradle-liquibase': gradleLiquibaseVersion } = application.javaDependencies;
