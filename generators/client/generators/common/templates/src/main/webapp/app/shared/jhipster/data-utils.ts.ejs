@@ -58,7 +58,7 @@ export const toOpenableContentType = (contentType: string | null | undefined, bl
   if (type.endsWith('+xml')) {
     return DOWNLOAD_CONTENT_TYPE;
   }
-  if (blobType === 'image' && type.startsWith('image/') && !type.endsWith('+xml')) {
+  if (blobType === 'image' && type.startsWith('image/')) {
     return type;
   }
   if (blobType === 'text' && type === 'text/plain') {
