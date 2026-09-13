@@ -62,6 +62,12 @@ public class CouchbaseTestContainer {
     @Bean
     DynamicPropertyRegistrar couchbaseProperties(CouchbaseContainer couchbaseContainer) {
         return registry -> {
+            // Spring Boot's auto-configuration always builds a ClusterEnvironment from these
+            // spring.couchbase.env.* properties; the SDK rejects connection-string query params
+            // once a ClusterEnvironment exists, so timeouts must be set this way instead. Default
+            // key-value timeout (~2.5s) is too tight right after container startup.
+            registry.add("spring.couchbase.env.timeouts.connect", () -> "15s");
+            registry.add("spring.couchbase.env.timeouts.key-value", () -> "10s");
             registry.add("jhipster.database.couchbase.bucket-name", () -> BUCKET_NAME);
             registry.add("jhipster.database.couchbase.scope-name", () -> "testScope");
         };
