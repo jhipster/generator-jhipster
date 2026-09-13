@@ -19,12 +19,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
   </div>
 
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-secondary"
-      data-dismiss="modal"
-      (click)="cancel()"
-    >
+    <button type="button" class="btn btn-secondary" (click)="cancel()">
       <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
     </button>
 
