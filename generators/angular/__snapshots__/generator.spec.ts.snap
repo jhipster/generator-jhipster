@@ -2037,7 +2037,7 @@ export class UserManagementFormService {
         <div class="mb-3">
           <label class="form-label" for="field_authority">Profiles</label>
           <select
-            class="form-control"
+            class="form-select"
             id="field_authority"
             multiple
             name="authority"

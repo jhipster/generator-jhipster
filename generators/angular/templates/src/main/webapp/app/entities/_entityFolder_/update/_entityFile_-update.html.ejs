@@ -39,7 +39,7 @@
   <%_ } else { _%>
                     <label class="form-label" for="field_<%- fieldName %>"<%- labelTooltip %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</label>
     <%_ if (field.clientConstantsAsValues) { _%>
-                    <select class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
+                    <select class="form-select" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
       <%_ if (!field.collection) { _%>
                         <option [ngValue]="null"></option>
       <%_ } _%>
@@ -48,7 +48,7 @@
                     }
                     </select>
     <%_ } else if (field.fieldIsEnum) { _%>
-                    <select class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>">
+                    <select class="form-select" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>">
       <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%- enumPrefix %>.null' | translate }}<% } %></option>
                     @for (<%- this._.lowerFirst(fieldType) %> of <%- this._.lowerFirst(fieldType) %>Values; track $index) {
@@ -171,7 +171,7 @@
 
                 <div class="mb-3">
                     <label class="form-label" for="field_<%- relationshipName %>">__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</label>
-                    <select class="form-control" id="field_<%- relationshipName %>"<%- relationship.collection ? ' multiple' : '' %> name="<%- relationshipName %>" formControlName="<%- propertyName %>">
+                    <select class="form-select" id="field_<%- relationshipName %>"<%- relationship.collection ? ' multiple' : '' %> name="<%- relationshipName %>" formControlName="<%- propertyName %>">
                     @for (<%- relationshipFieldName %> of <%- propertyName %>(); track $index) {
                         <option [value]="<%- relationshipFieldName %>">{{ <%- relationshipFieldName %> }}</option>
                     }
@@ -181,7 +181,7 @@
 
                 <div class="mb-3">
                     <label class="form-label" for="field_<%- relationshipName %>">__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</label>
-                    <select class="form-control" id="field_<%- relationshipName %>" data-cy="<%- propertyName %>" name="<%- relationshipName %>" formControlName="<%- propertyName %>" [compareWith]="compare<%- otherEntity.entityAngularName %>">
+                    <select class="form-select" id="field_<%- relationshipName %>" data-cy="<%- propertyName %>" name="<%- relationshipName %>" formControlName="<%- propertyName %>" [compareWith]="compare<%- otherEntity.entityAngularName %>">
     <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
     <%_ } else if (relationship.otherRelationship) { _%>
@@ -202,7 +202,7 @@
 
                 <div class="mb-3">
                     <label for="field_<%- relationshipFieldNamePlural %>">__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</label>
-                    <select class="form-control" id="field_<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- propertyName %>" formControlName="<%- propertyName %>" [compareWith]="compare<%- otherEntity.entityAngularName %>">
+                    <select class="form-select" id="field_<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- propertyName %>" formControlName="<%- propertyName %>" [compareWith]="compare<%- otherEntity.entityAngularName %>">
                     @for (<%- otherEntityName %>Option of <%- otherEntity.entityInstancePlural %>SharedCollection(); track $index) {
                         <option [ngValue]="<%- otherEntityName %>Option">{{ <%- otherEntityName %>Option.<%- otherEntityField %> }}</option>
                     }
