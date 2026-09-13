@@ -37,7 +37,7 @@ public class ElasticsearchExceptionMapper {
             ElasticsearchException esException = (ElasticsearchException) e.getCause();
             List<ErrorCause> rootCause = esException.response().error().rootCause();
             if (!rootCause.isEmpty()) {
-                String reason = rootCause.get(0).reason();
+                String reason = rootCause.getFirst().reason();
                 if (reason != null && reason.startsWith("Failed to parse query [")) {
                     return new QuerySyntaxException();
                 }

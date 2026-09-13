@@ -157,7 +157,7 @@ public class LiquibaseConfiguration {
         CqlSession session
     ) {
         String url = Optional.ofNullable(liquibaseProperties.getUrl()).orElseGet(() -> {
-            CassandraConnectionDetails.Node contactPoint = connectionDetails.getContactPoints().get(0);
+            CassandraConnectionDetails.Node contactPoint = connectionDetails.getContactPoints().getFirst();
             String keyspaceName = session
                 .getKeyspace()
                 .map(CqlIdentifier::asInternal)

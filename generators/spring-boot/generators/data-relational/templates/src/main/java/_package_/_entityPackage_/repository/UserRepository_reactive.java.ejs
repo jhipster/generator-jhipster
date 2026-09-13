@@ -143,7 +143,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             )
             .all()
             .groupBy(t -> t.getT1().getLogin())
-            .flatMap(l -> l.collectList().map(t -> updateUserWithAuthorities(t.get(0).getT1(), t)))
+            .flatMap(l -> l.collectList().map(t -> updateUserWithAuthorities(t.getFirst().getT1(), t)))
             .sort(
                 Sort.Direction.fromString(direction) == Sort.DEFAULT_DIRECTION
                     ? new BeanComparator<>(property)
@@ -182,7 +182,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .all()
             .collectList()
             .filter(l -> !l.isEmpty())
-            .map(l -> updateUserWithAuthorities(l.get(0).getT1(), l));
+            .map(l -> updateUserWithAuthorities(l.getFirst().getT1(), l));
     }
 
     private <%- user.persistClass %> updateUserWithAuthorities(<%- user.persistClass %> user, List<Tuple2<<%- user.persistClass %>, Optional<String>>> tuples) {
