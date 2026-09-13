@@ -19,7 +19,7 @@
                         <label class="form-control-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
   <%_ if (field.fieldIsEnum) { _%>
-                        <select class="form-control" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
+                        <select class="form-select" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
                             <option v-for="<%- this._.lowerFirst(fieldType) %> in <%- this._.lowerFirst(fieldType) %>Values" :key="<%- this._.lowerFirst(fieldType) %>" :value="<%- this._.lowerFirst(fieldType) %>" :label="t$('<%- enumPrefix %>.'+<%- this._.lowerFirst(fieldType) %>)">{{ <%- this._.lowerFirst(fieldType) %> }}</option>
 
@@ -116,7 +116,7 @@
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="mb-3">
                         <label class="form-control-label" for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
-                        <select class="form-control" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
+                        <select class="form-select" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
     <%_ if (relationshipRequired) { _%>
                             <option v-if="!<%- entityInstance %>.<%- relationshipName %>" :value="null" selected></option>
     <%_ } else { _%>
@@ -128,7 +128,7 @@
   <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="mb-3">
                         <label for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
-                        <select class="form-control" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
+                        <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
                             <option :value="getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
                         </select>
                     </div>
