@@ -119,7 +119,7 @@
 <%_ if (enableTranslation) { _%>
           <div class="mb-3" v-if="languages && Object.keys(languages).length > 1">
             <label for="langKey">{{ t$('settings.form.language') }}</label>
-            <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
+            <select class="form-select" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
               <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
               </option>
             </select>
