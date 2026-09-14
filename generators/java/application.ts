@@ -110,9 +110,17 @@ export const mutateField = {
 
 export type JavaAddedValidatedFieldProperties = JavaAddedPropertyProperties & {
   javaFieldValidatorsPartial?: string;
+  javaContentTypeValidatorsPartial?: string;
 };
 
 export const mutateValidatedField = {
+  /**
+   * ImageBlob accepts image content types only, except XML based images like SVG which can execute scripts when rendered.
+   * AnyBlob accepts any content type, clients are expected to open it as a download.
+   */
+  javaContentTypeValidatorsPartial: dontOverrideMutateDataProperty(field =>
+    field.blobContentTypeImage ? String.raw`@Pattern(regexp = "^(?i)image/(?![^;]*\\+xml)[^;]+(;.*)?$")` : undefined,
+  ),
   javaFieldValidatorsPartial: dontOverrideMutateDataProperty(field => {
     const validators = [];
     const MAX_VALUE = 2147483647;
