@@ -63,6 +63,7 @@ exports[`public api generator-jhipster/testing should match snapshot 1`] = `
   "entityCustomId",
   "entitySimple",
   "entitySkipClient",
+  "entityStringId",
   "extendFilteredMatrix",
   "extendMatrix",
   "fromMatrix",

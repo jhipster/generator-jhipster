@@ -51,7 +51,7 @@ import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } fro
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
-import { I<%- entityAngularName %><%- builtInUserManagement ? `, New${entityAngularName}` : '' %> } from '../<%- entityFileName %>.model';
+import { I<%- entityAngularName %><%- builtInUserManagement || (!primaryKey.autoGenerate && updatableEntity) ? `, New${entityAngularName}` : '' %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
 <%_ for (const { angularConstantName, angularConstantImportPath } of clientConstants) { _%>
@@ -219,7 +219,12 @@ export class <%- entityAngularName %>Update implements OnInit {
         this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
   <%_ } _%>
 <%_ } else if (updatableEntity) { _%>
-        this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %> as I<%- entityAngularName %>));
+        // The id is provided by the user, so a filled id does not mean the entity exists: the route decides.
+        if (this.<%- entityInstance %> === null) {
+            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %> as New<%- entityAngularName %>));
+        } else {
+            this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %> as I<%- entityAngularName %>));
+        }
 <%_ } else { _%>
         this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
 <%_ } _%>

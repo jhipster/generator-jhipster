@@ -83,6 +83,22 @@ export const entityCustomId = {
   ],
 } satisfies Entity;
 
+/** Entity whose id is provided by the user, like `User.login`. */
+export const entityStringId = {
+  name: 'EntityWithStringId',
+  changelogDate: '20260908120000',
+  fields: [
+    {
+      fieldName: 'id',
+      fieldType: 'String',
+      id: true,
+      autoGenerate: false,
+      fieldValidateRules: ['required'],
+    },
+    { fieldName: 'name', fieldType: 'String' },
+  ],
+} satisfies Entity;
+
 export const entitiesMicroservice = {
   name: 'Microservice',
   skipFakeData: true,

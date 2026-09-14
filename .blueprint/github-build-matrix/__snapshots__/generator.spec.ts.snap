@@ -42,8 +42,35 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
+        "removeNeedles": true
+      },
+      "workspaces": "false",
+      "disabled": false,
+      "build-jhipster-bom": true,
+      "jhipster-bom-branch": "main",
+      "jhipster-bom-cicd-version": "0.0.0-CICD"
+    },
+    {
+      "job-name": "ng-default-additional-playwright (n[2]/j[0])",
+      "sample": "ng-default-additional-playwright",
+      "os": "ubuntu-latest",
+      "node-version": "[2]",
+      "java-version": "[0]",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-compare": "false",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-default-additional-playwright",
+      "entity": "none",
+      "app-sample": "ng-default-playwright",
+      "jdl-entity": "*",
+      "generatorOptions": {
         "removeNeedles": true,
-        "clientTestFramework": "vitest"
+        "testFrameworks": [
+          "playwright"
+        ]
       },
       "workspaces": "false",
       "disabled": false,
@@ -88,7 +115,6 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "generatorOptions": {
-        "clientTestFramework": "vitest",
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
