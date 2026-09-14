@@ -34,11 +34,9 @@ import org.springframework.data.elasticsearch.repository.<%- reactive ? 'Reactiv
 
 import reactor.core.publisher.Flux;
 <%_ } else { _%>
-import org.springframework.scheduling.annotation.Async;
-  <%_ if (databaseTypeSql) { _%>
-import org.springframework.transaction.annotation.Transactional;
-  <%_ } _%>
+import <%- packageName %>.util.TransactionUtils;
 
+import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 <%_ } _%>
 <%_ if (databaseTypeCassandra || user.primaryKey.hasUUID) { _%>
@@ -78,16 +76,8 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 interface UserSearchRepositoryInternal {
     Stream<<%- user.persistClass %>> search(String query);
 
-    @Async
-  <%_ if (databaseTypeSql) { _%>
-    @Transactional
-  <%_ } _%>
     void index(<%- user.persistClass %> entity);
 
-    @Async
-  <%_ if (databaseTypeSql) { _%>
-    @Transactional
-  <%_ } _%>
     void deleteFromIndex(<%- user.persistClass %> entity);
 }
 
@@ -95,10 +85,12 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
     private final ElasticsearchTemplate elasticsearchTemplate;
     private final UserRepository repository;
+    private final Executor taskExecutor;
 
-    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, UserRepository repository) {
+    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, UserRepository repository, Executor taskExecutor) {
         this.elasticsearchTemplate = elasticsearchTemplate;
         this.repository = repository;
+        this.taskExecutor = taskExecutor;
     }
 
     @Override
@@ -112,12 +104,13 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
     @Override
     public void index(<%- user.persistClass %> entity) {
-        repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
+        <%- user.primaryKey.type %> id = entity.getId();
+        TransactionUtils.runAfterCommit(() -> taskExecutor.execute(() -> repository.findById(id).ifPresent(elasticsearchTemplate::save)));
     }
 
     @Override
     public void deleteFromIndex(<%- user.persistClass %> entity) {
-        elasticsearchTemplate.delete(entity);
+        TransactionUtils.runAfterCommit(() -> taskExecutor.execute(() -> elasticsearchTemplate.delete(entity)));
     }
 }
 <%_ } _%>
