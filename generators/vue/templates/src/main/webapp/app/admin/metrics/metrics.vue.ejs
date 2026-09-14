@@ -73,15 +73,15 @@
       </div>
       <div class="col-md-4">
         <h4>System</h4>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-4">Uptime</div>
           <div class="col-md-8 text-end">{{ convertMillisecondsToDuration(metrics.processMetrics['process.uptime']) }}</div>
         </div>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-4">Start time</div>
           <div class="col-md-8 text-end">{{ formatDate(metrics.processMetrics['process.start.time']) }}</div>
         </div>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-9">Process CPU usage</div>
           <div class="col-md-3 text-end">{{ formatNumber2(100 * metrics.processMetrics['process.cpu.usage']) }} %</div>
         </div>
@@ -92,7 +92,7 @@
           >
           </b-progress-bar>
         </b-progress>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-9">System CPU usage</div>
           <div class="col-md-3 text-end">{{ formatNumber2(100 * metrics.processMetrics['system.cpu.usage']) }} %</div>
         </div>
@@ -103,19 +103,19 @@
           >
           </b-progress-bar>
         </b-progress>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-9">System CPU count</div>
           <div class="col-md-3 text-end">{{ metrics.processMetrics['system.cpu.count'] }}</div>
         </div>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-9">System 1m Load average</div>
           <div class="col-md-3 text-end">{{ formatNumber2(metrics.processMetrics['system.load.average.1m']) }}</div>
         </div>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-9">Process files max</div>
           <div class="col-md-3 text-end">{{ formatNumber1(metrics.processMetrics['process.files.max']) }}</div>
         </div>
-        <div class="row" v-if="!updatingMetrics">
+        <div class="row">
           <div class="col-md-9">Process files open</div>
           <div class="col-md-3 text-end">{{ formatNumber1(metrics.processMetrics['process.files.open']) }}</div>
         </div>
