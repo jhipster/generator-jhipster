@@ -6,7 +6,6 @@
     "buildTool": "gradle",
     "cacheProvider": "no",
     "clientFramework": "angular",
-    "clientTestFramework": "vitest",
     "creationTimestamp": 1596513272473,
     "databaseType": "sql",
     "devDatabaseType": "h2Memory",

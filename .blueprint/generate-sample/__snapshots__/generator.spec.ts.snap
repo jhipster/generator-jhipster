@@ -285,6 +285,41 @@ exports[`generator - generate-sample with ng-default-additional (star jdl-entity
   "entities.jdl": {
     "stateCleared": "modified",
   },
+  "string-id.jdl": {
+    "stateCleared": "modified",
+  },
+  "user-management.jdl": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - generate-sample with ng-default-additional-playwright (star jdl-entity) should match matrix value 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "01-non-updatable-entity.jdl": {
+    "stateCleared": "modified",
+  },
+  "02-authority-relationship.jdl": {
+    "stateCleared": "modified",
+  },
+  "custom-domain.jdl": {
+    "stateCleared": "modified",
+  },
+  "custom-id.jdl": {
+    "stateCleared": "modified",
+  },
+  "cyclic.jdl": {
+    "stateCleared": "modified",
+  },
+  "entities.jdl": {
+    "stateCleared": "modified",
+  },
+  "string-id.jdl": {
+    "stateCleared": "modified",
+  },
   "user-management.jdl": {
     "stateCleared": "modified",
   },

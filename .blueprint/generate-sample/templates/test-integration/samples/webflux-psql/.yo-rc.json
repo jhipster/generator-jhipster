@@ -6,7 +6,6 @@
     "buildTool": "maven",
     "cacheProvider": "no",
     "clientFramework": "angular",
-    "clientTestFramework": "vitest",
     "creationTimestamp": 1596513172471,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",

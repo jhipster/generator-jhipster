@@ -62,6 +62,21 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe(`with ng-default-additional-playwright (star jdl-entity)`, () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withArguments('ng-default-additional-playwright')
+        .withOptions({
+          sampleOnly: true,
+        });
+    });
+
+    it('should match matrix value', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
   describe(`with vue-default-additional (specific jdl-entity)`, () => {
     before(async () => {
       await helpers

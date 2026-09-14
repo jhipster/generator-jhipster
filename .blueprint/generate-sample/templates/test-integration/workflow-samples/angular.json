@@ -13,8 +13,18 @@
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
+        "removeNeedles": true
+      }
+    },
+    {
+      "name": "ng-default-additional-playwright",
+      "job-name": "ng-default-additional-playwright",
+      "entity": "none",
+      "app-sample": "ng-default-playwright",
+      "jdl-entity": "*",
+      "generatorOptions": {
         "removeNeedles": true,
-        "clientTestFramework": "vitest"
+        "testFrameworks": ["playwright"]
       }
     },
     {
@@ -27,7 +37,6 @@
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "generatorOptions": {
-        "clientTestFramework": "vitest",
         "defaultEnvironment": "dev"
       }
     },
