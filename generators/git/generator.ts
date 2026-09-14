@@ -30,7 +30,9 @@ import type { Config as GitConfig, GeneratorProperties as GitGeneratorProperties
 
 export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
   gitInitialized!: boolean;
+  /** @deprecated the repository is inspected internally */
   existingRepository!: boolean;
+  #repository?: { insideRepository: boolean; repositoryRoot: boolean };
   skipGit!: GitGeneratorProperties['skipGit'];
   readonly forceGit!: GitGeneratorProperties['forceGit'];
   readonly commitMsg!: GitGeneratorProperties['commitMsg'];
@@ -52,25 +54,31 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
           this.skipGit = true;
         }
         if (!this.skipGit) {
-          const gitInstalled = (await this.createGit().version()).installed;
+          const gitInstalled = (await this.createSimpleGit().version()).installed;
           if (!gitInstalled) {
             this.log.warn('Git repository will not be created, as Git is not installed on your system');
             this.skipGit = true;
           }
         }
       },
-      async initializeMonorepository() {
-        if (!this.skipGit && this.jhipsterConfig.monorepository) {
-          await this.initializeGitRepository();
-        }
-      },
       async registerGitRoot() {
         if (!this.skipGit) {
           // Files written to this context belong to the repository `initializeGitRepository` will initialize, or to
           // the existing repository it reuses (a child application of a monorepository uses the root one).
-          const git = this.createGit();
-          const gitRoot = (await git.checkIsRepo()) ? await git.revparse(['--show-toplevel']) : this.destinationPath();
+          const { insideRepository, repositoryRoot } = await this.inspectRepository();
+          const gitRoot = insideRepository ? await this.createSimpleGit().revparse(['--show-toplevel']) : this.destinationPath();
           this.getContextData(CONTEXT_DATA_GIT_ROOT_KEY, { override: gitRoot });
+
+          // A repository root at another folder means this application is a child of a monorepository. Resolved
+          // here, before anything reads the configuration, and never overriding a configured value.
+          if (this.jhipsterConfig.monorepository === undefined && insideRepository && !repositoryRoot) {
+            this.jhipsterConfig.monorepository = true;
+          }
+        }
+      },
+      async initializeMonorepository() {
+        if (!this.skipGit && this.jhipsterConfig.monorepository) {
+          await this.initializeGitRepository();
         }
       },
     });
@@ -134,7 +142,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
 
         const commitFiles = async () => {
           this.debug('Committing files to git');
-          const git = this.createGit();
+          const git = this.createSimpleGit();
           const repositoryRoot = await git.revparse(['--show-toplevel']);
           const result = await git.log(['-n', '1', '--', '.yo-rc.json']).catch(() => ({ total: 0 }));
           const existingApplication = result.total > 0;
@@ -186,20 +194,30 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
 
   async initializeGitRepository() {
     try {
-      const git = this.createGit();
-      if (await git.checkIsRepo()) {
-        if (await git.checkIsRepo(CheckRepoActions.IS_REPO_ROOT)) {
-          this.log.info('Using existing git repository.');
-        } else {
-          this.log.info('Using existing git repository at parent folder.');
-        }
-        this.existingRepository = true;
-      } else if (await git.init()) {
+      const { insideRepository, repositoryRoot } = await this.inspectRepository();
+      if (insideRepository) {
+        this.log.info(repositoryRoot ? 'Using existing git repository.' : 'Using existing git repository at parent folder.');
+      } else if (await this.createSimpleGit().init()) {
         this.log.ok('Git repository initialized.');
       }
       this.gitInitialized = true;
     } catch (error) {
       this.log.warn(`Failed to initialize Git repository.\n ${error}`);
     }
+  }
+
+  /**
+   * Looks the repository up once: the tasks resolving the monorepository flag and initializing the repository both
+   * need it, and every call is a git process.
+   */
+  private async inspectRepository(): Promise<{ insideRepository: boolean; repositoryRoot: boolean }> {
+    if (!this.#repository) {
+      const git = this.createSimpleGit();
+      const insideRepository = await git.checkIsRepo();
+      this.#repository = { insideRepository, repositoryRoot: insideRepository && (await git.checkIsRepo(CheckRepoActions.IS_REPO_ROOT)) };
+      this.existingRepository = insideRepository;
+    }
+
+    return this.#repository;
   }
 }
