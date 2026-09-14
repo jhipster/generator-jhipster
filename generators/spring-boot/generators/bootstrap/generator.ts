@@ -189,6 +189,8 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           field.transient = true;
           // Disable update form.
           field.readonly = true;
+          // The expression is written inside a java string literal: every quote must be escaped exactly once, whatever the JDL or json escaping was.
+          field.mapstructExpression = field.mapstructExpression.replace(/\\*"/g, '\\"');
         }
 
         mutateData(field, {
