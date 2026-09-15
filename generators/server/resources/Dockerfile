@@ -28,7 +28,7 @@ LABEL ALIAS=couchbase
 
 FROM cassandra:6.0
 
-FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
+FROM mcr.microsoft.com/mssql/server:2025-latest
 LABEL ALIAS=mssql
 
 FROM neo4j:5.26.30

@@ -26,16 +26,16 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
-      - SA_PASSWORD=yourStrong(!)Password
+      - MSSQL_SA_PASSWORD=yourStrong(!)Password
       - MSSQL_DATABASE=<%- baseName %>
       - MSSQL_SLEEP=15
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:1433:1433
-    command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'
+    command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools18/bin/sqlcmd -U sa -P $$MSSQL_SA_PASSWORD -C -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'
     healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$${SA_PASSWORD}" -Q "USE $${MSSQL_DATABASE}" -b -o /dev/null
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$${MSSQL_SA_PASSWORD}" -C -Q "USE $${MSSQL_DATABASE}" -b -o /dev/null
       interval: 10s
       timeout: 3s
       retries: 10
