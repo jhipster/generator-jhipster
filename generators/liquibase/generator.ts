@@ -27,6 +27,7 @@ import {
   mutateRelationship as mutateBaseApplicationRelationship,
   mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
 } from '../base-application/entity.ts';
+import { getBlobContentType, isFieldBlobType } from '../base-application/internal/types/field-types.ts';
 import {
   loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
@@ -34,7 +35,7 @@ import {
   prepareEntityPrimaryKeyForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.ts';
-import type { Application as BaseApplicationApplication, DerivedField } from '../base-application/types.ts';
+import type { Application as BaseApplicationApplication, DerivedField, Field as BaseApplicationField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
@@ -234,6 +235,12 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as unknown as EntityAll, application });
             }
             for (const field of entity.fields ?? []) {
+              const baseField = field as unknown as BaseApplicationField;
+              if (isFieldBlobType(baseField)) {
+                // Convert blob types (e.g. ImageBlob, AnyBlob) to byte[] like the bootstrap generator does for current entities.
+                baseField.fieldTypeBlobContent ??= getBlobContentType(baseField.fieldType);
+                baseField.fieldType = 'byte[]' as any;
+              }
               prepareCommonFieldForTemplates(entity, field, this);
               mutateData(field as unknown as CommonField, commonMutateField);
               prepareServerFieldForTemplates(application as any, entity as unknown as ServerEntity, field as any, this);

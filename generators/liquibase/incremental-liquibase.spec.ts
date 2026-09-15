@@ -518,6 +518,54 @@ entity Customer {
     });
   });
 
+  describe('when removing blob fields', () => {
+    before(async () => {
+      await helpers.runJDL(`
+${jdlApplication}
+entity Customer {
+    original String
+    picture ImageBlob
+    content AnyBlob
+    description TextBlob
+}
+`);
+
+      await helpers
+        .runJDLInApplication(
+          `
+${jdlApplication}
+entity Customer {
+    original String
+}
+`,
+        )
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
+        .withOptions({
+          creationTimestamp: '2020-01-02',
+        });
+    });
+
+    it('should create entity update changelog dropping the blob columns', () => {
+      const changelog = `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`;
+      runResult.assertFileContent(changelog, 'dropColumn tableName="customer"');
+      runResult.assertFileContent(changelog, '<column name="picture"/>');
+      runResult.assertFileContent(changelog, '<column name="content"/>');
+      runResult.assertFileContent(changelog, '<column name="description"/>');
+    });
+    it('should drop the content type columns of the removed blob fields', () => {
+      const changelog = `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`;
+      runResult.assertFileContent(changelog, '<column name="picture_content_type"/>');
+      runResult.assertFileContent(changelog, '<column name="content_content_type"/>');
+    });
+    it('should not drop a content type column for a removed TextBlob field', () => {
+      runResult.assertNoFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
+        'description_content_type',
+      );
+    });
+  });
+
   describe('when removing a field with constraints', () => {
     before(async () => {
       await helpers.runJDL(`
