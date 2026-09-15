@@ -96,6 +96,3 @@ These are hardening measures, not a replacement for the trust decision described
 
 None of this makes an untrusted `.yo-rc.json` safe to run, because blueprints are by design executable extensions. The trust decision is the
 actual security boundary.
-
-If you find a way to escape these boundaries — a write outside the destination root, or a configuration value that produces executable content
-in a generated file — please report it privately as described above.
