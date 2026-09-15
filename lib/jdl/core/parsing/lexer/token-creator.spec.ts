@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { KEYWORD, NAME } from './shared-tokens.ts';
+import { KEYWORD } from './shared-tokens.ts';
 import createTokenFromConfig from './token-creator.ts';
 
 describe('jdl - TokenCreator', () => {
@@ -52,8 +52,12 @@ describe('jdl - TokenCreator', () => {
           token = createTokenFromConfig({ name: 'MY_TOKEN', pattern: 'keyword' });
         });
 
-        it('should set the longer alternative attribute', () => {
-          expect(token.LONGER_ALT).toBe(NAME);
+        it('should only match the keyword as a whole word', () => {
+          const pattern = token.PATTERN as RegExp;
+          expect(pattern.test('keyword')).toBe(true);
+          expect(pattern.test('keyword ')).toBe(true);
+          expect(pattern.test('keywords')).toBe(false);
+          expect(pattern.test('keyword-')).toBe(false);
         });
         it('should set the categories list', () => {
           expect(token.CATEGORIES).toEqual([KEYWORD]);
