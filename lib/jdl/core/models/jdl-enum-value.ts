@@ -17,6 +17,33 @@
  * limitations under the License.
  */
 
+/**
+ * Matches the lexer's NAME token (see parsing/lexer/shared-tokens.ts). An enum value is only safe to
+ * emit bare when it matches this; anything else has to be quoted so the export re-parses as itself.
+ */
+const NAME_PATTERN = /^[a-zA-Z_][a-zA-Z_\-\d]*$/;
+
+/**
+ * Renders an enum value for JDL output.
+ *
+ * The grammar accepts either a bare NAME or a quoted STRING inside the parentheses
+ * (see `enumProp` in parsing/jdl-parser.ts). Emitting a value that is neither produces JDL that
+ * re-parses as something other than what was exported — for `A("x), B(y")` the closing paren and
+ * comma are read as grammar, so one value silently becomes two enum entries.
+ */
+function stringifyEnumValue(value: string): string {
+  if (NAME_PATTERN.test(value)) {
+    return value;
+  }
+  if (value.includes('"')) {
+    // The STRING token is /"(?:[^"])*"/ — a plain literal with no escape sequence — so a value
+    // containing a double quote has no JDL representation at all. Failing loudly beats emitting
+    // JDL that silently parses back as different content.
+    throw new Error(`The enum value '${value}' contains a double quote, which JDL cannot represent.`);
+  }
+  return `"${value}"`;
+}
+
 export default class JDLEnumValue {
   name: string;
   value?: string;
@@ -32,7 +59,7 @@ export default class JDLEnumValue {
   }
 
   toString() {
-    const value = this.value ? ` (${this.value})` : '';
+    const value = this.value ? ` (${stringifyEnumValue(this.value)})` : '';
     return `${this.name}${value}`;
   }
 }
