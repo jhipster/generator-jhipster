@@ -63,6 +63,27 @@ describe('jdl - JDLLexer', () => {
     });
   });
 
+  describe('when a keyword is a prefix of another keyword', () => {
+    it('should lex the longer keyword as its own token', () => {
+      const { tokens, errors } = JDLLexer.tokenize('microfrontends microfrontend');
+      expect(errors).toHaveLength(0);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['MICROFRONTENDS', 'MICROFRONTEND']);
+    });
+
+    it('should lex a custom keyword declared after a shorter built-in keyword', () => {
+      const runtime = createRuntime({
+        validatorConfig: { REACTIVE_FOO: { type: 'BOOLEAN' } },
+        optionsValues: {},
+        optionsTypes: {},
+        quotedOptionNames: [],
+        tokenConfigs: [{ name: 'REACTIVE_FOO', pattern: 'reactiveFoo' }],
+      });
+      const { tokens, errors } = runtime.lexer.tokenize('reactiveFoo reactive');
+      expect(errors).toHaveLength(0);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['REACTIVE_FOO', 'REACTIVE']);
+    });
+  });
+
   describe('when passing an invalid JDL input', () => {
     let lexingResult: ReturnType<typeof JDLLexer.tokenize>;
 

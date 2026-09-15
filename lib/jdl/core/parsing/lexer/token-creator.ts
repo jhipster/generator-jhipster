@@ -18,30 +18,30 @@
  */
 
 import { type ITokenConfig, createToken } from 'chevrotain';
-import { isString } from 'lodash-es';
+import { castArray, escapeRegExp, isString } from 'lodash-es';
 
-import { KEYWORD, NAME, namePattern } from './shared-tokens.ts';
+import { KEYWORD, namePattern } from './shared-tokens.ts';
 
-export default function createTokenFromConfig(config: ITokenConfig) {
-  if (!config) {
+export default function createTokenFromConfig(tokenConfig: ITokenConfig) {
+  if (!tokenConfig) {
     throw new Error("Can't create a token without the proper config.");
+  }
+  // Token configs may be shared between runtimes, so never mutate the passed config.
+  const categories = castArray(tokenConfig.categories ?? []);
+  const config: ITokenConfig = { ...tokenConfig, categories };
+  if (isString(config.pattern)) {
+    // readable labels for diagrams
+    config.label ??= `'${config.pattern}'`;
   }
   // JDL has a great many keywords. Keywords can conflict with identifiers in a parsing
   // library with a separate lexing phase.
   // See: https://github.com/SAP/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
-  // a Concise way to resolve the problem without manually adding the "longer_alt" property dozens of times.
+  // A keyword is matched only as a whole word: it must not be followed by another identifier character.
+  // Otherwise a keyword that is a prefix of an identifier (`entity` in `entityName`) or of another keyword
+  // (`microfrontend` in `microfrontends`) would match first, whatever the order the tokens are declared in.
   if (isString(config.pattern) && namePattern.test(config.pattern)) {
-    config.longer_alt = NAME;
-    config.categories ??= [];
-    if (!Array.isArray(config.categories)) {
-      config.categories = [config.categories];
-    }
-    config.categories.push(KEYWORD);
-  }
-
-  // readable labels for diagrams
-  if (isString(config.pattern) && !config.label) {
-    config.label = `'${config.pattern}'`;
+    config.pattern = new RegExp(`${escapeRegExp(config.pattern)}(?![a-zA-Z_\\-\\d])`);
+    categories.push(KEYWORD);
   }
 
   return createToken(config);
