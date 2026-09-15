@@ -60,6 +60,9 @@ export const loadEntitiesAnnotations = (entities: BaseApplicationEntity[]): void
       if (field.options) {
         Object.assign(field, field.options);
       }
+      if (field.options?.mapstructExpression) {
+        field.transient = true;
+      }
     }
 
     // Load relationships annotations
