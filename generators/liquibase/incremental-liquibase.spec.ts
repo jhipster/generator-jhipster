@@ -427,6 +427,10 @@ entity Customer {
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_MapstructExpressionTest.xml`,
       ]);
     });
+
+    it('should not persist the derived transient property', () => {
+      runResult.assertNoFileContent(join('.jhipster', 'MapstructExpressionTest.json'), '"transient"');
+    });
   });
 
   describe('when adding a field with constraints', () => {
