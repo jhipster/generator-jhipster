@@ -181,7 +181,7 @@ public final class TestUtil {
         T domainObject2 = clazz.getConstructor().newInstance();
         assertThat(domainObject1).isNotEqualTo(domainObject2);
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
-        // HashCodes are equals because the objects are not persisted yet
+        // HashCodes are equal because the objects are not persisted yet
         assertThat(domainObject1).hasSameHashCodeAs(domainObject2);
 <%_ } _%>
     }
