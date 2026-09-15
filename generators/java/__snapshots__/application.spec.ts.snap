@@ -26,6 +26,7 @@ exports[`application mutation test expects mutateField to match snapshot 1`] = `
   "propertyConsumerName": "setPropertyName",
   "propertyJavaBeanName": "PropertyName",
   "propertySupplierName": "getPropertyName",
+  "transient": true,
 }
 `;
 

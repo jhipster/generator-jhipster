@@ -24,6 +24,7 @@ import { fieldTypes } from '../../lib/jhipster/index.ts';
 import type { EntityAll } from '../../lib/types/application-all.d.ts';
 import { mutateData } from '../../lib/utils/object.ts';
 import {
+  mutateField as mutateBaseApplicationField,
   mutateRelationship as mutateBaseApplicationRelationship,
   mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
 } from '../base-application/entity.ts';
@@ -39,6 +40,7 @@ import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
 import type { Field as CommonField } from '../common/types.ts';
+import { mutateField as mutateJavaField } from '../java/application.ts';
 import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
 import type { MavenProperty } from '../java-simple-application/generators/maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
@@ -85,6 +87,12 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   databaseChangelogs: BaseChangelog<LiquibaseEntity>[] = [];
   injectBuildTool = true;
   injectLogs = true;
+
+  protected override prepareEntityForComparison(entity: LiquibaseEntity): void {
+    for (const field of entity.fields ?? []) {
+      mutateData(field, mutateBaseApplicationField, mutateJavaField);
+    }
+  }
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

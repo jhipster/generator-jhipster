@@ -86,6 +86,8 @@ export default abstract class BaseEntityChangesGenerator<
 
   abstract isChangelogNew({ entityName, changelogDate }: { entityName: string; changelogDate: string }): boolean;
 
+  protected abstract prepareEntityForComparison(entity: Entity): void;
+
   protected getTaskFirstArgForPriority(
     priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES],
   ): TaskParamWithApplication<Application> {
@@ -150,10 +152,14 @@ export default abstract class BaseEntityChangesGenerator<
     // Compare entity changes and create changelogs
     return entityNames.map(entityName => {
       const newConfig = entitiesByName[entityName];
+      const oldConfig = previousEntitiesByName[entityName];
+      this.prepareEntityForComparison(newConfig);
+      if (oldConfig) {
+        this.prepareEntityForComparison(oldConfig);
+      }
+
       const newFields = (newConfig.fields || []).filter(field => !field.transient);
       const newRelationships = newConfig.relationships || [];
-
-      const oldConfig = previousEntitiesByName[entityName];
 
       if (!oldConfig || recreateInitialChangelog || !incrementalChangelog || !entitiesWithExistingChangelog.has(entityName)) {
         return {

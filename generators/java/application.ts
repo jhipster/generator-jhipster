@@ -80,6 +80,7 @@ const sampleValues = (fieldName: string, javaFieldType: (typeof primaryKeyTypes)
 
 export const mutateField = {
   __override__: false,
+  transient: ({ mapstructExpression }) => (mapstructExpression ? true : undefined),
   fieldInJavaBeanMethod: ({ fieldName }) => {
     // Handle the specific case when the second letter is capitalized
     // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
