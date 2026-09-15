@@ -20,7 +20,8 @@ The practical consequence is:
 The same applies to every other file the generator reads as configuration: `.jhipster/*.json` entity files, `.yo-resolve`, JDL files, and any
 blueprint referenced from them. The `.jhipster/*.json` entity configurations are less dangerous than `.yo-rc.json` — they only feed the entity
 templates and do not reach the more sensitive build files such as `pom.xml`, `build.gradle` or `package.json` — but they are still generator
-input and must be checked as well.
+input and must be checked as well. `.yo-resolve` does not participate in the generation itself, but it controls conflict resolution and can
+force the generator to overwrite existing files without prompting, so it too must be trusted.
 
 ### Why the configuration is trust-sensitive
 
