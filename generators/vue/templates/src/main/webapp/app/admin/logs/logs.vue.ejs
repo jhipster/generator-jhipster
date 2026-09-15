@@ -30,11 +30,11 @@
           <tr title="click to order">
             <th @click="changeOrder('name')" scope="col">
               <span>{{ t$('logs.table.name') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator>
+              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="name"></jhi-sort-indicator>
             </th>
             <th @click="changeOrder('level')" scope="col">
               <span>{{ t$('logs.table.level') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'level'"></jhi-sort-indicator>
+              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="level"></jhi-sort-indicator>
             </th>
           </tr>
         </thead>

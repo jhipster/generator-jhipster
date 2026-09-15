@@ -28,11 +28,11 @@
           <tr>
             <th class="w-40" @click="changeOrder('prefix')" scope="col">
               <span>{{ t$('configuration.table.prefix') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'prefix'"></jhi-sort-indicator>
+              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="prefix"></jhi-sort-indicator>
             </th>
             <th class="w-60" @click="changeOrder('properties')" scope="col">
               <span>{{ t$('configuration.table.properties') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" :field-name="'properties'"></jhi-sort-indicator>
+              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="properties"></jhi-sort-indicator>
             </th>
           </tr>
         </thead>
