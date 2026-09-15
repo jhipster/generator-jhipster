@@ -18,7 +18,6 @@
  */
 
 import { isFileStateModified } from 'mem-fs-editor/state';
-import { CheckRepoActions } from 'simple-git';
 
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { type PropertiesFileLines, editPropertiesFileCallback } from '../base-core/support/index.ts';
@@ -55,14 +54,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
   // Public API method used by the getter and also by Blueprints
   get configuring() {
     return this.asConfiguringTaskGroup({
-      async configureMonorepository() {
-        if (this.jhipsterConfig.monorepository) return;
-
-        const git = this.createSimpleGit();
-        if ((await git.checkIsRepo()) && !(await git.checkIsRepo(CheckRepoActions.IS_REPO_ROOT))) {
-          this.jhipsterConfig.monorepository = true;
-        }
-      },
       configureCommitHook() {
         if (this.jhipsterConfig.monorepository) {
           this.jhipsterConfig.skipCommitHook = true;
