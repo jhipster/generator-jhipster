@@ -22,7 +22,7 @@ import { before, describe, expect, it } from 'esmocha';
 import JDLApplicationEntities from './jdl-application-entities.ts';
 
 describe('jdl - JDLApplicationEntities', () => {
-  describe('addEntityNames', () => {
+  describe('add', () => {
     describe('when not passing anything', () => {
       let jdlApplicationEntities: JDLApplicationEntities;
 

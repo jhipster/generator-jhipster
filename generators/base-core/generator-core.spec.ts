@@ -228,7 +228,7 @@ override.existing = existingValue`,
           it('should append to an existing property', async () => {
             runResult.assertFileContent('dummy.properties', 'append.existing = existingValue, appendedValue');
           });
-          it('should append to an existing property', async () => {
+          it('should match snapshot', async () => {
             expect(runResult.getSnapshot('**/dummy.properties')).toMatchSnapshot();
           });
         });
