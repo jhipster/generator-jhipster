@@ -63,7 +63,7 @@
   [max]="stats.threadDumpAll"
   [striped]="true"
   [animated]="false"
-  type="success"
+  type="danger"
 >
   <span>{{ (stats.threadDumpBlocked * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
