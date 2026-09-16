@@ -311,7 +311,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
         <%- anyPropertyHasValidation ? '@NotNull ' : '' %>@RequestBody <%- instanceType %> <%- instanceName %>
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update <%- entityClass %> partially : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
+        LOG.debug("REST request to partially update <%- entityClass %> : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
 <%- include('../../_partials_entity_/validate_id_template') -%>
 
   <%_ if (reactive) { _%>
