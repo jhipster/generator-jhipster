@@ -22,7 +22,7 @@ Internally, JHipster uses [Yeoman](https://yeoman.io) as the core. JHipster is t
   - `support` - (exported) exported supporting libs
   - `templates` - templates folder
 - `lib` - (exported) shared libraries, utilities, types and jdl parser
-- `rfcs` - (RFCs)[CONTRIBUTING.md#rfcs]
+- `rfcs` - [RFCs](CONTRIBUTING.md#rfcs)
 - `test` - package tests
 
 ## Lifecycle

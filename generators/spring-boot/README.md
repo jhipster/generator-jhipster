@@ -11,7 +11,7 @@ Spring Boot generator.
 ##### Layers
 
 Customize @PreAuthorize annotations at Rest layer.
-Calculated using (@EntityAuthority)[../app/README.md#Authority] by default.
+Calculated using [@EntityAuthority](../app/README.md#authority) by default.
 
 ```
 @EntitySpringPreAuthorize("hasAuthority('ROLE_CUSTOM')")

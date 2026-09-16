@@ -125,4 +125,4 @@ relationship OneToMany {
 }
 ```
 
-Related issues: (#23917)[https://github.com/jhipster/generator-jhipster/issues/23917]
+Related issues: [#23917](https://github.com/jhipster/generator-jhipster/issues/23917)
