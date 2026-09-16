@@ -160,7 +160,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
      * {@code POST  /<%- entityApiUrl %>} : Create a new <%- entityInstance %>.
      *
      * @param <%- instanceName %> the <%- instanceName %> to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new <%- instanceName %>, or with status {@code 400 (Bad Request)} if the <%- entityInstance %> has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new <%- instanceName %>, or with status {@code 400 (Bad Request)} if the <%- entityInstance %> already has an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
