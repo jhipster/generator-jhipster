@@ -14,13 +14,13 @@ npm package that JHipster installs and executes on your machine.
 
 The practical consequence is:
 
-> **Running `jhipster` in a project you did not author is equivalent to running that project author's code on your machine, with your user's
+> **Running `jhipster` in a project you did not author is equivalent to running the project author's code on your machine, with your user's
 > privileges.**
 
 The same applies to every other file the generator reads as configuration: `.jhipster/*.json` entity files, `.yo-resolve`, JDL files, and any
 blueprint referenced from them. The `.jhipster/*.json` entity configurations are less dangerous than `.yo-rc.json` — they only feed the entity
 templates and do not reach the more sensitive build files such as `pom.xml`, `build.gradle` or `package.json` — but they are still generator
-input and must be checked as well. `.yo-resolve` does not participate in the generation itself, but it controls conflict resolution and can
+input and must be checked as well. `.yo-resolve` does not participate in generation itself, but it controls conflict resolution and can
 force the generator to overwrite existing files without prompting, so it too must be trusted.
 
 ### Why the configuration is trust-sensitive
@@ -30,14 +30,15 @@ resolved, possibly installed, and then **executed** in the generation process �
 lifecycle scripts (`preinstall`, `install`, `postinstall`) run as well. This is the highest-impact property of the file, and validating the
 other properties does not compensate for it. Installing a package that is not already present prompts for confirmation, but a blueprint that is
 already resolvable in the environment (globally installed, in `node_modules`, or on a lookup path) is composed and executed with no prompt — so
-a pre-installed blueprint is enough. JDL is equivalent: an application block can declare `blueprints`, which end up in `.yo-rc.json`.
+a pre-installed blueprint is enough to run without any prompt. JDL is equivalent: an application block can declare `blueprints`, which end up
+in `.yo-rc.json`.
 
 **Free-text values are embedded in generated files.** Values such as `baseName`, `packageName`, `jhipsterVersion`, `clientPackageManager`,
 entity and field names, or validation patterns are interpolated into templates that produce Java sources, `pom.xml` / `build.gradle`,
 `package.json`, `Dockerfile`s, shell scripts and CI pipeline definitions. A value that is harmless inside the generator process may be harmful
-in the artifact it produces — for example a string that closes a build-file element and appends a plugin, or that terminates a line in a
+in the artifact it produces — for example, a string that closes a build-file element and appends a plugin, or that terminates a line in a
 generated shell script and appends a command. That code does not run during generation; it runs the first time the developer builds, tests or
-starts the generated project, which is exactly what happens next.
+starts the generated project, which is exactly what a developer does next.
 
 **URLs and coordinates redirect the supply chain.** Registry URLs, repository URLs, service discovery endpoints and dependency versions coming
 from the configuration decide where the generated project fetches artifacts from and what it fetches. A modified value can point the generated
@@ -71,16 +72,16 @@ and the same holds for Maven and Gradle builds. `.yo-rc.json` belongs to that sa
 ### Recommendations for CI and hosted generation
 
 **Running JHipster as a hosted service — exposing the generator to configurations supplied by other people — is not an officially supported
-use case.** The generator is built to run on a developer's machine on input that developer trusts; a service that generates from
+use case.** The generator is built to run on a developer's machine, against input that the developer trusts; a service that generates from
 attacker-controlled input is outside that model. The guidance below is best-effort hardening for anyone who operates such a service anyway, not
 a supported configuration.
 
 - Run generation in an ephemeral, network-restricted container, and treat the checkout as untrusted input: never generate into a directory
   shared with credentials, caches or other jobs.
-- Sandbox the generator process with the Node.js permission model (`node --permission`), granting filesystem read only to the generator
-  installation and the generation directory and write only inside the generation directory. The generator can then neither read nor write
-  outside those paths, whatever the configuration asks for; generation still needs a few capability flags for the child processes, worker
-  threads and native addons it uses internally.
+- Sandbox the generator process with the Node.js permission model (`node --permission`), granting read access only to the generator
+  installation and the generation directory, and write access only inside the generation directory. The generator can then neither read
+  nor write outside those paths, whatever the configuration asks for; generation still needs a few capability flags for the child
+  processes, worker threads and native addons it uses internally.
 - A hosted service cannot trust its input, so it must rely on the technical boundaries below rather than on the configuration being benign: run
   with `--export-application` so nothing is committed to the host filesystem, and with `--disable-blueprints` so no blueprint is resolved or
   executed.
@@ -94,5 +95,5 @@ These are hardening measures, not a replacement for the trust decision described
   server-side consumer never writes attacker-controlled paths onto its own disk.
 - `--disable-blueprints` prevents blueprints from being resolved, installed or executed.
 
-None of this makes an untrusted `.yo-rc.json` safe to run, because blueprints are by design executable extensions. The trust decision is the
+None of this makes an untrusted `.yo-rc.json` safe to run, because blueprints are, by design, executable extensions. The trust decision is the
 actual security boundary.

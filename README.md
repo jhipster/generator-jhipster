@@ -10,7 +10,7 @@ Full documentation and information is available on our website at [https://www.j
 
 Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here][issue-template]. For feature requests and queries you can use [this template][feature-template]. If you have found a potential security issue, please read our [security policy](/SECURITY.md) and contact us privately first: https://github.com/jhipster/generator-jhipster/security/policy
 
-Before running the generator on a project you did not author, read [the trust model of `.yo-rc.json`](/SECURITY.md#the-trust-model-of-yo-rcjson): its properties become part of the generated application, and blueprints declared there are executed on your machine.
+Before running the generator on a project you did not author, read [the trust model of `.yo-rc.json`](/SECURITY.md#the-trust-model-of-yo-rcjson): the file's properties become part of the generated application, and blueprints declared in it are executed on your machine.
 
 ## Contributing
 
