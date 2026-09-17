@@ -11,6 +11,27 @@ jhipster generate-blueprint
 When creating blueprints it's cleaner to have the blueprint forwarding to a custom generator and keep main generators like client/common/server with customizations.
 Example [jOOQ Blueprint](https://github.com/jhipster/generator-jhipster-jooq/blob/ce48a06a2b031013383db01cc787bbe94aa2c683/generators/server/generator.mjs#L21)
 
+## Public API and semver
+
+A blueprint should only import `generator-jhipster` through the entry points declared in the [`exports`](package.json) field of `package.json`.
+Those entry points are the public API and follow [semver](https://semver.org): a breaking change to any of them ships in a major release, so a blueprint that stays within them keeps working across minor and patch releases.
+
+| Import                                                                      | Contents                                                              |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `generator-jhipster`                                                        | Programmatic entry point (Yeoman environment and CLI bootstrap).      |
+| `generator-jhipster/cli`                                                    | Building blocks to run or extend the CLI.                             |
+| `generator-jhipster/generators/<name>`                                      | A generator's default export (the class to extend) and its `command`. |
+| `generator-jhipster/generators/<name>/support`                              | Exported helpers of that generator.                                   |
+| `generator-jhipster/generators/<name>/generators/<sub>` (and `.../support`) | Nested sub-generators and their helpers.                              |
+| `generator-jhipster/jdl`                                                    | The JDL parser and API.                                               |
+| `generator-jhipster/testing`                                                | The test harness.                                                     |
+| `generator-jhipster/utils`                                                  | Shared, cross-generator utilities.                                    |
+| `generator-jhipster/ci`                                                     | Continuous-integration helpers.                                       |
+| `generator-jhipster/eslint` (and `generator-jhipster/eslint/recommended`)   | The ESLint plugin and its recommended configuration.                  |
+
+Anything that is not listed in `exports` is private and may change or be removed in any release without a major bump.
+In particular, a generator's `internal/` folder and any deep path that is not one of the entry points above are implementation details — do not import them from a blueprint, even when a bundler is able to resolve them.
+
 ## Maintaining a Blueprint
 
 ### Upgrading to a new JHipster version
