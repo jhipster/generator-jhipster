@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - base-core editPropertiesFile passing sortFile option as false when properties file exists should append to an existing property 1`] = `
+exports[`generator - base-core editPropertiesFile passing sortFile option as false when properties file exists should match snapshot 1`] = `
 {
   "dummy.properties": {
     "contents": "append.existing = existingValue, appendedValueUsingFunction
@@ -14,7 +14,7 @@ append.separator = firstSeparator, secondSeparator",
 }
 `;
 
-exports[`generator - base-core editPropertiesFile passing sortFile option as true when properties file exists should append to an existing property 1`] = `
+exports[`generator - base-core editPropertiesFile passing sortFile option as true when properties file exists should match snapshot 1`] = `
 {
   "dummy.properties": {
     "contents": "append.existing = existingValue, appendedValueUsingFunction

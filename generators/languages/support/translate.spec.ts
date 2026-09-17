@@ -148,7 +148,7 @@ __jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers.length }}" })
     });
   });
 
-  describe('jhiTransformTranslate', () => {
+  describe('jhiTransformTranslateStringify', () => {
     let jhiTransformTranslateStringify: ReturnType<typeof createJhiTransformTranslateStringifyReplacer>;
 
     beforeEach(() => {
