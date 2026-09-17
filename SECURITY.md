@@ -8,7 +8,7 @@ coordinated disclosure.
 
 ## The trust model of `.yo-rc.json`
 
-`.yo-rc.json` is **not inert configuration data — it is generator input, and almost every one of its properties can become part of the
+`.yo-rc.json` is **not inert configuration data — it is generator input, and almost all of its properties can become part of the
 generated application**: Java or TypeScript sources, build-script content, file and directory names, dependency coordinates, or the name of an
 npm package that JHipster installs and executes on your machine.
 
@@ -30,15 +30,14 @@ resolved, possibly installed, and then **executed** in the generation process �
 lifecycle scripts (`preinstall`, `install`, `postinstall`) run as well. This is the highest-impact property of the file, and validating the
 other properties does not compensate for it. Installing a package that is not already present prompts for confirmation, but a blueprint that is
 already resolvable in the environment (globally installed, in `node_modules`, or on a lookup path) is composed and executed with no prompt — so
-a pre-installed blueprint is enough to run without any prompt. JDL is equivalent: an application block can declare `blueprints`, which end up
-in `.yo-rc.json`.
+a pre-installed blueprint is all it takes. JDL is equivalent: an application block can declare `blueprints`, which end up in `.yo-rc.json`.
 
 **Free-text values are embedded in generated files.** Values such as `baseName`, `packageName`, `jhipsterVersion`, `clientPackageManager`,
 entity and field names, or validation patterns are interpolated into templates that produce Java sources, `pom.xml` / `build.gradle`,
 `package.json`, `Dockerfile`s, shell scripts and CI pipeline definitions. A value that is harmless inside the generator process may be harmful
 in the artifact it produces — for example, a string that closes a build-file element and appends a plugin, or that terminates a line in a
 generated shell script and appends a command. That code does not run during generation; it runs the first time the developer builds, tests or
-starts the generated project, which is exactly what a developer does next.
+starts the generated project, which is exactly what the developer does next.
 
 **URLs and coordinates redirect the supply chain.** Registry URLs, repository URLs, service discovery endpoints and dependency versions coming
 from the configuration decide where the generated project fetches artifacts from and what it fetches. A modified value can point the generated
