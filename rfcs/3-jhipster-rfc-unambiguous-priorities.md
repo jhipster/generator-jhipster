@@ -46,7 +46,7 @@ JHipster uses Yeoman's traditional priorities:
   }
 
   aTaskQueuedAtDefaultPriority() {
-    console.log('I am been executed, why? I am a default priority task.');
+    console.log('I am being executed, why? I am a default priority task.');
   }
 ```
 
@@ -68,7 +68,7 @@ While this works, an unambiguous notation would improve understanding of the wor
   }
 
   anOrdinaryClassMember() {
-    console.log('I am not been executed, why? I am just an ordinary function.');
+    console.log('I am not being executed, why? I am just an ordinary function.');
   }
 ```
 
