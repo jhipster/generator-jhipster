@@ -222,8 +222,8 @@ export const mutateRelationship = {
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
-  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName, { force: true }),
-  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName, { force: true }),
+  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName, { force: false }),
+  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName, { force: false }),
   relationshipNameCapitalized: ({ relationshipName }) => upperFirst(relationshipName),
   relationshipNameHumanized: ({ relationshipName }) => startCase(relationshipName),
 

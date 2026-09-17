@@ -31,6 +31,16 @@ describe('jdl - StringUtils', () => {
     it('should append an "s" when force is true', () => {
       expect(pluralize('UserData', { force: true })).toBe('UserDatas');
     });
+    it('should not double-pluralize already plural words when force is false', () => {
+      expect(pluralize('jobs', { force: false })).toBe('jobs');
+      expect(pluralize('categories', { force: false })).toBe('categories');
+      expect(pluralize('addresses', { force: false })).toBe('addresses');
+    });
+    it('should handle singular words correctly when force is false', () => {
+      expect(pluralize('job', { force: false })).toBe('jobs');
+      expect(pluralize('category', { force: false })).toBe('categories');
+      expect(pluralize('address', { force: false })).toBe('addresses');
+    });
   });
   describe('customCamelCase', () => {
     describe('when passing a valid string', () => {
