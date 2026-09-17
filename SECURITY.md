@@ -32,12 +32,6 @@ other properties does not compensate for it. Installing a package that is not al
 already resolvable in the environment (globally installed, in `node_modules`, or on a lookup path) is composed and executed with no prompt — so
 a pre-installed blueprint is all it takes. JDL is equivalent: an application block can declare `blueprints`, which end up in `.yo-rc.json`.
 
-**Local blueprints and `sharedOptions` execute without being declared anywhere.** A `.blueprint` directory in the working directory is
-discovered and composed automatically — no `blueprints` entry, no command-line flag and no prompt — so cloning a repository that ships one
-and running `jhipster` executes its code. Separately, `.jhipster/sharedOptions.js` (also `.cjs` and `.mjs`) is imported from the working
-directory before any blueprint is resolved, so it runs even when no blueprint is declared at all; blueprint packages expose the same hook
-as `cli/sharedOptions.js`. Neither file appears in `.yo-rc.json`, so reading the configuration alone does not reveal them.
-
 **Free-text values are embedded in generated files.** Values such as `baseName`, `packageName`, `jhipsterVersion`, `clientPackageManager`,
 entity and field names, or validation patterns are interpolated into templates that produce Java sources, `pom.xml` / `build.gradle`,
 `package.json`, `Dockerfile`s, shell scripts and CI pipeline definitions. A value that is harmless inside the generator process may be harmful
@@ -49,7 +43,19 @@ starts the generated project, which is exactly what the developer does next.
 from the configuration decide where the generated project fetches artifacts from and what it fetches. A modified value can point the generated
 build at an attacker-controlled registry, or pin a dependency to a malicious version, without touching a line of application code.
 
-### What this means in practice
+## Executable files in the project
+
+`.yo-rc.json` is configuration that the generator reads. The files below are different in kind: they are **JavaScript that the generator
+imports and runs** — not referenced from the configuration, but picked up by their location alone, so reading it does not reveal them.
+
+- **`.blueprint/`** — a directory in the working directory. It is discovered and composed automatically: no `blueprints` entry, no
+  command-line flag and no prompt. Cloning a repository that ships one and running `jhipster` executes its code.
+- **`.jhipster/sharedOptions.js`** (also `.cjs` and `.mjs`) — imported from the working directory before any blueprint is resolved, so it
+  runs even when no blueprint is declared at all. Blueprint packages expose the same hook as `cli/sharedOptions.js`.
+
+Treat these as you would a shell script committed to the repository: running the generator in that directory runs them.
+
+## What this means in practice
 
 | Scenario                                                                              | Trust required                                                                                                |
 | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -63,7 +69,7 @@ JHipster cannot tell these cases apart on its own — only the person running th
 This trust model is not specific to JHipster: a directory containing a `package.json` can already execute code through npm lifecycle scripts,
 and the same holds for Maven and Gradle builds. `.yo-rc.json` belongs to that same family of files and deserves the same suspicion.
 
-### Recommendations for users
+## Recommendations for users
 
 - **Do not run the generator in a repository you would not be willing to build.** If you would hesitate to run `./mvnw` or `npm install`
   there, hesitate to run `jhipster`.
@@ -75,7 +81,7 @@ and the same holds for Maven and Gradle builds. `.yo-rc.json` belongs to that sa
   and shell profiles.
 - **Do not run the generator as root**, and do not run it from your home directory.
 
-### Recommendations for CI and hosted generation
+## Recommendations for CI and hosted generation
 
 **Running JHipster as a hosted service — exposing the generator to configurations supplied by other people — is not an officially supported
 use case.** The generator is built to run on a developer's machine, against input that the developer trusts; a service that generates from
@@ -92,7 +98,7 @@ a supported configuration.
   with `--export-application` so nothing is committed to the host filesystem, and with `--disable-blueprints` so no blueprint is resolved or
   executed.
 
-### What the generator does on its side
+## What the generator does on its side
 
 These are hardening measures, not a replacement for the trust decision described above:
 
