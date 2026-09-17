@@ -18,7 +18,7 @@ LABEL ALIAS=keycloak
 
 FROM mysql:26.7.0
 
-FROM mariadb:12.3.3
+FROM mariadb:13.0.2
 
 FROM mongo:8.3.11
 LABEL ALIAS=mongodb
