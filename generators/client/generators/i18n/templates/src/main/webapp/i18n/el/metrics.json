@@ -66,13 +66,6 @@
         "p99": "p99"
       }
     },
-    "ehcache": {
-      "title": "Cache statistics",
-      "cachename": "Όνομα cache",
-      "hits": "Κτυπήματα",
-      "misses": "Αποφυγές",
-      "evictions": "Αριθμός εξώσεων"
-    },
     "cache": {
       "title": "Cache statistics",
       "cachename": "Cache name",
