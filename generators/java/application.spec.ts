@@ -19,6 +19,8 @@
 
 import { describe, expect, it } from 'esmocha';
 
+import { mutateData } from '../../lib/utils/object.ts';
+
 import * as entityData from './application.ts';
 
 import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '#testing';
@@ -32,4 +34,14 @@ describe('application mutation test', () => {
       expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
     });
   }
+
+  describe('mutateField', () => {
+    it('marks a direct MapStruct expression field as transient', () => {
+      const field: any = { mapstructExpression: 'java(s.getName())' };
+
+      mutateData(field, { transient: entityData.mutateField.transient });
+
+      expect(field.transient).toBe(true);
+    });
+  });
 });

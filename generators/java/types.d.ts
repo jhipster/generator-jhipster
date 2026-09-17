@@ -40,6 +40,7 @@ export type {
 
 type Property = {
   propertyDtoJavaType?: string;
+  mapstructExpression?: string;
 };
 
 export type Field = BaseApplicationField &

@@ -111,6 +111,33 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a MapStruct expression', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({}, [
+        {
+          name: 'MapstructExpression',
+          dto: 'mapstruct',
+          fields: [
+            { fieldName: 'name', fieldType: 'String' },
+            {
+              fieldName: 'displayName',
+              fieldType: 'String',
+              options: { mapstructExpression: 'java(s.getName())' },
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should omit the field from the domain class without Liquibase', () => {
+      expect(result.getComposedGenerators()).not.toContain('jhipster:liquibase');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/MapstructExpression.java', 'private String name;');
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/MapstructExpression.java', 'private String displayName;');
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/MapstructExpression.java', 'getDisplayName()');
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/MapstructExpression.java', 'setDisplayName(');
+    });
+  });
+
   describe('with entities disabled', () => {
     before(async () => {
       await helpers

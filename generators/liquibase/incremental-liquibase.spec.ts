@@ -80,6 +80,16 @@ relationship ManyToOne {
 }
 `;
 
+const jdlApplicationWithMapstructExpression = `
+${jdlApplication}
+entity MapstructExpressionTest {
+  name String
+  @MapstructExpression("java(s.getName())")
+  value String
+}
+dto MapstructExpressionTest with mapstruct
+`;
+
 const jdlApplicationEntityWithByteTypes = `
 ${jdlApplication}
 entity Smarty {
@@ -393,6 +403,33 @@ entity Customer {
     });
     it('should match snapshot', () => {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
+  });
+
+  describe('when regenerating an entity with a MapStruct expression', () => {
+    before(async () => {
+      await helpers
+        .runJDL(jdlApplicationWithMapstructExpression)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
+      await helpers
+        .runJDLInApplication(jdlApplicationWithMapstructExpression)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
+        .withOptions({
+          creationTimestamp: '2020-01-02',
+        });
+    });
+
+    it('should not create an entity update changelog', () => {
+      runResult.assertNoFile([
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_MapstructExpressionTest.xml`,
+      ]);
+    });
+
+    it('should not persist the derived transient property', () => {
+      runResult.assertNoFileContent(join('.jhipster', 'MapstructExpressionTest.json'), '"transient"');
     });
   });
 

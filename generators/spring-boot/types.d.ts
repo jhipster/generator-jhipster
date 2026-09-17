@@ -69,7 +69,6 @@ export type Field = ServerField &
     filterableField?: boolean;
     autoGenerateByService?: boolean;
     autoGenerateByRepository?: boolean;
-    mapstructExpression?: boolean;
 
     requiresPersistableImplementation?: boolean;
     fieldNameAsDatabaseColumn?: string;

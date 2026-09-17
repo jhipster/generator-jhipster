@@ -185,8 +185,6 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
             'mapstruct',
             `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`,
           );
-          // Remove from Entity.java and liquibase.
-          field.transient = true;
           // Disable update form.
           field.readonly = true;
         }
