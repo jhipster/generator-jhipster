@@ -50,8 +50,9 @@ imports and runs** — not referenced from the configuration, but picked up by t
 
 - **`.blueprint/`** — a directory in the working directory. It is discovered and composed automatically: no `blueprints` entry, no
   command-line flag and no prompt. Cloning a repository that ships one and running `jhipster` executes its code.
-- **`.jhipster/sharedOptions.js`** (also `.cjs` and `.mjs`) — imported from the working directory before any blueprint is resolved, so it
-  runs even when no blueprint is declared at all. Blueprint packages expose the same hook as `cli/sharedOptions.js`.
+- **`.jhipster/sharedOptions.js`** (also `.cjs` and `.mjs`) — imported and executed from the working directory when a blueprint is loaded.
+  A declared blueprint (in `.yo-rc.json` or via `--blueprints`) is what triggers it; blueprint packages expose the same hook as
+  `cli/sharedOptions.js`.
 
 Treat these as you would a shell script committed to the repository: running the generator in that directory runs them.
 
