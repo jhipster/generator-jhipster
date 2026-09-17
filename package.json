@@ -176,7 +176,7 @@
     "typescript-eslint": "8.70.0",
     "yaml": "2.9.1",
     "yeoman-environment": "7.0.0",
-    "yeoman-generator": "9.1.0"
+    "yeoman-generator": "9.2.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "5.10.0",
