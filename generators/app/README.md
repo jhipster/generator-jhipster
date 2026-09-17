@@ -6,7 +6,7 @@
 
 JHipster implementation allows you to override almost every aspect of the generation process.
 
-[SQL/spring-data-relational customizations](https://github.com/jhipster/generator-jhipster/blob/skip_ci-architecture/generators/spring-data-relational/README.md#sqlspring-data-relational-sub-generator)
+[SQL/spring-boot:data-relational customizations](../spring-boot/generators/data-relational/README.md#sqlspring-bootdata-relational-sub-generator)
 
 ### Application
 
