@@ -100,7 +100,8 @@ a supported configuration.
 
 ## What the generator does on its side
 
-These are hardening measures, not a replacement for the trust decision described above:
+These are hardening measures, not a replacement for the trust decision described above. They describe the current JHipster version; older
+versions may lack them or behave differently:
 
 - File writes are constrained to descendants of the destination root, so a configured path cannot escape the project directory.
 - `--export-application` generates into an in-memory store and serializes the result without committing to the host filesystem, so a
