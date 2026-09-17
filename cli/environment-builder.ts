@@ -147,7 +147,10 @@ export default class EnvironmentBuilder {
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
     this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
     this.localBlueprintPath = path.join(process.cwd(), '.blueprint');
-    this.localBlueprintExists = this.localBlueprintPath !== this.devBlueprintPath && existsSync(this.localBlueprintPath);
+    // A local `.blueprint` is code from the working directory that is composed and executed without being
+    // declared anywhere. `--disable-blueprints` must therefore also disable it, not only declared blueprints.
+    this.localBlueprintExists =
+      !this.disableBlueprints && this.localBlueprintPath !== this.devBlueprintPath && existsSync(this.localBlueprintPath);
 
     await this._lookupJHipster();
     await this._lookupLocalBlueprint();

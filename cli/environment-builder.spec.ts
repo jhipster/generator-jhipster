@@ -340,6 +340,23 @@ describe('cli - EnvironmentBuilder', () => {
       });
     });
 
+    describe('when a local .blueprint directory exists', () => {
+      before(async () => {
+        await helpers.prepareTemporaryDir();
+        fs.mkdirSync('.blueprint');
+      });
+
+      it('is registered by default', async () => {
+        const builder = await EnvironmentBuilder.createDefaultBuilder();
+        expect(builder.localBlueprintExists).toBe(true);
+      });
+
+      it('is disabled by disableBlueprints', async () => {
+        const builder = await EnvironmentBuilder.createDefaultBuilder(undefined, { disableBlueprints: true });
+        expect(builder.localBlueprintExists).toBe(false);
+      });
+    });
+
     describe('_getDisableBlueprintsFromArgv', () => {
       let oldArgv: string[];
       beforeEach(() => {
