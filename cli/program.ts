@@ -340,6 +340,24 @@ export const buildCommands = ({
   });
 };
 
+/**
+ * Whether blueprints should be disabled for the current invocation, resolved from argv before commander parses.
+ *
+ * Blueprints are disabled when the `--disable-blueprints` flag is passed, or when the invoked command opts out
+ * of blueprint composition (its `disableBlueprints` definition, e.g. `info`). Both are decided here so the
+ * environment — prepared once, up front, to register blueprint-provided commands — never has to peek at argv
+ * itself. Only statically-defined commands are considered: a blueprint-provided command cannot disable the
+ * blueprint loading it relies on.
+ */
+export const shouldDisableBlueprints = (argv: string[] = process.argv): boolean => {
+  if (argv.includes('--disable-blueprints')) {
+    return true;
+  }
+  const invokedCommand = argv.slice(2).find(argument => !argument.startsWith('-')) ?? resolveDefaultCommand();
+  const command: CliCommand | undefined = SUB_GENERATORS[invokedCommand as keyof typeof SUB_GENERATORS];
+  return Boolean(command?.disableBlueprints);
+};
+
 export const buildJHipster = async ({
   executableName,
   executableVersion,
@@ -358,7 +376,7 @@ export const buildJHipster = async ({
   if (env) {
     commands = { ...SUB_GENERATORS, ...commands };
   } else {
-    envBuilder ??= await createEnvBuilder();
+    envBuilder ??= await createEnvBuilder(undefined, { disableBlueprints: shouldDisableBlueprints() });
     env ??= envBuilder.getEnvironment();
     commands = { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()), ...commands };
   }

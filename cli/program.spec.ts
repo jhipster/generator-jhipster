@@ -19,13 +19,27 @@
 
 import { beforeEach, describe, expect, it } from 'esmocha';
 
-import { createProgram } from './program.ts';
+import { createProgram, shouldDisableBlueprints } from './program.ts';
 
 import { defaultHelpers as helpers } from '#testing';
 
 describe('cli - program', () => {
   beforeEach(async () => {
     await helpers.prepareTemporaryDir();
+  });
+
+  describe('shouldDisableBlueprints', () => {
+    it('is true when --disable-blueprints is passed', () => {
+      expect(shouldDisableBlueprints(['node', 'jhipster', 'app', '--disable-blueprints'])).toBe(true);
+    });
+
+    it('is true for a command that opts out of blueprints', () => {
+      expect(shouldDisableBlueprints(['node', 'jhipster', 'info'])).toBe(true);
+    });
+
+    it('is false for a command that composes with blueprints', () => {
+      expect(shouldDisableBlueprints(['node', 'jhipster', 'app'])).toBe(false);
+    });
   });
 
   describe('adding a negative option', () => {

@@ -356,28 +356,6 @@ describe('cli - EnvironmentBuilder', () => {
         expect(builder.localBlueprintExists).toBe(false);
       });
     });
-
-    describe('_getDisableBlueprintsFromArgv', () => {
-      let oldArgv: string[];
-      beforeEach(() => {
-        oldArgv = process.argv;
-      });
-      afterEach(() => {
-        process.argv = oldArgv;
-      });
-
-      it('is true when --disable-blueprints is passed', () => {
-        process.argv = ['node', 'jhipster', 'app', '--disable-blueprints'];
-        // @ts-expect-error private method
-        expect(EnvironmentBuilder.create([])._getDisableBlueprintsFromArgv()).toBe(true);
-      });
-
-      it('is false otherwise', () => {
-        process.argv = ['node', 'jhipster', 'app'];
-        // @ts-expect-error private method
-        expect(EnvironmentBuilder.create([])._getDisableBlueprintsFromArgv()).toBe(false);
-      });
-    });
   });
 
   describe('_lookupBlueprints', () => {

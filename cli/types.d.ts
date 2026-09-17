@@ -32,6 +32,11 @@ export type CliCommand = {
   help?: string;
   cliOnly?: boolean;
   removed?: string;
+  /**
+   * Disable blueprints for this command. Use for commands whose generator does not compose with blueprints
+   * (e.g. `info`), so a local or declared blueprint is not loaded or executed just to run them.
+   */
+  disableBlueprints?: boolean;
   /** Do not print the logo, e.g. for commands with machine-readable output. */
   silentLogo?: boolean;
   useOptions?: Record<string, any>;
