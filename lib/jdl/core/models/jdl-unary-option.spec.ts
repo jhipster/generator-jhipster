@@ -55,7 +55,7 @@ describe('jdl - JDLUnaryOption', () => {
         });
       });
 
-      it('should removes the dupes', () => {
+      it('should remove the duplicates', () => {
         expect(option.entityNames).toEqual(new Set(['A', 'B', 'C']));
         expect(option.excludedNames).toEqual(new Set(['E', 'D']));
       });

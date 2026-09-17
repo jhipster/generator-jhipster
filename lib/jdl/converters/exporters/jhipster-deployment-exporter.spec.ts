@@ -78,7 +78,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
             content = JSON.parse(data);
           });
 
-          it('should exports it', () => {
+          it('should export it', () => {
             fs.readFileSync(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' });
           });
 
@@ -110,7 +110,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
             content = JSON.parse(data);
           });
 
-          it('should exports it', () => {
+          it('should export it', () => {
             fs.readFileSync(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' });
           });
 
