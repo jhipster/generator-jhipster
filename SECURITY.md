@@ -32,6 +32,12 @@ other properties does not compensate for it. Installing a package that is not al
 already resolvable in the environment (globally installed, in `node_modules`, or on a lookup path) is composed and executed with no prompt — so
 a pre-installed blueprint is all it takes. JDL is equivalent: an application block can declare `blueprints`, which end up in `.yo-rc.json`.
 
+**Local blueprints and `sharedOptions` execute without being declared anywhere.** A `.blueprint` directory in the working directory is
+discovered and composed automatically — no `blueprints` entry, no command-line flag and no prompt — so cloning a repository that ships one
+and running `jhipster` executes its code. Separately, `.jhipster/sharedOptions.js` (also `.cjs` and `.mjs`) is imported from the working
+directory before any blueprint is resolved, so it runs even when no blueprint is declared at all; blueprint packages expose the same hook
+as `cli/sharedOptions.js`. Neither file appears in `.yo-rc.json`, so reading the configuration alone does not reveal them.
+
 **Free-text values are embedded in generated files.** Values such as `baseName`, `packageName`, `jhipsterVersion`, `clientPackageManager`,
 entity and field names, or validation patterns are interpolated into templates that produce Java sources, `pom.xml` / `build.gradle`,
 `package.json`, `Dockerfile`s, shell scripts and CI pipeline definitions. A value that is harmless inside the generator process may be harmful
@@ -63,6 +69,7 @@ and the same holds for Maven and Gradle builds. `.yo-rc.json` belongs to that sa
   there, hesitate to run `jhipster`.
 - **Read `.yo-rc.json` before the first run**, especially the `blueprints` and `generators` entries, and look up any blueprint you do not
   recognize.
+- **Check for a `.blueprint` directory and a `.jhipster/sharedOptions.*` file**, which are executed without being declared in `.yo-rc.json`.
 - **Review configuration files in pull requests** with the same scrutiny as source code.
 - **Use a sandbox for untrusted projects**: a container, a disposable VM, or a user account without access to your SSH keys, cloud credentials
   and shell profiles.
