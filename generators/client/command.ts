@@ -24,6 +24,8 @@ import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 
+import { retrieveBootswatchThemes } from './internal/bootswatch.ts';
+
 const { CYPRESS, PLAYWRIGHT } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
@@ -57,25 +59,6 @@ const command = {
         { value: REACT, name: 'React' },
         { value: VUE, name: 'Vue' },
         { value: CLIENT_FRAMEWORK_NO, name: 'No client' },
-      ],
-      scope: 'storage',
-    },
-    clientTheme: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      scope: 'storage',
-    },
-    clientThemeVariant: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      choices: [
-        { value: 'primary', name: 'Primary' },
-        { value: 'dark', name: 'Dark' },
-        { value: 'light', name: 'Light' },
       ],
       scope: 'storage',
     },
@@ -187,6 +170,39 @@ const command = {
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
         message: 'Do you want to generate the admin UI?',
       }),
+      scope: 'storage',
+    },
+    clientTheme: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      prompt: generator => ({
+        type: 'select',
+        when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework),
+        message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
+        choices: async answers => [
+          { value: 'none', name: 'Default JHipster' },
+          ...(await retrieveBootswatchThemes(generator, answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework)),
+        ],
+      }),
+      scope: 'storage',
+    },
+    clientThemeVariant: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        type: 'select',
+        when: answers => (answers.clientTheme ?? config.clientTheme ?? 'none') !== 'none' && !config.skipClient,
+        message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
+      }),
+      choices: [
+        { value: 'primary', name: 'Primary' },
+        { value: 'dark', name: 'Dark' },
+        { value: 'light', name: 'Light' },
+      ],
       scope: 'storage',
     },
     clientRootDir: {
