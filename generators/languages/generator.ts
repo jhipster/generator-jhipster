@@ -77,10 +77,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     }
   }
 
-  get supportedLanguages(): Map<string, Language> {
-    return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES);
-  }
-
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
@@ -222,5 +218,9 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  get supportedLanguages(): Map<string, Language> {
+    return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES);
   }
 }

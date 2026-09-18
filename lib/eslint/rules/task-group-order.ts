@@ -19,60 +19,130 @@
 import type { Rule } from 'eslint';
 
 import { PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../../generators/base-application/priorities.ts';
-
-/** Position of each priority in the order the generator runs them. */
-const priorityIndex = new Map<string, number>(PRIORITY_NAMES_LIST.map((priority, index) => [priority, index]));
-
-/** `PREPARING_EACH_ENTITY` is how a delegating getter names the priority its computed key resolves to. */
-const priorityByConstantName = new Map<string, string>(Object.entries(PRIORITY_NAMES));
+import { PRIORITY_NAMES_LIST as CORE_PRIORITY_NAMES_LIST } from '../../../generators/base-core/priorities.ts';
+import {
+  PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES,
+  PRIORITY_NAMES_LIST as WORKSPACES_PRIORITY_NAMES_LIST,
+} from '../../../generators/base-workspaces/priorities.ts';
 
 /**
- * The priority a getter belongs to, from either `get preparingEachEntity()` or
- * `get [SomeGenerator.PREPARING_EACH_ENTITY]()`. Returns undefined for anything else, which is left alone.
+ * Methods the environment calls while the generator is being set up, in the order it calls them.
+ * They run before any priority, so they are declared before the task groups.
  */
-const priorityOf = (node: any): string | undefined => {
-  const { key, computed } = node;
-  if (!computed) {
-    return key?.type === 'Identifier' && priorityIndex.has(key.name) ? key.name : undefined;
+const LIFECYCLE_METHODS = ['beforeQueue', 'postConstruct', '_postConstruct'];
+
+/**
+ * The order the generator runs the priorities in.
+ *
+ * No single list holds all of them: the application list drops `postPreparing`, and the workspaces priorities
+ * live in their own list. Each list is folded into the application one, every missing priority taking the place
+ * it holds relative to the neighbours it shares with it.
+ */
+const priorityOrder: string[] = [...PRIORITY_NAMES_LIST];
+const foldIn = (priorities: readonly string[]): void => {
+  priorities.forEach((priority, index) => {
+    if (priorityOrder.includes(priority)) return;
+    const previous = priorities
+      .slice(0, index)
+      .reverse()
+      .find(candidate => priorityOrder.includes(candidate));
+    priorityOrder.splice(previous === undefined ? 0 : priorityOrder.indexOf(previous) + 1, 0, priority);
+  });
+};
+foldIn(CORE_PRIORITY_NAMES_LIST);
+foldIn(WORKSPACES_PRIORITY_NAMES_LIST);
+
+/** Position of each priority in the order the generator runs them. */
+const priorityIndex = new Map<string, number>(priorityOrder.map((priority, index) => [priority, index]));
+
+/** `PREPARING_EACH_ENTITY` is how a delegating getter names the priority its computed key resolves to. */
+const priorityByConstantName = new Map<string, string>(Object.entries({ ...PRIORITY_NAMES, ...WORKSPACES_PRIORITY_NAMES }));
+
+/** Ranks are compared, never shown; the gaps only keep the three groups apart. */
+const TASK_GROUP_RANK = 100;
+const OTHER_RANK = 1000;
+
+type Member = { rank: number; name: string; group: 'lifecycle' | 'taskGroup' | 'other' };
+
+/**
+ * Where a member belongs, from either its name or, for a delegating getter, the constant its computed key reads.
+ */
+const classify = (node: any): Member | undefined => {
+  const { key, computed, kind, static: isStatic } = node;
+  if (isStatic || kind === 'constructor') return undefined;
+
+  if (computed) {
+    if (key?.type !== 'MemberExpression' || key.property?.type !== 'Identifier') return undefined;
+    const priority = priorityByConstantName.get(key.property.name);
+    return priority === undefined ? undefined : (
+        { rank: TASK_GROUP_RANK + priorityIndex.get(priority)!, name: priority, group: 'taskGroup' }
+      );
   }
-  if (key?.type === 'MemberExpression' && key.property?.type === 'Identifier') {
-    return priorityByConstantName.get(key.property.name);
-  }
-  return undefined;
+
+  if (key?.type !== 'Identifier') return undefined;
+  const { name } = key;
+
+  const lifecycle = LIFECYCLE_METHODS.indexOf(name);
+  if (lifecycle !== -1) return { rank: lifecycle, name, group: 'lifecycle' };
+
+  const priority = priorityIndex.get(name);
+  if (priority !== undefined) return { rank: TASK_GROUP_RANK + priority, name, group: 'taskGroup' };
+
+  return { rank: OTHER_RANK, name, group: 'other' };
+};
+
+const messageIdFor = (member: Member, previous: Member): keyof typeof messages => {
+  if (member.group === 'lifecycle') return previous.group === 'lifecycle' ? 'lifecycleOrder' : 'lifecycleFirst';
+  if (member.group === 'taskGroup') return previous.group === 'taskGroup' ? 'taskGroupOrder' : 'taskGroupBeforeOther';
+  return 'otherLast';
+};
+
+const messages = {
+  lifecycleOrder: "'{{ name }}' is called before '{{ previous }}', so it must be declared before it.",
+  lifecycleFirst: "'{{ name }}' runs before any priority, so it must be declared before the task groups.",
+  taskGroupOrder: "'{{ name }}' runs before '{{ previous }}', so it must be declared before it.",
+  taskGroupBeforeOther: "'{{ name }}' is a task group, so it must be declared before the methods that are not.",
+  otherLast: "'{{ name }}' is not a task group, so it must be declared after them.",
 };
 
 const rule: Rule.RuleModule = {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'Declare generator task group getters in the order the priorities run',
+      description: 'Declare generator members in the order they run: lifecycle methods, task groups, then the rest',
       recommended: true,
     },
     schema: [],
-    messages: {
-      outOfOrder: "'{{ priority }}' runs before '{{ previous }}', so it must be declared before it.",
-    },
+    messages,
   },
   create(context) {
     return {
       ClassBody(node: any) {
-        let highest = -1;
-        let highestPriority = '';
-        for (const member of node.body) {
-          if (member.type !== 'MethodDefinition' || member.kind !== 'get') continue;
-          const priority = priorityOf(member);
-          if (priority === undefined) continue;
+        const members = node.body
+          .filter((member: any) => member.type === 'MethodDefinition')
+          .map((member: any) => ({ node: member, member: classify(member) }))
+          .filter((entry: any) => entry.member) as { node: any; member: Member }[];
 
-          const index = priorityIndex.get(priority)!;
-          if (index < highest) {
+        // A method that is neither a lifecycle hook nor a task group belongs after them, so report the method
+        // itself rather than everything it pushed out of place.
+        const lastOrdered = members.findLastIndex(({ member }) => member.group !== 'other');
+        members.forEach(({ node: memberNode, member }, index) => {
+          if (member.group === 'other' && index < lastOrdered) {
+            context.report({ node: memberNode.key, messageId: 'otherLast', data: { name: member.name } });
+          }
+        });
+
+        let highest: Member | undefined;
+        for (const { node: memberNode, member } of members) {
+          if (member.group === 'other') continue;
+          if (highest && member.rank < highest.rank) {
             context.report({
-              node: member.key,
-              messageId: 'outOfOrder',
-              data: { priority, previous: highestPriority },
+              node: memberNode.key,
+              messageId: messageIdFor(member, highest),
+              data: { name: member.name, previous: highest.name },
             });
           } else {
-            highest = index;
-            highestPriority = priority;
+            highest = member;
           }
         }
       },

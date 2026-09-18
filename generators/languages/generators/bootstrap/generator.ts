@@ -48,10 +48,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
     await this.dependsOnBootstrap('javascript-simple-application');
   }
 
-  get supportedLanguages(): Map<string, Language> {
-    return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES, { factory: () => new Map() });
-  }
-
   get loading() {
     return this.asLoadingTaskGroup({
       preparing({ applicationDefaults }) {
@@ -128,5 +124,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+  }
+
+  get supportedLanguages(): Map<string, Language> {
+    return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES, { factory: () => new Map() });
   }
 }

@@ -46,10 +46,6 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     await this.dependsOnBootstrap('base-workspaces');
   }
 
-  override get directoryPath(): string {
-    return './';
-  }
-
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
@@ -122,6 +118,18 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setWorkspacesRoot() {
+        this.setWorkspacesRoot(this.destinationPath());
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get configuringWorkspaces() {
     return this.asConfiguringWorkspacesTaskGroup({
       checkWorkspaces() {
@@ -134,18 +142,6 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
   get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
     return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      setWorkspacesRoot() {
-        this.setWorkspacesRoot(this.destinationPath());
-      },
-    });
-  }
-
-  get [BaseWorkspacesGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get loadingWorkspaces() {
@@ -277,5 +273,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
   createWorkspacesScript(...scripts: string[]) {
     return Object.fromEntries(scripts.map(script => [script, `npm run ${script} --workspaces --if-present`]));
+  }
+
+  override get directoryPath(): string {
+    return './';
   }
 }

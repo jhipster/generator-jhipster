@@ -49,6 +49,15 @@ ruleTester.run('task-group-order', rule, {
       get supportedLanguages() {}
       get someHelper() {}
     }`,
+    // Lifecycle methods first, in the order the environment calls them, then task groups, then the rest.
+    `class G {
+      beforeQueue() {}
+      _postConstruct() {}
+      get initializing() {}
+      get writing() {}
+      someHelper() {}
+      get someAccessor() {}
+    }`,
     // Each class is considered on its own.
     `class A {
       get writing() {}
@@ -60,17 +69,40 @@ ruleTester.run('task-group-order', rule, {
   invalid: [
     {
       code: `class G {
+        _postConstruct() {}
+        beforeQueue() {}
+      }`,
+      errors: [{ messageId: 'lifecycleOrder', data: { name: 'beforeQueue', previous: '_postConstruct' } }],
+    },
+    {
+      code: `class G {
+        get writing() {}
+        beforeQueue() {}
+      }`,
+      errors: [{ messageId: 'lifecycleFirst', data: { name: 'beforeQueue' } }],
+    },
+    {
+      // The method is reported, not each of the task groups it pushed out of place.
+      code: `class G {
+        someHelper() {}
+        get initializing() {}
+        get writing() {}
+      }`,
+      errors: [{ messageId: 'otherLast', data: { name: 'someHelper' } }],
+    },
+    {
+      code: `class G {
         get preparingEachEntityRelationship() {}
         get preparingEachEntity() {}
       }`,
-      errors: [{ messageId: 'outOfOrder', data: { priority: 'preparingEachEntity', previous: 'preparingEachEntityRelationship' } }],
+      errors: [{ messageId: 'taskGroupOrder', data: { name: 'preparingEachEntity', previous: 'preparingEachEntityRelationship' } }],
     },
     {
       code: `class G {
         get configuringEachEntity() {}
         get composing() {}
       }`,
-      errors: [{ messageId: 'outOfOrder', data: { priority: 'composing', previous: 'configuringEachEntity' } }],
+      errors: [{ messageId: 'taskGroupOrder', data: { name: 'composing', previous: 'configuringEachEntity' } }],
     },
     {
       // The computed key of a delegating getter resolves to the same priority as its task group.
@@ -78,7 +110,7 @@ ruleTester.run('task-group-order', rule, {
         get [Base.POST_WRITING_ENTITIES]() {}
         get [Base.POST_WRITING]() {}
       }`,
-      errors: [{ messageId: 'outOfOrder', data: { priority: 'postWriting', previous: 'postWritingEntities' } }],
+      errors: [{ messageId: 'taskGroupOrder', data: { name: 'postWriting', previous: 'postWritingEntities' } }],
     },
   ],
 });

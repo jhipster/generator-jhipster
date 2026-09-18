@@ -88,12 +88,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   injectBuildTool = true;
   injectLogs = true;
 
-  protected override prepareEntityForComparison(entity: LiquibaseEntity): void {
-    for (const field of entity.fields ?? []) {
-      mutateData(field, mutateBaseApplicationField, mutateJavaField);
-    }
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -614,6 +608,12 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get [BaseEntityChangesGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
+  }
+
+  protected override prepareEntityForComparison(entity: LiquibaseEntity): void {
+    for (const field of entity.fields ?? []) {
+      mutateData(field, mutateBaseApplicationField, mutateJavaField);
+    }
   }
 
   /* ======================================================================== */
