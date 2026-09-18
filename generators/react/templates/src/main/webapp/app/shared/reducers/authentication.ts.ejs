@@ -37,7 +37,6 @@ export const initialState = {
 <%_ if (!authenticationTypeOauth2) { _%>
   loginSuccess: false,
   loginError: false, // Errors returned from server side
-  showModalLogin: false,
 <%_ } _%>
   account: {} as any,
   errorMessage: null as unknown as string, // Errors returned from server side
@@ -158,18 +157,12 @@ export const AuthenticationSlice = createSlice({
   reducers: {
 <%_ if (authenticationTypeJwt) { _%>
     logoutSession() {
-      return {
-        ...initialState,
-        showModalLogin: true,
-      };
+      return initialState;
     },
 <%_ } _%>
     authError(state, action) {
       return {
         ...state,
-<%_ if (!authenticationTypeOauth2) { _%>
-        showModalLogin: true,
-<%_ } _%>
         redirectMessage: action.payload
       };
     },
@@ -177,9 +170,6 @@ export const AuthenticationSlice = createSlice({
       return {
         ...state,
         loading: false,
-<%_ if (!authenticationTypeOauth2) { _%>
-        showModalLogin: true,
-<%_ } _%>
         isAuthenticated: false
       };
     },
@@ -190,14 +180,12 @@ export const AuthenticationSlice = createSlice({
       .addCase(authenticate.rejected, (state, action) => ({
         ...initialState,
         errorMessage: action.error.message!,
-        showModalLogin: true,
         loginError: true,
       }))
       .addCase(authenticate.fulfilled, state => ({
         ...state,
         loading: false,
         loginError: false,
-        showModalLogin: false,
         loginSuccess: true,
       }))
 <%_ } _%>
@@ -206,9 +194,6 @@ export const AuthenticationSlice = createSlice({
         loading: false,
         isAuthenticated: false,
         sessionHasBeenFetched: true,
-<%_ if (!authenticationTypeOauth2) { _%>
-        showModalLogin: true,
-<%_ } _%>
         errorMessage: action.error.message!,
       }))
       .addCase(getAccount.fulfilled, (state, action) => {
@@ -222,14 +207,14 @@ export const AuthenticationSlice = createSlice({
         };
       })
 <%_ if (!authenticationTypeJwt) { _%>
-      .addCase(logoutServer.fulfilled, (<%- authenticationTypeOauth2 ? 'state, action' : '' %>) => ({
-        ...initialState,
   <%_ if (authenticationTypeOauth2) { _%>
+      .addCase(logoutServer.fulfilled, (state, action) => ({
+        ...initialState,
         logoutUrl: action.payload.data.logoutUrl
-  <%_ } else { _%>
-        showModalLogin: true
-  <%_ } _%>
       }))
+  <%_ } else { _%>
+      .addCase(logoutServer.fulfilled, () => initialState)
+  <%_ } _%>
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
       .addCase(authenticate.pending, state => {
