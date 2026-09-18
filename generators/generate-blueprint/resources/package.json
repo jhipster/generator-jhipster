@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@vitest/browser-preview": "5.0.0",
+    "@vitest/browser-preview": "5.0.1",
     "@vitest/expect": "5.0.1",
     "ejs-lint": "2.0.1",
     "eslint": "10.10.0",
