@@ -43,7 +43,7 @@ Which version of JHipster are you using, is it a regression?
 
 - [ ] Tickets opened without reproduction steps or that don't follow the template recommendation will be **closed**.
 - [ ] This issue is prompt-related or an error that prevents JHipster from generating an application.
-- [ ] I don't have a JDL otherwise I should open an [JDL Issue](https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT_JDL.md)
+- [ ] I don't have a JDL otherwise I should open a [JDL issue](https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT_JDL.md)
 - [ ] The application is not successfully generated otherwise, I should open an [Issue with jhipster info](https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md)
 - [ ] Checking this box is mandatory (this is just to show you read everything)
 

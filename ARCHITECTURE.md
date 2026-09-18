@@ -334,7 +334,7 @@ A Blueprint package can include any number of sub-generators, each can be a repl
 
 Examples:
 
-- [Micronaut](https://github.com/jhipster/generator-jhipster-micronaut) has a [server](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/server) replacement blueprint, a [angular](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/angular), [client](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/client), [cypress](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/cypress), [docker](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/docker) and [react](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/react) side by side blueprints, and a [micronaut-cache](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/micronaut-cache) stand alone blueprint
+- [Micronaut](https://github.com/jhipster/generator-jhipster-micronaut) has a [server](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/server) replacement blueprint, an [angular](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/angular), [client](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/client), [cypress](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/cypress), [docker](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/docker) and [react](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/react) side by side blueprints, and a [micronaut-cache](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/micronaut-cache) stand alone blueprint
 
 More information can be found at:
 
@@ -375,11 +375,11 @@ More information can be found at:
 
 ### GeneratorBaseCore
 
-Adds custom APIS to `yeoman-generator` and customizes the behavior.
+Adds custom APIs to `yeoman-generator` and customizes the behavior.
 
 ### GeneratorBase
 
-Adds Blueprint composing APIS.
+Adds Blueprint composing APIs.
 
 ### GeneratorApplication
 
