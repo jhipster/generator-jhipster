@@ -181,10 +181,7 @@ const command = {
         type: 'select',
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework),
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
-        choices: async answers => [
-          { value: 'none', name: 'Default JHipster' },
-          ...(await retrieveBootswatchThemes(generator, answers.clientFramework ?? generator.jhipsterConfigWithDefaults.clientFramework)),
-        ],
+        choices: async () => [{ value: 'none', name: 'Default JHipster' }, ...(await retrieveBootswatchThemes(generator))],
       }),
       scope: 'storage',
     },

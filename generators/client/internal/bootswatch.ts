@@ -51,11 +51,11 @@ const offlineThemes: Choice[] = [
 
 /**
  * Bootswatch themes offered by the `clientTheme` prompt.
- * Vue uses Bootstrap 4, the other clients use Bootstrap 5.
+ * Every client installs the same major of the `bootswatch` package, so the themes offered must be of that major.
  */
-export const retrieveBootswatchThemes = async (generator: CoreGenerator, clientFramework?: string): Promise<Choice[]> => {
+export const retrieveBootswatchThemes = async (generator: CoreGenerator): Promise<Choice[]> => {
   try {
-    const response = await fetch(`https://bootswatch.com/api/${clientFramework === 'vue' ? '4' : '5'}.json`);
+    const response = await fetch('https://bootswatch.com/api/5.json');
     const { themes } = (await response.json()) as { themes: { name: string }[] };
     return themes.map(theme => ({
       value: theme.name.toLowerCase(),
