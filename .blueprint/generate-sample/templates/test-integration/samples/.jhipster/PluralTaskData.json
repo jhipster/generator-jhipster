@@ -1,0 +1,19 @@
+{
+  "changelogDate": "20260918120000",
+  "documentation": "The `Data` suffix is uncountable, so `pluralize` returns it unchanged. The entity plural must still be forced to differ from the singular (`PluralTaskDatas`), while the relationship plural must stay identical (`jobData`), not become `jobDatas` (#33986).",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "otherEntityName": "pluralJobData",
+      "otherEntityRelationshipName": "taskData",
+      "relationshipName": "jobData",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

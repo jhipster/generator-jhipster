@@ -23,7 +23,7 @@ import type { MemFsEditor } from 'mem-fs-editor';
 
 import { entitiesSamplesDir } from '../../constants.ts';
 
-const sqllight = ['BankAccount', 'Label', 'Operation', 'EntityWithDTO'];
+const sqllight = ['BankAccount', 'Label', 'Operation', 'EntityWithDTO', 'PluralTaskData', 'PluralJobData'];
 
 const sql = [
   ...sqllight,
