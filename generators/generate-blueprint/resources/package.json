@@ -1,12 +1,12 @@
 {
   "dependencies": {
-    "@vitest/browser-preview": "5.0.0",
+    "@vitest/browser-preview": "5.0.1",
     "@vitest/expect": "5.0.1",
     "ejs-lint": "2.0.1",
     "eslint": "10.10.0",
     "globals": "17.12.0",
     "typescript-eslint": "8.70.0",
-    "vitest": "5.0.0"
+    "vitest": "5.0.1"
   },
   "packageManager": "npm@12"
 }
