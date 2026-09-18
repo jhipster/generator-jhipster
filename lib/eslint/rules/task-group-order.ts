@@ -32,37 +32,33 @@ import {
 const LIFECYCLE_METHODS = ['beforeQueue', 'postConstruct', '_postConstruct'];
 
 /**
- * The order the generator runs the priorities in.
+ * The orders the generator runs the priorities in.
  *
  * No single list holds all of them: the application list drops `postPreparing`, and the workspaces priorities
- * live in their own list. Each list is folded into the application one, every missing priority taking the place
- * it holds relative to the neighbours it shares with it.
+ * live in their own. Two priorities are only comparable when a list holds both — `postPreparing` and
+ * `preparingWorkspaces` never meet, and nothing in the code says which of them runs first.
  */
-const priorityOrder: string[] = [...PRIORITY_NAMES_LIST];
-const foldIn = (priorities: readonly string[]): void => {
-  priorities.forEach((priority, index) => {
-    if (priorityOrder.includes(priority)) return;
-    const previous = priorities
-      .slice(0, index)
-      .reverse()
-      .find(candidate => priorityOrder.includes(candidate));
-    priorityOrder.splice(previous === undefined ? 0 : priorityOrder.indexOf(previous) + 1, 0, priority);
-  });
-};
-foldIn(CORE_PRIORITY_NAMES_LIST);
-foldIn(WORKSPACES_PRIORITY_NAMES_LIST);
+const priorityLists: readonly (readonly string[])[] = [PRIORITY_NAMES_LIST, CORE_PRIORITY_NAMES_LIST, WORKSPACES_PRIORITY_NAMES_LIST];
 
-/** Position of each priority in the order the generator runs them. */
-const priorityIndex = new Map<string, number>(priorityOrder.map((priority, index) => [priority, index]));
+const knownPriorities = new Set<string>(priorityLists.flat());
 
 /** `PREPARING_EACH_ENTITY` is how a delegating getter names the priority its computed key resolves to. */
-const priorityByConstantName = new Map<string, string>(Object.entries({ ...PRIORITY_NAMES, ...WORKSPACES_PRIORITY_NAMES }));
+const priorityByConstantName = new Map<string, string>(
+  Object.entries({ ...PRIORITY_NAMES, ...WORKSPACES_PRIORITY_NAMES }) as [string, string][],
+);
 
-/** Ranks are compared, never shown; the gaps only keep the three groups apart. */
-const TASK_GROUP_RANK = 100;
-const OTHER_RANK = 1000;
+/** Whether some list puts `priority` before `other`. Unrelated priorities are left alone. */
+const runsBefore = (priority: string, other: string): boolean =>
+  priorityLists.some(list => {
+    const index = list.indexOf(priority);
+    const otherIndex = list.indexOf(other);
+    return index !== -1 && otherIndex !== -1 && index < otherIndex;
+  });
 
-type Member = { rank: number; name: string; group: 'lifecycle' | 'taskGroup' | 'other' };
+/** Lifecycle methods come first and plain methods last; the task groups in between order among themselves. */
+const GROUP_ORDER = { lifecycle: 0, taskGroup: 1, other: 2 } as const;
+
+type Member = { name: string; group: keyof typeof GROUP_ORDER; lifecycleIndex?: number };
 
 /**
  * Where a member belongs, from either its name or, for a delegating getter, the constant its computed key reads.
@@ -74,21 +70,33 @@ const classify = (node: any): Member | undefined => {
   if (computed) {
     if (key?.type !== 'MemberExpression' || key.property?.type !== 'Identifier') return undefined;
     const priority = priorityByConstantName.get(key.property.name);
-    return priority === undefined ? undefined : (
-        { rank: TASK_GROUP_RANK + priorityIndex.get(priority)!, name: priority, group: 'taskGroup' }
-      );
+    return priority === undefined ? undefined : { name: priority, group: 'taskGroup' };
   }
 
   if (key?.type !== 'Identifier') return undefined;
   const { name } = key;
 
   const lifecycle = LIFECYCLE_METHODS.indexOf(name);
-  if (lifecycle !== -1) return { rank: lifecycle, name, group: 'lifecycle' };
+  if (lifecycle !== -1) return { name, group: 'lifecycle', lifecycleIndex: lifecycle };
 
-  const priority = priorityIndex.get(name);
-  if (priority !== undefined) return { rank: TASK_GROUP_RANK + priority, name, group: 'taskGroup' };
+  if (knownPriorities.has(name)) return { name, group: 'taskGroup' };
 
-  return { rank: OTHER_RANK, name, group: 'other' };
+  return { name, group: 'other' };
+};
+
+/**
+ * Whether `member` is declared too late, having to come before `previous`.
+ *
+ * A task group sitting after a plain method is left out: the plain method is the one that moves, and it is
+ * reported on its own, so reporting the task groups too would bury it under everything it pushed out of place.
+ */
+const mustPrecede = (member: Member, previous: Member): boolean => {
+  if (member.group === 'taskGroup' && previous.group === 'other') return false;
+  if (GROUP_ORDER[member.group] !== GROUP_ORDER[previous.group]) {
+    return GROUP_ORDER[member.group] < GROUP_ORDER[previous.group];
+  }
+  if (member.group === 'lifecycle') return member.lifecycleIndex! < previous.lifecycleIndex!;
+  return member.group === 'taskGroup' && runsBefore(member.name, previous.name);
 };
 
 const messageIdFor = (member: Member, previous: Member): keyof typeof messages => {
@@ -123,28 +131,24 @@ const rule: Rule.RuleModule = {
           .map((member: any) => ({ node: member, member: classify(member) }))
           .filter((entry: any) => entry.member) as { node: any; member: Member }[];
 
-        // A method that is neither a lifecycle hook nor a task group belongs after them, so report the method
-        // itself rather than everything it pushed out of place.
         const lastOrdered = members.findLastIndex(({ member }) => member.group !== 'other');
-        members.forEach(({ node: memberNode, member }, index) => {
-          if (member.group === 'other' && index < lastOrdered) {
-            context.report({ node: memberNode.key, messageId: 'otherLast', data: { name: member.name } });
-          }
-        });
 
-        let highest: Member | undefined;
-        for (const { node: memberNode, member } of members) {
-          if (member.group === 'other') continue;
-          if (highest && member.rank < highest.rank) {
+        members.forEach(({ node: memberNode, member }, index) => {
+          // Compared against every member before it, since the priorities are only partially ordered: a list
+          // that holds both says which runs first, and priorities that never share a list are left alone.
+          const offendedByOther = index < lastOrdered ? members[lastOrdered] : undefined;
+          const offended =
+            member.group === 'other' ?
+              offendedByOther
+            : members.slice(0, index).find(({ member: previous }) => mustPrecede(member, previous));
+          if (offended) {
             context.report({
               node: memberNode.key,
-              messageId: messageIdFor(member, highest),
-              data: { name: member.name, previous: highest.name },
+              messageId: messageIdFor(member, offended.member),
+              data: { name: member.name, previous: offended.member.name },
             });
-          } else {
-            highest = member;
           }
-        }
+        });
       },
     };
   },

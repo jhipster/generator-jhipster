@@ -43,16 +43,12 @@ export default defineConfig(
     },
   },
   {
-    files: ['generators/**/*.ts'],
+    files: ['generators/**/generator.ts'],
     ignores: [
-      '**/*.spec.ts',
-      '**/templates/**',
       // The base classes define the priority API itself: each `as<Priority>TaskGroup` helper is deliberately
       // paired with the priority it types, so their members are not in running order and are not meant to be.
       'generators/base/generator.ts',
-      'generators/base-application/generator.ts',
-      'generators/base-workspaces/generator.ts',
-      'generators/base-workspaces/generators/bootstrap/generator.ts',
+      'generators/base-*/generator.ts',
     ],
     plugins: { jhipster: jhipsterPlugin },
     rules: {
