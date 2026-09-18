@@ -42,6 +42,11 @@ export type Options = Command['Options'] & CacheCommand['Options'] & JavaOptions
 
 export type SpringEntity = {
   entitySearchLayer?: boolean;
+  /**
+   * Elasticsearch index backing the entity, when a search engine is enabled.
+   * Defaults to the lower cased entity instance; set it to keep pointing at an existing index.
+   */
+  elasticsearchIndexName?: string;
   /* Generate entity's Repository */
   entityPersistenceLayer?: boolean;
   /* Generate entity's Rest Api */
@@ -74,7 +79,13 @@ export type Field = ServerField &
     fieldNameAsDatabaseColumn?: string;
   };
 
-export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {}
+export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {
+  /**
+   * Name this relationship is indexed under, when a search engine is enabled.
+   * Defaults to the java property name; set it to keep an existing mapping when the property is renamed.
+   */
+  elasticsearchFieldName?: string;
+}
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ServerEntity<F, R>, SpringEntity {
   skipDbChangelog?: boolean;

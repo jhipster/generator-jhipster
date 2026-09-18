@@ -40,6 +40,8 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
       prepareEntity({ entity }) {
         mutateData(entity, {
           entitySearchLayer: true,
+          // Keeps an existing index reachable when the entity is renamed, since the index name is otherwise derived.
+          elasticsearchIndexName: ({ entityInstance, elasticsearchIndexName }) => elasticsearchIndexName ?? entityInstance.toLowerCase(),
         });
       },
     });
@@ -47,6 +49,21 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
 
   get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ relationship }) {
+        mutateData(relationship, {
+          // The name reaches the index mapping, so it must survive a rename of the java property.
+          elasticsearchFieldName: ({ propertyName, elasticsearchFieldName }) => elasticsearchFieldName ?? propertyName,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
   get writing() {
