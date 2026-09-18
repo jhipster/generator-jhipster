@@ -10,7 +10,7 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 
 import { jsRules } from './lib/eslint/base.ts';
-import jhipster from './lib/eslint/index.ts';
+import jhipster, { plugin as jhipsterPlugin } from './lib/eslint/index.ts';
 
 const tsFiles = ['**/*.{ts,mts,cts}'];
 const jsFiles = ['**/*.{js,cjs,mjs}'];
@@ -40,6 +40,14 @@ export default defineConfig(
     plugins: { n },
     rules: {
       'n/prefer-node-protocol': 'error',
+    },
+  },
+  {
+    files: ['generators/**/*.ts'],
+    ignores: ['**/*.spec.ts', '**/templates/**'],
+    plugins: { jhipster: jhipsterPlugin },
+    rules: {
+      'jhipster/task-group-order': 'error',
     },
   },
   {
