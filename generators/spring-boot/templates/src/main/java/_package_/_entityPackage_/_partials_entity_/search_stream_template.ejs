@@ -48,9 +48,9 @@ _%>
   <%_ } _%>
 <%_ } _%>
         } catch (RuntimeException e) {
-    <% if (searchEngineElasticsearch && fromResource) { %>
+<%_ if (searchEngineElasticsearch && fromResource) { _%>
             throw ElasticsearchExceptionMapper.mapException(e);
 <%_ } else { _%>
             throw e;
-    <% } %>
+<%_ } _%>
         }

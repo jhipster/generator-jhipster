@@ -218,7 +218,7 @@ export const <%- entityReactName %>Slice = createEntitySlice({
   <%_ } _%>
 <%_ } else { _%>
             entities: data
-  <% if (paginationNo) { _%>
+  <%_ if (paginationNo) { _%>
               .sort((a, b) => {
                 if (!action.meta?.arg?.sort) {
                   return 1;

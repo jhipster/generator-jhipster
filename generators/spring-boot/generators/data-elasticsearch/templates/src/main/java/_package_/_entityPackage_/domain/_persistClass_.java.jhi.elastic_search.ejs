@@ -57,7 +57,7 @@
   <%_ // just break the cycle; in the reactive area, we already have the annotation in place _%>
   <%_ if (!relationship.ownerSide && !reactive) { _%>
         @org.springframework.data.annotation.Transient
-    <% } %>
+  <%_ } _%>
   <%_ if (relationship.elasticsearchFieldName !== relationship.propertyName) { _%>
     @org.springframework.data.elasticsearch.annotations.Field(name = "<%- relationship.elasticsearchFieldName %>")
   <%_ } _%>

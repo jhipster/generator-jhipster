@@ -43,11 +43,11 @@ _%>
             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
             return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dtoMapstruct) { %><%- entityListToDtoListReference %>(<% } %>page.getContent()<%- (!viaService && dtoMapstruct) ? ')' : '' %>);
         } catch (RuntimeException e) {
-    <% if (searchEngineElasticsearch) { %>
+    <%_ if (searchEngineElasticsearch) { _%>
             throw ElasticsearchExceptionMapper.mapException(e);
     <%_ } else { _%>
             throw new RuntimeException(e);
-    <% } %>
+    <%_ } _%>
         }
   <%_ } _%>
 <% } -%>
