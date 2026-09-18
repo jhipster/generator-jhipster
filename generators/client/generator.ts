@@ -27,7 +27,6 @@ import { isReservedTypescriptKeyword } from '../javascript-simple-application/su
 
 import { addEnumerationFiles } from './entity-files.ts';
 import { writeFiles as writeCommonFiles } from './files-common.ts';
-import { askForClientTheme, askForClientThemeVariant } from './prompts.ts';
 import { filterEntitiesAndPropertiesForClient } from './support/filter-entities.ts';
 import type {
   Application as ClientApplication,
@@ -63,17 +62,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
       await this.dependsOnBootstrap('client');
       await this.dependsOnJHipster('common');
     }
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      askForClientTheme,
-      askForClientThemeVariant,
-    });
-  }
-
-  get [ClientApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {

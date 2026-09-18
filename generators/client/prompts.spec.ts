@@ -75,4 +75,63 @@ describe('generator - client - prompts', () => {
       });
     });
   });
+
+  describe('clientTheme prompts', () => {
+    describe('with a bootswatch theme', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(GENERATOR_APP)
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withAnswers({
+            baseName: 'sampleMysql',
+            packageName: 'com.mycompany.myapp',
+            applicationType: APPLICATION_TYPE_MONOLITH,
+            databaseType: SQL,
+            devDatabaseType: H2_DISK,
+            prodDatabaseType: MYSQL,
+            cacheProvider: EHCACHE,
+            authenticationType: JWT,
+            buildTool: MAVEN,
+            clientFramework: ANGULAR,
+            clientTheme: 'darkly',
+            clientThemeVariant: 'dark',
+          })
+          .withSkipWritingPriorities()
+          .withMockedGenerators(mockedComposedGenerators);
+      });
+
+      it('should write the theme and its variant to .yo-rc.json', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { clientTheme: 'darkly', clientThemeVariant: 'dark' } });
+      });
+    });
+
+    describe('with the default theme', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(GENERATOR_APP)
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withAnswers({
+            baseName: 'sampleMysql',
+            packageName: 'com.mycompany.myapp',
+            applicationType: APPLICATION_TYPE_MONOLITH,
+            databaseType: SQL,
+            devDatabaseType: H2_DISK,
+            prodDatabaseType: MYSQL,
+            cacheProvider: EHCACHE,
+            authenticationType: JWT,
+            buildTool: MAVEN,
+            clientFramework: ANGULAR,
+            clientTheme: 'none',
+            // Answered on purpose: the variant prompt must not be shown, so this answer must not be consumed.
+            clientThemeVariant: 'dark',
+          })
+          .withSkipWritingPriorities()
+          .withMockedGenerators(mockedComposedGenerators);
+      });
+
+      it('should not ask for a variant', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { clientTheme: 'none', clientThemeVariant: undefined } });
+      });
+    });
+  });
 });
