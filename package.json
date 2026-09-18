@@ -22,7 +22,7 @@
   "bugs": "https://github.com/jhipster/generator-jhipster/issues",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jhipster/generator-jhipster.git"
+    "url": "git+https://github.com/jhipster/generator-jhipster.git"
   },
   "funding": {
     "type": "opencollective",
