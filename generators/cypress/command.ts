@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+
+const { ANGULAR } = clientFrameworkTypes;
 
 const command = {
   configs: {
@@ -25,6 +28,11 @@ const command = {
       cli: {
         type: Boolean,
       },
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        type: 'confirm',
+        when: () => config.clientFramework === ANGULAR,
+        message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
+      }),
       scope: 'storage',
     },
     cypressAudit: {
@@ -32,9 +40,13 @@ const command = {
       cli: {
         type: Boolean,
       },
+      prompt: {
+        type: 'confirm',
+        message: 'Would you like to audit Cypress tests?',
+      },
       scope: 'storage',
     },
   },
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;
