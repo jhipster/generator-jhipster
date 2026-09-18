@@ -24,7 +24,7 @@ export * from '../lib/constants/jhipster.ts';
 
 export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '9.3.0';
+export const JHIPSTER_DEPENDENCIES_VERSION = '9.4.0';
 // Version of Java
 export const RECOMMENDED_JAVA_VERSION = '21';
 export const GRAALVM_RECOMMENDED_JAVA_VERSION = '25';
