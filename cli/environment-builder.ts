@@ -65,8 +65,10 @@ export type PrepareOptions = {
   lookups?: Parameters<Environment['lookup']>[0][];
   devBlueprintPath?: string;
   /**
-   * Disables blueprints support.
-   * Defaults to the `--disable-blueprints` flag from argv, since commander has not parsed yet.
+   * Disables the blueprints that come from the working directory: the declared ones and the local `.blueprint`.
+   * The dev blueprint (`JHIPSTER_DEV_BLUEPRINT`) is deliberately not affected — it is the generator's own code
+   * rather than the project's, and CI relies on it.
+   * The CLI resolves this from the `--disable-blueprints` flag and the invoked command; defaults to `false`.
    */
   disableBlueprints?: boolean;
 };
@@ -136,12 +138,7 @@ export default class EnvironmentBuilder {
     this.env = env;
   }
 
-  async prepare({
-    blueprints,
-    lookups,
-    devBlueprintPath = jhipsterDevBlueprintPath,
-    disableBlueprints = this._getDisableBlueprintsFromArgv(),
-  }: PrepareOptions = {}) {
+  async prepare({ blueprints, lookups, devBlueprintPath = jhipsterDevBlueprintPath, disableBlueprints = false }: PrepareOptions = {}) {
     this.disableBlueprints = disableBlueprints;
     const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
@@ -373,14 +370,6 @@ export default class EnvironmentBuilder {
       return [];
     }
     return blueprintNames.map(v => parseBlueprintInfo(v));
-  }
-
-  /**
-   * Detect the `--disable-blueprints` flag from argv.
-   * At this point, commander has not parsed yet because we are building it.
-   */
-  private _getDisableBlueprintsFromArgv(): boolean {
-    return process.argv.includes('--disable-blueprints');
   }
 
   /**

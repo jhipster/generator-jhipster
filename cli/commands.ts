@@ -128,6 +128,8 @@ Examples:
   },
   info: {
     desc: 'Display information about your current project and system',
+    // `info` is a read-only diagnostic; it must not load or execute blueprints from the project.
+    disableBlueprints: true,
   },
   init: {
     desc: 'Init project (alpha)',
