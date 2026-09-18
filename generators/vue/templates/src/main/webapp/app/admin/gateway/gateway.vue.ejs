@@ -21,7 +21,7 @@
                     <td>{{route.path}}</td>
                     <td>{{route.serviceId}}</td>
                     <td>
-                        <div v-if="route.serviceInstances.length === 0" class="label label-danger">{{ t$('gateway.routes.error') }}</div>
+                        <div v-if="route.serviceInstances.length === 0" class="badge bg-danger">{{ t$('gateway.routes.error') }}</div>
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <tr v-for="instance of route.serviceInstances" :key="instance.uri">
@@ -32,8 +32,8 @@
                                     </td>
                                     <td>
                                         <span v-for="(entry, key) of instance.metadata" :key="key">
-                                            <span class="badge bg-default font-weight-normal">
-                                                <span class="badge rounded-pill bg-info font-weight-normal">{{key}}</span>
+                                            <span class="badge bg-default fw-normal">
+                                                <span class="badge rounded-pill bg-info fw-normal">{{key}}</span>
                                                 <span class="text-secondary">{{ entry }}</span>
                                             </span>
                                         </span>
