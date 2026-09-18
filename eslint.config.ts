@@ -10,7 +10,7 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 
 import { jsRules } from './lib/eslint/base.ts';
-import jhipster from './lib/eslint/index.ts';
+import jhipster, { plugin as jhipsterPlugin } from './lib/eslint/index.ts';
 
 const tsFiles = ['**/*.{ts,mts,cts}'];
 const jsFiles = ['**/*.{js,cjs,mjs}'];
@@ -40,6 +40,19 @@ export default defineConfig(
     plugins: { n },
     rules: {
       'n/prefer-node-protocol': 'error',
+    },
+  },
+  {
+    files: ['generators/**/generator.ts'],
+    ignores: [
+      // The base classes define the priority API itself: each `as<Priority>TaskGroup` helper is deliberately
+      // paired with the priority it types, so their members are not in running order and are not meant to be.
+      'generators/base/generator.ts',
+      'generators/base-*/generator.ts',
+    ],
+    plugins: { jhipster: jhipsterPlugin },
+    rules: {
+      'jhipster/task-group-order': 'error',
     },
   },
   {

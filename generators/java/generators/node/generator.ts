@@ -99,31 +99,6 @@ export default class NodeGenerator extends JavaApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  useNpmWrapperInstallTask() {
-    this.setFeatures({
-      customInstallTask: async (preferredPm, defaultInstallTask) => {
-        const { buildTool } = this.jhipsterConfigWithDefaults;
-        if (
-          (preferredPm && preferredPm !== 'npm') ||
-          (this.jhipsterConfig as any).skipClient ||
-          (buildTool !== 'gradle' && buildTool !== 'maven')
-        ) {
-          await defaultInstallTask();
-          return;
-        }
-
-        const npmCommand = isWin32 ? 'npmw' : './npmw';
-        try {
-          await this.spawn(npmCommand, ['install'], { preferLocal: true, stdio: 'inherit' });
-        } catch (error: unknown) {
-          this.log.error(
-            chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${(error as ExecaError).shortMessage})`),
-          );
-        }
-      },
-    });
-  }
-
   get postWriting() {
     return this.asPostWritingTaskGroup({
       nodeGradlePlugin({ application, source }) {
@@ -353,5 +328,30 @@ export default class NodeGenerator extends JavaApplicationGenerator {
 
   get [JavaApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  useNpmWrapperInstallTask() {
+    this.setFeatures({
+      customInstallTask: async (preferredPm, defaultInstallTask) => {
+        const { buildTool } = this.jhipsterConfigWithDefaults;
+        if (
+          (preferredPm && preferredPm !== 'npm') ||
+          (this.jhipsterConfig as any).skipClient ||
+          (buildTool !== 'gradle' && buildTool !== 'maven')
+        ) {
+          await defaultInstallTask();
+          return;
+        }
+
+        const npmCommand = isWin32 ? 'npmw' : './npmw';
+        try {
+          await this.spawn(npmCommand, ['install'], { preferLocal: true, stdio: 'inherit' });
+        } catch (error: unknown) {
+          this.log.error(
+            chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${(error as ExecaError).shortMessage})`),
+          );
+        }
+      },
+    });
   }
 }

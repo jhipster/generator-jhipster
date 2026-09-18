@@ -55,26 +55,6 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
-  get configuringEachEntity() {
-    return this.asConfiguringEachEntityTaskGroup({
-      checkEntities({ entityName, entityConfig }) {
-        if (entityConfig.pagination && entityConfig.pagination !== NO_PAGINATION) {
-          const errorMessage = `Pagination is not supported for entity ${entityName} when the app uses Cassandra.`;
-          if (!this.skipChecks) {
-            throw new Error(errorMessage);
-          }
-
-          this.log.warn(errorMessage);
-          entityConfig.pagination = 'no';
-        }
-      },
-    });
-  }
-
-  get [SpringBootApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
-  }
-
   get composing() {
     return this.asComposingTaskGroup({
       async liquibase() {
@@ -105,6 +85,26 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      checkEntities({ entityName, entityConfig }) {
+        if (entityConfig.pagination && entityConfig.pagination !== NO_PAGINATION) {
+          const errorMessage = `Pagination is not supported for entity ${entityName} when the app uses Cassandra.`;
+          if (!this.skipChecks) {
+            throw new Error(errorMessage);
+          }
+
+          this.log.warn(errorMessage);
+          entityConfig.pagination = 'no';
+        }
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
   get writing() {
@@ -148,24 +148,6 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
-  }
-
-  get postWritingEntities() {
-    return this.asPostWritingEntitiesTaskGroup({
-      addLiquibaseChangelogs({ application, entities, source }) {
-        if (!application.databaseMigrationLiquibase) return;
-        for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn && !entity.skipDbChangelog)) {
-          (source as LiquibaseSource).addLiquibaseChangelog?.({
-            changelogName: `${entity.changelogDate}_added_entity_${entity.entityClass}`,
-            section: 'base',
-          });
-        }
-      },
-    });
-  }
-
-  get [SpringBootApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
   get postWriting() {
@@ -221,5 +203,23 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      addLiquibaseChangelogs({ application, entities, source }) {
+        if (!application.databaseMigrationLiquibase) return;
+        for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn && !entity.skipDbChangelog)) {
+          (source as LiquibaseSource).addLiquibaseChangelog?.({
+            changelogName: `${entity.changelogDate}_added_entity_${entity.entityClass}`,
+            section: 'base',
+          });
+        }
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 }

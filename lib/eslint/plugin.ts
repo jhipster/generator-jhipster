@@ -16,15 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { ESLint } from 'eslint';
 
-import type { Config } from 'eslint/config';
+import taskGroupOrder from './rules/task-group-order.ts';
 
-import base from './base.ts';
-import plugin from './plugin.ts';
-import recommended from './recommended.ts';
+/**
+ * Rules for generator sources, published so blueprints can hold themselves to the same conventions.
+ */
+const plugin: ESLint.Plugin = {
+  rules: {
+    'task-group-order': taskGroupOrder,
+  },
+};
 
-const configs: { recommended: Config; base: Config } = { recommended, base };
-
-export { plugin };
-
-export default configs;
+export default plugin;
