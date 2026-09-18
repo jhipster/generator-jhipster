@@ -82,7 +82,7 @@
       "averageRemoveTime": "Temps de suppression moyen (µs)"
     },
     "datasource": {
-      "usage": "Usage du Pool de connexion",
+      "usage": "Utilisation du pool de connexions",
       "title": "Statistiques du pool de connexions (temps en millisecondes)",
       "name": "Utilisation du pool",
       "count": "Total",
