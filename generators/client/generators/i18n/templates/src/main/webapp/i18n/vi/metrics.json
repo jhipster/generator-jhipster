@@ -66,14 +66,6 @@
         "p99": "99%"
       }
     },
-    "ehcache": {
-      "title": "Thống kê Ehcache",
-      "cachename": "Tên cache",
-      "objects": "Các đối tượng",
-      "hits": "Tìm thấy",
-      "misses": "Không tìm thấy",
-      "evictioncount": "Xóa khỏi cache"
-    },
     "cache": {
       "title": "Cache statistics",
       "cachename": "Cache name",
