@@ -8,6 +8,7 @@
       "options": [
         "ng-default",
         "ng-default-additional",
+        "ng-default-additional-playwright",
         "ng-mysql-es-noi18n-mapsid",
         "ng-mongodb-kafka-cucumber",
         "ng-h2mem-ws-nol2",
@@ -22,6 +23,7 @@
         "ng-webflux-psql-additional",
         "ng-webflux-gradle-session-h2mem-es",
         "ng-webflux-couchbase",
+        "ng-default-windows",
         "ms-ng-oauth2-mongodb-caffeine",
         "mf-ng-eureka-jwt-psql-ehcache",
         "ms-mf-ng-consul-oauth2-neo4j"
@@ -36,6 +38,7 @@
         "react-maven-h2mem-memcached",
         "react-gradle-mysql-es-noi18n-mapsid",
         "react-gradle-cassandra-session-redis",
+        "react-default-windows",
         "ms-react-consul-jwt-cassandra-redis",
         "ms-mf-react-eureka-oauth2-mariadb-infinispan"
       ]
@@ -50,11 +53,45 @@
         "vue-noi18n-mysql-ws-oauth2",
         "vue-fulli18n-mysql-es",
         "vue-gradle-h2mem-ws-session",
-        "vue-h2disk-ws-theme",
-        "vue-session-cassandra-fr",
+        "vue-rsbuild-h2disk-ws-theme",
+        "vue-oauth2-cassandra-fr",
+        "vue-default-windows",
         "ms-vue-eureka-jwt-couchbase-hazelcast",
         "ms-mf-vue-consul-oauth2-mysql-memcached",
         "stack-vue-no-db"
+      ]
+    },
+    {
+      "id": "daily-couchbaseSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-ngx-couchbase", "daily-gradle-ngx-couchbase", "daily-webflux-couchbase"]
+    },
+    {
+      "id": "daily-elasticsearchSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-ng-mysql-es-noi18n-mapsid", "daily-gradle-ngx-psql-es-noi18n"]
+    },
+    {
+      "id": "daily-monolith-oauth2Sample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-ngx-oauth2", "daily-react-oauth2", "daily-gradle-ngx-oauth2", "daily-gradle-react-oauth2"]
+    },
+    {
+      "id": "daily-ms-jwtSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-ms-ngx-gateway-eureka",
+        "daily-ms-micro-eureka",
+        "daily-ms-ngx-gateway-consul",
+        "daily-ms-micro-consul",
+        "daily-gradle-ms-ngx-gateway-eureka",
+        "daily-gradle-ms-micro-eureka",
+        "daily-gradle-ms-ngx-gateway-consul",
+        "daily-gradle-ms-micro-consul"
       ]
     },
     {
@@ -84,6 +121,145 @@
         "daily-vue-maven-neo4j",
         "daily-vue-gradle-neo4j",
         "daily-webflux-neo4j"
+      ]
+    },
+    {
+      "id": "daily-ng-gradle-nosqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-gradle-ngx-mongodb", "daily-gradle-ngx-cassandra"]
+    },
+    {
+      "id": "daily-ng-gradle-sqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-gradle-ngx-mysql",
+        "daily-gradle-ngx-sass-noi18n",
+        "daily-gradle-ngx-websocket",
+        "daily-gradle-ngx-hazelcast-cucumber",
+        "daily-gradle-ngx-mariadb-kafka-nol2",
+        "daily-gradle-ngx-session",
+        "daily-gradle-ngx-infinispan"
+      ]
+    },
+    {
+      "id": "daily-ng-maven-nosqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-ngx-mongodb", "daily-ngx-cassandra"]
+    },
+    {
+      "id": "daily-ng-maven-sqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-ngx-mysql",
+        "daily-ngx-sass-noi18n",
+        "daily-ngx-websocket",
+        "daily-ngx-hazelcast-cucumber",
+        "daily-ngx-mariadb-kafka-nol2",
+        "daily-ngx-session",
+        "daily-ngx-infinispan"
+      ]
+    },
+    {
+      "id": "daily-no-databaseSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-ngx-nodatabase-jwt",
+        "daily-ngx-nodatabase-oauth2",
+        "daily-ngx-nodatabase-session",
+        "daily-ngx-nodatabase-gateway-eureka-oauth2",
+        "daily-react-nodatabase-jwt-gradle",
+        "daily-react-nodatabase-oauth2-gradle",
+        "daily-react-nodatabase-session-gradle",
+        "daily-gradle-ngx-nodatabase-gateway-consul-jwt"
+      ]
+    },
+    {
+      "id": "daily-react-gradle-nosqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-gradle-react-mongodb", "daily-gradle-react-cassandra"]
+    },
+    {
+      "id": "daily-react-gradle-sqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-gradle-react-mysql",
+        "daily-gradle-react-sass-noi18n",
+        "daily-gradle-react-websocket",
+        "daily-gradle-react-hazelcast-cucumber",
+        "daily-gradle-react-mariadb-kafka-nol2",
+        "daily-gradle-react-session",
+        "daily-gradle-react-infinispan"
+      ]
+    },
+    {
+      "id": "daily-react-maven-nosqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-react-mongodb", "daily-react-cassandra"]
+    },
+    {
+      "id": "daily-react-maven-sqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-react-mysql",
+        "daily-react-sass-noi18n",
+        "daily-react-websocket",
+        "daily-react-hazelcast-cucumber",
+        "daily-react-mariadb-kafka",
+        "daily-react-session",
+        "daily-react-infinispan"
+      ]
+    },
+    {
+      "id": "daily-vue-gradle-nosqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-vue-gradle-mongodb", "daily-vue-gradle-cassandra"]
+    },
+    {
+      "id": "daily-vue-gradle-sqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-vue-gradle-psql",
+        "daily-vue-gradle-mysql",
+        "daily-vue-gradle-noi18n",
+        "daily-vue-gradle-fulli18n-fr",
+        "daily-vue-gradle-oauth2",
+        "daily-vue-gradle-session",
+        "daily-vue-gradle-es",
+        "daily-vue-gradle-websocket",
+        "daily-vue-gradle-theme"
+      ]
+    },
+    {
+      "id": "daily-vue-maven-nosqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": ["daily-vue-maven-mongodb", "daily-vue-maven-cassandra"]
+    },
+    {
+      "id": "daily-vue-maven-sqlSample",
+      "type": "pickString",
+      "description": "Sample to be generated",
+      "options": [
+        "daily-vue-maven-psql",
+        "daily-vue-maven-mysql",
+        "daily-vue-maven-noi18n",
+        "daily-vue-maven-fulli18n-fr",
+        "daily-vue-maven-oauth2",
+        "daily-vue-maven-session",
+        "daily-vue-maven-es",
+        "daily-vue-maven-websocket",
+        "daily-vue-maven-theme"
       ]
     }
   ],
@@ -128,6 +304,42 @@
       "type": "node",
       "request": "launch",
       "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-couchbase workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-couchbaseSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-elasticsearch workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-elasticsearchSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-monolith-oauth2 workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-monolith-oauth2Sample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-ms-jwt workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-ms-jwtSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
       "name": "generate sample from daily-ms-oauth2 workflow",
       "program": "${workspaceFolder}/bin/jhipster.cjs",
       "args": ["generate-sample", "${input:daily-ms-oauth2Sample}", "--global"],
@@ -140,6 +352,123 @@
       "name": "generate sample from daily-neo4j workflow",
       "program": "${workspaceFolder}/bin/jhipster.cjs",
       "args": ["generate-sample", "${input:daily-neo4jSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-ng-gradle-nosql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-ng-gradle-nosqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-ng-gradle-sql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-ng-gradle-sqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-ng-maven-nosql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-ng-maven-nosqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-ng-maven-sql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-ng-maven-sqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-no-database workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-no-databaseSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-react-gradle-nosql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-react-gradle-nosqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-react-gradle-sql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-react-gradle-sqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-react-maven-nosql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-react-maven-nosqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-react-maven-sql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-react-maven-sqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-vue-gradle-nosql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-vue-gradle-nosqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-vue-gradle-sql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-vue-gradle-sqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-vue-maven-nosql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-vue-maven-nosqlSample}", "--global"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "internalConsoleOptions": "neverOpen",
+      "name": "generate sample from daily-vue-maven-sql workflow",
+      "program": "${workspaceFolder}/bin/jhipster.cjs",
+      "args": ["generate-sample", "${input:daily-vue-maven-sqlSample}", "--global"],
       "console": "integratedTerminal"
     }
   ]
