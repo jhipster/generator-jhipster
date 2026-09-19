@@ -180,7 +180,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.postPreparing;
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get preparingEachEntity() {
