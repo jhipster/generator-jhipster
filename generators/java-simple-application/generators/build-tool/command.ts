@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/types.ts';
+import { ALPHANUMERIC_PATTERN } from '../../../../lib/constants/jdl.ts';
 import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
@@ -27,6 +28,11 @@ const command = {
       cli: {
         name: 'build',
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       prompt: {
         type: 'select',

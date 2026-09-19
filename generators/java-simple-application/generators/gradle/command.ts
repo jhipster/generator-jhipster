@@ -24,6 +24,10 @@ const command = {
       cli: {
         type: Boolean,
       },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       prompt: {
         type: 'confirm',
         message: 'Do you want to enable Gradle Develocity integration?',

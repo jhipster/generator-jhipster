@@ -32,7 +32,6 @@ const {
   BASE_NAME,
   BLUEPRINT,
   BLUEPRINTS,
-  BUILD_TOOL,
   DTO_SUFFIX,
   ENTITY_SUFFIX,
   GATEWAY_SERVER_PORT,
@@ -45,7 +44,6 @@ const {
   SKIP_SERVER,
   SKIP_USER_MANAGEMENT,
   TEST_FRAMEWORKS,
-  ENABLE_GRADLE_DEVELOCITY,
   GRADLE_DEVELOCITY_HOST,
 } = OptionNames;
 
@@ -58,7 +56,6 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'BLUEPRINT', pattern: BLUEPRINT },
     { name: 'GATEWAY_SERVER_PORT', pattern: GATEWAY_SERVER_PORT },
     { name: 'AUTHENTICATION_TYPE', pattern: AUTHENTICATION_TYPE },
-    { name: 'BUILD_TOOL', pattern: BUILD_TOOL },
     { name: 'APPLICATION_TYPE', pattern: APPLICATION_TYPE },
     { name: 'TEST_FRAMEWORKS', pattern: TEST_FRAMEWORKS },
     { name: 'SERVER_PORT', pattern: SERVER_PORT },
@@ -72,7 +69,6 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
     { name: 'SKIP_SERVER', pattern: SKIP_SERVER },
     { name: 'REMEMBER_ME_KEY', pattern: REMEMBER_ME_KEY },
-    { name: 'ENABLE_GRADLE_DEVELOCITY', pattern: ENABLE_GRADLE_DEVELOCITY },
     { name: 'GRADLE_DEVELOCITY_HOST', pattern: GRADLE_DEVELOCITY_HOST },
     ...tokenConfigs,
   ];

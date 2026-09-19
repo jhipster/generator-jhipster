@@ -235,7 +235,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.BASE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINT]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.BUILD_TOOL]: { type: ApplicationOptionTypes.STRING },
   [optionNames.DTO_SUFFIX]: { type: ApplicationOptionTypes.STRING },
   [optionNames.ENTITY_SUFFIX]: { type: ApplicationOptionTypes.STRING },
   [optionNames.EXPERIMENTAL]: { type: ApplicationOptionTypes.BOOLEAN },
@@ -255,7 +254,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_USER_MANAGEMENT]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.ENABLE_GRADLE_DEVELOCITY]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.GRADLE_DEVELOCITY_HOST]: { type: ApplicationOptionTypes.STRING },
 };
 

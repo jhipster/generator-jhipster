@@ -51,11 +51,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
     msg: 'blueprints property',
   },
-  BUILD_TOOL: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'buildTool property',
-  },
   ENTITY_SUFFIX: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
@@ -102,7 +97,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC,
     msg: 'testFrameworks property',
   },
-  ENABLE_GRADLE_DEVELOCITY: { type: 'BOOLEAN' },
   GRADLE_DEVELOCITY_HOST: {
     type: 'STRING',
     pattern: JWT_SECRET_KEY_PATTERN,
