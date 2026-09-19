@@ -53,6 +53,12 @@ type VisitorContext = {
   // applicationSubDeclaration?: CstNode[];
 };
 
+/**
+ * Drop the quotes of a STRING token. The content is kept as written, an escaped quote stays `\"`: a
+ * `@MapstructExpression` is copied into a java string literal.
+ */
+const parseStringLiteral = (image: string): string => image.slice(1, -1);
+
 export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
 
@@ -213,8 +219,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         case 'FALSE':
           optionValue = false;
           break;
+        case 'STRING':
+          optionValue = parseStringLiteral(valueImage);
+          break;
         default:
-          optionValue = valueImage.replace(/"/g, '');
+          optionValue = valueImage;
       }
       return { optionName, optionValue, type: 'BINARY' };
     }
@@ -634,8 +643,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         return context.INTEGER[0].image;
       }
       if (context.STRING) {
-        const stringImage = context.STRING[0].image;
-        return stringImage.substring(1, stringImage.length - 1);
+        return parseStringLiteral(context.STRING[0].image);
       }
       if (context.BOOLEAN) {
         return context.BOOLEAN[0].image === 'true';
@@ -683,8 +691,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         return context.INTEGER[0].image;
       }
       if (context.STRING) {
-        const stringImage = context.STRING[0].image;
-        return stringImage.substring(1, stringImage.length - 1);
+        return parseStringLiteral(context.STRING[0].image);
       }
       if (context.BOOLEAN) {
         return context.BOOLEAN[0].image === 'true';
@@ -709,7 +716,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       if (!context.STRING) {
         return [];
       }
-      return context.STRING.map(namePart => namePart.image.slice(1, -1));
+      return context.STRING.map(namePart => parseStringLiteral(namePart.image));
     }
   }
 

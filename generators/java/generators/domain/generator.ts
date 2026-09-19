@@ -73,6 +73,12 @@ export default class DomainGenerator extends JavaApplicationGenerator {
           field.propertyDtoJavaType = field.fieldTypeBlobContent === 'text' ? 'String' : field.fieldType;
         }
       },
+      normalizeMapstructExpression({ field }) {
+        if (field.mapstructExpression) {
+          // The expression is written inside a java string literal: every quote must be escaped exactly once, whatever the JDL or json escaping was.
+          field.mapstructExpression = field.mapstructExpression.replace(/\\*"/g, '\\"');
+        }
+      },
     });
   }
 
