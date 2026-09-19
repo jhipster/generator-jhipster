@@ -235,13 +235,10 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.BASE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINT]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.DTO_SUFFIX]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.ENTITY_SUFFIX]: { type: ApplicationOptionTypes.STRING },
   [optionNames.EXPERIMENTAL]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.GATEWAY_SERVER_PORT]: { type: ApplicationOptionTypes.INTEGER },
   [optionNames.I_18_N]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.INSTALL_MODULES]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.JHI_PREFIX]: { type: ApplicationOptionTypes.STRING },
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
   [optionNames.JWT_SECRET_KEY]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PACKAGE_FOLDER]: { type: ApplicationOptionTypes.STRING },
@@ -252,7 +249,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.SKIP_INSTALL]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_USER_MANAGEMENT]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
 };
 
 export const jhipsterQuotedOptionNames: string[] = [optionNames.JHIPSTER_VERSION, optionNames.JWT_SECRET_KEY];

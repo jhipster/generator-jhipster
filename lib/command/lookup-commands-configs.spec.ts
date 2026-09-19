@@ -31,6 +31,10 @@ describe('jdl options', () => {
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
+  "jhiPrefix",
+  "entitySuffix",
+  "dtoSuffix",
+  "testFrameworks",
   "nodePackageManager",
   "creationTimestamp",
   "removeNeedles",
@@ -92,6 +96,10 @@ describe('jdl options', () => {
           'websocket',
           'rememberMeKey',
           'gradleDevelocityHost',
+          'jhiPrefix',
+          'entitySuffix',
+          'dtoSuffix',
+          'testFrameworks',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.

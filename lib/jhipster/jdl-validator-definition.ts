@@ -20,7 +20,6 @@
 import { ALPHABETIC, ALPHABETIC_LOWER, ALPHANUMERIC, ALPHANUMERIC_UNDERSCORE } from '../jdl/core/built-in-options/validation-patterns.ts';
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
-const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
@@ -50,16 +49,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
     msg: 'blueprints property',
   },
-  ENTITY_SUFFIX: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'entitySuffix property',
-  },
-  DTO_SUFFIX: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'dtoSuffix property',
-  },
   FRONT_END_BUILDER: {
     type: 'NAME',
     pattern: ALPHABETIC,
@@ -67,11 +56,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   },
   GATEWAY_SERVER_PORT: { type: 'INTEGER' },
   JHIPSTER_VERSION: { type: 'STRING' },
-  JHI_PREFIX: {
-    type: 'NAME',
-    pattern: JHI_PREFIX_NAME_PATTERN,
-    msg: 'jhiPrefix property',
-  },
   JWT_SECRET_KEY: {
     type: 'STRING',
     pattern: JWT_SECRET_KEY_PATTERN,
@@ -86,9 +70,4 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   SKIP_CLIENT: { type: 'BOOLEAN' },
   SKIP_SERVER: { type: 'BOOLEAN' },
   SKIP_USER_MANAGEMENT: { type: 'BOOLEAN' },
-  TEST_FRAMEWORKS: {
-    type: 'list',
-    pattern: ALPHANUMERIC,
-    msg: 'testFrameworks property',
-  },
 };

@@ -32,17 +32,13 @@ const {
   BASE_NAME,
   BLUEPRINT,
   BLUEPRINTS,
-  DTO_SUFFIX,
-  ENTITY_SUFFIX,
   GATEWAY_SERVER_PORT,
   JHIPSTER_VERSION,
-  JHI_PREFIX,
   JWT_SECRET_KEY,
   SERVER_PORT,
   SKIP_CLIENT,
   SKIP_SERVER,
   SKIP_USER_MANAGEMENT,
-  TEST_FRAMEWORKS,
 } = OptionNames;
 
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
@@ -55,15 +51,11 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'GATEWAY_SERVER_PORT', pattern: GATEWAY_SERVER_PORT },
     { name: 'AUTHENTICATION_TYPE', pattern: AUTHENTICATION_TYPE },
     { name: 'APPLICATION_TYPE', pattern: APPLICATION_TYPE },
-    { name: 'TEST_FRAMEWORKS', pattern: TEST_FRAMEWORKS },
     { name: 'SERVER_PORT', pattern: SERVER_PORT },
-    { name: 'JHI_PREFIX', pattern: JHI_PREFIX },
     { name: 'JWT_SECRET_KEY', pattern: JWT_SECRET_KEY },
     { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
     { name: 'FRONT_END_BUILDER', pattern: 'frontendBuilder' }, // TODO always valid?
     { name: 'SKIP_USER_MANAGEMENT', pattern: SKIP_USER_MANAGEMENT },
-    { name: 'ENTITY_SUFFIX', pattern: ENTITY_SUFFIX },
-    { name: 'DTO_SUFFIX', pattern: DTO_SUFFIX },
     { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
     { name: 'SKIP_SERVER', pattern: SKIP_SERVER },
     ...tokenConfigs,

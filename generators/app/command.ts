@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHANUMERIC_PATTERN, JHI_PREFIX_NAME_PATTERN } from '../../lib/constants/jdl.ts';
 
 const command = {
   configs: {
@@ -25,6 +26,11 @@ const command = {
         description: 'Add prefix before services, controllers and states name',
         type: String,
       },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: JHI_PREFIX_NAME_PATTERN,
+      },
       scope: 'storage',
     },
     entitySuffix: {
@@ -32,12 +38,22 @@ const command = {
         description: 'Add suffix after entities name',
         type: String,
       },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
       scope: 'storage',
     },
     dtoSuffix: {
       cli: {
         description: 'Add suffix after dtos name',
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       scope: 'storage',
     },
@@ -52,6 +68,11 @@ const command = {
       description: 'Test frameworks to be generated',
       cli: {
         type: Array,
+      },
+      jdl: {
+        type: 'list',
+        tokenType: 'list',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       configure(gen, value) {
         if (value) {

@@ -18,6 +18,7 @@
  */
 import { snakeCase, upperCase } from 'lodash-es';
 
+import appCommand from '../../generators/app/command.ts';
 import baseCommand from '../../generators/base/command.ts';
 import bootstrapCommand from '../../generators/bootstrap/command.ts';
 import clientCommand from '../../generators/client/command.ts';
@@ -82,6 +83,7 @@ let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
 export const getDefaultJDLApplicationConfig = () => {
   defaultJDLApplicationConfig ??= Object.freeze(
     buildJDLApplicationConfig({
+      ...appCommand.configs,
       ...springBootCommand.configs,
       ...bootstrapCommand.configs,
       ...baseCommand.configs,
