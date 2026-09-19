@@ -22,6 +22,7 @@ import fs from 'node:fs';
 
 import helpers from 'yeoman-test';
 
+import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
 import { JDLEntity } from '../../core/models/index.ts';
 import JDLApplication from '../../core/models/jdl-application.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
@@ -30,7 +31,7 @@ import { createRuntime } from '../../core/runtime.ts';
 
 import exportToJDL from './jdl-exporter.ts';
 
-const runtime = createRuntime();
+const runtime = createRuntime(getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLExporter', () => {
   beforeEach(async () => {

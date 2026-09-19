@@ -32,8 +32,14 @@ describe('jdl options', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
   "removeNeedles",
+  "clientFramework",
   "clientBundler",
+  "microfrontend",
+  "microfrontends",
   "clientTestFramework",
+  "withAdminUi",
+  "clientTheme",
+  "clientThemeVariant",
   "graalvmSupport",
   "incrementalChangelog",
   "feignClient",
@@ -54,8 +60,8 @@ describe('jdl options', () => {
     }
 
     if (!choices) {
-      if (['routes'].includes(optionName)) {
-        // Option is manually tested.
+      if (['routes', 'clientTheme', 'microfrontends'].includes(optionName)) {
+        // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
         continue;
       }
       throw new Error(`No choices found for ${optionName}`);

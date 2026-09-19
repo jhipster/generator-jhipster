@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import { intersection } from 'lodash-es';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHANUMERIC_PATTERN, ALPHANUMERIC_UNDERSCORE_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 
@@ -46,6 +46,11 @@ const command = {
       description: 'Provide client framework for the application',
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       prompt: generator => ({
         type: 'select',
@@ -94,6 +99,10 @@ const command = {
       cli: {
         type: Boolean,
       },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'confirm',
         when: answers =>
@@ -108,6 +117,11 @@ const command = {
       description: 'Microfrontends to load',
       cli: {
         type: (val: string) => promptValueToMicrofrontends(val),
+      },
+      jdl: {
+        type: 'list',
+        tokenType: 'list',
+        tokenValuePattern: ALPHANUMERIC_UNDERSCORE_PATTERN,
       },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => {
@@ -165,6 +179,10 @@ const command = {
       cli: {
         type: Boolean,
       },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'confirm',
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
@@ -176,6 +194,11 @@ const command = {
       cli: {
         type: String,
         hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       prompt: generator => ({
         type: 'select',
@@ -189,6 +212,11 @@ const command = {
       cli: {
         type: String,
         hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'select',

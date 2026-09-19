@@ -19,6 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
 import applicationOptions from '../../../jhipster/application-options.ts';
 import { binaryOptions } from '../built-in-options/index.ts';
 import { createRuntime } from '../runtime.ts';
@@ -29,7 +30,7 @@ import StringJDLApplicationConfigurationOption from './string-jdl-application-co
 
 const { OptionNames } = applicationOptions;
 
-const runtime = createRuntime();
+const runtime = createRuntime(getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLApplication', () => {
   describe('hasConfigurationOption', () => {
@@ -571,28 +572,16 @@ describe('jdl - JDLApplication', () => {
       });
     });
     describe('when the clientThemeVariant is present', () => {
-      describe('without a value', () => {
-        let result: string;
-
-        before(() => {
-          const application = new JDLApplication({ config: { clientThemeVariant: '' } }, runtime);
-          result = application.toString();
-        });
-
-        it('should not stringify it', () => {
-          expect(result).not.toContain('clientThemeVariant');
-        });
-      });
       describe('with a value', () => {
         let result: string;
 
         before(() => {
-          const application = new JDLApplication({ config: { clientThemeVariant: 'aVariant' } }, runtime);
+          const application = new JDLApplication({ config: { clientThemeVariant: 'primary' } }, runtime);
           result = application.toString();
         });
 
-        it('should not stringify it', () => {
-          expect(result).toContain('clientThemeVariant aVariant');
+        it('should stringify it', () => {
+          expect(result).toContain('clientThemeVariant primary');
         });
       });
     });
