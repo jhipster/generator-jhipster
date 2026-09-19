@@ -131,6 +131,7 @@ type GeneratorsByNamespace = {
   kubernetes: import('./kubernetes/generator.ts').default;
   'jhipster:kubernetes': import('./kubernetes/generator.ts').default;
   'jhipster:kubernetes:bootstrap': import('./kubernetes/generators/bootstrap/generator.ts').default;
+  'jhipster:kubernetes:common': import('./kubernetes/generators/common/generator.ts').default;
   'jhipster:kubernetes:helm': import('./kubernetes/generators/helm/generator.ts').default;
   'jhipster:kubernetes:knative': import('./kubernetes/generators/knative/generator.ts').default;
   languages: import('./languages/generator.ts').default;

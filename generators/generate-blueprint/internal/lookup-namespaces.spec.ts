@@ -95,6 +95,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "jdl:bootstrap",
   "kubernetes",
   "kubernetes:bootstrap",
+  "kubernetes:common",
   "kubernetes:helm",
   "kubernetes:knative",
   "languages",

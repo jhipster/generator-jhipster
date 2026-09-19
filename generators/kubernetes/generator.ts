@@ -22,29 +22,9 @@ import chalk from 'chalk';
 import { buildToolTypes } from '../../lib/jhipster/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
 import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.ts';
-import {
-  askForAdminPassword,
-  askForApplicationType,
-  askForApps,
-  askForClustersMode,
-  askForDockerPushCommand,
-  askForDockerRepositoryName,
-  askForMonitoring,
-  askForPath,
-  askForServiceDiscovery,
-} from '../base-workspaces/internal/docker-prompts.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-boot/generators/data-relational/support/index.ts';
 
 import { applicationFiles, writeDeploymentFiles } from './files.ts';
-import {
-  askForIngressDomain,
-  askForIngressType,
-  askForIstioSupport,
-  askForKubernetesNamespace,
-  askForKubernetesServiceType,
-  askForPersistentStorage,
-  askForStorageClassName,
-} from './prompts.ts';
 import type {
   Config as KubernetesConfig,
   Deployment as KubernetesDeployment,
@@ -68,6 +48,8 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.dependsOnJHipster('jhipster:kubernetes:bootstrap');
+      const common = await this.dependsOnJHipster('jhipster:kubernetes:common');
+      common.target = 'kubernetes';
       await this.composeWithBlueprints();
     }
   }
@@ -83,40 +65,6 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      askForApplicationType,
-      askForPath,
-      askForApps,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get promptingWorkspaces() {
-    return this.asPromptingWorkspacesTaskGroup({
-      askForMonitoring,
-      askForClustersMode,
-      askForServiceDiscovery,
-      askForAdminPassword,
-      askForKubernetesNamespace,
-      askForDockerRepositoryName,
-      askForDockerPushCommand,
-      askForIstioSupport,
-      askForKubernetesServiceType,
-      askForIngressType,
-      askForIngressDomain,
-      askForPersistentStorage,
-      askForStorageClassName,
-    });
-  }
-
-  get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
-    return this.delegateTasksToBlueprint(() => this.promptingWorkspaces);
   }
 
   get preparingWorkspaces() {

@@ -1273,6 +1273,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/kubernetes/generators/bootstrap/templates/template-file-kubernetes:bootstrap.ejs": {
     "stateCleared": "modified",
   },
+  "generators/kubernetes/generators/common/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/common/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/common/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/common/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/common/templates/template-file-kubernetes:common.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/kubernetes/generators/helm/command.ts": {
     "stateCleared": "modified",
   },
