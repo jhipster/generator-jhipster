@@ -29,62 +29,45 @@ const baseSearchApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search?query=
 
 export default class <%- entityAngularName %>Service {
 <%_ if (searchEngineAny) { _%>
-  search(query<%- paginationNo ? '' : ', paginationQuery' %>) : Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      axios.get(`${baseSearchApiUrl}${query}<%- paginationNo ? '' : '&${buildPaginationQueryOpts(paginationQuery)}' %>`).then(res => {
-        resolve(<%- paginationNo ? 'res.data' : 'res' %>);
-      }).catch(err => { reject(err); });
-    });
+  <%_ if (paginationNo) { _%>
+  async search(query) : Promise<any> {
+    const res = await axios.get(`${baseSearchApiUrl}${query}`);
+    return res.data;
   }
+  <%_ } else { _%>
+  search(query, paginationQuery) : Promise<any> {
+    return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`);
+  }
+  <%_ } _%>
 <%_ } _%>
 
-  find(<%- primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<I<%- entityAngularName %>> {
-    return new Promise<I<%- entityAngularName %>>((resolve, reject) => {
-      axios.get(`${baseApiUrl}/${<%- primaryKey.name %>}`).then(res => {
-        resolve(res.data);
-      }).catch(err => { reject(err); });
-    });
+  async find(<%- primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<I<%- entityAngularName %>> {
+    const res = await axios.get(`${baseApiUrl}/${<%- primaryKey.name %>}`);
+    return res.data;
   }
 
   retrieve(<%- paginationNo ? '' : 'paginationQuery?: any' %>) : Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      axios.get(baseApiUrl<%- paginationNo ? '' : ' + `?${buildPaginationQueryOpts(paginationQuery)}` ' %>).then(res => {
-        resolve(res);
-      }).catch(err => { reject(err); });
-    });
+    return axios.get(baseApiUrl<%- paginationNo ? '' : ' + `?${buildPaginationQueryOpts(paginationQuery)}` ' %>);
   }
 <%_ if (!readOnly) { _%>
 
   delete(<%- primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      axios.delete(`${baseApiUrl}/${<%- primaryKey.name %>}`).then(res => {
-        resolve(res);
-      }).catch(err => { reject(err); });
-    });
+    return axios.delete(`${baseApiUrl}/${<%- primaryKey.name %>}`);
   }
 
-  create(entity: I<%- entityAngularName %>) : Promise<I<%- entityAngularName %>> {
-    return new Promise<I<%- entityAngularName %>>((resolve, reject) => {
-      axios.post(baseApiUrl, entity).then(res => {
-        resolve(res.data);
-      }).catch(err => { reject(err); });
-    });
+  async create(entity: I<%- entityAngularName %>) : Promise<I<%- entityAngularName %>> {
+    const res = await axios.post(baseApiUrl, entity);
+    return res.data;
   }
 
-  update(entity: I<%- entityAngularName %>) : Promise<I<%- entityAngularName %>> {
-    return new Promise<I<%- entityAngularName %>>((resolve, reject) => {
-      axios.put(`${baseApiUrl}/${entity.<%- primaryKey.name %>}`, entity).then(res => {
-        resolve(res.data);
-      }).catch(err => { reject(err); });
-    });
+  async update(entity: I<%- entityAngularName %>) : Promise<I<%- entityAngularName %>> {
+    const res = await axios.put(`${baseApiUrl}/${entity.<%- primaryKey.name %>}`, entity);
+    return res.data;
   }
 
-  partialUpdate(entity: I<%- entityAngularName %>) : Promise<I<%- entityAngularName %>> {
-    return new Promise<I<%- entityAngularName %>>((resolve, reject) => {
-      axios.patch(`${baseApiUrl}/${entity.<%- primaryKey.name %>}`, entity).then(res => {
-        resolve(res.data);
-      }).catch(err => { reject(err); });
-    });
+  async partialUpdate(entity: I<%- entityAngularName %>) : Promise<I<%- entityAngularName %>> {
+    const res = await axios.patch(`${baseApiUrl}/${entity.<%- primaryKey.name %>}`, entity);
+    return res.data;
   }
 <%_ } _%>
 }
