@@ -22,8 +22,8 @@
         </div>
 <%_ if (generateUserManagement) { _%>
         <div class="alert alert-warning" v-if="!authenticated">
-          <span>{{ t$('global.messages.info.register.noaccount') }}</span>&nbsp;
-          <router-link class="alert-link" to="/register"
+          <span>{{ t$('global.messages.info.register.noaccount') }}</span>
+          <router-link class="alert-link ms-1" to="/register"
             >{{ t$('global.messages.info.register.link') }}</router-link
           >
         </div>
