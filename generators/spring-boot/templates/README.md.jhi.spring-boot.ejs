@@ -281,7 +281,7 @@ docker compose -f src/main/docker/sonar.yml up -d
 
 Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
 
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)<% if (buildTool) { %> or by using the <%- buildTool === 'maven' ? 'maven' : '' %><%- buildTool === 'gradle' ? 'gradle' : '' %> plugin<% } %>.
+You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarsource.com/sonarqube-server/latest/analyzing-source-code/scanners/sonarscanner/)<% if (buildTool) { %> or by using the <%- buildTool === 'maven' ? 'maven' : '' %><%- buildTool === 'gradle' ? 'gradle' : '' %> plugin<% } %>.
 
 Then, run a Sonar analysis:
 
