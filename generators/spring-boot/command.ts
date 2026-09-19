@@ -51,6 +51,10 @@ const command = {
         description: 'Generate a reactive backend',
         type: Boolean,
       },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       prompt: gen => ({
         when: () => ['monolith', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'confirm',

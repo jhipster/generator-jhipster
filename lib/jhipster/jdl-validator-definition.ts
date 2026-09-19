@@ -64,11 +64,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC,
     msg: 'buildTool property',
   },
-  CACHE_PROVIDER: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'cacheProvider property',
-  },
   NODE_PACKAGE_MANAGER: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
@@ -78,16 +73,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     type: 'INTEGER',
     pattern: NUMERIC,
     msg: 'creationTimestamp property',
-  },
-  DATABASE_TYPE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'databaseType property',
-  },
-  DEV_DATABASE_TYPE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'devDatabaseType property',
   },
   ENTITY_SUFFIX: {
     type: 'NAME',
@@ -99,7 +84,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC,
     msg: 'dtoSuffix property',
   },
-  ENABLE_HIBERNATE_CACHE: { type: 'BOOLEAN' },
   ENABLE_SWAGGER_CODEGEN: { type: 'BOOLEAN' },
   FRONT_END_BUILDER: {
     type: 'NAME',
@@ -123,12 +107,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: PACKAGE_NAME_PATTERN,
     msg: 'packageName property',
   },
-  PROD_DATABASE_TYPE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'prodDatabaseType property',
-  },
-  REACTIVE: { type: 'BOOLEAN' },
   REMEMBER_ME_KEY: {
     type: 'STRING',
     pattern: REMEMBER_ME_KEY_PATTERN,

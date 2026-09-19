@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 import { getDBTypeFromDBValue } from './support/database.ts';
 
@@ -84,6 +85,11 @@ const command = {
         type: String,
         hide: true,
       },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
       choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
       scope: 'storage',
     },
@@ -92,6 +98,11 @@ const command = {
       cli: {
         type: String,
       },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
       choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql', 'h2Disk', 'h2Memory'],
       scope: 'storage',
     },
@@ -99,6 +110,11 @@ const command = {
       cli: {
         type: String,
         hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
       scope: 'storage',

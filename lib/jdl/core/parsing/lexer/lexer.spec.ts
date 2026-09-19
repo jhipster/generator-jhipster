@@ -73,15 +73,15 @@ describe('jdl - JDLLexer', () => {
 
     it('should lex a custom keyword declared after a shorter built-in keyword', () => {
       const runtime = createRuntime({
-        validatorConfig: { REACTIVE_FOO: { type: 'BOOLEAN' } },
+        validatorConfig: { BASE_NAME_FOO: { type: 'BOOLEAN' } },
         optionsValues: {},
         optionsTypes: {},
         quotedOptionNames: [],
-        tokenConfigs: [{ name: 'REACTIVE_FOO', pattern: 'reactiveFoo' }],
+        tokenConfigs: [{ name: 'BASE_NAME_FOO', pattern: 'baseNameFoo' }],
       });
-      const { tokens, errors } = runtime.lexer.tokenize('reactiveFoo reactive');
+      const { tokens, errors } = runtime.lexer.tokenize('baseNameFoo baseName');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['REACTIVE_FOO', 'REACTIVE']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['BASE_NAME_FOO', 'BASE_NAME']);
     });
   });
 

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
+import { ALPHANUMERIC_PATTERN } from '../../../../lib/constants/jdl.ts';
 
 const command = {
   configs: {
@@ -25,6 +26,11 @@ const command = {
       cli: {
         type: String,
       },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
       choices: ['no', 'caffeine', 'ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis'],
       scope: 'storage',
     },
@@ -32,6 +38,10 @@ const command = {
       description: 'Enable hibernate cache',
       cli: {
         type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
       },
       scope: 'storage',
     },
