@@ -19,7 +19,7 @@
 <%_ if (searchEngineAny) { _%>
         <div class="row-md">
             <div class="col-sm-12">
-                <form name="searchForm" class="form-inline" @submit.prevent="search(currentSearch)">
+                <form name="searchForm" @submit.prevent="search(currentSearch)">
                     <div class="input-group w-100 mt-3">
                         <input type="text" class="form-control" name="currentSearch" id="currentSearch"
                             :placeholder="t$('<%- i18nKeyPrefix %>.home.search')"

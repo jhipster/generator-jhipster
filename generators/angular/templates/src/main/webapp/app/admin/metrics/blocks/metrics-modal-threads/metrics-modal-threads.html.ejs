@@ -28,35 +28,35 @@
       @if (threadStateFilter === undefined) {
         <fa-icon icon="check" />
       }
-      All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpAll }}</span>
+      All&nbsp;<span class="badge rounded-pill">{{ threadDumpAll }}</span>
     </button>
 
     <button class="badge bg-success hand" (click)="threadStateFilter = ThreadState.Runnable">
       @if (threadStateFilter === ThreadState.Runnable) {
         <fa-icon icon="check" />
       }
-      Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpRunnable }}</span>
+      Runnable&nbsp;<span class="badge rounded-pill">{{ threadDumpRunnable }}</span>
     </button>
 
     <button class="badge bg-info hand" (click)="threadStateFilter = ThreadState.Waiting">
       @if (threadStateFilter === ThreadState.Waiting) {
         <fa-icon icon="check" />
       }
-      Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpWaiting }}</span>
+      Waiting&nbsp;<span class="badge rounded-pill">{{ threadDumpWaiting }}</span>
     </button>
 
     <button class="badge bg-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
       @if (threadStateFilter === ThreadState.TimedWaiting) {
         <fa-icon icon="check" />
       }
-      Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpTimedWaiting }}</span>
+      Timed Waiting&nbsp;<span class="badge rounded-pill">{{ threadDumpTimedWaiting }}</span>
     </button>
 
     <button class="badge bg-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
       @if (threadStateFilter === ThreadState.Blocked) {
         <fa-icon icon="check" />
       }
-      Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpBlocked }}</span>
+      Blocked&nbsp;<span class="badge rounded-pill">{{ threadDumpBlocked }}</span>
     </button>
   </div>
 
