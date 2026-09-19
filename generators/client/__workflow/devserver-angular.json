@@ -1,9 +1,0 @@
-{
-  "include": [
-    {
-      "app-sample": "ng-default",
-      "cache": "angular",
-      "entity": "sqllight"
-    }
-  ]
-}
