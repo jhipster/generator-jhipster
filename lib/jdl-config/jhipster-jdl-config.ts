@@ -47,7 +47,7 @@ export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs =
 export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicationConfig => {
   const jdlOptions = extractJdlDefinitionFromCommandConfig(configs);
   return {
-    quotedOptionNames: [],
+    quotedOptionNames: jdlOptions.filter(option => option.quoted).map(option => option.name),
     tokenConfigs: jdlOptions.map(option => ({
       name: upperCase(snakeCase(option.name)),
       pattern: option.name,

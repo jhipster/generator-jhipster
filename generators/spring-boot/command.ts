@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import { intersection } from 'lodash-es';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHANUMERIC_PATTERN, NON_WHITESPACE_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
 import { cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
@@ -112,6 +112,12 @@ const command = {
       cli: {
         type: String,
         hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'STRING',
+        tokenValuePattern: NON_WHITESPACE_PATTERN,
+        quoted: true,
       },
       scope: 'storage',
     },

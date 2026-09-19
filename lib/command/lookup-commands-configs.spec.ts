@@ -44,6 +44,7 @@ describe('jdl options', () => {
   "clientTheme",
   "clientThemeVariant",
   "enableGradleDevelocity",
+  "gradleDevelocityHost",
   "packageName",
   "graalvmSupport",
   "languages",
@@ -59,6 +60,7 @@ describe('jdl options', () => {
   "cacheProvider",
   "enableHibernateCache",
   "reactive",
+  "rememberMeKey",
   "feignClient",
   "syncUserWithIdp",
   "databaseMigration",
@@ -88,6 +90,8 @@ describe('jdl options', () => {
           'packageName',
           'creationTimestamp',
           'websocket',
+          'rememberMeKey',
+          'gradleDevelocityHost',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.

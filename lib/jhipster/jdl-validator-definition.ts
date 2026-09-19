@@ -22,7 +22,6 @@ import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
-const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
 export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
@@ -78,11 +77,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: JWT_SECRET_KEY_PATTERN,
     msg: 'JWT secret key property',
   },
-  REMEMBER_ME_KEY: {
-    type: 'STRING',
-    pattern: REMEMBER_ME_KEY_PATTERN,
-    msg: 'rememberMeKey property',
-  },
   SERVER_PORT: { type: 'INTEGER' },
   SERVICE_DISCOVERY_TYPE: {
     type: 'NAME',
@@ -96,10 +90,5 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     type: 'list',
     pattern: ALPHANUMERIC,
     msg: 'testFrameworks property',
-  },
-  GRADLE_DEVELOCITY_HOST: {
-    type: 'STRING',
-    pattern: JWT_SECRET_KEY_PATTERN,
-    msg: 'gradleDevelocityHost property',
   },
 };

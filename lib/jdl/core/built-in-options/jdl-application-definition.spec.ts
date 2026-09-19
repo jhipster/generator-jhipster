@@ -19,12 +19,13 @@
 
 import { describe, expect, it } from 'esmocha';
 
+import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
 import applicationOptions from '../../../jhipster/application-options.ts';
 import { createRuntime } from '../runtime.ts';
 
 const { OptionNames } = applicationOptions;
 
-const { applicationDefinition } = createRuntime();
+const { applicationDefinition } = createRuntime(getDefaultJDLApplicationConfig());
 
 describe('jdl - ApplicationOptions', () => {
   describe('doesOptionExist', () => {

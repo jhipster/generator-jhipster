@@ -245,7 +245,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
   [optionNames.JWT_SECRET_KEY]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PACKAGE_FOLDER]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.REMEMBER_ME_KEY]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SERVER_PORT]: { type: ApplicationOptionTypes.INTEGER },
   [optionNames.SERVICE_DISCOVERY_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SKIP_CLIENT]: { type: ApplicationOptionTypes.BOOLEAN },
@@ -254,15 +253,9 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_USER_MANAGEMENT]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.GRADLE_DEVELOCITY_HOST]: { type: ApplicationOptionTypes.STRING },
 };
 
-export const jhipsterQuotedOptionNames: string[] = [
-  optionNames.JHIPSTER_VERSION,
-  optionNames.REMEMBER_ME_KEY,
-  optionNames.JWT_SECRET_KEY,
-  optionNames.GRADLE_DEVELOCITY_HOST,
-];
+export const jhipsterQuotedOptionNames: string[] = [optionNames.JHIPSTER_VERSION, optionNames.JWT_SECRET_KEY];
 
 export const builtInJDLApplicationConfig: JDLApplicationConfig = {
   optionsTypes: jhipsterOptionTypes,

@@ -38,13 +38,11 @@ const {
   JHIPSTER_VERSION,
   JHI_PREFIX,
   JWT_SECRET_KEY,
-  REMEMBER_ME_KEY,
   SERVER_PORT,
   SKIP_CLIENT,
   SKIP_SERVER,
   SKIP_USER_MANAGEMENT,
   TEST_FRAMEWORKS,
-  GRADLE_DEVELOCITY_HOST,
 } = OptionNames;
 
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
@@ -68,8 +66,6 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'DTO_SUFFIX', pattern: DTO_SUFFIX },
     { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
     { name: 'SKIP_SERVER', pattern: SKIP_SERVER },
-    { name: 'REMEMBER_ME_KEY', pattern: REMEMBER_ME_KEY },
-    { name: 'GRADLE_DEVELOCITY_HOST', pattern: GRADLE_DEVELOCITY_HOST },
     ...tokenConfigs,
   ];
   return {
