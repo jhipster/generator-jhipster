@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { LANGUAGE_PATTERN } from '../../lib/constants/jdl.ts';
 
 import detectLanguage from './support/detect-language.ts';
 
@@ -34,6 +35,11 @@ const command = {
         type: Array,
         hide: true,
       },
+      jdl: {
+        type: 'list',
+        tokenType: 'list',
+        tokenValuePattern: LANGUAGE_PATTERN,
+      },
       scope: 'storage',
     },
     languagesDefinition: {
@@ -47,6 +53,10 @@ const command = {
       cli: {
         description: 'Enable translation',
         type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
       },
       scope: 'storage',
     },
@@ -69,6 +79,11 @@ const command = {
         description: 'Set application native language',
         type: String,
         required: false,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: LANGUAGE_PATTERN,
       },
       configure(gen, value) {
         if (value) {

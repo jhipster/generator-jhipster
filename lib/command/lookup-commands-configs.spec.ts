@@ -41,7 +41,16 @@ describe('jdl options', () => {
   "clientTheme",
   "clientThemeVariant",
   "graalvmSupport",
+  "languages",
+  "enableTranslation",
+  "nativeLanguage",
   "incrementalChangelog",
+  "databaseType",
+  "devDatabaseType",
+  "prodDatabaseType",
+  "cacheProvider",
+  "enableHibernateCache",
+  "reactive",
   "feignClient",
   "syncUserWithIdp",
   "databaseMigration",
@@ -60,7 +69,7 @@ describe('jdl options', () => {
     }
 
     if (!choices) {
-      if (['routes', 'clientTheme', 'microfrontends'].includes(optionName)) {
+      if (['routes', 'clientTheme', 'microfrontends', 'languages', 'nativeLanguage'].includes(optionName)) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
         continue;
       }
