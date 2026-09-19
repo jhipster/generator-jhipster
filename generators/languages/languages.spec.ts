@@ -365,4 +365,25 @@ describe('generator - languages', () => {
       });
     });
   });
+  describe('when adding a language to a project that already has some', () => {
+    before(async () => {
+      await createClientProject().withJHipsterConfig({
+        clientFramework: 'vue',
+        enableTranslation: true,
+        nativeLanguage: 'en',
+        languages: ['en', 'fr'],
+      });
+      await helpers
+        .runJHipsterInApplication('jhipster:languages')
+        // Only `de` is selected, `fr` is not: selecting languages only ever adds, it never removes a configured one.
+        .withAnswers({ languages: ['de'] })
+        .withOptions({ commandName: 'languages' });
+    });
+
+    it('should keep the already configured languages and add the new one', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', {
+        'generator-jhipster': { languages: ['en', 'fr', 'de'] },
+      });
+    });
+  });
 });
