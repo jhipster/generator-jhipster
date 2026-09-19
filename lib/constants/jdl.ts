@@ -19,3 +19,4 @@
 
 export const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 export const ALPHANUMERIC_UNDERSCORE_PATTERN = /^[A-Za-z]\w*$/;
+export const LANGUAGE_PATTERN = /^[a-z]+(-[A-Za-z0-9]+)*$/;

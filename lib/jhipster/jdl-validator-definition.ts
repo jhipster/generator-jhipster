@@ -28,7 +28,6 @@ import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 const PACKAGE_NAME_PATTERN = /^[a-z_][a-z0-9_]*$/;
-const LANGUAGE_PATTERN = /^[a-z]+(-[A-Za-z0-9]+)*$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
@@ -102,7 +101,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   },
   ENABLE_HIBERNATE_CACHE: { type: 'BOOLEAN' },
   ENABLE_SWAGGER_CODEGEN: { type: 'BOOLEAN' },
-  ENABLE_TRANSLATION: { type: 'BOOLEAN' },
   FRONT_END_BUILDER: {
     type: 'NAME',
     pattern: ALPHABETIC,
@@ -119,16 +117,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     type: 'STRING',
     pattern: JWT_SECRET_KEY_PATTERN,
     msg: 'JWT secret key property',
-  },
-  LANGUAGES: {
-    type: 'list',
-    pattern: LANGUAGE_PATTERN,
-    msg: 'languages property',
-  },
-  NATIVE_LANGUAGE: {
-    type: 'NAME',
-    pattern: LANGUAGE_PATTERN,
-    msg: 'nativeLanguage property',
   },
   PACKAGE_NAME: {
     type: 'qualifiedName',

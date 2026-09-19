@@ -22,6 +22,7 @@ import baseCommand from '../../generators/base/command.ts';
 import bootstrapCommand from '../../generators/bootstrap/command.ts';
 import clientCommand from '../../generators/client/command.ts';
 import javaSimpleApplicationCommand from '../../generators/java-simple-application/command.ts';
+import languagesCommand from '../../generators/languages/command.ts';
 import liquibaseCommand from '../../generators/liquibase/command.ts';
 import springBootCommand from '../../generators/spring-boot/command.ts';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
@@ -83,6 +84,7 @@ export const getDefaultJDLApplicationConfig = () => {
       ...baseCommand.configs,
       ...clientCommand.configs,
       ...javaSimpleApplicationCommand.configs,
+      ...languagesCommand.configs,
       ...liquibaseCommand.configs,
       ...gatewayCommand.configs,
     }),
