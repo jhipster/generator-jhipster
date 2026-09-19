@@ -47,7 +47,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   LanguagesOptions
 > {
   askForMoreLanguages!: boolean;
-  askForNativeLanguage!: boolean;
   languages?: string[];
   /**
    * Languages to be generated.
@@ -120,7 +119,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
       checkPrompts({ control }) {
         const { enableTranslation, languages } = this.jhipsterConfig;
         const showPrompts = this.options.askAnswered || (this.languageCommand && !this.regenerateLanguages);
-        this.askForNativeLanguage = showPrompts || (!control.existingProject && !this.jhipsterConfig.nativeLanguage);
         this.askForMoreLanguages =
           enableTranslation !== false && (showPrompts || (!control.existingProject && (languages?.length ?? 0) < 1));
       },
