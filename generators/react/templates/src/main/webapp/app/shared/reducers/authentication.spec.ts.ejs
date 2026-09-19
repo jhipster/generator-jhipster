@@ -57,7 +57,6 @@ describe('Authentication reducer tests', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
         loginSuccess: false,
         loginError: false, // Errors returned from server side
-        showModalLogin: false,
 <%_ } _%>
         redirectMessage: null
       });
@@ -86,7 +85,6 @@ describe('Authentication reducer tests', () => {
         loading: false,
         loginError: false,
         loginSuccess: true,
-        showModalLogin: false,
       });
     });
 <%_ } _%>
@@ -120,7 +118,6 @@ describe('Authentication reducer tests', () => {
 
       expect(toTest).toMatchObject({
         errorMessage: error.message,
-        showModalLogin: true,
         loginError: true,
       });
       expect(isAccountEmpty(toTest)).toBe(true);
@@ -134,9 +131,6 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         loading: false,
         isAuthenticated: false,
-<%_ if (!authenticationTypeOauth2) { _%>
-        showModalLogin: true,
-<%_ } _%>
         errorMessage: error.message
       });
       expect(isAccountEmpty(toTest)).toBe(true);
@@ -163,7 +157,6 @@ describe('Authentication reducer tests', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
         loginSuccess: false,
         loginError: false,
-        showModalLogin: true,
 <%_ } _%>
         errorMessage: null,
         redirectMessage: null,
@@ -171,7 +164,7 @@ describe('Authentication reducer tests', () => {
       expect(isAccountEmpty(toTest)).toBe(true);
     });
 
-    it('should properly define an error message and change the current state to display the login modal', () => {
+    it('should properly define an error message', () => {
       const message = 'redirect me please';
       const toTest = authentication(undefined, authError(message));
       expect(toTest).toMatchObject({
@@ -180,7 +173,6 @@ describe('Authentication reducer tests', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
         loginSuccess: false,
         loginError: false,
-        showModalLogin: true,
 <%_ } _%>
         errorMessage: null,
         redirectMessage: message,
@@ -192,9 +184,6 @@ describe('Authentication reducer tests', () => {
       const toTest = authentication({ ...initialState, isAuthenticated: true }, clearAuth());
       expect(toTest).toMatchObject({
         loading: false,
-<%_ if (!authenticationTypeOauth2) { _%>
-        showModalLogin: true,
-<%_ } _%>
         isAuthenticated: false
       });
     });
