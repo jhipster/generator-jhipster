@@ -20,7 +20,7 @@
     "packageName": "io.github.jhipster.app",
     "prodDatabaseType": "no",
     "reactive": true,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "eureka",
     "testFrameworks": ["gatling", "cypress"]
