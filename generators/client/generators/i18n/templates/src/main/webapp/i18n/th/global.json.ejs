@@ -64,8 +64,15 @@
         },
         "messages": {
             "info": {
-                "authenticated": "หากคุณต้องการ <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">เข้าระบบ</a>, คุณสามารถใช้บัญชี:<br/>- ผู้ดูแลระบบ (login=\"admin\" and password=\"admin\") <br/>- ผู้ใช้งานทั่วไป (login=\"user\" and password=\"user\").",
-                "register": "ถ้าคุณยังไม่มีบัญชี? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">ลงทะเบียน</a>."
+                "authenticated": {
+                    "prefix": "หากคุณต้องการ ",
+                    "link": "เข้าระบบ",
+                    "suffix": ", คุณสามารถใช้บัญชี:<br/>- ผู้ดูแลระบบ (login=\"admin\" และ password=\"admin\") <br/>- ผู้ใช้งานทั่วไป (login=\"user\" และ password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "ถ้าคุณยังไม่มีบัญชี?",
+                    "link": "ลงทะเบียน"
+                }
             },
             "error": {
                 "dontmatch": "รหัสผ่านและยืนยันรหัสผ่าน ไม่เหมือนกัน."
