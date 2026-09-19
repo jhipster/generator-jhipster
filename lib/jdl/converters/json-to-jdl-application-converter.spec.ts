@@ -20,13 +20,14 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../core/application-types.ts';
+import { getDefaultJDLApplicationConfig } from '../../jdl-config/jhipster-jdl-config.ts';
 import { convertApplicationsToJDL } from '../core/__test-support__/index.ts';
 import { createJDLApplication } from '../core/models/jdl-application-factory.ts';
 import JDLObject from '../core/models/jdl-object.ts';
 import { createRuntime } from '../core/runtime.ts';
 
 describe('jdl - JSONToJDLApplicationConverter', () => {
-  const runtime = createRuntime();
+  const runtime = createRuntime(getDefaultJDLApplicationConfig());
 
   describe('convert', () => {
     describe('when not passing any argument', () => {

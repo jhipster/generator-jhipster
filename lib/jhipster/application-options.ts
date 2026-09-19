@@ -230,7 +230,6 @@ export const jhipsterOptionValues = {
 } as const satisfies Record<string, JDLApplicationOptionValue>;
 
 export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
-  [optionNames.APPLICATION_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.AUTHENTICATION_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BASE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINT]: { type: ApplicationOptionTypes.STRING },

@@ -22,6 +22,7 @@ import appCommand from '../../generators/app/command.ts';
 import baseCommand from '../../generators/base/command.ts';
 import bootstrapCommand from '../../generators/bootstrap/command.ts';
 import clientCommand from '../../generators/client/command.ts';
+import commonCommand from '../../generators/common/command.ts';
 import javaSimpleApplicationCommand from '../../generators/java-simple-application/command.ts';
 import buildToolCommand from '../../generators/java-simple-application/generators/build-tool/command.ts';
 import gradleCommand from '../../generators/java-simple-application/generators/gradle/command.ts';
@@ -94,6 +95,7 @@ export const getDefaultJDLApplicationConfig = () => {
       ...languagesCommand.configs,
       ...liquibaseCommand.configs,
       ...serverCommand.configs,
+      ...commonCommand.configs,
       ...gatewayCommand.configs,
     }),
   );

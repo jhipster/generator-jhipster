@@ -47,6 +47,7 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
+  "applicationType",
   "enableGradleDevelocity",
   "gradleDevelocityHost",
   "packageName",

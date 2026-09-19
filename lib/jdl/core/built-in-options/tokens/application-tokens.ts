@@ -27,7 +27,6 @@ import type { JDLTokenConfig } from '../../types/parsing.ts';
 const { OptionNames } = applicationOptions;
 
 const {
-  APPLICATION_TYPE,
   AUTHENTICATION_TYPE,
   BASE_NAME,
   BLUEPRINT,
@@ -50,7 +49,6 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'BLUEPRINT', pattern: BLUEPRINT },
     { name: 'GATEWAY_SERVER_PORT', pattern: GATEWAY_SERVER_PORT },
     { name: 'AUTHENTICATION_TYPE', pattern: AUTHENTICATION_TYPE },
-    { name: 'APPLICATION_TYPE', pattern: APPLICATION_TYPE },
     { name: 'SERVER_PORT', pattern: SERVER_PORT },
     { name: 'JWT_SECRET_KEY', pattern: JWT_SECRET_KEY },
     { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },

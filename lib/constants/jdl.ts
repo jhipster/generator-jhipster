@@ -25,3 +25,4 @@ export const NUMERIC_PATTERN = /^\d$/;
 export const PACKAGE_NAME_PATTERN = /^[a-z_][a-z0-9_]*$/;
 export const NON_WHITESPACE_PATTERN = /^\S+$/;
 export const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
+export const ALPHABETIC_LOWER_PATTERN = /^[a-z]+$/;

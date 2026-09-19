@@ -19,6 +19,7 @@
 import chalk from 'chalk';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHABETIC_LOWER_PATTERN } from '../../lib/constants/jdl.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
 
 const command = {
@@ -72,6 +73,11 @@ const command = {
       description: 'Application type to generate',
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHABETIC_LOWER_PATTERN,
       },
       prompt: {
         type: 'select',

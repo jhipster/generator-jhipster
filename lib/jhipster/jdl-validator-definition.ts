@@ -24,11 +24,6 @@ const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
 export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
-  APPLICATION_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC_LOWER,
-    msg: 'applicationType property',
-  },
   AUTHENTICATION_TYPE: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
