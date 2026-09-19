@@ -17,13 +17,7 @@
  * limitations under the License.
  */
 
-import {
-  ALPHABETIC,
-  ALPHABETIC_LOWER,
-  ALPHANUMERIC,
-  ALPHANUMERIC_DASH,
-  ALPHANUMERIC_UNDERSCORE,
-} from '../jdl/core/built-in-options/validation-patterns.ts';
+import { ALPHABETIC, ALPHABETIC_LOWER, ALPHANUMERIC, ALPHANUMERIC_UNDERSCORE } from '../jdl/core/built-in-options/validation-patterns.ts';
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
@@ -72,7 +66,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC,
     msg: 'dtoSuffix property',
   },
-  ENABLE_SWAGGER_CODEGEN: { type: 'BOOLEAN' },
   FRONT_END_BUILDER: {
     type: 'NAME',
     pattern: ALPHABETIC,
@@ -95,11 +88,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: REMEMBER_ME_KEY_PATTERN,
     msg: 'rememberMeKey property',
   },
-  SEARCH_ENGINE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'searchEngine property',
-  },
   SERVER_PORT: { type: 'INTEGER' },
   SERVICE_DISCOVERY_TYPE: {
     type: 'NAME',
@@ -113,11 +101,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     type: 'list',
     pattern: ALPHANUMERIC,
     msg: 'testFrameworks property',
-  },
-  WEBSOCKET: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC_DASH,
-    msg: 'websocket property',
   },
   ENABLE_GRADLE_DEVELOCITY: { type: 'BOOLEAN' },
   GRADLE_DEVELOCITY_HOST: {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHANUMERIC_DASH_PATTERN, ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 import { getDBTypeFromDBValue } from './support/database.ts';
 
@@ -28,12 +28,21 @@ const command = {
       cli: {
         type: Boolean,
       },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       scope: 'storage',
     },
     searchEngine: {
       description: 'Provide search engine for the application when skipping server side generation',
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       choices: ['no', 'elasticsearch', 'couchbase'],
       scope: 'storage',
@@ -56,6 +65,11 @@ const command = {
       description: 'Provide websocket option for the application when skipping server side generation',
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_DASH_PATTERN,
       },
       scope: 'storage',
     },

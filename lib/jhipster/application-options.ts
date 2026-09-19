@@ -237,7 +237,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
   [optionNames.BUILD_TOOL]: { type: ApplicationOptionTypes.STRING },
   [optionNames.DTO_SUFFIX]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.ENABLE_SWAGGER_CODEGEN]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.ENTITY_SUFFIX]: { type: ApplicationOptionTypes.STRING },
   [optionNames.EXPERIMENTAL]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.GATEWAY_SERVER_PORT]: { type: ApplicationOptionTypes.INTEGER },
@@ -248,7 +247,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.JWT_SECRET_KEY]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PACKAGE_FOLDER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.REMEMBER_ME_KEY]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.SEARCH_ENGINE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SERVER_PORT]: { type: ApplicationOptionTypes.INTEGER },
   [optionNames.SERVICE_DISCOVERY_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SKIP_CLIENT]: { type: ApplicationOptionTypes.BOOLEAN },
@@ -257,7 +255,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_USER_MANAGEMENT]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
   [optionNames.ENABLE_GRADLE_DEVELOCITY]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.GRADLE_DEVELOCITY_HOST]: { type: ApplicationOptionTypes.STRING },
 };

@@ -24,6 +24,7 @@ import clientCommand from '../../generators/client/command.ts';
 import javaSimpleApplicationCommand from '../../generators/java-simple-application/command.ts';
 import languagesCommand from '../../generators/languages/command.ts';
 import liquibaseCommand from '../../generators/liquibase/command.ts';
+import serverCommand from '../../generators/server/command.ts';
 import springBootCommand from '../../generators/spring-boot/command.ts';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
 import type { JHipsterConfigs } from '../command/types.ts';
@@ -86,6 +87,7 @@ export const getDefaultJDLApplicationConfig = () => {
       ...javaSimpleApplicationCommand.configs,
       ...languagesCommand.configs,
       ...liquibaseCommand.configs,
+      ...serverCommand.configs,
       ...gatewayCommand.configs,
     }),
   );

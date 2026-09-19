@@ -48,6 +48,9 @@ describe('jdl options', () => {
   "enableTranslation",
   "nativeLanguage",
   "incrementalChangelog",
+  "enableSwaggerCodegen",
+  "searchEngine",
+  "websocket",
   "databaseType",
   "devDatabaseType",
   "prodDatabaseType",
@@ -82,6 +85,7 @@ describe('jdl options', () => {
           'nodePackageManager',
           'packageName',
           'creationTimestamp',
+          'websocket',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
