@@ -85,7 +85,7 @@ describe('Component Tests', () => {
           alertService,
           <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
-  <% if (relationship.otherEntityUser && generateBuiltInUserEntity) { %>
+  <%_ if (relationship.otherEntityUser && generateBuiltInUserEntity) { _%>
             userService: () => ({
                 retrieve: vi.fn().mockResolvedValue({}),
               }),

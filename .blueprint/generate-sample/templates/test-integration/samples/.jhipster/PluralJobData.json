@@ -1,0 +1,20 @@
+{
+  "changelogDate": "20260918120100",
+  "documentation": "Pinned to an explicit Elasticsearch index, so renaming the entity keeps the existing index reachable.",
+  "elasticsearchIndexName": "legacy_plural_job_data",
+  "fields": [
+    {
+      "fieldName": "reference",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "otherEntityName": "pluralTaskData",
+      "otherEntityRelationshipName": "jobData",
+      "relationshipName": "taskData",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

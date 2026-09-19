@@ -316,7 +316,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
           expect(response?.statusCode).to.equal(200);
         });
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
-  <% if (cypressBootstrapEntities) { %>
+  <%_ if (cypressBootstrapEntities) { _%>
         <%- entityInstance %> = undefined;
   <%_ } _%>
       });

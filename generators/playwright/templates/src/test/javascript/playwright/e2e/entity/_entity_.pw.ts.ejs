@@ -299,7 +299,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
         expect((await deleteRequest).status()).toBe(204);
         expect((await listRequest).status()).toBe(200);
         await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
-  <% if (playwrightBootstrapEntities) { %>
+  <%_ if (playwrightBootstrapEntities) { _%>
         <%- entityInstance %> = undefined;
   <%_ } _%>
       });

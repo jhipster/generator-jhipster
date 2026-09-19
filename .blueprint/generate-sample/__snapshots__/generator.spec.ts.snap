@@ -86,6 +86,12 @@ exports[`generator - generate-sample with daily-builds/ngx-oauth2 (daily-builds 
   ".jhipster/Place.json": {
     "stateCleared": "modified",
   },
+  ".jhipster/PluralJobData.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/PluralTaskData.json": {
+    "stateCleared": "modified",
+  },
   ".jhipster/SuperMegaLargeTestEntity.json": {
     "stateCleared": "modified",
   },
@@ -215,6 +221,12 @@ exports[`generator - generate-sample with ng-default should match matrix value 1
     "stateCleared": "modified",
   },
   ".jhipster/Place.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/PluralJobData.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/PluralTaskData.json": {
     "stateCleared": "modified",
   },
   ".jhipster/SuperMegaLargeTestEntity.json": {

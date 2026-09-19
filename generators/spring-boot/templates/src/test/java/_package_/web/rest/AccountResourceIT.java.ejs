@@ -1201,7 +1201,7 @@ class AccountResourceIT {
         token.setTokenDate(Instant.parse("2017-03-28T15:25:57.123Z"));
   <%_ } else { _%>
         token.setTokenDate(LocalDate.of(2017, 3, 23));
-  <% } %>
+  <%_ } _%>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
         persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
