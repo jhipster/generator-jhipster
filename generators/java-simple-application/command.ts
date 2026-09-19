@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition, PromptSpec } from '../../lib/command/index.ts';
+import { PACKAGE_NAME_PATTERN } from '../../lib/constants/jdl.ts';
 
 const command = {
   configs: {
@@ -40,6 +41,11 @@ const command = {
     packageName: {
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'qualifiedName',
+        tokenValuePattern: PACKAGE_NAME_PATTERN,
       },
       prompt: (gen): PromptSpec => ({
         type: 'input',

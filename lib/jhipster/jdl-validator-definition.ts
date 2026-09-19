@@ -27,10 +27,8 @@ import {
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
-const PACKAGE_NAME_PATTERN = /^[a-z_][a-z0-9_]*$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
-const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
 export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
@@ -64,16 +62,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC,
     msg: 'buildTool property',
   },
-  NODE_PACKAGE_MANAGER: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'nodePackageManager property',
-  },
-  CREATION_TIMESTAMP: {
-    type: 'INTEGER',
-    pattern: NUMERIC,
-    msg: 'creationTimestamp property',
-  },
   ENTITY_SUFFIX: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
@@ -101,11 +89,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     type: 'STRING',
     pattern: JWT_SECRET_KEY_PATTERN,
     msg: 'JWT secret key property',
-  },
-  PACKAGE_NAME: {
-    type: 'qualifiedName',
-    pattern: PACKAGE_NAME_PATTERN,
-    msg: 'packageName property',
   },
   REMEMBER_ME_KEY: {
     type: 'STRING',

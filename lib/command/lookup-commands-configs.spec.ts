@@ -31,6 +31,8 @@ describe('jdl options', () => {
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
+  "nodePackageManager",
+  "creationTimestamp",
   "removeNeedles",
   "clientFramework",
   "clientBundler",
@@ -40,6 +42,7 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
+  "packageName",
   "graalvmSupport",
   "languages",
   "enableTranslation",
@@ -69,7 +72,18 @@ describe('jdl options', () => {
     }
 
     if (!choices) {
-      if (['routes', 'clientTheme', 'microfrontends', 'languages', 'nativeLanguage'].includes(optionName)) {
+      if (
+        [
+          'routes',
+          'clientTheme',
+          'microfrontends',
+          'languages',
+          'nativeLanguage',
+          'nodePackageManager',
+          'packageName',
+          'creationTimestamp',
+        ].includes(optionName)
+      ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
         continue;
       }
