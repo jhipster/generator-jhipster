@@ -19,9 +19,10 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import { getDefaultJDLApplicationConfig } from '../../../../jdl-config/jhipster-jdl-config.ts';
 import { createRuntime } from '../../runtime.ts';
 
-const { lexer: JDLLexer } = createRuntime();
+const { lexer: JDLLexer } = createRuntime(getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLLexer', () => {
   describe('when passing a valid JDL input', () => {

@@ -70,22 +70,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC,
     msg: 'cacheProvider property',
   },
-  CLIENT_FRAMEWORK: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'clientFramework property',
-  },
-  CLIENT_THEME: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'clientTheme property',
-  },
-  CLIENT_THEME_VARIANT: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'clientThemeVariant property',
-  },
-  WITH_ADMIN_UI: { type: 'BOOLEAN' },
   NODE_PACKAGE_MANAGER: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
@@ -141,12 +125,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: LANGUAGE_PATTERN,
     msg: 'languages property',
   },
-  MICROFRONTENDS: {
-    type: 'list',
-    pattern: ALPHANUMERIC_UNDERSCORE,
-    msg: 'microfrontends property',
-  },
-  MICROFRONTEND: { type: 'BOOLEAN' },
   NATIVE_LANGUAGE: {
     type: 'NAME',
     pattern: LANGUAGE_PATTERN,
