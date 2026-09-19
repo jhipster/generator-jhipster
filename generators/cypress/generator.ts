@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
@@ -34,8 +33,6 @@ import type {
   Field as CypressField,
   Options as CypressOptions,
 } from './types.ts';
-
-const { ANGULAR } = clientFrameworkTypes;
 
 const WAIT_TIMEOUT = 3 * 60000;
 
@@ -55,34 +52,6 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       await this.dependsOnBootstrap('client');
       await this.dependsOnJHipster('javascript-simple-application');
     }
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async askForCypressOptions({ control }) {
-        if (control.existingProject && !this.options.askAnswered) return;
-        await this.prompt(
-          [
-            {
-              when: (this.jhipsterConfig as any).clientFramework === ANGULAR,
-              type: 'confirm',
-              name: 'cypressCoverage',
-              message: 'Would you like to generate code coverage for Cypress tests? [Experimental]',
-            },
-            {
-              type: 'confirm',
-              name: 'cypressAudit',
-              message: 'Would you like to audit Cypress tests?',
-            },
-          ],
-          this.config,
-        );
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
