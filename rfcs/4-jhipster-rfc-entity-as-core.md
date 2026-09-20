@@ -4,7 +4,7 @@
 
 - Feature Name: Entities as a core feature.
 - Start Date: 2021-11-20
-- Issue: [jhipster/generator-jhipster#0000](https://github.com/jhipster/generator-jhipster/0000)
+- Issue: [jhipster/generator-jhipster#0000](https://github.com/jhipster/generator-jhipster/issues/0000)
 
 ## Summary
 

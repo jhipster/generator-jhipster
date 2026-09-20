@@ -2,7 +2,7 @@
 
 - Feature Name: JHipster Kubernetes Operator
 - Start Date: 8/8/19
-- Issue: [jhipster/generator-jhipster#10053](https://github.com/jhipster/generator-jhipster/10053)
+- Issue: [jhipster/generator-jhipster#10053](https://github.com/jhipster/generator-jhipster/issues/10053)
 
 # Summary
 
