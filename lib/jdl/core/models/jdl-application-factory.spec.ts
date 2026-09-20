@@ -20,11 +20,12 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
 import { createRuntime } from '../runtime.ts';
 
 import { createJDLApplication } from './jdl-application-factory.ts';
 
-const runtime = createRuntime();
+const runtime = createRuntime(getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {

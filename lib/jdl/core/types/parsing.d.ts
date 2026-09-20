@@ -46,4 +46,6 @@ export type JHipsterOptionDefinition = {
   tokenType: JDLValidatorOptionType;
   tokenValuePattern?: RegExp;
   knownChoices?: string[];
+  /** Whether the value should be quoted when written back to JDL (e.g. jhipsterVersion). */
+  quoted?: boolean;
 };

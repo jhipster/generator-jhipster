@@ -31,7 +31,14 @@ describe('jdl options', () => {
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
+  "jhiPrefix",
+  "entitySuffix",
+  "dtoSuffix",
+  "testFrameworks",
+  "nodePackageManager",
+  "creationTimestamp",
   "removeNeedles",
+  "buildTool",
   "clientFramework",
   "clientBundler",
   "microfrontend",
@@ -40,17 +47,27 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
+  "skipUserManagement",
+  "applicationType",
+  "gatewayServerPort",
+  "enableGradleDevelocity",
+  "gradleDevelocityHost",
+  "packageName",
   "graalvmSupport",
   "languages",
   "enableTranslation",
   "nativeLanguage",
   "incrementalChangelog",
+  "enableSwaggerCodegen",
+  "searchEngine",
+  "websocket",
   "databaseType",
   "devDatabaseType",
   "prodDatabaseType",
   "cacheProvider",
   "enableHibernateCache",
   "reactive",
+  "rememberMeKey",
   "feignClient",
   "syncUserWithIdp",
   "databaseMigration",
@@ -69,7 +86,26 @@ describe('jdl options', () => {
     }
 
     if (!choices) {
-      if (['routes', 'clientTheme', 'microfrontends', 'languages', 'nativeLanguage'].includes(optionName)) {
+      if (
+        [
+          'routes',
+          'clientTheme',
+          'microfrontends',
+          'languages',
+          'nativeLanguage',
+          'nodePackageManager',
+          'packageName',
+          'creationTimestamp',
+          'websocket',
+          'rememberMeKey',
+          'gradleDevelocityHost',
+          'jhiPrefix',
+          'entitySuffix',
+          'dtoSuffix',
+          'testFrameworks',
+          'gatewayServerPort',
+        ].includes(optionName)
+      ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
         continue;
       }

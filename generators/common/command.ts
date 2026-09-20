@@ -19,6 +19,7 @@
 import chalk from 'chalk';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHABETIC_LOWER_PATTERN } from '../../lib/constants/jdl.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
 
 const command = {
@@ -66,12 +67,21 @@ const command = {
       cli: {
         type: Boolean,
       },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       scope: 'storage',
     },
     applicationType: {
       description: 'Application type to generate',
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHABETIC_LOWER_PATTERN,
       },
       prompt: {
         type: 'select',
@@ -86,6 +96,18 @@ const command = {
         type: Number,
       },
       default: 8080,
+      scope: 'storage',
+    },
+    gatewayServerPort: {
+      description: 'Gateway server port, used by the client dev server proxy and the e2e base url',
+      cli: {
+        type: Number,
+        hide: true,
+      },
+      jdl: {
+        type: 'integer',
+        tokenType: 'INTEGER',
+      },
       scope: 'storage',
     },
   },

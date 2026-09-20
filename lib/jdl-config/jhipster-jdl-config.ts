@@ -18,12 +18,17 @@
  */
 import { snakeCase, upperCase } from 'lodash-es';
 
+import appCommand from '../../generators/app/command.ts';
 import baseCommand from '../../generators/base/command.ts';
 import bootstrapCommand from '../../generators/bootstrap/command.ts';
 import clientCommand from '../../generators/client/command.ts';
+import commonCommand from '../../generators/common/command.ts';
 import javaSimpleApplicationCommand from '../../generators/java-simple-application/command.ts';
+import buildToolCommand from '../../generators/java-simple-application/generators/build-tool/command.ts';
+import gradleCommand from '../../generators/java-simple-application/generators/gradle/command.ts';
 import languagesCommand from '../../generators/languages/command.ts';
 import liquibaseCommand from '../../generators/liquibase/command.ts';
+import serverCommand from '../../generators/server/command.ts';
 import springBootCommand from '../../generators/spring-boot/command.ts';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
 import type { JHipsterConfigs } from '../command/types.ts';
@@ -44,7 +49,7 @@ export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs =
 export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicationConfig => {
   const jdlOptions = extractJdlDefinitionFromCommandConfig(configs);
   return {
-    quotedOptionNames: [],
+    quotedOptionNames: jdlOptions.filter(option => option.quoted).map(option => option.name),
     tokenConfigs: jdlOptions.map(option => ({
       name: upperCase(snakeCase(option.name)),
       pattern: option.name,
@@ -79,13 +84,18 @@ let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
 export const getDefaultJDLApplicationConfig = () => {
   defaultJDLApplicationConfig ??= Object.freeze(
     buildJDLApplicationConfig({
+      ...appCommand.configs,
       ...springBootCommand.configs,
       ...bootstrapCommand.configs,
       ...baseCommand.configs,
       ...clientCommand.configs,
       ...javaSimpleApplicationCommand.configs,
+      ...buildToolCommand.configs,
+      ...gradleCommand.configs,
       ...languagesCommand.configs,
       ...liquibaseCommand.configs,
+      ...serverCommand.configs,
+      ...commonCommand.configs,
       ...gatewayCommand.configs,
     }),
   );

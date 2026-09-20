@@ -17,28 +17,13 @@
  * limitations under the License.
  */
 
-import {
-  ALPHABETIC,
-  ALPHABETIC_LOWER,
-  ALPHANUMERIC,
-  ALPHANUMERIC_DASH,
-  ALPHANUMERIC_UNDERSCORE,
-} from '../jdl/core/built-in-options/validation-patterns.ts';
+import { ALPHABETIC_LOWER, ALPHANUMERIC, ALPHANUMERIC_UNDERSCORE } from '../jdl/core/built-in-options/validation-patterns.ts';
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
-const JHI_PREFIX_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
-const PACKAGE_NAME_PATTERN = /^[a-z_][a-z0-9_]*$/;
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
-const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
-const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
 export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
-  APPLICATION_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC_LOWER,
-    msg: 'applicationType property',
-  },
   AUTHENTICATION_TYPE: {
     type: 'NAME',
     pattern: ALPHANUMERIC,
@@ -59,63 +44,12 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
     msg: 'blueprints property',
   },
-  BUILD_TOOL: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'buildTool property',
-  },
-  NODE_PACKAGE_MANAGER: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'nodePackageManager property',
-  },
-  CREATION_TIMESTAMP: {
-    type: 'INTEGER',
-    pattern: NUMERIC,
-    msg: 'creationTimestamp property',
-  },
-  ENTITY_SUFFIX: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'entitySuffix property',
-  },
-  DTO_SUFFIX: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'dtoSuffix property',
-  },
-  ENABLE_SWAGGER_CODEGEN: { type: 'BOOLEAN' },
-  FRONT_END_BUILDER: {
-    type: 'NAME',
-    pattern: ALPHABETIC,
-    msg: 'frontendBuilder property',
-  },
-  GATEWAY_SERVER_PORT: { type: 'INTEGER' },
+  // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   JHIPSTER_VERSION: { type: 'STRING' },
-  JHI_PREFIX: {
-    type: 'NAME',
-    pattern: JHI_PREFIX_NAME_PATTERN,
-    msg: 'jhiPrefix property',
-  },
   JWT_SECRET_KEY: {
     type: 'STRING',
     pattern: JWT_SECRET_KEY_PATTERN,
     msg: 'JWT secret key property',
-  },
-  PACKAGE_NAME: {
-    type: 'qualifiedName',
-    pattern: PACKAGE_NAME_PATTERN,
-    msg: 'packageName property',
-  },
-  REMEMBER_ME_KEY: {
-    type: 'STRING',
-    pattern: REMEMBER_ME_KEY_PATTERN,
-    msg: 'rememberMeKey property',
-  },
-  SEARCH_ENGINE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'searchEngine property',
   },
   SERVER_PORT: { type: 'INTEGER' },
   SERVICE_DISCOVERY_TYPE: {
@@ -125,21 +59,4 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   },
   SKIP_CLIENT: { type: 'BOOLEAN' },
   SKIP_SERVER: { type: 'BOOLEAN' },
-  SKIP_USER_MANAGEMENT: { type: 'BOOLEAN' },
-  TEST_FRAMEWORKS: {
-    type: 'list',
-    pattern: ALPHANUMERIC,
-    msg: 'testFrameworks property',
-  },
-  WEBSOCKET: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC_DASH,
-    msg: 'websocket property',
-  },
-  ENABLE_GRADLE_DEVELOCITY: { type: 'BOOLEAN' },
-  GRADLE_DEVELOCITY_HOST: {
-    type: 'STRING',
-    pattern: JWT_SECRET_KEY_PATTERN,
-    msg: 'gradleDevelocityHost property',
-  },
 };

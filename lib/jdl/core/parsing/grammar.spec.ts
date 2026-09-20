@@ -20,13 +20,14 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.ts';
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
 import { createRuntime } from '../runtime.ts';
 import type { ParsedJDLApplications, ParsedJDLOption } from '../types/parsed.ts';
 
-const runtime = createRuntime();
+const runtime = createRuntime(getDefaultJDLApplicationConfig());
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;

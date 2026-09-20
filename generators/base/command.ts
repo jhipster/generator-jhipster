@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
+import { ALPHANUMERIC_PATTERN, NUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 import { parseCreationTimestamp } from './support/timestamp.ts';
 
@@ -97,6 +98,11 @@ const command = {
       cli: {
         type: String,
       },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
       scope: 'storage',
     },
     ignoreErrors: {
@@ -110,6 +116,11 @@ const command = {
       description: 'Project creation timestamp (used for reproducible builds)',
       cli: {
         type: parseCreationTimestamp,
+      },
+      jdl: {
+        type: 'integer',
+        tokenType: 'INTEGER',
+        tokenValuePattern: NUMERIC_PATTERN,
       },
       scope: 'storage',
     },

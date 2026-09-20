@@ -26,34 +26,8 @@ import type { JDLTokenConfig } from '../../types/parsing.ts';
 
 const { OptionNames } = applicationOptions;
 
-const {
-  APPLICATION_TYPE,
-  AUTHENTICATION_TYPE,
-  BASE_NAME,
-  BLUEPRINT,
-  BLUEPRINTS,
-  BUILD_TOOL,
-  CREATION_TIMESTAMP,
-  DTO_SUFFIX,
-  ENABLE_SWAGGER_CODEGEN,
-  ENTITY_SUFFIX,
-  GATEWAY_SERVER_PORT,
-  JHIPSTER_VERSION,
-  JHI_PREFIX,
-  JWT_SECRET_KEY,
-  NODE_PACKAGE_MANAGER,
-  PACKAGE_NAME,
-  REMEMBER_ME_KEY,
-  SEARCH_ENGINE,
-  SERVER_PORT,
-  SKIP_CLIENT,
-  SKIP_SERVER,
-  SKIP_USER_MANAGEMENT,
-  TEST_FRAMEWORKS,
-  WEBSOCKET,
-  ENABLE_GRADLE_DEVELOCITY,
-  GRADLE_DEVELOCITY_HOST,
-} = OptionNames;
+const { AUTHENTICATION_TYPE, BASE_NAME, BLUEPRINT, BLUEPRINTS, JHIPSTER_VERSION, JWT_SECRET_KEY, SERVER_PORT, SKIP_CLIENT, SKIP_SERVER } =
+  OptionNames;
 
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
 
@@ -62,30 +36,13 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'BASE_NAME', pattern: BASE_NAME },
     { name: 'BLUEPRINTS', pattern: BLUEPRINTS },
     { name: 'BLUEPRINT', pattern: BLUEPRINT },
-    { name: 'CREATION_TIMESTAMP', pattern: CREATION_TIMESTAMP },
-    { name: 'GATEWAY_SERVER_PORT', pattern: GATEWAY_SERVER_PORT },
-    { name: 'PACKAGE_NAME', pattern: PACKAGE_NAME },
     { name: 'AUTHENTICATION_TYPE', pattern: AUTHENTICATION_TYPE },
-    { name: 'WEBSOCKET', pattern: WEBSOCKET },
-    { name: 'BUILD_TOOL', pattern: BUILD_TOOL },
-    { name: 'SEARCH_ENGINE', pattern: SEARCH_ENGINE },
-    { name: 'APPLICATION_TYPE', pattern: APPLICATION_TYPE },
-    { name: 'TEST_FRAMEWORKS', pattern: TEST_FRAMEWORKS },
     { name: 'SERVER_PORT', pattern: SERVER_PORT },
-    { name: 'JHI_PREFIX', pattern: JHI_PREFIX },
     { name: 'JWT_SECRET_KEY', pattern: JWT_SECRET_KEY },
+    // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
     { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
-    { name: 'FRONT_END_BUILDER', pattern: 'frontendBuilder' }, // TODO always valid?
-    { name: 'SKIP_USER_MANAGEMENT', pattern: SKIP_USER_MANAGEMENT },
-    { name: 'ENABLE_SWAGGER_CODEGEN', pattern: ENABLE_SWAGGER_CODEGEN },
-    { name: 'ENTITY_SUFFIX', pattern: ENTITY_SUFFIX },
-    { name: 'DTO_SUFFIX', pattern: DTO_SUFFIX },
     { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
     { name: 'SKIP_SERVER', pattern: SKIP_SERVER },
-    { name: 'REMEMBER_ME_KEY', pattern: REMEMBER_ME_KEY },
-    { name: 'ENABLE_GRADLE_DEVELOCITY', pattern: ENABLE_GRADLE_DEVELOCITY },
-    { name: 'GRADLE_DEVELOCITY_HOST', pattern: GRADLE_DEVELOCITY_HOST },
-    { name: 'NODE_PACKAGE_MANAGER', pattern: NODE_PACKAGE_MANAGER },
     ...tokenConfigs,
   ];
   return {

@@ -17,12 +17,17 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
+import { NON_WHITESPACE_PATTERN } from '../../../../lib/constants/jdl.ts';
 
 const command = {
   configs: {
     enableGradleDevelocity: {
       cli: {
         type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
       },
       prompt: {
         type: 'confirm',
@@ -35,6 +40,12 @@ const command = {
     gradleDevelocityHost: {
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'STRING',
+        tokenValuePattern: NON_WHITESPACE_PATTERN,
+        quoted: true,
       },
       prompt: {
         when: answers => answers.enableGradleDevelocity,

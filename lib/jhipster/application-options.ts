@@ -87,10 +87,7 @@ const optionNames = {
   ENABLE_SWAGGER_CODEGEN: 'enableSwaggerCodegen',
   ENABLE_TRANSLATION: 'enableTranslation',
   ENTITY_SUFFIX: 'entitySuffix',
-  EXPERIMENTAL: 'experimental',
   GATEWAY_SERVER_PORT: 'gatewayServerPort',
-  I_18_N: 'i18N',
-  INSTALL_MODULES: 'installModules',
   JHI_PREFIX: 'jhiPrefix',
   JHIPSTER_VERSION: 'jhipsterVersion',
   JWT_SECRET_KEY: 'jwtSecretKey',
@@ -108,8 +105,6 @@ const optionNames = {
   SERVER_PORT: 'serverPort',
   SERVICE_DISCOVERY_TYPE: 'serviceDiscoveryType',
   SKIP_CLIENT: 'skipClient',
-  SKIP_GIT: 'skipGit',
-  SKIP_INSTALL: 'skipInstall',
   SKIP_SERVER: 'skipServer',
   SKIP_USER_MANAGEMENT: 'skipUserManagement',
   TEST_FRAMEWORKS: 'testFrameworks',
@@ -177,9 +172,6 @@ export const jhipsterOptionValues = {
   [optionNames.ENABLE_SWAGGER_CODEGEN]: false,
   [optionNames.ENABLE_TRANSLATION]: true,
   [optionNames.ENTITY_SUFFIX]: '',
-  [optionNames.EXPERIMENTAL]: false,
-  [optionNames.I_18_N]: true,
-  [optionNames.INSTALL_MODULES]: false,
   [optionNames.JHI_PREFIX]: 'jhi',
   [optionNames.JHIPSTER_VERSION]: '',
   [optionNames.JWT_SECRET_KEY]: '',
@@ -210,8 +202,6 @@ export const jhipsterOptionValues = {
     [NO_SERVICE_DISCOVERY]: NO_SERVICE_DISCOVERY,
   },
   [optionNames.SKIP_CLIENT]: false,
-  [optionNames.SKIP_GIT]: false,
-  [optionNames.SKIP_INSTALL]: false,
   [optionNames.SKIP_SERVER]: false,
   [optionNames.SKIP_USER_MANAGEMENT]: false,
   [optionNames.TEST_FRAMEWORKS]: {
@@ -230,47 +220,20 @@ export const jhipsterOptionValues = {
 } as const satisfies Record<string, JDLApplicationOptionValue>;
 
 export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
-  [optionNames.APPLICATION_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.AUTHENTICATION_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BASE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINT]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.BUILD_TOOL]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.CREATION_TIMESTAMP]: { type: ApplicationOptionTypes.INTEGER },
-  [optionNames.DTO_SUFFIX]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.ENABLE_SWAGGER_CODEGEN]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.ENTITY_SUFFIX]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.EXPERIMENTAL]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.GATEWAY_SERVER_PORT]: { type: ApplicationOptionTypes.INTEGER },
-  [optionNames.I_18_N]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.INSTALL_MODULES]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.JHI_PREFIX]: { type: ApplicationOptionTypes.STRING },
+  // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
   [optionNames.JWT_SECRET_KEY]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.NODE_PACKAGE_MANAGER]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.PACKAGE_NAME]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.PACKAGE_FOLDER]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.REMEMBER_ME_KEY]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.SEARCH_ENGINE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SERVER_PORT]: { type: ApplicationOptionTypes.INTEGER },
   [optionNames.SERVICE_DISCOVERY_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SKIP_CLIENT]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.SKIP_GIT]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.SKIP_INSTALL]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.SKIP_USER_MANAGEMENT]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.TEST_FRAMEWORKS]: { type: ApplicationOptionTypes.LIST },
-  [optionNames.WEBSOCKET]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.ENABLE_GRADLE_DEVELOCITY]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.GRADLE_DEVELOCITY_HOST]: { type: ApplicationOptionTypes.STRING },
 };
 
-export const jhipsterQuotedOptionNames: string[] = [
-  optionNames.JHIPSTER_VERSION,
-  optionNames.REMEMBER_ME_KEY,
-  optionNames.JWT_SECRET_KEY,
-  optionNames.GRADLE_DEVELOCITY_HOST,
-];
+export const jhipsterQuotedOptionNames: string[] = [optionNames.JHIPSTER_VERSION, optionNames.JWT_SECRET_KEY];
 
 export const builtInJDLApplicationConfig: JDLApplicationConfig = {
   optionsTypes: jhipsterOptionTypes,
