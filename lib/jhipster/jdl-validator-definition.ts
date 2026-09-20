@@ -17,17 +17,12 @@
  * limitations under the License.
  */
 
-import { ALPHABETIC_LOWER, ALPHANUMERIC_UNDERSCORE } from '../jdl/core/built-in-options/validation-patterns.ts';
+import { ALPHABETIC_LOWER } from '../jdl/core/built-in-options/validation-patterns.ts';
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
 export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
-  BASE_NAME: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC_UNDERSCORE,
-    msg: 'baseName property',
-  },
   BLUEPRINT: {
     type: 'NAME',
     pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,

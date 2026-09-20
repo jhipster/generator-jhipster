@@ -26,13 +26,12 @@ import type { JDLTokenConfig } from '../../types/parsing.ts';
 
 const { OptionNames } = applicationOptions;
 
-const { BASE_NAME, BLUEPRINT, BLUEPRINTS, JHIPSTER_VERSION, SKIP_CLIENT, SKIP_SERVER } = OptionNames;
+const { BLUEPRINT, BLUEPRINTS, JHIPSTER_VERSION, SKIP_CLIENT, SKIP_SERVER } = OptionNames;
 
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
 
 export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
   const applicationConfigTokens: Pick<ITokenConfig, 'name' | 'pattern'>[] = [
-    { name: 'BASE_NAME', pattern: BASE_NAME },
     { name: 'BLUEPRINTS', pattern: BLUEPRINTS },
     { name: 'BLUEPRINT', pattern: BLUEPRINT },
     // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.

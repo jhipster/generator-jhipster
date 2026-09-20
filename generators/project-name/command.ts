@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHANUMERIC_UNDERSCORE_PATTERN } from '../../lib/constants/jdl.ts';
 
 import { BASE_NAME_DESCRIPTION } from './constants.ts';
 
@@ -38,6 +39,11 @@ const command = {
       description: BASE_NAME_DESCRIPTION,
       cli: {
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_UNDERSCORE_PATTERN,
       },
       prompt: gen => ({
         type: 'input',

@@ -67,6 +67,7 @@ describe('jdl options', () => {
   "enableTranslation",
   "nativeLanguage",
   "incrementalChangelog",
+  "baseName",
   "enableSwaggerCodegen",
   "searchEngine",
   "websocket",
@@ -115,6 +116,7 @@ describe('jdl options', () => {
           'gatewayServerPort',
           'serverPort',
           'jwtSecretKey',
+          'baseName',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
