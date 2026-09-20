@@ -4,7 +4,7 @@
 
 - Feature Name: Modular needles.
 - Start Date: 2022-05-25
-- Issue: [jhipster/generator-jhipster#0000](https://github.com/jhipster/generator-jhipster/0000)
+- Issue: [jhipster/generator-jhipster#0000](https://github.com/jhipster/generator-jhipster/issues/0000)
 
 ## Summary
 

@@ -4,7 +4,7 @@
 
 - Feature Name: (fill me in with a unique ident, `my_awesome_feature`)
 - Start Date: (fill me in with today's date, YYYY-MM-DD)
-- Issue: [jhipster/generator-jhipster#0000](https://github.com/jhipster/generator-jhipster/0000)
+- Issue: [jhipster/generator-jhipster#0000](https://github.com/jhipster/generator-jhipster/issues/0000)
 
 ## Summary
 
