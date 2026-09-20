@@ -49,10 +49,12 @@
                     </select>
     <%_ } else if (field.fieldIsEnum) { _%>
                     <select class="form-select" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>">
-      <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
+      <%_ const enumPrefix = `${frontendAppName}.${fieldType}`;
+          const enumInstance = this._.lowerFirst(fieldType);
+      _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%- enumPrefix %>.null' | translate }}<% } %></option>
-                    @for (<%- this._.lowerFirst(fieldType) %> of <%- this._.lowerFirst(fieldType) %>Values; track $index) {
-                        <option [value]="<%- this._.lowerFirst(fieldType) %>">__jhiTranslatePipeEnum__('<%- enumPrefix %>', { "value": "<%- this._.lowerFirst(fieldType) %>" })</option>
+                    @for (<%- enumInstance %> of <%- enumInstance %>Values; track $index) {
+                        <option [value]="<%- enumInstance %>">__jhiTranslatePipeEnum__('<%- enumPrefix %>', { "value": "<%- enumInstance %>" })</option>
                     }
                     </select>
     <%_ } else { _%>
