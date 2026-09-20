@@ -35,7 +35,7 @@ export default function createTokenFromConfig(tokenConfig: ITokenConfig) {
   }
   // JDL has a great many keywords. Keywords can conflict with identifiers in a parsing
   // library with a separate lexing phase.
-  // See: https://github.com/SAP/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
+  // See: https://github.com/Chevrotain/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
   // A keyword is matched only as a whole word: it must not be followed by another identifier character.
   // Otherwise a keyword that is a prefix of an identifier (`entity` in `entityName`) or of another keyword
   // (`microfrontend` in `microfrontends`) would match first, whatever the order the tokens are declared in.
