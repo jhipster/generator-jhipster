@@ -36,8 +36,8 @@ import { test, expect } from '../../support/fixtures';
 
     const entityFakeData = generateFakeData('cypress');
     const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
-    const requiredOtherEntities = this._.uniq(requiredRelationships.map(rel => rel.otherEntity));
-    const otherEntities = this._.uniq(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity));
+    const requiredOtherEntities = [...new Set(requiredRelationships.map(rel => rel.otherEntity))];
+    const otherEntities = [...new Set(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity))];
     // We cannot generate a required entity with relationship with required relationships.
     const skipCreateTest = [
       !playwrightBootstrapEntities,
