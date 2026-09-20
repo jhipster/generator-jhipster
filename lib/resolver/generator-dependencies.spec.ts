@@ -18,7 +18,7 @@
  */
 import { describe, expect, it } from 'esmocha';
 
-import type { GeneratorMeta } from '@yeoman/types';
+import type { StoreGeneratorMeta } from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
@@ -28,9 +28,9 @@ import { type GeneratorDependency, resolveGeneratorDependencies } from './genera
 /** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
 const metaLookup = async (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
   const generators = await lookupGeneratorCommands();
-  return (namespace: string): GeneratorMeta | undefined => {
+  return (namespace: string): StoreGeneratorMeta | undefined => {
     const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
-    return command ? ({ namespace, importModule: async () => ({ command }) } as unknown as GeneratorMeta) : undefined;
+    return command ? ({ namespace, requireModule: () => ({ command }) } as unknown as StoreGeneratorMeta) : undefined;
   };
 };
 

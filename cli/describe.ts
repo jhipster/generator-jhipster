@@ -184,10 +184,10 @@ const describeCliCommand = async (
   // Like the cli, a command carries the options of the bootstrap generator, its own and the imported ones.
   const dependencies =
     options.imports === false ?
-      await resolveGeneratorDependencies([namespace], { ...resolveOptions, blueprintNamespaces: [] }).then(all =>
-        all.filter(dependency => dependency.namespace === namespace),
+      resolveGeneratorDependencies([namespace], { ...resolveOptions, blueprintNamespaces: [] }).filter(
+        dependency => dependency.namespace === namespace,
       )
-    : await resolveGeneratorDependencies(['bootstrap', namespace], resolveOptions);
+    : resolveGeneratorDependencies(['bootstrap', namespace], resolveOptions);
   const description = describeCommand({
     namespace,
     description: command?.desc,
