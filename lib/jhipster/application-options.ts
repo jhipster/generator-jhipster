@@ -220,20 +220,17 @@ export const jhipsterOptionValues = {
 } as const satisfies Record<string, JDLApplicationOptionValue>;
 
 export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
-  [optionNames.AUTHENTICATION_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BASE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINT]: { type: ApplicationOptionTypes.STRING },
   [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
   // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.JWT_SECRET_KEY]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.SERVER_PORT]: { type: ApplicationOptionTypes.INTEGER },
   [optionNames.SERVICE_DISCOVERY_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SKIP_CLIENT]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
 };
 
-export const jhipsterQuotedOptionNames: string[] = [optionNames.JHIPSTER_VERSION, optionNames.JWT_SECRET_KEY];
+export const jhipsterQuotedOptionNames: string[] = [optionNames.JHIPSTER_VERSION];
 
 export const builtInJDLApplicationConfig: JDLApplicationConfig = {
   optionsTypes: jhipsterOptionTypes,

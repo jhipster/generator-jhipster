@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHABETIC_LOWER_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHABETIC_LOWER_PATTERN, ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
 
 const command = {
@@ -54,6 +54,11 @@ const command = {
         name: 'auth',
         description: 'Provide authentication type for the application when skipping server side generation',
         type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       choices: [
         { value: 'jwt', name: 'JWT authentication (stateless, with a token)' },
@@ -94,6 +99,10 @@ const command = {
       description: 'Server port to use',
       cli: {
         type: Number,
+      },
+      jdl: {
+        type: 'integer',
+        tokenType: 'INTEGER',
       },
       default: 8080,
       scope: 'storage',

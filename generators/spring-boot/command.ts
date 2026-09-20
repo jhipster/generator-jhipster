@@ -25,6 +25,7 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TY
 import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
 import { cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret.ts';
+import commonCommand from '../common/command.ts';
 import serverCommand from '../server/command.ts';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
 
@@ -63,6 +64,7 @@ const command = {
       scope: 'storage',
     },
     serverPort: {
+      ...commonCommand.configs.serverPort,
       prompt: gen => ({
         when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'input',
@@ -106,6 +108,12 @@ const command = {
         env: 'JHI_JWT_SECRET_KEY',
         hide: true,
       },
+      jdl: {
+        type: 'string',
+        tokenType: 'STRING',
+        tokenValuePattern: NON_WHITESPACE_PATTERN,
+        quoted: true,
+      },
       scope: 'storage',
     },
     rememberMeKey: {
@@ -122,11 +130,7 @@ const command = {
       scope: 'storage',
     },
     authenticationType: {
-      cli: {
-        name: 'auth',
-        description: 'Provide authentication type for the application when skipping server side generation',
-        type: String,
-      },
+      ...commonCommand.configs.authenticationType,
       prompt: (gen, config) => ({
         type: 'select',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
@@ -136,11 +140,6 @@ const command = {
           : config.choices?.filter(choice => (typeof choice === 'string' ? choice : choice.value !== SESSION)),
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
       }),
-      choices: [
-        { value: 'jwt', name: 'JWT authentication (stateless, with a token)' },
-        { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
-        { value: 'session', name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
-      ],
       configure: gen => {
         const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
         if (authenticationType === SESSION && !rememberMeKey) {

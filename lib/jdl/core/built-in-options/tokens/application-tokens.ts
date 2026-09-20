@@ -26,8 +26,7 @@ import type { JDLTokenConfig } from '../../types/parsing.ts';
 
 const { OptionNames } = applicationOptions;
 
-const { AUTHENTICATION_TYPE, BASE_NAME, BLUEPRINT, BLUEPRINTS, JHIPSTER_VERSION, JWT_SECRET_KEY, SERVER_PORT, SKIP_CLIENT, SKIP_SERVER } =
-  OptionNames;
+const { BASE_NAME, BLUEPRINT, BLUEPRINTS, JHIPSTER_VERSION, SKIP_CLIENT, SKIP_SERVER } = OptionNames;
 
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
 
@@ -36,9 +35,6 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'BASE_NAME', pattern: BASE_NAME },
     { name: 'BLUEPRINTS', pattern: BLUEPRINTS },
     { name: 'BLUEPRINT', pattern: BLUEPRINT },
-    { name: 'AUTHENTICATION_TYPE', pattern: AUTHENTICATION_TYPE },
-    { name: 'SERVER_PORT', pattern: SERVER_PORT },
-    { name: 'JWT_SECRET_KEY', pattern: JWT_SECRET_KEY },
     // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
     { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
     { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
