@@ -48,6 +48,7 @@ describe('jdl options', () => {
   "clientTheme",
   "clientThemeVariant",
   "applicationType",
+  "gatewayServerPort",
   "enableGradleDevelocity",
   "gradleDevelocityHost",
   "packageName",
@@ -101,6 +102,7 @@ describe('jdl options', () => {
           'entitySuffix',
           'dtoSuffix',
           'testFrameworks',
+          'gatewayServerPort',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.

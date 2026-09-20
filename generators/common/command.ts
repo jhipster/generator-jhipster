@@ -94,6 +94,18 @@ const command = {
       default: 8080,
       scope: 'storage',
     },
+    gatewayServerPort: {
+      description: 'Gateway server port, used by the client dev server proxy and the e2e base url',
+      cli: {
+        type: Number,
+        hide: true,
+      },
+      jdl: {
+        type: 'integer',
+        tokenType: 'INTEGER',
+      },
+      scope: 'storage',
+    },
   },
   import: [
     'jhipster:base-application:bootstrap',

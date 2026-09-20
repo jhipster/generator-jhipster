@@ -49,7 +49,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHABETIC,
     msg: 'frontendBuilder property',
   },
-  GATEWAY_SERVER_PORT: { type: 'INTEGER' },
   JHIPSTER_VERSION: { type: 'STRING' },
   JWT_SECRET_KEY: {
     type: 'STRING',
