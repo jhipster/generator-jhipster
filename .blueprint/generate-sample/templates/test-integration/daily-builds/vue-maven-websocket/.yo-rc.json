@@ -22,7 +22,7 @@
     "packageName": "io.github.jhipster.sample",
     "prodDatabaseType": "postgresql",
     "reactive": false,
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
     "serverSideOptions": ["websocket:spring-websocket"],
     "testFrameworks": ["gatling", "cypress"],

@@ -20,7 +20,7 @@
     "packageName": "io.github.jhipster.app",
     "prodDatabaseType": "neo4j",
     "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
-    "searchEngine": false,
+    "searchEngine": "no",
     "serverPort": "8080",
     "testFrameworks": ["gatling", "cypress"]
   }
