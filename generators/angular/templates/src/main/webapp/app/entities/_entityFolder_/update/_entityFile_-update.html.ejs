@@ -67,10 +67,8 @@
                         <div class="form-text text-danger clearfix">
         <%_ if (field.blobContentTypeAny) { _%>
                             <a class="pull-start" (click)="openFile(<%- fieldName %>Ref.value!, editForm.get('<%- fieldName %>ContentType')!.value!)">__jhiTranslateTag__('entity.action.open')</a><br>
-                            <span class="pull-start">{{ editForm.get('<%- fieldName %>ContentType')!.value }}, {{ byteSize(<%- fieldName %>Ref.value!) }}</span>
-        <%_ } else { _%>
-                            <span class="pull-start">{{ editForm.get('<%- fieldName %>ContentType')!.value }}, {{ byteSize(<%- fieldName %>Ref.value!) }}</span>
         <%_ } _%>
+                            <span class="pull-start">{{ editForm.get('<%- fieldName %>ContentType')!.value }}, {{ byteSize(<%- fieldName %>Ref.value!) }}</span>
         <%_ if (field.blobContentTypeImage) { _%>
                             <button type="button" (click)="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>')" class="btn btn-secondary btn-xs pull-end">
         <%_ } else { _%>

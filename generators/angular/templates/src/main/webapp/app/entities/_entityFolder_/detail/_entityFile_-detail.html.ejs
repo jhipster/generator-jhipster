@@ -46,19 +46,16 @@
   <%_ } else if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label -%>
           <span>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>Ref.<%- fieldName %> ?? 'null'" })</span>
-  <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
+  <%_ } else if (field.fieldTypeBinary && (field.blobContentTypeImage || field.blobContentTypeAny)) { _%>
         @if (<%- entityInstance %>Ref.<%- fieldName %>) {
           <div>
+    <%_ if (field.blobContentTypeImage) { _%>
             <a (click)="openFile(<%- entityInstance %>Ref.<%- fieldName %>, <%- entityInstance %>Ref.<%- fieldName %>ContentType, 'image')">
               <img [src]="'data:' + <%- entityInstance %>Ref.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>Ref.<%- fieldName %>" style="max-width: 100%;" alt="<%- entityInstance %>"/>
             </a>
-            {{ <%- entityInstance %>Ref.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>Ref.<%- fieldName %>) }}
-          </div>
-        }
-  <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
-        @if (<%- entityInstance %>Ref.<%- fieldName %>) {
-          <div>
+    <%_ } else { _%>
             <a (click)="openFile(<%- entityInstance %>Ref.<%- fieldName %>, <%- entityInstance %>Ref.<%- fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
+    <%_ } _%>
             {{ <%- entityInstance %>Ref.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>Ref.<%- fieldName %>) }}
           </div>
         }
