@@ -67,6 +67,10 @@ const command = {
       cli: {
         type: Boolean,
       },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       scope: 'storage',
     },
     applicationType: {

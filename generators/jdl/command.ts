@@ -18,6 +18,7 @@
  */
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import commonCommand from '../common/command.ts';
 
 const command = {
   arguments: {
@@ -79,10 +80,8 @@ const command = {
       scope: 'generator',
     },
     skipUserManagement: {
-      description: 'Skip the user management module during app generation',
-      cli: {
-        type: Boolean,
-      },
+      // common owns this option; spread it so both declarations carry the same jdl spec
+      ...commonCommand.configs.skipUserManagement,
       scope: 'generator',
     },
   },

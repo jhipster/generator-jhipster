@@ -44,6 +44,7 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
     msg: 'blueprints property',
   },
+  // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   JHIPSTER_VERSION: { type: 'STRING' },
   JWT_SECRET_KEY: {
     type: 'STRING',
@@ -58,5 +59,4 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   },
   SKIP_CLIENT: { type: 'BOOLEAN' },
   SKIP_SERVER: { type: 'BOOLEAN' },
-  SKIP_USER_MANAGEMENT: { type: 'BOOLEAN' },
 };

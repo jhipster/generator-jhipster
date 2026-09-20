@@ -47,6 +47,7 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
+  "skipUserManagement",
   "applicationType",
   "gatewayServerPort",
   "enableGradleDevelocity",

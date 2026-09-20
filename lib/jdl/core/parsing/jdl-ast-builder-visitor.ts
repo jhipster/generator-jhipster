@@ -674,6 +674,13 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       const key = context.CONFIG_KEY[0].image;
       const value = this.visit(context.configValue);
 
+      if (key === 'jhipsterVersion') {
+        // TODO drop for v10
+        logger.warn(
+          'The jhipsterVersion option is deprecated and will be removed in JHipster v10. It is stamped by the generator, do not set it in JDL.',
+        );
+      }
+
       return { key, value };
     }
 
