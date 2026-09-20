@@ -121,7 +121,7 @@ export const mutateEntity = {
   entityUrl: data => data.entityStateName,
 
   entityAngularName: data => data.entityTsName,
-  entityAngularNamePlural: data => pluralize(data.entityAngularName, { force: true }),
+  entityAngularNamePlural: data => pluralize(data.entityAngularName),
   entityReactName: data => data.entityTsName,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, ClientAddedEntityProperties>;
 
