@@ -25,9 +25,9 @@ import { getDefaultRuntime } from '../../../../../lib/jdl-config/jhipster-jdl-co
 
 const optionName = 'routes';
 
-describe('generators - spring-cloud:gateway - jdl', () => {
-  const runtime = getDefaultRuntime();
+const runtime = await getDefaultRuntime();
 
+describe('generators - spring-cloud:gateway - jdl', () => {
   it('should not accept route and port', () => {
     expect(() => createImporterFromContent(`application { config { ${optionName} ["blog:123"] } }`)).toThrow(
       /The routes property name must match:/,

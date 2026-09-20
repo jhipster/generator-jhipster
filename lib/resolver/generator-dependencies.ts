@@ -18,7 +18,7 @@
  */
 import type { GeneratorMeta } from '@yeoman/types';
 
-import type { JHipsterCommandDefinition } from '../command/types.ts';
+import type { JHipsterCommandDefinition, JHipsterConfig } from '../command/types.ts';
 
 export type GeneratorDependency = {
   /** Namespace as requested, `app`, `jhipster:spring-boot:cache` or `jhipster-foo:app` for a blueprint override. */
@@ -93,4 +93,21 @@ export const resolveGeneratorDependencies = async (
     await lookup({ namespace: generatorName });
   }
   return dependencies;
+};
+
+/**
+ * The configs of the dependencies merged like the runtime merges them: a config declared by several commands keeps the
+ * last declaration, at the position of that declaration.
+ */
+export const mergeDependenciesConfigs = (
+  dependencies: Pick<GeneratorDependency, 'namespace' | 'blueprintNamespace' | 'command'>[],
+): Map<string, { config: JHipsterConfig; namespace: string; blueprintNamespace?: string }> => {
+  const configs = new Map<string, { config: JHipsterConfig; namespace: string; blueprintNamespace?: string }>();
+  for (const { namespace, blueprintNamespace, command } of dependencies) {
+    for (const [name, config] of Object.entries(command?.configs ?? {})) {
+      configs.delete(name);
+      configs.set(name, { config, namespace, blueprintNamespace });
+    }
+  }
+  return configs;
 };

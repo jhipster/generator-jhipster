@@ -28,7 +28,7 @@ import type JDLApplicationConfiguration from './jdl-application-configuration.ts
 
 const { OptionNames } = applicationOptions;
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = createRuntime(await getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {

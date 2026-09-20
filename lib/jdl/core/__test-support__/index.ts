@@ -36,12 +36,13 @@ import { parseFromContent as originalParseFromContent, parseFromFiles as origina
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
-const runtime = getDefaultRuntime();
+const jdlDefinition = await getDefaultJDLApplicationConfig();
+const runtime = await getDefaultRuntime();
 
 export const createImporterFromContent = (content: any, configuration?: any) =>
-  originalCreateImporterFromContent(content, configuration, getDefaultJDLApplicationConfig());
+  originalCreateImporterFromContent(content, configuration, jdlDefinition);
 export const createImporterFromFiles = (files: any, configuration?: any) =>
-  originalCreateImporterFromFiles(files, configuration, getDefaultJDLApplicationConfig());
+  originalCreateImporterFromFiles(files, configuration, jdlDefinition);
 
 export const parseFromConfigurationObject = (configuration: ParsedJDLRoot) => originalParseFromConfigurationObject(configuration, runtime);
 export const parseFromFiles = (files: string[]) => originalParseFromFiles(files, runtime);

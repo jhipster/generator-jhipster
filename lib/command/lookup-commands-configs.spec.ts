@@ -20,10 +20,13 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { type ImportState, createImporterFromContent } from '../jdl/jdl-importer.ts';
+import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
+
+const jdlDefinition = await getDefaultJDLApplicationConfig();
 
 describe('jdl options', () => {
   const jdlConfigs = Object.entries(jhipsterConfigsWithJDL);
@@ -38,7 +41,6 @@ describe('jdl options', () => {
   "nodePackageManager",
   "creationTimestamp",
   "removeNeedles",
-  "buildTool",
   "clientFramework",
   "clientBundler",
   "microfrontend",
@@ -47,13 +49,14 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
-  "skipUserManagement",
   "applicationType",
   "gatewayServerPort",
+  "buildTool",
   "enableGradleDevelocity",
   "gradleDevelocityHost",
   "packageName",
   "graalvmSupport",
+  "skipUserManagement",
   "languages",
   "enableTranslation",
   "nativeLanguage",
@@ -61,15 +64,15 @@ describe('jdl options', () => {
   "enableSwaggerCodegen",
   "searchEngine",
   "websocket",
-  "databaseType",
-  "devDatabaseType",
-  "prodDatabaseType",
-  "cacheProvider",
-  "enableHibernateCache",
   "reactive",
   "rememberMeKey",
   "feignClient",
+  "databaseType",
+  "prodDatabaseType",
+  "devDatabaseType",
   "syncUserWithIdp",
+  "cacheProvider",
+  "enableHibernateCache",
   "databaseMigration",
   "messageBroker",
   "routes",
@@ -121,7 +124,7 @@ describe('jdl options', () => {
           let state: ImportState;
 
           before(() => {
-            const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue} } }`);
+            const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue} } }`, undefined, jdlDefinition);
             state = importer.import();
           });
 
@@ -133,12 +136,18 @@ describe('jdl options', () => {
 
       if (isBoolean) {
         it('should not accept unknown value when creating importer', () => {
-          expect(() => createImporterFromContent(`application { config { ${optionName} unknown } }`)).toThrow(/, but found: "unknown"/);
+          expect(() => createImporterFromContent(`application { config { ${optionName} unknown } }`, undefined, jdlDefinition)).toThrow(
+            /, but found: "unknown"/,
+          );
         });
       } else {
         it('should not accept unknown value when importing', () => {
           expect(() =>
-            createImporterFromContent(`application { config { ${optionName} ${isArray ? `[unknown]` : 'unknown'} } }`).import(),
+            createImporterFromContent(
+              `application { config { ${optionName} ${isArray ? `[unknown]` : 'unknown'} } }`,
+              undefined,
+              jdlDefinition,
+            ).import(),
           ).toThrow(/The value 'unknown' is not allowed for the option '(.*)'/);
         });
       }

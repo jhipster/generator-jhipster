@@ -24,8 +24,9 @@ import { createRuntime } from '../runtime.ts';
 
 import { parse } from './api.ts';
 
+const jdlRuntime = createRuntime(await getDefaultJDLApplicationConfig());
+
 describe('jdl - JDLSyntaxValidatorVisitor', () => {
-  const jdlRuntime = createRuntime(getDefaultJDLApplicationConfig());
   describe('when declaring an application', () => {
     for (const booleanOption of ['microfrontend']) {
       describe(`and using for ${booleanOption}`, () => {

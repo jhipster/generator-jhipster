@@ -30,7 +30,7 @@ import StringJDLApplicationConfigurationOption from './string-jdl-application-co
 
 const { OptionNames } = applicationOptions;
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = createRuntime(await getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLApplication', () => {
   describe('hasConfigurationOption', () => {

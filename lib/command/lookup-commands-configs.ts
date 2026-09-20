@@ -17,31 +17,30 @@
  * limitations under the License.
  */
 
-import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
-
-import { lookupGenerators } from '../utils/index.ts';
+import { createGeneratorCommandsMetaLookup, lookupGeneratorCommands } from '../resolver/generator-commands.ts';
+import { mergeDependenciesConfigs, resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
-const cwd = join(import.meta.dirname, '../..');
-let jhipsterConfigs: JHipsterConfigs;
+const cache = new Map<string, JHipsterConfigs>();
 
-export const lookupCommandsConfigs = async (options?: { filter: (config: JHipsterConfig) => boolean }): Promise<JHipsterConfigs> => {
-  const { filter = () => true } = options ?? {};
-  if (!jhipsterConfigs) {
-    jhipsterConfigs = {};
-    const files = lookupGenerators();
-    for (const file of files) {
-      try {
-        const index = await import(pathToFileURL(`${cwd}/${file}`).toString());
-        if (index.command?.configs) {
-          Object.assign(jhipsterConfigs, index.command?.configs);
-        }
-      } catch (error) {
-        throw new Error(`Error loading configs from ${file}`, { cause: error });
-      }
-    }
+/**
+ * The configs contributed by generators: with `from`, the roots and their `import`s resolved recursively, the same
+ * dependency graph `jhipster describe` and the cli walk, which costs the handful of generators those roots depend on;
+ * without it, every generator found.
+ */
+export const lookupCommandsConfigs = async (options?: {
+  from?: string[];
+  filter?: (config: JHipsterConfig) => boolean;
+}): Promise<JHipsterConfigs> => {
+  const { from, filter = () => true } = options ?? {};
+  const key = from ? from.join(',') : '*';
+  if (!cache.has(key)) {
+    const dependencies =
+      from ?
+        await resolveGeneratorDependencies(from, { getGeneratorMeta: createGeneratorCommandsMetaLookup() })
+      : await lookupGeneratorCommands();
+    cache.set(key, Object.fromEntries([...mergeDependenciesConfigs(dependencies)].map(([name, { config }]) => [name, config])));
   }
-  return Object.fromEntries(Object.entries(jhipsterConfigs).filter(([_key, value]) => filter(value)));
+  return Object.fromEntries(Object.entries(cache.get(key)!).filter(([_key, value]) => filter(value)));
 };

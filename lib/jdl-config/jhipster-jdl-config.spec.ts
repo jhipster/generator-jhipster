@@ -22,7 +22,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { lookupCommandsConfigs } from '../command/lookup-commands-configs.ts';
 import type { JDLApplicationConfig } from '../jdl/core/types/parsing.ts';
 
-import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig } from './jhipster-jdl-config.ts';
+import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig, getDefaultJDLApplicationConfigSync } from './jhipster-jdl-config.ts';
 
 describe('getDefaultJDLApplicationConfig()', () => {
   let discoveredConfigs: JDLApplicationConfig;
@@ -33,10 +33,26 @@ describe('getDefaultJDLApplicationConfig()', () => {
   });
 
   it('should return the default JDL application config', async () => {
-    expect(getDefaultJDLApplicationConfig()).toMatchObject(discoveredConfigs);
+    expect(await getDefaultJDLApplicationConfig()).toMatchObject(discoveredConfigs);
   });
 
   it.skip('should match snapshot', async () => {
-    expect(getDefaultJDLApplicationConfig()).toMatchSnapshot();
+    expect(await getDefaultJDLApplicationConfig()).toMatchSnapshot();
+  });
+});
+
+describe('getDefaultJDLApplicationConfigSync()', () => {
+  // The deprecated synchronous definitions are built from a hand maintained list of commands, so an option moving into
+  // a command that the list does not name is dropped without a word. Anything this test reports as missing means that
+  // list needs the command added to it, not that the expectation needs loosening.
+  it('should not be missing any definition of the async version', async () => {
+    const asyncOptionNames = Object.keys((await getDefaultJDLApplicationConfig()).optionsTypes);
+    const syncOptionNames = Object.keys(getDefaultJDLApplicationConfigSync().optionsTypes);
+
+    expect(asyncOptionNames.filter(name => !syncOptionNames.includes(name))).toEqual([]);
+  });
+
+  it('should match the async version', async () => {
+    expect(getDefaultJDLApplicationConfigSync()).toEqual(await getDefaultJDLApplicationConfig());
   });
 });

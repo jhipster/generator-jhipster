@@ -24,9 +24,9 @@ import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl
 import { convertApplications, createJDLApplication } from '../../core/__test-support__/index.ts';
 import { createRuntime } from '../../core/runtime.ts';
 
-describe('jdl - ApplicationConverter', () => {
-  const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = createRuntime(await getDefaultJDLApplicationConfig());
 
+describe('jdl - ApplicationConverter', () => {
   describe('convertApplications', () => {
     describe('when not passing applications', () => {
       it('should fail', () => {

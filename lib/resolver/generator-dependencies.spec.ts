@@ -18,27 +18,16 @@
  */
 import { describe, expect, it } from 'esmocha';
 
-import type { GeneratorMeta } from '@yeoman/types';
-
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
-import { lookupGeneratorCommands } from './generator-commands.ts';
+import { createGeneratorCommandsMetaLookup, lookupGeneratorCommands } from './generator-commands.ts';
 import { type GeneratorDependency, resolveGeneratorDependencies } from './generator-dependencies.ts';
-
-/** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
-const metaLookup = async (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
-  const generators = await lookupGeneratorCommands();
-  return (namespace: string): GeneratorMeta | undefined => {
-    const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
-    return command ? ({ namespace, importModule: async () => ({ command }) } as unknown as GeneratorMeta) : undefined;
-  };
-};
 
 const resolve = async (
   generatorNames: string[],
   blueprints?: Record<string, JHipsterCommandDefinition>,
   blueprintNamespaces: string[] = [],
-) => resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: await metaLookup(blueprints), blueprintNamespaces });
+) => resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: createGeneratorCommandsMetaLookup(blueprints), blueprintNamespaces });
 
 const namespaces = (dependencies: GeneratorDependency[]) => dependencies.map(({ namespace }) => namespace);
 
@@ -57,7 +46,7 @@ describe('resolver - generator dependencies', () => {
     it('should report missing generators', async () => {
       const missing: string[] = [];
       await resolveGeneratorDependencies(['unknown'], {
-        getGeneratorMeta: await metaLookup(),
+        getGeneratorMeta: createGeneratorCommandsMetaLookup(),
         onMissing: namespace => missing.push(namespace),
       });
       expect(missing).toEqual(['unknown']);

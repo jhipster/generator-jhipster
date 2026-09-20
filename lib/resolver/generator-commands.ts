@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, extname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+
+import type { GeneratorMeta } from '@yeoman/types';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 import { lookupGeneratorsWithNamespace } from '../utils/lookup.ts';
@@ -38,6 +40,47 @@ export const readUsage = (generatorFile: string): string | undefined => {
   return existsSync(usagePath) ? readFileSync(usagePath, 'utf8').trim() : undefined;
 };
 
+const commandsCache = new Map<string, Promise<JHipsterCommandDefinition | undefined>>();
+
+/**
+ * Import the command of a generator, from its own `command` module when it has one rather than from its index, which
+ * also pulls the generator in. Besides being the smaller import, it keeps a command out of the import cycles the
+ * generators form: a generator reached while it is already being evaluated hands back a half initialized module whose
+ * `command` is undefined.
+ */
+const importGeneratorCommand = (generatorFile: string): Promise<JHipsterCommandDefinition | undefined> => {
+  if (!commandsCache.has(generatorFile)) {
+    const commandFile = join(dirname(generatorFile), `command${extname(generatorFile)}`);
+    const ownCommand = existsSync(commandFile);
+    commandsCache.set(
+      generatorFile,
+      import(pathToFileURL(ownCommand ? commandFile : generatorFile).toString()).then(module =>
+        ownCommand ? module.default : module.command,
+      ),
+    );
+  }
+  return commandsCache.get(generatorFile)!;
+};
+
+/**
+ * A `getGeneratorMeta` for `resolveGeneratorDependencies` backed by the generators of this installation, optionally
+ * with blueprint commands by namespace. Commands are imported lazily, as the dependency graph reaches them.
+ */
+export const createGeneratorCommandsMetaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
+  const generatorFiles = new Map(
+    lookupGeneratorsWithNamespace({ absolute: true }).map(({ namespace, generator }) => [`jhipster:${namespace}`, generator]),
+  );
+  return (namespace: string): GeneratorMeta | undefined => {
+    const blueprintCommand = blueprints[namespace];
+    const generatorFile = generatorFiles.get(namespace);
+    if (!blueprintCommand && !generatorFile) return undefined;
+    return {
+      namespace,
+      importModule: async () => ({ command: blueprintCommand ?? (await importGeneratorCommand(generatorFile!)) }),
+    } as unknown as GeneratorMeta;
+  };
+};
+
 let generatorsCache: Promise<GeneratorCommand[]> | undefined;
 
 const readUsageDescription = (generatorFile: string): string | undefined => {
@@ -55,8 +98,7 @@ export const lookupGeneratorCommands = async ({ descriptions = {} }: { descripti
   generatorsCache ??= (async () => {
     const generators: GeneratorCommand[] = [];
     for (const { namespace, generator } of lookupGeneratorsWithNamespace({ absolute: true })) {
-      const module = await import(pathToFileURL(generator).toString());
-      generators.push({ namespace, description: readUsageDescription(generator), command: module.command });
+      generators.push({ namespace, description: readUsageDescription(generator), command: await importGeneratorCommand(generator) });
     }
     return generators;
   })();

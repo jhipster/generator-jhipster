@@ -26,9 +26,9 @@ import { createJDLApplication } from '../core/models/jdl-application-factory.ts'
 import JDLObject from '../core/models/jdl-object.ts';
 import { createRuntime } from '../core/runtime.ts';
 
-describe('jdl - JSONToJDLApplicationConverter', () => {
-  const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = createRuntime(await getDefaultJDLApplicationConfig());
 
+describe('jdl - JSONToJDLApplicationConverter', () => {
   describe('convert', () => {
     describe('when not passing any argument', () => {
       let jdlObject: JDLObject;

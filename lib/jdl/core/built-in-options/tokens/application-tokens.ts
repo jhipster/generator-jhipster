@@ -50,12 +50,14 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     tokens: [
       applicationConfigCategoryToken,
       ...applicationConfigTokens.map((tokenConfig: ITokenConfig) => {
-        tokenConfig.categories = [applicationConfigCategoryToken];
+        const categories = [applicationConfigCategoryToken];
         // This is actually needed as the skipClient & skipServer options are both entity & app options...
         if (['SKIP_CLIENT', 'SKIP_SERVER'].includes(tokenConfig.name)) {
-          tokenConfig.categories.push(KEYWORD, UNARY_OPTION);
+          categories.push(KEYWORD, UNARY_OPTION);
         }
-        return createTokenFromConfig(tokenConfig);
+        // Copied rather than stamped onto the caller's config: the token configs come from a memoized application
+        // definition that is shared by every runtime built from it.
+        return createTokenFromConfig({ ...tokenConfig, categories });
       }),
     ],
   };

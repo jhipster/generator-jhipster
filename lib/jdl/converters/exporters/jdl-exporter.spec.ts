@@ -31,7 +31,7 @@ import { createRuntime } from '../../core/runtime.ts';
 
 import exportToJDL from './jdl-exporter.ts';
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = createRuntime(await getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLExporter', () => {
   beforeEach(async () => {

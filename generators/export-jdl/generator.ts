@@ -20,7 +20,7 @@ import chalk from 'chalk';
 
 import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.ts';
 import { createRuntime } from '../../lib/jdl/core/runtime.ts';
-import { getDefaultRuntime } from '../../lib/jdl-config/jhipster-jdl-config.ts';
+import { getDefaultJDLApplicationConfigSync } from '../../lib/jdl-config/jhipster-jdl-config.ts';
 import { CommandCoreGenerator } from '../base-core/generator.ts';
 import CoreGenerator from '../base-core/index.ts';
 
@@ -34,7 +34,9 @@ export default class extends CommandCoreGenerator<typeof command> {
     return this.asAnyTaskGroup({
       convertToJDL() {
         try {
-          const runtime = this.options.jdlDefinition ? createRuntime(this.options.jdlDefinition) : getDefaultRuntime();
+          // jdlDefinition is resolved from the generator graph by the cli, the deprecated synchronous definitions are a
+          // fallback for callers that compose this generator without passing it.
+          const runtime = createRuntime(this.options.jdlDefinition ?? getDefaultJDLApplicationConfigSync());
           const jdlObject = convertToJDL(runtime, this.destinationPath(), false);
           if (jdlObject) {
             this.jdlContent = jdlObject.toString();

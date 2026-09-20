@@ -19,7 +19,7 @@
 import { uniqBy } from 'lodash-es';
 
 import { APPLICATION_TYPE_KEY, type ApplicationType } from '../core/application-types.ts';
-import { getDefaultRuntime } from '../jdl-config/jhipster-jdl-config.ts';
+import { getDefaultJDLApplicationConfigSync } from '../jdl-config/jhipster-jdl-config.ts';
 import { readCurrentPathYoRcFile } from '../utils/yo-rc.ts';
 
 import {
@@ -70,12 +70,19 @@ type JDLApplicationConfiguration = {
  * There are two ways to create an importer:
  *   - By providing an existing application content, if there's one
  *   - Deprecated: providing some application options
+ *
+ * @param definition the application JDL definitions. Omitting it falls back to a deprecated hand maintained list of
+ * definitions which is kept for api compatibility only and will be removed in v10.
  */
-export function createImporterFromFiles(files: string[], configuration?: JDLApplicationConfiguration, definition?: JDLApplicationConfig) {
+export function createImporterFromFiles(
+  files: string[],
+  configuration?: JDLApplicationConfiguration,
+  definition: JDLApplicationConfig = getDefaultJDLApplicationConfigSync(),
+) {
   if (!files) {
     throw new Error('Files must be passed to create a new JDL importer.');
   }
-  const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
+  const runtime = createRuntime(definition);
   const content = parseFromFiles(files, runtime);
   return makeJDLImporter(content, configuration || {}, runtime);
 }
@@ -85,16 +92,19 @@ export function createImporterFromFiles(files: string[], configuration?: JDLAppl
  * There are two ways to create an importer:
  *   - By providing an existing application content, if there's one
  *   - Deprecated: providing some application options
+ *
+ * @param definition the application JDL definitions. Omitting it falls back to a deprecated hand maintained list of
+ * definitions which is kept for api compatibility only and will be removed in v10.
  */
 export function createImporterFromContent(
   jdlString: string,
   configuration?: JDLApplicationConfiguration,
-  definition?: JDLApplicationConfig,
+  definition: JDLApplicationConfig = getDefaultJDLApplicationConfigSync(),
 ) {
   if (!jdlString) {
     throw new Error('A JDL content must be passed to create a new JDL importer.');
   }
-  const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
+  const runtime = createRuntime(definition);
   const content = parseFromContent(jdlString, runtime);
   return makeJDLImporter(content, configuration || {}, runtime);
 }

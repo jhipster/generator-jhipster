@@ -45,7 +45,6 @@ import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generato
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
 import { getPackageRoot, isDistFolder } from '../index.ts';
-import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
@@ -749,8 +748,6 @@ const helpersPresets: Record<Presets | 'jhipster', MergeableHelperOptions> = {
     settings: { forwardCwd: true },
     generatorOptions: {
       skipInstall: true,
-      // TODO remove jdlDefinition.
-      jdlDefinition: getDefaultJDLApplicationConfig(),
     },
     environmentOptions: {
       dryRun: false,

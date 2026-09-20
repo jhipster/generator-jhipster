@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { getDefaultJDLApplicationConfigSync } from '../../../../lib/jdl-config/jhipster-jdl-config.ts';
 import BaseGenerator from '../../../base/index.ts';
 import { exportJDLTransform } from '../../support/export-jdl-transform.ts';
 import { importJDLTransform } from '../../support/import-jdl-transform.ts';
@@ -38,15 +39,15 @@ export default class JdlBootstrapGenerator extends BaseGenerator<JdlBootstrapCon
 
           const destinationPath = this.destinationPath();
           const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
-          const { jdlDefinition } = this.options;
+          // jdlDefinition is resolved from the generator graph by the cli, the deprecated synchronous definitions are a
+          // fallback for callers that compose this generator without passing it. Without any, the options declared by
+          // the commands are not known to the runtime and are silently dropped from the jdl.
+          const jdlDefinition = this.options.jdlDefinition ?? getDefaultJDLApplicationConfigSync();
 
           this.setFeatures({
-            commitTransformFactory: () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! }),
+            commitTransformFactory: () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition }),
           });
-          await this.pipeline(
-            { refresh: true, pendingFiles: false },
-            importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! }),
-          );
+          await this.pipeline({ refresh: true, pendingFiles: false }, importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition }));
         }
       },
     });

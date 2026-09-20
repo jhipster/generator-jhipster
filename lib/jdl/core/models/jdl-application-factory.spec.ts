@@ -25,7 +25,7 @@ import { createRuntime } from '../runtime.ts';
 
 import { createJDLApplication } from './jdl-application-factory.ts';
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = createRuntime(await getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {

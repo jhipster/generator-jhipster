@@ -25,7 +25,7 @@ import { createRuntime } from '../runtime.ts';
 
 const { OptionNames } = applicationOptions;
 
-const { applicationDefinition } = createRuntime(getDefaultJDLApplicationConfig());
+const { applicationDefinition } = createRuntime(await getDefaultJDLApplicationConfig());
 
 describe('jdl - ApplicationOptions', () => {
   describe('doesOptionExist', () => {

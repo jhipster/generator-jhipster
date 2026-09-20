@@ -19,7 +19,7 @@
 import { kebabCase } from 'lodash-es';
 
 import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
-import type { GeneratorDependency } from '../resolver/generator-dependencies.ts';
+import { type GeneratorDependency, mergeDependenciesConfigs } from '../resolver/generator-dependencies.ts';
 
 import { convertConfigToOption, extractArgumentsFromConfigs } from './converter.ts';
 import { getCommandDerivedPropertyMutations } from './mutations.ts';
@@ -126,14 +126,10 @@ export const describeCommand = ({
   dependencies: GeneratorDependency[];
 }): CommandDescription => {
   const rootCommand = dependencies.find(dependency => dependency.namespace === namespace)?.command;
-  const configs = new Map<string, ConfigDescription>();
-  for (const dependency of dependencies) {
-    for (const [name, config] of Object.entries(dependency.command?.configs ?? {})) {
-      // The owning command asks the prompt; keep the position of the last declaration.
-      configs.delete(name);
-      configs.set(name, describeConfig(name, config, dependency.namespace, dependency.blueprintNamespace));
-    }
-  }
+  // The owning command asks the prompt, so a config keeps the position of its last declaration.
+  const configs = [...mergeDependenciesConfigs(dependencies)].map(([name, { config, namespace: owner, blueprintNamespace }]) =>
+    describeConfig(name, config, owner, blueprintNamespace),
+  );
   const commandArguments = rootCommand?.arguments ?? extractArgumentsFromConfigs(rootCommand?.configs);
   return {
     namespace,
@@ -146,7 +142,7 @@ export const describeCommand = ({
       type: argument.type?.name,
       required: argument.required,
     })),
-    configs: [...configs.values()],
+    configs,
   };
 };
 

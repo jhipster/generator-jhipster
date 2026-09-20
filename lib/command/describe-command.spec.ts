@@ -18,28 +18,17 @@
  */
 import { describe, expect, it } from 'esmocha';
 
-import type { GeneratorMeta } from '@yeoman/types';
-
-import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
+import { createGeneratorCommandsMetaLookup } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 
 import { describeCommand, findConfigOwners } from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
 
-/** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
-const metaLookup = async (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
-  const generators = await lookupGeneratorCommands();
-  return (namespace: string): GeneratorMeta | undefined => {
-    const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
-    return command ? ({ namespace, importModule: async () => ({ command }) } as unknown as GeneratorMeta) : undefined;
-  };
-};
-
 const resolve = async (
   generatorNames: string[],
   blueprints?: Record<string, JHipsterCommandDefinition>,
   blueprintNamespaces: string[] = [],
-) => resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: await metaLookup(blueprints), blueprintNamespaces });
+) => resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: createGeneratorCommandsMetaLookup(blueprints), blueprintNamespaces });
 
 describe('command - describe command', () => {
   describe('describeCommand', () => {

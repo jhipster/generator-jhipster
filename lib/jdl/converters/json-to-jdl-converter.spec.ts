@@ -27,9 +27,9 @@ import { getTestFile } from '../core/__test-support__/index.ts';
 
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.ts';
 
-describe('jdl - JSONToJDLConverter', () => {
-  const runtime = getDefaultRuntime();
+const runtime = await getDefaultRuntime();
 
+describe('jdl - JSONToJDLConverter', () => {
   beforeEach(async () => {
     await helpers.prepareTemporaryDir();
   });

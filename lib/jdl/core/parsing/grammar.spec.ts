@@ -27,7 +27,7 @@ import { parseFromContent as originalParseFromContent } from '../readers/jdl-rea
 import { createRuntime } from '../runtime.ts';
 import type { ParsedJDLApplications, ParsedJDLOption } from '../types/parsed.ts';
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = createRuntime(await getDefaultJDLApplicationConfig());
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;

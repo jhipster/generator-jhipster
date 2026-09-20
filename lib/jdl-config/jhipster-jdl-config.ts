@@ -31,6 +31,7 @@ import liquibaseCommand from '../../generators/liquibase/command.ts';
 import serverCommand from '../../generators/server/command.ts';
 import springBootCommand from '../../generators/spring-boot/command.ts';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
+import { lookupCommandsConfigs } from '../command/lookup-commands-configs.ts';
 import type { JHipsterConfigs } from '../command/types.ts';
 import { createRuntime } from '../jdl/core/runtime.ts';
 import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
@@ -80,32 +81,63 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
   };
 };
 
-let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
-export const getDefaultJDLApplicationConfig = () => {
-  defaultJDLApplicationConfig ??= Object.freeze(
-    buildJDLApplicationConfig({
-      ...appCommand.configs,
-      ...springBootCommand.configs,
-      ...bootstrapCommand.configs,
-      ...baseCommand.configs,
-      ...clientCommand.configs,
-      ...javaSimpleApplicationCommand.configs,
-      ...buildToolCommand.configs,
-      ...gradleCommand.configs,
-      ...languagesCommand.configs,
-      ...liquibaseCommand.configs,
-      ...serverCommand.configs,
-      ...commonCommand.configs,
-      ...gatewayCommand.configs,
-    }),
+/**
+ * The commands that declared jdl options when the definitions were assembled from a hand maintained list, kept so that
+ * {@link getDefaultJDLApplicationConfigSync} has something to build from. `jhipster-jdl-config.spec.ts` fails when it
+ * drifts from what the import graph resolves.
+ *
+ * @deprecated use {@link getDefaultJDLApplicationConfig}, which resolves the graph instead.
+ */
+const legacyJDLApplicationCommands = [
+  appCommand,
+  springBootCommand,
+  bootstrapCommand,
+  baseCommand,
+  clientCommand,
+  javaSimpleApplicationCommand,
+  buildToolCommand,
+  gradleCommand,
+  languagesCommand,
+  liquibaseCommand,
+  serverCommand,
+  commonCommand,
+  gatewayCommand,
+];
+
+let defaultJDLApplicationConfigSync: Readonly<JDLApplicationConfig>;
+/**
+ * The application JDL definitions assembled from a hand maintained list of commands, which has to be edited whenever an
+ * option moves into a command and silently drops the option when it is not.
+ *
+ * It exists only so that the synchronous public api - {@link createImporterFromFiles} and
+ * {@link createImporterFromContent} called without a definition - keeps working. Pass a definition instead: the cli
+ * resolves one from the generator graph and hands it over.
+ *
+ * @deprecated to be removed in v10, use {@link getDefaultJDLApplicationConfig}.
+ */
+export const getDefaultJDLApplicationConfigSync = (): Readonly<JDLApplicationConfig> => {
+  defaultJDLApplicationConfigSync ??= Object.freeze(
+    buildJDLApplicationConfig(Object.assign({}, ...legacyJDLApplicationCommands.map(command => command.configs))),
   );
+  return defaultJDLApplicationConfigSync;
+};
+
+let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
+/**
+ * The application JDL definitions, assembled from the `app` generator's command and everything it imports - the same
+ * dependency graph the cli resolves for itself and `jhipster describe` walks - replacing a hand maintained list of
+ * commands. Async because it walks that graph; the jdl importer only falls back to the synchronous list, so nothing
+ * public depends on this one.
+ */
+export const getDefaultJDLApplicationConfig = async (): Promise<Readonly<JDLApplicationConfig>> => {
+  defaultJDLApplicationConfig ??= Object.freeze(buildJDLApplicationConfig(await lookupCommandsConfigs({ from: ['app'] })));
   return defaultJDLApplicationConfig;
 };
 
 let defaultRuntime: JDLRuntime;
-export const getDefaultRuntime = (): JDLRuntime => {
+export const getDefaultRuntime = async (): Promise<JDLRuntime> => {
   if (!defaultRuntime) {
-    defaultRuntime = createRuntime(getDefaultJDLApplicationConfig());
+    defaultRuntime = createRuntime(await getDefaultJDLApplicationConfig());
   }
 
   return defaultRuntime;
