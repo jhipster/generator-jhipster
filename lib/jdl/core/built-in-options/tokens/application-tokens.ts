@@ -50,7 +50,6 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'SERVER_PORT', pattern: SERVER_PORT },
     { name: 'JWT_SECRET_KEY', pattern: JWT_SECRET_KEY },
     { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
-    { name: 'FRONT_END_BUILDER', pattern: 'frontendBuilder' }, // TODO always valid?
     { name: 'SKIP_USER_MANAGEMENT', pattern: SKIP_USER_MANAGEMENT },
     { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
     { name: 'SKIP_SERVER', pattern: SKIP_SERVER },

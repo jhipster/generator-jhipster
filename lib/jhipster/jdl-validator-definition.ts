@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { ALPHABETIC, ALPHABETIC_LOWER, ALPHANUMERIC, ALPHANUMERIC_UNDERSCORE } from '../jdl/core/built-in-options/validation-patterns.ts';
+import { ALPHABETIC_LOWER, ALPHANUMERIC, ALPHANUMERIC_UNDERSCORE } from '../jdl/core/built-in-options/validation-patterns.ts';
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const JWT_SECRET_KEY_PATTERN = /^\S+$/;
@@ -43,11 +43,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     type: 'list',
     pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
     msg: 'blueprints property',
-  },
-  FRONT_END_BUILDER: {
-    type: 'NAME',
-    pattern: ALPHABETIC,
-    msg: 'frontendBuilder property',
   },
   JHIPSTER_VERSION: { type: 'STRING' },
   JWT_SECRET_KEY: {
