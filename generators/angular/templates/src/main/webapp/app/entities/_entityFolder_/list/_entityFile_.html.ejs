@@ -118,19 +118,16 @@
 <%_ const routerLink = ` [routerLink]="['/${entityPage}', ${entityInstance}.${primaryKey.name}, 'view']"`; _%>
 <%_ for (field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
-  <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
+  <%_ if (field.fieldTypeBinary && (field.blobContentTypeImage || field.blobContentTypeAny)) { _%>
                     <td>
                     @if (<%- entityInstance %>.<%- fieldName %>) {
+    <%_ if (field.blobContentTypeImage) { _%>
                         <a (click)="openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType, 'image')">
                             <img [src]="'data:' + <%- entityInstance %>.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 30px;" alt="<%- entityInstance %>"/>
                         </a>
-                        <span>{{ <%- entityInstance %>.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>.<%- fieldName %>) }}</span>
-                    }
-                    </td>
-  <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
-                    <td>
-                    @if (<%- entityInstance %>.<%- fieldName %>) {
+    <%_ } else { _%>
                         <a (click)="openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
+    <%_ } _%>
                         <span>{{ <%- entityInstance %>.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>.<%- fieldName %>) }}</span>
                     }
                     </td>
