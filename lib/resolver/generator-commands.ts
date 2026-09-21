@@ -61,7 +61,7 @@ let jhipsterStore: Promise<Store> | undefined;
 export const getJHipsterStore = (): Promise<Store> => {
   jhipsterStore ??= (async () => {
     const store = new Store();
-    await store.lookup({
+    store.lookupSync({
       packagePaths: [getPackageRoot()],
       lookups: jhipsterGeneratorsLookup,
       customizeNamespace: customizeNestedNamespace,
