@@ -69,7 +69,7 @@
           <span>{{ <%- entityInstance %>Ref.<%- fieldName %> }}</span>
   <%_ } _%>
   <%_ if (builtInUserManagement && fieldName === 'login') { _%>
-          @if (userManagementRef.activated) {
+          @if (<%- entityInstance %>Ref.activated) {
             <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
           } @else {
            <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
@@ -112,9 +112,9 @@
           </span>
         }
       <%_ } else { _%>
-        @if (<%- `${entityInstance}()!.${relationshipFieldName}` %>) {
+        @if (<%- entityInstance %>Ref.<%- relationshipFieldName %>) {
           <div>
-            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- `${entityInstance}()!.${relationshipFieldName}?.${relationship.otherEntity.primaryKey.name}` %>, 'view']">{{ <%- entityInstance %>Ref.<%- relationshipFieldName %>?.<%- otherEntityField %> }}</a>
+            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- entityInstance %>Ref.<%- relationshipFieldName %>?.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- entityInstance %>Ref.<%- relationshipFieldName %>?.<%- otherEntityField %> }}</a>
           </div>
         }
       <%_ } _%>
