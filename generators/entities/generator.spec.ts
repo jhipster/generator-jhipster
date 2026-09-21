@@ -32,6 +32,74 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
+  // The entities command composes the app generator with the writing and postWriting priorities skipped,
+  // so the translation files are written by client:i18n at writingEntities instead. Pinned here because
+  // that flow reaches `jhipster entity` and `jhipster jdl` with entities only.
+  describe('with translations enabled', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework: 'angular', enableTranslation: true, nativeLanguage: 'en', languages: ['en', 'fr'] }, [
+          { name: 'Foo', changelogDate: '20160926101210' },
+        ])
+        .withArguments(['Foo'])
+        .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
+    });
+
+    it('should write the translation files', () => {
+      expect(
+        Object.keys(runResult.getStateSnapshot())
+          .filter(file => file.includes('i18n'))
+          .sort(),
+      ).toMatchInlineSnapshot(`
+[
+  "src/main/webapp/i18n/en/foo.json",
+  "src/main/webapp/i18n/en/global.json",
+  "src/main/webapp/i18n/fr/foo.json",
+  "src/main/webapp/i18n/fr/global.json",
+]
+`);
+    });
+
+    it('should write the entity translations of every language', () => {
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, '"foo" : {');
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/foo.json`, '"foo" : {');
+    });
+
+    // The entity menu entry is added by the needle, the rest of global.json belongs to the writing
+    // priority the entities command skips.
+    it('should add the entity to the menu of the global translations', () => {
+      expect(runResult.getSnapshot(`**/i18n/*/global.json`)).toMatchInlineSnapshot(`
+{
+  "src/main/webapp/i18n/en/global.json": {
+    "contents": "{
+  "global": {
+    "menu": {
+      "entities": {
+        "foo": "Foo"
+      }
+    }
+  }
+}",
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/global.json": {
+    "contents": "{
+  "global": {
+    "menu": {
+      "entities": {
+        "foo": "Foo"
+      }
+    }
+  }
+}",
+    "stateCleared": "modified",
+  },
+}
+`);
+    });
+  });
+
   describe('regenerating', () => {
     const entities = [
       {
