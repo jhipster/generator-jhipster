@@ -19,6 +19,8 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
+import { passthrough } from '@yeoman/transform';
+
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.ts';
 
@@ -54,23 +56,19 @@ describe(`generator - ${generator}`, () => {
 
     class CustomGenerator extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {
-        initializing();
-        return {};
+        return { initializing };
       }
 
       get [BaseGenerator.PROMPTING]() {
-        prompting();
-        return {};
+        return { prompting };
       }
 
       get [BaseGenerator.WRITING]() {
-        writing();
-        return {};
+        return { writing };
       }
 
       get [BaseGenerator.POST_WRITING]() {
-        postWriting();
-        return {};
+        return { postWriting };
       }
     }
 
@@ -83,11 +81,84 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should skip priorities', async () => {
+    it('should not run the tasks of skipped priorities', () => {
       expect(initializing).toHaveBeenCalled();
       expect(prompting).not.toHaveBeenCalled();
       expect(writing).not.toHaveBeenCalled();
       expect(postWriting).not.toHaveBeenCalled();
+    });
+
+    describe('a priority registered outside base-core', () => {
+      const custom = esmocha.fn();
+
+      class CustomPriorityGenerator extends BaseGenerator {
+        constructor(args: any, options: any, features: any) {
+          super(args, options, features);
+          this.registerPriorities([{ priorityName: 'customPriority', queueName: 'jhipster:customPriority', before: 'writing' }]);
+        }
+
+        get '>customPriority'() {
+          return { custom };
+        }
+      }
+
+      it('should skip it by its priority name', async () => {
+        await helpers
+          .run(CustomPriorityGenerator)
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withOptions({ skipPriorities: ['customPriority'] });
+        expect(custom).not.toHaveBeenCalled();
+      });
+
+      it('should run it when another priority is skipped', async () => {
+        custom.mockClear();
+        await helpers
+          .run(CustomPriorityGenerator)
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withOptions({ skipPriorities: ['writing'] });
+        expect(custom).toHaveBeenCalled();
+      });
+    });
+
+    describe('transform queue', () => {
+      const transformed = esmocha.fn();
+
+      class TransformGenerator extends BaseGenerator {
+        get [BaseGenerator.DEFAULT]() {
+          return this.asDefaultTaskGroup({
+            queueTransform() {
+              this.queueTransformStream(
+                { name: 'test transform' },
+                passthrough(() => {
+                  transformed();
+                }),
+              );
+            },
+          });
+        }
+
+        get [BaseGenerator.WRITING]() {
+          return this.asWritingTaskGroup({
+            writing() {
+              this.writeDestination('foo.txt', 'foo');
+            },
+          });
+        }
+      }
+
+      it('should run the transform by default', async () => {
+        await helpers.run(TransformGenerator).withJHipsterGenerators({ useDefaultMocks: true });
+        expect(transformed).toHaveBeenCalled();
+      });
+
+      it('should skip the transform when the transform queue is skipped', async () => {
+        transformed.mockClear();
+        await helpers
+          .run(TransformGenerator)
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withOptions({ skipPriorities: ['transform'] });
+        expect(transformed).not.toHaveBeenCalled();
+      });
     });
   });
 

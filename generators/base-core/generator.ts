@@ -30,7 +30,7 @@ import type { simpleGit } from 'simple-git';
 import type { PackageJson, SetRequired } from 'type-fest';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
-import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
+import YeomanGenerator, { type ComposeOptions, type Storage, type Task } from 'yeoman-generator';
 
 import {
   type ExportGeneratorOptionsFromCommand,
@@ -309,16 +309,28 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   /**
-   * Override yeoman-generator method that gets methods to be queued, filtering the result.
+   * Override yeoman-generator method to drop the tasks of skipped priorities at the queue.
+   *
+   * Filtering here instead of at `getTaskNames()` also reaches the tasks a generator queues itself,
+   * like the file transforms queued by `queueTransformStream()` at the `transform` queue, and leaves
+   * yeoman-generator's lifecycle alone: the tasks are still found, they are just never queued.
+   *
+   * A task with `ignoreSkipPriorities` is queued anyway, for a caller that skips a priority to drop the
+   * generator's own tasks and adds a task of its own to that same priority.
    */
-  getTaskNames(): string[] {
-    let priorities = super.getTaskNames();
-    if (!this.features.disableSkipPriorities && this.options.skipPriorities) {
-      // Make sure yeoman-generator will not throw on empty tasks due to filtered priorities.
-      this.customLifecycle ||= priorities.length > 0;
-      priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
+  override queueTask(task: Task<this> & { ignoreSkipPriorities?: boolean }): void {
+    const { skipPriorities } = this.options;
+    if (skipPriorities && !task.ignoreSkipPriorities && !this.features.disableSkipPriorities) {
+      const queueName = task.queueName ?? PRIORITY_NAMES.DEFAULT;
+      // Every base registers its own priorities, so the queue of a priority is looked up at the
+      // generator instead of a static map: base-application and base-workspaces priorities such as
+      // writingEntities or promptingWorkspaces are not known by base-core.
+      const [priorityName = queueName] = Object.entries(this._queues).find(([, queue]) => queue.queueName === queueName) ?? [];
+      if (skipPriorities.includes(priorityName)) {
+        return;
+      }
     }
-    return priorities;
+    super.queueTask(task);
   }
 
   _queueCurrentJHipsterCommandTasks() {
