@@ -16,12 +16,6 @@
 # Spring Cloud <%- serviceDiscoveryConsul ? 'Consul ' : '' %>Config bootstrap configuration for the "dev" profile
 # In prod profile, properties will be overwritten by the ones defined in bootstrap-prod.yml
 # ===================================================================
-<%_ if (serviceDiscoveryEureka) { _%>
-
-jhipster:
-  registry:
-    password: admin
-<%_ } _%>
 
 spring:
   application:
@@ -68,4 +62,17 @@ spring:
       file: <%- dockerServicesDir %><%- databaseTypeSql ? prodDatabaseType : databaseType %>.yml
 <%_ } else { _%>
       file: <%- dockerServicesDir %>services.yml
+<%_ } _%>
+<%_ if (serviceDiscoveryEureka) { _%>
+
+---
+# Password of the development JHipster Registry (src/main/docker/jhipster-registry.yml).
+# The prod profile has no default: provide it with the JHIPSTER_REGISTRY_PASSWORD environment variable.
+spring:
+  config:
+    activate:
+      on-profile: dev | secret-samples
+jhipster:
+  registry:
+    password: admin
 <%_ } _%>
