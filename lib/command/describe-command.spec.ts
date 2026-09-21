@@ -19,9 +19,12 @@
 import { describe, expect, it } from 'esmocha';
 
 import type { GeneratorMeta } from '@yeoman/types';
+import { Store } from 'yeoman-environment';
 
+import { getPackageRoot } from '../index.ts';
 import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
+import { customizeNestedNamespace, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
 
 import { describeCommand, findConfigOwners } from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
@@ -93,6 +96,29 @@ describe('command - describe command', () => {
       const owners = await findConfigOwners('databaseType');
       expect(owners.owners.map(({ owner }) => owner)).toEqual(['server', 'spring-boot']);
       expect((await findConfigOwners('unknown')).owners).toEqual([]);
+    });
+
+    it('should find the config owners of a store, blueprints included', async () => {
+      const store = new Store();
+      store.lookupSync({
+        packagePaths: [getPackageRoot()],
+        lookups: jhipsterGeneratorsLookup,
+        customizeNamespace: customizeNestedNamespace,
+      });
+      const blueprintCommand: JHipsterCommandDefinition = {
+        configs: { databaseType: { cli: { type: String }, scope: 'storage' }, blueprintOnly: { cli: { type: Boolean }, scope: 'storage' } },
+      };
+      store.getGeneratorsMeta()['jhipster-foo:server'] = {
+        namespace: 'jhipster-foo:server',
+        resolved: '/generator-jhipster-foo/generators/server/index.js',
+        importModule: async () => ({ command: blueprintCommand }),
+      } as any;
+
+      const owners = await findConfigOwners('databaseType', { store });
+      expect(owners.owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server', 'server', 'spring-boot']);
+      expect((await findConfigOwners('blueprintOnly', { store })).owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server']);
+      // Without a store, only the jhipster generators.
+      expect((await findConfigOwners('blueprintOnly')).owners).toEqual([]);
     });
   });
 });

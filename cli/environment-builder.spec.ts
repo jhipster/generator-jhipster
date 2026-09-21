@@ -119,6 +119,15 @@ describe('cli - EnvironmentBuilder', () => {
       expect(envBuilder.getEnvironment().adapter).toBeDefined();
       expect(envBuilder.getEnvironment().sharedOptions).toBeDefined();
     });
+    it('should expose the store of the environment', () => {
+      const store = envBuilder.getStore();
+      store.add({ namespace: 'store-test:app' }, class {});
+      expect(envBuilder.getEnvironment().getGeneratorMeta('store-test:app')).toBeDefined();
+    });
+    it('should create a store for each environment', () => {
+      const options = {};
+      expect(EnvironmentBuilder.create(options).getStore()).not.toBe(EnvironmentBuilder.create(options).getStore());
+    });
   });
 
   describe('createDefaultBuilder', () => {

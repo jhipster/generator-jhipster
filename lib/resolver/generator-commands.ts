@@ -33,6 +33,9 @@ export type GeneratorCommand = {
   command?: JHipsterCommandDefinition;
 };
 
+/** The part of a generators store the lookups need. */
+export type GeneratorsStore = Pick<Store, 'getGeneratorsMeta'>;
+
 /**
  * Read the USAGE file next to a generator file.
  */
@@ -60,17 +63,21 @@ const getJHipsterStore = (): Store => {
   return jhipsterStore;
 };
 
-type JHipsterGeneratorMeta = StoreGeneratorMeta & { resolved: string };
+type ImportableGeneratorMeta = StoreGeneratorMeta & { resolved: string };
 
 /**
- * The jhipster generators of this installation, in the order of their files, as a glob of the generators sorted them.
+ * The generators of a store with a module to import, in the order of their files, as a glob of the generators sorted
+ * them. Defaults to the jhipster generators of this installation.
  */
-export const lookupJHipsterGeneratorsMeta = (): JHipsterGeneratorMeta[] => {
+export const lookupGeneratorsMeta = (store: GeneratorsStore = getJHipsterStore()): ImportableGeneratorMeta[] => {
   const packageRoot = getPackageRoot();
-  const generatorPath = ({ resolved }: JHipsterGeneratorMeta) => relative(packageRoot, resolved).replaceAll('\\', '/');
-  return Object.values(getJHipsterStore().getGeneratorsMeta())
-    .filter((meta): meta is JHipsterGeneratorMeta => meta.namespace.startsWith(JHIPSTER_NAMESPACE_PREFIX) && Boolean(meta.resolved))
-    .sort((a, b) => Number(generatorPath(a) > generatorPath(b)) - Number(generatorPath(a) < generatorPath(b)));
+  const generatorPath = ({ resolved }: ImportableGeneratorMeta) => relative(packageRoot, resolved).replaceAll('\\', '/');
+  return (
+    Object.values(store.getGeneratorsMeta())
+      // A generator registered as a class, like the aliases, has no module to import a command from.
+      .filter((meta): meta is ImportableGeneratorMeta => Boolean(meta.resolved && meta.importModule))
+      .sort((a, b) => Number(generatorPath(a) > generatorPath(b)) - Number(generatorPath(a) < generatorPath(b)))
+  );
 };
 
 let generatorsCache: Promise<GeneratorCommand[]> | undefined;
@@ -81,25 +88,34 @@ const readUsageDescription = (generatorFile: string): string | undefined => {
   return description?.[1].trim();
 };
 
+/** The namespace of a generator as the cli names it: without the prefix for the jhipster generators. */
+const toCommandNamespace = (namespace: string) =>
+  namespace.startsWith(JHIPSTER_NAMESPACE_PREFIX) ? namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length) : namespace;
+
+const loadGeneratorCommands = async (store?: GeneratorsStore): Promise<GeneratorCommand[]> => {
+  const generators: GeneratorCommand[] = [];
+  for (const meta of lookupGeneratorsMeta(store)) {
+    const module = (await meta.importModule!()) as { command?: JHipsterCommandDefinition };
+    generators.push({
+      namespace: toCommandNamespace(meta.namespace),
+      description: readUsageDescription(meta.resolved),
+      command: module.command,
+    });
+  }
+  return generators;
+};
+
 /**
- * Load the generators of this installation with their command definition.
+ * Load the generators of a store with their command definition: the jhipster generators, named without the `jhipster:`
+ * prefix, and the others, like blueprints, by their namespace. Defaults to the jhipster generators of this installation.
  */
-export const lookupGeneratorCommands = async ({ descriptions = {} }: { descriptions?: Record<string, string> } = {}): Promise<
-  GeneratorCommand[]
-> => {
-  generatorsCache ??= (async () => {
-    const generators: GeneratorCommand[] = [];
-    for (const meta of lookupJHipsterGeneratorsMeta()) {
-      const module = (await meta.importModule!()) as { command?: JHipsterCommandDefinition };
-      generators.push({
-        namespace: meta.namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length),
-        description: readUsageDescription(meta.resolved),
-        command: module.command,
-      });
-    }
-    return generators;
-  })();
-  return (await generatorsCache).map(generator => ({
+export const lookupGeneratorCommands = async ({
+  store,
+  descriptions = {},
+}: { store?: GeneratorsStore; descriptions?: Record<string, string> } = {}): Promise<GeneratorCommand[]> => {
+  // The store given changes as generators are registered, only the jhipster one is cached.
+  const generators = store ? await loadGeneratorCommands(store) : await (generatorsCache ??= loadGeneratorCommands());
+  return generators.map(generator => ({
     ...generator,
     description: descriptions[generator.namespace] ?? generator.description,
   }));

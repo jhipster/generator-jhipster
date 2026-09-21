@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { lookupJHipsterGeneratorsMeta } from '../resolver/generator-commands.ts';
+import { lookupGeneratorsMeta } from '../resolver/generator-commands.ts';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
@@ -27,7 +27,7 @@ export const lookupCommandsConfigs = async (options?: { filter: (config: JHipste
   const { filter = () => true } = options ?? {};
   if (!jhipsterConfigs) {
     jhipsterConfigs = {};
-    for (const meta of lookupJHipsterGeneratorsMeta()) {
+    for (const meta of lookupGeneratorsMeta()) {
       try {
         const index = (await meta.importModule!()) as { command?: { configs?: JHipsterConfigs } };
         if (index.command?.configs) {
