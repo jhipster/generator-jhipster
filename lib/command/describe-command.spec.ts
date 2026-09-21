@@ -18,7 +18,7 @@
  */
 import { describe, expect, it } from 'esmocha';
 
-import { createGeneratorMetaLookup, getJHipsterEnvironment } from '../resolver/generator-commands.ts';
+import { createGeneratorMetaLookup, getJHipsterStore } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 
 import { describeCommand, findConfigOwners } from './describe-command.ts';
@@ -30,7 +30,7 @@ const resolve = async (
   blueprintNamespaces: string[] = [],
 ) =>
   resolveGeneratorDependencies(generatorNames, {
-    getGeneratorMeta: createGeneratorMetaLookup(await getJHipsterEnvironment(), blueprints),
+    getGeneratorMeta: createGeneratorMetaLookup(await getJHipsterStore(), blueprints),
     blueprintNamespaces,
   });
 

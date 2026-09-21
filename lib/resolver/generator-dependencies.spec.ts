@@ -20,7 +20,7 @@ import { describe, expect, it } from 'esmocha';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
-import { createGeneratorMetaLookup, getJHipsterEnvironment, lookupGeneratorCommands } from './generator-commands.ts';
+import { createGeneratorMetaLookup, getJHipsterStore, lookupGeneratorCommands } from './generator-commands.ts';
 import { type GeneratorDependency, resolveGeneratorDependencies } from './generator-dependencies.ts';
 
 const resolve = async (
@@ -29,7 +29,7 @@ const resolve = async (
   blueprintNamespaces: string[] = [],
 ) =>
   resolveGeneratorDependencies(generatorNames, {
-    getGeneratorMeta: createGeneratorMetaLookup(await getJHipsterEnvironment(), blueprints),
+    getGeneratorMeta: createGeneratorMetaLookup(await getJHipsterStore(), blueprints),
     blueprintNamespaces,
   });
 
@@ -50,7 +50,7 @@ describe('resolver - generator dependencies', () => {
     it('should report missing generators', async () => {
       const missing: string[] = [];
       await resolveGeneratorDependencies(['unknown'], {
-        getGeneratorMeta: createGeneratorMetaLookup(await getJHipsterEnvironment()),
+        getGeneratorMeta: createGeneratorMetaLookup(await getJHipsterStore()),
         onMissing: namespace => missing.push(namespace),
       });
       expect(missing).toEqual(['unknown']);

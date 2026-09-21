@@ -21,7 +21,7 @@ import { before, describe, expect, it } from 'esmocha';
 
 import { type ImportState, createImporterFromContent } from '../jdl/jdl-importer.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
-import { type GeneratorsEnvironment, createGeneratorMetaLookup, getJHipsterEnvironment } from '../resolver/generator-commands.ts';
+import { createGeneratorMetaLookup, getJHipsterStore } from '../resolver/generator-commands.ts';
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
@@ -31,21 +31,21 @@ const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => B
 const jdlDefinition = await getDefaultJDLApplicationConfig();
 
 describe('lookupCommandsConfigs', () => {
-  it('should resolve blueprints from the environment it is given, without sharing the result with another', async () => {
-    const jhipsterEnv = await getJHipsterEnvironment();
+  it('should resolve blueprints from the store it is given, without sharing the result with another', async () => {
+    const jhipsterStore = await getJHipsterStore();
     const blueprintCommand = {
       configs: { fooOption: { cli: { type: Boolean }, scope: 'storage' } },
       import: [],
     } as const satisfies JHipsterCommandDefinition;
-    const blueprintEnv: GeneratorsEnvironment = {
-      getGeneratorMeta: createGeneratorMetaLookup(jhipsterEnv, { 'jhipster-foo:git': blueprintCommand }),
-      getGeneratorsMeta: () => jhipsterEnv.getGeneratorsMeta(),
+    const blueprintStore = {
+      getMeta: createGeneratorMetaLookup(jhipsterStore, { 'jhipster-foo:git': blueprintCommand }),
+      getGeneratorsMeta: () => jhipsterStore.getGeneratorsMeta(),
     };
 
-    const withBlueprint = await lookupCommandsConfigs({ from: ['git'], env: blueprintEnv, blueprintNamespaces: ['jhipster-foo'] });
+    const withBlueprint = await lookupCommandsConfigs({ from: ['git'], store: blueprintStore, blueprintNamespaces: ['jhipster-foo'] });
     expect(withBlueprint.fooOption).toBeDefined();
-    // Same environment without the blueprint namespace, then the default environment: neither may see the cached result.
-    expect((await lookupCommandsConfigs({ from: ['git'], env: blueprintEnv })).fooOption).toBeUndefined();
+    // Same store without the blueprint namespace, then the default store: neither may see the cached result.
+    expect((await lookupCommandsConfigs({ from: ['git'], store: blueprintStore })).fooOption).toBeUndefined();
     expect((await lookupCommandsConfigs({ from: ['git'] })).fooOption).toBeUndefined();
   });
 });

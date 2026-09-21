@@ -18,44 +18,43 @@
  */
 
 import {
-  type GeneratorsEnvironment,
+  type GeneratorsStore,
   createGeneratorMetaLookup,
-  getJHipsterEnvironment,
+  getJHipsterStore,
   lookupGeneratorCommands,
 } from '../resolver/generator-commands.ts';
 import { mergeDependenciesConfigs, resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
-// By environment, as what a namespace resolves to - blueprints included - is a property of the environment's store.
-const cache = new WeakMap<GeneratorsEnvironment, Map<string, JHipsterConfigs>>();
+// By store, as what a namespace resolves to - blueprints included - is a property of the store.
+const cache = new WeakMap<GeneratorsStore, Map<string, JHipsterConfigs>>();
 
 /**
- * The configs contributed by the generators of an environment: with `from`, the roots and their `import`s resolved
+ * The configs contributed by the generators of a store: with `from`, the roots and their `import`s resolved
  * recursively, the same dependency graph `jhipster describe` and the cli walk, which costs the handful of generators
  * those roots depend on; without it, every jhipster generator registered.
  *
- * The generators come from the environment's store. Without an `env`, that is an environment with only the jhipster
- * generators, so blueprints contribute only when the caller passes the environment they are registered in, along
- * with their `blueprintNamespaces`.
+ * Without a `store`, that is a store with only the jhipster generators, so blueprints contribute only when the caller
+ * passes the store they are registered in - the one of the environment builder - along with their `blueprintNamespaces`.
  */
 export const lookupCommandsConfigs = async (options?: {
   from?: string[];
   filter?: (config: JHipsterConfig) => boolean;
-  env?: GeneratorsEnvironment;
+  store?: GeneratorsStore;
   blueprintNamespaces?: string[];
 }): Promise<JHipsterConfigs> => {
   const { from, filter = () => true, blueprintNamespaces = [] } = options ?? {};
-  const env = options?.env ?? (await getJHipsterEnvironment());
-  if (!cache.has(env)) cache.set(env, new Map());
-  const envCache = cache.get(env)!;
+  const store = options?.store ?? (await getJHipsterStore());
+  if (!cache.has(store)) cache.set(store, new Map());
+  const storeCache = cache.get(store)!;
   const key = JSON.stringify([from ?? '*', blueprintNamespaces]);
-  if (!envCache.has(key)) {
+  if (!storeCache.has(key)) {
     const dependencies =
       from ?
-        await resolveGeneratorDependencies(from, { getGeneratorMeta: createGeneratorMetaLookup(env), blueprintNamespaces })
-      : await lookupGeneratorCommands({ env });
-    envCache.set(key, Object.fromEntries([...mergeDependenciesConfigs(dependencies)].map(([name, { config }]) => [name, config])));
+        await resolveGeneratorDependencies(from, { getGeneratorMeta: createGeneratorMetaLookup(store), blueprintNamespaces })
+      : await lookupGeneratorCommands({ store });
+    storeCache.set(key, Object.fromEntries([...mergeDependenciesConfigs(dependencies)].map(([name, { config }]) => [name, config])));
   }
-  return Object.fromEntries(Object.entries(envCache.get(key)!).filter(([_key, value]) => filter(value)));
+  return Object.fromEntries(Object.entries(storeCache.get(key)!).filter(([_key, value]) => filter(value)));
 };

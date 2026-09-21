@@ -20,9 +20,11 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 import type { GeneratorMeta } from '@yeoman/types';
-import type Environment from 'yeoman-environment';
+import { Store } from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
+import { getPackageRoot } from '../index.ts';
+import { customizeNestedNamespace, jhipsterGeneratorsLookup } from '../utils/lookup.ts';
 
 export type GeneratorCommand = {
   namespace: string;
@@ -31,8 +33,8 @@ export type GeneratorCommand = {
   command?: JHipsterCommandDefinition;
 };
 
-/** The part of the environment the lookups need: its generators store. */
-export type GeneratorsEnvironment = Pick<Environment, 'getGeneratorMeta' | 'getGeneratorsMeta'>;
+/** The part of a generators store the lookups need. */
+export type GeneratorsStore = Pick<Store, 'getMeta' | 'getGeneratorsMeta'>;
 
 const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
 
@@ -50,41 +52,45 @@ const readUsageDescription = (generatorFile: string): string | undefined => {
   return description?.[1].trim();
 };
 
-let jhipsterEnvironment: Promise<Environment> | undefined;
+let jhipsterStore: Promise<Store> | undefined;
 
 /**
- * An environment with only the jhipster generators, shared by the lookups that are not given one. The generators are
- * looked up by the environment rather than by a lookup of our own, so the namespaces are the ones the cli resolves.
- * Imported lazily: the environment builder sits above the generators, which sit above this module.
+ * A store with only the jhipster generators, shared by the lookups that are not given one. It is the store the
+ * environment uses, looked up the way the environment builder looks the jhipster generators up, without an environment.
  */
-export const getJHipsterEnvironment = (): Promise<Environment> => {
-  jhipsterEnvironment ??= import('../../cli/environment-builder.ts')
-    .then(({ default: EnvironmentBuilder }) => EnvironmentBuilder.createJHipsterBuilder())
-    .then(builder => builder.getEnvironment());
-  return jhipsterEnvironment;
+export const getJHipsterStore = (): Promise<Store> => {
+  jhipsterStore ??= (async () => {
+    const store = new Store();
+    await store.lookup({
+      packagePaths: [getPackageRoot()],
+      lookups: jhipsterGeneratorsLookup,
+      customizeNamespace: customizeNestedNamespace,
+    });
+    return store;
+  })();
+  return jhipsterStore;
 };
 
 /**
- * The `getGeneratorMeta` of an environment for `resolveGeneratorDependencies`, optionally with commands by namespace
- * that stand in for generators that are not registered, like the ones of a blueprint in a test.
+ * The `getGeneratorMeta` of a store for `resolveGeneratorDependencies`, optionally with commands by namespace that
+ * stand in for generators that are not registered, like the ones of a blueprint in a test.
  */
 export const createGeneratorMetaLookup =
-  (env: GeneratorsEnvironment, commands: Record<string, JHipsterCommandDefinition> = {}) =>
+  (store: GeneratorsStore, commands: Record<string, JHipsterCommandDefinition> = {}) =>
   (namespace: string): GeneratorMeta | undefined =>
-    commands[namespace] ?
-      ({ namespace, importModule: async () => ({ command: commands[namespace] }) } as unknown as GeneratorMeta)
-    : env.getGeneratorMeta(namespace);
+    (commands[namespace] ? { namespace, importModule: async () => ({ command: commands[namespace] }) } : store.getMeta(namespace)) as
+      GeneratorMeta | undefined;
 
 /**
- * Load the jhipster generators registered in the environment with their command definition.
+ * Load the jhipster generators registered in the store with their command definition.
  */
 export const lookupGeneratorCommands = async ({
-  env,
+  store,
   descriptions = {},
-}: { env?: GeneratorsEnvironment; descriptions?: Record<string, string> } = {}): Promise<GeneratorCommand[]> => {
+}: { store?: GeneratorsStore; descriptions?: Record<string, string> } = {}): Promise<GeneratorCommand[]> => {
   const generators: GeneratorCommand[] = [];
-  // Sorted, so the result does not depend on the order the environment happened to register the generators in.
-  const metas = Object.values((env ?? (await getJHipsterEnvironment())).getGeneratorsMeta()).sort((a, b) =>
+  // Sorted, so the result does not depend on the order the generators happened to be registered in.
+  const metas = Object.values((store ?? (await getJHipsterStore())).getGeneratorsMeta()).sort((a, b) =>
     a.namespace.localeCompare(b.namespace),
   );
   for (const meta of metas) {

@@ -20,7 +20,14 @@ import { relative } from 'node:path';
 
 import { globSync } from 'tinyglobby';
 
-import { getSourceRoot } from '../index.ts';
+import { getSourceRoot, isDistFolder } from '../index.ts';
+
+/** Lookups supporting nested generators. */
+export const generatorsLookup = ['generators', 'generators/*/generators'];
+/** Lookup for source or built generators depending on the files being used. */
+export const jhipsterGeneratorsLookup = isDistFolder() ? generatorsLookup.map(lookup => `dist/${lookup}`) : generatorsLookup;
+/** Namespace of a nested generator: `jhipster:spring-boot:generators:cache` is `jhipster:spring-boot:cache`. */
+export const customizeNestedNamespace = (ns?: string) => ns?.replaceAll(':generators:', ':');
 
 type LookupGeneratorsOptions = {
   firstLevelOnly?: boolean;
