@@ -36,7 +36,7 @@ import { useAlertService } from '@/shared/alert/alert.service';
     const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
 _%>
 
-<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+<%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
 import UserService from '@/entities/user/user.service';
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
@@ -58,7 +58,7 @@ export default defineComponent({
     const alertService = inject('alertService', () => useAlertService(), true);
 
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref(new <%- entityAngularName %>());
-<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+<%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
     const userService = inject('userService', () => new UserService());
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<Array<any>> = ref([]);
@@ -101,7 +101,7 @@ export default defineComponent({
 <%_ if (relationships.length > 0) { _%>
 
     const initRelationships = () => {
-  <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+  <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
     <%_ if (relationship.otherEntity.builtInUser) { _%>
       userService().retrieve().then((res) => {
         <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
@@ -171,7 +171,7 @@ export default defineComponent({
 <%_ } _%>
       isSaving,
       currentLanguage,
-<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+<%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
       <%- relationship.otherEntity.entityInstancePlural %>,
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
