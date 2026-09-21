@@ -530,6 +530,8 @@ plugins {
         const priority = coreGenerator._queues[priorityName];
         const queueName = priority.queueName ?? priority.priorityName;
         coreGenerator.queueTask({
+          // The task is added on purpose, run it even when the priority is skipped.
+          ignoreSkipPriorities: true,
           taskName: `test-task${randomInt(1000)}`,
           queueName,
           method,

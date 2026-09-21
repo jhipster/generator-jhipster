@@ -30,7 +30,7 @@ import type { simpleGit } from 'simple-git';
 import type { PackageJson, SetRequired } from 'type-fest';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
-import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
+import YeomanGenerator, { type ComposeOptions, type Storage, type Task } from 'yeoman-generator';
 
 import {
   type ExportGeneratorOptionsFromCommand,
@@ -77,7 +77,7 @@ import type {
 } from './api.ts';
 import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_NAME_BY_QUEUE_NAME, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
@@ -309,16 +309,25 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   /**
-   * Override yeoman-generator method that gets methods to be queued, filtering the result.
+   * Override yeoman-generator method to drop the tasks of skipped priorities at the queue.
+   *
+   * Filtering here instead of at `getTaskNames()` also reaches the tasks a generator queues itself,
+   * like the file transforms queued by `queueTransformStream()` at the `transform` queue, and leaves
+   * yeoman-generator's lifecycle alone: the tasks are still found, they are just never queued.
+   *
+   * A task with `ignoreSkipPriorities` is queued anyway, for a caller that skips a priority to drop the
+   * generator's own tasks and adds a task of its own to that same priority.
    */
-  getTaskNames(): string[] {
-    let priorities = super.getTaskNames();
-    if (!this.features.disableSkipPriorities && this.options.skipPriorities) {
-      // Make sure yeoman-generator will not throw on empty tasks due to filtered priorities.
-      this.customLifecycle ||= priorities.length > 0;
-      priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
+  override queueTask(task: Task<this> & { ignoreSkipPriorities?: boolean }): void {
+    const { skipPriorities } = this.options;
+    if (skipPriorities && !task.ignoreSkipPriorities && !this.features.disableSkipPriorities) {
+      const queueName = task.queueName ?? PRIORITY_NAMES.DEFAULT;
+      const priorityName = PRIORITY_NAME_BY_QUEUE_NAME[queueName] ?? queueName;
+      if (skipPriorities.includes(priorityName)) {
+        return;
+      }
     }
-    return priorities;
+    super.queueTask(task);
   }
 
   _queueCurrentJHipsterCommandTasks() {

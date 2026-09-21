@@ -19,6 +19,8 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
+import { passthrough } from '@yeoman/transform';
+
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.ts';
 
@@ -54,23 +56,19 @@ describe(`generator - ${generator}`, () => {
 
     class CustomGenerator extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {
-        initializing();
-        return {};
+        return { initializing };
       }
 
       get [BaseGenerator.PROMPTING]() {
-        prompting();
-        return {};
+        return { prompting };
       }
 
       get [BaseGenerator.WRITING]() {
-        writing();
-        return {};
+        return { writing };
       }
 
       get [BaseGenerator.POST_WRITING]() {
-        postWriting();
-        return {};
+        return { postWriting };
       }
     }
 
@@ -83,11 +81,52 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should skip priorities', async () => {
+    it('should not run the tasks of skipped priorities', () => {
       expect(initializing).toHaveBeenCalled();
       expect(prompting).not.toHaveBeenCalled();
       expect(writing).not.toHaveBeenCalled();
       expect(postWriting).not.toHaveBeenCalled();
+    });
+
+    describe('transform queue', () => {
+      const transformed = esmocha.fn();
+
+      class TransformGenerator extends BaseGenerator {
+        get [BaseGenerator.DEFAULT]() {
+          return this.asDefaultTaskGroup({
+            queueTransform() {
+              this.queueTransformStream(
+                { name: 'test transform' },
+                passthrough(() => {
+                  transformed();
+                }),
+              );
+            },
+          });
+        }
+
+        get [BaseGenerator.WRITING]() {
+          return this.asWritingTaskGroup({
+            writing() {
+              this.writeDestination('foo.txt', 'foo');
+            },
+          });
+        }
+      }
+
+      it('should run the transform by default', async () => {
+        await helpers.run(TransformGenerator).withJHipsterGenerators({ useDefaultMocks: true });
+        expect(transformed).toHaveBeenCalled();
+      });
+
+      it('should skip the transform when the transform queue is skipped', async () => {
+        transformed.mockClear();
+        await helpers
+          .run(TransformGenerator)
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withOptions({ skipPriorities: ['transform'] });
+        expect(transformed).not.toHaveBeenCalled();
+      });
     });
   });
 
