@@ -282,6 +282,31 @@ describe(`generator - ${generator}`, () => {
     });
   }
 
+  for (const reactive of [false, true]) {
+    describe(`with ${reactive ? 'reactive ' : ''}filtering and a relationship to the same entity`, () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true, reactive }, [
+          {
+            name: 'Node',
+            changelogDate: '20160926101210',
+            jpaMetamodelFiltering: true,
+            fields: [{ fieldName: 'name', fieldType: 'String' }],
+            relationships: [{ relationshipName: 'parent', otherEntityName: 'Node', relationshipType: 'many-to-one' }],
+          },
+        ]);
+      });
+
+      it('should import the entity only once in the integration test', () => {
+        const nodeResourceIT = 'src/test/java/com/mycompany/myapp/web/rest/NodeResourceIT.java';
+        runResult.assertFileContent(nodeResourceIT, 'import com.mycompany.myapp.domain.Node;');
+        runResult.assertNoFileContent(
+          nodeResourceIT,
+          /import com\.mycompany\.myapp\.domain\.Node;[\s\S]*import com\.mycompany\.myapp\.domain\.Node;/,
+        );
+      });
+    });
+  }
+
   describe('source api', () => {
     describe('editJavaFile with springBeans', () => {
       before(async () => {

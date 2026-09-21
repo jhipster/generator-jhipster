@@ -60,7 +60,7 @@ import <%- packageName %>.web.rest.TestUtil;
 <% } %>
 import <%- packageName %>.IntegrationTest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
-<%_ const imported = []; _%>
+<%_ const imported = [entityNameCapitalized]; _%>
 <%_ for (relationship of relationships) { _%>
   <%_ // import entities in required relationships
       const { relationshipValidate } = relationship;
