@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-
-import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
+import { dirname, join } from 'node:path';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
-import { getPackageRoot } from '../index.ts';
 
-import { customizeNestedNamespace, jhipsterGeneratorsLookup } from './lookups.ts';
+import { type GeneratorsStore, JHIPSTER_NAMESPACE_PREFIX, lookupGeneratorsMeta } from './lookups.ts';
+
+export type { GeneratorsStore } from './lookups.ts';
 
 export type GeneratorCommand = {
   namespace: string;
@@ -33,51 +32,12 @@ export type GeneratorCommand = {
   command?: JHipsterCommandDefinition;
 };
 
-/** The part of a generators store the lookups need. */
-export type GeneratorsStore = Pick<Store, 'getGeneratorsMeta'>;
-
 /**
  * Read the USAGE file next to a generator file.
  */
 export const readUsage = (generatorFile: string): string | undefined => {
   const usagePath = join(dirname(generatorFile), 'USAGE');
   return existsSync(usagePath) ? readFileSync(usagePath, 'utf8').trim() : undefined;
-};
-
-const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
-
-let jhipsterStore: Store | undefined;
-
-/**
- * A store with only the jhipster generators, looked up the way the environment builder looks them up.
- */
-const getJHipsterStore = (): Store => {
-  if (!jhipsterStore) {
-    jhipsterStore = new Store();
-    jhipsterStore.lookupSync({
-      packagePaths: [getPackageRoot()],
-      lookups: jhipsterGeneratorsLookup,
-      customizeNamespace: customizeNestedNamespace,
-    });
-  }
-  return jhipsterStore;
-};
-
-type ImportableGeneratorMeta = StoreGeneratorMeta & { resolved: string };
-
-/**
- * The generators of a store with a module to import, in the order of their files, as a glob of the generators sorted
- * them. Defaults to the jhipster generators of this installation.
- */
-export const lookupGeneratorsMeta = (store: GeneratorsStore = getJHipsterStore()): ImportableGeneratorMeta[] => {
-  const packageRoot = getPackageRoot();
-  const generatorPath = ({ resolved }: ImportableGeneratorMeta) => relative(packageRoot, resolved).replaceAll('\\', '/');
-  return (
-    Object.values(store.getGeneratorsMeta())
-      // A generator registered as a class, like the aliases, has no module to import a command from.
-      .filter((meta): meta is ImportableGeneratorMeta => Boolean(meta.resolved && meta.importModule))
-      .sort((a, b) => Number(generatorPath(a) > generatorPath(b)) - Number(generatorPath(a) < generatorPath(b)))
-  );
 };
 
 let generatorsCache: Promise<GeneratorCommand[]> | undefined;

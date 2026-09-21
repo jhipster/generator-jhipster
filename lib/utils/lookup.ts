@@ -18,30 +18,33 @@
  */
 import { relative } from 'node:path';
 
-import { globSync } from 'tinyglobby';
-
 import { getSourceRoot } from '../index.ts';
+import { JHIPSTER_NAMESPACE_PREFIX, lookupGeneratorsMeta } from '../resolver/lookups.ts';
 
 type LookupGeneratorsOptions = {
   firstLevelOnly?: boolean;
   absolute?: boolean;
 };
 
-export const lookupGenerators = ({ firstLevelOnly, absolute }: LookupGeneratorsOptions = {}) =>
-  globSync([`generators/*/index.{t,j}s`, ...(firstLevelOnly ? [] : [`generators/*/generators/*/index.{t,j}s`])], {
-    onlyFiles: true,
-    cwd: getSourceRoot(),
-    absolute,
-  }).sort();
+/**
+ * The jhipster generators of this installation, sorted by path, with their namespace without the `jhipster:` prefix.
+ * The path is relative to the source root, or absolute with `absolute`.
+ */
+export const lookupGeneratorsWithNamespace = ({ firstLevelOnly, absolute }: LookupGeneratorsOptions = {}): {
+  generator: string;
+  namespace: string;
+}[] => {
+  const sourceRoot = getSourceRoot();
+  return lookupGeneratorsMeta()
+    .map(meta => ({
+      generator: absolute ? meta.resolved : relative(sourceRoot, meta.resolved).replaceAll('\\', '/'),
+      namespace: meta.namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length),
+    }))
+    .filter(({ namespace }) => !firstLevelOnly || !namespace.includes(':'));
+};
 
-const toNamespace = (generatorRelativePath: string) =>
-  generatorRelativePath
-    .replace(/\/index\.[tj]s$/, '')
-    .replace(/generators\//g, '')
-    .replaceAll('/', ':');
-
-export const lookupGeneratorsWithNamespace = (options?: LookupGeneratorsOptions): { namespace: string; generator: string }[] =>
-  lookupGenerators(options).map(gen => ({
-    generator: gen,
-    namespace: toNamespace(options?.absolute ? relative(getSourceRoot(), gen) : gen),
-  }));
+/**
+ * The paths of the jhipster generators of this installation, sorted, relative to the source root or absolute.
+ */
+export const lookupGenerators = (options?: LookupGeneratorsOptions): string[] =>
+  lookupGeneratorsWithNamespace(options).map(({ generator }) => generator);

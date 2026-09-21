@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { lookupGeneratorsMeta } from '../resolver/generator-commands.ts';
+import { lookupGeneratorsMeta } from '../resolver/lookups.ts';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
