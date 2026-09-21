@@ -23,7 +23,7 @@ import { basename, join } from 'node:path';
 import Generator from './generator.ts';
 
 import { shouldSupportFeatures } from '#test-support';
-import { basicHelpers as helpers } from '#testing';
+import { defaultHelpers as helpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
 

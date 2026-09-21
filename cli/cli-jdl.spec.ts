@@ -24,7 +24,7 @@ import { execa } from 'execa';
 
 import { getPackageRoot } from '../lib/index.ts';
 
-import { basicHelpers as helpers, runResult } from '#testing';
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const jhipsterCli = join(getPackageRoot(), 'bin/jhipster.cjs');
 

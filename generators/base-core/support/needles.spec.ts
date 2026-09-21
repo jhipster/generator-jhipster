@@ -19,7 +19,7 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import test from 'node:test';
 
-import { basicHelpers as helpers } from '../../../lib/testing/helpers.ts';
+import { defaultHelpers as helpers } from '../../../lib/testing/helpers.ts';
 
 import {
   checkContentIn,

@@ -27,7 +27,7 @@ import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
-import { basicHelpers, defaultHelpers as helpers, result } from '#testing';
+import { defaultHelpers as helpers, result, skipPrettierHelpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -98,8 +98,8 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      // basicHelpers keeps dryRun disabled, so files would be written to disk without export mode.
-      await basicHelpers.run(WriteGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+      // skipPrettierHelpers keeps dryRun disabled, so files would be written to disk without export mode.
+      await skipPrettierHelpers.run(WriteGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
     });
 
     it('does not write the generated file to disk', () => {
@@ -129,7 +129,7 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await basicHelpers.run(WriteGenerator).withOptions({ deferCommit: true }).withJHipsterGenerators();
+      await skipPrettierHelpers.run(WriteGenerator).withOptions({ deferCommit: true }).withJHipsterGenerators();
     });
 
     it('does not write the generated file to disk', () => {
@@ -163,7 +163,7 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await basicHelpers.run(SiblingGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+      await skipPrettierHelpers.run(SiblingGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
     });
 
     it('does not write the generated file to disk', () => {
@@ -192,7 +192,7 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await basicHelpers.run(EscapeGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+      await skipPrettierHelpers.run(EscapeGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
     });
 
     it('does not write the escaped file to disk', () => {
