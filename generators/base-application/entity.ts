@@ -215,8 +215,8 @@ export const mutateRelationship = {
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
-  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName, { force: true }),
-  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName, { force: true }),
+  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName, { force: false }),
+  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName, { force: false }),
   relationshipNameCapitalized: ({ relationshipName }) => upperFirst(relationshipName),
   relationshipNameHumanized: ({ relationshipName }) => startCase(relationshipName),
 
@@ -388,7 +388,7 @@ export const mutateEntity = {
   clientRootFolder: '',
   entityNameCapitalized: ({ name }) => upperFirst(name),
   entityNameKebabCase: ({ name }) => kebabCase(name),
-  entityNamePlural: ({ name }) => pluralize(name, { force: true }),
+  entityNamePlural: ({ name }) => pluralize(name, { force: false }),
   entityNamePluralizedAndSpinalCased: ({ name }) => kebabCase(pluralize(name, { force: false })),
   entityInstance: ({ name }) => lowerFirst(name),
   entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),

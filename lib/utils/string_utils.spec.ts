@@ -28,8 +28,14 @@ describe('jdl - StringUtils', () => {
     it('should keep it as it is when force is false', () => {
       expect(pluralize('UserData', { force: false })).toBe('UserData');
     });
+    it('should not double-pluralize when force is false', () => {
+      expect(pluralize('Jobs', { force: false })).toBe('Jobs');
+    });
     it('should append an "s" when force is true', () => {
       expect(pluralize('UserData', { force: true })).toBe('UserDatas');
+    });
+    it('should double-pluralize when force is true', () => {
+      expect(pluralize('Jobs', { force: true })).toBe('Jobses');
     });
   });
   describe('customCamelCase', () => {
