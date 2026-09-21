@@ -4,7 +4,7 @@
     "@cypress/schematic": "6.0.0",
     "babel-loader": "10.1.1",
     "babel-plugin-istanbul": "8.0.0",
-    "cypress": "16.0.0",
+    "cypress": "16.1.0",
     "cypress-audit": "1.1.0",
     "cypress-terminal-report": "7.3.3",
     "eslint-plugin-cypress": "7.0.2",
