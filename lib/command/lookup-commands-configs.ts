@@ -17,29 +17,24 @@
  * limitations under the License.
  */
 
-import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
-
-import { lookupGenerators } from '../utils/index.ts';
+import { lookupJHipsterGeneratorsMeta } from '../resolver/generator-commands.ts';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
-const cwd = join(import.meta.dirname, '../..');
 let jhipsterConfigs: JHipsterConfigs;
 
 export const lookupCommandsConfigs = async (options?: { filter: (config: JHipsterConfig) => boolean }): Promise<JHipsterConfigs> => {
   const { filter = () => true } = options ?? {};
   if (!jhipsterConfigs) {
     jhipsterConfigs = {};
-    const files = lookupGenerators();
-    for (const file of files) {
+    for (const meta of lookupJHipsterGeneratorsMeta()) {
       try {
-        const index = await import(pathToFileURL(`${cwd}/${file}`).toString());
+        const index = (await meta.importModule!()) as { command?: { configs?: JHipsterConfigs } };
         if (index.command?.configs) {
           Object.assign(jhipsterConfigs, index.command?.configs);
         }
       } catch (error) {
-        throw new Error(`Error loading configs from ${file}`, { cause: error });
+        throw new Error(`Error loading configs from ${meta.resolved}`, { cause: error });
       }
     }
   }

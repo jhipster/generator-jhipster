@@ -30,7 +30,7 @@ import type Environment from 'yeoman-environment';
 import type { EnvironmentOptions } from 'yeoman-environment';
 import { RunContext, type RunContextSettings, type RunResult, YeomanTest, createHelpers, result } from 'yeoman-test';
 
-import EnvironmentBuilder, { generatorsLookup, jhipsterGeneratorsLookup } from '../../cli/environment-builder.ts';
+import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import type JHipsterCommand from '../../cli/jhipster-command.ts';
 import { buildJHipster, createProgram } from '../../cli/program.ts';
 import type { CliCommand } from '../../cli/types.ts';
@@ -48,6 +48,7 @@ import { getPackageRoot, isDistFolder } from '../index.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
+import { generatorsLookup, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
 import getGenerator, { getGeneratorRelativeFolder } from '../utils/get-generator.ts';

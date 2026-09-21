@@ -29,6 +29,7 @@ import Environment from 'yeoman-environment';
 import BaseGenerator from '../generators/base/index.ts';
 import { type Blueprint, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../lib/index.ts';
+import { customizeNestedNamespace, generatorsLookup, jhipsterGeneratorsLookup } from '../lib/resolver/lookups.ts';
 import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
@@ -39,14 +40,8 @@ const jhipsterDevBlueprintPath =
   process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
-const customizeNestedNamespace = (ns?: string) => ns?.replaceAll(':generators:', ':');
-
-// Support nested generators.
-export const generatorsLookup = ['generators', 'generators/*/generators'];
 // Local and dev blueprints generators.
 const localBlueprintGeneratorsLookup = ['.', './*/generators'];
-// Lookup for source or built generators depending on the files being used.
-export const jhipsterGeneratorsLookup = isDistFolder() ? generatorsLookup.map(lookup => `dist/${lookup}`) : generatorsLookup;
 // Lookup for source and built generators.
 const packagedGeneratorsLookup = generatorsLookup.flatMap(lookup => [`dist/${lookup}`, lookup]);
 

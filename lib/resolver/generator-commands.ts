@@ -17,11 +17,14 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { dirname, join, relative } from 'node:path';
+
+import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
-import { lookupGeneratorsWithNamespace } from '../utils/lookup.ts';
+import { getPackageRoot } from '../index.ts';
+
+import { customizeNestedNamespace, jhipsterGeneratorsLookup } from './lookups.ts';
 
 export type GeneratorCommand = {
   namespace: string;
@@ -36,6 +39,38 @@ export type GeneratorCommand = {
 export const readUsage = (generatorFile: string): string | undefined => {
   const usagePath = join(dirname(generatorFile), 'USAGE');
   return existsSync(usagePath) ? readFileSync(usagePath, 'utf8').trim() : undefined;
+};
+
+const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
+
+let jhipsterStore: Store | undefined;
+
+/**
+ * A store with only the jhipster generators, looked up the way the environment builder looks them up.
+ */
+const getJHipsterStore = (): Store => {
+  if (!jhipsterStore) {
+    jhipsterStore = new Store();
+    jhipsterStore.lookupSync({
+      packagePaths: [getPackageRoot()],
+      lookups: jhipsterGeneratorsLookup,
+      customizeNamespace: customizeNestedNamespace,
+    });
+  }
+  return jhipsterStore;
+};
+
+type JHipsterGeneratorMeta = StoreGeneratorMeta & { resolved: string };
+
+/**
+ * The jhipster generators of this installation, in the order of their files, as a glob of the generators sorted them.
+ */
+export const lookupJHipsterGeneratorsMeta = (): JHipsterGeneratorMeta[] => {
+  const packageRoot = getPackageRoot();
+  const generatorPath = ({ resolved }: JHipsterGeneratorMeta) => relative(packageRoot, resolved).replaceAll('\\', '/');
+  return Object.values(getJHipsterStore().getGeneratorsMeta())
+    .filter((meta): meta is JHipsterGeneratorMeta => meta.namespace.startsWith(JHIPSTER_NAMESPACE_PREFIX) && Boolean(meta.resolved))
+    .sort((a, b) => Number(generatorPath(a) > generatorPath(b)) - Number(generatorPath(a) < generatorPath(b)));
 };
 
 let generatorsCache: Promise<GeneratorCommand[]> | undefined;
@@ -54,9 +89,13 @@ export const lookupGeneratorCommands = async ({ descriptions = {} }: { descripti
 > => {
   generatorsCache ??= (async () => {
     const generators: GeneratorCommand[] = [];
-    for (const { namespace, generator } of lookupGeneratorsWithNamespace({ absolute: true })) {
-      const module = await import(pathToFileURL(generator).toString());
-      generators.push({ namespace, description: readUsageDescription(generator), command: module.command });
+    for (const meta of lookupJHipsterGeneratorsMeta()) {
+      const module = (await meta.importModule!()) as { command?: JHipsterCommandDefinition };
+      generators.push({
+        namespace: meta.namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length),
+        description: readUsageDescription(meta.resolved),
+        command: module.command,
+      });
     }
     return generators;
   })();
