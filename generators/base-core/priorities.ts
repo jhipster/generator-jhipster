@@ -175,13 +175,6 @@ export const CUSTOM_PRIORITIES = (
   ] satisfies Priority[]
 ).reverse();
 
-/**
- * Queue name of each priority, for priorities whose queue is not named after them.
- */
-export const PRIORITY_NAME_BY_QUEUE_NAME: Record<string, string> = Object.fromEntries(
-  CUSTOM_PRIORITIES.filter(priority => priority.queueName).map(priority => [priority.queueName!, priority.priorityName]),
-);
-
 export const PRIORITY_NAMES = {
   INITIALIZING,
   PROMPTING,

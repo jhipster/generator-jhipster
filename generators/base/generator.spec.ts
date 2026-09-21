@@ -88,6 +88,38 @@ describe(`generator - ${generator}`, () => {
       expect(postWriting).not.toHaveBeenCalled();
     });
 
+    describe('a priority registered outside base-core', () => {
+      const custom = esmocha.fn();
+
+      class CustomPriorityGenerator extends BaseGenerator {
+        constructor(args: any, options: any, features: any) {
+          super(args, options, features);
+          this.registerPriorities([{ priorityName: 'customPriority', queueName: 'jhipster:customPriority', before: 'writing' }]);
+        }
+
+        get '>customPriority'() {
+          return { custom };
+        }
+      }
+
+      it('should skip it by its priority name', async () => {
+        await helpers
+          .run(CustomPriorityGenerator)
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withOptions({ skipPriorities: ['customPriority'] });
+        expect(custom).not.toHaveBeenCalled();
+      });
+
+      it('should run it when another priority is skipped', async () => {
+        custom.mockClear();
+        await helpers
+          .run(CustomPriorityGenerator)
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withOptions({ skipPriorities: ['writing'] });
+        expect(custom).toHaveBeenCalled();
+      });
+    });
+
     describe('transform queue', () => {
       const transformed = esmocha.fn();
 

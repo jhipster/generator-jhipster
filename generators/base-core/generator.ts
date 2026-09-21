@@ -77,7 +77,7 @@ import type {
 } from './api.ts';
 import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_NAME_BY_QUEUE_NAME, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
@@ -322,7 +322,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const { skipPriorities } = this.options;
     if (skipPriorities && !task.ignoreSkipPriorities && !this.features.disableSkipPriorities) {
       const queueName = task.queueName ?? PRIORITY_NAMES.DEFAULT;
-      const priorityName = PRIORITY_NAME_BY_QUEUE_NAME[queueName] ?? queueName;
+      // Every base registers its own priorities, so the queue of a priority is looked up at the
+      // generator instead of a static map: base-application and base-workspaces priorities such as
+      // writingEntities or promptingWorkspaces are not known by base-core.
+      const [priorityName = queueName] = Object.entries(this._queues).find(([, queue]) => queue.queueName === queueName) ?? [];
       if (skipPriorities.includes(priorityName)) {
         return;
       }
