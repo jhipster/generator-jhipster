@@ -144,7 +144,7 @@ const describeCliCommand = async (
   envBuilder?: EnvironmentBuilder,
 ) => {
   if (options.config) {
-    const owners = await findConfigOwners(options.config);
+    const owners = await findConfigOwners(options.config, { env });
     print(options.json ? owners : formatConfigOwners(owners));
     return;
   }

@@ -21,12 +21,34 @@ import { before, describe, expect, it } from 'esmocha';
 
 import { type ImportState, createImporterFromContent } from '../jdl/jdl-importer.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
+import { type GeneratorsEnvironment, createGeneratorMetaLookup, getJHipsterEnvironment } from '../resolver/generator-commands.ts';
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
+import type { JHipsterCommandDefinition } from './types.ts';
 
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 
 const jdlDefinition = await getDefaultJDLApplicationConfig();
+
+describe('lookupCommandsConfigs', () => {
+  it('should resolve blueprints from the environment it is given, without sharing the result with another', async () => {
+    const jhipsterEnv = await getJHipsterEnvironment();
+    const blueprintCommand = {
+      configs: { fooOption: { cli: { type: Boolean }, scope: 'storage' } },
+      import: [],
+    } as const satisfies JHipsterCommandDefinition;
+    const blueprintEnv: GeneratorsEnvironment = {
+      getGeneratorMeta: createGeneratorMetaLookup(jhipsterEnv, { 'jhipster-foo:git': blueprintCommand }),
+      getGeneratorsMeta: () => jhipsterEnv.getGeneratorsMeta(),
+    };
+
+    const withBlueprint = await lookupCommandsConfigs({ from: ['git'], env: blueprintEnv, blueprintNamespaces: ['jhipster-foo'] });
+    expect(withBlueprint.fooOption).toBeDefined();
+    // Same environment without the blueprint namespace, then the default environment: neither may see the cached result.
+    expect((await lookupCommandsConfigs({ from: ['git'], env: blueprintEnv })).fooOption).toBeUndefined();
+    expect((await lookupCommandsConfigs({ from: ['git'] })).fooOption).toBeUndefined();
+  });
+});
 
 describe('jdl options', () => {
   const jdlConfigs = Object.entries(jhipsterConfigsWithJDL);
@@ -51,11 +73,11 @@ describe('jdl options', () => {
   "clientThemeVariant",
   "applicationType",
   "gatewayServerPort",
+  "packageName",
+  "graalvmSupport",
   "buildTool",
   "enableGradleDevelocity",
   "gradleDevelocityHost",
-  "packageName",
-  "graalvmSupport",
   "skipUserManagement",
   "languages",
   "enableTranslation",
@@ -71,10 +93,10 @@ describe('jdl options', () => {
   "prodDatabaseType",
   "devDatabaseType",
   "syncUserWithIdp",
-  "cacheProvider",
-  "enableHibernateCache",
   "databaseMigration",
   "messageBroker",
+  "cacheProvider",
+  "enableHibernateCache",
   "routes",
 ]
 `);

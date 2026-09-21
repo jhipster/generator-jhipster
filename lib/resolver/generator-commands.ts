@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, extname, join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { dirname, join } from 'node:path';
 
 import type { GeneratorMeta } from '@yeoman/types';
+import type Environment from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
-import { lookupGeneratorsWithNamespace } from '../utils/lookup.ts';
 
 export type GeneratorCommand = {
   namespace: string;
@@ -31,6 +30,11 @@ export type GeneratorCommand = {
   description?: string;
   command?: JHipsterCommandDefinition;
 };
+
+/** The part of the environment the lookups need: its generators store. */
+export type GeneratorsEnvironment = Pick<Environment, 'getGeneratorMeta' | 'getGeneratorsMeta'>;
+
+const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
 
 /**
  * Read the USAGE file next to a generator file.
@@ -40,70 +44,59 @@ export const readUsage = (generatorFile: string): string | undefined => {
   return existsSync(usagePath) ? readFileSync(usagePath, 'utf8').trim() : undefined;
 };
 
-const commandsCache = new Map<string, Promise<JHipsterCommandDefinition | undefined>>();
-
-/**
- * Import the command of a generator, from its own `command` module when it has one rather than from its index, which
- * also pulls the generator in. Besides being the smaller import, it keeps a command out of the import cycles the
- * generators form: a generator reached while it is already being evaluated hands back a half initialized module whose
- * `command` is undefined.
- */
-const importGeneratorCommand = (generatorFile: string): Promise<JHipsterCommandDefinition | undefined> => {
-  if (!commandsCache.has(generatorFile)) {
-    const commandFile = join(dirname(generatorFile), `command${extname(generatorFile)}`);
-    const ownCommand = existsSync(commandFile);
-    commandsCache.set(
-      generatorFile,
-      import(pathToFileURL(ownCommand ? commandFile : generatorFile).toString()).then(module =>
-        ownCommand ? module.default : module.command,
-      ),
-    );
-  }
-  return commandsCache.get(generatorFile)!;
-};
-
-/**
- * A `getGeneratorMeta` for `resolveGeneratorDependencies` backed by the generators of this installation, optionally
- * with blueprint commands by namespace. Commands are imported lazily, as the dependency graph reaches them.
- */
-export const createGeneratorCommandsMetaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
-  const generatorFiles = new Map(
-    lookupGeneratorsWithNamespace({ absolute: true }).map(({ namespace, generator }) => [`jhipster:${namespace}`, generator]),
-  );
-  return (namespace: string): GeneratorMeta | undefined => {
-    const blueprintCommand = blueprints[namespace];
-    const generatorFile = generatorFiles.get(namespace);
-    if (!blueprintCommand && !generatorFile) return undefined;
-    return {
-      namespace,
-      importModule: async () => ({ command: blueprintCommand ?? (await importGeneratorCommand(generatorFile!)) }),
-    } as unknown as GeneratorMeta;
-  };
-};
-
-let generatorsCache: Promise<GeneratorCommand[]> | undefined;
-
 const readUsageDescription = (generatorFile: string): string | undefined => {
   const usage = readUsage(generatorFile);
   const description = usage ? /Description:\s*\n([^\n]+)/.exec(usage) : undefined;
   return description?.[1].trim();
 };
 
+let jhipsterEnvironment: Promise<Environment> | undefined;
+
 /**
- * Load the generators of this installation with their command definition.
+ * An environment with only the jhipster generators, shared by the lookups that are not given one. The generators are
+ * looked up by the environment rather than by a lookup of our own, so the namespaces are the ones the cli resolves.
+ * Imported lazily: the environment builder sits above the generators, which sit above this module.
  */
-export const lookupGeneratorCommands = async ({ descriptions = {} }: { descriptions?: Record<string, string> } = {}): Promise<
-  GeneratorCommand[]
-> => {
-  generatorsCache ??= (async () => {
-    const generators: GeneratorCommand[] = [];
-    for (const { namespace, generator } of lookupGeneratorsWithNamespace({ absolute: true })) {
-      generators.push({ namespace, description: readUsageDescription(generator), command: await importGeneratorCommand(generator) });
-    }
-    return generators;
-  })();
-  return (await generatorsCache).map(generator => ({
-    ...generator,
-    description: descriptions[generator.namespace] ?? generator.description,
-  }));
+export const getJHipsterEnvironment = (): Promise<Environment> => {
+  jhipsterEnvironment ??= import('../../cli/environment-builder.ts')
+    .then(({ default: EnvironmentBuilder }) => EnvironmentBuilder.createJHipsterBuilder())
+    .then(builder => builder.getEnvironment());
+  return jhipsterEnvironment;
+};
+
+/**
+ * The `getGeneratorMeta` of an environment for `resolveGeneratorDependencies`, optionally with commands by namespace
+ * that stand in for generators that are not registered, like the ones of a blueprint in a test.
+ */
+export const createGeneratorMetaLookup =
+  (env: GeneratorsEnvironment, commands: Record<string, JHipsterCommandDefinition> = {}) =>
+  (namespace: string): GeneratorMeta | undefined =>
+    commands[namespace] ?
+      ({ namespace, importModule: async () => ({ command: commands[namespace] }) } as unknown as GeneratorMeta)
+    : env.getGeneratorMeta(namespace);
+
+/**
+ * Load the jhipster generators registered in the environment with their command definition.
+ */
+export const lookupGeneratorCommands = async ({
+  env,
+  descriptions = {},
+}: { env?: GeneratorsEnvironment; descriptions?: Record<string, string> } = {}): Promise<GeneratorCommand[]> => {
+  const generators: GeneratorCommand[] = [];
+  // Sorted, so the result does not depend on the order the environment happened to register the generators in.
+  const metas = Object.values((env ?? (await getJHipsterEnvironment())).getGeneratorsMeta()).sort((a, b) =>
+    a.namespace.localeCompare(b.namespace),
+  );
+  for (const meta of metas) {
+    // A generator registered as a class, like the aliases, has no module to import a command from.
+    if (!meta.namespace.startsWith(JHIPSTER_NAMESPACE_PREFIX) || !meta.importModule) continue;
+    const namespace = meta.namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length);
+    const module = (await meta.importModule()) as { command?: JHipsterCommandDefinition };
+    generators.push({
+      namespace,
+      description: descriptions[namespace] ?? (meta.resolved ? readUsageDescription(meta.resolved) : undefined),
+      command: module.command,
+    });
+  }
+  return generators;
 };

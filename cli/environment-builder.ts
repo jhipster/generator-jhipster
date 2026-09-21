@@ -117,6 +117,14 @@ export default class EnvironmentBuilder {
     return EnvironmentBuilder.create(options).prepare(prepareOptions);
   }
 
+  /**
+   * Creates a new EnvironmentBuilder with a new Environment and only the jhipster generators: no blueprints, no
+   * sharedOptions and nothing read from the working directory. For looking generators up rather than running them.
+   */
+  static async createJHipsterBuilder(options?: EnvironmentOptions): Promise<EnvironmentBuilder> {
+    return EnvironmentBuilder.create(options)._lookupJHipster();
+  }
+
   static async run(
     args: Parameters<Environment['run']>[0],
     generatorOptions: Parameters<Environment['run']>[1] & Record<string, unknown> = {},
