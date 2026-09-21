@@ -38,17 +38,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import tech.jhipster.config.JHipsterProperties;
-import tech.jhipster.config.cache.PrefixedKeyGenerator;
 
 <%_ if (serviceDiscoveryAny) { _%>
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
 import org.jgroups.JChannel;
-import org.jgroups.PhysicalAddress;
 import org.jgroups.protocols.*;
 import org.jgroups.protocols.pbcast.GMS;
 import org.jgroups.protocols.pbcast.NAKACK2;
 import org.jgroups.protocols.pbcast.STABLE;
-import org.jgroups.stack.IpAddress;
 import org.jgroups.stack.ProtocolStack;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;

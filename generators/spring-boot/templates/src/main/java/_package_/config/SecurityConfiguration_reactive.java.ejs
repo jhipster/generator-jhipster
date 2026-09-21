@@ -47,9 +47,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.ParameterizedTypeReference;
   <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationTypeJwt) { _%>
-import org.springframework.security.config.Customizer;
-<%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -129,7 +126,6 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
-import java.net.URI;
   <%_ } _%>
 
 import java.util.HashSet;

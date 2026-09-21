@@ -31,9 +31,6 @@ import org.springframework.data.r2dbc.convert.R2dbcConverter;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
-import org.springframework.data.relational.core.sql.Column;
-import org.springframework.data.relational.core.sql.Expression;
-import org.springframework.data.relational.core.sql.Table;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
@@ -46,7 +43,6 @@ import reactor.util.function.Tuples;
 <%_ if (!authenticationTypeOauth2) { _%>
 import java.time.LocalDateTime;
 <%_ } _%>
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

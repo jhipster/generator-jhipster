@@ -61,9 +61,6 @@ import org.springframework.cache.annotation.CacheEvict;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-    <%_ if (databaseTypeCouchbase) { _%>
-import org.springframework.data.domain.PageImpl;
-    <%_ } _%>
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
   <%_ if (!authenticationTypeOauth2) { _%>

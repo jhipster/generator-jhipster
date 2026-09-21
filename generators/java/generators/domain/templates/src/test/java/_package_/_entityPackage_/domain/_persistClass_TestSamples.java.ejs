@@ -18,9 +18,6 @@
 -%>
 package <%- entityAbsolutePackage %>.domain;
 
-import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
-import <%- packageName %>.web.rest.TestUtil;
 <%_ if (fields.some(field => field.fieldTypeString) || fields.some(field => field.fieldTypeUUID)) { _%>
 import java.util.UUID;
 <%_ } _%>
