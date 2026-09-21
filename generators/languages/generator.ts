@@ -20,7 +20,6 @@
 import chalk from 'chalk';
 import { padEnd } from 'lodash-es';
 
-import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import type { Config as ClientConfig } from '../client/types.ts';
@@ -34,8 +33,6 @@ import type {
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
 } from './types.ts';
-
-const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 
 /**
  * This is the base class for a generator that generates entities.
@@ -65,14 +62,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('languages');
       await this.dependsOnBootstrap('common');
-    }
-
-    const { skipClient, clientFramework } = this.jhipsterConfigWithDefaults as ClientConfig;
-    if (!skipClient && clientFramework !== NO_CLIENT_FRAMEWORK && (!this.jhipsterConfig.enableTranslation || clientFramework === ANGULAR)) {
-      // We must write languages files for translation process for entities only generation.
-      // Angular frontend uses translation files even if enableTranslation is enabled.
-      // As side effect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
-      this.setFeatures({ disableSkipPriorities: true });
     }
   }
 
