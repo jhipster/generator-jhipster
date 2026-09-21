@@ -33,7 +33,7 @@
     "@tsconfig/node18": "18.2.7",
     "@types/node": "22.20.3",
     "@vitejs/plugin-vue": "6.0.9",
-    "@vue/test-utils": "2.5.0",
+    "@vue/test-utils": "2.5.1",
     "@vue/tsconfig": "0.9.1",
     "autoprefixer": "10.6.1",
     "axios-mock-adapter": "2.1.0",
