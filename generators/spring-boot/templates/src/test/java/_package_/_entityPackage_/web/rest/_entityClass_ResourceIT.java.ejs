@@ -27,33 +27,19 @@ import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
       = filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
       || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
 
-    let callBlock = '';
-    let callListBlock = '';
-    if (reactive) {
-      callBlock = '.block()';
-      callListBlock = '.collectList().block()';
-    }
-    let saveMethod = 'save';
-    if (!reactive && databaseTypeSql) {
-      saveMethod = 'saveAndFlush';
-    }
+    const callBlock = reactive ? '.block()' : '';
+    const callListBlock = reactive ? '.collectList().block()' : '';
+    const saveMethod = !reactive && databaseTypeSql ? 'saveAndFlush' : 'save';
     const entityManagerVariable = databaseTypeSql && reactive ? 'template' : 'em';
-    let createEntityPrefix = '';
-    let createEntityPostfix = '';
-    if (databaseTypeSql && reactive) {
-      createEntityPrefix = 'template.insert(';
-      createEntityPostfix = ').block()';
-    }
+    const createEntityPrefix = databaseTypeSql && reactive ? 'template.insert(' : '';
+    const createEntityPostfix = databaseTypeSql && reactive ? ').block()' : '';
     let idValue = `${persistInstance}.${primaryKey.propertySupplierName}()`;
     if (primaryKey.typeLong || primaryKey.typeInteger) {
       idValue = `${idValue}.intValue()`;
     } else if (primaryKey.typeUUID) {
       idValue = `${idValue}.toString()`;
     }
-    let transactionalAnnotation = '';
-    if (databaseTypeSql && !reactive) {
-      transactionalAnnotation = '\n    @Transactional';
-    }
+    const transactionalAnnotation = databaseTypeSql && !reactive ? '\n    @Transactional' : '';
 _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%- packageName %>.web.rest.TestUtil;
