@@ -24,11 +24,12 @@ import { pathToFileURL } from 'node:url';
 import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';
 import { cloneDeep, mergeWith } from 'lodash-es';
-import Environment from 'yeoman-environment';
+import Environment, { Store } from 'yeoman-environment';
 
 import BaseGenerator from '../generators/base/index.ts';
 import { type Blueprint, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../lib/index.ts';
+import { customizeNestedNamespace, generatorsLookup, jhipsterGeneratorsLookup } from '../lib/resolver/lookups.ts';
 import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
@@ -39,14 +40,8 @@ const jhipsterDevBlueprintPath =
   process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
-const customizeNestedNamespace = (ns?: string) => ns?.replaceAll(':generators:', ':');
-
-// Support nested generators.
-export const generatorsLookup = ['generators', 'generators/*/generators'];
 // Local and dev blueprints generators.
 const localBlueprintGeneratorsLookup = ['.', './*/generators'];
-// Lookup for source or built generators depending on the files being used.
-export const jhipsterGeneratorsLookup = isDistFolder() ? generatorsLookup.map(lookup => `dist/${lookup}`) : generatorsLookup;
 // Lookup for source and built generators.
 const packagedGeneratorsLookup = generatorsLookup.flatMap(lookup => [`dist/${lookup}`, lookup]);
 
@@ -75,14 +70,21 @@ export type PrepareOptions = {
 
 const createEnvironment = (options: EnvironmentOptions = {}) => {
   options.adapter ??= new QueuedAdapter({ log: createJHipsterLogger() });
-  return new Environment({
+  // The generators store is ours, so that what the environment looks up can be queried without going through it.
+  // A new one for each environment unless the caller passes one: the options are not ours to add it to, a caller
+  // reusing them would end up sharing the store, mocked generators included, between its environments.
+  const store = options.store ?? new Store();
+  const env = new Environment({
     ...options,
+    store,
     generatorLookupOptions: { ...defaultLookupOptions, ...options.generatorLookupOptions },
   });
+  return { env, store };
 };
 
 export default class EnvironmentBuilder {
   env: Environment;
+  store?: Store;
   devBlueprintPath?: string;
   localBlueprintPath?: string;
   localBlueprintExists?: boolean;
@@ -93,9 +95,9 @@ export default class EnvironmentBuilder {
    * Creates a new EnvironmentBuilder with a new Environment.
    */
   static create(options: EnvironmentOptions = {}): EnvironmentBuilder {
-    const env = createEnvironment(options);
+    const { env, store } = createEnvironment(options);
     env.setMaxListeners(0);
-    return new EnvironmentBuilder(env);
+    return new EnvironmentBuilder(env, store);
   }
 
   /**
@@ -134,8 +136,17 @@ export default class EnvironmentBuilder {
    * - Installs blueprints if not found.
    * - Loads sharedOptions.
    */
-  constructor(env: Environment) {
+  constructor(env: Environment, store?: Store) {
     this.env = env;
+    this.store = store;
+  }
+
+  /**
+   * The generators store of the environment: jhipster generators, blueprints and whatever else it looked up.
+   * Undefined for an environment that was not created by the builder.
+   */
+  getStore(): Store | undefined {
+    return this.store;
   }
 
   async prepare({ blueprints, lookups, devBlueprintPath = jhipsterDevBlueprintPath, disableBlueprints = false }: PrepareOptions = {}) {

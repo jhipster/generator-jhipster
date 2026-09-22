@@ -18,7 +18,7 @@
  */
 import { kebabCase } from 'lodash-es';
 
-import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
+import { type GeneratorsStore, lookupGeneratorCommands } from '../resolver/generator-commands.ts';
 import type { GeneratorDependency } from '../resolver/generator-dependencies.ts';
 
 import { convertConfigToOption, extractArgumentsFromConfigs } from './converter.ts';
@@ -153,8 +153,8 @@ export const describeCommand = ({
 /**
  * Find the commands declaring a config, e.g. which generator owns `databaseType`.
  */
-export const findConfigOwners = async (name: string): Promise<ConfigOwners> => {
-  const owners = (await lookupGeneratorCommands())
+export const findConfigOwners = async (name: string, { store }: { store?: GeneratorsStore } = {}): Promise<ConfigOwners> => {
+  const owners = (await lookupGeneratorCommands({ store }))
     .filter(generator => generator.command?.configs?.[name])
     .map(generator => describeConfig(name, generator.command!.configs![name], generator.namespace));
   return { name, owners };

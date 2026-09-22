@@ -18,10 +18,12 @@
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
-import { lookupGeneratorsWithNamespace } from '../utils/lookup.ts';
+
+import { type GeneratorsStore, JHIPSTER_NAMESPACE_PREFIX, lookupGeneratorsMeta } from './lookups.ts';
+
+export type { GeneratorsStore } from './lookups.ts';
 
 export type GeneratorCommand = {
   namespace: string;
@@ -46,21 +48,34 @@ const readUsageDescription = (generatorFile: string): string | undefined => {
   return description?.[1].trim();
 };
 
+/** The namespace of a generator as the cli names it: without the prefix for the jhipster generators. */
+const toCommandNamespace = (namespace: string) =>
+  namespace.startsWith(JHIPSTER_NAMESPACE_PREFIX) ? namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length) : namespace;
+
+const loadGeneratorCommands = async (store?: GeneratorsStore): Promise<GeneratorCommand[]> => {
+  const generators: GeneratorCommand[] = [];
+  for (const meta of lookupGeneratorsMeta(store)) {
+    const module = (await meta.importModule!()) as { command?: JHipsterCommandDefinition };
+    generators.push({
+      namespace: toCommandNamespace(meta.namespace),
+      description: readUsageDescription(meta.resolved),
+      command: module.command,
+    });
+  }
+  return generators;
+};
+
 /**
- * Load the generators of this installation with their command definition.
+ * Load the generators of a store with their command definition: the jhipster generators, named without the `jhipster:`
+ * prefix, and the others, like blueprints, by their namespace. Defaults to the jhipster generators of this installation.
  */
-export const lookupGeneratorCommands = async ({ descriptions = {} }: { descriptions?: Record<string, string> } = {}): Promise<
-  GeneratorCommand[]
-> => {
-  generatorsCache ??= (async () => {
-    const generators: GeneratorCommand[] = [];
-    for (const { namespace, generator } of lookupGeneratorsWithNamespace({ absolute: true })) {
-      const module = await import(pathToFileURL(generator).toString());
-      generators.push({ namespace, description: readUsageDescription(generator), command: module.command });
-    }
-    return generators;
-  })();
-  return (await generatorsCache).map(generator => ({
+export const lookupGeneratorCommands = async ({
+  store,
+  descriptions = {},
+}: { store?: GeneratorsStore; descriptions?: Record<string, string> } = {}): Promise<GeneratorCommand[]> => {
+  // The store given changes as generators are registered, only the jhipster one is cached.
+  const generators = store ? await loadGeneratorCommands(store) : await (generatorsCache ??= loadGeneratorCommands());
+  return generators.map(generator => ({
     ...generator,
     description: descriptions[generator.namespace] ?? generator.description,
   }));
