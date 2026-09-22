@@ -123,7 +123,6 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 <%_ if (searchEngineElasticsearch && !paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 <%_ } _%>
 import org.springframework.http.MediaType;
 <%_ if (searchEngineCouchbase) { _%>
@@ -146,7 +145,6 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (reactive && (implementsEagerLoadApis || searchEngineElasticsearch)) { _%>
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
 import jakarta.persistence.EntityManager;

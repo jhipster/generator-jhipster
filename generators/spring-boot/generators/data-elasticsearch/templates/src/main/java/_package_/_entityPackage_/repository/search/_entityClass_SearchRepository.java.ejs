@@ -29,7 +29,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
   <%_ } _%>
 import org.springframework.data.domain.Pageable;
 import java.util.List;
-import org.springframework.data.domain.PageRequest;
 
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -43,8 +42,6 @@ import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<%- reactive ? 'Reactive' : '' %>ElasticsearchRepository;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
@@ -56,7 +53,6 @@ import java.util.stream.Stream;
 import java.util.UUID;
 <% } %>
 
-import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.queryStringQuery;
 
 /**
  * Spring Data Elasticsearch repository for the {@link <%- persistClass %>} entity.

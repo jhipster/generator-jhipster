@@ -28,9 +28,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
   <%_ } _%>
 <%_ } _%>
 
-<%_ if (reactive && searchEngineElasticsearch) { _%>
-import <%- packageName %>.repository.search.UserSearchRepository;
-<%_ } _%>
 import <%- packageName %>.IntegrationTest;
 import <%- packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;

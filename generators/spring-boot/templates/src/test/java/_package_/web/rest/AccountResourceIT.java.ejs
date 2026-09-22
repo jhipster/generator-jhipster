@@ -33,9 +33,6 @@ import <%- packageName %>.repository.AuthorityRepository;
 import <%- packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%- packageName %>.repository.UserRepository;
-<%_ if (reactive && searchEngineElasticsearch) { _%>
-import <%- packageName %>.repository.search.UserSearchRepository;
-<%_ } _%>
 import <%- packageName %>.security.AuthoritiesConstants;
 import <%- packageName %>.service.UserService;
 import <%- packageName %>.service.dto.PasswordChangeDTO;
