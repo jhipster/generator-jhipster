@@ -34,6 +34,4 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   },
   // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   JHIPSTER_VERSION: { type: 'STRING' },
-  SKIP_CLIENT: { type: 'BOOLEAN' },
-  SKIP_SERVER: { type: 'BOOLEAN' },
 };

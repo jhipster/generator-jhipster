@@ -53,6 +53,8 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
+  "skipClient",
+  "skipServer",
   "authenticationType",
   "skipUserManagement",
   "applicationType",

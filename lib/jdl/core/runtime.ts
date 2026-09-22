@@ -79,7 +79,7 @@ export const createRuntime = (
 
       // The application config keys are tokens of their lexer mode, checked against the validations by name.
       const applicationConfigTokens = Object.fromEntries(applicationTokens.tokens.map(token => [token.name, token]));
-      checkConfigKeys({ ...applicationConfigTokens, ...jdlTokens.tokens }, Object.keys(propertyValidations));
+      checkConfigKeys({ ...jdlTokens.tokens, ...applicationConfigTokens }, Object.keys(propertyValidations));
     }
     return jdlTokens;
   };

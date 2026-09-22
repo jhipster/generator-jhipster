@@ -93,12 +93,6 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
   createTokenFromConfig({ name: 'CONFIG', pattern: 'config', push_mode: APPLICATION_CONFIG_MODE });
   createTokenFromConfig({ name: 'ENTITIES', pattern: 'entities' });
 
-  // The application config keys that are entity options too (skipClient, skipServer) are keywords outside the config.
-  const entityKeywords = applicationTokens.tokens.filter(token => token.CATEGORIES?.includes(UNARY_OPTION));
-  entityKeywords.forEach(token => {
-    _tokens[token.name] = token;
-  });
-
   // application must appear AFTER "applicationType" due to shorter common prefix.
   createTokenFromConfig({ name: 'APPLICATION', pattern: 'application' });
   createTokenFromConfig({ name: 'DEPLOYMENT', pattern: 'deployment', push_mode: DEPLOYMENT_MODE });
