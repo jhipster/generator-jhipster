@@ -20,10 +20,16 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { type ImportState, createImporterFromContent } from '../jdl/jdl-importer.ts';
+import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 
-const jhipsterConfigsWithJDL = lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
+// Only the application definitions: the round-trip below goes through `application { config { … } }`, where the
+// deployment options - declared by the generators `deployment` imports - are not valid.
+const applicationJdlOptions = Object.keys(getDefaultJDLApplicationConfig().optionsTypes);
+const jhipsterConfigsWithJDL = Object.fromEntries(
+  Object.entries(lookupCommandsConfigs({ filter: config => Boolean(config.jdl) })).filter(([name]) => applicationJdlOptions.includes(name)),
+);
 
 describe('jdl options', () => {
   const jdlConfigs = Object.entries(jhipsterConfigsWithJDL);

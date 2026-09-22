@@ -18,6 +18,7 @@
  */
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHABETIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 const command = {
   arguments: {
@@ -28,6 +29,18 @@ const command = {
     },
   },
   configs: {
+    gatewayType: {
+      description: 'Gateway type',
+      // DEPRECATED: no generator reads it, it only reaches a field on JDLDeployment. TODO drop for v10.
+      cli: { type: String, hide: true },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHABETIC_PATTERN,
+      },
+      choices: ['SpringCloudGateway'],
+      scope: 'storage',
+    },
     jwtSecretKey: {
       cli: {
         type: String,

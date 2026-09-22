@@ -18,10 +18,15 @@
  */
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import deploymentCommand from '../deployment/command.ts';
 
 const command = {
   configs: {
     appsFolders: {
+      // the same option as the deployment one - the applications added to the workspace/deployment - and it is
+      // declared once in base-workspaces, which both extend. Only the root the paths are relative to differs: the
+      // monorepository parent here, the deployment directory there. Spread so a single declaration carries the jdl spec.
+      ...deploymentCommand.configs.appsFolders,
       cli: {
         name: 'workspacesFolders',
         type: Array,

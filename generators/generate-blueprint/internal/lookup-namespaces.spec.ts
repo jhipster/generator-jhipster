@@ -55,6 +55,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "common",
   "common:bootstrap",
   "cypress",
+  "deployment",
   "docker",
   "docker-compose",
   "docker:bootstrap",

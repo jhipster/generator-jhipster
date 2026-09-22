@@ -32,6 +32,9 @@ import type { JDLRuntime } from '../types/runtime.ts';
 import deduplicate from '../utils/array-utils.ts';
 import logger from '../utils/objects/logger.ts';
 
+/** Deployment options kept for compatibility: they parse, but no generator reads them. TODO drop for v10. */
+const DEPRECATED_DEPLOYMENT_OPTIONS = ['gatewayType', 'registryReplicas', 'storageType'];
+
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const {
   Validations: { PATTERN, REQUIRED, UNIQUE },
@@ -509,6 +512,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     deploymentConfigDeclaration(context: Record<'DEPLOYMENT_KEY', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
       const key = context.DEPLOYMENT_KEY[0].image;
       const value = this.visit(context.deploymentConfigValue);
+
+      if (DEPRECATED_DEPLOYMENT_OPTIONS.includes(key)) {
+        // TODO drop for v10
+        logger.warn(`The ${key} deployment option is deprecated and will be removed in JHipster v10. No generator reads it.`);
+      }
 
       return { key, value };
     }
