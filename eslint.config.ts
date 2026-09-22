@@ -131,6 +131,7 @@ export default defineConfig(
       'no-irregular-whitespace': 'error',
       'no-console': 'error',
       'no-template-curly-in-string': 'error',
+      'no-useless-concat': 'error',
       'no-nested-ternary': 'error',
       'no-restricted-syntax': [
         'error',
@@ -168,6 +169,7 @@ export default defineConfig(
         ...js.configs.recommended.rules,
         ...jsRules,
         'no-negated-condition': 'error',
+        'no-useless-concat': 'error',
         'no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
         'prefer-destructuring': ['error', { array: false, object: true }],
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],

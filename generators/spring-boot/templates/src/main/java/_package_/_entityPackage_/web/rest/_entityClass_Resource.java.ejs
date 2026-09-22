@@ -151,7 +151,7 @@ public class <%- entityClass %>Resource {
 <%_ const instanceType = restClass;
     const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;
-    const entityToDtoReference = `${mapper}::` + 'toDto';
+    const entityToDtoReference = `${mapper}::toDto`;
     const idToString = primaryKey.typeString ? '' : '.toString()';
 _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }) -%>
 <%_ if (!readOnly) { _%>
