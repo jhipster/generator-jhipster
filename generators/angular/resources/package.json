@@ -23,7 +23,7 @@
     "@angular/cli": "22.1.8",
     "@eslint/js": "10.0.1",
     "@types/folder-hash": "4.0.4",
-    "@types/node": "22.20.3",
+    "@types/node": "22.20.4",
     "@types/sockjs-client": "1.5.4",
     "angular-eslint": "22.5.0",
     "deepmerge": "4.3.1",
