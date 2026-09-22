@@ -27,16 +27,18 @@ import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig } from './jhi
 describe('getDefaultJDLApplicationConfig()', () => {
   let discoveredConfigs: JDLApplicationConfig;
 
-  before(async () => {
-    const configs = await lookupCommandsConfigs();
+  before(() => {
+    const configs = lookupCommandsConfigs();
     discoveredConfigs = buildJDLApplicationConfig(Object.fromEntries(Object.entries(configs).filter(([_key, value]) => value.jdl)));
   });
 
-  it('should return the default JDL application config', async () => {
+  it('should have every jdl option declared by a generator', () => {
+    // The definitions come from what `app` imports; an option declared by a generator `app` does not reach is a mistake
+    // in the command's `import`s rather than in the definitions.
     expect(getDefaultJDLApplicationConfig()).toMatchObject(discoveredConfigs);
   });
 
-  it.skip('should match snapshot', async () => {
+  it.skip('should match snapshot', () => {
     expect(getDefaultJDLApplicationConfig()).toMatchSnapshot();
   });
 });

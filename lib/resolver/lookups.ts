@@ -64,7 +64,7 @@ export const lookupGeneratorsMeta = (store: GeneratorsStore = getJHipsterStore()
   return (
     Object.values(store.getGeneratorsMeta())
       // A generator registered as a class, like the aliases, has no module to import a command from.
-      .filter((meta): meta is ImportableGeneratorMeta => Boolean(meta.resolved && meta.importModule))
+      .filter((meta): meta is ImportableGeneratorMeta => Boolean(meta.resolved && meta.requireModule))
       .sort((a, b) => Number(generatorPath(a) > generatorPath(b)) - Number(generatorPath(a) < generatorPath(b)))
   );
 };

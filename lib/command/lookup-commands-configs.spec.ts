@@ -23,7 +23,7 @@ import { type ImportState, createImporterFromContent } from '../jdl/jdl-importer
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 
-const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
+const jhipsterConfigsWithJDL = lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 
 describe('jdl options', () => {
   const jdlConfigs = Object.entries(jhipsterConfigsWithJDL);

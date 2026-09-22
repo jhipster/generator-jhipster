@@ -16,21 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { GeneratorMeta } from '@yeoman/types';
+import type { StoreGeneratorMeta } from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
 export type GeneratorDependency = {
   /** Namespace as requested, `app`, `jhipster:spring-boot:cache` or `jhipster-foo:app` for a blueprint override. */
   namespace: string;
-  meta: GeneratorMeta;
+  meta: StoreGeneratorMeta;
   /** Set when the generator comes from a blueprint. */
   blueprintNamespace?: string;
   command?: JHipsterCommandDefinition;
 };
 
 export type ResolveGeneratorDependenciesOptions = {
-  getGeneratorMeta: (namespace: string) => GeneratorMeta | undefined;
+  getGeneratorMeta: (namespace: string) => StoreGeneratorMeta | undefined;
   blueprintNamespaces?: string[];
   /** Namespace prefix of the generators without one; defaults to `jhipster`. */
   namespacePrefix?: string;
@@ -44,30 +44,33 @@ type JHipsterModule = { command?: JHipsterCommandDefinition };
  * Resolve the generators contributing options to a command the way the cli does: the generators, their `import`s
  * recursively, and the blueprint generators overriding them (a blueprint command with `override` replaces the
  * original). The result is ordered as the cli registers the options.
+ *
+ * Synchronous: the modules are loaded through `requireModule` of the store metas, which throws for a module that
+ * cannot be required - a generator, of a blueprint too, has to be loadable with `require`.
  */
-export const resolveGeneratorDependencies = async (
+export const resolveGeneratorDependencies = (
   generatorNames: string[],
   { getGeneratorMeta, blueprintNamespaces = [], namespacePrefix = 'jhipster', onMissing }: ResolveGeneratorDependenciesOptions,
-): Promise<GeneratorDependency[]> => {
+): GeneratorDependency[] => {
   const dependencies: GeneratorDependency[] = [];
   const isRegistered = (namespace: string) => dependencies.some(dependency => dependency.namespace === namespace);
 
-  const register = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
+  const register = ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
     const meta = getGeneratorMeta(namespace.includes(':') ? namespace : `${namespacePrefix}:${namespace}`);
     if (!meta) {
       if (!blueprintNamespace) onMissing?.(namespace);
       return undefined;
     }
-    const module = (await meta.importModule?.()) as JHipsterModule | undefined;
+    const module = meta.requireModule?.() as JHipsterModule | undefined;
     dependencies.push({ namespace, meta, blueprintNamespace, command: module?.command });
     return module;
   };
 
-  const lookup = async ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
-    const lookupGeneratorAndImports = async (options: { namespace: string; blueprintNamespace?: string }) => {
-      const module = await register(options);
+  const lookup = ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
+    const lookupGeneratorAndImports = (options: { namespace: string; blueprintNamespace?: string }) => {
+      const module = register(options);
       for (const imported of module?.command?.import ?? []) {
-        await lookup({ namespace: imported, blueprintNamespace: options.blueprintNamespace });
+        lookup({ namespace: imported, blueprintNamespace: options.blueprintNamespace });
       }
       return module?.command?.override;
     };
@@ -78,19 +81,19 @@ export const resolveGeneratorDependencies = async (
         const blueprintSubGenerator = `${nextBlueprint}:${namespace}`;
         if (
           !isRegistered(blueprintSubGenerator) &&
-          (await lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint }))
+          lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint })
         ) {
           overridden = true;
         }
       }
     }
     if (!overridden && !isRegistered(namespace)) {
-      await lookupGeneratorAndImports({ namespace, blueprintNamespace });
+      lookupGeneratorAndImports({ namespace, blueprintNamespace });
     }
   };
 
   for (const generatorName of generatorNames) {
-    await lookup({ namespace: generatorName });
+    lookup({ namespace: generatorName });
   }
   return dependencies;
 };

@@ -263,7 +263,7 @@ export const buildCommands = ({
           if (cmdName === GENERATOR_JDL) {
             bootstrapGen.push(entrypointGenerator ?? GENERATOR_APP);
           }
-          const allDependencies = await resolveGeneratorDependencies(bootstrapGen, {
+          const allDependencies = resolveGeneratorDependencies(bootstrapGen, {
             getGeneratorMeta: namespace => env.getGeneratorMeta(namespace),
             blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
             onMissing: namespace => logger.warn(`Generator ${namespace} not found.`),
