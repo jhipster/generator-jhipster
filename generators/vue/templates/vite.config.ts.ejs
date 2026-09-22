@@ -18,9 +18,8 @@
 -%>
 import { fileURLToPath, URL } from 'node:url';
 import path from 'node:path';
-import { normalizePath } from 'vite';
 
-import { defineConfig } from 'vite';
+import { defineConfig, normalizePath } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend && clientBundlerVite) { _%>
