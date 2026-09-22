@@ -23,13 +23,13 @@ import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
 let jhipsterConfigs: JHipsterConfigs;
 
-export const lookupCommandsConfigs = async (options?: { filter: (config: JHipsterConfig) => boolean }): Promise<JHipsterConfigs> => {
+export const lookupCommandsConfigs = (options?: { filter: (config: JHipsterConfig) => boolean }): JHipsterConfigs => {
   const { filter = () => true } = options ?? {};
   if (!jhipsterConfigs) {
     jhipsterConfigs = {};
     for (const meta of lookupGeneratorsMeta()) {
       try {
-        const index = (await meta.importModule!()) as { command?: { configs?: JHipsterConfigs } };
+        const index = meta.requireModule!() as { command?: { configs?: JHipsterConfigs } };
         if (index.command?.configs) {
           Object.assign(jhipsterConfigs, index.command?.configs);
         }

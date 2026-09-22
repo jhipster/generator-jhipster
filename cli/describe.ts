@@ -145,7 +145,7 @@ const describeCliCommand = async (
 ) => {
   if (options.config) {
     // The store of the cli: blueprints declare configs too.
-    const owners = await findConfigOwners(options.config, { store: envBuilder?.getStore() });
+    const owners = findConfigOwners(options.config, { store: envBuilder?.getStore() });
     print(options.json ? owners : formatConfigOwners(owners));
     return;
   }

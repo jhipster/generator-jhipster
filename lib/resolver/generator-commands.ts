@@ -40,7 +40,7 @@ export const readUsage = (generatorFile: string): string | undefined => {
   return existsSync(usagePath) ? readFileSync(usagePath, 'utf8').trim() : undefined;
 };
 
-let generatorsCache: Promise<GeneratorCommand[]> | undefined;
+let generatorsCache: GeneratorCommand[] | undefined;
 
 const readUsageDescription = (generatorFile: string): string | undefined => {
   const usage = readUsage(generatorFile);
@@ -52,10 +52,10 @@ const readUsageDescription = (generatorFile: string): string | undefined => {
 const toCommandNamespace = (namespace: string) =>
   namespace.startsWith(JHIPSTER_NAMESPACE_PREFIX) ? namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length) : namespace;
 
-const loadGeneratorCommands = async (store?: GeneratorsStore): Promise<GeneratorCommand[]> => {
+const loadGeneratorCommands = (store?: GeneratorsStore): GeneratorCommand[] => {
   const generators: GeneratorCommand[] = [];
   for (const meta of lookupGeneratorsMeta(store)) {
-    const module = (await meta.importModule!()) as { command?: JHipsterCommandDefinition };
+    const module = meta.requireModule!() as { command?: JHipsterCommandDefinition };
     generators.push({
       namespace: toCommandNamespace(meta.namespace),
       description: readUsageDescription(meta.resolved),
@@ -69,12 +69,12 @@ const loadGeneratorCommands = async (store?: GeneratorsStore): Promise<Generator
  * Load the generators of a store with their command definition: the jhipster generators, named without the `jhipster:`
  * prefix, and the others, like blueprints, by their namespace. Defaults to the jhipster generators of this installation.
  */
-export const lookupGeneratorCommands = async ({
+export const lookupGeneratorCommands = ({
   store,
   descriptions = {},
-}: { store?: GeneratorsStore; descriptions?: Record<string, string> } = {}): Promise<GeneratorCommand[]> => {
+}: { store?: GeneratorsStore; descriptions?: Record<string, string> } = {}): GeneratorCommand[] => {
   // The store given changes as generators are registered, only the jhipster one is cached.
-  const generators = store ? await loadGeneratorCommands(store) : await (generatorsCache ??= loadGeneratorCommands());
+  const generators = store ? loadGeneratorCommands(store) : (generatorsCache ??= loadGeneratorCommands());
   return generators.map(generator => ({
     ...generator,
     description: descriptions[generator.namespace] ?? generator.description,

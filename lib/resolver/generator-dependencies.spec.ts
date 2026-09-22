@@ -26,26 +26,23 @@ import { lookupGeneratorCommands } from './generator-commands.ts';
 import { type GeneratorDependency, resolveGeneratorDependencies } from './generator-dependencies.ts';
 
 /** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
-const metaLookup = async (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
-  const generators = await lookupGeneratorCommands();
+const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
+  const generators = lookupGeneratorCommands();
   return (namespace: string): StoreGeneratorMeta | undefined => {
     const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
     return command ? ({ namespace, requireModule: () => ({ command }) } as unknown as StoreGeneratorMeta) : undefined;
   };
 };
 
-const resolve = async (
-  generatorNames: string[],
-  blueprints?: Record<string, JHipsterCommandDefinition>,
-  blueprintNamespaces: string[] = [],
-) => resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: await metaLookup(blueprints), blueprintNamespaces });
+const resolve = (generatorNames: string[], blueprints?: Record<string, JHipsterCommandDefinition>, blueprintNamespaces: string[] = []) =>
+  resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: metaLookup(blueprints), blueprintNamespaces });
 
 const namespaces = (dependencies: GeneratorDependency[]) => dependencies.map(({ namespace }) => namespace);
 
 describe('resolver - generator dependencies', () => {
   describe('resolveGeneratorDependencies', () => {
-    it('should resolve the imports recursively in registration order', async () => {
-      const dependencies = await resolve(['bootstrap', 'spring-boot']);
+    it('should resolve the imports recursively in registration order', () => {
+      const dependencies = resolve(['bootstrap', 'spring-boot']);
       expect(namespaces(dependencies).slice(0, 3)).toEqual(['bootstrap', 'spring-boot', 'java']);
       expect(namespaces(dependencies)).toEqual(
         expect.arrayContaining(['liquibase', 'jhipster:spring-boot:cache', 'jhipster:spring-cloud']),
@@ -54,40 +51,40 @@ describe('resolver - generator dependencies', () => {
       expect(dependencies.find(({ namespace }) => namespace === 'java')?.command?.configs).toBeTruthy();
     });
 
-    it('should report missing generators', async () => {
+    it('should report missing generators', () => {
       const missing: string[] = [];
-      await resolveGeneratorDependencies(['unknown'], {
-        getGeneratorMeta: await metaLookup(),
+      resolveGeneratorDependencies(['unknown'], {
+        getGeneratorMeta: metaLookup(),
         onMissing: namespace => missing.push(namespace),
       });
       expect(missing).toEqual(['unknown']);
     });
 
-    it('should add blueprint generators and let an override replace the original', async () => {
+    it('should add blueprint generators and let an override replace the original', () => {
       const blueprint = {
         configs: { fooOption: { cli: { type: Boolean }, scope: 'storage' } },
         import: [],
       } as const satisfies JHipsterCommandDefinition;
-      const dependencies = await resolve(['git'], { 'jhipster-foo:git': blueprint }, ['jhipster-foo']);
+      const dependencies = resolve(['git'], { 'jhipster-foo:git': blueprint }, ['jhipster-foo']);
       expect(namespaces(dependencies)).toEqual(['jhipster-foo:git', 'git']);
       expect(dependencies[0].blueprintNamespace).toBe('jhipster-foo');
 
-      const overriding = await resolve(['git'], { 'jhipster-foo:git': { ...blueprint, override: true } }, ['jhipster-foo']);
+      const overriding = resolve(['git'], { 'jhipster-foo:git': { ...blueprint, override: true } }, ['jhipster-foo']);
       expect(namespaces(overriding)).toEqual(['jhipster-foo:git']);
     });
   });
 
   describe('lookupGeneratorCommands', () => {
-    it('should list the generators with the usage description', async () => {
-      const generators = await lookupGeneratorCommands();
+    it('should list the generators with the usage description', () => {
+      const generators = lookupGeneratorCommands();
       expect(generators.map(({ namespace }) => namespace)).toEqual(expect.arrayContaining(['app', 'info', 'spring-boot:cache']));
       expect(generators.find(({ namespace }) => namespace === 'info')?.description).toBe(
         'Display information about your current project and system.',
       );
     });
 
-    it('should prefer the passed descriptions', async () => {
-      const generators = await lookupGeneratorCommands({ descriptions: { info: 'custom' } });
+    it('should prefer the passed descriptions', () => {
+      const generators = lookupGeneratorCommands({ descriptions: { info: 'custom' } });
       expect(generators.find(({ namespace }) => namespace === 'info')?.description).toBe('custom');
     });
   });

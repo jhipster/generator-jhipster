@@ -29,24 +29,21 @@ import { describeCommand, findConfigOwners } from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
 
 /** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
-const metaLookup = async (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
-  const generators = await lookupGeneratorCommands();
+const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
+  const generators = lookupGeneratorCommands();
   return (namespace: string): StoreGeneratorMeta | undefined => {
     const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
     return command ? ({ namespace, requireModule: () => ({ command }) } as unknown as StoreGeneratorMeta) : undefined;
   };
 };
 
-const resolve = async (
-  generatorNames: string[],
-  blueprints?: Record<string, JHipsterCommandDefinition>,
-  blueprintNamespaces: string[] = [],
-) => resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: await metaLookup(blueprints), blueprintNamespaces });
+const resolve = (generatorNames: string[], blueprints?: Record<string, JHipsterCommandDefinition>, blueprintNamespaces: string[] = []) =>
+  resolveGeneratorDependencies(generatorNames, { getGeneratorMeta: metaLookup(blueprints), blueprintNamespaces });
 
 describe('command - describe command', () => {
   describe('describeCommand', () => {
-    it('should describe a command with the configs of its dependencies', async () => {
-      const command = describeCommand({ namespace: 'spring-boot', dependencies: await resolve(['spring-boot']) });
+    it('should describe a command with the configs of its dependencies', () => {
+      const command = describeCommand({ namespace: 'spring-boot', dependencies: resolve(['spring-boot']) });
       expect(command.namespace).toBe('spring-boot');
       expect(command.dependencies).toContain('java');
       expect(command.configs.find(({ name }) => name === 'reactive')).toMatchObject({
@@ -64,8 +61,8 @@ describe('command - describe command', () => {
       expect(command.configs.find(({ name }) => name === 'buildTool')?.owner).toBe('jhipster:java-simple-application:build-tool');
     });
 
-    it('should describe the application configuration through the imports', async () => {
-      const command = describeCommand({ namespace: 'app', dependencies: await resolve(['bootstrap', 'app']) });
+    it('should describe the application configuration through the imports', () => {
+      const command = describeCommand({ namespace: 'app', dependencies: resolve(['bootstrap', 'app']) });
       expect(command.configs.find(({ name }) => name === 'databaseType')).toMatchObject({
         owner: 'spring-boot',
         choices: expect.arrayContaining(['sql', 'mongodb', 'no']),
@@ -73,14 +70,14 @@ describe('command - describe command', () => {
       expect(command.configs.some(({ name }) => name === 'clientFramework')).toBe(true);
     });
 
-    it('should keep the last declaration of a config and mark blueprint configs', async () => {
+    it('should keep the last declaration of a config and mark blueprint configs', () => {
       const blueprint = {
         configs: { skipGit: { description: 'overridden', cli: { type: Boolean }, scope: 'storage' } },
         import: [],
       } as const satisfies JHipsterCommandDefinition;
       const command = describeCommand({
         namespace: 'git',
-        dependencies: await resolve(['git'], { 'jhipster-foo:git': blueprint }, ['jhipster-foo']),
+        dependencies: resolve(['git'], { 'jhipster-foo:git': blueprint }, ['jhipster-foo']),
       });
       const skipGit = command.configs.find(({ name }) => name === 'skipGit');
       expect(skipGit).toMatchObject({ owner: 'git', description: 'Skip git repository initialization' });
@@ -91,13 +88,13 @@ describe('command - describe command', () => {
   });
 
   describe('findConfigOwners', () => {
-    it('should find the config owners', async () => {
-      const owners = await findConfigOwners('databaseType');
+    it('should find the config owners', () => {
+      const owners = findConfigOwners('databaseType');
       expect(owners.owners.map(({ owner }) => owner)).toEqual(['server', 'spring-boot']);
-      expect((await findConfigOwners('unknown')).owners).toEqual([]);
+      expect(findConfigOwners('unknown').owners).toEqual([]);
     });
 
-    it('should find the config owners of a store, blueprints included', async () => {
+    it('should find the config owners of a store, blueprints included', () => {
       const store = new Store();
       store.lookupSync({
         packagePaths: [getPackageRoot()],
@@ -110,14 +107,14 @@ describe('command - describe command', () => {
       store.getGeneratorsMeta()['jhipster-foo:server'] = {
         namespace: 'jhipster-foo:server',
         resolved: '/generator-jhipster-foo/generators/server/index.js',
-        importModule: async () => ({ command: blueprintCommand }),
+        requireModule: () => ({ command: blueprintCommand }),
       } as any;
 
-      const owners = await findConfigOwners('databaseType', { store });
+      const owners = findConfigOwners('databaseType', { store });
       expect(owners.owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server', 'server', 'spring-boot']);
-      expect((await findConfigOwners('blueprintOnly', { store })).owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server']);
+      expect(findConfigOwners('blueprintOnly', { store }).owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server']);
       // Without a store, only the jhipster generators.
-      expect((await findConfigOwners('blueprintOnly')).owners).toEqual([]);
+      expect(findConfigOwners('blueprintOnly').owners).toEqual([]);
     });
   });
 });

@@ -27,8 +27,8 @@ import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig } from './jhi
 describe('getDefaultJDLApplicationConfig()', () => {
   let discoveredConfigs: JDLApplicationConfig;
 
-  before(async () => {
-    const configs = await lookupCommandsConfigs();
+  before(() => {
+    const configs = lookupCommandsConfigs();
     discoveredConfigs = buildJDLApplicationConfig(Object.fromEntries(Object.entries(configs).filter(([_key, value]) => value.jdl)));
   });
 
