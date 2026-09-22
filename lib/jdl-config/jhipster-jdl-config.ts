@@ -19,9 +19,7 @@
 import { snakeCase, upperCase } from 'lodash-es';
 
 import type { JHipsterConfigs } from '../command/types.ts';
-import { createRuntime } from '../jdl/core/runtime.ts';
 import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
-import type { JDLRuntime } from '../jdl/core/types/runtime.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
 
@@ -97,13 +95,4 @@ let defaultJDLDeploymentConfig: Readonly<JDLApplicationConfig>;
 export const getDefaultJDLDeploymentConfig = (): Readonly<JDLApplicationConfig> => {
   defaultJDLDeploymentConfig ??= Object.freeze(buildJDLApplicationConfig(lookupConfigsFrom('deployment')));
   return defaultJDLDeploymentConfig;
-};
-
-let defaultRuntime: JDLRuntime;
-export const getDefaultRuntime = (): JDLRuntime => {
-  if (!defaultRuntime) {
-    defaultRuntime = createRuntime(getDefaultJDLApplicationConfig());
-  }
-
-  return defaultRuntime;
 };

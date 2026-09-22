@@ -19,15 +19,7 @@
 import { type CstElement, type CstNode, type ICstVisitor, type IToken, type TokenType, tokenMatcher as matchesToken } from 'chevrotain';
 import { first, flatten, includes } from 'lodash-es';
 
-import {
-  ALPHABETIC,
-  ALPHABETIC_DASH_LOWER,
-  ALPHABETIC_LOWER,
-  ALPHANUMERIC,
-  ALPHANUMERIC_DASH,
-  ALPHANUMERIC_SPACE,
-  ALPHANUMERIC_UNDERSCORE,
-} from '../built-in-options/validation-patterns.ts';
+import { ALPHANUMERIC } from '../built-in-options/validation-patterns.ts';
 import type { JDLValidatorOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
@@ -38,101 +30,7 @@ const ENUM_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_PROP_NAME_PATTERN = /^[A-Z]\w*$/;
 const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z]\w*$/;
 const METHOD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
-
-// const PASSWORD_PATTERN = /^(.+)$/;
-const REPONAME_PATTERN = /^"((?:https?:\/\/)?(?:[\w-]+\.)+[\w-]+(?:[:/?#][\w\-._~:/?#[\]@!$&'()*+,;=]*)?|[a-zA-Z0-9]+)"$/;
-const KUBERNETES_STORAGE_CLASS_NAME = /^"[A-Za-z]*"$/;
 const PATH_PATTERN = /^"([^/]+).*"$/;
-
-const deploymentConfigPropsValidations = {
-  DEPLOYMENT_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC_DASH_LOWER,
-    msg: 'deploymentType property',
-  },
-  GATEWAY_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC,
-    msg: 'gatewayType property',
-  },
-  MONITORING: {
-    type: 'NAME',
-    pattern: ALPHABETIC_LOWER,
-    msg: 'monitoring property',
-  },
-  DIRECTORY_PATH: {
-    type: 'STRING',
-    pattern: PATH_PATTERN,
-    msg: 'directoryPath property',
-  },
-  APPS_FOLDERS: {
-    type: 'list',
-    pattern: ALPHANUMERIC_UNDERSCORE,
-    msg: 'appsFolders property',
-  },
-  CLUSTERED_DB_APPS: {
-    type: 'list',
-    pattern: ALPHANUMERIC,
-    msg: 'clusteredDbApps property',
-  },
-  // This is not secure, need to find a better way
-  /*   ADMIN_PASSWORD: {
-    type: 'STRING',
-    pattern: PASSWORD_PATTERN,
-    msg: 'adminPassword property'
-  }, */
-  SERVICE_DISCOVERY_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC_LOWER,
-    msg: 'serviceDiscoveryType property',
-  },
-  DOCKER_REPOSITORY_NAME: {
-    type: 'STRING',
-    pattern: REPONAME_PATTERN,
-    msg: 'dockerRepositoryName property',
-  },
-  DOCKER_PUSH_COMMAND: {
-    type: 'STRING',
-    pattern: ALPHANUMERIC_SPACE,
-    msg: 'dockerPushCommand property',
-  },
-  KUBERNETES_NAMESPACE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC_DASH,
-    msg: 'kubernetesNamespace property',
-  },
-  KUBERNETES_SERVICE_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC,
-    msg: 'kubernetesServiceType property',
-  },
-  KUBERNETES_STORAGE_CLASS_NAME: {
-    type: 'STRING',
-    pattern: KUBERNETES_STORAGE_CLASS_NAME,
-    msg: 'kubernetesStorageClassName property',
-  },
-  KUBERNETES_USE_DYNAMIC_STORAGE: { type: 'BOOLEAN' },
-  INGRESS_DOMAIN: {
-    type: 'STRING',
-    pattern: REPONAME_PATTERN,
-    msg: 'ingressDomain property',
-  },
-  INGRESS_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC,
-    msg: 'ingressType property',
-  },
-  ISTIO: {
-    type: 'BOOLEAN',
-    msg: 'istio property',
-  },
-  REGISTRY_REPLICAS: { type: 'INTEGER' },
-  STORAGE_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC_LOWER,
-    msg: 'storageType property',
-  },
-} as const;
 
 interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
   constantDeclaration(context: any): void;
@@ -297,7 +195,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
 
     checkDeploymentConfigPropSyntax(key: IToken, value: CstElement) {
       const propertyName = key.tokenType.name;
-      const validation = deploymentConfigPropsValidations[propertyName as keyof typeof deploymentConfigPropsValidations];
+      const validation = runtime.deploymentPropertyValidations[propertyName];
       if (!validation) {
         throw Error(`Got an invalid deployment config property: '${propertyName}'.`);
       }
@@ -309,9 +207,9 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
         'children' in value &&
         value.children?.NAME
       ) {
-        value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok as IToken, validation.pattern, validation.msg));
+        value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok as IToken, validation.pattern!, validation.msg!));
       } else if ('image' in value && value.image && 'pattern' in validation && validation.pattern) {
-        this.checkNameSyntax(value, validation.pattern, validation.msg);
+        this.checkNameSyntax(value, validation.pattern, validation.msg!);
       }
     }
 

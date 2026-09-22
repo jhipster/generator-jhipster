@@ -11,4 +11,5 @@ export type JDLRuntime = {
   lexer: Lexer;
   parser: JDLParser;
   propertyValidations: Record<string, JDLValidatorOption>;
+  deploymentPropertyValidations: Record<string, JDLValidatorOption>;
 };

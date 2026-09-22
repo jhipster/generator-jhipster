@@ -19,11 +19,12 @@
 
 import type { Lexer, TokenType } from 'chevrotain';
 
+import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from '../../jdl-config/jhipster-jdl-config.ts';
 import { builtInJDLApplicationConfig } from '../../jhipster/application-options.ts';
 
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
 import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.ts';
-import { deploymentTokens } from './built-in-options/tokens/deployment-tokens.ts';
+import { buildDeploymentTokens } from './built-in-options/tokens/deployment-tokens.ts';
 import JDLParser from './parsing/jdl-parser.ts';
 import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
@@ -49,9 +50,22 @@ const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JD
   };
 };
 
-export const createRuntime = (definition?: JDLApplicationConfig): JDLRuntime => {
+/**
+ * @param definition the application JDL definitions, merged over the built in ones.
+ * @param deploymentDefinition the deployment JDL definitions, the ones of the deployment generators by default.
+ */
+export const createRuntime = (
+  definition?: JDLApplicationConfig,
+  deploymentDefinition: JDLApplicationConfig = getDefaultJDLDeploymentConfig(),
+): JDLRuntime => {
   const newDefinition = definition ? mergeDefinition(definition, builtInJDLApplicationConfig) : builtInJDLApplicationConfig;
   const propertyValidations: Record<string, JDLValidatorOption> = newDefinition.validatorConfig;
+  const deploymentPropertyValidations: Record<string, JDLValidatorOption> = {
+    ...deploymentDefinition.validatorConfig,
+    // The one keyword of both grammars, whose token is created with both categories in the lexer: validated as in the
+    // application config.
+    SERVICE_DISCOVERY_TYPE: propertyValidations.SERVICE_DISCOVERY_TYPE,
+  };
   const applicationDefinition = new JDLApplicationDefinition({
     optionValues: newDefinition.optionsValues,
     optionTypes: newDefinition.optionsTypes,
@@ -66,6 +80,7 @@ export const createRuntime = (definition?: JDLApplicationConfig): JDLRuntime => 
     get tokens(): Record<string, TokenType> {
       if (!tokens) {
         const applicationTokens = buildApplicationTokens(newDefinition.tokenConfigs);
+        const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
         tokens = buildTokens({ applicationTokens, deploymentTokens });
 
         checkConfigKeys(tokens, Object.keys(propertyValidations));
@@ -90,5 +105,13 @@ export const createRuntime = (definition?: JDLApplicationConfig): JDLRuntime => 
     },
     applicationDefinition,
     propertyValidations,
+    deploymentPropertyValidations,
   };
+};
+
+let defaultRuntime: JDLRuntime;
+/** The runtime of the default definitions, the ones of the generators. */
+export const getDefaultRuntime = (): JDLRuntime => {
+  defaultRuntime ??= createRuntime(getDefaultJDLApplicationConfig());
+  return defaultRuntime;
 };
