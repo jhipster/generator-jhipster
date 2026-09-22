@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject, OnInit<%- enableTranslation ? ', DOCUMENT, RendererFactory2, Renderer2' : '' %> } from '@angular/core';
-import { RouterOutlet, Router, TitleStrategy } from '@angular/router';
+import { RouterOutlet<%- enableTranslation ? ', Router, TitleStrategy' : '' %> } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
@@ -41,13 +41,13 @@ export default class Main implements OnInit {
   private readonly htmlElement: HTMLElement;
 <%_ } _%>
 
-  private readonly router = inject(Router);
-  private readonly titleStrategy = inject(TitleStrategy);
   private readonly accountService = inject(AccountService);
 <%_ if (enableI18nRTL) { _%>
   private readonly findLanguageFromKeyPipe = inject(FindLanguageFromKeyPipe);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
+  private readonly router = inject(Router);
+  private readonly titleStrategy = inject(TitleStrategy);
   private readonly document = inject(DOCUMENT);
   private readonly translateService = inject(TranslateService);
   private readonly rootRenderer = inject(RendererFactory2);
