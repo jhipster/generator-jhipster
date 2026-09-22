@@ -8,7 +8,7 @@
     "cypress-audit": "1.1.0",
     "cypress-terminal-report": "7.3.3",
     "eslint-plugin-cypress": "7.0.2",
-    "lighthouse": "13.4.1",
+    "lighthouse": "13.5.0",
     "monocart-coverage-reports": "2.13.0",
     "nyc": "18.0.0"
   },
