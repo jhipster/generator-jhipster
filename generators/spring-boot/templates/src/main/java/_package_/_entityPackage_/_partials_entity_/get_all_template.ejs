@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%_ const mapper = `${entityInstance}Mapper`;
-    const entityListToDtoListReference = `${mapper}.` + 'toDto';
-    const entityToDtoReference = `${mapper}::` + 'toDto';
+    const entityListToDtoListReference = `${mapper}.toDto`;
+    const entityToDtoReference = `${mapper}::toDto`;
     const reactiveEntityToDto = dtoMapstruct && !viaService ? `.map(${entityToDtoReference})` : '';
     const reactiveNoPagination = reactive && paginationNo;
     const reactivePagination = reactive && !paginationNo;

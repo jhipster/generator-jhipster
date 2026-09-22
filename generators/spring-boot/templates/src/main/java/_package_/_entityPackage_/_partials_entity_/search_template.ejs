@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%_ const mapper = `${entityInstance}Mapper`;
-    const entityToDtoReference = `${mapper}::` + 'toDto';
-    const entityListToDtoListReference = `${mapper}.` + 'toDto';
+    const entityToDtoReference = `${mapper}::toDto`;
+    const entityListToDtoListReference = `${mapper}.toDto`;
 _%>
 <%_ if (paginationNo) { _%>
     public <%- reactive ? 'Mono<' : '' %>List<<%- restClass %>><%- reactive ? '>' : '' %> search<%- entityClassPlural %>(@RequestParam("query") String query) {

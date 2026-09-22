@@ -21,6 +21,7 @@ import { describe, expect, it } from 'esmocha';
 import { sanitizeConfigForNodeApplications } from './config-hardening.ts';
 
 describe('generator - base-simple-application - support - config-hardening', () => {
+  // eslint-disable-next-line no-useless-concat
   const template = '$' + '{injected}';
 
   it('sanitizes writable string properties and returns cleanup entries', () => {
@@ -41,6 +42,7 @@ describe('generator - base-simple-application - support - config-hardening', () 
   it('sanitizes placeholders that are only assembled once an inner match is removed', () => {
     // `$` + `${}` + `{injected}`: stripping the empty placeholder joins the remaining characters
     // into a new one, so a single replace pass leaves a live template literal behind.
+    // eslint-disable-next-line no-useless-concat
     const reassembling = '$' + '${}' + '{injected}';
     const config: any = { foo: `prefix-${reassembling}-suffix` };
 
