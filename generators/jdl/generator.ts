@@ -268,7 +268,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           const { deploymentType } = deploymentConfig;
           this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
-          await this.composeWithJHipster(deploymentType, {
+          // The deployment generator delegates to the one of the deploymentType, in the folder named after it.
+          await this.composeWithJHipster('deployment', {
             generatorOptions: {
               destinationRoot: this.destinationPath(deploymentType),
               force: true,
