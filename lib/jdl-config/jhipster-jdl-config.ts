@@ -19,9 +19,7 @@
 import { snakeCase, upperCase } from 'lodash-es';
 
 import type { JHipsterConfigs } from '../command/types.ts';
-import { createRuntime } from '../jdl/core/runtime.ts';
 import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
-import type { JDLRuntime } from '../jdl/core/types/runtime.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
 
@@ -69,28 +67,32 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
   };
 };
 
+/** The configs of a generator and of everything it imports, the dependency graph the cli resolves. */
+const lookupConfigsFrom = (generator: string): JHipsterConfigs => {
+  const store = getJHipsterStore();
+  const configs: JHipsterConfigs = {};
+  for (const { command } of resolveGeneratorDependencies([generator], { getGeneratorMeta: namespace => store.getMeta(namespace) })) {
+    Object.assign(configs, command?.configs);
+  }
+  return configs;
+};
+
 let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
 /**
- * The application JDL definitions: the jdl options of the `app` generator and of everything it imports, the dependency
- * graph the cli resolves, so an option moving into any command `app` reaches is picked up without a list to maintain.
+ * The application JDL definitions: the jdl options of the `app` generator and of everything it imports, so an option
+ * moving into any command `app` reaches is picked up without a list to maintain.
  */
 export const getDefaultJDLApplicationConfig = (): Readonly<JDLApplicationConfig> => {
-  if (!defaultJDLApplicationConfig) {
-    const store = getJHipsterStore();
-    const configs: JHipsterConfigs = {};
-    for (const { command } of resolveGeneratorDependencies(['app'], { getGeneratorMeta: namespace => store.getMeta(namespace) })) {
-      Object.assign(configs, command?.configs);
-    }
-    defaultJDLApplicationConfig = Object.freeze(buildJDLApplicationConfig(configs));
-  }
+  defaultJDLApplicationConfig ??= Object.freeze(buildJDLApplicationConfig(lookupConfigsFrom('app')));
   return defaultJDLApplicationConfig;
 };
 
-let defaultRuntime: JDLRuntime;
-export const getDefaultRuntime = (): JDLRuntime => {
-  if (!defaultRuntime) {
-    defaultRuntime = createRuntime(getDefaultJDLApplicationConfig());
-  }
-
-  return defaultRuntime;
+let defaultJDLDeploymentConfig: Readonly<JDLApplicationConfig>;
+/**
+ * The deployment JDL definitions, the same way: the jdl options of the `deployment` generator and of the deployment
+ * types it imports, `docker-compose` and `kubernetes`.
+ */
+export const getDefaultJDLDeploymentConfig = (): Readonly<JDLApplicationConfig> => {
+  defaultJDLDeploymentConfig ??= Object.freeze(buildJDLApplicationConfig(lookupConfigsFrom('deployment')));
+  return defaultJDLDeploymentConfig;
 };

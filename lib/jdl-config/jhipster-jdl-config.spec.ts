@@ -17,25 +17,30 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 
 import { lookupCommandsConfigs } from '../command/lookup-commands-configs.ts';
-import type { JDLApplicationConfig } from '../jdl/core/types/parsing.ts';
 
-import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig } from './jhipster-jdl-config.ts';
+import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
-describe('getDefaultJDLApplicationConfig()', () => {
-  let discoveredConfigs: JDLApplicationConfig;
-
-  before(() => {
-    const configs = lookupCommandsConfigs();
-    discoveredConfigs = buildJDLApplicationConfig(Object.fromEntries(Object.entries(configs).filter(([_key, value]) => value.jdl)));
+describe('jdl definitions', () => {
+  // Every jdl option a generator declares belongs to one of the two trees: the application definitions are the options
+  // reached from `app`, the deployment ones the options reached from `deployment`. An option declared by a generator
+  // neither reaches is a mistake in a command's `import`s rather than in the definitions.
+  it('should split every jdl option declared by a generator between the application and the deployment definitions', () => {
+    const declared = Object.keys(lookupCommandsConfigs({ filter: config => Boolean(config.jdl) })).sort();
+    const application = Object.keys(getDefaultJDLApplicationConfig().optionsTypes);
+    const deployment = Object.keys(getDefaultJDLDeploymentConfig().optionsTypes);
+    expect([...application, ...deployment].sort()).toEqual(declared);
+    expect(application.filter(name => deployment.includes(name))).toEqual([]);
   });
 
-  it('should have every jdl option declared by a generator', () => {
-    // The definitions come from what `app` imports; an option declared by a generator `app` does not reach is a mistake
-    // in the command's `import`s rather than in the definitions.
-    expect(getDefaultJDLApplicationConfig()).toMatchObject(discoveredConfigs);
+  it('should build the application definitions from the options reached from app', () => {
+    const configs = lookupCommandsConfigs();
+    const application = Object.keys(getDefaultJDLApplicationConfig().optionsTypes);
+    expect(getDefaultJDLApplicationConfig()).toMatchObject(
+      buildJDLApplicationConfig(Object.fromEntries(Object.entries(configs).filter(([name]) => application.includes(name)))),
+    );
   });
 
   it.skip('should match snapshot', () => {

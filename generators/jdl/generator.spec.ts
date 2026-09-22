@@ -114,6 +114,23 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('for deployment jdl', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedGenerators(mockedGenerators).withOptions({
+        inline: 'application { config { baseName foo } }\ndeployment { deploymentType docker-compose\n appsFolders [foo] }',
+      });
+    });
+
+    it('should compose with the generator of the deploymentType, through the deployment generator', () => {
+      runResult.assertGeneratorComposedOnce(MOCKED_DOCKER_COMPOSE);
+    });
+    it('should write the deployment config in the folder of the deploymentType', () => {
+      runResult.assertJsonFileContent('docker-compose/.yo-rc.json', {
+        'generator-jhipster': { deploymentType: 'docker-compose', appsFolders: ['foo'] },
+      });
+    });
+  });
+
   describe('for application jdl', () => {
     describe('with valid jdl', () => {
       before(async () => {

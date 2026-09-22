@@ -682,6 +682,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/cypress/templates/template-file-cypress.ejs": {
     "stateCleared": "modified",
   },
+  "generators/deployment/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/deployment/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/deployment/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/deployment/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/deployment/templates/template-file-deployment.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/docker-compose/command.ts": {
     "stateCleared": "modified",
   },

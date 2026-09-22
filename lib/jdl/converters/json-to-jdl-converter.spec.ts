@@ -21,9 +21,9 @@ import { beforeEach, describe, expect, it } from 'esmocha';
 import fs, { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.ts';
 import { createJHipsterConfigFiles, defaultHelpers as helpers } from '../../testing/index.ts';
 import { getTestFile } from '../core/__test-support__/index.ts';
+import { getDefaultRuntime } from '../core/runtime.ts';
 
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.ts';
 

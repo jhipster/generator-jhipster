@@ -19,7 +19,7 @@
 
 import path from 'node:path';
 
-import { getDefaultJDLApplicationConfig, getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.ts';
+import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
 import {
   type JHipsterYoRcContentAndJDLWrapper,
   convertApplicationsToJDL as originalConvertApplicationsToJDL,
@@ -33,6 +33,7 @@ import {
 import { createJDLLinterFromContent as originalCreateJDLLinterFromContent } from '../linters/jdl-linter.ts';
 import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.ts';
 import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.ts';
+import { getDefaultRuntime } from '../runtime.ts';
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 

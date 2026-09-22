@@ -40,6 +40,7 @@ Commands:
   ci-cd:gitlab                    Create a GitLab CI/CD pipeline
   ci-cd:jenkins                   Create a Jenkins CI/CD pipeline
   ci-cd:travis                    Create a Travis CI/CD pipeline
+  deployment                      Generate a deployment, delegating to the generator matching its deploymentType
   docker-compose                  Create all required Docker deployment configuration for the selected applications
   describe [options] [generator]  Describe the generators, the arguments, options and configuration of a command, or find the command declaring a config
   download <jdlFiles...>          Download jdl file from template repository
