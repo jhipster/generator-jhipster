@@ -71,17 +71,21 @@ describe('jdl - JDLLexer', () => {
       expect(tokens.map(token => token.tokenType.name)).toEqual(['MICROFRONTENDS', 'MICROFRONTEND']);
     });
 
-    it('should lex a custom keyword declared after a shorter built-in keyword', () => {
+    it('should lex a keyword declared after a shorter keyword it starts with', () => {
+      // Keywords match whole words only, so the shorter one registered first does not take the start of the longer one.
       const runtime = createRuntime({
-        validatorConfig: { BASE_NAME_FOO: { type: 'BOOLEAN' } },
+        validatorConfig: { FOO: { type: 'BOOLEAN' }, FOO_BAR: { type: 'BOOLEAN' } },
         optionsValues: {},
         optionsTypes: {},
         quotedOptionNames: [],
-        tokenConfigs: [{ name: 'BASE_NAME_FOO', pattern: 'baseNameFoo' }],
+        tokenConfigs: [
+          { name: 'FOO', pattern: 'foo' },
+          { name: 'FOO_BAR', pattern: 'fooBar' },
+        ],
       });
-      const { tokens, errors } = runtime.lexer.tokenize('baseNameFoo baseName');
+      const { tokens, errors } = runtime.lexer.tokenize('fooBar foo');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['BASE_NAME_FOO', 'BASE_NAME']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['FOO_BAR', 'FOO']);
     });
   });
 

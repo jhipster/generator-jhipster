@@ -31,7 +31,7 @@ import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import { createRuntime } from '../../core/runtime.ts';
+import { getDefaultRuntime } from '../../core/runtime.ts';
 import logger from '../../core/utils/objects/logger.ts';
 
 import { convert } from './jdl-with-applications-to-json-converter.ts';
@@ -48,7 +48,7 @@ const { BUILT_IN_ENTITY } = relationshipOptions;
 type ConvertedEntity = Exclude<ReturnType<ReturnType<typeof convert>['get']>, never[] | undefined>[0] | undefined;
 
 describe('jdl - JDLWithApplicationsToJSONConverter', () => {
-  const runtime = createRuntime();
+  const runtime = getDefaultRuntime();
 
   describe('convert', () => {
     describe('when passing invalid parameters', () => {

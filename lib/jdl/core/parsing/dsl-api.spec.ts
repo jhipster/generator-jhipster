@@ -19,12 +19,12 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { createRuntime } from '../runtime.ts';
+import { getDefaultRuntime } from '../runtime.ts';
 
 import { parse } from './api.ts';
 
 describe('jdl - JDL DSL API', () => {
-  const jdlRuntime = createRuntime();
+  const jdlRuntime = getDefaultRuntime();
 
   describe('when wanting an AST', () => {
     describe('with a valid input', () => {

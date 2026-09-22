@@ -23,7 +23,7 @@ import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { createJDLApplication } from '../__test-support__/index.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
-import { createRuntime } from '../runtime.ts';
+import { getDefaultRuntime } from '../runtime.ts';
 
 import { JDLEntity, JDLEnum } from './index.ts';
 import type JDLApplication from './jdl-application.ts';
@@ -36,7 +36,7 @@ import JDLUnaryOption from './jdl-unary-option.ts';
 import JDLValidation from './jdl-validation.ts';
 
 describe('jdl - JDLObject', () => {
-  const runtime = createRuntime();
+  const runtime = getDefaultRuntime();
 
   describe('addApplication', () => {
     describe('when adding an invalid application', () => {
