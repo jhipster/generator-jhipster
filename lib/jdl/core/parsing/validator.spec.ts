@@ -2021,15 +2021,17 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         describe('an invalid value', () => {
           describe('such as having special character inside the list', () => {
             it('should report a syntax error', () => {
-              expect(() =>
-                parse(
-                  `
+              expect(
+                () =>
+                  parse(
+                    `
                 deployment {
                   ${type} [fr, en, @123]
               }`,
-                  jdlRuntime,
-                ),
-              ).toThrow(/^MismatchedTokenException: Found an invalid token '@', at line: \d+ and column: \d+\./);
+                    jdlRuntime,
+                  ),
+                // A deployment block is lexed in a mode of its own, where `@`, an annotation token, is no token at all.
+              ).toThrow(/^unexpected character: ->@<-/);
             });
           });
           describe('such as not a list', () => {

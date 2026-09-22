@@ -224,7 +224,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
   // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.SERVICE_DISCOVERY_TYPE]: { type: ApplicationOptionTypes.STRING },
   [optionNames.SKIP_CLIENT]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
 };

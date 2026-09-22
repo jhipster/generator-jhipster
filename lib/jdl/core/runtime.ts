@@ -26,7 +26,7 @@ import JDLApplicationDefinition from './built-in-options/jdl-application-definit
 import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.ts';
 import { buildDeploymentTokens } from './built-in-options/tokens/deployment-tokens.ts';
 import JDLParser from './parsing/jdl-parser.ts';
-import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
+import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
 import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
@@ -60,12 +60,7 @@ export const createRuntime = (
 ): JDLRuntime => {
   const newDefinition = mergeDefinition(definition, builtInJDLApplicationConfig);
   const propertyValidations: Record<string, JDLValidatorOption> = newDefinition.validatorConfig;
-  const deploymentPropertyValidations: Record<string, JDLValidatorOption> = {
-    ...deploymentDefinition.validatorConfig,
-    // The one keyword of both grammars, whose token is created with both categories in the lexer: validated as in the
-    // application config.
-    SERVICE_DISCOVERY_TYPE: propertyValidations.SERVICE_DISCOVERY_TYPE,
-  };
+  const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
   const deploymentOptionTypes = deploymentDefinition.optionsTypes;
   const applicationDefinition = new JDLApplicationDefinition({
     optionValues: newDefinition.optionsValues,
@@ -73,24 +68,29 @@ export const createRuntime = (
     quotedOptionNames: newDefinition.quotedOptionNames,
   });
 
-  let tokens: Record<string, TokenType>;
+  let jdlTokens: JDLTokens;
   let lexer: Lexer;
   let parser: JDLParser;
+  const getJDLTokens = () => {
+    if (!jdlTokens) {
+      const applicationTokens = buildApplicationTokens(newDefinition.tokenConfigs);
+      const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
+      jdlTokens = buildTokens({ applicationTokens, deploymentTokens });
+
+      // The application config keys are tokens of their lexer mode, checked against the validations by name.
+      const applicationConfigTokens = Object.fromEntries(applicationTokens.tokens.map(token => [token.name, token]));
+      checkConfigKeys({ ...applicationConfigTokens, ...jdlTokens.tokens }, Object.keys(propertyValidations));
+    }
+    return jdlTokens;
+  };
 
   return {
     get tokens(): Record<string, TokenType> {
-      if (!tokens) {
-        const applicationTokens = buildApplicationTokens(newDefinition.tokenConfigs);
-        const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
-        tokens = buildTokens({ applicationTokens, deploymentTokens });
-
-        checkConfigKeys(tokens, Object.keys(propertyValidations));
-      }
-      return tokens;
+      return getJDLTokens().tokens;
     },
     get lexer(): Lexer {
       if (!lexer) {
-        lexer = createJDLLexer(this.tokens);
+        lexer = createJDLLexer(getJDLTokens());
       }
       return lexer;
     },
@@ -99,7 +99,7 @@ export const createRuntime = (
         parser = new JDLParser(this.tokens);
         parser.parse();
         const rules = parser.getGAstProductions();
-        checkTokens(Object.values(this.tokens), Object.values(rules));
+        checkTokens(allTokens(getJDLTokens()), Object.values(rules));
       }
 
       return parser;

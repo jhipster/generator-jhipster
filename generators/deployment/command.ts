@@ -87,6 +87,14 @@ const command = {
       choices: ['no', 'prometheus'],
       scope: 'storage',
     },
+    serviceDiscoveryType: {
+      description: 'Service discovery of the applications to deploy',
+      cli: { type: String, hide: true },
+      // Declared by spring-boot too: a keyword of both grammars, one token with both categories.
+      jdl: { type: 'string', tokenType: 'NAME', tokenValuePattern: ALPHABETIC_LOWER_PATTERN },
+      choices: ['consul', 'eureka', 'no'],
+      scope: 'storage',
+    },
   },
 } as const satisfies JHipsterCommandDefinition;
 

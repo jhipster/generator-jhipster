@@ -58,6 +58,7 @@ describe('jdl options', () => {
   "applicationType",
   "serverPort",
   "gatewayServerPort",
+  "serviceDiscoveryType",
   "jwtSecretKey",
   "enableGradleDevelocity",
   "gradleDevelocityHost",

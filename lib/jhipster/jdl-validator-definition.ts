@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import { ALPHABETIC_LOWER } from '../jdl/core/built-in-options/validation-patterns.ts';
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
@@ -35,11 +34,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   },
   // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   JHIPSTER_VERSION: { type: 'STRING' },
-  SERVICE_DISCOVERY_TYPE: {
-    type: 'NAME',
-    pattern: ALPHABETIC_LOWER,
-    msg: 'serviceDiscoveryType property',
-  },
   SKIP_CLIENT: { type: 'BOOLEAN' },
   SKIP_SERVER: { type: 'BOOLEAN' },
 };

@@ -40,7 +40,8 @@ function getUsedTokens(rules: Rule[]): TokenType[] {
 }
 
 function getUselessTokens(usedTokens: TokenType[], allDefinedTokens: TokenType[]) {
-  const usedCategories = uniq(flatMap(usedTokens, 'CATEGORIES'));
+  // A token a rule consumes is matched by the tokens it is a category of too, BLOCK_RCURLY for RCURLY.
+  const usedCategories = uniq([...usedTokens, ...flatMap(usedTokens, 'CATEGORIES')]);
   // TODO: Calling uniq with two parameters is probably a bug.
 
   // @ts-expect-error TODO

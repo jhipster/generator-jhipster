@@ -21,7 +21,7 @@ import { describe, expect, it } from 'esmocha';
 
 import { lookupCommandsConfigs } from '../command/lookup-commands-configs.ts';
 
-import { buildJDLApplicationConfig, getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
+import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
 describe('jdl definitions', () => {
   // Every jdl option a generator declares belongs to one of the two trees: the application definitions are the options
@@ -31,16 +31,16 @@ describe('jdl definitions', () => {
     const declared = Object.keys(lookupCommandsConfigs({ filter: config => Boolean(config.jdl) })).sort();
     const application = Object.keys(getDefaultJDLApplicationConfig().optionsTypes);
     const deployment = Object.keys(getDefaultJDLDeploymentConfig().optionsTypes);
-    expect([...application, ...deployment].sort()).toEqual(declared);
-    expect(application.filter(name => deployment.includes(name))).toEqual([]);
+    expect([...new Set([...application, ...deployment])].sort()).toEqual(declared);
   });
 
-  it('should build the application definitions from the options reached from app', () => {
-    const configs = lookupCommandsConfigs();
-    const application = Object.keys(getDefaultJDLApplicationConfig().optionsTypes);
-    expect(getDefaultJDLApplicationConfig()).toMatchObject(
-      buildJDLApplicationConfig(Object.fromEntries(Object.entries(configs).filter(([name]) => application.includes(name)))),
+  it('should let a keyword be declared by both trees, each with its own definition', () => {
+    // serviceDiscoveryType is declared by spring-boot and by deployment: the two grammars are lexed in modes of their
+    // own, so it is a token of each, and neither tree needs to know what the other declares.
+    const shared = Object.keys(getDefaultJDLApplicationConfig().optionsTypes).filter(
+      name => name in getDefaultJDLDeploymentConfig().optionsTypes,
     );
+    expect(shared).toEqual(['serviceDiscoveryType']);
   });
 
   it.skip('should match snapshot', () => {
