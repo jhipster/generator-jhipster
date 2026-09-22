@@ -24,12 +24,12 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import { supportedLanguages } from './support/index.ts';
 
-import { basicHelpers, defaultHelpers as helpers, result as runResult } from '#testing';
+import { defaultHelpers as helpers, dryRunHelpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
-const createClientProject = (options?: Parameters<ReturnType<typeof basicHelpers.runJHipster>['withOptions']>[0]) =>
-  basicHelpers
+const createClientProject = (options?: Parameters<ReturnType<typeof dryRunHelpers.runJHipster>['withOptions']>[0]) =>
+  dryRunHelpers
     .runJHipster('app')
     .withMockedGenerators(['jhipster:server'])
     .withJHipsterConfig()

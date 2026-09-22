@@ -27,7 +27,7 @@ import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/prio
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.ts';
 import getGenerator from '../../lib/utils/get-generator.ts';
 
-import { runResult, skipPrettierHelpers as helpers } from '#testing';
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);
 

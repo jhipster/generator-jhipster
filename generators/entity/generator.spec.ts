@@ -23,7 +23,7 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/
 
 import Generator from './index.ts';
 
-import { basicHelpers, defaultHelpers as helpers, result as runResult } from '#testing';
+import { defaultHelpers as helpers, result as runResult, skipPrettierHelpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -33,7 +33,7 @@ describe(`generator - ${generator}`, () => {
 
   describe('with default configuration', () => {
     before(async () => {
-      const res = await basicHelpers.runJHipster('app').withJHipsterConfig({});
+      const res = await skipPrettierHelpers.runJHipster('app').withJHipsterConfig({});
       res.memFs = undefined as any;
       await runResult
         .createJHipster('entity')

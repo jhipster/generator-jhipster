@@ -22,7 +22,7 @@ import fs, { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.ts';
-import { basicHelpers as helpers, createJHipsterConfigFiles } from '../../testing/index.ts';
+import { createJHipsterConfigFiles, defaultHelpers as helpers } from '../../testing/index.ts';
 import { getTestFile } from '../core/__test-support__/index.ts';
 
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.ts';

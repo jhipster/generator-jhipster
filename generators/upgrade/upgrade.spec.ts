@@ -26,7 +26,7 @@ import { escapeRegExp } from 'lodash-es';
 
 import { packageJson } from '../../lib/index.ts';
 
-import { basicHelpers as helpers, result as runResult } from '#testing';
+import { result as runResult, skipPrettierHelpers as helpers } from '#testing';
 
 const writeJsonSync = (file: PathOrFileDescriptor, content: any) => writeFileSync(file, JSON.stringify(content, null, 2));
 
