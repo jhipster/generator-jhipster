@@ -16,13 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs/esm';
-<%_ } _%>
-
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
 
 import { I<%- entityAngularName %><% if (!readOnly && primaryKey) { %>, New<%- entityAngularName %><% } %> } from './<%- entityFileName %>.model';

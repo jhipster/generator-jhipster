@@ -51,20 +51,15 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
       });
   _%>
   <%_ if (otherEntity.builtInUser) { _%>
-import { I<%- otherEntity.entityAngularName %> } from 'app/shared/model/user.model';
     <%_ if (authenticationTypeOauth2) { _%>
 import { getUsers } from 'app/shared/reducers/user-management';
     <%_ } else { _%>
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
     <%_ } _%>
   <%_ } else { _%>
-    <%_ if (otherEntity.entityAngularName !== entityReactName) { _%>
-import { I<%- otherEntity.entityAngularName %> } from 'app/shared/model/<%- otherEntity.entityModelFileName %>.model';
-    <%_ } _%>
 import { getEntities as get<%- otherEntity.entityNamePlural %> } from 'app/entities/<%- otherEntity.entityFolderName %>/<%- otherEntity.entityFileName %>.reducer';
   <%_ } _%>
 <%_ } _%>
-import { I<%- entityReactName %> } from 'app/shared/model/<%- entityModelFileName %>.model';
 <%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';

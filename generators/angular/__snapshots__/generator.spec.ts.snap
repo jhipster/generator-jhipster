@@ -995,7 +995,6 @@ import {
 } from "@angular/router";
 import { lastValueFrom, of, throwError } from "rxjs";
 
-import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 
 import userManagementResolve from "./user-management-routing-resolve.service";

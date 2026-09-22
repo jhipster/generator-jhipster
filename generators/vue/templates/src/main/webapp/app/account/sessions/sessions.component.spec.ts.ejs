@@ -23,10 +23,6 @@ import axios from 'axios';
 import { createTestingPinia } from '@pinia/testing';
 import { useStore } from '@/store';
 import Sessions from './sessions.vue';
-import router from '@/router';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } _%>
 
 type SessionsComponentType = InstanceType<typeof Sessions>;
 

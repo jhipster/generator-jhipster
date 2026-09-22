@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const tsKeyId = primaryKey.tsSampleValues[0];
-    const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
-_%>
+<%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import axios from 'axios';
 <%_ if (anyFieldIsDateDerived) { _%>
@@ -37,9 +35,6 @@ import {
 <%_ } _%>
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 import { <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
-<%_ } _%>
 
 const error = {
   response: {
