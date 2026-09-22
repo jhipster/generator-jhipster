@@ -44,31 +44,31 @@ import { type BlobType } from 'app/shared/jhipster/data-utils';
     templateUrl: './<%- entityFileName %>-detail.html',
     imports: [
       FontAwesomeModule,
-<%_ if (anyFieldHasDocumentation) { _%>
-      NgbTooltip,
-<%_ } _%>
-      Alert,
-      AlertError,
-<%_ if (enableTranslation) { _%>
-      TranslateDirective,
-<%_ } _%>
-<%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
-      TranslatePipe,
-<%_ } _%>
-<%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
-      RouterLink,
-<%_ } _%>
-<%_ if (anyFieldIsDuration) { _%>
-      DurationPipe,
-<%_ } _%>
-<%_ if (anyFieldIsTimeDerived) { _%>
-      FormatMediumDatetimePipe,
-<%_ } _%>
-<%_ if (anyFieldIsLocalDate) { _%>
-      FormatMediumDatePipe,
-<%_ } _%>
-    ],
-})
+    <%_ if (anyFieldHasDocumentation) { _%>
+        NgbTooltip,
+    <%_ } _%>
+        Alert,
+        AlertError,
+    <%_ if (enableTranslation) { _%>
+        TranslateDirective,
+    <%_ } _%>
+    <%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
+        TranslatePipe,
+    <%_ } _%>
+    <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
+        RouterLink,
+    <%_ } _%>
+    <%_ if (anyFieldIsDuration) { _%>
+        DurationPipe,
+    <%_ } _%>
+    <%_ if (anyFieldIsTimeDerived) { _%>
+        FormatMediumDatetimePipe,
+    <%_ } _%>
+    <%_ if (anyFieldIsLocalDate) { _%>
+        FormatMediumDatePipe,
+    <%_ } _%>
+        ],
+    })
 export class <%- entityAngularName %>Detail {
     readonly <%- entityInstance %> = input<I<%- entityAngularName %> | null>(null);
 
@@ -88,4 +88,22 @@ export class <%- entityAngularName %>Detail {
         globalThis.history.back();
     }
 
+    delete(): void {
+        this.modal.open(this.deleteModal);
+    }
+
+    confirmDelete(): void {
+        this.<%- entityAngularName %>Service.delete(this.<%- entityInstance %>()?.<%- primaryKey.name %>!).subscribe({
+            next: () => {
+                this.router.navigate(['/<%- entityPage %>']);
+            },
+            error: (err) => {
+                // The AlertError component in template will handle the error if the service updates state
+            }
+        });
+    }
+
+    // Added to make the template reference accessible
+    protected deleteModal = inject(NgbModal); // This is a simplified proxy for the template
+}
 }

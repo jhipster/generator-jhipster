@@ -134,7 +134,14 @@
         <fa-icon icon="arrow-left" />&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
 <%_ if (!readOnly && updatableEntity) { _%>
-
+      <button type="button"
+          (click)="delete()"
+          class="btn btn-danger"
+          data-cy="entityDetailsDeleteButton">
+        <fa-icon icon="trash" />&nbsp;<span>__jhiTranslateTag__('entity.action.delete')</span>
+      </button>
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
       <button type="button"
           [routerLink]="['/<%- entityPage %>', <%- entityInstance %>Ref.<%- primaryKey.name %>, 'edit']"
           class="btn btn-primary">
@@ -142,6 +149,17 @@
       </button>
 <%_ } _%>
     </div>
-    }
-  </div>
-</div>
+
+  <ng-template #deleteModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">__jhiTranslateTag__('entity.action.delete')</h4>
+        <button type="button" class="btn-close" (click)="modal.dismiss('Crosscheck')"></button>
+    </div>
+    <div class="modal-body">
+        <p>__jhiTranslateTag__('entity.action.deleteConfirm')</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Crosscheck')">__jhiTranslateTag__('entity.action.cancel')</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">__jhiTranslateTag__('entity.action.delete')</button>
+    </div>
+</ng-template>
