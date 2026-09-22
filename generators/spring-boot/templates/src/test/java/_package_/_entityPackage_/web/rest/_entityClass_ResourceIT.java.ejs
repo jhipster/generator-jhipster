@@ -264,11 +264,11 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       if (field.fieldValidate === true) {
         if (field.fieldValidationMax) {
           defaultValue = field.fieldValidateRulesMax;
-          updatedValue = parseInt(field.fieldValidateRulesMax) - 1;
+          updatedValue = Number.parseInt(field.fieldValidateRulesMax) - 1;
         }
         if (field.fieldValidationMin) {
           defaultValue = field.fieldValidateRulesMin;
-          updatedValue = parseInt(field.fieldValidateRulesMin) + 1;
+          updatedValue = Number.parseInt(field.fieldValidateRulesMin) + 1;
         }
         if (field.fieldValidationMinBytes) {
           defaultValue = field.fieldValidateRulesMinbytes;
