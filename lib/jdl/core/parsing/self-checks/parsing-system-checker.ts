@@ -18,7 +18,7 @@
  */
 
 import { Lexer, type Rule, type TokenType } from 'chevrotain';
-import { difference, flatMap, includes, isEmpty, reject, some, uniq, values } from 'lodash-es';
+import { difference, flatMap, includes, reject, some, uniq } from 'lodash-es';
 
 import TokenCollectorVisitor from './token-collector-visitor.ts';
 
@@ -40,7 +40,7 @@ function getUsedTokens(rules: Rule[]): TokenType[] {
 }
 
 function getUselessTokens(usedTokens: TokenType[], allDefinedTokens: TokenType[]) {
-  // A token a rule consumes is matched by the tokens it is a category of too, BLOCK_RCURLY for RCURLY.
+  // A token a rule consumes is matched by the tokens it is a category of too.
   const usedCategories = uniq([...usedTokens, ...flatMap(usedTokens, 'CATEGORIES')]);
   // TODO: Calling uniq with two parameters is probably a bug.
 
@@ -51,27 +51,4 @@ function getUselessTokens(usedTokens: TokenType[], allDefinedTokens: TokenType[]
     return some(tokCategories, category => includes(usedCategories, category));
   });
   return reject(redundant, tokenType => tokenType.GROUP === Lexer.SKIPPED);
-}
-
-export function checkConfigKeys(definedTokensMap: Record<string, TokenType>, usedConfigKeys: string[]) {
-  checkForUselessConfigurationKeys(definedTokensMap, usedConfigKeys);
-  checkForMissingConfigurationKeys(definedTokensMap, usedConfigKeys);
-}
-
-function checkForUselessConfigurationKeys(definedTokensMap: Record<string, TokenType>, usedConfigKeys: string[]) {
-  const redundantConfigKeys = difference(usedConfigKeys, Object.keys(definedTokensMap));
-  if (!isEmpty(redundantConfigKeys)) {
-    throw new Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
-  }
-}
-
-function checkForMissingConfigurationKeys(definedTokensMap: Record<string, TokenType>, usedConfigKeys: string[]) {
-  const definedConfigKeyNames = values(definedTokensMap)
-    .filter(tokenType => includes(tokenType.CATEGORIES, definedTokensMap.CONFIG_KEY))
-    .map(tokenType => tokenType.name);
-
-  const missingConfigKeys = difference(definedConfigKeyNames, usedConfigKeys);
-  if (!isEmpty(missingConfigKeys)) {
-    throw new Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
-  }
 }

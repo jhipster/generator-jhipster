@@ -16,9 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ITokenConfig } from 'chevrotain';
-
-export type JDLTokenConfig = Pick<ITokenConfig, 'name' | 'pattern'>;
 
 export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
 
@@ -37,7 +34,6 @@ export type JDLApplicationOptionType = {
 };
 
 export type JDLApplicationConfig = {
-  tokenConfigs: JDLTokenConfig[];
   validatorConfig: Record<string, JDLValidatorOption>;
   optionsValues: Record<string, JDLApplicationOptionValue>;
   optionsTypes: Record<string, JDLApplicationOptionType>;

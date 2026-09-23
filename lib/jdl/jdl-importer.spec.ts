@@ -565,9 +565,7 @@ entity A
       });
 
       it('should report it', () => {
-        expect(caughtError.message).toBe(
-          "MismatchedTokenException: Found an invalid token 'unknownOption', at line: 5 and column: 5.\n\tPlease make sure your JDL content does not use invalid characters, keywords or options.",
-        );
+        expect(caughtError.message).toBe('Unknown application option: unknownOption.\n\tat line: 5, column: 5');
       });
     });
     describe('when parsing relationships with annotations and options', () => {

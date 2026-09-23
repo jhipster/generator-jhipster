@@ -52,11 +52,9 @@ export default class JDLParser extends CstParser {
     this.enumDeclaration();
     this.enumPropList();
     this.enumProp();
-    this.entityList();
     this.exclusion();
     this.useOptionDeclaration();
-    this.unaryOptionDeclaration();
-    this.binaryOptionDeclaration();
+    this.optionDeclaration();
     this.filterDef();
     this.comment();
     this.deploymentDeclaration();
@@ -90,13 +88,10 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.enumDeclaration) },
           { ALT: () => this.CONSUME(this.tokens.JAVADOC) },
           { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
-          { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
-          { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
           { ALT: () => this.SUBRULE(this.applicationDeclaration) },
           { ALT: () => this.SUBRULE(this.deploymentDeclaration) },
-          // a constantDeclaration starts with a NAME, but any keyword is also a NAME
-          // So to avoid conflicts with most of the above alternatives (which start with keywords)
-          // this alternative must be last.
+          // A constant and an option statement start with a NAME, but any keyword is also a NAME.
+          // So to avoid conflicts with the above alternatives (which start with keywords) these alternatives must be last.
           {
             // - A Constant starts with a NAME
             // - NAME tokens are very common
@@ -105,6 +100,10 @@ export default class JDLParser extends CstParser {
             GATE: () => this.LA(2).tokenType === this.tokens.EQUALS,
             ALT: () => this.SUBRULE(this.constantDeclaration),
           },
+          // The option statements: the lexer knows no option, the option names are checked against the definitions.
+          // Every keyword is a NAME too, so the static analysis sees `entity Foo` as an option statement as well; the
+          // alternatives are tried in order, a keyword statement wins over an option statement starting with the keyword.
+          { IGNORE_AMBIGUITIES: true, ALT: () => this.SUBRULE(this.optionDeclaration) },
         ]);
       });
     });
@@ -344,7 +343,7 @@ export default class JDLParser extends CstParser {
 
   relationshipOption(): CstNode {
     this.RULE('relationshipOption', () => {
-      this.CONSUME(this.tokens.RELATIONSHIP_OPTION);
+      this.CONSUME(this.tokens.NAME);
     });
     return noopCst;
   }
@@ -397,18 +396,6 @@ export default class JDLParser extends CstParser {
     return noopCst;
   }
 
-  entityList(): CstNode {
-    this.RULE('entityList', () => {
-      this.commonEntityList();
-      this.CONSUME(this.tokens.WITH);
-      this.OR1([
-        { ALT: () => this.CONSUME2(this.tokens.NAME, { LABEL: 'method' }) },
-        { ALT: () => this.CONSUME3(this.tokens.STRING, { LABEL: 'methodPath' }) },
-      ]);
-    });
-    return noopCst;
-  }
-
   commonEntityList(): CstNode {
     this.MANY({
       // the next section may contain [NAME, WITH], LA(2) check is used to resolve this.
@@ -454,22 +441,22 @@ export default class JDLParser extends CstParser {
     return noopCst;
   }
 
-  unaryOptionDeclaration(): CstNode {
-    this.RULE('unaryOptionDeclaration', () => {
-      this.CONSUME(this.tokens.UNARY_OPTION);
+  /**
+   * An option statement: `<option> <entities>` for a unary option, `<option> <entities> with <value>` for a binary one,
+   * both with an optional `except <entities>`.
+   */
+  optionDeclaration(): CstNode {
+    this.RULE('optionDeclaration', () => {
+      this.CONSUME(this.tokens.NAME, { LABEL: 'option' });
       this.SUBRULE(this.filterDef);
       this.OPTION(() => {
-        this.SUBRULE(this.exclusion);
+        this.CONSUME(this.tokens.WITH);
+        this.OR([
+          { ALT: () => this.CONSUME2(this.tokens.NAME, { LABEL: 'method' }) },
+          { ALT: () => this.CONSUME3(this.tokens.STRING, { LABEL: 'methodPath' }) },
+        ]);
       });
-    });
-    return noopCst;
-  }
-
-  binaryOptionDeclaration(): CstNode {
-    this.RULE('binaryOptionDeclaration', () => {
-      this.CONSUME(this.tokens.BINARY_OPTION);
-      this.SUBRULE(this.entityList);
-      this.OPTION(() => {
+      this.OPTION1(() => {
         this.SUBRULE(this.exclusion);
       });
     });
@@ -504,7 +491,7 @@ export default class JDLParser extends CstParser {
 
   deploymentConfigDeclaration(): CstNode {
     this.RULE('deploymentConfigDeclaration', () => {
-      this.CONSUME(this.tokens.DEPLOYMENT_KEY);
+      this.CONSUME(this.tokens.NAME);
       this.SUBRULE(this.deploymentConfigValue);
       this.OPTION(() => {
         this.CONSUME(this.tokens.COMMA);
@@ -543,9 +530,9 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.applicationSubNamespaceConfig) },
           { ALT: () => this.SUBRULE(this.applicationSubConfig) },
           { ALT: () => this.SUBRULE(this.applicationSubEntities) },
-          { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
-          { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
           { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
+          // Last: an option statement starts with a NAME, and any keyword is also a NAME, see prog.
+          { IGNORE_AMBIGUITIES: true, ALT: () => this.SUBRULE(this.optionDeclaration) },
         ]);
       });
     });
@@ -608,7 +595,7 @@ export default class JDLParser extends CstParser {
 
   applicationConfigDeclaration(): CstNode {
     this.RULE('applicationConfigDeclaration', () => {
-      this.CONSUME(this.tokens.CONFIG_KEY);
+      this.CONSUME(this.tokens.NAME);
       this.SUBRULE(this.configValue);
       this.OPTION(() => {
         this.CONSUME(this.tokens.COMMA);

@@ -44,8 +44,7 @@ type VisitorContext = {
   deploymentDeclaration?: CstNode[];
   relationDeclaration?: CstNode[];
   enumDeclaration?: CstNode[];
-  unaryOptionDeclaration?: CstNode[];
-  binaryOptionDeclaration?: CstNode[];
+  optionDeclaration?: CstNode[];
   useOptionDeclaration?: CstNode[];
   // filterDef?: CstNode[];
   // exclusion?: CstNode[];
@@ -127,9 +126,10 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         ast.enums = context.enumDeclaration.map(element => this.visit(element));
       }
 
-      if (context.unaryOptionDeclaration) {
-        context.unaryOptionDeclaration
-          .map(element => this.visit(element))
+      const options: ParsedJDLOption[] = context.optionDeclaration?.map(element => this.visit(element)) ?? [];
+      if (options.some(option => option.optionValue === undefined)) {
+        options
+          .filter(option => option.optionValue === undefined)
           .forEach((option: ParsedJDLOption) => {
             if (!ast.options[option.optionName]) {
               ast.options[option.optionName] = {};
@@ -142,9 +142,9 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
           });
       }
 
-      if (context.binaryOptionDeclaration) {
-        context.binaryOptionDeclaration
-          .map(element => this.visit(element))
+      if (options.some(option => option.optionValue !== undefined)) {
+        options
+          .filter((option): option is ParsedJDLBinaryOption => option.optionValue !== undefined)
           .forEach((option: ParsedJDLBinaryOption) => {
             option.optionName = binaryOptionName(option.optionName);
             const newOption = !ast.options[option.optionName];
@@ -405,8 +405,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return context.relationshipOption.map(element => this.visit(element)).reduce((final, current) => [...final, current], []);
     }
 
-    relationshipOption(context: Record<'RELATIONSHIP_OPTION', IToken[]>) {
-      return { optionName: context.RELATIONSHIP_OPTION[0].image, type: 'UNARY' };
+    relationshipOption(context: Record<'NAME', IToken[]>) {
+      return { optionName: context.NAME[0].image, type: 'UNARY' };
     }
 
     enumDeclaration(context: Record<'NAME' | 'JAVADOC', IToken[]> & Record<'enumPropList', CstNode[]>) {
@@ -441,38 +441,12 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return prop;
     }
 
-    entityList(context: Record<'NAME' | 'STAR' | 'method' | 'methodPath', IToken[]>) {
-      let entityList: string[] = [];
-      if (context.NAME) {
-        entityList = context.NAME.map(nameToken => nameToken.image);
-      }
-
-      const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
-
-      if (context.STAR || entityOnlyListContainsAll) {
-        entityList = ['*'];
-      }
-
-      if (context.method) {
-        entityList.push(context.method[0].image);
-      }
-      if (context.methodPath) {
-        entityList.push(context.methodPath[0].image);
-      }
-
-      return deduplicate(entityList);
-    }
-
     exclusion(context: Record<'NAME', IToken[]>) {
       return context.NAME.map(nameToken => nameToken.image);
     }
 
-    unaryOptionDeclaration(context: Record<'UNARY_OPTION', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
-      return getUnaryOptionFromContext(context, this);
-    }
-
-    binaryOptionDeclaration(context: Record<'BINARY_OPTION', IToken[]> & Record<'entityList' | 'exclusion', CstNode[]>) {
-      return getBinaryOptionFromContext(context, this);
+    optionDeclaration(context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
+      return getOptionFromContext(context, this);
     }
 
     useOptionDeclaration(context: Record<'NAME', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
@@ -517,8 +491,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return config;
     }
 
-    deploymentConfigDeclaration(context: Record<'DEPLOYMENT_KEY', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
-      const key = context.DEPLOYMENT_KEY[0].image;
+    deploymentConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
+      const key = context.NAME[0].image;
       const value = this.visit(context.deploymentConfigValue);
 
       warnIfDeprecated(key, runtime.deploymentDefinition.optionTypes[key], 'deployment');
@@ -538,12 +512,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
 
     applicationSubDeclaration(
       context: Record<
-        | 'applicationSubConfig'
-        | 'applicationSubNamespaceConfig'
-        | 'applicationSubEntities'
-        | 'unaryOptionDeclaration'
-        | 'binaryOptionDeclaration'
-        | 'useOptionDeclaration',
+        'applicationSubConfig' | 'applicationSubNamespaceConfig' | 'applicationSubEntities' | 'optionDeclaration' | 'useOptionDeclaration',
         CstNode[]
       >,
     ) {
@@ -569,9 +538,10 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         applicationSubDeclaration.entitiesOptions = this.visit(context.applicationSubEntities.at(-1)!);
       }
 
-      if (context.unaryOptionDeclaration) {
-        context.unaryOptionDeclaration
-          .map(element => this.visit(element))
+      const options: ParsedJDLOption[] = context.optionDeclaration?.map(element => this.visit(element)) ?? [];
+      if (options.some(option => option.optionValue === undefined)) {
+        options
+          .filter(option => option.optionValue === undefined)
           .forEach(option => {
             if (!applicationSubDeclaration.options![option.optionName]) {
               applicationSubDeclaration.options![option.optionName] = {};
@@ -584,9 +554,9 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
           });
       }
 
-      if (context.binaryOptionDeclaration) {
-        context.binaryOptionDeclaration
-          .map(element => this.visit(element))
+      if (options.some(option => option.optionValue !== undefined)) {
+        options
+          .filter((option): option is ParsedJDLBinaryOption => option.optionValue !== undefined)
           .forEach(option => {
             option.optionName = binaryOptionName(option.optionName);
             if (!applicationSubDeclaration.options![option.optionName]) {
@@ -675,12 +645,12 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return config;
     }
 
-    applicationSubEntities(context: Record<'UNARY_OPTION', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
+    applicationSubEntities(context: Record<'filterDef' | 'exclusion', CstNode[]>) {
       return getEntityListFromContext(context, this);
     }
 
-    applicationConfigDeclaration(context: Record<'CONFIG_KEY', IToken[]> & Record<'configValue', CstNode[]>) {
-      const key = context.CONFIG_KEY[0].image;
+    applicationConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'configValue', CstNode[]>) {
+      const key = context.NAME[0].image;
       const value = this.visit(context.configValue);
 
       warnIfDeprecated(key, runtime.applicationDefinition.optionTypes[key], 'application');
@@ -749,10 +719,7 @@ function getOptionEntityAndExcludedEntityLists(
   return { entityList, excludedEntityList };
 }
 
-function getEntityListFromContext(
-  context: Record<'UNARY_OPTION', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
-  visitor: ICstVisitor<any, any>,
-) {
+function getEntityListFromContext(context: Record<'filterDef' | 'exclusion', CstNode[]>, visitor: ICstVisitor<any, any>) {
   const entityList = visitor.visit(context.filterDef);
 
   let excluded = [];
@@ -760,44 +727,20 @@ function getEntityListFromContext(
     excluded = visitor.visit(context.exclusion);
   }
 
-  const result: any = { entityList, excluded };
-  if (context.UNARY_OPTION) {
-    result.optionName = context.UNARY_OPTION[0].image;
-  }
-  return result;
+  return { entityList, excluded };
 }
 
-function getUnaryOptionFromContext(
-  context: Record<'UNARY_OPTION', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
+/** An option statement: unary without a value, binary with the `with` value. */
+function getOptionFromContext(
+  context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
   visitor: ICstVisitor<any, any>,
 ) {
-  const entityList = visitor.visit(context.filterDef);
-
-  let excluded = [];
-  if (context.exclusion) {
-    excluded = visitor.visit(context.exclusion);
-  }
-
-  return { optionName: context.UNARY_OPTION[0].image, list: entityList, excluded };
-}
-
-function getBinaryOptionFromContext(
-  context: Record<'BINARY_OPTION', IToken[]> & Record<'entityList' | 'exclusion', CstNode[]>,
-  visitor: ICstVisitor<any, any>,
-) {
-  const entityListWithOptionValue: string[] = visitor.visit(context.entityList);
-  const optionValue = entityListWithOptionValue.at(-1);
-  const list = entityListWithOptionValue.slice(0, -1);
-
-  let excluded = [];
-  if (context.exclusion) {
-    excluded = visitor.visit(context.exclusion);
-  }
-
+  const { entityList, excluded } = getEntityListFromContext(context, visitor);
+  const value = context.method?.[0] ?? context.methodPath?.[0];
   return {
-    optionName: context.BINARY_OPTION[0].image,
-    optionValue,
-    list,
+    optionName: context.option[0].image,
+    ...(value ? { optionValue: value.image } : {}),
+    list: entityList,
     excluded,
   };
 }

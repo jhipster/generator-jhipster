@@ -20,12 +20,9 @@
 import type { Lexer, TokenType } from 'chevrotain';
 
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
-import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.ts';
-import { buildDeploymentTokens } from './built-in-options/tokens/deployment-tokens.ts';
-import { buildEntityTokens } from './built-in-options/tokens/entity-tokens.ts';
 import JDLParser from './parsing/jdl-parser.ts';
 import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
-import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
+import { checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
 import type { JDLDefinitions, JDLValidatorOption } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 
@@ -56,16 +53,7 @@ export const createRuntime = ({
   let lexer: Lexer;
   let parser: JDLParser;
   const getJDLTokens = () => {
-    if (!jdlTokens) {
-      const applicationTokens = buildApplicationTokens(definition.tokenConfigs);
-      const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
-      const entityTokens = buildEntityTokens(entityDefinition, relationshipDefinition);
-      jdlTokens = buildTokens({ applicationTokens, deploymentTokens, entityTokens });
-
-      // The application config keys are tokens of their lexer mode, checked against the validations by name.
-      const applicationConfigTokens = Object.fromEntries(applicationTokens.tokens.map(token => [token.name, token]));
-      checkConfigKeys({ ...jdlTokens.tokens, ...applicationConfigTokens }, Object.keys(propertyValidations));
-    }
+    jdlTokens ??= buildTokens();
     return jdlTokens;
   };
 

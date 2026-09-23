@@ -69,6 +69,8 @@ export type ParsedJDLOptionConfig = {
 
 export type ParsedJDLOption = {
   optionName: string;
+  /** The `with` value of a binary option statement. */
+  optionValue?: string;
 } & ParsedJDLOptionConfig;
 
 export type ParsedJDLBinaryOption = {
