@@ -147,17 +147,13 @@ export default class JDLParser extends CstParser {
       this.CONSUME(this.tokens.NAME, { LABEL: 'option' });
       this.OPTION(() => {
         this.CONSUME(this.tokens.LPAREN);
-        this.OR({
-          IGNORE_AMBIGUITIES: true,
-          DEF: [
-            { ALT: () => this.CONSUME(this.tokens.STRING, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(this.tokens.INTEGER, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(this.tokens.DECIMAL, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(this.tokens.TRUE, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(this.tokens.FALSE, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME2(this.tokens.NAME, { LABEL: 'value' }) },
-          ],
-        });
+        this.OR([
+          { ALT: () => this.CONSUME(this.tokens.STRING, { LABEL: 'value' }) },
+          { ALT: () => this.CONSUME(this.tokens.INTEGER, { LABEL: 'value' }) },
+          { ALT: () => this.CONSUME(this.tokens.DECIMAL, { LABEL: 'value' }) },
+          // A name, `true` and `false` included: the ast builder types the value by its token.
+          { ALT: () => this.CONSUME2(this.tokens.NAME, { LABEL: 'value' }) },
+        ]);
         this.CONSUME(this.tokens.RPAREN);
       });
     });
