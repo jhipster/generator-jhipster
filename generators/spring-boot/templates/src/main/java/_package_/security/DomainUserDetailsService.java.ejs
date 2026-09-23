@@ -50,7 +50,7 @@ import java.util.*;
  * Authenticate a user from the database.
  */
 @Service("userDetailsService")
-public class DomainUserDetailsService implements <%- reactive ? 'Reactive' : '' %>UserDetailsService {
+public class DomainUserDetailsService implements <%- reactivePrefix %>UserDetailsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DomainUserDetailsService.class);
 

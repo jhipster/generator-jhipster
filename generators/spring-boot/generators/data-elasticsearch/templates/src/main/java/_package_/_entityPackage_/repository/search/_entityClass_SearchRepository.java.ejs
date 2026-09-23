@@ -40,7 +40,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.repository.<%- reactive ? 'Reactive' : '' %>ElasticsearchRepository;
+import org.springframework.data.elasticsearch.repository.<%- reactivePrefix %>ElasticsearchRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 <%_ if (reactive) { _%>
@@ -57,7 +57,7 @@ import java.util.UUID;
 /**
  * Spring Data Elasticsearch repository for the {@link <%- persistClass %>} entity.
  */
-public interface <%- entityClass %>SearchRepository extends <%- reactive ? 'Reactive' : '' %>ElasticsearchRepository<<%- persistClass %>, <%- primaryKey.type %>>, <%- entityClass %>SearchRepositoryInternal {
+public interface <%- entityClass %>SearchRepository extends <%- reactivePrefix %>ElasticsearchRepository<<%- persistClass %>, <%- primaryKey.type %>>, <%- entityClass %>SearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 

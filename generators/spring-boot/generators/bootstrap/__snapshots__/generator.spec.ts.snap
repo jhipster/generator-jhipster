@@ -214,6 +214,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
+  "reactivePrefix": "",
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,

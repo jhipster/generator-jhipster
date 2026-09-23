@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const reactivePrefix = reactive ? 'Reactive' : ''; _%>
 package <%- packageName %>.web.rest;
 
 import static <%- packageName %>.test.util.OAuth2TestUtil.ID_TOKEN;
@@ -36,9 +35,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.client.<%- reactive ? 'Reactive' : '' %>OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.<%- reactivePrefix %>OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.<%- reactive ? 'Reactive' : '' %>ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.<%- reactivePrefix %>ClientRegistrationRepository;
 <%_ if (reactive) { _%>
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -61,7 +60,7 @@ import java.util.Map;
 class LogoutResourceIT {
 
     @Autowired
-    private <%- reactive ? 'Reactive' : '' %>ClientRegistrationRepository registrations;
+    private <%- reactivePrefix %>ClientRegistrationRepository registrations;
 
     @Autowired
     private <%- reactive ? '' : 'Web' %>ApplicationContext context;
