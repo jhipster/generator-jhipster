@@ -53,9 +53,12 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
+  "authenticationType",
   "skipUserManagement",
   "applicationType",
+  "serverPort",
   "gatewayServerPort",
+  "jwtSecretKey",
   "enableGradleDevelocity",
   "gradleDevelocityHost",
   "packageName",
@@ -64,6 +67,7 @@ describe('jdl options', () => {
   "enableTranslation",
   "nativeLanguage",
   "incrementalChangelog",
+  "baseName",
   "enableSwaggerCodegen",
   "searchEngine",
   "websocket",
@@ -110,6 +114,9 @@ describe('jdl options', () => {
           'dtoSuffix',
           'testFrameworks',
           'gatewayServerPort',
+          'serverPort',
+          'jwtSecretKey',
+          'baseName',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.

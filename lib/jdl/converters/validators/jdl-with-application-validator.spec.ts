@@ -31,7 +31,7 @@ import JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import { createRuntime } from '../../core/runtime.ts';
+import { getDefaultRuntime } from '../../core/runtime.ts';
 
 import createValidator from './jdl-with-application-validator.ts';
 
@@ -39,7 +39,7 @@ const {
   Validations: { MIN },
 } = validations;
 
-const runtime = createRuntime();
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLWithApplicationValidator', () => {
   describe('createValidator', () => {

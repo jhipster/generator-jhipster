@@ -17,23 +17,12 @@
  * limitations under the License.
  */
 
-import { ALPHABETIC_LOWER, ALPHANUMERIC, ALPHANUMERIC_UNDERSCORE } from '../jdl/core/built-in-options/validation-patterns.ts';
+import { ALPHABETIC_LOWER } from '../jdl/core/built-in-options/validation-patterns.ts';
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
-const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
 export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
-  AUTHENTICATION_TYPE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC,
-    msg: 'authenticationType property',
-  },
-  BASE_NAME: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC_UNDERSCORE,
-    msg: 'baseName property',
-  },
   BLUEPRINT: {
     type: 'NAME',
     pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
@@ -46,12 +35,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
   },
   // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   JHIPSTER_VERSION: { type: 'STRING' },
-  JWT_SECRET_KEY: {
-    type: 'STRING',
-    pattern: JWT_SECRET_KEY_PATTERN,
-    msg: 'JWT secret key property',
-  },
-  SERVER_PORT: { type: 'INTEGER' },
   SERVICE_DISCOVERY_TYPE: {
     type: 'NAME',
     pattern: ALPHABETIC_LOWER,

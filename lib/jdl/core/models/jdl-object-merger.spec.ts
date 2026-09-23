@@ -24,7 +24,7 @@ import fieldTypes from '../../../jhipster/field-types.ts';
 import { createJDLApplication } from '../__test-support__/index.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { unaryOptions } from '../built-in-options/index.ts';
-import { createRuntime } from '../runtime.ts';
+import { getDefaultRuntime } from '../runtime.ts';
 
 import { JDLEntity, JDLEnum } from './index.ts';
 import JDLField from './jdl-field.ts';
@@ -33,7 +33,7 @@ import JDLObject from './jdl-object.ts';
 import JDLRelationship from './jdl-relationship.ts';
 import JDLUnaryOption from './jdl-unary-option.ts';
 
-const runtime = createRuntime();
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {

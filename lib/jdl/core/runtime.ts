@@ -55,10 +55,10 @@ const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JD
  * @param deploymentDefinition the deployment JDL definitions, the ones of the deployment generators by default.
  */
 export const createRuntime = (
-  definition?: JDLApplicationConfig,
+  definition: JDLApplicationConfig,
   deploymentDefinition: JDLApplicationConfig = getDefaultJDLDeploymentConfig(),
 ): JDLRuntime => {
-  const newDefinition = definition ? mergeDefinition(definition, builtInJDLApplicationConfig) : builtInJDLApplicationConfig;
+  const newDefinition = mergeDefinition(definition, builtInJDLApplicationConfig);
   const propertyValidations: Record<string, JDLValidatorOption> = newDefinition.validatorConfig;
   const deploymentPropertyValidations: Record<string, JDLValidatorOption> = {
     ...deploymentDefinition.validatorConfig,
@@ -110,7 +110,7 @@ export const createRuntime = (
 };
 
 let defaultRuntime: JDLRuntime;
-/** The runtime of the default definitions, the ones of the generators. */
+/** The runtime of the definitions of the generators, the one to use when no definition is given. */
 export const getDefaultRuntime = (): JDLRuntime => {
   defaultRuntime ??= createRuntime(getDefaultJDLApplicationConfig());
   return defaultRuntime;
