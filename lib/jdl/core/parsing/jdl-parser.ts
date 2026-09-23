@@ -101,9 +101,7 @@ export default class JDLParser extends CstParser {
             ALT: () => this.SUBRULE(this.constantDeclaration),
           },
           // The option statements: the lexer knows no option, the option names are checked against the definitions.
-          // Every keyword is a NAME too, so the static analysis sees `entity Foo` as an option statement as well; the
-          // alternatives are tried in order, a keyword statement wins over an option statement starting with the keyword.
-          { IGNORE_AMBIGUITIES: true, ALT: () => this.SUBRULE(this.optionDeclaration) },
+          { ALT: () => this.SUBRULE(this.optionDeclaration) },
         ]);
       });
     });
@@ -447,7 +445,8 @@ export default class JDLParser extends CstParser {
    */
   optionDeclaration(): CstNode {
     this.RULE('optionDeclaration', () => {
-      this.CONSUME(this.tokens.NAME, { LABEL: 'option' });
+      // An identifier, not a name: a statement starting with a keyword is not an option statement.
+      this.CONSUME(this.tokens.IDENTIFIER, { LABEL: 'option' });
       this.SUBRULE(this.filterDef);
       this.OPTION(() => {
         this.CONSUME(this.tokens.WITH);
@@ -531,8 +530,7 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.applicationSubConfig) },
           { ALT: () => this.SUBRULE(this.applicationSubEntities) },
           { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
-          // Last: an option statement starts with a NAME, and any keyword is also a NAME, see prog.
-          { IGNORE_AMBIGUITIES: true, ALT: () => this.SUBRULE(this.optionDeclaration) },
+          { ALT: () => this.SUBRULE(this.optionDeclaration) },
         ]);
       });
     });

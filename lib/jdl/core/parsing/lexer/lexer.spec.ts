@@ -19,6 +19,8 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import { tokenMatcher } from 'chevrotain';
+
 import { getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 
 const { lexer: JDLLexer } = getDefaultRuntime();
@@ -64,18 +66,25 @@ describe('jdl - JDLLexer', () => {
   });
 
   describe('when a keyword is a prefix of a name', () => {
-    it('should lex the name as a name', () => {
+    it('should lex the name as an identifier', () => {
       // Keywords match whole words only, so a keyword does not take the start of a longer name.
       const { tokens, errors } = JDLLexer.tokenize('entityName entity enumeration');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['NAME', 'ENTITY', 'NAME']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['IDENTIFIER', 'ENTITY', 'IDENTIFIER']);
     });
 
-    it('should lex the options as names', () => {
+    it('should lex the options as identifiers', () => {
       // The lexer knows no option: the option statements and the config keys are names, checked against the definitions.
       const { tokens, errors } = JDLLexer.tokenize('dto A with mapstruct');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['NAME', 'NAME', 'WITH', 'NAME']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['IDENTIFIER', 'IDENTIFIER', 'WITH', 'IDENTIFIER']);
+    });
+
+    it('should lex a keyword as a name too', () => {
+      // A keyword is a NAME by category, so it may be a field name, a config key or a value.
+      const { tokens, errors } = JDLLexer.tokenize('entity');
+      expect(errors).toHaveLength(0);
+      expect(tokenMatcher(tokens[0], getDefaultRuntime().tokens.NAME)).toBe(true);
     });
   });
 

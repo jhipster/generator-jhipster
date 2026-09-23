@@ -20,7 +20,7 @@
 import { type ITokenConfig, Lexer, type TokenType } from 'chevrotain';
 
 import RelationshipTypeTokens from './relationship-type-tokens.ts';
-import { NAME } from './shared-tokens.ts';
+import { IDENTIFIER, NAME } from './shared-tokens.ts';
 import createTokenFromConfigCreator from './token-creator.ts';
 import ValidationTokens from './validation-tokens.ts';
 
@@ -129,8 +129,9 @@ export const buildTokens = (): JDLTokens => {
   // annotations
   createTokenFromConfig({ name: 'AT', pattern: '@' });
 
-  // Imperative the "NAME" token will be added after all the keywords to resolve keywords vs identifier conflict.
+  // Imperative the "IDENTIFIER" token will be added after all the keywords to resolve keywords vs identifier conflict.
   _tokens.NAME = NAME;
+  _tokens.IDENTIFIER = IDENTIFIER;
 
   return { tokens: _tokens, list: Object.values(_tokens) };
 };
