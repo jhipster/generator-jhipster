@@ -66,6 +66,7 @@ export const createRuntime = (
     // application config.
     SERVICE_DISCOVERY_TYPE: propertyValidations.SERVICE_DISCOVERY_TYPE,
   };
+  const deploymentOptionTypes = deploymentDefinition.optionsTypes;
   const applicationDefinition = new JDLApplicationDefinition({
     optionValues: newDefinition.optionsValues,
     optionTypes: newDefinition.optionsTypes,
@@ -106,6 +107,7 @@ export const createRuntime = (
     applicationDefinition,
     propertyValidations,
     deploymentPropertyValidations,
+    deploymentOptionTypes,
   };
 };
 

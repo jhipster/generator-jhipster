@@ -89,16 +89,14 @@ const command = {
     },
     registryReplicas: {
       description: 'Registry replicas',
-      // DEPRECATED: no consumer at all. TODO drop for v10.
       cli: { type: Number, hide: true },
-      jdl: { type: 'integer', tokenType: 'INTEGER' },
+      jdl: { type: 'integer', tokenType: 'INTEGER', deprecated: 'no generator reads it, it will be removed in JHipster v10' },
       scope: 'storage',
     },
     storageType: {
       description: 'Storage type',
-      // DEPRECATED: only reaches a field on JDLDeployment. TODO drop for v10.
       cli: { type: String, hide: true },
-      jdl: deploymentName(ALPHABETIC_LOWER_PATTERN),
+      jdl: { ...deploymentName(ALPHABETIC_LOWER_PATTERN), deprecated: 'no generator reads it, it will be removed in JHipster v10' },
       scope: 'storage',
     },
   },

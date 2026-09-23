@@ -57,12 +57,7 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
         .map(option => [option.name, Object.fromEntries(option.knownChoices!.map(choice => [choice, choice]))]),
     ),
     optionsTypes: Object.fromEntries(
-      jdlOptions.map(option => [
-        option.name,
-        {
-          type: option.type,
-        },
-      ]),
+      jdlOptions.map(option => [option.name, { type: option.type, ...(option.deprecated ? { deprecated: option.deprecated } : {}) }]),
     ),
   };
 };
