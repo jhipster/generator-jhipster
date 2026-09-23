@@ -39,6 +39,7 @@ const command = {
         deprecated: 'no generator reads it, it will be removed in JHipster v10',
       },
       choices: ['SpringCloudGateway'],
+      default: 'SpringCloudGateway',
       scope: 'storage',
     },
     jwtSecretKey: {

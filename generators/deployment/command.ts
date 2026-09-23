@@ -54,6 +54,7 @@ const command = {
         tokenType: 'list',
         tokenValuePattern: ALPHANUMERIC_UNDERSCORE_PATTERN,
       },
+      default: [],
       scope: 'storage',
     },
     clusteredDbApps: {
@@ -64,6 +65,7 @@ const command = {
         tokenType: 'list',
         tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
+      default: [],
       scope: 'storage',
     },
     directoryPath: {
@@ -74,6 +76,7 @@ const command = {
         tokenType: 'STRING',
         tokenValuePattern: PATH_PATTERN,
       },
+      default: '../',
       scope: 'storage',
     },
     monitoring: {
@@ -85,6 +88,7 @@ const command = {
         tokenValuePattern: ALPHABETIC_LOWER_PATTERN,
       },
       choices: ['no', 'prometheus'],
+      default: 'no',
       scope: 'storage',
     },
     serviceDiscoveryType: {
@@ -93,6 +97,7 @@ const command = {
       // Declared by spring-boot too: a keyword of both grammars, one token with both categories.
       jdl: { type: 'string', tokenType: 'NAME', tokenValuePattern: ALPHABETIC_LOWER_PATTERN },
       choices: ['consul', 'eureka', 'no'],
+      default: 'consul',
       scope: 'storage',
     },
   },

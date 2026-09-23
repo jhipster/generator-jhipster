@@ -18,7 +18,7 @@
  */
 import { isEqual } from 'lodash-es';
 
-import deploymentOptions from '../../../jhipster/deployment-options.ts';
+import { getDefaultJDLDeploymentDefaults } from '../../../jdl-config/jhipster-jdl-config.ts';
 import type { ParsedJDLDeployment } from '../types/parsed.ts';
 import { merge } from '../utils/object-utils.ts';
 import { join } from '../utils/set-utils.ts';
@@ -82,5 +82,5 @@ function stringifyOptionValue(name: string, value: any): string {
 }
 
 function defaults(deploymentType: string) {
-  return deploymentOptions.Options.defaults(deploymentType);
+  return getDefaultJDLDeploymentDefaults(deploymentType);
 }

@@ -18,12 +18,10 @@
  */
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
-import deploymentOptions from '../../../jhipster/deployment-options.ts';
+import { ServiceTypes } from '../../../jhipster/kubernetes-platform-types.ts';
 import type JDLDeployment from '../../core/models/jdl-deployment.ts';
 
 import Validator from './validator.ts';
-
-const { Options } = deploymentOptions;
 
 export default class DeploymentValidator extends Validator {
   constructor() {
@@ -34,10 +32,10 @@ export default class DeploymentValidator extends Validator {
     super.validate(jdlDeployment);
 
     switch (jdlDeployment.deploymentType) {
-      case Options.deploymentType.dockerCompose:
+      case 'docker-compose':
         validateDockerComposeRelatedDeployment(jdlDeployment, options);
         break;
-      case Options.deploymentType.kubernetes:
+      case 'kubernetes':
         validateKubernetesRelatedDeployment(jdlDeployment);
         break;
       default:
@@ -47,7 +45,7 @@ export default class DeploymentValidator extends Validator {
 }
 
 function validateDockerComposeRelatedDeployment(jdlDeployment: JDLDeployment, options: any = {}) {
-  if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === APPLICATION_TYPE_MICROSERVICE) {
+  if (jdlDeployment.gatewayType !== 'SpringCloudGateway' && options.applicationType === APPLICATION_TYPE_MICROSERVICE) {
     throw new Error('A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.');
   }
 }
@@ -61,7 +59,7 @@ function validateKubernetesRelatedDeployment(jdlDeployment: JDLDeployment) {
       'An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.',
     );
   }
-  if (jdlDeployment.kubernetesServiceType === Options.kubernetesServiceType.ingress && !jdlDeployment.ingressType) {
+  if (jdlDeployment.kubernetesServiceType === ServiceTypes.INGRESS && !jdlDeployment.ingressType) {
     throw new Error('An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.');
   }
 }

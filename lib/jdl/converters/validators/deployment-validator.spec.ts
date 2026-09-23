@@ -20,11 +20,8 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
-import deploymentOptions from '../../../jhipster/deployment-options.ts';
 
 import DeploymentValidator from './deployment-validator.ts';
-
-const { Options } = deploymentOptions;
 
 describe('jdl - DeploymentValidator', () => {
   let validator: DeploymentValidator;
@@ -46,12 +43,12 @@ describe('jdl - DeploymentValidator', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.dockerCompose,
+                deploymentType: 'docker-compose',
                 directoryPath: '../',
-                gatewayType: Options.gatewayType.springCloudGateway,
+                gatewayType: 'SpringCloudGateway',
                 monitoring: 'no',
                 // @ts-expect-error FIXME
-                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                serviceDiscoveryType: 'eureka',
               }),
             ).toThrow(/^The deployment attribute appsFolders was not found.$/);
           });
@@ -60,12 +57,12 @@ describe('jdl - DeploymentValidator', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.dockerCompose,
+                deploymentType: 'docker-compose',
                 appsFolders: ['beers', 'burgers'],
-                gatewayType: Options.gatewayType.springCloudGateway,
+                gatewayType: 'SpringCloudGateway',
                 monitoring: 'no',
                 // @ts-expect-error FIXME
-                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                serviceDiscoveryType: 'eureka',
               }),
             ).toThrow(/^The deployment attribute directoryPath was not found.$/);
           });
@@ -74,12 +71,12 @@ describe('jdl - DeploymentValidator', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.dockerCompose,
+                deploymentType: 'docker-compose',
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
-                gatewayType: Options.gatewayType.springCloudGateway,
+                gatewayType: 'SpringCloudGateway',
                 // @ts-expect-error FIXME
-                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                serviceDiscoveryType: 'eureka',
               }),
             ).not.toThrow();
           });
@@ -90,12 +87,12 @@ describe('jdl - DeploymentValidator', () => {
               expect(() =>
                 validator.validate(
                   {
-                    deploymentType: Options.deploymentType.dockerCompose,
+                    deploymentType: 'docker-compose',
                     appsFolders: ['beers', 'burgers'],
                     directoryPath: '../',
                     monitoring: 'no',
                     // @ts-expect-error FIXME
-                    serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                    serviceDiscoveryType: 'eureka',
                   },
                   {
                     applicationType: APPLICATION_TYPE_MICROSERVICE,
@@ -109,7 +106,7 @@ describe('jdl - DeploymentValidator', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.dockerCompose,
+                deploymentType: 'docker-compose',
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
                 monitoring: 'no',
@@ -123,12 +120,12 @@ describe('jdl - DeploymentValidator', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.kubernetes,
+                deploymentType: 'kubernetes',
                 directoryPath: '../',
-                kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                kubernetesServiceType: 'LoadBalancer',
                 monitoring: 'no',
                 // @ts-expect-error FIXME
-                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                serviceDiscoveryType: 'eureka',
               }),
             ).toThrow(/^The deployment attribute appsFolders was not found.$/);
           });
@@ -137,12 +134,12 @@ describe('jdl - DeploymentValidator', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.kubernetes,
+                deploymentType: 'kubernetes',
                 appsFolders: ['beers', 'burgers'],
-                kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                kubernetesServiceType: 'LoadBalancer',
                 monitoring: 'no',
                 // @ts-expect-error FIXME
-                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                serviceDiscoveryType: 'eureka',
               }),
             ).toThrow(/^The deployment attribute directoryPath was not found.$/);
           });
@@ -151,12 +148,12 @@ describe('jdl - DeploymentValidator', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.kubernetes,
+                deploymentType: 'kubernetes',
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
-                kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                kubernetesServiceType: 'LoadBalancer',
                 // @ts-expect-error FIXME
-                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                serviceDiscoveryType: 'eureka',
               }),
             ).not.toThrow();
           });
@@ -165,11 +162,11 @@ describe('jdl - DeploymentValidator', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
-                deploymentType: Options.deploymentType.kubernetes,
+                deploymentType: 'kubernetes',
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
                 // @ts-expect-error FIXME
-                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                serviceDiscoveryType: 'eureka',
               }),
             ).toThrow(/^A kubernetes service type must be provided when dealing with kubernetes-related deployments.$/);
           });
@@ -179,12 +176,12 @@ describe('jdl - DeploymentValidator', () => {
             it('should fail', () => {
               expect(() =>
                 validator.validate({
-                  deploymentType: Options.deploymentType.kubernetes,
+                  deploymentType: 'kubernetes',
                   appsFolders: ['beers', 'burgers'],
                   directoryPath: '../',
                   // @ts-expect-error FIXME
-                  serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-                  kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                  serviceDiscoveryType: 'eureka',
+                  kubernetesServiceType: 'LoadBalancer',
                   istio: true,
                 }),
               ).toThrow(
@@ -198,12 +195,12 @@ describe('jdl - DeploymentValidator', () => {
             it('should fail', () => {
               expect(() =>
                 validator.validate({
-                  deploymentType: Options.deploymentType.kubernetes,
+                  deploymentType: 'kubernetes',
                   appsFolders: ['beers', 'burgers'],
                   directoryPath: '../',
-                  kubernetesServiceType: Options.kubernetesServiceType.ingress,
+                  kubernetesServiceType: 'Ingress',
                   // @ts-expect-error FIXME
-                  serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+                  serviceDiscoveryType: 'eureka',
                 }),
               ).toThrow(
                 /^An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.$/,

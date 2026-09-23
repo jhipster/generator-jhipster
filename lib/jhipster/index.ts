@@ -24,7 +24,6 @@ export { default as buildToolTypes } from './build-tool-types.ts';
 export { default as cacheTypes } from './cache-types.ts';
 export { default as clientFrameworkTypes } from './client-framework-types.ts';
 export { default as databaseTypes } from './database-types.ts';
-export { default as deploymentOptions } from './deployment-options.ts';
 export { default as entityOptions } from './entity-options.ts';
 export { default as fieldTypes } from './field-types.ts';
 export { default as kubernetesPlatformTypes } from './kubernetes-platform-types.ts';
