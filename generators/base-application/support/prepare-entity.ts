@@ -536,7 +536,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
 }
 
 export async function addFakerToEntity(entityWithConfig: BaseApplicationEntity, nativeLanguage = 'en') {
-  entityWithConfig.faker ||= await createFaker(nativeLanguage);
+  entityWithConfig.faker ??= await createFaker(nativeLanguage);
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker!.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
   entityWithConfig.resetFakerSeed();

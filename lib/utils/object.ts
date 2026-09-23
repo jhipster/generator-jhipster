@@ -165,7 +165,7 @@ const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { def
   let mutationApplied = false;
   const delayedContext = context[MUTATION_CONTEXT_SYMBOL].delayContext;
   if (delayedContext) {
-    const { defaults = true, throwOnDelay = false } = opts || {};
+    const { defaults = true, throwOnDelay = false } = opts ?? {};
     for (const [key, value] of Object.entries(delayedContext)) {
       if (key in context && (context as any)[key] !== undefined) {
         delete delayedContext[key];

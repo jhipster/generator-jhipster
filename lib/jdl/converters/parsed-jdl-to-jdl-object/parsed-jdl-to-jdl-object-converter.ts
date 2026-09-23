@@ -115,12 +115,12 @@ function fillClassesAndFields(): void {
 
 function getJDLFieldsFromParsedEntity(entity: ParsedJDLEntity): JDLField[] {
   const fields: JDLField[] = [];
-  const arr = entity.body || [];
+  const arr = entity.body ?? [];
   for (const item of arr) {
     const field = item;
     const jdlField = convertField(field);
     jdlField.validations = getValidations(field);
-    jdlField.options = convertAnnotationsToOptions(field.annotations || []);
+    jdlField.options = convertAnnotationsToOptions(field.annotations ?? []);
     fields.push(jdlField);
   }
   return fields;
