@@ -115,6 +115,12 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   get configuringWorkspaces() {
     return this.asConfiguringWorkspacesTaskGroup({
       configureBaseDeployment({ applications }) {
+        const clientOnlyApplications = applications.filter(app => app.skipServer);
+        if (clientOnlyApplications.length > 0) {
+          throw new Error(
+            `Applications generated with skipServer have no docker image to compose: ${clientOnlyApplications.map(app => app.appFolder).join(', ')}`,
+          );
+        }
         this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
         if (applications.some(app => app.serviceDiscoveryTypeEureka)) {
           this.jhipsterConfig.adminPassword ??= 'admin';

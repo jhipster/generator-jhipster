@@ -164,6 +164,26 @@ describe('generator - Docker Compose', () => {
     });
   });
 
+  describe('gateway generated with skipServer', () => {
+    const chosenApps = ['01-gateway', '02-mysql'];
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withWorkspaceApplicationAtFolder('client-gateway', { applicationType: 'gateway', baseName: 'clientGateway', skipServer: true })
+        .withGenerateWorkspaceApplications();
+    });
+    it('should fail with a message naming the application', async () => {
+      await expect(
+        helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
+          deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
+          directoryPath: '../',
+          appsFolders: [...chosenApps, 'client-gateway'],
+          clusteredDbApps: [],
+        }),
+      ).rejects.toThrow('Applications generated with skipServer have no docker image to compose: client-gateway');
+    });
+  });
   describe('gateway and one microservice', () => {
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
