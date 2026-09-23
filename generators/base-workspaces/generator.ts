@@ -195,10 +195,14 @@ export default abstract class BaseWorkspacesGenerator<
       return args;
     }
     const [first, ...others] = args ?? [];
+    // The deployment context is loaded from the configuration in the loading workspaces priority, earlier tasks
+    // read the configuration.
+    const deployment =
+      ([PROMPTING_WORKSPACES, CONFIGURING_WORKSPACES] as string[]).includes(priorityName) ? {} : { deployment: this.context };
     return [
       {
         ...first,
-        deployment: this.context,
+        ...deployment,
         applications: this.#applications,
       },
       ...others,

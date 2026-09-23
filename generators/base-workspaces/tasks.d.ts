@@ -24,11 +24,19 @@ import type { Application as BaseSimpleApplicationApplication } from '../base-si
 
 import type { Deployment as BaseWorkspacesDeployment } from './types.d.ts';
 
-export type TaskParamWithApplications<
+export type TaskParamWithApplications<A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication> =
+  TaskParamWithControl & {
+    applications: A[];
+  };
+
+/**
+ * The deployment context is loaded from the configuration in the loading workspaces priority, so it is only passed
+ * to the tasks from there on: prompting and configuring workspaces tasks read `jhipsterConfig` instead.
+ */
+export type TaskParamWithDeployment<
   D extends BaseWorkspacesDeployment,
   A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication,
-> = TaskParamWithControl & {
-  applications: A[];
+> = TaskParamWithApplications<A> & {
   deployment: D;
 };
 
@@ -39,15 +47,15 @@ export type Tasks<
 > = Merge<
   BaseTaskTypes<S>,
   {
-    PromptingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
-    ConfiguringWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
-    LoadingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
-    PreparingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
-    DefaultTaskParam: TaskTypes['DefaultTaskParam'] & TaskParamWithApplications<D, A>;
-    WritingTaskParam: TaskParamWithControl & TaskParamWithApplications<D, A>;
-    PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithApplications<D, A>;
-    InstallTaskParam: TaskTypes['InstallTaskParam'] & TaskParamWithApplications<D, A>;
-    PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & TaskParamWithApplications<D, A>;
-    EndTaskParam: TaskTypes['EndTaskParam'] & TaskParamWithApplications<D, A>;
+    PromptingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<A>;
+    ConfiguringWorkspacesTaskParam: TaskParamWithControl & TaskParamWithApplications<A>;
+    LoadingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithDeployment<D, A>;
+    PreparingWorkspacesTaskParam: TaskParamWithControl & TaskParamWithDeployment<D, A>;
+    DefaultTaskParam: TaskTypes['DefaultTaskParam'] & TaskParamWithDeployment<D, A>;
+    WritingTaskParam: TaskParamWithControl & TaskParamWithDeployment<D, A>;
+    PostWritingTaskParam: TaskParamWithSource<S> & TaskParamWithDeployment<D, A>;
+    InstallTaskParam: TaskTypes['InstallTaskParam'] & TaskParamWithDeployment<D, A>;
+    PostInstallTaskParam: TaskTypes['PostInstallTaskParam'] & TaskParamWithDeployment<D, A>;
+    EndTaskParam: TaskTypes['EndTaskParam'] & TaskParamWithDeployment<D, A>;
   }
 >;

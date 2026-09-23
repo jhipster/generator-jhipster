@@ -77,11 +77,6 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
 
   get configuringWorkspaces() {
     return this.asConfiguringWorkspacesTaskGroup({
-      prepareApplication({ deployment, applications }) {
-        for (const application of applications) {
-          application.dbPeerCount ??= deployment.clusteredDbApps?.includes(application.appFolder!) ? 3 : 1;
-        }
-      },
       generateSecrets() {
         this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
         this.jhipsterConfig.dbRandomPassword ??= this.options.reproducibleTests ? 'SECRET-PASSWORD' : randomBytes(30).toString('hex');
@@ -105,6 +100,10 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         });
       },
       appsConfigs({ deployment, applications }) {
+        // The deployment config is loaded into the context in this priority, read clusteredDbApps from it.
+        for (const application of applications) {
+          application.dbPeerCount ??= deployment.clusteredDbApps?.includes(application.appFolder!) ? 3 : 1;
+        }
         deployment.appConfigs = applications;
         deployment.gatewayNb = applications.filter(app => app.applicationTypeGateway).length;
         deployment.monolithicNb = applications.filter(app => app.applicationTypeMonolith).length;

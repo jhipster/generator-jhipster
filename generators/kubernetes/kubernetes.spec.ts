@@ -505,6 +505,48 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('mongodb microservice with a clustered database', () => {
+    before(async () => {
+      const chosenApps = ['04-mongo'];
+
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps,
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: chosenApps,
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+    it('should match files snapshot', function () {
+      expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('creates a mongodb statefulset with three replicas', () => {
+      runResult.assertFileContent('./kubernetes/msmongodb-k8s/msmongodb-mongodb.yml', /replicas: 3/);
+    });
+    it('points the application at the three mongodb peers', () => {
+      runResult.assertFileContent(
+        './kubernetes/msmongodb-k8s/msmongodb-deployment.yml',
+        /mongodb:\/\/msmongodb-mongodb-0\.msmongodb-mongodb\.default:27017,msmongodb-mongodb-1\.msmongodb-mongodb\.default:27017,msmongodb-mongodb-2\.msmongodb-mongodb\.default:27017\/msmongodb/,
+      );
+    });
+  });
   describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
     before(async () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
