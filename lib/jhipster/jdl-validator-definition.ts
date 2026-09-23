@@ -19,19 +19,7 @@
 
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
-const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
-
 export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
-  BLUEPRINT: {
-    type: 'NAME',
-    pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
-    msg: 'blueprint property',
-  },
-  BLUEPRINTS: {
-    type: 'list',
-    pattern: BASIC_NPM_PACKAGE_NAME_PATTERN,
-    msg: 'blueprints property',
-  },
   // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   JHIPSTER_VERSION: { type: 'STRING' },
 };

@@ -220,8 +220,6 @@ export const jhipsterOptionValues = {
 } as const satisfies Record<string, JDLApplicationOptionValue>;
 
 export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
-  [optionNames.BLUEPRINT]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
   // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
   [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
 };

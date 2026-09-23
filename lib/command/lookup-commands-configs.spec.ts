@@ -41,8 +41,10 @@ describe('jdl options', () => {
   "entitySuffix",
   "dtoSuffix",
   "testFrameworks",
+  "blueprints",
   "nodePackageManager",
   "creationTimestamp",
+  "blueprint",
   "removeNeedles",
   "buildTool",
   "clientFramework",
@@ -120,6 +122,8 @@ describe('jdl options', () => {
           'serverPort',
           'jwtSecretKey',
           'baseName',
+          'blueprints',
+          'blueprint',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
