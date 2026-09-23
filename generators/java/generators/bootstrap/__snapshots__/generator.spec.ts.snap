@@ -214,6 +214,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
+  "reactivePrefix": "",
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,

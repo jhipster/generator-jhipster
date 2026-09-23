@@ -25,8 +25,8 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 
-import org.springframework.data.neo4j.repository.config.Enable<%- reactive ? 'Reactive' : '' %>Neo4jRepositories;
-import org.springframework.data.neo4j.repository.<%- reactive ? 'Reactive' : '' %>Neo4jRepository;
+import org.springframework.data.neo4j.repository.config.Enable<%- reactivePrefix %>Neo4jRepositories;
+import org.springframework.data.neo4j.repository.<%- reactivePrefix %>Neo4jRepository;
 <%_ if (reactive) { _%>
 
 import org.neo4j.driver.Driver;
@@ -39,9 +39,9 @@ import org.springframework.transaction.ReactiveTransactionManager;
 
 @Configuration
 <%_ if (searchEngineElasticsearch) { _%>
-@Enable<%- reactive ? 'Reactive' : '' %>Neo4jRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- reactive ? 'Reactive' : '' %>Neo4jRepository.class))
+@Enable<%- reactivePrefix %>Neo4jRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- reactivePrefix %>Neo4jRepository.class))
 <%_ } else { _%>
-@Enable<%- reactive ? 'Reactive' : '' %>Neo4jRepositories("<%- packageName %>.repository")
+@Enable<%- reactivePrefix %>Neo4jRepositories("<%- packageName %>.repository")
 <%_ } _%>
 public class DatabaseConfiguration {
 <%_ if (reactive) { _%>

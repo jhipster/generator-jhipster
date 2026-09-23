@@ -416,6 +416,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
+  "reactivePrefix": "",
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,

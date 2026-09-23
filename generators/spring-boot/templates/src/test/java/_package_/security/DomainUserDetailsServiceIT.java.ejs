@@ -82,7 +82,7 @@ class DomainUserDetailsServiceIT {
 
     @Autowired
     @Qualifier("userDetailsService")
-    private <%- reactive ? 'Reactive' : '' %>UserDetailsService domainUserDetailsService;
+    private <%- reactivePrefix %>UserDetailsService domainUserDetailsService;
 
     public <%- user.persistClass %> getUserOne() {
         <%- user.persistClass %> userOne = new <%- user.persistClass %>();

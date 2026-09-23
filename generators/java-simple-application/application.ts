@@ -91,6 +91,7 @@ export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
   optionalOrMonoClassPath: string;
   wrapMono: (className: string) => string;
   listOrFluxClassPath: string;
+  reactivePrefix: string;
   reactorBlock: string;
   reactorBlockOptional: string;
   pageOrFlux: string;
@@ -194,6 +195,7 @@ export const mutateApplicationPreparing = {
       ctx.reactive ? `Mono<${className}>` : className,
   listOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'List'),
   listOrFluxClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Flux' : 'java.util.List'),
+  reactivePrefix: ({ reactive }) => (reactive ? 'Reactive' : ''),
   reactorBlock: ({ reactive }) => (reactive ? '.block()' : ''),
   reactorBlockOptional: ({ reactive }) => (reactive ? '.blockOptional()' : ''),
   pageOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'Page'),
