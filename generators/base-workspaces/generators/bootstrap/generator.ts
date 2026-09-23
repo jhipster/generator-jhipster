@@ -18,7 +18,7 @@
  */
 import { defaults } from 'lodash-es';
 
-import { removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
+import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../../../lib/utils/path.ts';
 import { CONTEXT_DATA_EXISTING_PROJECT } from '../../../base/support/constants.ts';
 import BaseWorkspacesGenerator from '../../index.ts';
@@ -88,6 +88,9 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
         deployment.serviceDiscoveryTypeAny = (deployment.serviceDiscoveryType ?? 'no') !== 'eureka';
         deployment.serviceDiscoveryTypeEureka = deployment.serviceDiscoveryType === 'eureka';
         deployment.serviceDiscoveryTypeConsul = deployment.serviceDiscoveryType === 'consul';
+      },
+      finalizeDeploymentMutations({ deployment }) {
+        finalizeMutations(deployment);
       },
     });
   }
