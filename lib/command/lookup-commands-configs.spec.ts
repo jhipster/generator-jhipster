@@ -93,45 +93,50 @@ describe('jdl options', () => {
 `);
   });
 
+  // Options without enumerable choices (free-form names / lists); manually tested elsewhere.
+  const freeFormOptions = [
+    'routes',
+    'clientTheme',
+    'microfrontends',
+    'languages',
+    'nativeLanguage',
+    'nodePackageManager',
+    'packageName',
+    'creationTimestamp',
+    'websocket',
+    'rememberMeKey',
+    'gradleDevelocityHost',
+    'jhiPrefix',
+    'entitySuffix',
+    'dtoSuffix',
+    'testFrameworks',
+    'gatewayServerPort',
+    'serverPort',
+    'jwtSecretKey',
+    'baseName',
+    'blueprints',
+    'blueprint',
+    'jhipsterVersion',
+  ];
+
+  const getChoices = (config: (typeof jdlConfigs)[number][1]): (string | boolean)[] | undefined => {
+    const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
+    return !choices && config.cli?.type === Boolean ? [true, false] : choices;
+  };
+
+  // A throw while registering the describes would silently truncate the suite, assert the free-form list instead.
+  it('should have choices for every jdl option not listed as free-form', () => {
+    const optionsWithoutChoices = jdlConfigs.filter(([_optionName, config]) => !getChoices(config)).map(([optionName]) => optionName);
+    expect(optionsWithoutChoices.filter(optionName => !freeFormOptions.includes(optionName))).toEqual([]);
+    expect(freeFormOptions.filter(optionName => !optionsWithoutChoices.includes(optionName))).toEqual([]);
+  });
+
   for (const [optionName, config] of jdlConfigs) {
-    let choices: (string | boolean)[] | undefined = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
+    const choices = getChoices(config);
     const isBoolean = config.cli?.type === Boolean;
     const isArray = config.cli?.type === Array;
-    if (!choices && isBoolean) {
-      choices = [true, false];
-    }
-
     if (!choices) {
-      if (
-        [
-          'routes',
-          'clientTheme',
-          'microfrontends',
-          'languages',
-          'nativeLanguage',
-          'nodePackageManager',
-          'packageName',
-          'creationTimestamp',
-          'websocket',
-          'rememberMeKey',
-          'gradleDevelocityHost',
-          'jhiPrefix',
-          'entitySuffix',
-          'dtoSuffix',
-          'testFrameworks',
-          'gatewayServerPort',
-          'serverPort',
-          'jwtSecretKey',
-          'baseName',
-          'blueprints',
-          'blueprint',
-          'jhipsterVersion',
-        ].includes(optionName)
-      ) {
-        // Option has no enumerable choices (free-form name / list); manually tested elsewhere.
-        continue;
-      }
-      throw new Error(`No choices found for ${optionName}`);
+      continue;
     }
 
     describe(`jdl - ${optionName}`, function () {
