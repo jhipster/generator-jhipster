@@ -21,6 +21,9 @@ package <%- entityAbsolutePackage %>.web.rest;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
 import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
+<%_ if (!readOnly && updatableEntity) { _%>
+import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateBody;
+<%_ } _%>
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     const hasUserRepository
@@ -98,6 +101,9 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import tools.jackson.databind.ObjectMapper;
+<%_ if (updatableEntity && fields.some(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired)) { _%>
+import tools.jackson.databind.node.ObjectNode;
+<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
 import org.springframework.data.util.Streamable;
@@ -920,6 +926,36 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
         <%_ } _%>
     }
+  <%_ if (updatableEntity) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void check<%- field.fieldInJavaBeanMethod %>IsRequiredOnPatch() throws Exception {
+        // Initialize the database
+    <%_ if (!primaryKey.derived) { _%>
+      <%_ for (const pkField of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- pkField.propertyConsumerName %>(<%- pkField.fieldJavaValueGenerator %>);
+      <%_ } _%>
+    <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        // Patch the field to null, which fails.
+        ObjectNode <%- restInstance %>Patch = om.valueToTree(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>);
+        <%- restInstance %>Patch.putNull("<%- field.fieldName %>");
+
+    <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>Patch))
+            .exchange()
+            .expectStatus().isBadRequest();
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+            .contentType("application/merge-patch+json")
+            .content(om.writeValueAsBytes(<%- restInstance %>Patch)))
+            .andExpect(status().isBadRequest());
+    <%_ } _%>
+    }
+  <%_ } _%>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>

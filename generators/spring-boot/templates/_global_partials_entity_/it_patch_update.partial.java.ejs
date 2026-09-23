@@ -42,14 +42,14 @@ webTestClient
 .patch()
 .uri(ENTITY_API_URL_ID, partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
 .contentType(MediaType.valueOf("application/merge-patch+json"))
-.bodyValue(om.writeValueAsBytes(<%- `partialUpdated${persistClass}` %>))
+.bodyValue(convertObjectToPartialUpdateBody(om, <%- `partialUpdated${persistClass}` %>))
 .exchange()
 .expectStatus()
 .isOk();
 <%_ } else { _%>
 rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
 .contentType("application/merge-patch+json")
-.content(om.writeValueAsBytes(<%- `partialUpdated${persistClass}` %>)))
+.content(convertObjectToPartialUpdateBody(om, <%- `partialUpdated${persistClass}` %>)))
 .andExpect(status().isOk());
 <%_ } _%>
 

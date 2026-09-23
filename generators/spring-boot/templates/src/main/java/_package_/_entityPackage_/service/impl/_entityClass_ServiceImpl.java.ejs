@@ -67,9 +67,6 @@ import java.util.List;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
-<%_ if (updatableEntity && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
-import java.util.function.Consumer;
-<%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
@@ -120,22 +117,6 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     public <%- reactive ? 'Mono<' : '' %><%- restClass %><%- reactive ? '>' : '' %> update(<%- restClass %> <%- restInstance %>) {
         LOG.debug("Request to update <%- entityClass %> : {}", <%- restInstance %>);
 <%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: true }) -%>
-    }
-
-  <%_ if (!serviceImpl) { _%>
-    /**
-     * Partially update a <%- entityInstance %>.
-     *
-     * @param <%- restInstance %> the entity to update partially.
-     * @return the persisted entity.
-     */
-  <%_ } _%>
-  <%_ if (serviceImpl) { _%>
-    @Override
-  <%_ } _%>
-    public <%- reactive ? 'Mono' : 'Optional' %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>) {
-        LOG.debug("Request to partially update <%- entityClass %> : {}", <%- restInstance %>);
-<%- include('../../_partials_entity_/patch_template', { isService: true, viaService: false }) -%>
     }
 <%_ } _%>
 <%_ if (!jpaMetamodelFiltering) { _%>
@@ -320,14 +301,6 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
             .map(<%- entityToDtoReference %>);
     <%_ } _%>
   <%_ } _%>
-    }
-<%_ } _%>
-<%_ if (updatableEntity && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
-
-    protected <T> void updateIfPresent(Consumer<T> setter, T value) {
-        if (value != null) {
-            setter.accept(value);
-        }
     }
 <%_ } _%>
 }
