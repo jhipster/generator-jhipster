@@ -125,9 +125,6 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
     return this.asPreparingWorkspacesTaskGroup({
       derivedProperties({ deployment, applications }) {
         deployment.deploymentApplicationTypeMicroservice = deployment.deploymentApplicationType === 'microservice';
-        deployment.ingressTypeNginx = deployment.ingressType === 'nginx';
-        deployment.ingressTypeGke = deployment.ingressType === 'gke';
-        deployment.kubernetesServiceTypeIngress = deployment.kubernetesServiceType === 'Ingress';
         deployment.kubernetesNamespaceDefault = deployment.kubernetesNamespace === 'default';
         deployment.generatorTypeK8s = deployment.generatorType === 'k8s';
         deployment.generatorTypeHelm = deployment.generatorType === 'helm';

@@ -23,14 +23,12 @@ import path from 'node:path';
 
 import helpers from 'yeoman-test';
 
-import deploymentOptions from '../../../jhipster/deployment-options.ts';
 import JDLDeployment from '../../core/models/jdl-deployment.ts';
 
 import exportDeployments from './jhipster-deployment-exporter.ts';
 
-const {
-  DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
-} = deploymentOptions;
+const DOCKERCOMPOSE = 'docker-compose';
+const KUBERNETES = 'kubernetes';
 
 describe('jdl - JHipsterDeploymentExporter', () => {
   beforeEach(async () => {

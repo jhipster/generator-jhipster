@@ -22,7 +22,7 @@ import { join } from 'node:path';
 import { defaults } from 'lodash-es';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
-import { deploymentOptions } from '../../lib/jhipster/index.ts';
+import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-jdl-config.ts';
 import { createDelayedMutationContext, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
 import type { GenericTask } from '../base-core/types.ts';
@@ -44,8 +44,6 @@ import type {
   Source as BaseWorkspacesSource,
   WorkspacesApplication,
 } from './types.ts';
-
-const { Options: DeploymentOptions } = deploymentOptions;
 
 const {
   PROMPTING_WORKSPACES,
@@ -97,13 +95,14 @@ export default abstract class BaseWorkspacesGenerator<
     return defaults(
       {},
       removeFieldsWithNullishValues(this.config.getAll()),
-      DeploymentOptions.defaults(this.jhipsterConfig.deploymentType),
+      getDefaultJDLDeploymentDefaults(this.jhipsterConfig.deploymentType),
     );
   }
 
   get context() {
-    // Delayed mutation context so command defaults are applied only after the configuration is loaded.
-    return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => createDelayedMutationContext() });
+    // Delayed mutation context so command defaults and derived properties are applied only after the configuration is
+    // loaded, like the application context.
+    return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => createDelayedMutationContext({ autoDelay: true }) });
   }
 
   get appsFolders(): string[] {

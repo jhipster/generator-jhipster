@@ -81,10 +81,6 @@ export type Deployment = DeploymentConfig & {
 
   authenticationType?: string;
 
-  serviceDiscoveryTypeAny?: boolean;
-  serviceDiscoveryTypeConsul?: boolean;
-  serviceDiscoveryTypeEureka?: boolean;
-
   entryPort?: number;
 
   monitoring?: string;

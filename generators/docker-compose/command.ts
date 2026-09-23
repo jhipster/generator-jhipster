@@ -21,6 +21,7 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHABETIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 const command = {
+  import: ['base-workspaces'],
   arguments: {
     appsFolders: {
       type: Array,
@@ -39,6 +40,7 @@ const command = {
         deprecated: 'no generator reads it, it will be removed in JHipster v10',
       },
       choices: ['SpringCloudGateway'],
+      default: 'SpringCloudGateway',
       scope: 'storage',
     },
     jwtSecretKey: {

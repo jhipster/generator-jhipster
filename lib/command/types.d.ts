@@ -207,7 +207,7 @@ export type JHipsterCommandDefinition<ConfigContext = BaseCoreGenerator> = {
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']
    */
-  readonly import?: readonly (keyof GeneratorsByNamespace | 'base')[];
+  readonly import?: readonly (keyof GeneratorsByNamespace | 'base' | 'base-workspaces')[];
   /**
    * @experimental
    * Compose with generator.

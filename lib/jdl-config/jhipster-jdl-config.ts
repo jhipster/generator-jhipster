@@ -82,6 +82,32 @@ export const getDefaultJDLApplicationConfig = (): Readonly<JDLApplicationConfig>
   return defaultJDLApplicationConfig;
 };
 
+const deploymentDefaults = new Map<string, Readonly<Record<string, any>>>();
+/**
+ * The defaults of the options of a deployment of the type: the ones `base-workspaces` declares, shared by every type,
+ * and the ones the command of the type declares - `docker-compose` or `kubernetes`, which the deploymentType names.
+ */
+export const getDefaultJDLDeploymentDefaults = (deploymentType = ''): Readonly<Record<string, any>> => {
+  if (!deploymentDefaults.has(deploymentType)) {
+    const store = getJHipsterStore();
+    const defaults: Record<string, any> = {};
+    // base-workspaces declares the options shared by every type, the generator of the type imports it; the type may
+    // name no generator (`none` for workspaces).
+    const dependencies = resolveGeneratorDependencies(['base-workspaces', ...(deploymentType ? [deploymentType] : [])], {
+      getGeneratorMeta: namespace => store.getMeta(namespace),
+    });
+    for (const { command } of dependencies) {
+      for (const [name, config] of Object.entries(command?.configs ?? {})) {
+        if (config.default !== undefined && typeof config.default !== 'function') {
+          defaults[name] = config.default;
+        }
+      }
+    }
+    deploymentDefaults.set(deploymentType, Object.freeze(defaults));
+  }
+  return deploymentDefaults.get(deploymentType)!;
+};
+
 let defaultJDLDeploymentConfig: Readonly<JDLApplicationConfig>;
 /**
  * The deployment JDL definitions, the same way: the jdl options of the `deployment` generator and of the deployment

@@ -31,35 +31,42 @@ const deploymentName = (tokenValuePattern: RegExp) => ({ type: 'string', tokenTy
 const deploymentBoolean = { type: 'boolean', tokenType: 'BOOLEAN' } as const;
 
 const command = {
+  import: ['base-workspaces'],
   configs: {
     kubernetesNamespace: {
       description: 'Kubernetes namespace',
       cli: { type: String, hide: true },
       jdl: deploymentName(ALPHANUMERIC_DASH_PATTERN),
+      default: 'default',
       scope: 'storage',
     },
     kubernetesServiceType: {
       description: 'Kubernetes service type',
       cli: { type: String, hide: true },
       jdl: deploymentName(ALPHABETIC_PATTERN),
+      choices: ['LoadBalancer', 'NodePort', 'Ingress'],
+      default: 'LoadBalancer',
       scope: 'storage',
     },
     kubernetesStorageClassName: {
       description: 'Kubernetes storage class name',
       cli: { type: String, hide: true },
       jdl: deploymentString(KUBERNETES_STORAGE_CLASS_NAME_PATTERN),
+      default: '',
       scope: 'storage',
     },
     kubernetesUseDynamicStorage: {
       description: 'Use dynamic storage',
       cli: { type: Boolean, hide: true },
       jdl: deploymentBoolean,
+      default: false,
       scope: 'storage',
     },
     ingressDomain: {
       description: 'Ingress domain',
       cli: { type: String, hide: true },
       jdl: deploymentString(REPONAME_PATTERN),
+      default: '',
       scope: 'storage',
     },
     ingressType: {
@@ -67,24 +74,28 @@ const command = {
       cli: { type: String, hide: true },
       jdl: deploymentName(ALPHABETIC_PATTERN),
       choices: ['nginx', 'gke'],
+      default: 'nginx',
       scope: 'storage',
     },
     istio: {
       description: 'Use Istio',
       cli: { type: Boolean, hide: true },
       jdl: deploymentBoolean,
+      default: false,
       scope: 'storage',
     },
     dockerRepositoryName: {
       description: 'Docker repository name',
       cli: { type: String, hide: true },
       jdl: deploymentString(REPONAME_PATTERN),
+      default: '',
       scope: 'storage',
     },
     dockerPushCommand: {
       description: 'Docker push command',
       cli: { type: String, hide: true },
       jdl: deploymentString(ALPHANUMERIC_SPACE_PATTERN),
+      default: 'docker push',
       scope: 'storage',
     },
     registryReplicas: {
