@@ -1012,7 +1012,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ } _%>;
     }
 <% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
-  <%_ const eagerLoadMockResult = reactive ? 'Flux.empty()' : paginationNo ? 'new ArrayList<>()' : 'new PageImpl(new ArrayList<>())'; _%>
+  <%_ const imperativeEagerLoadMockResult = paginationNo ? 'new ArrayList<>()' : 'new PageImpl(new ArrayList<>())'; _%>
+  <%_ const eagerLoadMockResult = reactive ? 'Flux.empty()' : imperativeEagerLoadMockResult; _%>
     @SuppressWarnings({"unchecked"})
     void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (serviceNo) { _%>
