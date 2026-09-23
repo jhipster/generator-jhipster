@@ -42,6 +42,7 @@ const command = {
       description: 'Kubernetes service type',
       cli: { type: String, hide: true },
       jdl: deploymentName(ALPHABETIC_PATTERN),
+      choices: ['LoadBalancer', 'NodePort', 'Ingress'],
       scope: 'storage',
     },
     kubernetesStorageClassName: {

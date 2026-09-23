@@ -60,7 +60,7 @@ export function parseFromConfigurationObject(configurationObject: ParsedJDLRoot,
   }
   init(configurationObject);
   fillApplications(runtime);
-  fillDeployments();
+  fillDeployments(runtime);
   fillEnums();
   fillClassesAndFields();
   fillAssociations();
@@ -92,8 +92,8 @@ function fillApplicationsPerEntityName(application: JDLApplication): void {
   });
 }
 
-function fillDeployments(): void {
-  const jdlDeployments = convertDeployments(parsedContent.deployments);
+function fillDeployments(runtime: JDLRuntime): void {
+  const jdlDeployments = convertDeployments(parsedContent.deployments, runtime);
   jdlDeployments.forEach(jdlDeployment => {
     jdlObject.addDeployment(jdlDeployment);
   });

@@ -40,11 +40,15 @@ export const createRuntime = (
 ): JDLRuntime => {
   const propertyValidations: Record<string, JDLValidatorOption> = definition.validatorConfig;
   const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
-  const deploymentOptionTypes = deploymentDefinition.optionsTypes;
   const applicationDefinition = new JDLApplicationDefinition({
     optionValues: definition.optionsValues,
     optionTypes: definition.optionsTypes,
     quotedOptionNames: definition.quotedOptionNames,
+  });
+  const jdlDeploymentDefinition = new JDLApplicationDefinition({
+    optionValues: deploymentDefinition.optionsValues,
+    optionTypes: deploymentDefinition.optionsTypes,
+    quotedOptionNames: deploymentDefinition.quotedOptionNames,
   });
 
   let jdlTokens: JDLTokens;
@@ -86,7 +90,7 @@ export const createRuntime = (
     applicationDefinition,
     propertyValidations,
     deploymentPropertyValidations,
-    deploymentOptionTypes,
+    deploymentDefinition: jdlDeploymentDefinition,
   };
 };
 

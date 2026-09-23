@@ -20,6 +20,7 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import type JDLDeployment from '../../core/models/jdl-deployment.ts';
+import { getDefaultRuntime } from '../../core/runtime.ts';
 
 import { convertDeployments } from './deployment-converter.ts';
 
@@ -27,21 +28,45 @@ describe('jdl - DeploymentConverter', () => {
   describe('convertDeployments', () => {
     describe('when not passing deployments', () => {
       it('should fail', () => {
-        // @ts-expect-error
-        expect(() => convertDeployments()).toThrow(/^Deployments have to be passed so as to be converted\.$/);
+        expect(() => convertDeployments(undefined as any, getDefaultRuntime())).toThrow(
+          /^Deployments have to be passed so as to be converted\.$/,
+        );
       });
     });
+    describe('when passing a value an option does not allow', () => {
+      it('should fail', () => {
+        expect(() =>
+          convertDeployments(
+            [{ deploymentType: 'kubernetes', appsFolders: ['tata'], serviceDiscoveryType: 'zookeeper' } as any],
+            getDefaultRuntime(),
+          ),
+        ).toThrow(/^The value 'zookeeper' is not allowed for the deployment option 'serviceDiscoveryType'\.$/);
+      });
+
+      it('should let an option without choices take any value', () => {
+        expect(() =>
+          convertDeployments(
+            [{ deploymentType: 'kubernetes', appsFolders: ['tata'], kubernetesNamespace: 'anything-goes' } as any],
+            getDefaultRuntime(),
+          ),
+        ).not.toThrow();
+      });
+    });
+
     describe('when passing deployments', () => {
       let convertedDeployments: JDLDeployment[];
 
       before(() => {
-        convertedDeployments = convertDeployments([
-          {
-            deploymentType: 'docker-compose',
-            appsFolders: ['tata', 'titi'],
-            dockerRepositoryName: 'test',
-          },
-        ]);
+        convertedDeployments = convertDeployments(
+          [
+            {
+              deploymentType: 'docker-compose',
+              appsFolders: ['tata', 'titi'],
+              dockerRepositoryName: 'test',
+            },
+          ],
+          getDefaultRuntime(),
+        );
       });
 
       it('should convert them', () => {

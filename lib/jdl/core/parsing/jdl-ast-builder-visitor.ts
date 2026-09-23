@@ -517,7 +517,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       const key = context.DEPLOYMENT_KEY[0].image;
       const value = this.visit(context.deploymentConfigValue);
 
-      warnIfDeprecated(key, runtime.deploymentOptionTypes[key], 'deployment');
+      warnIfDeprecated(key, runtime.deploymentDefinition.optionTypes[key], 'deployment');
 
       return { key, value };
     }
