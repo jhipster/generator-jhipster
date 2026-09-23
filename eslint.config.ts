@@ -159,13 +159,13 @@ export default defineConfig(
       experimental: true,
       allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData'],
     },
+    js.configs.recommended,
     stylistic.configs.customize({
       jsx: false,
       semi: true,
     }),
     {
       rules: {
-        ...js.configs.recommended.rules,
         ...jsRules,
         'no-negated-condition': 'error',
         'no-nested-ternary': 'error',
