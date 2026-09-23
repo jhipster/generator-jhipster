@@ -18,7 +18,13 @@
 -%>
 package <%- entityAbsolutePackage %>.service.mapper;
 
-<%_ const testedRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded && property.ownerSide && !property.otherEntity.builtIn); _%>
+<%_ // The mapper of an embedded entity has no named mappings: MapStruct forges the mappings of its related entities.
+    const testedRelationships = embedded
+      ? []
+      : restProperties.filter(
+        property => property.relationshipName && !property.otherEntity.embedded && property.ownerSide && !property.otherEntity.builtIn,
+      );
+_%>
 import static <%- entityAbsoluteClass %>Asserts.*;
 import static <%- entityAbsoluteClass %>TestSamples.*;
 <%_ for (const otherEntity of this._.uniq(testedRelationships.map(relationship => relationship.otherEntity)).filter(otherEntity => otherEntity.entityClass !== entityClass)) { _%>

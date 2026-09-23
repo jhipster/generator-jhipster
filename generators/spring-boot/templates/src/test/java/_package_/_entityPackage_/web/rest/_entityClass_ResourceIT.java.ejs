@@ -30,19 +30,19 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
     // nested related object, to check the request does not write into the related entity.
     const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
       .filter(relationship =>
-        relationship.ownerSide &&
-        !relationship.id &&
-        !relationship.otherEntity.builtIn &&
-        !relationship.otherEntity.embedded &&
-        !relationship.otherEntity.skipServer &&
-        relationship.otherEntity.entityClass !== entityClass &&
-        relationship.otherEntity.primaryKey.ids.length === 1,
+        relationship.ownerSide
+          && !relationship.id
+          && !relationship.otherEntity.builtIn
+          && !relationship.otherEntity.embedded
+          && !relationship.otherEntity.skipServer
+          && relationship.otherEntity.entityClass !== entityClass
+          && relationship.otherEntity.primaryKey.ids.length === 1,
       )
       .map(relationship => ({
         relationship,
         observedField: relationship.otherEntity.fields.find(
-          field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
-        ),
+        field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
+      ),
       }))
       .filter(({ observedField }) => observedField);
     const noCascadeOtherEntities = this._.uniq(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity));
@@ -963,36 +963,36 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
         <%_ } _%>
     }
-  <%_ if (updatableEntity) { _%>
+        <%_ if (updatableEntity) { _%>
 
     @Test<%- transactionalAnnotation %>
     void check<%- field.fieldInJavaBeanMethod %>IsRequiredOnPatch() throws Exception {
         // Initialize the database
-    <%_ if (!primaryKey.derived) { _%>
-      <%_ for (const pkField of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+          <%_ if (!primaryKey.derived) { _%>
+            <%_ for (const pkField of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
         <%- persistInstance %>.<%- pkField.propertyConsumerName %>(<%- pkField.fieldJavaValueGenerator %>);
-      <%_ } _%>
-    <%_ } _%>
+            <%_ } _%>
+          <%_ } _%>
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Patch the field to null, which fails.
         ObjectNode <%- restInstance %>Patch = om.valueToTree(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>);
         <%- restInstance %>Patch.putNull("<%- field.fieldName %>");
 
-    <%_ if (reactive) { _%>
+          <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(om.writeValueAsBytes(<%- restInstance %>Patch))
             .exchange()
             .expectStatus().isBadRequest();
-    <%_ } else { _%>
+          <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>Patch)))
             .andExpect(status().isBadRequest());
-    <%_ } _%>
+          <%_ } _%>
     }
-  <%_ } _%>
+        <%_ } _%>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
