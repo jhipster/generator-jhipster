@@ -101,7 +101,12 @@ export default class JDLParser extends CstParser {
             ALT: () => this.SUBRULE(this.constantDeclaration),
           },
           // The option statements: the lexer knows no option, the option names are checked against the definitions.
-          { ALT: () => this.SUBRULE(this.optionDeclaration) },
+          {
+            // A block never follows an option statement: `entiti Foo {` is a misspelled keyword statement rather than an
+            // option statement, reported at the misspelled keyword with the statements expected there.
+            GATE: () => !this.isBlockStatement(),
+            ALT: () => this.SUBRULE(this.optionDeclaration),
+          },
         ]);
       });
     });
@@ -526,11 +531,16 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.applicationSubConfig) },
           { ALT: () => this.SUBRULE(this.applicationSubEntities) },
           { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
-          { ALT: () => this.SUBRULE(this.optionDeclaration) },
+          { GATE: () => !this.isBlockStatement(), ALT: () => this.SUBRULE(this.optionDeclaration) },
         ]);
       });
     });
     return noopCst;
+  }
+
+  /** Whether the statement at the current token opens a block, `<keyword> [name] {`, which no option statement does. */
+  private isBlockStatement(): boolean {
+    return this.LA(2).tokenType === this.tokens.LCURLY || this.LA(3).tokenType === this.tokens.LCURLY;
   }
 
   applicationSubNamespaceConfig(): CstNode {

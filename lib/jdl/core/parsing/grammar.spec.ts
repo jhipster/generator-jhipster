@@ -1824,6 +1824,22 @@ entity A {
       });
     });
   });
+  describe('when parsing a misspelled statement keyword', () => {
+    it('should report the statement at the misspelled keyword', () => {
+      // An option statement never opens a block, so `entiti Foo {` is not one: it is reported as an unknown statement.
+      expect(() => parseFromContent('entiti Foo {\n  name String\n}')).toThrow(
+        /^Unknown statement 'entiti', expected an entity, an enum, a relationship, an application, a deployment, a use statement, a constant or an option statement\.\n\tat line: 1, column: 1$/,
+      );
+    });
+    it('should report the statement inside an application', () => {
+      expect(() => parseFromContent('entity A\napplication {\n  config { baseName foo }\n  entitis A {}\n}')).toThrow(
+        /^Unknown statement 'entitis', expected a config block, an entities statement, a use statement or an option statement\.\n\tat line: 4, column: 3$/,
+      );
+    });
+    it('should report an unknown option statement by its name', () => {
+      expect(() => parseFromContent('entity A\nreadonly A')).toThrow(/^Unknown option: readonly\.\n\tat line: 2, column: 1$/);
+    });
+  });
   describe('when parsing the deprecated paginate keyword', () => {
     let warnSpy: ReturnType<typeof esmocha.spyOn>;
     let parsedOptions: ParsedJDLApplications['options'];
