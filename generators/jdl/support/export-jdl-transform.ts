@@ -26,8 +26,8 @@ import { setModifiedFileState } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.ts';
-import { createRuntime } from '../../../lib/jdl/core/runtime.ts';
 import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.ts';
+import { createJDLRuntime } from '../../../lib/jdl-config/jdl-runtime.ts';
 import type { Entity } from '../../../lib/jhipster/types/entity.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
@@ -75,7 +75,7 @@ export const exportJDLTransform = ({
 
         const jdlObject = getJDLObjectFromSingleApplication(
           { ...contents, [GENERATOR_JHIPSTER]: { ...rest, incrementalChangelog } },
-          createRuntime(jdlDefinition),
+          createJDLRuntime({ application: jdlDefinition }),
           entitiesMap,
         );
 

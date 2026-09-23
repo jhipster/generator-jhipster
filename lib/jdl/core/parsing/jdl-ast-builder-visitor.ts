@@ -18,7 +18,7 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { relationshipOptions, validations } from '../built-in-options/index.ts';
+import { validations } from '../built-in-options/index.ts';
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
@@ -33,7 +33,6 @@ import type { JDLRuntime } from '../types/runtime.ts';
 import deduplicate from '../utils/array-utils.ts';
 import logger from '../utils/objects/logger.ts';
 
-const { BUILT_IN_ENTITY } = relationshipOptions;
 const {
   Validations: { PATTERN, REQUIRED, UNIQUE },
 } = validations;
@@ -68,6 +67,20 @@ const warnIfDeprecated = (key: string, optionType: JDLApplicationOptionType | un
 
 export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
+
+  /** The binary option a statement keyword names, warning about a deprecated keyword. */
+  const binaryOptionName = (keyword: string): string => {
+    for (const [name, { jdl }] of Object.entries(runtime.entityDefinition.configs)) {
+      if ((jdl.keyword ?? name) === keyword) {
+        return name;
+      }
+      if (jdl.deprecatedKeywords?.includes(keyword)) {
+        logger.warn(`The ${keyword} option is deprecated, please use ${name} instead.`);
+        return name;
+      }
+    }
+    return keyword;
+  };
 
   class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     constructor() {
@@ -133,11 +146,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         context.binaryOptionDeclaration
           .map(element => this.visit(element))
           .forEach((option: ParsedJDLBinaryOption) => {
-            if (option.optionName === 'paginate') {
-              // TODO drop for v9
-              logger.warn('The paginate option is deprecated, please use pagination instead.');
-              option.optionName = 'pagination';
-            }
+            option.optionName = binaryOptionName(option.optionName);
             const newOption = !ast.options[option.optionName];
             if (newOption) {
               ast.options[option.optionName] = {};
@@ -396,13 +405,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return context.relationshipOption.map(element => this.visit(element)).reduce((final, current) => [...final, current], []);
     }
 
-    relationshipOption(context: Record<'BUILT_IN_ENTITY', IToken[]>) {
-      if (context.BUILT_IN_ENTITY) {
-        return { optionName: BUILT_IN_ENTITY, type: 'UNARY' };
-      }
-
-      /* istanbul ignore next */
-      throw new Error(`No valid relationship option found, expected '${context.BUILT_IN_ENTITY}'.`);
+    relationshipOption(context: Record<'RELATIONSHIP_OPTION', IToken[]>) {
+      return { optionName: context.RELATIONSHIP_OPTION[0].image, type: 'UNARY' };
     }
 
     enumDeclaration(context: Record<'NAME' | 'JAVADOC', IToken[]> & Record<'enumPropList', CstNode[]>) {
@@ -584,11 +588,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         context.binaryOptionDeclaration
           .map(element => this.visit(element))
           .forEach(option => {
-            if (option.optionName === 'paginate') {
-              // TODO drop for v9
-              logger.warn('The paginate option is deprecated, please use pagination instead.');
-              option.optionName = 'pagination';
-            }
+            option.optionName = binaryOptionName(option.optionName);
             if (!applicationSubDeclaration.options![option.optionName]) {
               applicationSubDeclaration.options![option.optionName] = {};
             }

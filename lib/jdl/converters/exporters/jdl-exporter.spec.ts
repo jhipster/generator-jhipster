@@ -22,16 +22,15 @@ import fs from 'node:fs';
 
 import helpers from 'yeoman-test';
 
-import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { JDLEntity } from '../../core/models/index.ts';
 import JDLApplication from '../../core/models/jdl-application.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.ts';
-import { createRuntime } from '../../core/runtime.ts';
 
 import exportToJDL from './jdl-exporter.ts';
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLExporter', () => {
   beforeEach(async () => {

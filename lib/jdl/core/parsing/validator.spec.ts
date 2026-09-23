@@ -19,13 +19,12 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
-import { createRuntime } from '../runtime.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 
 import { parse } from './api.ts';
 
 describe('jdl - JDLSyntaxValidatorVisitor', () => {
-  const jdlRuntime = createRuntime(getDefaultJDLApplicationConfig());
+  const jdlRuntime = getDefaultRuntime();
   describe('when declaring an application', () => {
     for (const booleanOption of ['microfrontend']) {
       describe(`and using for ${booleanOption}`, () => {

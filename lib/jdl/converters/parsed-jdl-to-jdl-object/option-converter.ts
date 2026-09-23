@@ -25,7 +25,7 @@ import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import type { ParsedJDLOption, ParsedJDLOptionConfig, ParsedJDLUseOption } from '../../core/types/parsed.ts';
 
-const { OptionValues, getOptionName } = binaryOptions;
+const { getOptionNameForValue } = binaryOptions;
 export default { convertOptions };
 
 /**
@@ -94,13 +94,13 @@ function convertUseOptions(useOptions: ParsedJDLUseOption[]): JDLBinaryOption[] 
     const { optionValues, list, excluded } = useValue;
 
     optionValues.forEach(optionValue => {
-      const optionName = (OptionValues as Record<string, string>)[optionValue];
+      const optionName = getOptionNameForValue(optionValue);
       if (!optionName) {
         return;
       }
       convertedUseOptions.push(
         new JDLBinaryOption({
-          name: getOptionName(optionName)!,
+          name: optionName,
           value: optionValue,
           entityNames: list,
           excludedNames: excluded,

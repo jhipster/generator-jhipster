@@ -3,10 +3,14 @@ import type { Lexer, TokenType } from 'chevrotain';
 import type JDLApplicationDefinition from '../built-in-options/jdl-application-definition.ts';
 import type JDLParser from '../parsing/jdl-parser.ts';
 
-import type { JDLValidatorOption } from './parsing.ts';
+import type { JDLOptionsDefinition, JDLValidatorOption } from './parsing.ts';
 
 export type JDLRuntime = {
   applicationDefinition: JDLApplicationDefinition;
+  /** The option statements of entities. */
+  entityDefinition: JDLOptionsDefinition;
+  /** The option statements of relationships. */
+  relationshipDefinition: JDLOptionsDefinition;
   tokens: Record<string, TokenType>;
   lexer: Lexer;
   parser: JDLParser;

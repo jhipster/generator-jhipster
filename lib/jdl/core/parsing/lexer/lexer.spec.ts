@@ -19,12 +19,11 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { getDefaultJDLApplicationConfig } from '../../../../jdl-config/jhipster-jdl-config.ts';
-import { createRuntime } from '../../runtime.ts';
+import { createJDLRuntime, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 
 import { LexerModes } from './lexer.ts';
 
-const { lexer: JDLLexer } = createRuntime(getDefaultJDLApplicationConfig());
+const { lexer: JDLLexer } = getDefaultRuntime();
 
 describe('jdl - JDLLexer', () => {
   describe('when passing a valid JDL input', () => {
@@ -76,15 +75,17 @@ describe('jdl - JDLLexer', () => {
 
     it('should lex a keyword declared after a shorter keyword it starts with', () => {
       // Keywords match whole words only, so the shorter one registered first does not take the start of the longer one.
-      const runtime = createRuntime({
-        validatorConfig: { FOO: { type: 'BOOLEAN' }, FOO_BAR: { type: 'BOOLEAN' } },
-        optionsValues: {},
-        optionsTypes: {},
-        quotedOptionNames: [],
-        tokenConfigs: [
-          { name: 'FOO', pattern: 'foo' },
-          { name: 'FOO_BAR', pattern: 'fooBar' },
-        ],
+      const runtime = createJDLRuntime({
+        application: {
+          validatorConfig: { FOO: { type: 'BOOLEAN' }, FOO_BAR: { type: 'BOOLEAN' } },
+          optionsValues: {},
+          optionsTypes: {},
+          quotedOptionNames: [],
+          tokenConfigs: [
+            { name: 'FOO', pattern: 'foo' },
+            { name: 'FOO_BAR', pattern: 'fooBar' },
+          ],
+        },
       });
       const { tokens, errors } = runtime.lexer.tokenize('fooBar foo', LexerModes.APPLICATION_CONFIG);
       expect(errors).toHaveLength(0);

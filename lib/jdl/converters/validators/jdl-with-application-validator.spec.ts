@@ -20,6 +20,7 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import databaseTypes from '../../../jhipster/database-types.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { relationshipTypes } from '../../core/basic-types/index.ts';
@@ -31,7 +32,6 @@ import JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import { getDefaultRuntime } from '../../core/runtime.ts';
 
 import createValidator from './jdl-with-application-validator.ts';
 

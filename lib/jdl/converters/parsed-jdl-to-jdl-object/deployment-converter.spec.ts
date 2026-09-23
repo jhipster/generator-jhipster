@@ -19,8 +19,8 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import type JDLDeployment from '../../core/models/jdl-deployment.ts';
-import { getDefaultRuntime } from '../../core/runtime.ts';
 
 import { convertDeployments } from './deployment-converter.ts';
 

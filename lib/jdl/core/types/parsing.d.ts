@@ -44,6 +44,45 @@ export type JDLApplicationConfig = {
   quotedOptionNames: string[];
 };
 
+/** The jdl spec of an option statement: `<option> <entities>` for a unary one, `<option> <entities> with <value>` for a binary one. */
+export type JDLOptionStatementSpec = {
+  type: 'unary' | 'binary';
+  /** The keyword of the statement, the option name by default. */
+  keyword?: string;
+  /** Deprecated keywords still accepted for the option, warned about. */
+  deprecatedKeywords?: readonly string[];
+};
+
+/** An option of the entity or relationship statements, shaped like a command config. */
+export type JDLOptionConfig = {
+  description?: string;
+  /** The values a binary option accepts; a binary option without choices accepts any name. */
+  choices?: readonly string[];
+  /** The value of the option for the entities the jdl does not set it on. */
+  default?: string;
+  jdl: JDLOptionStatementSpec;
+};
+
+/**
+ * The option statements of a jdl block, entity or relationship, shaped like a generator command so a generator may
+ * declare them the same way one day.
+ */
+export type JDLOptionsDefinition = {
+  configs: Readonly<Record<string, JDLOptionConfig>>;
+};
+
+/** Every definition a runtime is built from. */
+export type JDLDefinitions = {
+  /** The application config options. */
+  application: JDLApplicationConfig;
+  /** The deployment options. */
+  deployment: JDLApplicationConfig;
+  /** The option statements of entities. */
+  entity: JDLOptionsDefinition;
+  /** The option statements of relationships. */
+  relationship: JDLOptionsDefinition;
+};
+
 export type JHipsterOptionDefinition = {
   name: string;
   type: JDLApplicationOptionTypeValue;

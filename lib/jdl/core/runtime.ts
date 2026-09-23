@@ -19,25 +19,26 @@
 
 import type { Lexer, TokenType } from 'chevrotain';
 
-import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from '../../jdl-config/jhipster-jdl-config.ts';
-
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
 import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.ts';
 import { buildDeploymentTokens } from './built-in-options/tokens/deployment-tokens.ts';
+import { buildEntityTokens } from './built-in-options/tokens/entity-tokens.ts';
 import JDLParser from './parsing/jdl-parser.ts';
 import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
-import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.ts';
+import type { JDLDefinitions, JDLValidatorOption } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 
 /**
- * @param definition the application JDL definitions.
- * @param deploymentDefinition the deployment JDL definitions, the ones of the deployment generators by default.
+ * Builds a runtime, the lexer, the parser and the definitions the jdl is parsed and validated with, from every definition:
+ * the core knows no option by itself, `lib/jdl-config` provides the default ones.
  */
-export const createRuntime = (
-  definition: JDLApplicationConfig,
-  deploymentDefinition: JDLApplicationConfig = getDefaultJDLDeploymentConfig(),
-): JDLRuntime => {
+export const createRuntime = ({
+  application: definition,
+  deployment: deploymentDefinition,
+  entity: entityDefinition,
+  relationship: relationshipDefinition,
+}: JDLDefinitions): JDLRuntime => {
   const propertyValidations: Record<string, JDLValidatorOption> = definition.validatorConfig;
   const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
   const applicationDefinition = new JDLApplicationDefinition({
@@ -58,7 +59,8 @@ export const createRuntime = (
     if (!jdlTokens) {
       const applicationTokens = buildApplicationTokens(definition.tokenConfigs);
       const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
-      jdlTokens = buildTokens({ applicationTokens, deploymentTokens });
+      const entityTokens = buildEntityTokens(entityDefinition, relationshipDefinition);
+      jdlTokens = buildTokens({ applicationTokens, deploymentTokens, entityTokens });
 
       // The application config keys are tokens of their lexer mode, checked against the validations by name.
       const applicationConfigTokens = Object.fromEntries(applicationTokens.tokens.map(token => [token.name, token]));
@@ -88,15 +90,10 @@ export const createRuntime = (
       return parser;
     },
     applicationDefinition,
+    entityDefinition,
+    relationshipDefinition,
     propertyValidations,
     deploymentPropertyValidations,
     deploymentDefinition: jdlDeploymentDefinition,
   };
-};
-
-let defaultRuntime: JDLRuntime;
-/** The runtime of the definitions of the generators, the one to use when no definition is given. */
-export const getDefaultRuntime = (): JDLRuntime => {
-  defaultRuntime ??= createRuntime(getDefaultJDLApplicationConfig());
-  return defaultRuntime;
 };

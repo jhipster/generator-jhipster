@@ -20,11 +20,11 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { createJDLApplication } from '../__test-support__/index.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { unaryOptions } from '../built-in-options/index.ts';
-import { getDefaultRuntime } from '../runtime.ts';
 
 import { JDLEntity, JDLEnum } from './index.ts';
 import JDLField from './jdl-field.ts';

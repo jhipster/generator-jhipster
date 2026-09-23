@@ -19,10 +19,9 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import applicationOptions from '../../../jhipster/application-options.ts';
 import { binaryOptions } from '../built-in-options/index.ts';
-import { createRuntime } from '../runtime.ts';
 
 import JDLApplication from './jdl-application.ts';
 import JDLBinaryOption from './jdl-binary-option.ts';
@@ -30,7 +29,7 @@ import StringJDLApplicationConfigurationOption from './string-jdl-application-co
 
 const { OptionNames } = applicationOptions;
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLApplication', () => {
   describe('hasConfigurationOption', () => {
