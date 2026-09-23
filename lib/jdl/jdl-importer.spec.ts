@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect, it } from 'esmocha';
-import { rmSync } from 'node:fs';
+import { before, describe, expect, it } from 'esmocha';
 import path from 'node:path';
+
+import helpers from 'yeoman-test';
 
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import clientFrameworkTypes from '../jhipster/client-framework-types.ts';
@@ -350,7 +351,9 @@ relationship OneToOne {
     describe('when parsing JDL applications and deployment config', () => {
       let importState: ImportState;
 
-      before(() => {
+      before(async () => {
+        // The deployment is exported to the current directory.
+        await helpers.prepareTemporaryDir();
         const importer = createImporterFromFiles([getTestFile('applications3.jdl')]);
         importState = importer.import();
       });
@@ -363,17 +366,13 @@ relationship OneToOne {
       const contents: any[] = [];
       const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes'];
 
-      before(() => {
+      before(async () => {
+        // The deployments are exported to the current directory.
+        await helpers.prepareTemporaryDir();
         const importer = createImporterFromFiles([getTestFile('deployments.jdl')]);
         importer.import();
         DEPLOYMENT_NAMES.forEach(name => {
           contents.push(readYoRcFile(path.join(name)));
-        });
-      });
-
-      after(() => {
-        DEPLOYMENT_NAMES.forEach(name => {
-          rmSync(name, { recursive: true });
         });
       });
 
