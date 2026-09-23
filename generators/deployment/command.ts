@@ -17,18 +17,12 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
-import {
-  ALPHABETIC_DASH_LOWER_PATTERN,
-  ALPHABETIC_LOWER_PATTERN,
-  ALPHANUMERIC_PATTERN,
-  ALPHANUMERIC_UNDERSCORE_PATTERN,
-  PATH_PATTERN,
-} from '../../lib/constants/jdl.ts';
+import { ALPHABETIC_DASH_LOWER_PATTERN } from '../../lib/constants/jdl.ts';
 
 /**
- * Deployment options shared by every deployment type. The prompts still live in the deployment generators; these
- * declarations exist so the deployment JDL definitions can be derived from the commands, the way the application ones
- * are from `app`: the options of this generator and of what it imports.
+ * The deployment JDL definitions are derived from the commands, the way the application ones are from `app`: the
+ * options of this generator and of what it imports. The options shared by every deployment type are declared by
+ * `base-workspaces`, reached through the deployment generators.
  */
 const command = {
   // The deployment types it delegates to: their options are the ones of a deployment, like `app` has the ones of what
@@ -44,60 +38,6 @@ const command = {
         tokenValuePattern: ALPHABETIC_DASH_LOWER_PATTERN,
       },
       choices: ['docker-compose', 'kubernetes'],
-      scope: 'storage',
-    },
-    appsFolders: {
-      description: 'Folders of the applications to deploy',
-      cli: { type: Array, hide: true },
-      jdl: {
-        type: 'list',
-        tokenType: 'list',
-        tokenValuePattern: ALPHANUMERIC_UNDERSCORE_PATTERN,
-      },
-      default: [],
-      scope: 'storage',
-    },
-    clusteredDbApps: {
-      description: 'Applications using a clustered database',
-      cli: { type: Array, hide: true },
-      jdl: {
-        type: 'list',
-        tokenType: 'list',
-        tokenValuePattern: ALPHANUMERIC_PATTERN,
-      },
-      default: [],
-      scope: 'storage',
-    },
-    directoryPath: {
-      description: 'Root directory of the applications to deploy',
-      cli: { type: String, hide: true },
-      jdl: {
-        type: 'string',
-        tokenType: 'STRING',
-        tokenValuePattern: PATH_PATTERN,
-      },
-      default: '../',
-      scope: 'storage',
-    },
-    monitoring: {
-      description: 'Monitoring solution to deploy',
-      cli: { type: String, hide: true },
-      jdl: {
-        type: 'string',
-        tokenType: 'NAME',
-        tokenValuePattern: ALPHABETIC_LOWER_PATTERN,
-      },
-      choices: ['no', 'prometheus'],
-      default: 'no',
-      scope: 'storage',
-    },
-    serviceDiscoveryType: {
-      description: 'Service discovery of the applications to deploy',
-      cli: { type: String, hide: true },
-      // Declared by spring-boot too: a keyword of both grammars, one token with both categories.
-      jdl: { type: 'string', tokenType: 'NAME', tokenValuePattern: ALPHABETIC_LOWER_PATTERN },
-      choices: ['consul', 'eureka', 'no'],
-      default: 'consul',
       scope: 'storage',
     },
   },

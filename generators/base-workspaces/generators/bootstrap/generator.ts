@@ -78,18 +78,11 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
         defaults(deployment, this.jhipsterConfigWithDefaults);
       },
       derivedProperties({ deployment }) {
+        // elk is not offered any more, kept for existing configurations. TODO drop for v10
         deployment.monitoringElk = deployment.monitoring === 'elk';
-        deployment.monitoringPrometheus = deployment.monitoring === 'prometheus';
-
-        deployment.serviceDiscoveryAny = deployment.serviceDiscoveryType !== 'no';
-        deployment.serviceDiscoveryConsul = deployment.serviceDiscoveryType === 'consul';
-        deployment.serviceDiscoveryEureka = deployment.serviceDiscoveryType === 'eureka';
-
-        deployment.serviceDiscoveryTypeAny = (deployment.serviceDiscoveryType ?? 'no') !== 'eureka';
-        deployment.serviceDiscoveryTypeEureka = deployment.serviceDiscoveryType === 'eureka';
-        deployment.serviceDiscoveryTypeConsul = deployment.serviceDiscoveryType === 'consul';
       },
       finalizeDeploymentMutations({ deployment }) {
+        // Applies the delayed command defaults and derived properties (monitoringPrometheus, serviceDiscoveryConsul, ...).
         finalizeMutations(deployment);
       },
     });

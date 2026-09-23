@@ -21,6 +21,7 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHABETIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 const command = {
+  import: ['base-workspaces'],
   arguments: {
     appsFolders: {
       type: Array,

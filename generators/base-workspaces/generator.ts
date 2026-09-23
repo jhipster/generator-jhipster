@@ -100,8 +100,9 @@ export default abstract class BaseWorkspacesGenerator<
   }
 
   get context() {
-    // Delayed mutation context so command defaults are applied only after the configuration is loaded.
-    return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => createDelayedMutationContext() });
+    // Delayed mutation context so command defaults and derived properties are applied only after the configuration is
+    // loaded, like the application context.
+    return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => createDelayedMutationContext({ autoDelay: true }) });
   }
 
   get appsFolders(): string[] {

@@ -31,6 +31,7 @@ const deploymentName = (tokenValuePattern: RegExp) => ({ type: 'string', tokenTy
 const deploymentBoolean = { type: 'boolean', tokenType: 'BOOLEAN' } as const;
 
 const command = {
+  import: ['base-workspaces'],
   configs: {
     kubernetesNamespace: {
       description: 'Kubernetes namespace',
