@@ -18,14 +18,13 @@
  */
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import type { JDLApplicationConfig, JDLApplicationOptionType, JDLApplicationOptionValue } from '../jdl/core/types/parsing.ts';
+import type { JDLApplicationOptionValue } from '../jdl/core/types/parsing.ts';
 
 import authenticationTypes from './authentication-types.ts';
 import buildToolTypes from './build-tool-types.ts';
 import cacheTypes from './cache-types.ts';
 import clientFrameworkTypes from './client-framework-types.ts';
 import databaseTypes from './database-types.ts';
-import { builtInConfigPropsValidations } from './jdl-validator-definition.ts';
 import searchEngineTypes from './search-engine-types.ts';
 import serviceDiscoveryTypes from './service-discovery-types.ts';
 import testFrameworkTypes from './test-framework-types.ts';
@@ -207,22 +206,8 @@ export const jhipsterOptionValues = {
   [optionNames.GRADLE_DEVELOCITY_HOST]: '',
 } as const satisfies Record<string, JDLApplicationOptionValue>;
 
-export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {};
-
-export const jhipsterQuotedOptionNames: string[] = [];
-
-export const builtInJDLApplicationConfig: JDLApplicationConfig = {
-  optionsTypes: jhipsterOptionTypes,
-  // Don't validate built-in options.
-  optionsValues: {},
-  quotedOptionNames: jhipsterQuotedOptionNames,
-  validatorConfig: builtInConfigPropsValidations,
-  tokenConfigs: [],
-};
-
 export { optionNames as OptionNames };
 export default {
   OptionNames: optionNames,
   OptionValues: jhipsterOptionValues,
-  QuotedOptionNames: jhipsterQuotedOptionNames,
 };

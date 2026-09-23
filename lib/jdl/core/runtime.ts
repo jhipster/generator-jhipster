@@ -20,7 +20,6 @@
 import type { Lexer, TokenType } from 'chevrotain';
 
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from '../../jdl-config/jhipster-jdl-config.ts';
-import { builtInJDLApplicationConfig } from '../../jhipster/application-options.ts';
 
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
 import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.ts';
@@ -31,41 +30,21 @@ import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-syst
 import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 
-const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JDLApplicationConfig) => {
-  return {
-    validatorConfig: {
-      ...defaultDefinition.validatorConfig,
-      ...definition.validatorConfig,
-    },
-    optionsValues: {
-      ...defaultDefinition.optionsValues,
-      ...definition.optionsValues,
-    },
-    optionsTypes: {
-      ...defaultDefinition.optionsTypes,
-      ...definition.optionsTypes,
-    },
-    quotedOptionNames: [...defaultDefinition.quotedOptionNames, ...definition.quotedOptionNames],
-    tokenConfigs: [...defaultDefinition.tokenConfigs, ...definition.tokenConfigs],
-  };
-};
-
 /**
- * @param definition the application JDL definitions, merged over the built in ones.
+ * @param definition the application JDL definitions.
  * @param deploymentDefinition the deployment JDL definitions, the ones of the deployment generators by default.
  */
 export const createRuntime = (
   definition: JDLApplicationConfig,
   deploymentDefinition: JDLApplicationConfig = getDefaultJDLDeploymentConfig(),
 ): JDLRuntime => {
-  const newDefinition = mergeDefinition(definition, builtInJDLApplicationConfig);
-  const propertyValidations: Record<string, JDLValidatorOption> = newDefinition.validatorConfig;
+  const propertyValidations: Record<string, JDLValidatorOption> = definition.validatorConfig;
   const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
   const deploymentOptionTypes = deploymentDefinition.optionsTypes;
   const applicationDefinition = new JDLApplicationDefinition({
-    optionValues: newDefinition.optionsValues,
-    optionTypes: newDefinition.optionsTypes,
-    quotedOptionNames: newDefinition.quotedOptionNames,
+    optionValues: definition.optionsValues,
+    optionTypes: definition.optionsTypes,
+    quotedOptionNames: definition.quotedOptionNames,
   });
 
   let jdlTokens: JDLTokens;
@@ -73,7 +52,7 @@ export const createRuntime = (
   let parser: JDLParser;
   const getJDLTokens = () => {
     if (!jdlTokens) {
-      const applicationTokens = buildApplicationTokens(newDefinition.tokenConfigs);
+      const applicationTokens = buildApplicationTokens(definition.tokenConfigs);
       const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
       jdlTokens = buildTokens({ applicationTokens, deploymentTokens });
 
