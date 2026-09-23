@@ -89,7 +89,7 @@ describe(`generator - ${generator}`, () => {
         parentDir = await mkdtemp(join(tmpdir(), 'jhipster-git-parent-'));
         await simpleGit({ baseDir: parentDir }).init();
         await mkdir(resolve(parentDir, 'child'));
-        await helpers.runJHipster(generator).cd(resolve(parentDir, 'child')).withOptions({ skipGit: false });
+        await helpers.runJHipster(generator, { cwd: resolve(parentDir, 'child'), tmpdir: false }).withOptions({ skipGit: false });
       });
       after(async () => {
         await rm(parentDir, { recursive: true, force: true });
