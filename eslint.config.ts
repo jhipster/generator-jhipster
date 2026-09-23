@@ -169,7 +169,7 @@ export default defineConfig(
         ...jsRules,
         'no-negated-condition': 'error',
         'no-useless-concat': 'error',
-        'no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
+        '@stylistic/no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
         '@stylistic/comma-dangle': ['error', 'always-multiline'],
         '@stylistic/no-mixed-operators': 'off',
