@@ -37,6 +37,7 @@ describe('jdl options', () => {
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
+  "jhipsterVersion",
   "jhiPrefix",
   "entitySuffix",
   "dtoSuffix",
@@ -124,6 +125,7 @@ describe('jdl options', () => {
           'baseName',
           'blueprints',
           'blueprint',
+          'jhipsterVersion',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.

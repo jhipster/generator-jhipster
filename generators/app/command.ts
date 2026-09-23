@@ -21,6 +21,17 @@ import { ALPHANUMERIC_PATTERN, JHI_PREFIX_NAME_PATTERN } from '../../lib/constan
 
 const command = {
   configs: {
+    jhipsterVersion: {
+      description: 'JHipster version the application was generated with',
+      // Stamped by the generator, not an option: declared for the jdl to keep reading it until it is dropped.
+      jdl: {
+        type: 'string',
+        tokenType: 'STRING',
+        quoted: true,
+        deprecated: 'it is stamped by the generator, do not set it in JDL; it will be removed in JHipster v10',
+      },
+      scope: 'none',
+    },
     jhiPrefix: {
       cli: {
         description: 'Add prefix before services, controllers and states name',

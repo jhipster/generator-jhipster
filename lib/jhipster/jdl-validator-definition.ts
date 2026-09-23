@@ -19,7 +19,4 @@
 
 import type { JDLValidatorOption } from '../jdl/core/types/parsing.ts';
 
-export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {
-  // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
-  JHIPSTER_VERSION: { type: 'STRING' },
-};
+export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> = {};

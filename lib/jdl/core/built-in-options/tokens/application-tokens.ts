@@ -19,27 +19,21 @@
 
 import { type ITokenConfig, Lexer } from 'chevrotain';
 
-import applicationOptions from '../../../../jhipster/application-options.ts';
 import createTokenFromConfig from '../../parsing/lexer/token-creator.ts';
 import type { JDLTokenConfig } from '../../types/parsing.ts';
 
-const { OptionNames } = applicationOptions;
-
-const { JHIPSTER_VERSION } = OptionNames;
-
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
 
+/**
+ * The application config tokens from the token configs of the application JDL definitions, which come from the
+ * generators' commands: no application option is built in any more.
+ */
 export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
-  const applicationConfigTokens: Pick<ITokenConfig, 'name' | 'pattern'>[] = [
-    // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
-    { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
-    ...tokenConfigs,
-  ];
   return {
     categoryToken: applicationConfigCategoryToken,
     tokens: [
       applicationConfigCategoryToken,
-      ...applicationConfigTokens.map((tokenConfig: ITokenConfig) => {
+      ...tokenConfigs.map((tokenConfig: ITokenConfig) => {
         const categories = [applicationConfigCategoryToken];
         // Copied rather than stamped onto the caller's config: the token configs come from a memoized application
         // definition that is shared by every runtime built from it.
