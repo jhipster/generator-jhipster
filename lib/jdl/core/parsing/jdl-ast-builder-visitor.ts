@@ -28,12 +28,10 @@ import type {
   ParsedJDLOptionConfig,
   ParsedJDLValidation,
 } from '../types/parsed.ts';
+import type { JDLApplicationOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 import deduplicate from '../utils/array-utils.ts';
 import logger from '../utils/objects/logger.ts';
-
-/** Deployment options kept for compatibility: they parse, but no generator reads them. TODO drop for v10. */
-const DEPRECATED_DEPLOYMENT_OPTIONS = ['gatewayType', 'registryReplicas', 'storageType'];
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const {
@@ -61,6 +59,12 @@ type VisitorContext = {
  * `@MapstructExpression` is copied into a java string literal.
  */
 const parseStringLiteral = (image: string): string => image.slice(1, -1);
+
+const warnIfDeprecated = (key: string, optionType: JDLApplicationOptionType | undefined, grammar: 'application' | 'deployment') => {
+  if (optionType?.deprecated) {
+    logger.warn(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`);
+  }
+};
 
 export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
@@ -513,10 +517,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       const key = context.DEPLOYMENT_KEY[0].image;
       const value = this.visit(context.deploymentConfigValue);
 
-      if (DEPRECATED_DEPLOYMENT_OPTIONS.includes(key)) {
-        // TODO drop for v10
-        logger.warn(`The ${key} deployment option is deprecated and will be removed in JHipster v10. No generator reads it.`);
-      }
+      warnIfDeprecated(key, runtime.deploymentOptionTypes[key], 'deployment');
 
       return { key, value };
     }
@@ -683,10 +684,12 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       const value = this.visit(context.configValue);
 
       if (key === 'jhipsterVersion') {
-        // TODO drop for v10
+        // Built in option, it carries no deprecated reason until it is declared by the app command. TODO drop for v10
         logger.warn(
           'The jhipsterVersion option is deprecated and will be removed in JHipster v10. It is stamped by the generator, do not set it in JDL.',
         );
+      } else {
+        warnIfDeprecated(key, runtime.applicationDefinition.optionTypes[key], 'application');
       }
 
       return { key, value };

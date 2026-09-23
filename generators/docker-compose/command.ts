@@ -31,12 +31,12 @@ const command = {
   configs: {
     gatewayType: {
       description: 'Gateway type',
-      // DEPRECATED: no generator reads it, it only reaches a field on JDLDeployment. TODO drop for v10.
       cli: { type: String, hide: true },
       jdl: {
         type: 'string',
         tokenType: 'NAME',
         tokenValuePattern: ALPHABETIC_PATTERN,
+        deprecated: 'no generator reads it, it will be removed in JHipster v10',
       },
       choices: ['SpringCloudGateway'],
       scope: 'storage',

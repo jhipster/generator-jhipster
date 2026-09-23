@@ -30,7 +30,11 @@ export type JDLValidatorOption = {
 
 export type JDLApplicationOptionValue = string | number | boolean | undefined | never[] | Record<string, string>;
 export type JDLApplicationOptionTypeValue = 'string' | 'integer' | 'boolean' | 'list' | 'quotedList';
-export type JDLApplicationOptionType = { type: JDLApplicationOptionTypeValue };
+export type JDLApplicationOptionType = {
+  type: JDLApplicationOptionTypeValue;
+  /** Why the option is deprecated, warned about when the jdl sets it. */
+  deprecated?: string;
+};
 
 export type JDLApplicationConfig = {
   tokenConfigs: JDLTokenConfig[];
@@ -48,4 +52,6 @@ export type JHipsterOptionDefinition = {
   knownChoices?: string[];
   /** Whether the value should be quoted when written back to JDL (e.g. jhipsterVersion). */
   quoted?: boolean;
+  /** The option is deprecated: setting it in the jdl warns with this reason. */
+  deprecated?: string;
 };

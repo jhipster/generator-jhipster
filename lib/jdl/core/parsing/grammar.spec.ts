@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
@@ -26,6 +26,7 @@ import { binaryOptions, unaryOptions, validations } from '../built-in-options/in
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
 import { createRuntime } from '../runtime.ts';
 import type { ParsedJDLApplications, ParsedJDLOption } from '../types/parsed.ts';
+import logger from '../utils/objects/logger.ts';
 
 const runtime = createRuntime(getDefaultJDLApplicationConfig());
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
@@ -2029,6 +2030,25 @@ entity A {
           });
         });
       });
+    });
+  });
+  describe('when parsing a deprecated option', () => {
+    let warnSpy: ReturnType<typeof esmocha.spyOn>;
+
+    before(() => {
+      warnSpy = esmocha.spyOn(logger, 'warn');
+      parseFromContent(`deployment { gatewayType SpringCloudGateway }
+`);
+    });
+
+    after(() => {
+      warnSpy.mockRestore();
+    });
+
+    it('should warn with the reason of the deployment option', () => {
+      expect(warnSpy).toHaveBeenCalledWith(
+        'The gatewayType deployment option is deprecated: no generator reads it, it will be removed in JHipster v10',
+      );
     });
   });
   describe('when parsing deployments', () => {
