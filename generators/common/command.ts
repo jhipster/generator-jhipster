@@ -40,6 +40,7 @@ const command = {
         description: 'Skip the client-side application generation',
         type: Boolean,
       },
+      jdl: { type: 'boolean', tokenType: 'BOOLEAN' },
       scope: 'storage',
     },
     skipServer: {
@@ -47,6 +48,7 @@ const command = {
         description: 'Skip the server-side application generation',
         type: Boolean,
       },
+      jdl: { type: 'boolean', tokenType: 'BOOLEAN' },
       scope: 'storage',
     },
     authenticationType: {

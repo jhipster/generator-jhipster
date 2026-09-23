@@ -22,6 +22,8 @@ import { before, describe, expect, it } from 'esmocha';
 import { getDefaultJDLApplicationConfig } from '../../../../jdl-config/jhipster-jdl-config.ts';
 import { createRuntime } from '../../runtime.ts';
 
+import { LexerModes } from './lexer.ts';
+
 const { lexer: JDLLexer } = createRuntime(getDefaultJDLApplicationConfig());
 
 describe('jdl - JDLLexer', () => {
@@ -65,8 +67,9 @@ describe('jdl - JDLLexer', () => {
   });
 
   describe('when a keyword is a prefix of another keyword', () => {
+    // Application config keys are lexed inside `config { }`, in the lexer mode of the application config.
     it('should lex the longer keyword as its own token', () => {
-      const { tokens, errors } = JDLLexer.tokenize('microfrontends microfrontend');
+      const { tokens, errors } = JDLLexer.tokenize('microfrontends microfrontend', LexerModes.APPLICATION_CONFIG);
       expect(errors).toHaveLength(0);
       expect(tokens.map(token => token.tokenType.name)).toEqual(['MICROFRONTENDS', 'MICROFRONTEND']);
     });
@@ -83,7 +86,7 @@ describe('jdl - JDLLexer', () => {
           { name: 'FOO_BAR', pattern: 'fooBar' },
         ],
       });
-      const { tokens, errors } = runtime.lexer.tokenize('fooBar foo');
+      const { tokens, errors } = runtime.lexer.tokenize('fooBar foo', LexerModes.APPLICATION_CONFIG);
       expect(errors).toHaveLength(0);
       expect(tokens.map(token => token.tokenType.name)).toEqual(['FOO_BAR', 'FOO']);
     });

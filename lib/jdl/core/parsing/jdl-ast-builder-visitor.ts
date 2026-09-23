@@ -683,14 +683,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       const key = context.CONFIG_KEY[0].image;
       const value = this.visit(context.configValue);
 
-      if (key === 'jhipsterVersion') {
-        // Built in option, it carries no deprecated reason until it is declared by the app command. TODO drop for v10
-        logger.warn(
-          'The jhipsterVersion option is deprecated and will be removed in JHipster v10. It is stamped by the generator, do not set it in JDL.',
-        );
-      } else {
-        warnIfDeprecated(key, runtime.applicationDefinition.optionTypes[key], 'application');
-      }
+      warnIfDeprecated(key, runtime.applicationDefinition.optionTypes[key], 'application');
 
       return { key, value };
     }

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
-import { ALPHANUMERIC_PATTERN, NUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHANUMERIC_PATTERN, NPM_PACKAGE_NAME_PATTERN, NUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 
 import { parseCreationTimestamp } from './support/timestamp.ts';
 
@@ -53,6 +53,8 @@ const command = {
       cli: {
         type: String,
       },
+      // A list in the jdl, `blueprints [kotlin, vuejs]`, the comma separated string being the cli form.
+      jdl: { type: 'list', tokenType: 'list', tokenValuePattern: NPM_PACKAGE_NAME_PATTERN },
       scope: 'none',
     },
     disableBlueprints: {
@@ -129,6 +131,7 @@ const command = {
       internal: {
         type: Array,
       },
+      jdl: { type: 'string', tokenType: 'NAME', tokenValuePattern: NPM_PACKAGE_NAME_PATTERN },
       scope: 'none',
     },
     jdlDefinition: {

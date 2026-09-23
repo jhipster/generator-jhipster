@@ -26,6 +26,8 @@ const tokens = [
   { name: 'USE', pattern: 'use' },
   { name: 'FOR', pattern: 'for' },
   { name: 'CLIENT_ROOT_FOLDER', pattern: 'clientRootFolder', type: 'binary' },
+  { name: 'SKIP_CLIENT', pattern: 'skipClient', type: 'unary' },
+  { name: 'SKIP_SERVER', pattern: 'skipServer', type: 'unary' },
   { name: 'NO_FLUENT_METHOD', pattern: 'noFluentMethod', type: 'unary' },
   { name: 'READ_ONLY', pattern: 'readOnly', type: 'unary' },
   { name: 'EMBEDDED', pattern: 'embedded', type: 'unary' },

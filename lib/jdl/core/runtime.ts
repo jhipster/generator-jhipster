@@ -20,77 +20,56 @@
 import type { Lexer, TokenType } from 'chevrotain';
 
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from '../../jdl-config/jhipster-jdl-config.ts';
-import { builtInJDLApplicationConfig } from '../../jhipster/application-options.ts';
 
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
 import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.ts';
 import { buildDeploymentTokens } from './built-in-options/tokens/deployment-tokens.ts';
 import JDLParser from './parsing/jdl-parser.ts';
-import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
+import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
 import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 
-const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JDLApplicationConfig) => {
-  return {
-    validatorConfig: {
-      ...defaultDefinition.validatorConfig,
-      ...definition.validatorConfig,
-    },
-    optionsValues: {
-      ...defaultDefinition.optionsValues,
-      ...definition.optionsValues,
-    },
-    optionsTypes: {
-      ...defaultDefinition.optionsTypes,
-      ...definition.optionsTypes,
-    },
-    quotedOptionNames: [...defaultDefinition.quotedOptionNames, ...definition.quotedOptionNames],
-    tokenConfigs: [...defaultDefinition.tokenConfigs, ...definition.tokenConfigs],
-  };
-};
-
 /**
- * @param definition the application JDL definitions, merged over the built in ones.
+ * @param definition the application JDL definitions.
  * @param deploymentDefinition the deployment JDL definitions, the ones of the deployment generators by default.
  */
 export const createRuntime = (
   definition: JDLApplicationConfig,
   deploymentDefinition: JDLApplicationConfig = getDefaultJDLDeploymentConfig(),
 ): JDLRuntime => {
-  const newDefinition = mergeDefinition(definition, builtInJDLApplicationConfig);
-  const propertyValidations: Record<string, JDLValidatorOption> = newDefinition.validatorConfig;
-  const deploymentPropertyValidations: Record<string, JDLValidatorOption> = {
-    ...deploymentDefinition.validatorConfig,
-    // The one keyword of both grammars, whose token is created with both categories in the lexer: validated as in the
-    // application config.
-    SERVICE_DISCOVERY_TYPE: propertyValidations.SERVICE_DISCOVERY_TYPE,
-  };
+  const propertyValidations: Record<string, JDLValidatorOption> = definition.validatorConfig;
+  const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
   const deploymentOptionTypes = deploymentDefinition.optionsTypes;
   const applicationDefinition = new JDLApplicationDefinition({
-    optionValues: newDefinition.optionsValues,
-    optionTypes: newDefinition.optionsTypes,
-    quotedOptionNames: newDefinition.quotedOptionNames,
+    optionValues: definition.optionsValues,
+    optionTypes: definition.optionsTypes,
+    quotedOptionNames: definition.quotedOptionNames,
   });
 
-  let tokens: Record<string, TokenType>;
+  let jdlTokens: JDLTokens;
   let lexer: Lexer;
   let parser: JDLParser;
+  const getJDLTokens = () => {
+    if (!jdlTokens) {
+      const applicationTokens = buildApplicationTokens(definition.tokenConfigs);
+      const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
+      jdlTokens = buildTokens({ applicationTokens, deploymentTokens });
+
+      // The application config keys are tokens of their lexer mode, checked against the validations by name.
+      const applicationConfigTokens = Object.fromEntries(applicationTokens.tokens.map(token => [token.name, token]));
+      checkConfigKeys({ ...jdlTokens.tokens, ...applicationConfigTokens }, Object.keys(propertyValidations));
+    }
+    return jdlTokens;
+  };
 
   return {
     get tokens(): Record<string, TokenType> {
-      if (!tokens) {
-        const applicationTokens = buildApplicationTokens(newDefinition.tokenConfigs);
-        const deploymentTokens = buildDeploymentTokens(deploymentDefinition.tokenConfigs);
-        tokens = buildTokens({ applicationTokens, deploymentTokens });
-
-        checkConfigKeys(tokens, Object.keys(propertyValidations));
-      }
-      return tokens;
+      return getJDLTokens().tokens;
     },
     get lexer(): Lexer {
       if (!lexer) {
-        lexer = createJDLLexer(this.tokens);
+        lexer = createJDLLexer(getJDLTokens());
       }
       return lexer;
     },
@@ -99,7 +78,7 @@ export const createRuntime = (
         parser = new JDLParser(this.tokens);
         parser.parse();
         const rules = parser.getGAstProductions();
-        checkTokens(Object.values(this.tokens), Object.values(rules));
+        checkTokens(allTokens(getJDLTokens()), Object.values(rules));
       }
 
       return parser;

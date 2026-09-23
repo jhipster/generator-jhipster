@@ -18,19 +18,13 @@
  */
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import type {
-  JDLApplicationConfig,
-  JDLApplicationOptionType,
-  JDLApplicationOptionTypeValue,
-  JDLApplicationOptionValue,
-} from '../jdl/core/types/parsing.ts';
+import type { JDLApplicationOptionValue } from '../jdl/core/types/parsing.ts';
 
 import authenticationTypes from './authentication-types.ts';
 import buildToolTypes from './build-tool-types.ts';
 import cacheTypes from './cache-types.ts';
 import clientFrameworkTypes from './client-framework-types.ts';
 import databaseTypes from './database-types.ts';
-import { builtInConfigPropsValidations } from './jdl-validator-definition.ts';
 import searchEngineTypes from './search-engine-types.ts';
 import serviceDiscoveryTypes from './service-discovery-types.ts';
 import testFrameworkTypes from './test-framework-types.ts';
@@ -59,13 +53,6 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const { SPRING_WEBSOCKET } = websocketTypes;
 
 const NO_WEBSOCKET = websocketTypes.NO;
-
-const ApplicationOptionTypes: Record<string, JDLApplicationOptionTypeValue> = {
-  STRING: 'string',
-  INTEGER: 'integer',
-  BOOLEAN: 'boolean',
-  LIST: 'list',
-};
 
 const optionNames = {
   APPLICATION_TYPE: 'applicationType',
@@ -219,30 +206,8 @@ export const jhipsterOptionValues = {
   [optionNames.GRADLE_DEVELOCITY_HOST]: '',
 } as const satisfies Record<string, JDLApplicationOptionValue>;
 
-export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
-  [optionNames.BLUEPRINT]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.BLUEPRINTS]: { type: ApplicationOptionTypes.LIST },
-  // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
-  [optionNames.JHIPSTER_VERSION]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.SERVICE_DISCOVERY_TYPE]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.SKIP_CLIENT]: { type: ApplicationOptionTypes.BOOLEAN },
-  [optionNames.SKIP_SERVER]: { type: ApplicationOptionTypes.BOOLEAN },
-};
-
-export const jhipsterQuotedOptionNames: string[] = [optionNames.JHIPSTER_VERSION];
-
-export const builtInJDLApplicationConfig: JDLApplicationConfig = {
-  optionsTypes: jhipsterOptionTypes,
-  // Don't validate built-in options.
-  optionsValues: {},
-  quotedOptionNames: jhipsterQuotedOptionNames,
-  validatorConfig: builtInConfigPropsValidations,
-  tokenConfigs: [],
-};
-
 export { optionNames as OptionNames };
 export default {
   OptionNames: optionNames,
   OptionValues: jhipsterOptionValues,
-  QuotedOptionNames: jhipsterQuotedOptionNames,
 };

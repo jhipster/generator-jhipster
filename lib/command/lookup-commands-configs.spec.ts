@@ -37,12 +37,15 @@ describe('jdl options', () => {
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
+  "jhipsterVersion",
   "jhiPrefix",
   "entitySuffix",
   "dtoSuffix",
   "testFrameworks",
+  "blueprints",
   "nodePackageManager",
   "creationTimestamp",
+  "blueprint",
   "removeNeedles",
   "buildTool",
   "clientFramework",
@@ -53,11 +56,14 @@ describe('jdl options', () => {
   "withAdminUi",
   "clientTheme",
   "clientThemeVariant",
+  "skipClient",
+  "skipServer",
   "authenticationType",
   "skipUserManagement",
   "applicationType",
   "serverPort",
   "gatewayServerPort",
+  "serviceDiscoveryType",
   "jwtSecretKey",
   "enableGradleDevelocity",
   "gradleDevelocityHost",
@@ -117,6 +123,9 @@ describe('jdl options', () => {
           'serverPort',
           'jwtSecretKey',
           'baseName',
+          'blueprints',
+          'blueprint',
+          'jhipsterVersion',
         ].includes(optionName)
       ) {
         // Option has no enumerable choices (free-form name / list); manually tested elsewhere.

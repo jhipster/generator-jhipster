@@ -19,37 +19,22 @@
 
 import { type ITokenConfig, Lexer } from 'chevrotain';
 
-import applicationOptions from '../../../../jhipster/application-options.ts';
-import { KEYWORD, UNARY_OPTION } from '../../parsing/lexer/shared-tokens.ts';
 import createTokenFromConfig from '../../parsing/lexer/token-creator.ts';
 import type { JDLTokenConfig } from '../../types/parsing.ts';
 
-const { OptionNames } = applicationOptions;
-
-const { BLUEPRINT, BLUEPRINTS, JHIPSTER_VERSION, SKIP_CLIENT, SKIP_SERVER } = OptionNames;
-
 export const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
 
+/**
+ * The application config tokens from the token configs of the application JDL definitions, which come from the
+ * generators' commands: no application option is built in any more.
+ */
 export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
-  const applicationConfigTokens: Pick<ITokenConfig, 'name' | 'pattern'>[] = [
-    { name: 'BLUEPRINTS', pattern: BLUEPRINTS },
-    { name: 'BLUEPRINT', pattern: BLUEPRINT },
-    // DEPRECATED: stamped by the generator, not a user option. TODO drop for v10.
-    { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
-    { name: 'SKIP_CLIENT', pattern: SKIP_CLIENT },
-    { name: 'SKIP_SERVER', pattern: SKIP_SERVER },
-    ...tokenConfigs,
-  ];
   return {
     categoryToken: applicationConfigCategoryToken,
     tokens: [
       applicationConfigCategoryToken,
-      ...applicationConfigTokens.map((tokenConfig: ITokenConfig) => {
+      ...tokenConfigs.map((tokenConfig: ITokenConfig) => {
         const categories = [applicationConfigCategoryToken];
-        // This is actually needed as the skipClient & skipServer options are both entity & app options...
-        if (['SKIP_CLIENT', 'SKIP_SERVER'].includes(tokenConfig.name)) {
-          categories.push(KEYWORD, UNARY_OPTION);
-        }
         // Copied rather than stamped onto the caller's config: the token configs come from a memoized application
         // definition that is shared by every runtime built from it.
         return createTokenFromConfig({ ...tokenConfig, categories });
