@@ -46,6 +46,38 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
       }))
       .filter(({ observedField }) => observedField);
     const noCascadeOtherEntities = this._.uniq(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity));
+    // A related entity is created for each relationship, and createEntity may already have persisted one of the same
+    // class: the unique fields of the created ones are randomized so that none of them collide. The id is randomized
+    // too when it is not generated and the same entity is related more than once.
+    const noCascadeFakeValues = new Map(
+      noCascadeRelationships.map(({ relationship }) => {
+        const { otherEntity } = relationship;
+        const relatedMoreThanOnce = noCascadeRelationships.filter(other => other.relationship.otherEntity === otherEntity).length > 1;
+        const fakedFields = [
+          ...relatedMoreThanOnce ? otherEntity.primaryKey.fields.filter(field => !field.autoGenerate) : [],
+          ...otherEntity.fields.filter(field => field.unique && !field.id),
+        ];
+        return [
+          relationship,
+          fakedFields
+            .map(field => ({
+              property: field.propertyConsumerName,
+              value:
+              field.fieldTypeString || field.blobContentTypeText
+                ? `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`
+                : field.fieldTypeUUID
+                ? `UUID.fromString("${faker.string.uuid()}")`
+                : field.fieldTypeLong
+                ? `${faker.number.int({ min: 1, max: 1000000 })}L`
+                : field.fieldTypeInteger
+                ? `${faker.number.int({ min: 1, max: 1000000 })}`
+                : undefined,
+            }))
+            .filter(fake => fake.value),
+        ];
+      }),
+    );
+    const noCascadeFakesUseUuid = [...noCascadeFakeValues.values()].flat().some(fake => fake.value.startsWith('UUID'));
     const hasUserRepository
       = filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
       || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
@@ -225,7 +257,7 @@ import java.util.Base64;
 import java.util.stream.Stream;
 <%_ } _%>
 import java.util.List;
-<%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
+<%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID || noCascadeFakesUseUuid) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
@@ -1737,6 +1769,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         // Persist the related entities and a <%- entityInstance %> related to them
     <%_ for (const { relationship, observedField } of noCascadeRelationships) { _%>
         var <%- relatedVariable(relationship) %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- (databaseTypeSql && relationship.otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
+      <%_ for (const { property, value } of noCascadeFakeValues.get(relationship)) { _%>
+        <%- relatedVariable(relationship) %>.<%- property %>(<%- value %>);
+      <%_ } _%>
       <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- relatedVariable(relationship) %>);
       <%_ } else if (!databaseTypeSql) { _%>
@@ -1807,7 +1842,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ for (const { relationship, observedField } of noCascadeRelationships) { _%>
         assertThat(<%- relatedRepository(relationship) %>.findById(<%- relatedId(relationship) %>)<%- reactive ? '.block()' : '.orElseThrow()' %>.<%- observedField.propertySupplierName %>()).isEqualTo(<%- relatedVariable(relationship) %>Value);
     <%_ } _%>
-    <%_ if (!databaseTypeSql) { _%>
+    <%_ if (!databaseTypeSql || reactive) { _%>
+        // The entities the test created are removed; the ones of a transactional test go with its rollback.
+      <%_ if (databaseTypeSql) { _%>
+        <%- entityInstance %>Repository.delete(inserted<%- persistClass %>)<%- callBlock %>;
+        inserted<%- persistClass %> = null;
+      <%_ } _%>
       <%_ for (const { relationship } of noCascadeRelationships) { _%>
         <%- relatedRepository(relationship) %>.delete(<%- relatedVariable(relationship) %>)<%- callBlock %>;
       <%_ } _%>
