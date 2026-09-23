@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { getDefaultRuntime } from '../runtime.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 
 import { parse } from './api.ts';
 

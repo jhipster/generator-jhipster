@@ -20,6 +20,7 @@
 import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { createJDLApplication } from '../../core/__test-support__/index.ts';
 import { relationshipTypes } from '../../core/basic-types/index.ts';
@@ -31,7 +32,6 @@ import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import { getDefaultRuntime } from '../../core/runtime.ts';
 import logger from '../../core/utils/objects/logger.ts';
 
 import { convert } from './jdl-with-applications-to-json-converter.ts';

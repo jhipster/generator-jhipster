@@ -20,9 +20,6 @@
 import { type IMultiModeLexerDefinition, type ITokenConfig, Lexer, type TokenType } from 'chevrotain';
 import { uniq } from 'lodash-es';
 
-import { relationshipOptions } from '../../built-in-options/index.ts';
-
-import OptionTokens from './option-tokens.ts';
 import RelationshipTypeTokens from './relationship-type-tokens.ts';
 import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.ts';
 import createTokenFromConfigCreator from './token-creator.ts';
@@ -50,11 +47,13 @@ const { DEFAULT: DEFAULT_MODE, APPLICATION_CONFIG: APPLICATION_CONFIG_MODE, DEPL
  * `deployment` and left at the `}` closing the block, so that the two grammars are independent: a keyword of both is
  * a token of each, and neither needs to know what the other declares.
  */
-export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentTokens: TokenParam }): JDLTokens => {
-  const { applicationTokens, deploymentTokens } = tokens;
+export const buildTokens = (tokens: {
+  applicationTokens: TokenParam;
+  deploymentTokens: TokenParam;
+  entityTokens: TokenParam;
+}): JDLTokens => {
+  const { applicationTokens, deploymentTokens, entityTokens } = tokens;
   const _tokens: Record<string, TokenType> = {};
-
-  const { BUILT_IN_ENTITY } = relationshipOptions;
 
   function createTokenFromConfig(config: ITokenConfig) {
     const newToken = createTokenFromConfigCreator(config);
@@ -105,7 +104,6 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
   createTokenFromConfig({ name: 'ENUM', pattern: 'enum' });
   // Relationship-related
   createTokenFromConfig({ name: 'RELATIONSHIP', pattern: 'relationship' });
-  createTokenFromConfig({ name: 'BUILT_IN_ENTITY', pattern: BUILT_IN_ENTITY });
 
   // Category For the relationship type key names
   RelationshipTypeTokens.tokens.forEach(token => {
@@ -114,8 +112,13 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
 
   createTokenFromConfig({ name: 'STAR', pattern: '*' });
 
-  // Options
-  OptionTokens.tokens.forEach(token => {
+  // Option statements
+  createTokenFromConfig({ name: 'WITH', pattern: 'with' });
+  createTokenFromConfig({ name: 'EXCEPT', pattern: 'except' });
+  createTokenFromConfig({ name: 'USE', pattern: 'use' });
+  createTokenFromConfig({ name: 'FOR', pattern: 'for' });
+  // The option keywords of the entity and relationship statements come from the entity JDL definitions.
+  entityTokens.tokens.forEach(token => {
     _tokens[token.name] = token;
   });
 
@@ -158,7 +161,11 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
     NAME,
   };
   // The categories the parser consumes the keys of a block by; the keys themselves are tokens of their mode.
-  const categoryTokens = { CONFIG_KEY: applicationTokens.categoryToken, DEPLOYMENT_KEY: deploymentTokens.categoryToken };
+  const categoryTokens = {
+    CONFIG_KEY: applicationTokens.categoryToken,
+    DEPLOYMENT_KEY: deploymentTokens.categoryToken,
+    RELATIONSHIP_OPTION: entityTokens.categoryToken,
+  };
 
   // What a config or a deployment block holds besides its keys: the values, and the punctuation around them.
   const blockTokens = [

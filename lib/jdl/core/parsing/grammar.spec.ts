@@ -20,15 +20,16 @@
 import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
-import { getDefaultJDLApplicationConfig } from '../../../jdl-config/jhipster-jdl-config.ts';
+import { getDefaultJDLEntityConfig } from '../../../jdl-config/jdl-entity-config.ts';
+import { getDefaultJDLRelationshipConfig } from '../../../jdl-config/jdl-relationship-config.ts';
+import { createJDLRuntime, getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.ts';
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
-import { createRuntime } from '../runtime.ts';
 import type { ParsedJDLApplications, ParsedJDLOption } from '../types/parsed.ts';
 import logger from '../utils/objects/logger.ts';
 
-const runtime = createRuntime(getDefaultJDLApplicationConfig());
+const runtime = getDefaultRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;
@@ -37,7 +38,11 @@ const {
 } = validations;
 const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = unaryOptions;
 
-const { Options, Values, OptionValues } = binaryOptions;
+const { Options, Values } = binaryOptions;
+// The values a `use` statement accepts: every binary option value but `no`.
+const useValues = Object.values(getDefaultJDLEntityConfig().configs)
+  .flatMap(option => option.choices ?? [])
+  .filter(value => value !== 'no');
 
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX } = Options;
 
@@ -1819,6 +1824,60 @@ entity A {
       });
     });
   });
+  describe('when parsing the deprecated paginate keyword', () => {
+    let warnSpy: ReturnType<typeof esmocha.spyOn>;
+    let parsedOptions: ParsedJDLApplications['options'];
+
+    before(() => {
+      warnSpy = esmocha.spyOn(logger, 'warn');
+      parsedOptions = parseFromContent('paginate A with pagination').options;
+    });
+
+    after(() => {
+      warnSpy.mockRestore();
+    });
+
+    it('should parse it as the pagination option', () => {
+      expect(parsedOptions).toEqual({ pagination: { pagination: { list: ['A'], excluded: [] } } });
+    });
+    it('should warn', () => {
+      expect(warnSpy).toHaveBeenCalledWith('The paginate option is deprecated, please use pagination instead.');
+    });
+  });
+  describe('when parsing the options of a runtime with entity definitions of its own', () => {
+    let parsed: ParsedJDLApplications;
+
+    before(() => {
+      // The lexer and the parser know no option by themselves: they take them from the entity definitions.
+      const customRuntime = createJDLRuntime({
+        entity: {
+          configs: {
+            ...getDefaultJDLEntityConfig().configs,
+            audited: { jdl: { type: 'unary' } },
+            cache: { choices: ['redis', 'no'], jdl: { type: 'binary' } },
+          },
+        },
+        relationship: { configs: { ...getDefaultJDLRelationshipConfig().configs, cascade: { jdl: { type: 'unary' } } } },
+      });
+      parsed = originalParseFromContent(
+        `entity A
+entity B
+audited A
+cache A with redis
+relationship OneToMany {
+  A{b} to B with cascade
+}`,
+        customRuntime,
+      );
+    });
+
+    it('should parse the unary and binary options', () => {
+      expect(parsed.options).toEqual({ audited: { list: ['A'], excluded: [] }, cache: { redis: { list: ['A'], excluded: [] } } });
+    });
+    it('should parse the relationship option', () => {
+      expect(parsed.relationships[0].options.global).toEqual([{ optionName: 'cascade', type: 'UNARY' }]);
+    });
+  });
   describe('when parsing an option', () => {
     describe('being unary', () => {
       describe('with exclusions', () => {
@@ -1935,7 +1994,7 @@ entity A {
             const value: any = Values[option][key];
 
             before(() => {
-              const content = parseFromContent(`${option === PAGINATION ? 'paginate' : option} A with ${value}`);
+              const content = parseFromContent(`${option} A with ${value}`);
               // @ts-expect-error FIXME
               parsedOption = content.options[option][value];
             });
@@ -2010,7 +2069,7 @@ entity A {
       });
     });
     describe('using the use-form', () => {
-      Object.keys(OptionValues).forEach(optionValue => {
+      useValues.forEach(optionValue => {
         describe(`of ${optionValue}`, () => {
           let parsedOptions: ParsedJDLApplications['useOptions'];
 

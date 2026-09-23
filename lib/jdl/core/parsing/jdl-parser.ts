@@ -344,7 +344,7 @@ export default class JDLParser extends CstParser {
 
   relationshipOption(): CstNode {
     this.RULE('relationshipOption', () => {
-      this.OR([{ ALT: () => this.CONSUME(this.tokens.BUILT_IN_ENTITY) }]);
+      this.CONSUME(this.tokens.RELATIONSHIP_OPTION);
     });
     return noopCst;
   }

@@ -64,19 +64,13 @@ const DefaultValues = {
   [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
-function getOptionName(optionValue: string): JDLOptionName | undefined {
-  return optionNames.find(optionName => (Values as Record<string, Record<string, string>>)[optionName]?.[optionValue]);
+/** The binary option a `use` statement value belongs to, `no` belongs to none. */
+function getOptionNameForValue(optionValue: string): BinaryOptionType | undefined {
+  return optionNames.find(
+    optionName =>
+      optionValue !== 'no' && Object.values((Values as Record<string, Record<string, string>>)[optionName] ?? {}).includes(optionValue),
+  );
 }
-
-const OptionValues = {
-  mapstruct: 'MAPSTRUCT',
-  serviceClass: 'SERVICE_CLASS',
-  serviceImpl: 'SERVICE_IMPL',
-  pagination: 'PAGINATION',
-  'infinite-scroll': 'INFINITE-SCROLL',
-  elasticsearch: 'ELASTICSEARCH',
-  couchbase: 'COUCHBASE',
-} as const;
 
 function forEach(passedFunction: (optionName: BinaryOptionType) => void): void {
   if (!passedFunction) {
@@ -85,27 +79,18 @@ function forEach(passedFunction: (optionName: BinaryOptionType) => void): void {
   optionNames.forEach(optionName => passedFunction(optionName));
 }
 
+/** Whether the option exists with the value: an option without values accepts any. */
 function exists(passedOption: JDLOptionName, passedValue?: any) {
-  return (
-    !(optionNames as string[]).includes(passedOption) ||
-    optionNames.some(
-      option =>
-        passedOption === option &&
-        (passedOption === Options.MICROSERVICE ||
-          passedOption === Options.ANGULAR_SUFFIX ||
-          passedOption === Options.CLIENT_ROOT_FOLDER ||
-          Object.values((Values as Record<string, Record<string, string>>)[option]).includes(passedValue)),
-    )
-  );
+  const values = (Values as Record<string, Record<string, string>>)[passedOption];
+  return !(optionNames as string[]).includes(passedOption) || !values || Object.values(values).includes(passedValue);
 }
 
 export default {
   Options,
   // TODO change the names
   DefaultValues,
-  OptionValues,
   Values,
   exists,
   forEach,
-  getOptionName,
+  getOptionNameForValue,
 };
