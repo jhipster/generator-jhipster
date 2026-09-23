@@ -50,7 +50,7 @@ export function convertApplications(parsedApplications: ParsedJDLApplication[], 
 }
 
 function getEntityOptionsInApplication(parsedApplication: ParsedJDLApplication): AbstractJDLOption[] {
-  return convertOptions(parsedApplication.options, parsedApplication.useOptions || []);
+  return convertOptions(parsedApplication.options, parsedApplication.useOptions ?? []);
 }
 
 /**

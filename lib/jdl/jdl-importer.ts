@@ -76,7 +76,7 @@ export function createImporterFromFiles(files: string[], configuration?: JDLAppl
   }
   const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
   const content = parseFromFiles(files, runtime);
-  return makeJDLImporter(content, configuration || {}, runtime);
+  return makeJDLImporter(content, configuration ?? {}, runtime);
 }
 
 /**
@@ -95,7 +95,7 @@ export function createImporterFromContent(
   }
   const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
   const content = parseFromContent(jdlString, runtime);
-  return makeJDLImporter(content, configuration || {}, runtime);
+  return makeJDLImporter(content, configuration ?? {}, runtime);
 }
 
 export type ApplicationWithEntities = {

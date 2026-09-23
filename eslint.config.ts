@@ -76,6 +76,7 @@ export default defineConfig(
       '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/no-redundant-type-constituents': 'error',
       '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/prefer-nullish-coalescing': ['error', { ignorePrimitives: true }],
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',

@@ -138,7 +138,7 @@ export function replaceTranslations({
       data = {};
       let templateLiteral = false;
       for (const interpolateMatch of interpolateMatches) {
-        let { field, value }: { field?: string; value?: string | number } = interpolateMatch.groups || {};
+        let { field, value }: { field?: string; value?: string | number } = interpolateMatch.groups ?? {};
         if (/^'.*'$/.test(field) || /^".*"$/.test(field)) {
           // unwrap field
           field = field.slice(1, -1);

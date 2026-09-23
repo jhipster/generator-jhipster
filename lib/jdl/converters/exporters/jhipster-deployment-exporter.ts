@@ -63,8 +63,8 @@ function setUpDeploymentStructure(deployment: JDLDeployment) {
 }
 
 function setUpArrayOptions(deployment: Partial<YoRcJHipsterDeploymentContent>) {
-  deployment[GENERATOR_NAME]!.appsFolders = Array.from(deployment[GENERATOR_NAME]?.appsFolders || []);
-  deployment[GENERATOR_NAME]!.clusteredDbApps = Array.from(deployment[GENERATOR_NAME]?.clusteredDbApps || []);
+  deployment[GENERATOR_NAME]!.appsFolders = Array.from(deployment[GENERATOR_NAME]?.appsFolders ?? []);
+  deployment[GENERATOR_NAME]!.clusteredDbApps = Array.from(deployment[GENERATOR_NAME]?.clusteredDbApps ?? []);
   return deployment;
 }
 
