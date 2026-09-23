@@ -56,7 +56,7 @@ describe(`generator - ${generator}`, () => {
         });
       });
       it('should create 1 commit', async () => {
-        const git = runResult.generator.createGit();
+        const git = runResult.generator.createSimpleGit();
         await expect(git.log()).resolves.toMatchObject({
           total: 1,
           latest: { message: expect.stringMatching(/^Initial version of/) },
@@ -122,7 +122,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runJHipsterInApplication(generator).withOptions({ skipGit: false, baseName: 'changed' });
       });
       it('should create a single commit', async () => {
-        const git = runResult.generator.createGit();
+        const git = runResult.generator.createSimpleGit();
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
       });
     });
@@ -132,7 +132,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runJHipsterInApplication(generator).withOptions({ skipGit: false, forceGit: true, baseName: 'changed' });
       });
       it('should create 2 commits', async () => {
-        const git = runResult.generator.createGit();
+        const git = runResult.generator.createSimpleGit();
         await expect(git.log()).resolves.toMatchObject({ total: 2 });
       });
     });
