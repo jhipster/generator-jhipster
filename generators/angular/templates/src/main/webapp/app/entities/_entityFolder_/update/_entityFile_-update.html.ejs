@@ -30,7 +30,8 @@
 
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%- field.fieldName %>.value !== null) {<% } %>
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%- fieldName %>Ref = editForm.get('<%- fieldName %>')!;<% } %>
-  <%_ const labelTooltip = field.documentation && enableTranslation ? ` [ngbTooltip]="'${i18nKeyPrefix}.help.${fieldName}' | translate"` : field.documentation ? ` ngbTooltip="${field.documentation}"` : ''; _%>
+  <%_ const documentationTooltip = enableTranslation ? ` [ngbTooltip]="'${i18nKeyPrefix}.help.${fieldName}' | translate"` : ` ngbTooltip="${field.documentation}"`; _%>
+  <%_ const labelTooltip = field.documentation ? documentationTooltip : ''; _%>
                 <div class="mb-3<%- field.fieldTypeBoolean ? ' form-check' : '' %>">
   <%_ if (field.fieldTypeBoolean) { _%>
                     <input type="<%- field.htmlInputType %>" class="form-check-input" name="<%- fieldName %>" id="field_<%- fieldName %>"
