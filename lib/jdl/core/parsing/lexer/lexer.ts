@@ -17,42 +17,25 @@
  * limitations under the License.
  */
 
-import { type IMultiModeLexerDefinition, type ITokenConfig, Lexer, type TokenType } from 'chevrotain';
-import { uniq } from 'lodash-es';
+import { type ITokenConfig, Lexer, type TokenType } from 'chevrotain';
 
 import RelationshipTypeTokens from './relationship-type-tokens.ts';
-import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.ts';
+import { IDENTIFIER, NAME } from './shared-tokens.ts';
 import createTokenFromConfigCreator from './token-creator.ts';
 import ValidationTokens from './validation-tokens.ts';
-
-type TokenParam = { categoryToken: TokenType; tokens: TokenType[] };
 
 export type JDLTokens = {
   /** The tokens the parser refers to by name. */
   tokens: Record<string, TokenType>;
-  /** The lexer modes: the application config and the deployment blocks lex their own keys. */
-  modes: IMultiModeLexerDefinition;
+  /** The tokens in lexing order. */
+  list: TokenType[];
 };
 
-/** The lexer modes: the default one, the one inside `config { }` and the one inside `deployment { }`. */
-export const LexerModes = {
-  DEFAULT: 'default',
-  APPLICATION_CONFIG: 'application_config',
-  DEPLOYMENT: 'deployment',
-} as const;
-const { DEFAULT: DEFAULT_MODE, APPLICATION_CONFIG: APPLICATION_CONFIG_MODE, DEPLOYMENT: DEPLOYMENT_MODE } = LexerModes;
-
 /**
- * The application config keys and the deployment keys are lexed in modes of their own, entered at `config` and
- * `deployment` and left at the `}` closing the block, so that the two grammars are independent: a keyword of both is
- * a token of each, and neither needs to know what the other declares.
+ * The tokens of the jdl: its structure only. The lexer knows no option: the config and deployment keys, the entity and
+ * relationship option keywords are names, checked against the definitions once parsed.
  */
-export const buildTokens = (tokens: {
-  applicationTokens: TokenParam;
-  deploymentTokens: TokenParam;
-  entityTokens: TokenParam;
-}): JDLTokens => {
-  const { applicationTokens, deploymentTokens, entityTokens } = tokens;
+export const buildTokens = (): JDLTokens => {
   const _tokens: Record<string, TokenType> = {};
 
   function createTokenFromConfig(config: ITokenConfig) {
@@ -67,7 +50,7 @@ export const buildTokens = (tokens: {
     pattern: Lexer.NA,
   });
 
-  const WHITESPACE = createTokenFromConfig({
+  createTokenFromConfig({
     name: 'WHITESPACE',
     pattern: /[\n\t\r \u2028\u2029]+/,
     // Whitespace insensitivity for the win.
@@ -75,13 +58,13 @@ export const buildTokens = (tokens: {
   });
 
   // Comments
-  const JAVADOC = createTokenFromConfig({
+  createTokenFromConfig({
     name: 'JAVADOC',
     pattern: /\/\*\*([\s\S]*?)\*\//,
   });
 
   // Comments
-  const BLOCK_COMMENT = createTokenFromConfig({
+  createTokenFromConfig({
     name: 'BLOCK_COMMENT',
     pattern: /\/\*([\s\S]*?)\*\//,
     group: Lexer.SKIPPED,
@@ -89,16 +72,15 @@ export const buildTokens = (tokens: {
 
   // Constants
   // Application constants
-  createTokenFromConfig({ name: 'CONFIG', pattern: 'config', push_mode: APPLICATION_CONFIG_MODE });
+  createTokenFromConfig({ name: 'CONFIG', pattern: 'config' });
   createTokenFromConfig({ name: 'ENTITIES', pattern: 'entities' });
 
-  // application must appear AFTER "applicationType" due to shorter common prefix.
   createTokenFromConfig({ name: 'APPLICATION', pattern: 'application' });
-  createTokenFromConfig({ name: 'DEPLOYMENT', pattern: 'deployment', push_mode: DEPLOYMENT_MODE });
+  createTokenFromConfig({ name: 'DEPLOYMENT', pattern: 'deployment' });
 
   // boolean value constants
-  const TRUE = createTokenFromConfig({ name: 'TRUE', pattern: 'true', categories: [BOOLEAN] });
-  const FALSE = createTokenFromConfig({ name: 'FALSE', pattern: 'false', categories: [BOOLEAN] });
+  createTokenFromConfig({ name: 'TRUE', pattern: 'true', categories: [BOOLEAN] });
+  createTokenFromConfig({ name: 'FALSE', pattern: 'false', categories: [BOOLEAN] });
   // Entity constants
   createTokenFromConfig({ name: 'ENTITY', pattern: 'entity' });
   createTokenFromConfig({ name: 'ENUM', pattern: 'enum' });
@@ -117,10 +99,6 @@ export const buildTokens = (tokens: {
   createTokenFromConfig({ name: 'EXCEPT', pattern: 'except' });
   createTokenFromConfig({ name: 'USE', pattern: 'use' });
   createTokenFromConfig({ name: 'FOR', pattern: 'for' });
-  // The option keywords of the entity and relationship statements come from the entity JDL definitions.
-  entityTokens.tokens.forEach(token => {
-    _tokens[token.name] = token;
-  });
 
   // validations
   ValidationTokens.tokens.forEach(token => {
@@ -128,85 +106,40 @@ export const buildTokens = (tokens: {
   });
 
   createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\// });
-  const DECIMAL = createTokenFromConfig({ name: 'DECIMAL', pattern: /-?\d+\.\d+/ });
-  const INTEGER = createTokenFromConfig({ name: 'INTEGER', pattern: /-?\d+/ });
+  createTokenFromConfig({ name: 'DECIMAL', pattern: /-?\d+\.\d+/ });
+  createTokenFromConfig({ name: 'INTEGER', pattern: /-?\d+/ });
   // A backslash is a literal character, except that `\"` does not close the literal, e.g. "java(\"a\")".
   // The content is kept as written.
-  const STRING = createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"\\]|\\"|\\)*"/ });
+  createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"\\]|\\"|\\)*"/ });
 
   // punctuation
-  const LPAREN = createTokenFromConfig({ name: 'LPAREN', pattern: '(' });
-  const RPAREN = createTokenFromConfig({ name: 'RPAREN', pattern: ')' });
-  const LCURLY = createTokenFromConfig({ name: 'LCURLY', pattern: '{' });
-  const RCURLY = createTokenFromConfig({ name: 'RCURLY', pattern: '}' });
-  const LSQUARE = createTokenFromConfig({ name: 'LSQUARE', pattern: '[' });
-  const RSQUARE = createTokenFromConfig({ name: 'RSQUARE', pattern: ']' });
-  const COMMA = createTokenFromConfig({ name: 'COMMA', pattern: ',' });
-  const COMMA_WITHOUT_NEWLINE = createTokenFromConfig({ name: 'COMMA_WITHOUT_NEWLINE', pattern: /,[^\n\r]/ });
+  createTokenFromConfig({ name: 'LPAREN', pattern: '(' });
+  createTokenFromConfig({ name: 'RPAREN', pattern: ')' });
+  createTokenFromConfig({ name: 'LCURLY', pattern: '{' });
+  createTokenFromConfig({ name: 'RCURLY', pattern: '}' });
+  createTokenFromConfig({ name: 'LSQUARE', pattern: '[' });
+  createTokenFromConfig({ name: 'RSQUARE', pattern: ']' });
+  createTokenFromConfig({ name: 'COMMA', pattern: ',' });
+  createTokenFromConfig({ name: 'COMMA_WITHOUT_NEWLINE', pattern: /,[^\n\r]/ });
   createTokenFromConfig({ name: 'EQUALS', pattern: '=' });
-  const DOT = createTokenFromConfig({ name: 'DOT', pattern: '.' });
+  createTokenFromConfig({ name: 'DOT', pattern: '.' });
 
   createTokenFromConfig({ name: 'TO', pattern: 'to' });
 
   // annotations
   createTokenFromConfig({ name: 'AT', pattern: '@' });
 
-  // The `}` closing a config or a deployment block leaves its mode; the parser consumes it as a RCURLY.
-  const BLOCK_RCURLY = createTokenFromConfigCreator({ name: 'BLOCK_RCURLY', pattern: '}', pop_mode: true, categories: [RCURLY] });
+  // Imperative the "IDENTIFIER" token will be added after all the keywords to resolve keywords vs identifier conflict.
+  _tokens.NAME = NAME;
+  _tokens.IDENTIFIER = IDENTIFIER;
 
-  const typedTokens = {
-    UNARY_OPTION,
-    BINARY_OPTION,
-    // Imperative the "NAME" token will be added after all the keywords to resolve keywords vs identifier conflict.
-    NAME,
-  };
-  // The categories the parser consumes the keys of a block by; the keys themselves are tokens of their mode.
-  const categoryTokens = {
-    CONFIG_KEY: applicationTokens.categoryToken,
-    DEPLOYMENT_KEY: deploymentTokens.categoryToken,
-    RELATIONSHIP_OPTION: entityTokens.categoryToken,
-  };
-
-  // What a config or a deployment block holds besides its keys: the values, and the punctuation around them.
-  const blockTokens = [
-    WHITESPACE,
-    JAVADOC,
-    BLOCK_COMMENT,
-    BOOLEAN,
-    TRUE,
-    FALSE,
-    DECIMAL,
-    INTEGER,
-    STRING,
-    LPAREN,
-    RPAREN,
-    LCURLY,
-    BLOCK_RCURLY,
-    LSQUARE,
-    RSQUARE,
-    COMMA,
-    COMMA_WITHOUT_NEWLINE,
-    DOT,
-    NAME,
-  ];
-
-  return {
-    tokens: { ..._tokens, ...typedTokens, ...categoryTokens },
-    modes: {
-      defaultMode: DEFAULT_MODE,
-      modes: {
-        [DEFAULT_MODE]: uniq([...Object.values(_tokens), ...Object.values(typedTokens)]),
-        [APPLICATION_CONFIG_MODE]: [...applicationTokens.tokens, ...blockTokens],
-        [DEPLOYMENT_MODE]: [...deploymentTokens.tokens, ...blockTokens],
-      },
-    },
-  };
+  return { tokens: _tokens, list: Object.values(_tokens) };
 };
 
-/** Every token of the lexer, whatever the mode. */
-export const allTokens = ({ modes }: JDLTokens): TokenType[] => uniq(Object.values(modes.modes).flat());
+/** Every token of the lexer. */
+export const allTokens = ({ list }: JDLTokens): TokenType[] => list;
 
 // with 'ensureOptimizations' the lexer initialization will throw a descriptive error
 // instead of silently reverting to an unoptimized algorithm.
 // This will avoid performance regressions.
-export const createJDLLexer = ({ modes }: JDLTokens) => new Lexer(modes, { ensureOptimizations: true });
+export const createJDLLexer = ({ list }: JDLTokens) => new Lexer(list, { ensureOptimizations: true });

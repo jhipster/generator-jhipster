@@ -92,7 +92,7 @@ describe('jdl - JDLReader', () => {
         it('should fail', () => {
           expect(() => {
             parseFromFiles(['test_file.jdl']);
-          }).toThrow(/but found: 'enity'/);
+          }).toThrow(/^Unknown option: enity\.\n\tat line: 1, column: 1$/);
         });
       });
       describe('when reading a single JDL file', () => {

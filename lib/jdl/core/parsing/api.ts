@@ -56,10 +56,24 @@ export function getCst(input: string, runtime: JDLRuntime, options?: ParseOption
   return cst;
 }
 
+/** What a statement may be, by the rule it is parsed in: the list chevrotain expects is a wall of token sequences. */
+const EXPECTED_STATEMENTS: Record<string, string> = {
+  prog: 'an entity, an enum, a relationship, an application, a deployment, a use statement, a constant or an option statement',
+  applicationSubDeclaration: 'a config block, an entities statement, a use statement or an option statement',
+};
+
 function throwParserError(errors: IRecognitionException[]) {
   const parserError = errors[0];
   if (parserError.name === 'MismatchedTokenException') {
     throwErrorAboutInvalidToken(parserError);
+  }
+  const expectedStatements = EXPECTED_STATEMENTS[parserError.context.ruleStack.at(-1)!];
+  // A statement starting with a name that is no keyword: a misspelled keyword, or an option statement opening a block.
+  if (parserError.name === 'NoViableAltException' && expectedStatements && parserError.token.tokenType.name === 'IDENTIFIER') {
+    const { token } = parserError;
+    throw new Error(
+      `Unknown statement '${token.image}', expected ${expectedStatements}.\n\tat line: ${token.startLine}, column: ${token.startColumn}`,
+    );
   }
   const errorMessage = `${parserError.name}: ${parserError.message}`;
   const { token } = parserError;

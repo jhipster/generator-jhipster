@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import { type CstElement, type CstNode, type ICstVisitor, type IToken, type TokenType, tokenMatcher as matchesToken } from 'chevrotain';
-import { first, flatten, includes } from 'lodash-es';
+import { first, flatten, includes, snakeCase, upperCase } from 'lodash-es';
 
 import { ALPHANUMERIC } from '../built-in-options/validation-patterns.ts';
-import type { JDLValidatorOptionType } from '../types/parsing.ts';
+import type { JDLOptionsDefinition, JDLValidatorOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
@@ -41,11 +41,19 @@ interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
   relationshipSide(context: any): void;
   enumDeclaration(context: any): void;
   enumPropList(context: any): void;
-  entityList(context: any): void;
+  optionDeclaration(context: any): void;
+  relationshipOption(context: any): void;
   exclusion(context: any): void;
 }
 
 type JDLCstVisitor<IN, OUT> = new () => JDLCstVisitorInstance<IN, OUT>;
+
+/** The validations are keyed by the option name in upper snake case. */
+const validationKey = (optionName: string) => upperCase(snakeCase(optionName));
+
+/** The option a statement keyword names: by its name, its keyword or a deprecated keyword. */
+const optionDefinition = (configs: JDLOptionsDefinition['configs'], keyword: string) =>
+  Object.entries(configs).find(([name, { jdl }]) => (jdl.keyword ?? name) === keyword || jdl.deprecatedKeywords?.includes(keyword))?.[1];
 
 export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDLRuntime) {
   const { parser } = runtime;
@@ -177,10 +185,10 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
     }
 
     checkConfigPropSyntax(key: IToken, value: CstElement) {
-      const propertyName = key.tokenType.name;
-      const validation = runtime.propertyValidations[propertyName];
+      const validation = runtime.propertyValidations[validationKey(key.image)];
       if (!validation) {
-        throw Error(`Got an invalid application config property: '${propertyName}'.`);
+        this.errors.push({ message: `Unknown application option: ${key.image}.`, token: key });
+        return;
       }
 
       if (this.checkExpectedValueType(validation.type, value) && validation.pattern && 'children' in value && value.children) {
@@ -194,10 +202,10 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
     }
 
     checkDeploymentConfigPropSyntax(key: IToken, value: CstElement) {
-      const propertyName = key.tokenType.name;
-      const validation = runtime.deploymentPropertyValidations[propertyName];
+      const validation = runtime.deploymentPropertyValidations[validationKey(key.image)];
       if (!validation) {
-        throw Error(`Got an invalid deployment config property: '${propertyName}'.`);
+        this.errors.push({ message: `Unknown deployment option: ${key.image}.`, token: key });
+        return;
       }
 
       if (
@@ -269,18 +277,22 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       });
     }
 
-    entityList(context: Record<'NAME' | 'method' | 'methodPath', IToken[]>) {
-      super.entityList(context);
-      if (context.NAME) {
-        context.NAME.forEach(nameToken => {
-          // we don't want this validated as it's an alias for '*'
-          if (nameToken.image === 'all') {
-            return;
-          }
-          this.checkNameSyntax(nameToken, ENTITY_NAME_PATTERN, 'entity');
+    optionDeclaration(context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
+      super.optionDeclaration(context);
+      const option = context.option[0];
+      const binary = Boolean(context.method ?? context.methodPath);
+      const definition = optionDefinition(runtime.entityDefinition.configs, option.image);
+      if (!definition) {
+        this.errors.push({ message: `Unknown option: ${option.image}.`, token: option });
+      } else if ((definition.jdl.type === 'binary') !== binary) {
+        this.errors.push({
+          message:
+            binary ?
+              `The ${option.image} option takes no value.`
+            : `The ${option.image} option needs a value: ${option.image} <entities> with <value>.`,
+          token: option,
         });
       }
-
       if (context.method) {
         this.checkNameSyntax(context.method[0], METHOD_NAME_PATTERN, 'method');
       }
@@ -288,7 +300,13 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
         this.checkNameSyntax(context.methodPath[0], PATH_PATTERN, 'methodPath');
       }
     }
-
+    relationshipOption(context: Record<'NAME', IToken[]>) {
+      super.relationshipOption(context);
+      const option = context.NAME[0];
+      if (!optionDefinition(runtime.relationshipDefinition.configs, option.image)) {
+        this.errors.push({ message: `Unknown relationship option: ${option.image}.`, token: option });
+      }
+    }
     override exclusion(context: Record<'NAME', IToken[]>) {
       super.exclusion(context);
       context.NAME.forEach(nameToken => {
@@ -308,8 +326,8 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       }
     }
 
-    applicationConfigDeclaration(context: Record<'CONFIG_KEY', IToken[]> & Record<'configValue', CstNode[]>) {
-      this.visit(context.configValue, context.CONFIG_KEY[0]);
+    applicationConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'configValue', CstNode[]>) {
+      this.visit(context.configValue, context.NAME[0]);
     }
 
     configValue(context: Record<string, CstElement[]>, configKey: IToken) {
@@ -317,8 +335,8 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       this.checkConfigPropSyntax(configKey, configValue!);
     }
 
-    deploymentConfigDeclaration(context: Record<'DEPLOYMENT_KEY', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
-      this.visit(context.deploymentConfigValue, context.DEPLOYMENT_KEY[0]);
+    deploymentConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
+      this.visit(context.deploymentConfigValue, context.NAME[0]);
     }
 
     deploymentConfigValue(context: Record<string, CstElement[]>, configKey: IToken) {

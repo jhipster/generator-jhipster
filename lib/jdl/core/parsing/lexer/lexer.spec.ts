@@ -19,9 +19,9 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { createJDLRuntime, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
+import { tokenMatcher } from 'chevrotain';
 
-import { LexerModes } from './lexer.ts';
+import { getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 
 const { lexer: JDLLexer } = getDefaultRuntime();
 
@@ -65,31 +65,26 @@ describe('jdl - JDLLexer', () => {
     });
   });
 
-  describe('when a keyword is a prefix of another keyword', () => {
-    // Application config keys are lexed inside `config { }`, in the lexer mode of the application config.
-    it('should lex the longer keyword as its own token', () => {
-      const { tokens, errors } = JDLLexer.tokenize('microfrontends microfrontend', LexerModes.APPLICATION_CONFIG);
+  describe('when a keyword is a prefix of a name', () => {
+    it('should lex the name as an identifier', () => {
+      // Keywords match whole words only, so a keyword does not take the start of a longer name.
+      const { tokens, errors } = JDLLexer.tokenize('entityName entity enumeration');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['MICROFRONTENDS', 'MICROFRONTEND']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['IDENTIFIER', 'ENTITY', 'IDENTIFIER']);
     });
 
-    it('should lex a keyword declared after a shorter keyword it starts with', () => {
-      // Keywords match whole words only, so the shorter one registered first does not take the start of the longer one.
-      const runtime = createJDLRuntime({
-        application: {
-          validatorConfig: { FOO: { type: 'BOOLEAN' }, FOO_BAR: { type: 'BOOLEAN' } },
-          optionsValues: {},
-          optionsTypes: {},
-          quotedOptionNames: [],
-          tokenConfigs: [
-            { name: 'FOO', pattern: 'foo' },
-            { name: 'FOO_BAR', pattern: 'fooBar' },
-          ],
-        },
-      });
-      const { tokens, errors } = runtime.lexer.tokenize('fooBar foo', LexerModes.APPLICATION_CONFIG);
+    it('should lex the options as identifiers', () => {
+      // The lexer knows no option: the option statements and the config keys are names, checked against the definitions.
+      const { tokens, errors } = JDLLexer.tokenize('dto A with mapstruct');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['FOO_BAR', 'FOO']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['IDENTIFIER', 'IDENTIFIER', 'WITH', 'IDENTIFIER']);
+    });
+
+    it('should lex a keyword as a name too', () => {
+      // A keyword is a NAME by category, so it may be a field name, a config key or a value.
+      const { tokens, errors } = JDLLexer.tokenize('entity');
+      expect(errors).toHaveLength(0);
+      expect(tokenMatcher(tokens[0], getDefaultRuntime().tokens.NAME)).toBe(true);
     });
   });
 

@@ -1070,7 +1070,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             }`,
                 jdlRuntime,
               ),
-            ).toThrow("MismatchedTokenException: Found an invalid token 'abc', at line: 4 and column: 29.");
+            ).toThrow(/^NoViableAltException: Expecting: one of these possible Token sequences:/);
           });
         });
         describe('when the prefix begins by a dash', () => {
@@ -2030,7 +2030,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                     jdlRuntime,
                   ),
                 // A deployment block is lexed in a mode of its own, where `@`, an annotation token, is no token at all.
-              ).toThrow(/^unexpected character: ->@<-/);
+              ).toThrow("MismatchedTokenException: Found an invalid token '@'");
             });
           });
           describe('such as not a list', () => {
