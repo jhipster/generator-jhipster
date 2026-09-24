@@ -2,9 +2,9 @@ entity A
 entity B
 
 relationship ManyToOne {
-  A{authority} to Authority
+  A{authority} to Authority with builtInEntity
 }
 
 relationship OneToOne {
-  B{authority} to Authority
+  B{authority} to Authority with builtInEntity
 }

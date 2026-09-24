@@ -8,7 +8,7 @@ entity D {
 }
 
 relationship OneToOne {
-  A to B{a},
+  A{b} to B{a},
   C{d} to D{c}
 }
 
