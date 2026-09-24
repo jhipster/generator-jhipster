@@ -30,7 +30,9 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
-    const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
+    // Couchbase stores a relationship as an id, and its findById projects the joined document over that same field,
+    // so an entity whose relationship is set cannot be read back: https://github.com/jhipster/generator-jhipster/issues
+    const noCascadeRelationships = readOnly || databaseTypeCouchbase || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
       .filter(relationship =>
         relationship.ownerSide
           && !relationship.id
@@ -177,7 +179,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
-<%_ if (updatableEntity && requiredFields.length > 0) { _%>
+<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 <%_ } _%>
@@ -1001,7 +1003,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
-<%_ if (updatableEntity && requiredFields.length > 0) { _%>
+<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
 
     @ParameterizedTest
     @ValueSource(strings = { <%- requiredFields.map(field => `"${field.fieldName}"`).join(', ') %> })<%- transactionalAnnotation %>
