@@ -26,6 +26,8 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
 <%_ } _%>
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
+    // Fields a request may not set to null. Each is patched to null by the same test.
+    const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
     const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
@@ -175,6 +177,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
+<%_ if (updatableEntity && requiredFields.length > 0) { _%>
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+<%_ } _%>
 <%_ if (implementsEagerLoadApis || databaseTypeNeo4j) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -991,39 +997,40 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
         <%_ } _%>
     }
-        <%_ if (updatableEntity) { _%>
+      <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (updatableEntity && requiredFields.length > 0) { _%>
 
-    @Test<%- transactionalAnnotation %>
-    void check<%- field.fieldInJavaBeanMethod %>IsRequiredOnPatch() throws Exception {
+    @ParameterizedTest
+    @ValueSource(strings = { <%- requiredFields.map(field => `"${field.fieldName}"`).join(', ') %> })<%- transactionalAnnotation %>
+    void checkFieldIsRequiredOnPatch(String fieldName) throws Exception {
         // Initialize the database
-          <%_ if (!primaryKey.derived) { _%>
-            <%_ for (const pkField of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+  <%_ if (!primaryKey.derived) { _%>
+    <%_ for (const pkField of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
         <%- persistInstance %>.<%- pkField.propertyConsumerName %>(<%- pkField.fieldJavaValueGenerator %>);
-            <%_ } _%>
-          <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         // Patch the field to null, which fails.
         ObjectNode <%- restInstance %>Patch = om.valueToTree(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>);
-        <%- restInstance %>Patch.putNull("<%- field.fieldName %>");
+        <%- restInstance %>Patch.putNull(fieldName);
 
-          <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(om.writeValueAsBytes(<%- restInstance %>Patch))
             .exchange()
             .expectStatus().isBadRequest();
-          <%_ } else { _%>
+  <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>Patch)))
             .andExpect(status().isBadRequest());
-          <%_ } _%>
-    }
-        <%_ } _%>
-      <%_ } _%>
-    <%_ } _%>
   <%_ } _%>
+    }
 <%_ } _%>
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
 
