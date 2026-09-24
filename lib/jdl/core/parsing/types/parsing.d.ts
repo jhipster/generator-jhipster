@@ -70,18 +70,26 @@ export type JDLOptionsDefinition = {
 };
 
 /**
- * A field validation written with a value, `<name>(<value>)`: `number` takes an integer, a decimal or a constant, `regex`
- * a regular expression. The validations without a value, `required` and `unique`, are keywords of the grammar: a name
+ * A field validation written with a value, `<name>(<value>)`: `number` takes an integer, a decimal or a constant, `integer`
+ * the same but a decimal, `regex` a regular expression. The validations without a value, `required` and `unique`, are keywords of the grammar: a name
  * after the type of a field could be the next field otherwise.
  */
 export type JDLValidationConfig = {
   description?: string;
-  jdl: { value: 'number' | 'regex' };
+  jdl: { value: 'integer' | 'number' | 'regex' };
 };
 
 /** The field validations written with a value, shaped like the option statements. */
 export type JDLValidationsDefinition = {
   configs: Readonly<Record<string, JDLValidationConfig>>;
+};
+
+/** The field types and the validations each one takes. */
+export type JDLFieldTypesDefinition = {
+  /** The validations of a field by its type; a type not listed takes none. */
+  types: Readonly<Record<string, { validations: readonly string[] }>>;
+  /** The validations of a field whose type is an enum of the jdl. */
+  enum: { validations: readonly string[] };
 };
 
 /** Every definition a runtime is built from. */
@@ -96,6 +104,8 @@ export type JDLDefinitions = {
   relationship: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validation: JDLValidationsDefinition;
+  /** The field types and their validations. */
+  fieldTypes: JDLFieldTypesDefinition;
 };
 
 export type JHipsterOptionDefinition = {

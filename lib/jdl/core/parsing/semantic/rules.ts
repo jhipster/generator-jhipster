@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../relationship-types.ts';
 import type { ParsedJDLOptionConfig, ParsedJDLUseOption } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
@@ -153,6 +154,66 @@ export const duplicatedField: JDLSemanticRule = {
     ),
 };
 
+export const validationForFieldType: JDLSemanticRule = {
+  id: 'validation-for-field-type',
+  check: (ast, runtime) => {
+    const { types, enum: enumType } = runtime.fieldTypesDefinition;
+    const enumNames = new Set(ast.enums.map(jdlEnum => jdlEnum.name));
+    return ast.entities.flatMap(entity =>
+      (entity.body ?? []).flatMap(field => {
+        const allowed = enumNames.has(field.type) ? enumType.validations : (types[field.type]?.validations ?? []);
+        return field.validations
+          .filter(validation => !allowed.includes(validation.key))
+          .map(validation => ({
+            message: `The validation '${validation.key}' isn't supported for the type '${field.type}'.`,
+            location: validation.location,
+          }));
+      }),
+    );
+  },
+};
+
+export const decimalValidationValue: JDLSemanticRule = {
+  id: 'decimal-validation-value',
+  check: (ast, runtime) =>
+    ast.entities.flatMap(entity =>
+      (entity.body ?? []).flatMap(field =>
+        field.validations
+          .filter(validation => runtime.validationDefinition.configs[validation.key]?.jdl.value === 'integer')
+          .filter(validation => String(validation.constant ? ast.constants[validation.value as string] : validation.value).includes('.'))
+          .map(validation => ({
+            message: `Decimal values are forbidden for the ${validation.key} validation.`,
+            location: validation.location,
+          })),
+      ),
+    ),
+};
+
+export const requiredReflexiveRelationship: JDLSemanticRule = {
+  id: 'required-reflexive-relationship',
+  check: ast =>
+    ast.relationships
+      .filter(({ from, to }) => from.name.toLowerCase() === to.name.toLowerCase() && (from.required || to.required))
+      .map(relationship => ({
+        message: `Required relationships to the same entity are not supported, for relationship from and to '${relationship.from.name}'.`,
+        location: relationship.location,
+      })),
+};
+
+export const oneToOneDirection: JDLSemanticRule = {
+  id: 'one-to-one-direction',
+  check: ast =>
+    ast.relationships
+      // Without any injected field, both sides get one.
+      .filter(({ cardinality, from, to }) => cardinality === JDL_RELATIONSHIP_ONE_TO_ONE && !from.injectedField && to.injectedField)
+      .map(relationship => ({
+        message:
+          `In the One-to-One relationship from ${relationship.from.name} to ${relationship.to.name}, ` +
+          'the source entity must possess the destination, or you must invert the direction of the relationship.',
+        location: relationship.location,
+      })),
+};
+
 export const semanticRules: JDLSemanticRule[] = [
   undeclaredRelationshipEntity,
   undeclaredApplicationEntity,
@@ -161,4 +222,8 @@ export const semanticRules: JDLSemanticRule[] = [
   duplicatedEntity,
   duplicatedEnum,
   duplicatedField,
+  validationForFieldType,
+  decimalValidationValue,
+  requiredReflexiveRelationship,
+  oneToOneDirection,
 ];

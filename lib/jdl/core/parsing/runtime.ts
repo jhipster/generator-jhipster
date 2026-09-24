@@ -36,6 +36,7 @@ export const createRuntime = ({
   entity: entityDefinition,
   relationship: relationshipDefinition,
   validation: validationDefinition,
+  fieldTypes: fieldTypesDefinition,
 }: JDLDefinitions): JDLRuntime => {
   const propertyValidations: Record<string, JDLValidatorOption> = definition.validatorConfig;
   const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
@@ -82,6 +83,7 @@ export const createRuntime = ({
     entityDefinition,
     relationshipDefinition,
     validationDefinition,
+    fieldTypesDefinition,
     propertyValidations,
     deploymentPropertyValidations,
     deploymentDefinition: jdlDeploymentDefinition,

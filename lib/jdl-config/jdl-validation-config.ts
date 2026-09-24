@@ -22,10 +22,10 @@ const defaultJDLValidationConfig: JDLValidationsDefinition = Object.freeze({
   configs: {
     min: { description: 'Minimum value of a number', jdl: { value: 'number' } },
     max: { description: 'Maximum value of a number', jdl: { value: 'number' } },
-    minlength: { description: 'Minimum length of a string', jdl: { value: 'number' } },
-    maxlength: { description: 'Maximum length of a string', jdl: { value: 'number' } },
-    minbytes: { description: 'Minimum size of a blob', jdl: { value: 'number' } },
-    maxbytes: { description: 'Maximum size of a blob', jdl: { value: 'number' } },
+    minlength: { description: 'Minimum length of a string', jdl: { value: 'integer' } },
+    maxlength: { description: 'Maximum length of a string', jdl: { value: 'integer' } },
+    minbytes: { description: 'Minimum size of a blob', jdl: { value: 'integer' } },
+    maxbytes: { description: 'Maximum size of a blob', jdl: { value: 'integer' } },
     pattern: { description: 'Pattern a string matches', jdl: { value: 'regex' } },
   },
 });

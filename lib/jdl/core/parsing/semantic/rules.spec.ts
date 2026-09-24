@@ -156,6 +156,85 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('validation-for-field-type', () => {
+    it('reports a validation the type does not take, at the validation', () => {
+      expect(check('entity A {\n  age Integer required minlength(3)\n}')).toEqual([
+        {
+          ruleId: 'validation-for-field-type',
+          message: "The validation 'minlength' isn't supported for the type 'Integer'.",
+          at: 'minlength(3)',
+        },
+      ]);
+    });
+    it('takes the validations of an enum field from the enum type', () => {
+      expect(check('enum E { X }\nentity A {\n  e E required unique minlength(3)\n}').map(diagnostic => diagnostic.message)).toEqual([
+        "The validation 'minlength' isn't supported for the type 'E'.",
+      ]);
+    });
+    it('reports any validation of a type that takes none', () => {
+      // A field type not in the definitions takes no validation; ByteBuffer crashed the validator.
+      expect(check('entity A {\n  b ByteBuffer required\n  c Strin required\n}').map(diagnostic => diagnostic.message)).toEqual([
+        "The validation 'required' isn't supported for the type 'ByteBuffer'.",
+        "The validation 'required' isn't supported for the type 'Strin'.",
+      ]);
+    });
+    it('takes the field types from the definitions', () => {
+      const runtime = createJDLRuntime({ fieldTypes: { types: { Money: { validations: ['min'] } }, enum: { validations: [] } } });
+      expect(check('entity A {\n  price Money min(0)\n  name String required\n}', runtime).map(diagnostic => diagnostic.message)).toEqual([
+        "The validation 'required' isn't supported for the type 'String'.",
+      ]);
+    });
+  });
+
+  describe('decimal-validation-value', () => {
+    it('reports a decimal given to a validation that takes an integer', () => {
+      expect(check('entity A {\n  name String minlength(1.5)\n}')).toEqual([
+        { ruleId: 'decimal-validation-value', message: 'Decimal values are forbidden for the minlength validation.', at: 'minlength(1.5)' },
+      ]);
+    });
+    it('reports it through a constant', () => {
+      expect(check('MINL = 1.5\nentity A {\n  name String minlength(MINL)\n}').map(diagnostic => diagnostic.at)).toEqual([
+        'minlength(MINL)',
+      ]);
+    });
+    it('accepts a decimal for a validation that takes a number', () => {
+      expect(check('entity A {\n  age Float min(1.5)\n}')).toEqual([]);
+    });
+  });
+
+  describe('required-reflexive-relationship', () => {
+    it('reports a required relationship to the same entity, on either side', () => {
+      expect(
+        check('entity A\nrelationship ManyToOne {\n  A{parent required} to A\n  A{other} to A{others required}\n}').map(diagnostic => [
+          diagnostic.ruleId,
+          diagnostic.at,
+        ]),
+      ).toEqual([
+        ['required-reflexive-relationship', 'A{parent required} to A'],
+        ['required-reflexive-relationship', 'A{other} to A{others required}'],
+      ]);
+    });
+    it('accepts an optional one', () => {
+      expect(check('entity A\nrelationship ManyToOne { A{parent} to A }')).toEqual([]);
+    });
+  });
+
+  describe('one-to-one-direction', () => {
+    it('reports a One-to-One relationship whose destination only has the injected field', () => {
+      expect(check('entity A\nentity B\nrelationship OneToOne { A to B{a} }')).toEqual([
+        {
+          ruleId: 'one-to-one-direction',
+          message:
+            'In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship.',
+          at: 'A to B{a}',
+        },
+      ]);
+    });
+    it('accepts one without any injected field, both sides get one', () => {
+      expect(check('entity A\nentity B\nrelationship OneToOne { A to B }')).toEqual([]);
+    });
+  });
+
   it('reports every problem, in source order', () => {
     expect(check('dto B with mapstruct\nentity A\nrelationship OneToOne { A to C }').map(diagnostic => diagnostic.ruleId)).toEqual([
       'undeclared-option-entity',

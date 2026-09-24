@@ -245,7 +245,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
         this.errors.push({ message: `Unknown validation: ${name.image}.`, token: name });
       } else if (definition.jdl.value === 'regex' && !context.REGEX) {
         this.errors.push({ message: `The ${name.image} validation takes a regular expression: ${name.image}(/<pattern>/).`, token: name });
-      } else if (definition.jdl.value === 'number' && context.REGEX) {
+      } else if (definition.jdl.value !== 'regex' && context.REGEX) {
         this.errors.push({ message: `The ${name.image} validation takes a number or a constant: ${name.image}(<value>).`, token: name });
       }
       if (context.NAME) {
