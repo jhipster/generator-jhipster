@@ -35,7 +35,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 <%_ } _%>
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+import org.springframework.data.mongodb.core.mapping.event.<%- reactivePrefix %>ValidatingEntityCallback;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.mongodb.repository.<%- reactivePrefix %>MongoRepository;
 <%_ } _%>
@@ -58,8 +58,8 @@ import java.util.List;
 public class DatabaseConfiguration {
 
     @Bean
-    public ValidatingMongoEventListener validatingMongoEventListener() {
-        return new ValidatingMongoEventListener(validator());
+    public <%- reactivePrefix %>ValidatingEntityCallback validatingEntityCallback() {
+        return new <%- reactivePrefix %>ValidatingEntityCallback(validator());
     }
 
     @Bean
