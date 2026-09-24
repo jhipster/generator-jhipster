@@ -26,8 +26,12 @@ const noopCst = undefined as unknown as CstNode;
 export default class JDLParser extends CstParser {
   private readonly tokens: Record<string, TokenType>;
 
-  constructor(tokens: Record<string, TokenType>) {
-    super(tokens, { outputCst: true } as any);
+  /**
+   * @param recoveryEnabled - go on after an error, for tools: every error is reported and the CST has what could be parsed.
+   * It slows down the parsing of a valid jdl by about 10%, which the generator does not need.
+   */
+  constructor(tokens: Record<string, TokenType>, { recoveryEnabled = false }: { recoveryEnabled?: boolean } = {}) {
+    super(tokens, { outputCst: true, recoveryEnabled } as any);
     this.tokens = tokens;
   }
 

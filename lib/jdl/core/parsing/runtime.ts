@@ -56,6 +56,7 @@ export const createRuntime = ({
   let jdlTokens: JDLTokens;
   let lexer: Lexer;
   let parser: JDLParser;
+  let recoveringParser: JDLParser;
   const getJDLTokens = () => {
     jdlTokens ??= buildTokens();
     return jdlTokens;
@@ -80,6 +81,13 @@ export const createRuntime = ({
       }
 
       return parser;
+    },
+    get recoveringParser(): JDLParser {
+      if (!recoveringParser) {
+        recoveringParser = new JDLParser(this.tokens, { recoveryEnabled: true });
+        recoveringParser.parse();
+      }
+      return recoveringParser;
     },
     applicationDefinition,
     entityDefinition,

@@ -38,7 +38,10 @@ export type { JDLDiagnostic } from './semantic/types.ts';
 export type { JDLLocation } from './types/parsed.ts';
 
 export type JDLParseResult = {
-  /** The parsed jdl, whenever it lexes and parses, even with syntax or semantic errors. */
+  /**
+   * The parsed jdl, whenever it lexes, even with parsing, syntax or semantic errors: after a parsing error it is what could
+   * be parsed, when that is enough to build it.
+   */
   ast?: ParsedJDLApplications;
   /** Every problem found, errors and warnings, in source order. */
   diagnostics: JDLDiagnostic[];
@@ -71,19 +74,21 @@ const parsingDiagnostic = (error: IRecognitionException): JDLDiagnostic => ({
 
 /**
  * Parses a jdl without throwing: every problem is a diagnostic with its location, the lexing and parsing errors, the syntax
- * errors, the semantic ones and the warnings. A jdl that does not lex or parse has no AST, and only the errors of the stage
- * that failed.
+ * errors, the semantic ones and the warnings. The parser recovers from an error and reports every one; a jdl with parsing
+ * errors is not checked further, the checks would report their consequences. A jdl that does not lex has no AST.
  */
 export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<ParseOptions, 'startRule'>): JDLParseResult {
   const lexResult = runtime.lexer.tokenize(input);
   if (lexResult.errors.length > 0) {
     return { diagnostics: lexResult.errors.map(lexingDiagnostic) };
   }
-  runtime.parser.input = lexResult.tokens;
+  const { recoveringParser } = runtime;
+  recoveringParser.input = lexResult.tokens;
   const startRule = options?.startRule ?? 'prog';
-  const cst = (runtime.parser as unknown as Record<string, () => CstNode>)[startRule]();
-  if (runtime.parser.errors.length > 0) {
-    return { diagnostics: runtime.parser.errors.map(parsingDiagnostic) };
+  const cst = (recoveringParser as unknown as Record<string, () => CstNode>)[startRule]();
+  if (recoveringParser.errors.length > 0) {
+    // The CST has what could be parsed; the checks would report the consequences of the errors, only the errors are.
+    return { ast: buildRecoveredAst(cst, runtime), diagnostics: recoveringParser.errors.map(parsingDiagnostic) };
   }
   const diagnostics: JDLDiagnostic[] = performAdditionalSyntaxChecks(cst, runtime).map(error => ({
     ruleId: 'syntax',
@@ -100,6 +105,15 @@ export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<Pars
   }
   diagnostics.sort((a, b) => (a.location?.startOffset ?? Infinity) - (b.location?.startOffset ?? Infinity));
   return { ast, diagnostics };
+}
+
+/** The AST of what could be parsed, none when the CST misses what the AST builder needs. */
+function buildRecoveredAst(cst: CstNode, runtime: JDLRuntime): ParsedJDLApplications | undefined {
+  try {
+    return buildJDLAstBuilderVisitor(runtime, () => {}).visit(cst);
+  } catch {
+    return undefined;
+  }
 }
 
 export function parse(input: string, runtime: JDLRuntime, options?: ParseOptions): ParsedJDLApplications {

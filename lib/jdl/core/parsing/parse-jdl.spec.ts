@@ -47,9 +47,7 @@ describe('jdl - parseJDL', () => {
     ]);
   });
 
-  it('reports a parsing error at its token, without an AST', () => {
-    const result = parseJDL('entiti Foo {\n  name String\n}', getDefaultRuntime());
-    expect(result.ast).toBeUndefined();
+  it('reports a parsing error at its token', () => {
     expect(diagnose('entiti Foo {\n  name String\n}')).toEqual([
       {
         ruleId: 'parsing',
@@ -59,6 +57,17 @@ describe('jdl - parseJDL', () => {
         at: 'entiti',
       },
     ]);
+  });
+
+  it('recovers from parsing errors: reports every one, and what could be parsed', () => {
+    const content = 'entity A {\n  name String\n  age Integer,,\n}\nentity B {\n  x\n}\nentity C\nrelationship OneToOne { A to D }';
+    const { ast } = parseJDL(content, getDefaultRuntime());
+    expect(diagnose(content).map(({ ruleId, at }) => [ruleId, at])).toEqual([
+      ['parsing', ','],
+      ['parsing', '}'],
+    ]);
+    // The undeclared D is not reported: a jdl with parsing errors is not checked.
+    expect(ast?.entities.map(entity => entity.name)).toEqual(['A', 'B', 'C']);
   });
 
   it('reports a parsing error at the end of the input without a location', () => {
