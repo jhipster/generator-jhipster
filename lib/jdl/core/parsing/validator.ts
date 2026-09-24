@@ -19,12 +19,12 @@
 import { type CstElement, type CstNode, type ICstVisitor, type IToken, type TokenType, tokenMatcher as matchesToken } from 'chevrotain';
 import { first, flatten, includes, snakeCase, upperCase } from 'lodash-es';
 
-import { ALPHANUMERIC } from '../built-in-options/validation-patterns.ts';
 import type { JDLOptionsDefinition, JDLValidatorOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
+const FIELD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 const TYPE_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_PROP_NAME_PATTERN = /^[A-Z]\w*$/;
@@ -233,7 +233,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
 
     fieldDeclaration(context: Record<'NAME', IToken[]>) {
       super.fieldDeclaration(context);
-      this.checkNameSyntax(context.NAME[0], ALPHANUMERIC, 'fieldName');
+      this.checkNameSyntax(context.NAME[0], FIELD_NAME_PATTERN, 'fieldName');
     }
 
     type(context: Record<'NAME', IToken[]>) {
@@ -253,9 +253,9 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       this.checkNameSyntax(context.NAME[0], ENTITY_NAME_PATTERN, 'entity');
 
       if (Array.isArray(context.injectedField)) {
-        this.checkNameSyntax(context.injectedField[0], ALPHANUMERIC, 'injectedField');
+        this.checkNameSyntax(context.injectedField[0], FIELD_NAME_PATTERN, 'injectedField');
         if (context.injectedFieldParam) {
-          this.checkNameSyntax(context.injectedFieldParam[0], ALPHANUMERIC, 'injectedField');
+          this.checkNameSyntax(context.injectedFieldParam[0], FIELD_NAME_PATTERN, 'injectedField');
         }
       }
     }
