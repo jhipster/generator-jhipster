@@ -112,7 +112,7 @@ export default class JDLParser extends CstParser {
               GATE: () => this.LA(2).tokenType === this.tokens.EQUALS,
               ALT: () => this.SUBRULE(this.constantDeclaration),
             },
-            { ALT: () => this.SUBRULE(this.optionDeclaration) },
+            { GATE: () => !this.isBlockStatement(), ALT: () => this.SUBRULE(this.optionDeclaration) },
           ],
         });
       });
@@ -470,7 +470,7 @@ export default class JDLParser extends CstParser {
 
   optionDeclaration(): CstNode {
     this.RULE('optionDeclaration', () => {
-      this.CONSUME(this.tokens.NAME, { LABEL: 'option' });
+      this.CONSUME(this.tokens.IDENTIFIER, { LABEL: 'option' });
       this.SUBRULE(this.filterDef);
       this.OPTION(() => {
         this.CONSUME(this.tokens.WITH);
@@ -556,12 +556,17 @@ export default class JDLParser extends CstParser {
             { ALT: () => this.SUBRULE(this.applicationSubConfig) },
             { ALT: () => this.SUBRULE(this.applicationSubEntities) },
             { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
-            { ALT: () => this.SUBRULE(this.optionDeclaration) },
+            { GATE: () => !this.isBlockStatement(), ALT: () => this.SUBRULE(this.optionDeclaration) },
           ],
         });
       });
     });
     return noopCst;
+  }
+
+  /** An option statement cannot open a block; report a misspelled structural keyword at its start. */
+  private isBlockStatement(): boolean {
+    return this.LA(2).tokenType === this.tokens.LCURLY || this.LA(3).tokenType === this.tokens.LCURLY;
   }
 
   applicationSubNamespaceConfig(): CstNode {

@@ -21,6 +21,8 @@ import { type CstElement, type CstNode, type ICstVisitor, type IToken, type Toke
 import type { JDLValidatorOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
+import { findConfigValidation, findOptionDefinition } from './definitions.ts';
+
 interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
   constantDeclaration(context: any): void;
   entityDeclaration(context: any): void;
@@ -31,6 +33,8 @@ interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
   enumDeclaration(context: any): void;
   enumPropList(context: any): void;
   entityList(context: any): void;
+  optionDeclaration(context: any): void;
+  relationshipOption(context: any): void;
   exclusion(context: any): void;
 }
 
@@ -167,10 +171,9 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
 
     checkConfigPropSyntax(key: IToken, value: CstElement) {
       const propertyName = key.image;
-      const legacyKey = runtime.definitions.application.tokenConfigs.find(token => token.pattern === propertyName)?.name;
-      const validation = runtime.propertyValidations[propertyName] ?? runtime.propertyValidations[legacyKey ?? ''];
+      const validation = findConfigValidation(runtime.definitions.application, propertyName);
       if (!validation) {
-        this.errors.push({ message: `Got an invalid application config property: '${propertyName}'.`, token: key });
+        this.errors.push({ message: `Unknown application option: ${propertyName}.`, token: key });
         return;
       }
 
@@ -186,10 +189,9 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
 
     checkDeploymentConfigPropSyntax(key: IToken, value: CstElement) {
       const propertyName = key.image;
-      const legacyKey = runtime.definitions.deployment.tokenConfigs.find(token => token.pattern === propertyName)?.name;
-      const validation = runtime.deploymentPropertyValidations[propertyName] ?? runtime.deploymentPropertyValidations[legacyKey ?? ''];
+      const validation = findConfigValidation(runtime.definitions.deployment, propertyName);
       if (!validation) {
-        this.errors.push({ message: `Got an invalid deployment config property: '${propertyName}'.`, token: key });
+        this.errors.push({ message: `Unknown deployment option: ${propertyName}.`, token: key });
         return;
       }
 
@@ -279,6 +281,34 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       }
       if (context.methodPath) {
         this.checkNameSyntax(context.methodPath[0], runtime.definitions.names?.path, 'methodPath');
+      }
+    }
+
+    optionDeclaration(context: Record<'option' | 'method' | 'methodPath', IToken[]>) {
+      super.optionDeclaration(context);
+      const option = context.option[0];
+      const binary = Boolean(context.method ?? context.methodPath);
+      const definition = findOptionDefinition(runtime.entityDefinition, option.image)?.[1];
+      if (!definition) {
+        this.errors.push({ message: `Unknown option: ${option.image}.`, token: option });
+      } else if ((definition.jdl.type === 'binary') !== binary) {
+        this.errors.push({
+          message:
+            binary ?
+              `The ${option.image} option takes no value.`
+            : `The ${option.image} option needs a value: ${option.image} <entities> with <value>.`,
+          token: option,
+        });
+      }
+      if (context.method) this.checkNameSyntax(context.method[0], runtime.definitions.names?.method, 'method');
+      if (context.methodPath) this.checkNameSyntax(context.methodPath[0], runtime.definitions.names?.path, 'methodPath');
+    }
+
+    relationshipOption(context: Record<'RELATIONSHIP_OPTION', IToken[]>) {
+      super.relationshipOption(context);
+      const option = context.RELATIONSHIP_OPTION[0];
+      if (!findOptionDefinition(runtime.relationshipDefinition, option.image)) {
+        this.errors.push({ message: `Unknown relationship option: ${option.image}.`, token: option });
       }
     }
 

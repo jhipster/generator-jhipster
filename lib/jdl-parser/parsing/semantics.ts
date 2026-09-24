@@ -6,6 +6,7 @@ import type { ParsedJDLApplications, ParsedJDLOptionConfig } from '../types/pars
 import type { JDLApplicationConfig, JDLDefinitions, JDLOptionsDefinition, JDLValidatorOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
+import { findConfigValidation, findOptionDefinition } from './definitions.ts';
 import type { JDLDiagnostic } from './diagnostics.ts';
 import type { SourceRange } from './locations.ts';
 
@@ -49,11 +50,9 @@ export function validateSemantics(ast: ParsedJDLApplications, runtime: JDLRuntim
   };
   const checkOptions = (options: OptionDeclaration[], optionDefinitions: JDLOptionsDefinition = definitions.entity) => {
     for (const option of options) {
-      const match = Object.entries(optionDefinitions.configs).find(
-        ([name, { jdl }]) => (jdl.keyword ?? name) === option.optionName || jdl.deprecatedKeywords?.includes(option.optionName),
-      );
+      const match = findOptionDefinition(optionDefinitions, option.optionName);
       if (!match) {
-        report('option.unknown', `The option '${option.optionName}' does not exist.`, option);
+        report('option.unknown', `Unknown option: ${option.optionName}.`, option);
         continue;
       }
       const [name, definition] = match;
@@ -71,7 +70,13 @@ export function validateSemantics(ast: ParsedJDLApplications, runtime: JDLRuntim
         );
       }
       if ((jdl.type === 'binary') !== (option.optionValue !== undefined)) {
-        report('option.kind', `The '${name}' option ${jdl.type === 'binary' ? 'requires' : 'does not accept'} a value.`, option);
+        report(
+          'option.kind',
+          jdl.type === 'binary' ?
+            `The ${option.optionName} option needs a value: ${option.optionName} <entities> with <value>.`
+          : `The ${option.optionName} option takes no value.`,
+          option,
+        );
       } else if (option.optionValue !== undefined && definition.choices && !definition.choices.includes(option.optionValue)) {
         report('option.value', `The '${name}' option is not valid for value '${option.optionValue}'.`, option);
       }
@@ -91,11 +96,10 @@ export function validateSemantics(ast: ParsedJDLApplications, runtime: JDLRuntim
       if (!declaredKeys.has(key)) report('config.required', `The ${kind} config property '${key}' is required.`, node);
     }
     for (const declaration of declarations) {
-      const legacyKey = config.tokenConfigs.find(token => token.pattern === declaration.key)?.name;
-      const validation = own(config.validatorConfig, declaration.key) ?? own(config.validatorConfig, legacyKey ?? '');
+      const validation = findConfigValidation(config, declaration.key);
       const optionType = own(config.optionsTypes, declaration.key);
       if (!validation || !optionType) {
-        report('config.unknown', `Got an invalid ${kind} config property: '${declaration.key}'.`, declaration);
+        report('config.unknown', `Unknown ${kind} option: ${declaration.key}.`, declaration);
         continue;
       }
       if (optionType.deprecated) {
@@ -280,11 +284,13 @@ export function validateSemantics(ast: ParsedJDLApplications, runtime: JDLRuntim
       relationship.options?.destination ?? [],
     ].flat()) {
       // Annotation names remain extensible; statement options must be declared by the host.
-      if (!Object.hasOwn(definitions.relationship.configs, annotation.optionName)) {
-        if (annotation.statement) report('option.unknown', `The option '${annotation.optionName}' does not exist.`, annotation);
+      const statementDefinition = findOptionDefinition(definitions.relationship, annotation.optionName)?.[1];
+      const definition =
+        annotation.statement ? statementDefinition : (own(definitions.relationship.configs, annotation.optionName) ?? statementDefinition);
+      if (!definition) {
+        if (annotation.statement) report('option.unknown', `Unknown relationship option: ${annotation.optionName}.`, annotation);
         continue;
       }
-      const definition = definitions.relationship.configs[annotation.optionName];
       if (definition.jdl.type === 'binary' && annotation.optionValue === undefined) {
         report('option.kind', `The '${annotation.optionName}' option requires a value.`, annotation);
       } else if (definition.choices && !definition.choices.includes(String(annotation.optionValue))) {

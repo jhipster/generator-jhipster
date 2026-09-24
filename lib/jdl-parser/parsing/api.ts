@@ -108,9 +108,19 @@ function throwParserError(errors: IRecognitionException[]) {
   throw new Error(parserErrorMessage(errors[0]));
 }
 
+const EXPECTED_STATEMENTS: Record<string, string> = {
+  prog: 'an entity, an enum, a relationship, an application, a deployment, a use statement, a constant or an option statement',
+  applicationSubDeclaration: 'a config block, an entities statement, a use statement or an option statement',
+};
+
 function parserErrorMessage(parserError: IRecognitionException): string {
   if (parserError.name === 'MismatchedTokenException') {
     return invalidTokenMessage(parserError);
+  }
+  const expectedStatements = EXPECTED_STATEMENTS[parserError.context.ruleStack.at(-1)!];
+  if (parserError.name === 'NoViableAltException' && expectedStatements && parserError.token.tokenType.name === 'IDENTIFIER') {
+    const { token } = parserError;
+    return `Unknown statement '${token.image}', expected ${expectedStatements}.\n\tat line: ${token.startLine}, column: ${token.startColumn}`;
   }
   const errorMessage = `${parserError.name}: ${parserError.message}`;
   const { token } = parserError;
