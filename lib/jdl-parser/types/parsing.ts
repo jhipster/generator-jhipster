@@ -39,7 +39,8 @@ export type JDLApplicationOptionType = {
 export type JDLApplicationConfig = {
   /** Config keys that must occur explicitly, before generator defaults are applied. */
   required?: readonly string[];
-  tokenConfigs: JDLTokenConfig[];
+  /** Legacy mapping of option names to validator keys; the lexer does not consume it. */
+  tokenConfigs?: JDLTokenConfig[];
   validatorConfig: Record<string, JDLValidatorOption>;
   optionsValues: Record<string, JDLApplicationOptionValue>;
   optionsTypes: Record<string, JDLApplicationOptionType>;
