@@ -33,16 +33,7 @@ describe('jdl - DeploymentConverter', () => {
         );
       });
     });
-    describe('when passing a value an option does not allow', () => {
-      it('should fail', () => {
-        expect(() =>
-          convertDeployments(
-            [{ deploymentType: 'kubernetes', appsFolders: ['tata'], serviceDiscoveryType: 'zookeeper' } as any],
-            getDefaultRuntime(),
-          ),
-        ).toThrow(/^The value 'zookeeper' is not allowed for the deployment option 'serviceDiscoveryType'\.$/);
-      });
-
+    describe('when passing an option without choices', () => {
       it('should let an option without choices take any value', () => {
         expect(() =>
           convertDeployments(

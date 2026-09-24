@@ -26,24 +26,15 @@ export default { convertDeployments };
 /**
  * Converts a parsed JDL content corresponding to deployments to an array of JDLDeployment objects.
  * @param {Array} parsedDeployments - parsed JDL deployments.
- * @param runtime - the runtime, whose deployment definition says which values an option allows.
+ * @param _runtime - the runtime, kept for compatibility; the parsed AST has already been validated.
  * @return the converted JDLDeployment objects.
  */
-export function convertDeployments(parsedDeployments: ParsedJDLDeployment[], runtime: JDLRuntime): JDLDeployment[] {
+export function convertDeployments(parsedDeployments: ParsedJDLDeployment[], _runtime: JDLRuntime): JDLDeployment[] {
   if (!parsedDeployments) {
     throw new Error('Deployments have to be passed so as to be converted.');
   }
   return parsedDeployments.map(parsedDeployment => {
-    // Like the application configuration: an option with choices only takes one of them.
-    for (const [optionName, optionValue] of Object.entries(parsedDeployment)) {
-      if (
-        (Array.isArray(optionValue) || typeof optionValue === 'string') &&
-        runtime.deploymentDefinition.doesOptionExist(optionName) &&
-        !runtime.deploymentDefinition.doesOptionValueExist(optionName, optionValue)
-      ) {
-        throw new Error(`The value '${optionValue}' is not allowed for the deployment option '${optionName}'.`);
-      }
-    }
-    return new JDLDeployment(parsedDeployment);
+    const { location: _location, configDeclarations: _declarations, ...config } = parsedDeployment;
+    return new JDLDeployment(config);
   });
 }

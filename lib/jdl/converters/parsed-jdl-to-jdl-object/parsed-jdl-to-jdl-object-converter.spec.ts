@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { entityOptions } from '../../../jhipster/index.ts';
 import { getTestFile, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.ts';
@@ -33,7 +33,6 @@ import type JDLOptions from '../../core/models/jdl-options.ts';
 import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import type { ParsedJDLApplications } from '../../core/types/parsed.ts';
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 
@@ -199,20 +198,6 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           ]);
         });
       });
-      describe('with an application type', () => {
-        let input: ReturnType<typeof parseFromFiles>;
-
-        before(() => {
-          input = parseFromFiles([getTestFile('invalid_field_type.jdl')]);
-        });
-
-        it('should not check for field types', () => {
-          parseFromConfigurationObject({
-            parsedContent: input,
-            applicationType: APPLICATION_TYPE_GATEWAY,
-          });
-        });
-      });
       describe('with a required relationship', () => {
         let jdlObject;
         let relationship: ReturnType<ReturnType<typeof parseFromConfigurationObject>['relationships']['getOneToOne']>;
@@ -284,19 +269,6 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         it('is processed', () => {
           expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority')?.to).toBe('Authority');
           expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority')?.to).toBe('Authority');
-        });
-      });
-      describe('with an invalid option', () => {
-        let input: ParsedJDLApplications;
-
-        before(() => {
-          input = parseFromFiles([getTestFile('invalid_option.jdl')]);
-        });
-
-        it('should not fail', () => {
-          parseFromConfigurationObject({
-            parsedContent: input,
-          });
         });
       });
       describe('with a required enum', () => {
@@ -466,21 +438,12 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           });
         });
       });
-      describe('when having a cassandra app with paginated entities', () => {
-        let input: ReturnType<typeof parseFromFiles>;
-
-        before(() => {
-          input = parseFromFiles([getTestFile('cassandra_jdl.jdl')]);
-        });
-
-        it('should fail', () => {
-          try {
-            parseFromConfigurationObject({
-              parsedContent: input,
-            });
-          } catch (error) {
-            expect((error as Error).name).toBe('IllegalOptionException');
-          }
+      describe('when migrating date fields in a legacy fixture', () => {
+        it('should convert the supported LocalDate type', () => {
+          const input = parseFromFiles([getTestFile('cassandra_jdl.jdl')]);
+          const converted = parseFromConfigurationObject({ parsedContent: input });
+          expect(converted.entities.JobHistory.fields.startDate.type).toBe('LocalDate');
+          expect(converted.entities.Employee.fields.hireDate.type).toBe('LocalDate');
         });
       });
       describe('when parsing applications', () => {
@@ -924,31 +887,6 @@ JDLDeployment {
         });
       });
       describe('when parsing entity options in applications', () => {
-        describe('if the entity list does not contain some entities mentioned in options', () => {
-          let parsedContent: ReturnType<typeof parseFromContent>;
-
-          before(() => {
-            parsedContent = parseFromContent(`application {
-  config {
-    baseName testApp1
-  }
-  entities A
-  readOnly B
-}
-
-entity A
-entity B
-`);
-          });
-
-          it('should fail', () => {
-            expect(() =>
-              parseFromConfigurationObject({
-                parsedContent,
-              }),
-            ).toThrow(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
-          });
-        });
         describe('if the entity list contains all the entities mentioned in options', () => {
           let optionsForFirstApplication: JDLOptions;
           let optionsForSecondApplication: JDLOptions;

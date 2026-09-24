@@ -20,6 +20,7 @@
 import { lowerFirst } from 'lodash-es';
 
 import { asJdlRelationshipType } from '../../core/basic-types/relationship-types.ts';
+import type { JDLRelationshipType } from '../../core/basic-types/relationships.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
 import type { ParsedJDLAnnotation, ParsedJDLRelationship } from '../../core/types/parsed.ts';
 import { formatComment } from '../../core/utils/format-utils.ts';
@@ -45,7 +46,7 @@ export function convertRelationships(
     const relationshipConfiguration = {
       from: parsedRelationship.from.name,
       to: parsedRelationship.to.name,
-      type: asJdlRelationshipType(parsedRelationship.cardinality),
+      type: asJdlRelationshipType(parsedRelationship.cardinality as JDLRelationshipType),
       injectedFieldInFrom: parsedRelationship.from.injectedField,
       injectedFieldInTo: parsedRelationship.to.injectedField,
       isInjectedFieldInFromRequired: parsedRelationship.from.required,
