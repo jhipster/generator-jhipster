@@ -22,7 +22,9 @@ import fs from 'node:fs';
 
 import helpers from 'yeoman-test';
 
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { getTestFile, parseFromContent, parseFromFiles } from '../__test-support__/index.ts';
+import { parse } from '../parsing/api.ts';
 import type { ParsedJDLApplications } from '../types/parsed.ts';
 
 describe('jdl - JDLReader', () => {
@@ -84,7 +86,7 @@ describe('jdl - JDLReader', () => {
           }).toThrow(/^File content must be passed, it is currently empty\.$/);
         });
       });
-      describe('when passing a JDL file with a syntax error', () => {
+      describe('when passing a JDL file with an unknown option', () => {
         beforeEach(() => {
           fs.writeFileSync('test_file.jdl', 'enity A');
         });
@@ -92,7 +94,11 @@ describe('jdl - JDLReader', () => {
         it('should fail', () => {
           expect(() => {
             parseFromFiles(['test_file.jdl']);
-          }).toThrow(/but found: 'enity'/);
+          }).toThrow("The option 'enity' does not exist.\n\tat line: 1, column: 1");
+          const text = fs.readFileSync('test_file.jdl', 'utf8');
+          const { diagnostics } = parse(text, getDefaultRuntime());
+          expect(diagnostics.map(diagnostic => diagnostic.ruleId)).toEqual(['option.unknown']);
+          expect(text.slice(diagnostics[0].range.start.offset, diagnostics[0].range.end.offset)).toBe('enity A');
         });
       });
       describe('when reading a single JDL file', () => {
@@ -103,7 +109,9 @@ describe('jdl - JDLReader', () => {
         });
 
         it('should read it', () => {
-          expect(content).not.toBeNull();
+          expect(content.entities.map(entity => entity.name)).toEqual(['A', 'B', 'C', 'D']);
+          expect(content.relationships[0].from.injectedField).toBe('b');
+          expect(content.relationships[0].to.injectedField).toBe('a');
         });
       });
       describe('when reading more than one JDL file', () => {
@@ -114,7 +122,20 @@ describe('jdl - JDLReader', () => {
         });
 
         it('should read them', () => {
-          expect(content).not.toBeNull();
+          expect(content.entities.map(entity => entity.name)).toEqual(['A', 'B', 'C', 'D', 'E', 'F']);
+          expect(content.relationships).toHaveLength(2);
+        });
+      });
+      describe('when a OneToOne relationship omits its owning source field', () => {
+        it('reports the source side before the content reaches a converter', () => {
+          const text = fs.readFileSync(getTestFile('valid_jdl.jdl'), 'utf8').replace('A{b} to B{a}', 'A to B{a}');
+          const { diagnostics } = parse(text, getDefaultRuntime());
+          expect(diagnostics.map(diagnostic => diagnostic.ruleId)).toEqual(['relationship.owner']);
+          expect(diagnostics[0].range.start).toEqual({ offset: text.indexOf('A to B{a}'), line: 11, column: 3 });
+          expect(text.slice(diagnostics[0].range.start.offset, diagnostics[0].range.end.offset)).toBe('A');
+          expect(() => parseFromContent(text)).toThrow(
+            'In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship.\n\tat line: 11, column: 3',
+          );
         });
       });
       describe('when reading a complex JDL file', () => {

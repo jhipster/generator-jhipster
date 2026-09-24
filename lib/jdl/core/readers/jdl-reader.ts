@@ -19,7 +19,7 @@
 
 import { readFileSync } from 'node:fs';
 
-import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.ts';
+import { getCst as apiGetCst, parseOrThrow as apiParser } from '../parsing/api.ts';
 import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 import logger from '../utils/objects/logger.ts';
@@ -84,7 +84,11 @@ function parse(content: string, runtime: JDLRuntime) {
   }
   try {
     const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
-    const parsedContent = apiParser(processedInput, runtime);
+    const parsedContent = apiParser(processedInput, runtime, {
+      onDiagnostic: diagnostic => {
+        if (diagnostic.severity === 'warning') logger.warn(diagnostic.message);
+      },
+    });
     return performJDLPostParsingTasks(parsedContent);
   } catch (error) {
     if (error instanceof SyntaxError) {
