@@ -24,7 +24,7 @@ const validationTokens = [
   { name: 'REQUIRED', pattern: 'required' },
   { name: 'UNIQUE', pattern: 'unique' },
   { name: 'PATTERN', pattern: 'pattern' },
-].map(createTokenFromConfig);
+].map(config => createTokenFromConfig(config));
 
 export default {
   tokens: [...validationTokens, ...MinMaxTokens.tokens],

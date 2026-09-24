@@ -21,8 +21,6 @@ import { before, describe, expect, it } from 'esmocha';
 
 import { createJDLRuntime, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 
-import { LexerModes } from './lexer.ts';
-
 const { lexer: JDLLexer } = getDefaultRuntime();
 
 describe('jdl - JDLLexer', () => {
@@ -65,16 +63,15 @@ describe('jdl - JDLLexer', () => {
     });
   });
 
-  describe('when a keyword is a prefix of another keyword', () => {
-    // Application config keys are lexed inside `config { }`, in the lexer mode of the application config.
-    it('should lex the longer keyword as its own token', () => {
-      const { tokens, errors } = JDLLexer.tokenize('microfrontends microfrontend', LexerModes.APPLICATION_CONFIG);
+  describe('when option names share a prefix', () => {
+    it('should lex both names as identifiers in every block', () => {
+      const { tokens, errors } = JDLLexer.tokenize('microfrontends microfrontend');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['MICROFRONTENDS', 'MICROFRONTEND']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['NAME', 'NAME']);
     });
 
-    it('should lex a keyword declared after a shorter keyword it starts with', () => {
-      // Keywords match whole words only, so the shorter one registered first does not take the start of the longer one.
+    it('should not reserve names supplied by a blueprint', () => {
+      // Definitions affect semantic validation, not how option names are tokenized.
       const runtime = createJDLRuntime({
         application: {
           validatorConfig: { FOO: { type: 'BOOLEAN' }, FOO_BAR: { type: 'BOOLEAN' } },
@@ -87,9 +84,9 @@ describe('jdl - JDLLexer', () => {
           ],
         },
       });
-      const { tokens, errors } = runtime.lexer.tokenize('fooBar foo', LexerModes.APPLICATION_CONFIG);
+      const { tokens, errors } = runtime.lexer.tokenize('fooBar foo');
       expect(errors).toHaveLength(0);
-      expect(tokens.map(token => token.tokenType.name)).toEqual(['FOO_BAR', 'FOO']);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['NAME', 'NAME']);
     });
   });
 
