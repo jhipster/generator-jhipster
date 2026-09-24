@@ -37,6 +37,9 @@ import <%- packageName %>.web.rest.vm.ManagedUserVM;
 
 import java.security.Principal;
 import org.apache.commons.lang3.StringUtils;
+<%_ if (authenticationTypeSession && !reactive) { _%>
+import org.apache.commons.lang3.Strings;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -280,7 +283,7 @@ public class AccountResource {
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(u ->
                 persistentTokenRepository.findByUser(u).stream()
-                    .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
+                    .filter(persistentToken -> Strings.CS.equals(persistentToken.getSeries(), decodedSeries))
   <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
                     .findAny().ifPresent(t -> persistentTokenRepository.deleteById(decodedSeries)));
   <%_ } else if (databaseTypeCouchbase) { _%>
