@@ -5,6 +5,7 @@ generators/**/package-lock.json
 
 # Build output
 /dist
+/lib/jdl-parser/dist
 build/
 generators/**/.gradle
 

@@ -87,6 +87,10 @@
     "./ci": {
       "types": "./dist/lib/ci/index.d.ts",
       "default": "./dist/lib/ci/index.js"
+    },
+    "./jdl-parser": {
+      "types": "./dist/lib/jdl-parser/index.d.ts",
+      "default": "./dist/lib/jdl-parser/index.js"
     }
   },
   "main": "./dist/generators/index.js",

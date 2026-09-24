@@ -1,6 +1,6 @@
 {
   "include": ["cli/**/*", "generators/**/*", "lib/**/*", "test/**/*", ".blueprint/**/*", "eslint.config.ts"],
-  "exclude": [],
+  "exclude": ["lib/jdl-parser/dist", "lib/jdl-parser/node_modules"],
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": true,

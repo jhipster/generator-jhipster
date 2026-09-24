@@ -30,7 +30,7 @@ export default defineConfig(
       ...js.configs.recommended.rules,
     },
   },
-  { ignores: ['dist', 'docs'] },
+  { ignores: ['dist', 'docs', 'lib/jdl-parser/dist'] },
   {
     files: jsTsFiles,
     ...jhipster.base,

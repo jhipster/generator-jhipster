@@ -1,6 +1,6 @@
 {
   "include": ["./cli", "./generators", "./lib"],
-  "exclude": ["**/*.spec.*", "**/__*/**", "**/node_modules", "**/.*/"],
+  "exclude": ["lib/jdl-parser/dist", "lib/jdl-parser/node_modules", "**/*.spec.*", "**/__*/**", "**/node_modules", "**/.*/"],
   "compilerOptions": {
     /* Language and Environment */
     "target": "ES2025" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
