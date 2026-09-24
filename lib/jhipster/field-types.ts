@@ -59,7 +59,7 @@ export const BlobTypes = {
   TEXT: 'text',
 } as const;
 
-const CommonDBValidations = {
+export const CommonDBValidations = {
   String: new Set([REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH, PATTERN]),
   Integer: new Set([REQUIRED, UNIQUE, MIN, MAX]),
   Long: new Set([REQUIRED, UNIQUE, MIN, MAX]),
