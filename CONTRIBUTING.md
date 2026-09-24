@@ -169,6 +169,7 @@ AI coding assistants (GitHub Copilot, Claude, Cursor, and similar tools) are wel
 
 - **You remain responsible for the change.** Before submitting, you must read, understand, and test the code — including anything the assistant produced. Do not submit AI output you have not verified.
 - **The normal bar still applies.** Tests, lint, type-check, and all other Coding Rules above must pass. AI assistance does not lower the review bar; if anything, reviewers will look more carefully at AI-generated diffs.
+- **A bug bounty goes to a person.** An assistant is a tool, and using one keeps you eligible. An automated account is not: a pull request opened by a bot, or by an agent acting on its own, never earns a bug bounty. See [Bug bounties](#bounties).
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
