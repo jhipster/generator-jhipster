@@ -28,18 +28,30 @@ import { getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
 /**
- * A runtime from the JHipster definitions, the ones not passed: the application and deployment options of the
- * generators, the entity and relationship option statements, the field validations and types.
+ * The JHipster definitions: the application and deployment options of the generators, the entity and relationship
+ * option statements, the field validations and types.
  */
-export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDLRuntime =>
-  createRuntime({
-    application: definitions.application ?? getDefaultJDLApplicationConfig(),
-    deployment: definitions.deployment ?? getDefaultJDLDeploymentConfig(),
-    entity: definitions.entity ?? getDefaultJDLEntityConfig(),
-    relationship: definitions.relationship ?? getDefaultJDLRelationshipConfig(),
-    validation: definitions.validation ?? getDefaultJDLValidationConfig(),
-    fieldTypes: definitions.fieldTypes ?? getDefaultJDLFieldTypesConfig(),
+export const getDefaultJDLDefinitions = (): Required<JDLDefinitions> => ({
+  application: getDefaultJDLApplicationConfig(),
+  deployment: getDefaultJDLDeploymentConfig(),
+  entity: getDefaultJDLEntityConfig(),
+  relationship: getDefaultJDLRelationshipConfig(),
+  validation: getDefaultJDLValidationConfig(),
+  fieldTypes: getDefaultJDLFieldTypesConfig(),
+});
+
+/** A runtime from the JHipster definitions, the ones not passed. */
+export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDLRuntime => {
+  const defaults = getDefaultJDLDefinitions();
+  return createRuntime({
+    application: definitions.application ?? defaults.application,
+    deployment: definitions.deployment ?? defaults.deployment,
+    entity: definitions.entity ?? defaults.entity,
+    relationship: definitions.relationship ?? defaults.relationship,
+    validation: definitions.validation ?? defaults.validation,
+    fieldTypes: definitions.fieldTypes ?? defaults.fieldTypes,
   });
+};
 
 let defaultRuntime: JDLRuntime;
 /** The runtime from the JHipster definitions. */

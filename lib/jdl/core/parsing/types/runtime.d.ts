@@ -13,8 +13,8 @@ export type JDLRuntime = {
   relationshipDefinition: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validationDefinition: JDLValidationsDefinition;
-  /** The field types and their validations. */
-  fieldTypesDefinition: JDLFieldTypesDefinition;
+  /** The field types and their validations; without them, a field takes any type and any validation. */
+  fieldTypesDefinition?: JDLFieldTypesDefinition;
   tokens: Record<string, TokenType>;
   lexer: Lexer;
   parser: JDLParser;

@@ -157,6 +157,7 @@ export const duplicatedField: JDLSemanticRule = {
 export const fieldType: JDLSemanticRule = {
   id: 'field-type',
   check: (ast, runtime) => {
+    if (!runtime.fieldTypesDefinition) return [];
     const { types } = runtime.fieldTypesDefinition;
     const enumNames = new Set(ast.enums.map(jdlEnum => jdlEnum.name));
     return ast.entities.flatMap(entity =>
@@ -189,6 +190,7 @@ export const fieldType: JDLSemanticRule = {
 export const validationForFieldType: JDLSemanticRule = {
   id: 'validation-for-field-type',
   check: (ast, runtime) => {
+    if (!runtime.fieldTypesDefinition) return [];
     const { types, enum: enumType } = runtime.fieldTypesDefinition;
     const enumNames = new Set(ast.enums.map(jdlEnum => jdlEnum.name));
     return ast.entities.flatMap(entity =>

@@ -104,8 +104,8 @@ export type JDLDefinitions = {
   relationship: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validation: JDLValidationsDefinition;
-  /** The field types and their validations. */
-  fieldTypes: JDLFieldTypesDefinition;
+  /** The field types and their validations; without them, a field takes any type and any validation. */
+  fieldTypes?: JDLFieldTypesDefinition;
 };
 
 export type JHipsterOptionDefinition = {

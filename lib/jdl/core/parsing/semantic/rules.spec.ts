@@ -19,10 +19,11 @@
 import { describe, esmocha, expect, it } from 'esmocha';
 
 import { getDefaultJDLRelationshipConfig } from '../../../../jdl-config/jdl-relationship-config.ts';
-import { createJDLRuntime, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
+import { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 import { createImporterFromContent } from '../../__test-support__/index.ts';
 import { parseFromContent } from '../../readers/jdl-reader.ts';
 import logger from '../../utils/objects/logger.ts';
+import { createRuntime } from '../runtime.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 import { checkSemantics } from './index.ts';
@@ -173,6 +174,14 @@ describe('jdl - semantic rules', () => {
           ({ severity, message }) => [severity, message],
         ),
       ).toEqual([['warning', 'The type Date of the field start in the entity A is deprecated: use Instant, which it is migrated to.']]);
+    });
+  });
+
+  describe('without field types definitions', () => {
+    it('accepts any field type and any validation', () => {
+      const { fieldTypes: _fieldTypes, ...definitions } = getDefaultJDLDefinitions();
+      const runtime = createRuntime(definitions);
+      expect(check('entity A {\n  name Strin required minlength(3)\n  age Integer pattern(/a/)\n}', runtime)).toEqual([]);
     });
   });
 
