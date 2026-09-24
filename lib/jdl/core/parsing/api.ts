@@ -19,16 +19,22 @@
 
 import { type CstNode, EOF, type IRecognitionException } from 'chevrotain';
 
-import type { JDLRuntime } from '../types/runtime.ts';
-
 import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
+import type { ParsedJDLApplications } from './types/parsed.ts';
+import type { JDLRuntime } from './types/runtime.ts';
 import performAdditionalSyntaxChecks from './validator.ts';
 
-type ParseOptions = { startRule?: string };
+type ParseOptions = {
+  startRule?: string;
+  /** Receives the warnings about what the jdl uses, a deprecated option for instance; `console.warn` by default. */
+  onWarning?: (message: string) => void;
+};
 
-export function parse(input: string, runtime: JDLRuntime, options?: ParseOptions) {
+export function parse(input: string, runtime: JDLRuntime, options?: ParseOptions): ParsedJDLApplications {
   const cst = getCst(input, runtime, options);
-  const astBuilderVisitor = buildJDLAstBuilderVisitor(runtime);
+  // The parser has no logger of its own: a caller that passes none still sees the warnings.
+  // eslint-disable-next-line no-console
+  const astBuilderVisitor = buildJDLAstBuilderVisitor(runtime, options?.onWarning ?? (message => console.warn(message)));
   return astBuilderVisitor.visit(cst);
 }
 

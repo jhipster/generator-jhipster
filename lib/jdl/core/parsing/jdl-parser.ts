@@ -41,8 +41,7 @@ export default class JDLParser extends CstParser {
     this.fieldDeclaration();
     this.type();
     this.validation();
-    this.minMaxValidation();
-    this.pattern();
+    this.valuedValidation();
     this.relationDeclaration();
     this.relationshipType();
     this.relationshipBody();
@@ -200,8 +199,13 @@ export default class JDLParser extends CstParser {
 
       this.CONSUME(this.tokens.NAME);
       this.SUBRULE(this.type);
-      this.MANY1(() => {
-        this.SUBRULE(this.validation);
+      this.MANY1({
+        // A repetition is entered on its first token: a name only starts a validation followed by its value, the next
+        // field starts with a name too.
+        GATE: () => this.LA(1).tokenType !== this.tokens.IDENTIFIER || this.LA(2).tokenType === this.tokens.LPAREN,
+        DEF: () => {
+          this.SUBRULE(this.validation);
+        },
       });
 
       this.OPTION2({
@@ -231,33 +235,26 @@ export default class JDLParser extends CstParser {
       this.OR([
         { ALT: () => this.CONSUME(this.tokens.REQUIRED) },
         { ALT: () => this.CONSUME(this.tokens.UNIQUE) },
-        { ALT: () => this.SUBRULE(this.minMaxValidation) },
-        { ALT: () => this.SUBRULE(this.pattern) },
+        { ALT: () => this.SUBRULE(this.valuedValidation) },
       ]);
     });
     return noopCst;
   }
 
-  minMaxValidation(): CstNode {
-    this.RULE('minMaxValidation', () => {
-      // Note that "MIN_MAX_KEYWORD" is an abstract token and could match 6 different concrete token types
-      this.CONSUME(this.tokens.MIN_MAX_KEYWORD);
+  /**
+   * A validation with a value, `minlength(3)`, `max(MAX)` or `pattern(/a/)`: its name and the kind of value it takes come
+   * from the validation definitions. The next field starts with two names, the parenthesis tells a validation from it.
+   */
+  valuedValidation(): CstNode {
+    this.RULE('valuedValidation', () => {
+      this.CONSUME(this.tokens.IDENTIFIER, { LABEL: 'validationName' });
       this.CONSUME(this.tokens.LPAREN);
       this.OR([
         { ALT: () => this.CONSUME(this.tokens.DECIMAL) },
         { ALT: () => this.CONSUME(this.tokens.INTEGER) },
+        { ALT: () => this.CONSUME(this.tokens.REGEX) },
         { ALT: () => this.CONSUME(this.tokens.NAME) },
       ]);
-      this.CONSUME(this.tokens.RPAREN);
-    });
-    return noopCst;
-  }
-
-  pattern(): CstNode {
-    this.RULE('pattern', () => {
-      this.CONSUME(this.tokens.PATTERN);
-      this.CONSUME(this.tokens.LPAREN);
-      this.CONSUME(this.tokens.REGEX);
       this.CONSUME(this.tokens.RPAREN);
     });
     return noopCst;

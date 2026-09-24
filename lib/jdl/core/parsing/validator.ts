@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 import { type CstElement, type CstNode, type ICstVisitor, type IToken, type TokenType, tokenMatcher as matchesToken } from 'chevrotain';
-import { first, flatten, includes, snakeCase, upperCase } from 'lodash-es';
 
-import { ALPHANUMERIC } from '../built-in-options/validation-patterns.ts';
-import type { JDLOptionsDefinition, JDLValidatorOptionType } from '../types/parsing.ts';
-import type { JDLRuntime } from '../types/runtime.ts';
+import type { JDLOptionsDefinition, JDLValidatorOptionType } from './types/parsing.ts';
+import type { JDLRuntime } from './types/runtime.ts';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
+const FIELD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 const TYPE_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_PROP_NAME_PATTERN = /^[A-Z]\w*$/;
@@ -37,7 +36,7 @@ interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
   entityDeclaration(context: any): void;
   fieldDeclaration(context: any): void;
   type(context: any): void;
-  minMaxValidation(context: any): void;
+  valuedValidation(context: any): void;
   relationshipSide(context: any): void;
   enumDeclaration(context: any): void;
   enumPropList(context: any): void;
@@ -47,9 +46,6 @@ interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
 }
 
 type JDLCstVisitor<IN, OUT> = new () => JDLCstVisitorInstance<IN, OUT>;
-
-/** The validations are keyed by the option name in upper snake case. */
-const validationKey = (optionName: string) => upperCase(snakeCase(optionName));
 
 /** The option a statement keyword names: by its name, its keyword or a deprecated keyword. */
 const optionDefinition = (configs: JDLOptionsDefinition['configs'], keyword: string) =>
@@ -109,7 +105,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
             'tokenType' in actual &&
             // a Boolean (true/false) is also a valid name.
             actual.tokenType &&
-            !includes(actual.tokenType.CATEGORIES, this.tokens.BOOLEAN)
+            !actual.tokenType.CATEGORIES?.includes(this.tokens.BOOLEAN)
           ) {
             this.errors.push({
               message: `A name is expected, but found: "${getFirstToken(actual).image}"`,
@@ -185,7 +181,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
     }
 
     checkConfigPropSyntax(key: IToken, value: CstElement) {
-      const validation = runtime.propertyValidations[validationKey(key.image)];
+      const validation = runtime.propertyValidations[key.image];
       if (!validation) {
         this.errors.push({ message: `Unknown application option: ${key.image}.`, token: key });
         return;
@@ -202,7 +198,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
     }
 
     checkDeploymentConfigPropSyntax(key: IToken, value: CstElement) {
-      const validation = runtime.deploymentPropertyValidations[validationKey(key.image)];
+      const validation = runtime.deploymentPropertyValidations[key.image];
       if (!validation) {
         this.errors.push({ message: `Unknown deployment option: ${key.image}.`, token: key });
         return;
@@ -233,7 +229,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
 
     fieldDeclaration(context: Record<'NAME', IToken[]>) {
       super.fieldDeclaration(context);
-      this.checkNameSyntax(context.NAME[0], ALPHANUMERIC, 'fieldName');
+      this.checkNameSyntax(context.NAME[0], FIELD_NAME_PATTERN, 'fieldName');
     }
 
     type(context: Record<'NAME', IToken[]>) {
@@ -241,8 +237,17 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       this.checkNameSyntax(context.NAME[0], TYPE_NAME_PATTERN, 'typeName');
     }
 
-    minMaxValidation(context: Record<'NAME', IToken[]>) {
-      super.minMaxValidation(context);
+    valuedValidation(context: Record<'validationName' | 'NAME' | 'REGEX', IToken[]>) {
+      super.valuedValidation(context);
+      const name = context.validationName[0];
+      const definition = runtime.validationDefinition.configs[name.image];
+      if (!definition) {
+        this.errors.push({ message: `Unknown validation: ${name.image}.`, token: name });
+      } else if (definition.jdl.value === 'regex' && !context.REGEX) {
+        this.errors.push({ message: `The ${name.image} validation takes a regular expression: ${name.image}(/<pattern>/).`, token: name });
+      } else if (definition.jdl.value === 'number' && context.REGEX) {
+        this.errors.push({ message: `The ${name.image} validation takes a number or a constant: ${name.image}(<value>).`, token: name });
+      }
       if (context.NAME) {
         this.checkNameSyntax(context.NAME[0], CONSTANT_PATTERN, 'constant');
       }
@@ -253,9 +258,9 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       this.checkNameSyntax(context.NAME[0], ENTITY_NAME_PATTERN, 'entity');
 
       if (Array.isArray(context.injectedField)) {
-        this.checkNameSyntax(context.injectedField[0], ALPHANUMERIC, 'injectedField');
+        this.checkNameSyntax(context.injectedField[0], FIELD_NAME_PATTERN, 'injectedField');
         if (context.injectedFieldParam) {
-          this.checkNameSyntax(context.injectedFieldParam[0], ALPHANUMERIC, 'injectedField');
+          this.checkNameSyntax(context.injectedFieldParam[0], FIELD_NAME_PATTERN, 'injectedField');
         }
       }
     }
@@ -331,8 +336,8 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
     }
 
     configValue(context: Record<string, CstElement[]>, configKey: IToken) {
-      const configValue = first(first(Object.values(context)));
-      this.checkConfigPropSyntax(configKey, configValue!);
+      const configValue = Object.values(context)[0]?.[0];
+      this.checkConfigPropSyntax(configKey, configValue);
     }
 
     deploymentConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
@@ -340,8 +345,8 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
     }
 
     deploymentConfigValue(context: Record<string, CstElement[]>, configKey: IToken) {
-      const configValue = first(first(Object.values(context)));
-      this.checkDeploymentConfigPropSyntax(configKey, configValue!);
+      const configValue = Object.values(context)[0]?.[0];
+      this.checkDeploymentConfigPropSyntax(configKey, configValue);
     }
   }
   const syntaxValidatorVisitor = new JDLSyntaxValidatorVisitor(runtime);
@@ -360,8 +365,9 @@ function getFirstToken(tokOrCstNode: CstElement): IToken {
   }
 
   // CST Node - - assumes no nested CST Nodes, only terminals
-  return flatten(Object.values(tokOrCstNode.children)).reduce<any>(
-    (firstTok: any, nextTok: any) => (firstTok.startOffset > nextTok.startOffset ? nextTok : firstTok),
-    { startOffset: Infinity },
-  );
+  return Object.values(tokOrCstNode.children)
+    .flat()
+    .reduce<any>((firstTok: any, nextTok: any) => (firstTok.startOffset > nextTok.startOffset ? nextTok : firstTok), {
+      startOffset: Infinity,
+    });
 }

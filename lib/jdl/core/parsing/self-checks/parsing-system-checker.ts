@@ -18,7 +18,6 @@
  */
 
 import { Lexer, type Rule, type TokenType } from 'chevrotain';
-import { difference, flatMap, includes, reject, some, uniq } from 'lodash-es';
 
 import TokenCollectorVisitor from './token-collector-visitor.ts';
 
@@ -35,20 +34,15 @@ function getUsedTokens(rules: Rule[]): TokenType[] {
   return rules.reduce((result, currentRule) => {
     const collector = new TokenCollectorVisitor();
     currentRule.accept(collector);
-    return uniq(result.concat(collector.actualTokens));
+    return [...new Set(result.concat(collector.actualTokens))];
   }, [] as TokenType[]);
 }
 
 function getUselessTokens(usedTokens: TokenType[], allDefinedTokens: TokenType[]) {
   // A token a rule consumes is matched by the tokens it is a category of too.
-  const usedCategories = uniq([...usedTokens, ...flatMap(usedTokens, 'CATEGORIES')]);
-  // TODO: Calling uniq with two parameters is probably a bug.
-
-  // @ts-expect-error TODO
-  const notDirectlyUsedTokens = difference(allDefinedTokens, uniq(usedTokens, usedCategories));
-  const redundant = reject(notDirectlyUsedTokens, token => {
-    const tokCategories = token.CATEGORIES;
-    return some(tokCategories, category => includes(usedCategories, category));
-  });
-  return reject(redundant, tokenType => tokenType.GROUP === Lexer.SKIPPED);
+  const usedCategories = new Set([...usedTokens, ...usedTokens.flatMap(token => token.CATEGORIES ?? [])]);
+  const directlyUsedTokens = new Set(usedTokens);
+  const notDirectlyUsedTokens = allDefinedTokens.filter(token => !directlyUsedTokens.has(token));
+  const redundant = notDirectlyUsedTokens.filter(token => !token.CATEGORIES?.some(category => usedCategories.has(category)));
+  return redundant.filter(tokenType => tokenType.GROUP !== Lexer.SKIPPED);
 }

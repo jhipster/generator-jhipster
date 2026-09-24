@@ -24,7 +24,7 @@ export { formatComment };
  * @param comment string.
  * @returns formatted comment string
  */
-export default function formatComment(comment?: string): string | undefined {
+export default function formatComment(comment?: string | null): string | undefined {
   if (!comment) {
     return undefined;
   }

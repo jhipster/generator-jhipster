@@ -16,10 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const ALPHABETIC = /^[A-Za-z]+$/;
-export const ALPHABETIC_LOWER = /^[a-z]+$/;
-export const ALPHANUMERIC = /^[A-Za-z][A-Za-z0-9]*$/;
-export const ALPHANUMERIC_DASH = /^[A-Za-z][A-Za-z0-9-]*$/;
-export const ALPHABETIC_DASH_LOWER = /^[a-z][a-z-]*$/;
-export const ALPHANUMERIC_SPACE = /^"?[A-Za-z][A-Za-z0-9- ]*"?$/;
-export const ALPHANUMERIC_UNDERSCORE = /^[A-Za-z]\w*$/;
+
+/** The relationship types of the grammar, as written in a relationship declaration. */
+export const JDL_RELATIONSHIP_ONE_TO_ONE = 'OneToOne';
+export const JDL_RELATIONSHIP_ONE_TO_MANY = 'OneToMany';
+export const JDL_RELATIONSHIP_MANY_TO_ONE = 'ManyToOne';
+export const JDL_RELATIONSHIP_MANY_TO_MANY = 'ManyToMany';
+
+export type JDLRelationshipType =
+  | typeof JDL_RELATIONSHIP_ONE_TO_ONE
+  | typeof JDL_RELATIONSHIP_ONE_TO_MANY
+  | typeof JDL_RELATIONSHIP_MANY_TO_ONE
+  | typeof JDL_RELATIONSHIP_MANY_TO_MANY;

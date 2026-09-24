@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { ParsedJDLApplication, ParsedJDLApplications } from '../types/parsed.ts';
+import type { ParsedJDLApplication, ParsedJDLApplications } from './types/parsed.ts';
 
 export default function performJDLPostParsingTasks(parsedContent: ParsedJDLApplications): ParsedJDLApplications {
   return resolveEntityNames(parsedContent);

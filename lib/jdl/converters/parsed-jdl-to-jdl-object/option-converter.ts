@@ -23,7 +23,7 @@ import type { UnaryOptionType } from '../../core/built-in-options/unary-options.
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.ts';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
-import type { ParsedJDLOption, ParsedJDLOptionConfig, ParsedJDLUseOption } from '../../core/types/parsed.ts';
+import type { ParsedJDLOption, ParsedJDLOptionConfig, ParsedJDLUseOption } from '../../core/parsing/types/parsed.ts';
 
 const { getOptionNameForValue } = binaryOptions;
 export default { convertOptions };

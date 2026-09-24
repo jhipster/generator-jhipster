@@ -18,24 +18,27 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { validations } from '../built-in-options/index.ts';
+import type { JDLRelationshipType } from './relationship-types.ts';
 import type {
   ParsedJDLAnnotation,
+  ParsedJDLApplicationConfig,
+  ParsedJDLApplicationDeclaration,
   ParsedJDLApplications,
   ParsedJDLBinaryOption,
+  ParsedJDLDeployment,
+  ParsedJDLEntity,
   ParsedJDLEntityField,
+  ParsedJDLEnum,
+  ParsedJDLEnumValue,
   ParsedJDLOption,
   ParsedJDLOptionConfig,
+  ParsedJDLRelationship,
+  ParsedJDLRelationshipSide,
+  ParsedJDLUseOption,
   ParsedJDLValidation,
-} from '../types/parsed.ts';
-import type { JDLApplicationOptionType } from '../types/parsing.ts';
-import type { JDLRuntime } from '../types/runtime.ts';
-import deduplicate from '../utils/array-utils.ts';
-import logger from '../utils/objects/logger.ts';
-
-const {
-  Validations: { PATTERN, REQUIRED, UNIQUE },
-} = validations;
+} from './types/parsed.ts';
+import type { JDLApplicationOptionType } from './types/parsing.ts';
+import type { JDLRuntime } from './types/runtime.ts';
 
 type VisitorContext = {
   applicationDeclaration?: CstNode[];
@@ -58,14 +61,19 @@ type VisitorContext = {
  */
 const parseStringLiteral = (image: string): string => image.slice(1, -1);
 
-const warnIfDeprecated = (key: string, optionType: JDLApplicationOptionType | undefined, grammar: 'application' | 'deployment') => {
-  if (optionType?.deprecated) {
-    logger.warn(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`);
-  }
-};
+const deduplicate = <T>(array: T[]): T[] => [...new Set(array)];
 
-export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
+/**
+ * @param onWarning - receives the warnings about what the jdl uses, a deprecated option for instance.
+ */
+export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (message: string) => void) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
+
+  const warnIfDeprecated = (key: string, optionType: JDLApplicationOptionType | undefined, grammar: 'application' | 'deployment') => {
+    if (optionType?.deprecated) {
+      onWarning(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`);
+    }
+  };
 
   /** The binary option a statement keyword names, warning about a deprecated keyword. */
   const binaryOptionName = (keyword: string): string => {
@@ -74,7 +82,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         return name;
       }
       if (jdl.deprecatedKeywords?.includes(keyword)) {
-        logger.warn(`The ${keyword} option is deprecated, please use ${name} instead.`);
+        onWarning(`The ${keyword} option is deprecated, please use ${name} instead.`);
         return name;
       }
     }
@@ -87,7 +95,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       this.validateVisitor();
     }
 
-    prog(context: VisitorContext) {
+    prog(context: VisitorContext): ParsedJDLApplications {
       const ast: ParsedJDLApplications = {
         applications: [],
         deployments: [],
@@ -180,7 +188,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     entityDeclaration(
       context: Record<'ENTITY' | 'NAME' | 'JAVADOC', IToken[]> &
         Record<'annotationDeclaration' | 'entityTableNameDeclaration' | 'entityBody', CstNode[]>,
-    ) {
+    ): ParsedJDLEntity {
       const annotations: ParsedJDLAnnotation[] = [];
       if (context.annotationDeclaration) {
         context.annotationDeclaration.forEach(contextObject => {
@@ -214,14 +222,14 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       };
     }
 
-    annotationDeclaration(context: Record<'AT' | 'value' | 'option', IToken[]>) {
+    annotationDeclaration(context: Record<'AT' | 'value' | 'option', IToken[]>): ParsedJDLAnnotation {
       const optionName = context.option[0].image;
       if (!context.value) {
         return { optionName, type: 'UNARY' };
       }
       const { image: valueImage } = context.value[0];
       const { tokenType } = context.value[0];
-      let optionValue: unknown;
+      let optionValue: ParsedJDLAnnotation['optionValue'];
       switch (tokenType.name) {
         case 'INTEGER':
           optionValue = Number.parseInt(valueImage, 10);
@@ -244,18 +252,20 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return { optionName, optionValue, type: 'BINARY' };
     }
 
-    entityTableNameDeclaration(context: Record<'NAME', IToken[]>) {
+    entityTableNameDeclaration(context: Record<'NAME', IToken[]>): string {
       return context.NAME[0].image;
     }
 
-    entityBody(context: Record<'fieldDeclaration', CstNode[]>) {
+    entityBody(context: Record<'fieldDeclaration', CstNode[]>): ParsedJDLEntityField[] {
       if (!context.fieldDeclaration) {
         return [];
       }
       return context.fieldDeclaration.map(element => this.visit(element));
     }
 
-    fieldDeclaration(context: Record<'JAVADOC' | 'NAME', IToken[]> & Record<'annotationDeclaration' | 'validation' | 'type', CstNode[]>) {
+    fieldDeclaration(
+      context: Record<'JAVADOC' | 'NAME', IToken[]> & Record<'annotationDeclaration' | 'validation' | 'type', CstNode[]>,
+    ): ParsedJDLEntityField {
       const annotations: any[] = [];
       if (context.annotationDeclaration) {
         context.annotationDeclaration.forEach(contextObject => {
@@ -283,55 +293,35 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       };
     }
 
-    type(context: Record<'NAME', IToken[]>) {
+    type(context: Record<'NAME', IToken[]>): string {
       return context.NAME[0].image;
     }
 
-    validation(context: Record<'REQUIRED' | 'UNIQUE', IToken[]> & Record<'minMaxValidation' | 'pattern', CstNode[]>) {
-      // only one of these alternatives can exist at the same time.
-      if (context.REQUIRED) {
+    validation(context: Record<'REQUIRED' | 'UNIQUE', IToken[]> & Record<'valuedValidation', CstNode[]>): ParsedJDLValidation {
+      // only one of these alternatives can exist at the same time; a validation is keyed by its keyword, as written.
+      const keyword = context.REQUIRED ?? context.UNIQUE;
+      if (keyword) {
         return {
-          key: REQUIRED,
+          key: keyword[0].image,
           value: '',
         };
       }
-      if (context.UNIQUE) {
-        return {
-          key: UNIQUE,
-          value: '',
-        };
-      }
-      if (context.minMaxValidation) {
-        return this.visit(context.minMaxValidation);
-      }
-      return this.visit(context.pattern);
+      return this.visit(context.valuedValidation);
     }
 
-    minMaxValidation(context: Record<'NAME' | 'MIN_MAX_KEYWORD' | 'INTEGER' | 'DECIMAL', IToken[]>) {
+    valuedValidation(context: Record<'validationName' | 'NAME' | 'INTEGER' | 'DECIMAL' | 'REGEX', IToken[]>): ParsedJDLValidation {
+      const key = context.validationName[0].image;
       if (context.NAME) {
-        return {
-          key: context.MIN_MAX_KEYWORD[0].image,
-          value: context.NAME[0].image,
-          constant: true,
-        };
+        return { key, value: context.NAME[0].image, constant: true };
       }
-
-      return {
-        key: context.MIN_MAX_KEYWORD[0].image,
-        value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image,
-      };
+      if (context.REGEX) {
+        const patternImage = context.REGEX[0].image;
+        return { key, value: patternImage.substring(1, patternImage.length - 1) };
+      }
+      return { key, value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image };
     }
 
-    pattern(context: Record<'REGEX', IToken[]>) {
-      const patternImage = context.REGEX[0].image;
-
-      return {
-        key: PATTERN,
-        value: patternImage.substring(1, patternImage.length - 1),
-      };
-    }
-
-    relationDeclaration(context: Record<'relationshipType' | 'relationshipBody', CstNode[]>) {
+    relationDeclaration(context: Record<'relationshipType' | 'relationshipBody', CstNode[]>): ParsedJDLRelationship[] {
       const cardinality = this.visit(context.relationshipType);
       const relationshipBodies = context.relationshipBody.map(element => this.visit(element));
 
@@ -342,22 +332,23 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return relationshipBodies;
     }
 
-    relationshipType(context: Record<'RELATIONSHIP_TYPE', IToken[]>) {
-      return context.RELATIONSHIP_TYPE[0].image;
+    relationshipType(context: Record<'RELATIONSHIP_TYPE', IToken[]>): JDLRelationshipType {
+      // The token only matches the relationship types.
+      return context.RELATIONSHIP_TYPE[0].image as JDLRelationshipType;
     }
 
     relationshipBody(
       context: Record<'from' | 'to' | 'annotationOnSourceSide' | 'annotationOnDestinationSide' | 'relationshipOptions', CstNode[]>,
-    ) {
+    ): Omit<ParsedJDLRelationship, 'cardinality'> {
       const optionsForTheSourceSide = context.annotationOnSourceSide?.map(element => this.visit(element)) ?? [];
       const optionsForTheDestinationSide = context.annotationOnDestinationSide?.map(element => this.visit(element)) ?? [];
 
       const from = this.visit(context.from);
       const to = this.visit(context.to);
 
-      const relationshipOptions: ParsedJDLOption[] = [];
+      const relationshipOptions: ParsedJDLAnnotation[] = [];
       if (context.relationshipOptions) {
-        this.visit(context.relationshipOptions).forEach((option: ParsedJDLOption) => relationshipOptions.push(option));
+        this.visit(context.relationshipOptions).forEach((option: ParsedJDLAnnotation) => relationshipOptions.push(option));
       }
 
       return {
@@ -373,7 +364,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
 
     relationshipSide(
       context: Record<'NAME' | 'injectedField' | 'injectedFieldParam' | 'REQUIRED', IToken[]> & Record<'comment', CstNode[]>,
-    ) {
+    ): ParsedJDLRelationshipSide {
       const documentation = this.visit(context.comment);
       const name = context.NAME[0].image;
 
@@ -401,15 +392,15 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return ast;
     }
 
-    relationshipOptions(context: Record<'relationshipOption', CstNode[]>) {
+    relationshipOptions(context: Record<'relationshipOption', CstNode[]>): ParsedJDLAnnotation[] {
       return context.relationshipOption.map(element => this.visit(element)).reduce((final, current) => [...final, current], []);
     }
 
-    relationshipOption(context: Record<'NAME', IToken[]>) {
+    relationshipOption(context: Record<'NAME', IToken[]>): ParsedJDLAnnotation {
       return { optionName: context.NAME[0].image, type: 'UNARY' };
     }
 
-    enumDeclaration(context: Record<'NAME' | 'JAVADOC', IToken[]> & Record<'enumPropList', CstNode[]>) {
+    enumDeclaration(context: Record<'NAME' | 'JAVADOC', IToken[]> & Record<'enumPropList', CstNode[]>): ParsedJDLEnum {
       const name = context.NAME[0].image;
       const values = this.visit(context.enumPropList);
       let documentation: string | null = null;
@@ -420,11 +411,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return { name, values, documentation };
     }
 
-    enumPropList(context: Record<'enumProp', CstNode[]>) {
+    enumPropList(context: Record<'enumProp', CstNode[]>): ParsedJDLEnumValue[] {
       return context.enumProp.map(element => this.visit(element));
     }
 
-    enumProp(context: Record<'enumPropKey' | 'enumPropValue' | 'enumPropValueWithQuotes' | 'JAVADOC', IToken[]>) {
+    enumProp(context: Record<'enumPropKey' | 'enumPropValue' | 'enumPropValueWithQuotes' | 'JAVADOC', IToken[]>): ParsedJDLEnumValue {
       const prop: any = {
         key: context.enumPropKey[0].image,
       };
@@ -441,19 +432,21 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return prop;
     }
 
-    exclusion(context: Record<'NAME', IToken[]>) {
+    exclusion(context: Record<'NAME', IToken[]>): string[] {
       return context.NAME.map(nameToken => nameToken.image);
     }
 
-    optionDeclaration(context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
+    optionDeclaration(
+      context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
+    ): ParsedJDLOption {
       return getOptionFromContext(context, this);
     }
 
-    useOptionDeclaration(context: Record<'NAME', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
+    useOptionDeclaration(context: Record<'NAME', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>): ParsedJDLUseOption {
       return getSpecialUnaryOptionDeclaration(context, this);
     }
 
-    filterDef(context: Record<'NAME' | 'STAR', IToken[]>) {
+    filterDef(context: Record<'NAME' | 'STAR', IToken[]>): string[] {
       let entityList: any[] = [];
       if (context.NAME) {
         entityList = context.NAME.map(nameToken => nameToken.image);
@@ -476,11 +469,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return null;
     }
 
-    deploymentDeclaration(context: Record<'deploymentConfigDeclaration', CstNode[]>) {
-      const config: Record<string, string | boolean> = {};
+    deploymentDeclaration(context: Record<'deploymentConfigDeclaration', CstNode[]>): ParsedJDLDeployment {
+      const config: ParsedJDLDeployment = {};
 
       if (context.deploymentConfigDeclaration) {
-        const configProps: { key: string; value: string | boolean }[] = context.deploymentConfigDeclaration.map(element =>
+        const configProps: { key: string; value: string | boolean | string[] }[] = context.deploymentConfigDeclaration.map(element =>
           this.visit(element),
         );
         configProps.forEach(configProp => {
@@ -506,7 +499,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return this.configValue(context);
     }
 
-    applicationDeclaration(context: Record<'applicationSubDeclaration', CstNode[]>) {
+    applicationDeclaration(context: Record<'applicationSubDeclaration', CstNode[]>): ParsedJDLApplicationDeclaration {
       return this.visit(context.applicationSubDeclaration);
     }
 
@@ -515,7 +508,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         'applicationSubConfig' | 'applicationSubNamespaceConfig' | 'applicationSubEntities' | 'optionDeclaration' | 'useOptionDeclaration',
         CstNode[]
       >,
-    ) {
+    ): ParsedJDLApplicationDeclaration {
       const applicationSubDeclaration: ParsedJDLApplications['applications'][number] = {
         config: {} as any,
         namespaceConfigs: {},
@@ -632,7 +625,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
     }
 
-    applicationSubConfig(context: Record<'applicationConfigDeclaration', CstNode[]>) {
+    applicationSubConfig(context: Record<'applicationConfigDeclaration', CstNode[]>): ParsedJDLApplicationConfig {
       const config: any = {};
 
       if (context.applicationConfigDeclaration) {
@@ -682,18 +675,18 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
     }
 
-    qualifiedName(context: Record<'NAME', IToken[]>) {
+    qualifiedName(context: Record<'NAME', IToken[]>): string {
       return context.NAME.map(namePart => namePart.image).join('.');
     }
 
-    list(context: Record<'NAME', IToken[]>) {
+    list(context: Record<'NAME', IToken[]>): string[] {
       if (!context.NAME) {
         return [];
       }
       return context.NAME.map(namePart => namePart.image);
     }
 
-    quotedList(context: Record<'STRING', IToken[]>) {
+    quotedList(context: Record<'STRING', IToken[]>): string[] {
       if (!context.STRING) {
         return [];
       }

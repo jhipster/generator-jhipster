@@ -69,7 +69,6 @@ describe('jdl - JDLDeployment', () => {
         args = {
           deploymentType: 'docker-compose',
           appsFolders: ['foo', 'bar'],
-          // @ts-expect-error FIXME directoryPath is not defined in the type
           directoryPath: '../',
           gatewayType: 'SpringCloudGateway',
           dockerRepositoryName: 'test',
@@ -96,7 +95,6 @@ describe('jdl - JDLDeployment', () => {
         args = {
           deploymentType: 'docker-compose',
           appsFolders: ['foo', 'bar'],
-          // @ts-expect-error FIXME directoryPath is not defined in the type
           directoryPath: '../parent',
           gatewayType: 'SpringCloudGateway',
           dockerRepositoryName: 'test',

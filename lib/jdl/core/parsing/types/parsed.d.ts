@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationType } from '../../../core/application-types.ts';
-import type { RelationshipType } from '../basic-types/relationships.ts';
+import type { JDLRelationshipType } from '../relationship-types.ts';
 
 export type ParsedJDLAnnotation = {
   optionName: string;
@@ -36,13 +35,15 @@ export type ParsedJDLEntityField = {
   validations: ParsedJDLValidation[];
   name: string;
   type: string;
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
 };
 
 export type ParsedJDLEntity = {
   name: string;
   tableName?: string;
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
   annotations?: ParsedJDLAnnotation[];
   body?: ParsedJDLEntityField[];
 };
@@ -59,7 +60,8 @@ export type ParsedJDLEnumValue = {
 export type ParsedJDLEnum = {
   name: string;
   values: ParsedJDLEnumValue[];
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
 };
 
 export type ParsedJDLOptionConfig = {
@@ -89,8 +91,9 @@ export type ParsedJDLApplication = {
   useOptions?: ParsedJDLUseOption[];
 };
 
-export type ParsedJDLDeployment = {
-  deploymentType: string;
+/** A deployment as written, one entry per option: they are checked after parsing, `deploymentType` included. */
+export type ParsedJDLDeployment = Record<string, string | boolean | string[] | undefined> & {
+  deploymentType?: string;
   appsFolders?: string[];
   dockerRepositoryName?: string;
 };
@@ -99,7 +102,8 @@ export type ParsedJDLRelationshipSide = {
   name: string;
   injectedField?: string;
   required: boolean;
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
 };
 
 export type ParsedJDLRelationshipOption = {
@@ -111,12 +115,15 @@ export type ParsedJDLRelationshipOption = {
 export type ParsedJDLRelationship = {
   from: ParsedJDLRelationshipSide;
   to: ParsedJDLRelationshipSide;
-  cardinality: RelationshipType;
+  cardinality: JDLRelationshipType;
   options: ParsedJDLRelationshipOption;
 };
 
+/** An application as the parser writes it: the entities statement is resolved into `entities` after parsing. */
+export type ParsedJDLApplicationDeclaration = ParsedJDLApplication & { entitiesOptions?: { entityList: string[]; excluded: string[] } };
+
 export type ParsedJDLApplications = {
-  applications: (ParsedJDLApplication & { entitiesOptions?: { entityList: string[]; excluded: string[] } })[];
+  applications: ParsedJDLApplicationDeclaration[];
   entities: ParsedJDLEntity[];
   relationships: ParsedJDLRelationship[];
   deployments: ParsedJDLDeployment[];
@@ -124,12 +131,4 @@ export type ParsedJDLApplications = {
   constants: Record<string, string>;
   options: Record<string, ParsedJDLOption | Record<string, ParsedJDLOption>>;
   useOptions: ParsedJDLUseOption[];
-};
-
-export type ParsedJDLRoot = {
-  parsedContent: ParsedJDLApplications;
-  document?: ParsedJDLApplications; // deprecated
-  entities?: ParsedJDLEntity[];
-  applicationType?: ApplicationType;
-  applicationName?: string;
 };

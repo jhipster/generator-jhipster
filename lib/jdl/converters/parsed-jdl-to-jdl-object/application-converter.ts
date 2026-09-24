@@ -23,8 +23,8 @@ import { createJDLApplication } from '../../core/models/jdl-application-factory.
 import type JDLApplication from '../../core/models/jdl-application.ts';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import type JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
-import type { ParsedJDLApplication } from '../../core/types/parsed.ts';
-import type { JDLRuntime } from '../../core/types/runtime.ts';
+import type { ParsedJDLApplication } from '../../core/parsing/types/parsed.ts';
+import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
 
 import { convertOptions } from './option-converter.ts';
 

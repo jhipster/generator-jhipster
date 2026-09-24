@@ -23,11 +23,13 @@ import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.t
 import { getDefaultJDLEntityConfig } from '../../../jdl-config/jdl-entity-config.ts';
 import { getDefaultJDLRelationshipConfig } from '../../../jdl-config/jdl-relationship-config.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
+import { getDefaultJDLValidationConfig } from '../../../jdl-config/jdl-validation-config.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.ts';
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
-import type { ParsedJDLApplications, ParsedJDLOption } from '../types/parsed.ts';
 import logger from '../utils/objects/logger.ts';
+
+import type { ParsedJDLApplications, ParsedJDLOption } from './types/parsed.ts';
 
 const runtime = getDefaultRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
@@ -1904,6 +1906,52 @@ entity A {
     it('should parse it as the pagination option and warn', () => {
       expect(parsedOptions).toEqual({ pagination: { pagination: { list: ['A'], excluded: [] } } });
       expect(warnSpy).toHaveBeenCalledWith('The paginate option is deprecated, please use pagination instead.');
+    });
+  });
+  describe('when parsing the validations of a runtime with validation definitions of its own', () => {
+    it('should parse a validation the definitions declare', () => {
+      // The validations with a value come from the definitions, the grammar only knows `<name>(<value>)`.
+      const customRuntime = createJDLRuntime({
+        validation: { configs: { ...getDefaultJDLValidationConfig().configs, step: { jdl: { value: 'number' } } } },
+      });
+      const [entity] = originalParseFromContent('entity A {\n  age Integer required step(5) max(99)\n}', customRuntime).entities;
+      expect(entity.body![0].validations).toEqual([
+        { key: 'required', value: '' },
+        { key: 'step', value: '5' },
+        { key: 'max', value: '99' },
+      ]);
+    });
+    it('should report a validation the definitions do not declare', () => {
+      const customRuntime = createJDLRuntime({ validation: { configs: { step: { jdl: { value: 'number' } } } } });
+      expect(() => originalParseFromContent('entity A {\n  age Integer max(99)\n}', customRuntime)).toThrow(
+        /^Unknown validation: max\.\n\tat line: 2, column: 15$/,
+      );
+    });
+  });
+  describe('when parsing a validation with a value', () => {
+    it('should report an unknown validation', () => {
+      expect(() => parseFromContent('entity A {\n  name String maxlenght(3)\n}')).toThrow(
+        /^Unknown validation: maxlenght\.\n\tat line: 2, column: 15$/,
+      );
+    });
+    it('should report a regular expression given to a number validation', () => {
+      expect(() => parseFromContent('entity A {\n  name String minlength(/a/)\n}')).toThrow(
+        /^The minlength validation takes a number or a constant: minlength\(<value>\)\.\n\tat line: 2, column: 15$/,
+      );
+    });
+    it('should report a number given to the pattern validation', () => {
+      expect(() => parseFromContent('entity A {\n  name String pattern(3)\n}')).toThrow(
+        /^The pattern validation takes a regular expression: pattern\(\/<pattern>\/\)\.\n\tat line: 2, column: 15$/,
+      );
+    });
+    it('should parse fields named like a validation', () => {
+      // A validation name is no keyword: only a parenthesis after it makes it a validation.
+      const [entity] = parseFromContent('entity A {\n  name String minlength(1)\n  min Integer min(0)\n  pattern String\n}').entities;
+      expect(entity.body!.map(field => [field.name, field.validations.map(validation => validation.key)])).toEqual([
+        ['name', ['minlength']],
+        ['min', ['min']],
+        ['pattern', []],
+      ]);
     });
   });
   describe('when parsing an option statement of a runtime with entity definitions of its own', () => {

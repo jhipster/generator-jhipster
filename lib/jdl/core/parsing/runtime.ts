@@ -19,10 +19,10 @@
 
 import type { Lexer, TokenType } from 'chevrotain';
 
-import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
-import JDLParser from './parsing/jdl-parser.ts';
-import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
-import { checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
+import JDLApplicationDefinition from './jdl-application-definition.ts';
+import JDLParser from './jdl-parser.ts';
+import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './lexer/lexer.ts';
+import { checkTokens } from './self-checks/parsing-system-checker.ts';
 import type { JDLDefinitions, JDLValidatorOption } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 
@@ -35,6 +35,7 @@ export const createRuntime = ({
   deployment: deploymentDefinition,
   entity: entityDefinition,
   relationship: relationshipDefinition,
+  validation: validationDefinition,
 }: JDLDefinitions): JDLRuntime => {
   const propertyValidations: Record<string, JDLValidatorOption> = definition.validatorConfig;
   const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
@@ -80,6 +81,7 @@ export const createRuntime = ({
     applicationDefinition,
     entityDefinition,
     relationshipDefinition,
+    validationDefinition,
     propertyValidations,
     deploymentPropertyValidations,
     deploymentDefinition: jdlDeploymentDefinition,

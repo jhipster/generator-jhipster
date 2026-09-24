@@ -18,7 +18,7 @@
  */
 import { lowerFirst } from 'lodash-es';
 
-import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import { APPLICATION_TYPE_MICROSERVICE, type ApplicationType } from '../../../core/application-types.ts';
 import { binaryOptions } from '../../core/built-in-options/index.ts';
 import type { JDLEntity } from '../../core/models/index.ts';
 import type JDLApplication from '../../core/models/jdl-application.ts';
@@ -26,14 +26,8 @@ import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import type JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import type JDLValidation from '../../core/models/jdl-validation.ts';
-import type {
-  ParsedJDLAnnotation,
-  ParsedJDLApplications,
-  ParsedJDLEntity,
-  ParsedJDLEntityField,
-  ParsedJDLRoot,
-} from '../../core/types/parsed.ts';
-import type { JDLRuntime } from '../../core/types/runtime.ts';
+import type { ParsedJDLAnnotation, ParsedJDLApplications, ParsedJDLEntity, ParsedJDLEntityField } from '../../core/parsing/types/parsed.ts';
+import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
 
 import { convertApplications } from './application-converter.ts';
 import { convertDeployments } from './deployment-converter.ts';
@@ -45,6 +39,15 @@ import { convertRelationships } from './relationship-converter.ts';
 import { convertValidations } from './validation-converter.ts';
 
 let parsedContent: ParsedJDLApplications;
+/** What the reader hands the converter: the parsed jdl, and the application it is imported for. */
+export type ParsedJDLRoot = {
+  parsedContent: ParsedJDLApplications;
+  document?: ParsedJDLApplications; // deprecated
+  entities?: ParsedJDLEntity[];
+  applicationType?: ApplicationType;
+  applicationName?: string;
+};
+
 let configuration: ParsedJDLRoot;
 let jdlObject: JDLObject;
 let entityNames: string[];

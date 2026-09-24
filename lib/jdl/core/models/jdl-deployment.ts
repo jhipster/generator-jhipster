@@ -19,7 +19,7 @@
 import { isEqual } from 'lodash-es';
 
 import { getDefaultJDLDeploymentDefaults } from '../../../jdl-config/jhipster-jdl-config.ts';
-import type { ParsedJDLDeployment } from '../types/parsed.ts';
+import type { ParsedJDLDeployment } from '../parsing/types/parsed.ts';
 import { merge } from '../utils/object-utils.ts';
 import { join } from '../utils/set-utils.ts';
 

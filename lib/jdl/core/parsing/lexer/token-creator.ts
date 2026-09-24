@@ -18,18 +18,19 @@
  */
 
 import { type ITokenConfig, createToken } from 'chevrotain';
-import { castArray, escapeRegExp, isString } from 'lodash-es';
 
 import { KEYWORD, namePattern } from './shared-tokens.ts';
+
+const escapeRegExp = (text: string) => text.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
 
 export default function createTokenFromConfig(tokenConfig: ITokenConfig) {
   if (!tokenConfig) {
     throw new Error("Can't create a token without the proper config.");
   }
   // Token configs may be shared between runtimes, so never mutate the passed config.
-  const categories = castArray(tokenConfig.categories ?? []);
+  const categories = [tokenConfig.categories ?? []].flat();
   const config: ITokenConfig = { ...tokenConfig, categories };
-  if (isString(config.pattern)) {
+  if (typeof config.pattern === 'string') {
     // readable labels for diagrams
     config.label ??= `'${config.pattern}'`;
   }
@@ -39,7 +40,7 @@ export default function createTokenFromConfig(tokenConfig: ITokenConfig) {
   // A keyword is matched only as a whole word: it must not be followed by another identifier character.
   // Otherwise a keyword that is a prefix of an identifier (`entity` in `entityName`) or of another keyword
   // (`microfrontend` in `microfrontends`) would match first, whatever the order the tokens are declared in.
-  if (isString(config.pattern) && namePattern.test(config.pattern)) {
+  if (typeof config.pattern === 'string' && namePattern.test(config.pattern)) {
     config.pattern = new RegExp(`${escapeRegExp(config.pattern)}(?![a-zA-Z_\\-\\d])`);
     categories.push(KEYWORD);
   }

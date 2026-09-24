@@ -19,8 +19,8 @@
 
 import type { CstNode, IToken } from 'chevrotain';
 
+import type { JDLRuntime } from '../parsing/types/runtime.ts';
 import { getCstFromContent } from '../readers/jdl-reader.ts';
-import type { JDLRuntime } from '../types/runtime.ts';
 
 import { checkEntities } from './entity-linter.ts';
 import { checkEnums } from './enum-linter.ts';

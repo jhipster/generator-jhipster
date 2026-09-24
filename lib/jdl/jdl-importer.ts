@@ -38,12 +38,12 @@ import type JDLJSONEntity from './core/basic-types/json-entity.ts';
 import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 import type JDLDeployment from './core/models/jdl-deployment.ts';
 import type JDLObject from './core/models/jdl-object.ts';
+import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
+import type { JDLApplicationConfig } from './core/parsing/types/parsing.ts';
+import type { JDLRuntime } from './core/parsing/types/runtime.ts';
 import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
 import type { JSONEntity } from './core/types/json-config.ts';
-import type { ParsedJDLApplications } from './core/types/parsed.ts';
-import type { JDLApplicationConfig } from './core/types/parsing.ts';
-import type { JDLRuntime } from './core/types/runtime.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 

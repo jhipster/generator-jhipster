@@ -26,7 +26,7 @@ import { setModifiedFileState } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.ts';
-import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.ts';
+import type { JDLApplicationConfig } from '../../../lib/jdl/core/parsing/types/parsing.ts';
 import { createJDLRuntime } from '../../../lib/jdl-config/jdl-runtime.ts';
 import type { Entity } from '../../../lib/jhipster/types/entity.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';

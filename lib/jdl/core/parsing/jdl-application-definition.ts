@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/parsing.ts';
+import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from './types/parsing.ts';
 
 export default class JDLApplicationDefinition {
   optionValues: Record<string, JDLApplicationOptionValue>;

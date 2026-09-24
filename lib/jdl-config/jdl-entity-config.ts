@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLOptionsDefinition } from '../jdl/core/types/parsing.ts';
+import type { JDLOptionsDefinition } from '../jdl/core/parsing/types/parsing.ts';
 
 const defaultJDLEntityConfig: JDLOptionsDefinition = Object.freeze({
   configs: {
