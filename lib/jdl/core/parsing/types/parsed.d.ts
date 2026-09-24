@@ -110,7 +110,7 @@ export type ParsedJDLUseOption = Located & {
 
 export type ParsedJDLApplication = Located & {
   config: ParsedJDLApplicationConfig;
-  namespaceConfigs?: Record<string, KeyLocated & Record<string, boolean | number | string[] | string>>;
+  namespaceConfigs?: Record<string, Located & KeyLocated & Record<string, boolean | number | string[] | string>>;
   entities?: string[];
   options?: Record<string, ParsedJDLOptionConfig | Record<string, ParsedJDLOptionConfig>>;
   useOptions?: ParsedJDLUseOption[];

@@ -17,16 +17,12 @@
  * limitations under the License.
  */
 
-import { BASE_NAME_KEY } from '../../core/built-in-options/index.ts';
-import type JDLApplicationConfigurationOption from '../../core/models/jdl-application-configuration-option.ts';
 import type JDLApplication from '../../core/models/jdl-application.ts';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import type JDLField from '../../core/models/jdl-field.ts';
 import type JDLObject from '../../core/models/jdl-object.ts';
-import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 
 import BinaryOptionValidator from './binary-option-validator.ts';
-import DeploymentValidator from './deployment-validator.ts';
 import EntityValidator from './entity-validator.ts';
 import EnumValidator from './enum-validator.ts';
 import FieldValidator from './field-validator.ts';
@@ -44,25 +40,13 @@ export default function createValidator(jdlObject: JDLObject) {
   return {
     checkForErrors: (): void => {
       jdlObject.forEachApplication(jdlApplication => {
-        checkForNamespaceConfigErrors(jdlApplication);
         checkForRelationshipErrors();
         checkForEntityErrors(jdlApplication);
         checkForEnumErrors();
-        checkDeploymentsErrors();
         checkForOptionErrors();
       });
-      checkForRelationshipsBetweenApplications();
     },
   };
-
-  function checkForNamespaceConfigErrors(jdlApplication: JDLApplication): void {
-    jdlApplication.forEachNamespaceConfiguration(config => {
-      const blueprints: JDLApplicationConfigurationOption<string[]> | undefined = jdlApplication.config.getOption('blueprints');
-      if (!blueprints?.getValue().some(blueprint => blueprint === config.namespace)) {
-        throw new Error(`Blueprint namespace config ${config.namespace} requires the blueprint ${config.namespace}`);
-      }
-    });
-  }
 
   function checkForEntityErrors(jdlApplication: JDLApplication): void {
     if (jdlObject.getEntityQuantity() === 0) {
@@ -106,16 +90,6 @@ export default function createValidator(jdlObject: JDLObject) {
     });
   }
 
-  function checkDeploymentsErrors(): void {
-    if (jdlObject.getDeploymentQuantity() === 0) {
-      return;
-    }
-    const validator = new DeploymentValidator();
-    jdlObject.forEachDeployment(deployment => {
-      validator.validate(deployment);
-    });
-  }
-
   function checkForOptionErrors(): void {
     if (jdlObject.getOptionQuantity() === 0) {
       return;
@@ -130,50 +104,4 @@ export default function createValidator(jdlObject: JDLObject) {
       }
     });
   }
-
-  function checkForRelationshipsBetweenApplications(): void {
-    const applicationsPerEntityNames = getApplicationsPerEntityNames(jdlObject);
-    jdlObject.forEachRelationship(jdlRelationship => {
-      checkIfRelationshipIsBetweenApplications({
-        jdlRelationship,
-        applicationsPerEntityName: applicationsPerEntityNames,
-      });
-    });
-  }
-}
-
-function checkIfRelationshipIsBetweenApplications({
-  jdlRelationship,
-  applicationsPerEntityName,
-}: {
-  jdlRelationship: JDLRelationship;
-  applicationsPerEntityName: Record<string, JDLApplication[]>;
-}): void {
-  let applicationsForSourceEntity = applicationsPerEntityName[jdlRelationship.from];
-  let applicationsForDestinationEntity = applicationsPerEntityName[jdlRelationship.to];
-  if (!applicationsForDestinationEntity || !applicationsForSourceEntity) {
-    return;
-  }
-  applicationsForSourceEntity = applicationsForSourceEntity.map(jdlApplication =>
-    jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY),
-  );
-  applicationsForDestinationEntity = applicationsForDestinationEntity.map(jdlApplication =>
-    jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY),
-  );
-  const difference = applicationsForSourceEntity.filter(application => !applicationsForDestinationEntity.includes(application));
-  if (difference.length !== 0) {
-    throw new Error(
-      `Entities for the ${jdlRelationship.type} relationship from '${jdlRelationship.from}' to '${jdlRelationship.to}' do not belong to the same application.`,
-    );
-  }
-}
-function getApplicationsPerEntityNames(jdlObject: JDLObject): Record<string, JDLApplication[]> {
-  const applicationsPerEntityName: Record<string, JDLApplication[]> = {};
-  jdlObject.forEachApplication(jdlApplication => {
-    jdlApplication.forEachEntityName(entityName => {
-      applicationsPerEntityName[entityName] ??= [];
-      applicationsPerEntityName[entityName].push(jdlApplication);
-    });
-  });
-  return applicationsPerEntityName;
 }

@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import databaseTypes from '../../../jhipster/database-types.ts';
 import { relationshipTypes } from '../../core/basic-types/index.ts';
@@ -77,88 +77,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             validator.checkForErrors();
           }).not.toThrow();
         });
-      });
-    });
-    describe('with relationships between multiple applications', () => {
-      let validator: ReturnType<typeof createValidator>;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application1 = createJDLApplication(
-          {
-            applicationType: APPLICATION_TYPE_MICROSERVICE,
-            baseName: 'app1',
-          },
-          runtime,
-        );
-        application1.addEntityNames(['A', 'B']);
-        const application2 = createJDLApplication(
-          {
-            applicationType: APPLICATION_TYPE_MICROSERVICE,
-            baseName: 'app2',
-          },
-          runtime,
-        );
-        application2.addEntityNames(['B', 'C']);
-        const application3 = createJDLApplication(
-          {
-            applicationType: APPLICATION_TYPE_MICROSERVICE,
-            baseName: 'app3',
-          },
-          runtime,
-        );
-        application3.addEntityNames(['A', 'B', 'C']);
-        jdlObject.addApplication(application1);
-        jdlObject.addApplication(application2);
-        jdlObject.addApplication(application3);
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'A',
-          }),
-        );
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'B',
-          }),
-        );
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'C',
-          }),
-        );
-        jdlObject.addRelationship(
-          new JDLRelationship({
-            from: 'A',
-            to: 'B',
-            type: relationshipTypes.MANY_TO_MANY,
-            injectedFieldInFrom: 'b',
-            injectedFieldInTo: 'a',
-          }),
-        );
-        jdlObject.addRelationship(
-          new JDLRelationship({
-            from: 'B',
-            to: 'C',
-            type: relationshipTypes.MANY_TO_MANY,
-            injectedFieldInFrom: 'c',
-            injectedFieldInTo: 'd',
-          }),
-        );
-        jdlObject.addRelationship(
-          new JDLRelationship({
-            from: 'A',
-            to: 'C',
-            type: relationshipTypes.MANY_TO_MANY,
-            injectedFieldInFrom: 'c',
-            injectedFieldInTo: 'd',
-          }),
-        );
-        validator = createValidator(jdlObject);
-      });
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).toThrow("Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application.");
       });
     });
     describe('when having DTOs without services', () => {

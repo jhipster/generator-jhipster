@@ -605,7 +605,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         });
       }
 
-      return { namespace, config: setKeyLocations(config, keyLocations) };
+      return { namespace, config: setKeyLocations(setLocation(config, spanLocation(context)), keyLocations) };
     }
 
     applicationNamespaceConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'namespaceConfigValue', CstNode[]>) {

@@ -18,35 +18,19 @@
  */
 
 import JDLDeployment from '../../core/models/jdl-deployment.ts';
-import { errorLocation } from '../../core/parsing/location.ts';
 import type { ParsedJDLDeployment } from '../../core/parsing/types/parsed.ts';
-import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
 
 export default { convertDeployments };
 
 /**
  * Converts a parsed JDL content corresponding to deployments to an array of JDLDeployment objects.
  * @param {Array} parsedDeployments - parsed JDL deployments.
- * @param runtime - the runtime, whose deployment definition says which values an option allows.
  * @return the converted JDLDeployment objects.
  */
-export function convertDeployments(parsedDeployments: ParsedJDLDeployment[], runtime: JDLRuntime): JDLDeployment[] {
+export function convertDeployments(parsedDeployments: ParsedJDLDeployment[]): JDLDeployment[] {
   if (!parsedDeployments) {
     throw new Error('Deployments have to be passed so as to be converted.');
   }
-  return parsedDeployments.map(parsedDeployment => {
-    // Like the application configuration: an option with choices only takes one of them.
-    for (const [optionName, optionValue] of Object.entries(parsedDeployment)) {
-      if (
-        (Array.isArray(optionValue) || typeof optionValue === 'string') &&
-        runtime.deploymentDefinition.doesOptionExist(optionName) &&
-        !runtime.deploymentDefinition.doesOptionValueExist(optionName, optionValue)
-      ) {
-        throw new Error(
-          `The value '${optionValue}' is not allowed for the deployment option '${optionName}'.${errorLocation(parsedDeployment.keyLocations?.[optionName])}`,
-        );
-      }
-    }
-    return new JDLDeployment(parsedDeployment);
-  });
+  // The semantic rules checked the values.
+  return parsedDeployments.map(parsedDeployment => new JDLDeployment(parsedDeployment));
 }

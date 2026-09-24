@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JDLSemanticRule } from '../semantic/types.ts';
 
 export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
 
@@ -106,6 +107,8 @@ export type JDLDefinitions = {
   validation: JDLValidationsDefinition;
   /** The field types and their validations; without them, a field takes any type and any validation. */
   fieldTypes?: JDLFieldTypesDefinition;
+  /** Semantic rules of the tool, checked with the ones of the jdl. */
+  rules?: readonly JDLSemanticRule[];
 };
 
 export type JHipsterOptionDefinition = {

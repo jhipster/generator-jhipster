@@ -19,7 +19,6 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import type JDLDeployment from '../../core/models/jdl-deployment.ts';
 
 import { convertDeployments } from './deployment-converter.ts';
@@ -28,28 +27,7 @@ describe('jdl - DeploymentConverter', () => {
   describe('convertDeployments', () => {
     describe('when not passing deployments', () => {
       it('should fail', () => {
-        expect(() => convertDeployments(undefined as any, getDefaultRuntime())).toThrow(
-          /^Deployments have to be passed so as to be converted\.$/,
-        );
-      });
-    });
-    describe('when passing a value an option does not allow', () => {
-      it('should fail', () => {
-        expect(() =>
-          convertDeployments(
-            [{ deploymentType: 'kubernetes', appsFolders: ['tata'], serviceDiscoveryType: 'zookeeper' } as any],
-            getDefaultRuntime(),
-          ),
-        ).toThrow(/^The value 'zookeeper' is not allowed for the deployment option 'serviceDiscoveryType'\.$/);
-      });
-
-      it('should let an option without choices take any value', () => {
-        expect(() =>
-          convertDeployments(
-            [{ deploymentType: 'kubernetes', appsFolders: ['tata'], kubernetesNamespace: 'anything-goes' } as any],
-            getDefaultRuntime(),
-          ),
-        ).not.toThrow();
+        expect(() => convertDeployments(undefined as any)).toThrow(/^Deployments have to be passed so as to be converted\.$/);
       });
     });
 
@@ -57,16 +35,13 @@ describe('jdl - DeploymentConverter', () => {
       let convertedDeployments: JDLDeployment[];
 
       before(() => {
-        convertedDeployments = convertDeployments(
-          [
-            {
-              deploymentType: 'docker-compose',
-              appsFolders: ['tata', 'titi'],
-              dockerRepositoryName: 'test',
-            },
-          ],
-          getDefaultRuntime(),
-        );
+        convertedDeployments = convertDeployments([
+          {
+            deploymentType: 'docker-compose',
+            appsFolders: ['tata', 'titi'],
+            dockerRepositoryName: 'test',
+          },
+        ]);
       });
 
       it('should convert them', () => {

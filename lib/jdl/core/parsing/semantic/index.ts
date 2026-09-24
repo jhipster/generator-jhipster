@@ -19,16 +19,20 @@
 import type { ParsedJDLApplications } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
-import { semanticRules } from './rules.ts';
 import type { JDLDiagnostic, JDLSemanticRule } from './types.ts';
 
 export type { JDLDiagnostic, JDLSemanticRule } from './types.ts';
 
 /**
  * Checks the parsed jdl against the semantic rules: what the grammar cannot tell, an entity that is used but not declared
- * for instance. Every problem is reported, in source order.
+ * for instance. Every problem is reported, in source order. The rules are the runtime's: the ones of the jdl, then the ones
+ * of the tool its definitions bring.
  */
-export function checkSemantics(ast: ParsedJDLApplications, runtime: JDLRuntime, rules: JDLSemanticRule[] = semanticRules): JDLDiagnostic[] {
+export function checkSemantics(
+  ast: ParsedJDLApplications,
+  runtime: JDLRuntime,
+  rules: readonly JDLSemanticRule[] = runtime.semanticRules,
+): JDLDiagnostic[] {
   return rules
     .flatMap(rule => rule.check(ast, runtime).map(diagnostic => ({ ruleId: rule.id, severity: 'error' as const, ...diagnostic })))
     .sort((a, b) => (a.location?.startOffset ?? Infinity) - (b.location?.startOffset ?? Infinity));

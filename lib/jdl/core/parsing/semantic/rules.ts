@@ -294,6 +294,84 @@ export const optionValue: JDLSemanticRule = {
   },
 };
 
+export const relationshipBetweenApplications: JDLSemanticRule = {
+  id: 'relationship-between-applications',
+  check: ast => {
+    const applicationsPerEntity = new Map<string, Set<string>>();
+    for (const application of ast.applications) {
+      for (const entityName of application.entities ?? []) {
+        if (!applicationsPerEntity.has(entityName)) applicationsPerEntity.set(entityName, new Set());
+        applicationsPerEntity.get(entityName)!.add(application.config.baseName);
+      }
+    }
+    return ast.relationships.flatMap(relationship => {
+      const sourceApplications = applicationsPerEntity.get(relationship.from.name);
+      const destinationApplications = applicationsPerEntity.get(relationship.to.name);
+      // An application with the source entity must have the destination one.
+      if (!sourceApplications || !destinationApplications || [...sourceApplications].every(name => destinationApplications.has(name))) {
+        return [];
+      }
+      return [
+        {
+          message: `Entities for the ${relationship.cardinality} relationship from '${relationship.from.name}' to '${relationship.to.name}' do not belong to the same application.`,
+          location: relationship.location,
+        },
+      ];
+    });
+  },
+};
+
+/** A value an option with choices does not take, a list value by any of its items. */
+const isValueNotAllowed = (
+  definition: JDLRuntime['applicationDefinition'],
+  optionName: string,
+  value: unknown,
+): value is string | string[] =>
+  (Array.isArray(value) || typeof value === 'string') &&
+  definition.doesOptionExist(optionName) &&
+  !definition.doesOptionValueExist(optionName, value);
+
+export const applicationOptionValue: JDLSemanticRule = {
+  id: 'application-option-value',
+  check: (ast, runtime) =>
+    ast.applications.flatMap(({ config }) =>
+      Object.entries(config)
+        .filter(([optionName, value]) => isValueNotAllowed(runtime.applicationDefinition, optionName, value))
+        .map(([optionName, value]) => ({
+          message: `The value '${value}' is not allowed for the option '${optionName}'.`,
+          location: config.keyLocations?.[optionName],
+        })),
+    ),
+};
+
+export const deploymentOptionValue: JDLSemanticRule = {
+  id: 'deployment-option-value',
+  check: (ast, runtime) =>
+    ast.deployments.flatMap(deployment =>
+      Object.entries(deployment)
+        .filter(([optionName, value]) => isValueNotAllowed(runtime.deploymentDefinition, optionName, value))
+        .map(([optionName, value]) => ({
+          message: `The value '${value}' is not allowed for the deployment option '${optionName}'.`,
+          location: deployment.keyLocations?.[optionName],
+        })),
+    ),
+};
+
+/** A namespace config configures the blueprint of the same name, which the application must use. */
+export const namespaceConfigBlueprint: JDLSemanticRule = {
+  id: 'namespace-config-blueprint',
+  check: ast =>
+    ast.applications.flatMap(application => {
+      const { blueprints } = application.config;
+      return Object.entries(application.namespaceConfigs ?? {})
+        .filter(([namespace]) => !(Array.isArray(blueprints) && blueprints.includes(namespace)))
+        .map(([namespace, config]) => ({
+          message: `Blueprint namespace config ${namespace} requires the blueprint ${namespace}`,
+          location: config.location,
+        }));
+    }),
+};
+
 export const semanticRules: JDLSemanticRule[] = [
   undeclaredRelationshipEntity,
   undeclaredApplicationEntity,
@@ -308,4 +386,8 @@ export const semanticRules: JDLSemanticRule[] = [
   requiredReflexiveRelationship,
   oneToOneDirection,
   optionValue,
+  relationshipBetweenApplications,
+  applicationOptionValue,
+  deploymentOptionValue,
+  namespaceConfigBlueprint,
 ];

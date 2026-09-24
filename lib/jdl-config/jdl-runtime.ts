@@ -24,12 +24,13 @@ import type { JDLRuntime } from '../jdl/core/parsing/types/runtime.ts';
 import { getDefaultJDLEntityConfig } from './jdl-entity-config.ts';
 import { getDefaultJDLFieldTypesConfig } from './jdl-field-types-config.ts';
 import { getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';
+import { jhipsterSemanticRules } from './jdl-semantic-rules.ts';
 import { getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
 /**
  * The JHipster definitions: the application and deployment options of the generators, the entity and relationship
- * option statements, the field validations and types.
+ * option statements, the field validations and types, and the semantic rules of JHipster.
  */
 export const getDefaultJDLDefinitions = (): Required<JDLDefinitions> => ({
   application: getDefaultJDLApplicationConfig(),
@@ -38,6 +39,7 @@ export const getDefaultJDLDefinitions = (): Required<JDLDefinitions> => ({
   relationship: getDefaultJDLRelationshipConfig(),
   validation: getDefaultJDLValidationConfig(),
   fieldTypes: getDefaultJDLFieldTypesConfig(),
+  rules: jhipsterSemanticRules,
 });
 
 /** A runtime from the JHipster definitions, the ones not passed. */
@@ -50,6 +52,7 @@ export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDL
     relationship: definitions.relationship ?? defaults.relationship,
     validation: definitions.validation ?? defaults.validation,
     fieldTypes: definitions.fieldTypes ?? defaults.fieldTypes,
+    rules: definitions.rules ?? defaults.rules,
   });
 };
 

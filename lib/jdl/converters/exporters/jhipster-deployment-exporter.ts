@@ -22,7 +22,6 @@ import path from 'node:path';
 import type { YoRcJHipsterDeploymentContent } from '../../../jhipster/types/yo-rc.ts';
 import type JDLDeployment from '../../core/models/jdl-deployment.ts';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../../core/utils/file-utils.ts';
-import DeploymentValidator from '../validators/deployment-validator.ts';
 
 import { GENERATOR_NAME, writeConfigFile } from './export-utils.ts';
 
@@ -39,18 +38,12 @@ export default function exportDeployments(
     throw new Error('Deployments have to be passed to be exported.');
   }
   return Object.values(deployments).map(deployment => {
-    checkForErrors(deployment);
     const yoRcDeployment: Partial<YoRcJHipsterDeploymentContent> = setUpDeploymentStructure(deployment);
     if (!skipFileGeneration) {
       writeDeploymentConfigs(yoRcDeployment);
     }
     return yoRcDeployment;
   });
-}
-
-function checkForErrors(deployment: JDLDeployment) {
-  const validator = new DeploymentValidator();
-  validator.validate(deployment);
 }
 
 function setUpDeploymentStructure(deployment: JDLDeployment) {

@@ -295,6 +295,81 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('relationship-between-applications', () => {
+    const applications = (sourceApplications: string, destinationApplications: string) =>
+      `entity A\nentity B\napplication { config { baseName a } entities ${sourceApplications} }\napplication { config { baseName b } entities ${destinationApplications} }\nrelationship ManyToOne { A to B }`;
+    it('reports a relationship from an application that does not have the destination', () => {
+      expect(check(applications('A', 'B'))).toEqual([
+        {
+          ruleId: 'relationship-between-applications',
+          message: "Entities for the ManyToOne relationship from 'A' to 'B' do not belong to the same application.",
+          at: 'A to B',
+        },
+      ]);
+      expect(check(applications('A, B', 'A')).map(diagnostic => diagnostic.ruleId)).toEqual(['relationship-between-applications']);
+    });
+    it('accepts a destination in every application of the source', () => {
+      expect(check(applications('A, B', 'B'))).toEqual([]);
+    });
+    it('accepts an entity of no application', () => {
+      expect(check('entity A\nentity B\napplication { config { baseName a } entities A }\nrelationship ManyToOne { A to B }')).toEqual([]);
+    });
+  });
+
+  describe('application-option-value', () => {
+    it('reports a value outside the choices of an application option, at the option', () => {
+      expect(check('application {\n  config {\n    baseName foo\n    clientFramework svelte\n  }\n}')).toEqual([
+        {
+          ruleId: 'application-option-value',
+          message: "The value 'svelte' is not allowed for the option 'clientFramework'.",
+          at: 'clientFramework svelte',
+        },
+      ]);
+    });
+  });
+
+  describe('deployment-option-value', () => {
+    it('reports a value outside the choices of a deployment option, at the option', () => {
+      expect(check('deployment {\n  deploymentType kubernetes\n  serviceDiscoveryType zookeeper\n}')).toEqual([
+        {
+          ruleId: 'deployment-option-value',
+          message: "The value 'zookeeper' is not allowed for the deployment option 'serviceDiscoveryType'.",
+          at: 'serviceDiscoveryType zookeeper',
+        },
+      ]);
+    });
+    it('accepts any value for an option without choices', () => {
+      expect(check('deployment {\n  deploymentType kubernetes\n  kubernetesNamespace anything-goes\n}')).toEqual([]);
+    });
+  });
+
+  describe('namespace-config-blueprint', () => {
+    it('reports a namespace config without its blueprint, at the config', () => {
+      expect(check('application {\n  config { baseName a }\n  config(foo) { bar baz }\n}')).toEqual([
+        {
+          ruleId: 'namespace-config-blueprint',
+          message: 'Blueprint namespace config foo requires the blueprint foo',
+          at: 'config(foo) { bar baz }',
+        },
+      ]);
+    });
+    it('accepts it with its blueprint', () => {
+      expect(check('application {\n  config { baseName a blueprints [foo] }\n  config(foo) { bar baz }\n}')).toEqual([]);
+    });
+  });
+
+  describe('with rules of the runtime', () => {
+    it('checks them with the rules of the jdl', () => {
+      const runtime = createJDLRuntime({
+        rules: [{ id: 'no-b', check: ast => ast.entities.filter(entity => entity.name === 'B').map(() => ({ message: 'No B.' })) }],
+      });
+      expect(check('entity B\ndto C with mapstruct', runtime).map(diagnostic => diagnostic.ruleId)).toEqual([
+        'undeclared-option-entity',
+        'no-b',
+      ]);
+    });
+  });
+
   it('reports every problem, in source order', () => {
     expect(check('dto B with mapstruct\nentity A\nrelationship OneToOne { A to C }').map(diagnostic => diagnostic.ruleId)).toEqual([
       'undeclared-option-entity',
