@@ -12,5 +12,8 @@
     "monocart-coverage-reports": "2.13.0",
     "nyc": "18.0.0"
   },
-  "packageManager": "npm@12"
+  "packageManager": "npm@12",
+  "allowScripts": {
+    "cypress": true
+  }
 }

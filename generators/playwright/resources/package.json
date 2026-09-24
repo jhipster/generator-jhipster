@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "postinstall": "playwright install chromium"
+  },
   "devDependencies": {
     "@playwright/test": "1.63.0",
     "eslint-plugin-playwright": "2.11.0",
