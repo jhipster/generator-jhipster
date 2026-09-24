@@ -138,6 +138,22 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a single character field name', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({}, [
+        {
+          name: 'Unit',
+          fields: [{ fieldName: 'x', fieldType: 'Double' }],
+        },
+      ]);
+    });
+
+    it('should generate capitalized bean accessors', () => {
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Unit.java', 'public Double getX()');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Unit.java', 'public void setX(');
+    });
+  });
+
   describe('with entities disabled', () => {
     before(async () => {
       await helpers
