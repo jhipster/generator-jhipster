@@ -335,7 +335,8 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         if (!idNode.<%- primaryKey.typeLong || primaryKey.typeInteger ? 'isIntegralNumber' : 'isString' %>()) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
-        if (!Objects.equals(<%- primaryKey.name %><%- primaryKey.typeUUID ? '.toString()' : '' %>, idNode.<%- primaryKey.typeLong ? 'longValue' : primaryKey.typeInteger ? 'intValue' : 'stringValue' %>())) {
+  <%_ const idNodeValue = { Long: 'longValue', Integer: 'intValue' }[primaryKey.type] ?? 'stringValue'; _%>
+        if (!Objects.equals(<%- primaryKey.name %><%- primaryKey.typeUUID ? '.toString()' : '' %>, idNode.<%- idNodeValue %>())) {
             throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }
 

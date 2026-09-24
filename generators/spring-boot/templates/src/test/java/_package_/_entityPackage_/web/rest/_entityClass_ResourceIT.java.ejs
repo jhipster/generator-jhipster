@@ -62,16 +62,12 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
           fakedFields
             .map(field => ({
               property: field.propertyConsumerName,
-              value:
-              field.fieldTypeString || field.blobContentTypeText
-                ? `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`
-                : field.fieldTypeUUID
-                ? `UUID.fromString("${faker.string.uuid()}")`
-                : field.fieldTypeLong
-                ? `${faker.number.int({ min: 1, max: 1000000 })}L`
-                : field.fieldTypeInteger
-                ? `${faker.number.int({ min: 1, max: 1000000 })}`
-                : undefined,
+              value: {
+              String: `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`,
+              UUID: `UUID.fromString("${faker.string.uuid()}")`,
+              Long: `${faker.number.int({ min: 1, max: 1000000 })}L`,
+              Integer: `${faker.number.int({ min: 1, max: 1000000 })}`,
+            }[field.javaFieldType],
             }))
             .filter(fake => fake.value),
         ];
