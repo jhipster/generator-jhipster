@@ -20,7 +20,9 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { type ImportState, createImporterFromContent } from '../jdl/jdl-importer.ts';
+import { getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
+import { parse } from '../jdl-parser/index.ts';
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 
@@ -163,10 +165,28 @@ describe('jdl options', () => {
           expect(() => createImporterFromContent(`application { config { ${optionName} unknown } }`)).toThrow(/, but found: "unknown"/);
         });
       } else {
-        it('should not accept unknown value when importing', () => {
-          expect(() =>
-            createImporterFromContent(`application { config { ${optionName} ${isArray ? `[unknown]` : 'unknown'} } }`).import(),
-          ).toThrow(/The value 'unknown' is not allowed for the option '(.*)'/);
+        it('should report an unknown choice before creating the importer', () => {
+          const declaration = `${optionName} ${isArray ? '[unknown]' : 'unknown'}`;
+          const content = `application { config { ${declaration} } }`;
+          const message = `The '${optionName}' option is not valid for value 'unknown'.`;
+          const start = content.indexOf(declaration);
+          const end = start + declaration.length;
+          expect(() => createImporterFromContent(content)).toThrow(new Error(`${message}\n\tat line: 1, column: ${start + 1}`));
+
+          const { diagnostics } = parse(content, getDefaultRuntime());
+          const errors = diagnostics.filter(diagnostic => diagnostic.severity === 'error');
+          expect(errors).toEqual([
+            {
+              ruleId: 'config.value',
+              severity: 'error',
+              message,
+              range: {
+                start: { offset: start, line: 1, column: start + 1 },
+                end: { offset: end, line: 1, column: end + 1 },
+              },
+            },
+          ]);
+          expect(content.slice(errors[0].range.start.offset, errors[0].range.end.offset)).toBe(declaration);
         });
       }
     });
