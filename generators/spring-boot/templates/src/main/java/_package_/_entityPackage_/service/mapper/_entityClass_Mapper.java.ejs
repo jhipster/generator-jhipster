@@ -28,50 +28,45 @@ package <%- entityAbsolutePackage %>.service.mapper;
       dtoRelationships.filter(relationship => relationship.collection).map(relationship => relationship.relatedField.originalField ?? relationship.relatedField),
     );
     const toDtoMappings = this._.uniqWith(
-      otherEntities
-        .filter(otherEntity => dtoRelationships.some(relationship => relationship.otherEntity === otherEntity))
-        .flatMap(otherEntity =>
-          dtoRelationships
-            .filter(relationship => relationship.otherEntity === otherEntity)
-            .map(relationship => ({ otherEntity, displayField: relationship.relatedField })),
-        ),
-      (a, b) => (a.displayField.originalField ?? a.displayField) === (b.displayField.originalField ?? b.displayField),
-    ).map(mapping => ({
-      ...mapping,
-      name: `${mapping.otherEntity.entityInstance}${this._.upperFirst(mapping.displayField.propertyName)}`,
-      // A Set variant is needed when any relationship using this mapping is a collection.
-      collection: displayFieldOfCollections.has(mapping.displayField.originalField ?? mapping.displayField),
-    }));
+      dtoRelationships.map(relationship => ({ otherEntity: relationship.otherEntity, displayField: relationship.relatedField })),
+      (a, b) =>
+        a.otherEntity === b.otherEntity && (a.displayField.originalField ?? a.displayField) === (b.displayField.originalField ?? b.displayField),
+      ).map(mapping => ({
+        ...mapping,
+        name: `${mapping.otherEntity.entityInstance}${this._.upperFirst(mapping.displayField.propertyName)}`,
+        // A Set variant is needed when any relationship using this mapping is a collection.
+        collection: displayFieldOfCollections.has(mapping.displayField.originalField ?? mapping.displayField),
+      }));
 
-    // DTO -> entity: one mapping per related entity copying only the id. A relationship is persisted by the id of the
-    // related entity, so nothing else may flow from the DTO into it.
-    const toEntityMappings = this._.uniq(ownerSideRelationships.map(relationship => relationship.otherEntity)).map(otherEntity => ({
-      otherEntity,
-      name: `${otherEntity.entityInstance}FromId`,
-      collection: ownerSideRelationships.some(relationship => relationship.otherEntity === otherEntity && relationship.collection),
-    }));
+      // DTO -> entity: one mapping per related entity copying only the id. A relationship is persisted by the id of the
+      // related entity, so nothing else may flow from the DTO into it.
+      const toEntityMappings = this._.uniq(ownerSideRelationships.map(relationship => relationship.otherEntity)).map(otherEntity => ({
+        otherEntity,
+        name: `${otherEntity.entityInstance}FromId`,
+        collection: ownerSideRelationships.some(relationship => relationship.otherEntity === otherEntity && relationship.collection),
+      }));
 
-    // The named mapping each relationship is mapped with, by relationship.
-    const qualifiedBy = new Map(
-      dtoRelationships.map(relationship => [
-        relationship,
-        {
-          toDto: `${relationship.otherEntity.entityInstance}${this._.upperFirst(relationship.relatedField.propertyName)}${relationship.collection ? 'Set' : ''}`,
-          toEntity: `${relationship.otherEntity.entityInstance}FromId${relationship.collection ? 'Set' : ''}`,
-        },
-      ]),
-    );
+      // The named mapping each relationship is mapped with, by relationship.
+      const qualifiedBy = new Map(
+        dtoRelationships.map(relationship => [
+          relationship,
+          {
+            toDto: `${relationship.otherEntity.entityInstance}${this._.upperFirst(relationship.relatedField.propertyName)}${relationship.collection ? 'Set' : ''}`,
+            toEntity: `${relationship.otherEntity.entityInstance}FromId${relationship.collection ? 'Set' : ''}`,
+          },
+        ]),
+      );
 
-    const expressionFields = fields.filter(field => field.mapstructExpression);
-    const hasUuidDisplayField = restProperties.some(property => property.relatedField?.fieldTypeUUID);
-    const hasBytesDisplayField = restProperties.some(property => property.relatedField?.fieldTypeBytes);
-    const hasCollectionMapping = toDtoMappings.some(mapping => mapping.collection) || toEntityMappings.some(mapping => mapping.collection);
-    const overridesToDto = dtoRelationships.length > 0 || expressionFields.length > 0;
-    const overridesToEntity = dtoRelationships.length > 0 || primaryKey.ids.length > 1;
-    // With every nested bean covered by a named mapping, a relationship a mapping forgets must be a compile error
-    // instead of a mapping forged by MapStruct. Embedded entities and composite ids still rely on forged mappings.
-    const disableSubMappingMethodsGeneration
-      = !embedded && primaryKey.ids.length === 1 && !restProperties.some(property => property.relationshipName && property.otherEntity.embedded);
+      const expressionFields = fields.filter(field => field.mapstructExpression);
+      const hasUuidDisplayField = restProperties.some(property => property.relatedField?.fieldTypeUUID);
+      const hasBytesDisplayField = restProperties.some(property => property.relatedField?.fieldTypeBytes);
+      const hasCollectionMapping = toDtoMappings.some(mapping => mapping.collection) || toEntityMappings.some(mapping => mapping.collection);
+      const overridesToDto = dtoRelationships.length > 0 || expressionFields.length > 0;
+      const overridesToEntity = dtoRelationships.length > 0 || primaryKey.ids.length > 1;
+      // With every nested bean covered by a named mapping, a relationship a mapping forgets must be a compile error
+      // instead of a mapping forged by MapStruct. Embedded entities and composite ids still rely on forged mappings.
+      const disableSubMappingMethodsGeneration
+        = !embedded && primaryKey.ids.length === 1 && !restProperties.some(property => property.relationshipName && property.otherEntity.embedded);
 _%>
 <%_ if (hasCollectionMapping) { _%>
 import java.util.Set;
