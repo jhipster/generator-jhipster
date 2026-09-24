@@ -84,7 +84,7 @@ function parse(content: string, runtime: JDLRuntime) {
   }
   try {
     const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
-    const parsedContent = apiParser(processedInput, runtime);
+    const parsedContent = apiParser(processedInput, runtime, { onWarning: message => logger.warn(message) });
     return performJDLPostParsingTasks(parsedContent);
   } catch (error) {
     if (error instanceof SyntaxError) {

@@ -19,7 +19,7 @@
 import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
 
 import type { JHipsterCommandDefinition, JHipsterConfigs } from '../../lib/command/types.ts';
-import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.ts';
+import type { JDLApplicationConfig } from '../../lib/jdl/core/parsing/types/parsing.ts';
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 

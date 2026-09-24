@@ -18,9 +18,6 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import deduplicate from '../utils/array-utils.ts';
-import logger from '../utils/objects/logger.ts';
-
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
@@ -54,14 +51,19 @@ type VisitorContext = {
  */
 const parseStringLiteral = (image: string): string => image.slice(1, -1);
 
-const warnIfDeprecated = (key: string, optionType: JDLApplicationOptionType | undefined, grammar: 'application' | 'deployment') => {
-  if (optionType?.deprecated) {
-    logger.warn(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`);
-  }
-};
+const deduplicate = <T>(array: T[]): T[] => [...new Set(array)];
 
-export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
+/**
+ * @param onWarning - receives the warnings about what the jdl uses, a deprecated option for instance.
+ */
+export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (message: string) => void) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
+
+  const warnIfDeprecated = (key: string, optionType: JDLApplicationOptionType | undefined, grammar: 'application' | 'deployment') => {
+    if (optionType?.deprecated) {
+      onWarning(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`);
+    }
+  };
 
   /** The binary option a statement keyword names, warning about a deprecated keyword. */
   const binaryOptionName = (keyword: string): string => {
@@ -70,7 +72,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         return name;
       }
       if (jdl.deprecatedKeywords?.includes(keyword)) {
-        logger.warn(`The ${keyword} option is deprecated, please use ${name} instead.`);
+        onWarning(`The ${keyword} option is deprecated, please use ${name} instead.`);
         return name;
       }
     }
