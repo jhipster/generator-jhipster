@@ -19,3 +19,5 @@
 
 export * from './jdl-importer.ts';
 export * from './core/parsing/api.ts';
+export { createJDLRuntime, getDefaultJDLDefinitions } from '../jdl-config/jdl-runtime.ts';
+export type { JDLDefinitions } from './core/types/parsing.ts';

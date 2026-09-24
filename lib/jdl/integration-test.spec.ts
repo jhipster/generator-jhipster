@@ -445,8 +445,9 @@ application {
 `;
 
       it('should throw error', () => {
-        const importer = createImporterFromContent(jdl);
-        expect(() => importer.import()).toThrow(/Blueprint namespace config foo requires the blueprint foo/);
+        expect(() => createImporterFromContent(jdl)).toThrow(
+          "Namespace config 'foo' requires 'foo' in 'blueprints'.\n\tat line: 6, column: 3",
+        );
       });
     });
 

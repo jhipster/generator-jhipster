@@ -23,11 +23,13 @@ import path from 'node:path';
 import helpers from 'yeoman-test';
 
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
+import { getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 import clientFrameworkTypes from '../jhipster/client-framework-types.ts';
 import databaseTypes from '../jhipster/database-types.ts';
 import { readYoRcFile } from '../utils/yo-rc.ts';
 
 import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.ts';
+import { parse } from './core/parsing/api.ts';
 import type { ImportState } from './jdl-importer.ts';
 
 const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
@@ -541,11 +543,12 @@ use mapstruct, elasticsearch for A, B except C`;
         expect(importState.exportedEntities[2].searchEngine).not.toBe('elasticsearch');
       });
     });
-    describe('when parsing a JDL content with invalid tokens', () => {
+    describe('when parsing a JDL content with an unknown config option', () => {
       let caughtError: any;
+      let content: string;
 
       before(() => {
-        const content = `application {
+        content = `application {
   config {
     baseName toto
     databaseType sql
@@ -565,9 +568,11 @@ entity A
       });
 
       it('should report it', () => {
-        expect(caughtError.message).toBe(
-          "MismatchedTokenException: Found an invalid token 'unknownOption', at line: 5 and column: 5.\n\tPlease make sure your JDL content does not use invalid characters, keywords or options.",
-        );
+        expect(caughtError.message).toBe("Got an invalid application config property: 'unknownOption'.\n\tat line: 5, column: 5");
+        const { diagnostics } = parse(content, getDefaultRuntime());
+        expect(diagnostics.map(diagnostic => diagnostic.ruleId)).toEqual(['config.unknown']);
+        expect(diagnostics[0].range.start).toEqual({ offset: content.indexOf('unknownOption'), line: 5, column: 5 });
+        expect(content.slice(diagnostics[0].range.start.offset, diagnostics[0].range.end.offset)).toBe('unknownOption toto');
       });
     });
     describe('when parsing relationships with annotations and options', () => {
