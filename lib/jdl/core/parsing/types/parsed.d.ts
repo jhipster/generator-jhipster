@@ -35,13 +35,15 @@ export type ParsedJDLEntityField = {
   validations: ParsedJDLValidation[];
   name: string;
   type: string;
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
 };
 
 export type ParsedJDLEntity = {
   name: string;
   tableName?: string;
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
   annotations?: ParsedJDLAnnotation[];
   body?: ParsedJDLEntityField[];
 };
@@ -58,7 +60,8 @@ export type ParsedJDLEnumValue = {
 export type ParsedJDLEnum = {
   name: string;
   values: ParsedJDLEnumValue[];
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
 };
 
 export type ParsedJDLOptionConfig = {
@@ -88,8 +91,9 @@ export type ParsedJDLApplication = {
   useOptions?: ParsedJDLUseOption[];
 };
 
-export type ParsedJDLDeployment = {
-  deploymentType: string;
+/** A deployment as written, one entry per option: they are checked after parsing, `deploymentType` included. */
+export type ParsedJDLDeployment = Record<string, string | boolean | string[] | undefined> & {
+  deploymentType?: string;
   appsFolders?: string[];
   dockerRepositoryName?: string;
 };
@@ -98,7 +102,8 @@ export type ParsedJDLRelationshipSide = {
   name: string;
   injectedField?: string;
   required: boolean;
-  documentation?: string;
+  /** The javadoc comment before the declaration, null when there is none. */
+  documentation?: string | null;
 };
 
 export type ParsedJDLRelationshipOption = {
@@ -114,8 +119,11 @@ export type ParsedJDLRelationship = {
   options: ParsedJDLRelationshipOption;
 };
 
+/** An application as the parser writes it: the entities statement is resolved into `entities` after parsing. */
+export type ParsedJDLApplicationDeclaration = ParsedJDLApplication & { entitiesOptions?: { entityList: string[]; excluded: string[] } };
+
 export type ParsedJDLApplications = {
-  applications: (ParsedJDLApplication & { entitiesOptions?: { entityList: string[]; excluded: string[] } })[];
+  applications: ParsedJDLApplicationDeclaration[];
   entities: ParsedJDLEntity[];
   relationships: ParsedJDLRelationship[];
   deployments: ParsedJDLDeployment[];

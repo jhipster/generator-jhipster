@@ -20,6 +20,7 @@
 import { type CstNode, EOF, type IRecognitionException } from 'chevrotain';
 
 import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
+import type { ParsedJDLApplications } from './types/parsed.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 import performAdditionalSyntaxChecks from './validator.ts';
 
@@ -29,7 +30,7 @@ type ParseOptions = {
   onWarning?: (message: string) => void;
 };
 
-export function parse(input: string, runtime: JDLRuntime, options?: ParseOptions) {
+export function parse(input: string, runtime: JDLRuntime, options?: ParseOptions): ParsedJDLApplications {
   const cst = getCst(input, runtime, options);
   // The parser has no logger of its own: a caller that passes none still sees the warnings.
   // eslint-disable-next-line no-console
