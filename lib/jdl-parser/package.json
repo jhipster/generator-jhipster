@@ -1,0 +1,28 @@
+{
+  "name": "@jhipster/jdl-parser",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Pure, recovering JDL parser and positioned semantic diagnostics",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.txt"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "chevrotain": "13.2.0"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3"
+  }
+}
