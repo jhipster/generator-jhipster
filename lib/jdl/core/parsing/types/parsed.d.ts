@@ -18,19 +18,39 @@
  */
 import type { JDLRelationshipType } from '../relationship-types.ts';
 
-export type ParsedJDLAnnotation = {
+/** Where a node was written, from its first token to its last one. Lines and columns start at 1, `endOffset` is inclusive. */
+export type JDLLocation = {
+  startOffset: number;
+  endOffset: number;
+  startLine: number;
+  startColumn: number;
+  endLine: number;
+  endColumn: number;
+};
+
+/** A node of the AST built by the parser knows where it was written; the property is not enumerable. */
+export type Located = {
+  readonly location?: JDLLocation;
+};
+
+/** A record node knows where each of its keys was written, the whole `key value` statement; the property is not enumerable. */
+export type KeyLocated = {
+  readonly keyLocations?: Record<string, JDLLocation | undefined>;
+};
+
+export type ParsedJDLAnnotation = Located & {
   optionName: string;
   type: 'UNARY' | 'BINARY';
   optionValue?: boolean | string | number;
 };
 
-export type ParsedJDLValidation = {
+export type ParsedJDLValidation = Located & {
   key: string;
   value?: string | number | RegExp | boolean;
   constant?: boolean;
 };
 
-export type ParsedJDLEntityField = {
+export type ParsedJDLEntityField = Located & {
   annotations?: ParsedJDLAnnotation[];
   validations: ParsedJDLValidation[];
   name: string;
@@ -39,7 +59,7 @@ export type ParsedJDLEntityField = {
   documentation?: string | null;
 };
 
-export type ParsedJDLEntity = {
+export type ParsedJDLEntity = Located & {
   name: string;
   tableName?: string;
   /** The javadoc comment before the declaration, null when there is none. */
@@ -47,17 +67,17 @@ export type ParsedJDLEntity = {
   annotations?: ParsedJDLAnnotation[];
   body?: ParsedJDLEntityField[];
 };
-export type ParsedJDLApplicationConfig = {
+export type ParsedJDLApplicationConfig = KeyLocated & {
   baseName: string;
 } & Record<string, any>;
 
-export type ParsedJDLEnumValue = {
+export type ParsedJDLEnumValue = Located & {
   key: string;
   value?: string;
   comment?: string;
 };
 
-export type ParsedJDLEnum = {
+export type ParsedJDLEnum = Located & {
   name: string;
   values: ParsedJDLEnumValue[];
   /** The javadoc comment before the declaration, null when there is none. */
@@ -79,26 +99,28 @@ export type ParsedJDLBinaryOption = {
   optionValue: string;
 } & ParsedJDLOption;
 
-export type ParsedJDLUseOption = {
+export type ParsedJDLUseOption = Located & {
   optionValues: string[];
 } & ParsedJDLOptionConfig;
 
-export type ParsedJDLApplication = {
+export type ParsedJDLApplication = Located & {
   config: ParsedJDLApplicationConfig;
-  namespaceConfigs?: Record<string, Record<string, boolean | number | string[] | string>>;
+  namespaceConfigs?: Record<string, KeyLocated & Record<string, boolean | number | string[] | string>>;
   entities?: string[];
   options?: Record<string, ParsedJDLOptionConfig | Record<string, ParsedJDLOptionConfig>>;
   useOptions?: ParsedJDLUseOption[];
 };
 
 /** A deployment as written, one entry per option: they are checked after parsing, `deploymentType` included. */
-export type ParsedJDLDeployment = Record<string, string | boolean | string[] | undefined> & {
-  deploymentType?: string;
-  appsFolders?: string[];
-  dockerRepositoryName?: string;
-};
+export type ParsedJDLDeployment = Located &
+  KeyLocated &
+  Record<string, string | boolean | string[] | undefined> & {
+    deploymentType?: string;
+    appsFolders?: string[];
+    dockerRepositoryName?: string;
+  };
 
-export type ParsedJDLRelationshipSide = {
+export type ParsedJDLRelationshipSide = Located & {
   name: string;
   injectedField?: string;
   required: boolean;
@@ -112,7 +134,7 @@ export type ParsedJDLRelationshipOption = {
   destination: ParsedJDLAnnotation[];
 };
 
-export type ParsedJDLRelationship = {
+export type ParsedJDLRelationship = Located & {
   from: ParsedJDLRelationshipSide;
   to: ParsedJDLRelationshipSide;
   cardinality: JDLRelationshipType;
@@ -128,7 +150,7 @@ export type ParsedJDLApplications = {
   relationships: ParsedJDLRelationship[];
   deployments: ParsedJDLDeployment[];
   enums: ParsedJDLEnum[];
-  constants: Record<string, string>;
+  constants: KeyLocated & Record<string, string>;
   options: Record<string, ParsedJDLOption | Record<string, ParsedJDLOption>>;
   useOptions: ParsedJDLUseOption[];
 };
