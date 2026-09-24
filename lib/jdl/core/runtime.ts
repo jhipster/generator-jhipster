@@ -19,7 +19,7 @@
 
 import type { Lexer, TokenType } from 'chevrotain';
 
-import JDLApplicationDefinition from './built-in-options/jdl-application-definition.ts';
+import JDLApplicationDefinition from './jdl-application-definition.ts';
 import JDLParser from './parsing/jdl-parser.ts';
 import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './parsing/lexer/lexer.ts';
 import { checkTokens } from './parsing/self-checks/parsing-system-checker.ts';
