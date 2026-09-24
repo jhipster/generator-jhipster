@@ -17,46 +17,5 @@
  * limitations under the License.
  */
 
-import {
-  type Alternation,
-  type Alternative,
-  GAstVisitor,
-  type NonTerminal,
-  type Option,
-  type Repetition,
-  type RepetitionMandatory,
-  type RepetitionMandatoryWithSeparator,
-  type RepetitionWithSeparator,
-  type Rule,
-  type Terminal,
-  type TokenType,
-} from 'chevrotain';
-
-export default class TokenCollectorVisitor extends GAstVisitor {
-  visitNonTerminal(_node: NonTerminal) {}
-  visitAlternative(_node: Alternative) {}
-  visitOption(_node: Option) {}
-  visitRepetition(_node: Repetition) {}
-  visitRepetitionMandatory(_node: RepetitionMandatory) {}
-  visitAlternation(_node: Alternation) {}
-  visitRule(_node: Rule) {}
-
-  actualTokens: TokenType[];
-
-  constructor() {
-    super();
-    this.actualTokens = [];
-  }
-
-  visitTerminal(node: Terminal) {
-    this.actualTokens.push(node.terminalType);
-  }
-
-  visitRepetitionMandatoryWithSeparator(node: RepetitionMandatoryWithSeparator) {
-    this.actualTokens.push(node.separator);
-  }
-
-  visitRepetitionWithSeparator(node: RepetitionWithSeparator) {
-    this.actualTokens.push(node.separator);
-  }
-}
+export * from '../../../../jdl-parser/parsing/self-checks/token-collector-visitor.ts';
+export { default } from '../../../../jdl-parser/parsing/self-checks/token-collector-visitor.ts';
