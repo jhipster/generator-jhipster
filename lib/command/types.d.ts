@@ -4,7 +4,7 @@ import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 import type BaseCoreGenerator from '../../generators/base-core/generator.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
 import type { JHipsterNamedChoice } from '../core/types.ts';
-import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
+import type { JHipsterOptionDefinition } from '../jdl/core/parsing/types/parsing.ts';
 
 import type { MergeUnion } from './support/merge-union.ts';
 

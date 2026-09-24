@@ -19,8 +19,8 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import { getDefaultRuntime } from '../../jdl-config/jdl-runtime.ts';
-import applicationOptions from '../../jhipster/application-options.ts';
+import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
+import applicationOptions from '../../../jhipster/application-options.ts';
 
 const { OptionNames } = applicationOptions;
 

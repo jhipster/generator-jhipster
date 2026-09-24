@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { createRuntime } from '../jdl/core/runtime.ts';
-import type { JDLDefinitions } from '../jdl/core/types/parsing.ts';
-import type { JDLRuntime } from '../jdl/core/types/runtime.ts';
+import { createRuntime } from '../jdl/core/parsing/runtime.ts';
+import type { JDLDefinitions } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLRuntime } from '../jdl/core/parsing/types/runtime.ts';
 
 import { getDefaultJDLEntityConfig } from './jdl-entity-config.ts';
 import { getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';

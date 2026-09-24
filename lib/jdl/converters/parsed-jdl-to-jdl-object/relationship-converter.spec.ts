@@ -51,7 +51,7 @@ describe('jdl - RelationshipConverter', () => {
                   required: false,
                   documentation: '/**\n * Not required\n */',
                 },
-                cardinality: 'one-to-many',
+                cardinality: 'OneToMany',
                 options: {
                   global: [{ optionName: 'builtInEntity', type: 'UNARY' }],
                   source: [],
@@ -112,7 +112,7 @@ describe('jdl - RelationshipConverter', () => {
                   required: false,
                   documentation: '/**\n * Not required\n */',
                 },
-                cardinality: 'one-to-many',
+                cardinality: 'OneToMany',
                 options: {
                   global: [{ optionName: 'builtInEntity', type: 'UNARY' }],
                   source: [],

@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationType } from '../../../core/application-types.ts';
-import type { RelationshipType } from '../basic-types/relationships.ts';
+import type { JDLRelationshipType } from '../relationship-types.ts';
 
 export type ParsedJDLAnnotation = {
   optionName: string;
@@ -111,7 +110,7 @@ export type ParsedJDLRelationshipOption = {
 export type ParsedJDLRelationship = {
   from: ParsedJDLRelationshipSide;
   to: ParsedJDLRelationshipSide;
-  cardinality: RelationshipType;
+  cardinality: JDLRelationshipType;
   options: ParsedJDLRelationshipOption;
 };
 
@@ -124,12 +123,4 @@ export type ParsedJDLApplications = {
   constants: Record<string, string>;
   options: Record<string, ParsedJDLOption | Record<string, ParsedJDLOption>>;
   useOptions: ParsedJDLUseOption[];
-};
-
-export type ParsedJDLRoot = {
-  parsedContent: ParsedJDLApplications;
-  document?: ParsedJDLApplications; // deprecated
-  entities?: ParsedJDLEntity[];
-  applicationType?: ApplicationType;
-  applicationName?: string;
 };

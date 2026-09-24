@@ -19,7 +19,7 @@
 
 import { relationshipTypes } from '../basic-types/index.ts';
 import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
-import type { JDLRelationshipType } from '../basic-types/relationships.ts';
+import type { JDLRelationshipType } from '../parsing/relationship-types.ts';
 
 import type JDLRelationship from './jdl-relationship.ts';
 

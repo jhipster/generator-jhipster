@@ -33,7 +33,7 @@ import type JDLOptions from '../../core/models/jdl-options.ts';
 import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import type { ParsedJDLApplications } from '../../core/types/parsed.ts';
+import type { ParsedJDLApplications } from '../../core/parsing/types/parsed.ts';
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 

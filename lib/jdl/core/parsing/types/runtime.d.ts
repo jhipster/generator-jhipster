@@ -1,7 +1,7 @@
 import type { Lexer, TokenType } from 'chevrotain';
 
 import type JDLApplicationDefinition from '../jdl-application-definition.ts';
-import type JDLParser from '../parsing/jdl-parser.ts';
+import type JDLParser from '../jdl-parser.ts';
 
 import type { JDLOptionsDefinition, JDLValidatorOption } from './parsing.ts';
 

@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLRuntime } from '../parsing/types/runtime.ts';
 
-import JDLApplication from './jdl-application.ts';
+/** The relationship types of the grammar, as written in a relationship declaration. */
+export const JDL_RELATIONSHIP_ONE_TO_ONE = 'OneToOne';
+export const JDL_RELATIONSHIP_ONE_TO_MANY = 'OneToMany';
+export const JDL_RELATIONSHIP_MANY_TO_ONE = 'ManyToOne';
+export const JDL_RELATIONSHIP_MANY_TO_MANY = 'ManyToMany';
 
-/**
- * Creates a JDL application from a passed configuration.
- * @param {Object} config - the application configuration.
- * @returns {JDLApplication} the created JDL application.
- */
-export function createJDLApplication(config: any, runtime: JDLRuntime, namespaceConfigs?: Record<string, Record<string, any>>) {
-  return new JDLApplication({ config: { baseName: 'jhipster', ...config }, namespaceConfigs }, runtime);
-}
+export type JDLRelationshipType =
+  | typeof JDL_RELATIONSHIP_ONE_TO_ONE
+  | typeof JDL_RELATIONSHIP_ONE_TO_MANY
+  | typeof JDL_RELATIONSHIP_MANY_TO_ONE
+  | typeof JDL_RELATIONSHIP_MANY_TO_MANY;

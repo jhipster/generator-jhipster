@@ -19,7 +19,7 @@
 import { snakeCase, upperCase } from 'lodash-es';
 
 import type { JHipsterConfigs } from '../command/types.ts';
-import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
+import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/parsing/types/parsing.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
 

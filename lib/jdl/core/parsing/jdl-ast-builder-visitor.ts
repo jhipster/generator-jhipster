@@ -18,6 +18,9 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
+import deduplicate from '../utils/array-utils.ts';
+import logger from '../utils/objects/logger.ts';
+
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
@@ -26,11 +29,9 @@ import type {
   ParsedJDLOption,
   ParsedJDLOptionConfig,
   ParsedJDLValidation,
-} from '../types/parsed.ts';
-import type { JDLApplicationOptionType } from '../types/parsing.ts';
-import type { JDLRuntime } from '../types/runtime.ts';
-import deduplicate from '../utils/array-utils.ts';
-import logger from '../utils/objects/logger.ts';
+} from './types/parsed.ts';
+import type { JDLApplicationOptionType } from './types/parsing.ts';
+import type { JDLRuntime } from './types/runtime.ts';
 
 type VisitorContext = {
   applicationDeclaration?: CstNode[];

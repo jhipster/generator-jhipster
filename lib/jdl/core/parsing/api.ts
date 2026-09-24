@@ -19,9 +19,8 @@
 
 import { type CstNode, EOF, type IRecognitionException } from 'chevrotain';
 
-import type { JDLRuntime } from '../types/runtime.ts';
-
 import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
+import type { JDLRuntime } from './types/runtime.ts';
 import performAdditionalSyntaxChecks from './validator.ts';
 
 type ParseOptions = { startRule?: string };

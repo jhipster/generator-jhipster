@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JDLRuntime } from '../types/runtime.ts';
+import type { JDLRuntime } from '../parsing/types/runtime.ts';
 
 import type AbstractJDLOption from './abstract-jdl-option.ts';
 import createApplicationConfigurationFromObject, {

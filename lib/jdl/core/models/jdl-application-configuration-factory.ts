@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import type { JDLApplicationOptionTypeValue } from '../types/parsing.ts';
-import type { JDLRuntime } from '../types/runtime.ts';
+import type { JDLApplicationOptionTypeValue } from '../parsing/types/parsing.ts';
+import type { JDLRuntime } from '../parsing/types/runtime.ts';
 import logger from '../utils/objects/logger.ts';
 
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.ts';

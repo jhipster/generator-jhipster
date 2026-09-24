@@ -18,7 +18,7 @@
  */
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import type { JDLApplicationOptionValue } from '../jdl/core/types/parsing.ts';
+import type { JDLApplicationOptionValue } from '../jdl/core/parsing/types/parsing.ts';
 
 import authenticationTypes from './authentication-types.ts';
 import buildToolTypes from './build-tool-types.ts';

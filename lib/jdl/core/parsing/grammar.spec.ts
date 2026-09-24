@@ -26,8 +26,9 @@ import { createJDLRuntime, getDefaultRuntime } from '../../../jdl-config/jdl-run
 import { relationshipTypes } from '../basic-types/index.ts';
 import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.ts';
 import { parseFromContent as originalParseFromContent } from '../readers/jdl-reader.ts';
-import type { ParsedJDLApplications, ParsedJDLOption } from '../types/parsed.ts';
 import logger from '../utils/objects/logger.ts';
+
+import type { ParsedJDLApplications, ParsedJDLOption } from './types/parsed.ts';
 
 const runtime = getDefaultRuntime();
 const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
