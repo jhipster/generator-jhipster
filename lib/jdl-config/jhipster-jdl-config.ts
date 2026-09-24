@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { snakeCase, upperCase } from 'lodash-es';
 
 import type { JHipsterConfigs } from '../command/types.ts';
 import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/parsing/types/parsing.ts';
@@ -39,7 +38,7 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
     quotedOptionNames: jdlOptions.filter(option => option.quoted).map(option => option.name),
     validatorConfig: Object.fromEntries(
       jdlOptions.map(option => [
-        upperCase(snakeCase(option.name)),
+        option.name,
         {
           type: option.tokenType,
           pattern: option.tokenValuePattern,
