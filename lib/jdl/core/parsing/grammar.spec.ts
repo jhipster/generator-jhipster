@@ -466,6 +466,15 @@ entity C
         });
       });
     });
+    describe('with boolean annotation values', () => {
+      it('should parse them as booleans, a boolean being a name', () => {
+        const content = parseFromContent('@readOnly(true)\n@embedded(false)\nentity A');
+        expect(content.entities[0].annotations).toEqual([
+          { optionName: 'readOnly', optionValue: true, type: 'BINARY' },
+          { optionName: 'embedded', optionValue: false, type: 'BINARY' },
+        ]);
+      });
+    });
     describe('with annotations', () => {
       let parsedEntity: ParsedJDLApplications['entities'][number];
 
@@ -1838,6 +1847,71 @@ entity A {
     });
     it('should report an unknown option statement by its name', () => {
       expect(() => parseFromContent('entity A\nreadonly A')).toThrow(/^Unknown option: readonly\.\n\tat line: 2, column: 1$/);
+    });
+  });
+  describe('when parsing an option statement of the wrong kind', () => {
+    it('should report a unary option given a value', () => {
+      expect(() => parseFromContent('entity A\nreadOnly A with x')).toThrow(
+        /^The readOnly option takes no value\.\n\tat line: 2, column: 1$/,
+      );
+    });
+    it('should report a binary option without a value', () => {
+      expect(() => parseFromContent('entity A\ndto A')).toThrow(
+        /^The dto option needs a value: dto <entities> with <value>\.\n\tat line: 2, column: 1$/,
+      );
+    });
+    it('should report it inside an application', () => {
+      expect(() => parseFromContent('entity A\napplication {\n  config { baseName foo }\n  entities A\n  dto A\n}')).toThrow(
+        /^The dto option needs a value: dto <entities> with <value>\.\n\tat line: 5, column: 3$/,
+      );
+    });
+  });
+  describe('when parsing an unknown relationship option', () => {
+    it('should report it at the option', () => {
+      expect(() => parseFromContent('entity A\nentity B\nrelationship OneToMany {\n  A{b} to B with cascade\n}')).toThrow(
+        /^Unknown relationship option: cascade\.\n\tat line: 4, column: 18$/,
+      );
+    });
+  });
+  describe('when parsing an unknown deployment option', () => {
+    it('should report it at the key', () => {
+      expect(() => parseFromContent('deployment {\n  deploymentType docker-compose\n  fooBar x\n}')).toThrow(
+        /^Unknown deployment option: fooBar\.\n\tat line: 3, column: 3$/,
+      );
+    });
+  });
+  describe('when a jdl has several errors', () => {
+    it('should report every one of them', () => {
+      expect(() => parseFromContent('application {\n  config {\n    fooBar true\n    serverPort abc\n  }\n}')).toThrow(
+        /^Unknown application option: fooBar\.\n\tat line: 3, column: 5\nAn integer literal is expected, but found: "abc"\n\tat line: 4, column: 16$/,
+      );
+    });
+  });
+  describe('when parsing the deprecated paginate keyword inside an application', () => {
+    let warnSpy: ReturnType<typeof esmocha.spyOn>;
+    let parsedOptions: ParsedJDLApplications['applications'][number]['options'];
+
+    before(() => {
+      warnSpy = esmocha.spyOn(logger, 'warn');
+      parsedOptions = parseFromContent('entity A\napplication {\n  config { baseName foo }\n  entities A\n  paginate A with pagination\n}')
+        .applications[0].options;
+    });
+
+    after(() => {
+      warnSpy.mockRestore();
+    });
+
+    it('should parse it as the pagination option and warn', () => {
+      expect(parsedOptions).toEqual({ pagination: { pagination: { list: ['A'], excluded: [] } } });
+      expect(warnSpy).toHaveBeenCalledWith('The paginate option is deprecated, please use pagination instead.');
+    });
+  });
+  describe('when parsing an option statement of a runtime with entity definitions of its own', () => {
+    it('should report an option the definitions do not declare', () => {
+      const customRuntime = createJDLRuntime({ entity: { configs: { audited: { jdl: { type: 'unary' } } } } });
+      expect(() => originalParseFromContent('entity A\naudited A\nreadOnly A', customRuntime)).toThrow(
+        /^Unknown option: readOnly\.\n\tat line: 3, column: 1$/,
+      );
     });
   });
   describe('when parsing the deprecated paginate keyword', () => {
