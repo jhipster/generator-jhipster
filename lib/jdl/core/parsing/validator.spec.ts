@@ -21,7 +21,7 @@ import { describe, expect, it } from 'esmocha';
 
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 
-import { parse } from './api.ts';
+import { getCst as parse } from './api.ts';
 
 describe('jdl - JDLSyntaxValidatorVisitor', () => {
   const jdlRuntime = getDefaultRuntime();
@@ -1070,7 +1070,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             }`,
                 jdlRuntime,
               ),
-            ).toThrow("MismatchedTokenException: Found an invalid token 'abc', at line: 4 and column: 29.");
+            ).toThrow(/NoViableAltException:.*[\s\S]*at line: 5, column: 15/);
           });
         });
         describe('when the prefix begins by a dash', () => {
@@ -2030,7 +2030,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                     jdlRuntime,
                   ),
                 // A deployment block is lexed in a mode of its own, where `@`, an annotation token, is no token at all.
-              ).toThrow(/^unexpected character: ->@<-/);
+              ).toThrow(/^MismatchedTokenException: Found an invalid token '@'/);
             });
           });
           describe('such as not a list', () => {

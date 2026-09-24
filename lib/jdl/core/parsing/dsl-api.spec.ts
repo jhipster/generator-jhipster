@@ -21,7 +21,7 @@ import { before, describe, expect, it } from 'esmocha';
 
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 
-import { parse } from './api.ts';
+import { parseOrThrow as parse } from './api.ts';
 
 describe('jdl - JDL DSL API', () => {
   const jdlRuntime = getDefaultRuntime();

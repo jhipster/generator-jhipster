@@ -17,5 +17,4 @@
  * limitations under the License.
  */
 
-export * from '../../../jdl-parser/parsing/jdl-parser.ts';
-export { default } from '../../../jdl-parser/parsing/jdl-parser.ts';
+export * from '../../../jdl-parser/parsing/diagnostics.ts';

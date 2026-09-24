@@ -29,8 +29,16 @@ import { parseFromContent as originalParseFromContent } from '../readers/jdl-rea
 import type { ParsedJDLApplications, ParsedJDLOption } from '../types/parsed.ts';
 import logger from '../utils/objects/logger.ts';
 
+import { getCst, parse } from './api.ts';
+import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
+import performJDLPostParsingTasks from './jdl-post-parsing-tasks.ts';
+
 const runtime = getDefaultRuntime();
-const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
+// These fixtures exercise individual grammar productions, including incomplete documents
+// and syntactically valid combinations which semantic validation deliberately rejects.
+// Keep syntax checking strict, then construct the legacy-shaped AST for existing snapshots.
+const parseFromContent = (content: string) =>
+  performJDLPostParsingTasks(buildJDLAstBuilderVisitor(runtime).visit(getCst(content, runtime)));
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 const {
@@ -47,6 +55,35 @@ const useValues = Object.values(getDefaultJDLEntityConfig().configs)
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX } = Options;
 
 describe('jdl - Grammar tests', () => {
+  describe('when validating grammar fragments semantically', () => {
+    for (const [content, ruleId, markedText] of [
+      ['entity A { name String minlength(1.5) }', 'validation.value', 'minlength(1.5)'],
+      ['entity A { data TextBlob minbytes(1) }', 'validation.type', 'minbytes(1)'],
+      ['service A with serviceClass', 'reference.entity', 'service A with serviceClass'],
+      ['relationship ManyToOne { A to B }', 'reference.entity', 'A'],
+    ]) {
+      it(`should report ${ruleId} with its source range for ${content}`, () => {
+        const result = parse(content, runtime);
+        expect(result.ast).toBeDefined();
+        const start = content.indexOf(markedText);
+        expect(result.diagnostics).toContainEqual(
+          expect.objectContaining({
+            ruleId,
+            severity: 'error',
+            range: {
+              start: { offset: start, line: 1, column: start + 1 },
+              end: { offset: start + markedText.length, line: 1, column: start + markedText.length + 1 },
+            },
+          }),
+        );
+      });
+    }
+
+    it('should accept spaces in quoted enum values during semantic validation', () => {
+      const { diagnostics } = parse('enum Country { FRANCE("cheese and wine country") }', runtime);
+      expect(diagnostics.map(({ ruleId, severity }) => ({ ruleId, severity }))).toEqual([{ ruleId: 'enum.unused', severity: 'warning' }]);
+    });
+  });
   describe('when parsing constants', () => {
     describe('with integer values', () => {
       let constants: ParsedJDLApplications['constants'];
@@ -1830,7 +1867,7 @@ entity A {
 
     before(() => {
       warnSpy = esmocha.spyOn(logger, 'warn');
-      parsedOptions = parseFromContent('paginate A with pagination').options;
+      parsedOptions = originalParseFromContent('entity A\npaginate A with pagination', runtime).options;
     });
 
     after(() => {
@@ -2096,8 +2133,7 @@ relationship OneToMany {
 
     before(() => {
       warnSpy = esmocha.spyOn(logger, 'warn');
-      parseFromContent(`deployment { gatewayType SpringCloudGateway }
-`);
+      originalParseFromContent('deployment { deploymentType docker-compose gatewayType SpringCloudGateway }', runtime);
     });
 
     after(() => {
