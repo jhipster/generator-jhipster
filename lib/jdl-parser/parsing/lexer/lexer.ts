@@ -39,11 +39,12 @@ export const buildTokens = ({
   namePattern = defaultNamePattern,
   validations = {},
 }: Pick<JDLDefinitions, 'namePattern' | 'validations'> = {}): JDLTokens => {
-  const NAME = createChevrotainToken({ name: 'NAME', pattern: namePattern });
+  const NAME = createChevrotainToken({ name: 'NAME', pattern: Lexer.NA });
+  const IDENTIFIER = createChevrotainToken({ name: 'IDENTIFIER', pattern: namePattern, categories: [NAME] });
   const KEYWORD = createChevrotainToken({ name: 'KEYWORD', pattern: Lexer.NA, categories: [NAME] });
   const tokens: Record<string, TokenType> = {};
   const createToken = (config: ITokenConfig) => {
-    const token = createTokenFromConfigCreator(config, KEYWORD);
+    const token = createTokenFromConfigCreator(config, KEYWORD, IDENTIFIER);
     tokens[config.name] = token;
     return token;
   };
@@ -112,6 +113,7 @@ export const buildTokens = ({
   }
   // Identifiers follow keywords so that their categories can still accept structural words.
   tokens.NAME = NAME;
+  tokens.IDENTIFIER = IDENTIFIER;
   return { tokens, vocabulary: Object.values(tokens) };
 };
 

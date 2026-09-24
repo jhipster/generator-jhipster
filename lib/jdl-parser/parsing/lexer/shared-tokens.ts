@@ -19,13 +19,12 @@
 import { Lexer, createToken } from 'chevrotain';
 
 const namePattern = /[a-zA-Z_][a-zA-Z_\-\d]*/;
-const nameTokenConfig = { name: 'NAME', pattern: namePattern };
-
-const nameToken = createToken(nameTokenConfig);
+const nameToken = createToken({ name: 'NAME', pattern: Lexer.NA });
+const identifierToken = createToken({ name: 'IDENTIFIER', pattern: namePattern, categories: [nameToken] });
 const keywordTokenConfig = {
   name: 'KEYWORD',
   pattern: Lexer.NA,
-  longer_alt: nameToken,
+  longer_alt: identifierToken,
   categories: [nameToken],
 };
 const keywordToken = createToken(keywordTokenConfig);
@@ -34,6 +33,7 @@ const unaryOptionCategoryToken = createToken({ name: 'UNARY_OPTION', pattern: Le
 const binaryOptionCategoryToken = createToken({ name: 'BINARY_OPTION', pattern: Lexer.NA });
 
 export { nameToken as NAME };
+export { identifierToken as IDENTIFIER };
 export { keywordToken as KEYWORD };
 export { namePattern };
 export { unaryOptionCategoryToken as UNARY_OPTION };

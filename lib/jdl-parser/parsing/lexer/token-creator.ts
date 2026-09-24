@@ -19,9 +19,13 @@
 
 import { type ITokenConfig, type TokenType, createToken } from 'chevrotain';
 
-import { KEYWORD, namePattern } from './shared-tokens.ts';
+import { IDENTIFIER, KEYWORD, namePattern } from './shared-tokens.ts';
 
-export default function createTokenFromConfig(tokenConfig: ITokenConfig, keywordCategory: TokenType = KEYWORD) {
+export default function createTokenFromConfig(
+  tokenConfig: ITokenConfig,
+  keywordCategory: TokenType = KEYWORD,
+  identifierToken: TokenType = IDENTIFIER,
+) {
   if (!tokenConfig) {
     throw new Error("Can't create a token without the proper config.");
   }
@@ -41,7 +45,7 @@ export default function createTokenFromConfig(tokenConfig: ITokenConfig, keyword
   // (`microfrontend` in `microfrontends`) would match first, whatever the order the tokens are declared in.
   if (typeof config.pattern === 'string' && namePattern.test(config.pattern)) {
     config.pattern = new RegExp(`${config.pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![a-zA-Z_\\-\\d])`);
-    config.longer_alt ??= keywordCategory.CATEGORIES?.[0];
+    config.longer_alt ??= identifierToken;
     categories.push(keywordCategory);
   }
 
