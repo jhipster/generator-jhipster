@@ -18,7 +18,6 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { validations } from '../built-in-options/index.ts';
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
@@ -32,10 +31,6 @@ import type { JDLApplicationOptionType } from '../types/parsing.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 import deduplicate from '../utils/array-utils.ts';
 import logger from '../utils/objects/logger.ts';
-
-const {
-  Validations: { PATTERN, REQUIRED, UNIQUE },
-} = validations;
 
 type VisitorContext = {
   applicationDeclaration?: CstNode[];
@@ -288,16 +283,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     }
 
     validation(context: Record<'REQUIRED' | 'UNIQUE', IToken[]> & Record<'minMaxValidation' | 'pattern', CstNode[]>) {
-      // only one of these alternatives can exist at the same time.
-      if (context.REQUIRED) {
+      // only one of these alternatives can exist at the same time; a validation is keyed by its keyword, as written.
+      const keyword = context.REQUIRED ?? context.UNIQUE;
+      if (keyword) {
         return {
-          key: REQUIRED,
-          value: '',
-        };
-      }
-      if (context.UNIQUE) {
-        return {
-          key: UNIQUE,
+          key: keyword[0].image,
           value: '',
         };
       }
@@ -322,11 +312,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       };
     }
 
-    pattern(context: Record<'REGEX', IToken[]>) {
+    pattern(context: Record<'PATTERN' | 'REGEX', IToken[]>) {
       const patternImage = context.REGEX[0].image;
 
       return {
-        key: PATTERN,
+        key: context.PATTERN[0].image,
         value: patternImage.substring(1, patternImage.length - 1),
       };
     }
