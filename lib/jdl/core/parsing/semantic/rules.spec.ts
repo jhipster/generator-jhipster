@@ -127,6 +127,35 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('duplicated-entity', () => {
+    it('reports every declaration after the first one', () => {
+      expect(check('entity A\nentity B\nentity A { name String }\nentity A')).toEqual([
+        { ruleId: 'duplicated-entity', message: 'The entity A is declared more than once.', at: 'entity A { name String }' },
+        { ruleId: 'duplicated-entity', message: 'The entity A is declared more than once.', at: 'entity A' },
+      ]);
+    });
+  });
+
+  describe('duplicated-enum', () => {
+    it('reports a second declaration', () => {
+      expect(check('enum E { X }\nenum E { Y }')).toEqual([
+        { ruleId: 'duplicated-enum', message: 'The enum E is declared more than once.', at: 'enum E { Y }' },
+      ]);
+    });
+  });
+
+  describe('duplicated-field', () => {
+    it('reports a second declaration in the same entity only', () => {
+      expect(check('entity A {\n  name String\n  name Integer required\n}\nentity B {\n  name String\n}')).toEqual([
+        {
+          ruleId: 'duplicated-field',
+          message: 'The field name is declared more than once in the entity A.',
+          at: 'name Integer required',
+        },
+      ]);
+    });
+  });
+
   it('reports every problem, in source order', () => {
     expect(check('dto B with mapstruct\nentity A\nrelationship OneToOne { A to C }').map(diagnostic => diagnostic.ruleId)).toEqual([
       'undeclared-option-entity',

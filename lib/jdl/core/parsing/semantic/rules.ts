@@ -121,9 +121,44 @@ export const undeclaredOptionEntity: JDLSemanticRule = {
   },
 };
 
+/** The nodes declared under a name already taken: every declaration after the first one. */
+const redeclared = <T extends { name: string }>(nodes: T[]): T[] => {
+  const seen = new Set<string>();
+  return nodes.filter(node => seen.has(node.name) || !seen.add(node.name));
+};
+
+export const duplicatedEntity: JDLSemanticRule = {
+  id: 'duplicated-entity',
+  check: ast =>
+    redeclared(ast.entities).map(entity => ({
+      message: `The entity ${entity.name} is declared more than once.`,
+      location: entity.location,
+    })),
+};
+
+export const duplicatedEnum: JDLSemanticRule = {
+  id: 'duplicated-enum',
+  check: ast =>
+    redeclared(ast.enums).map(jdlEnum => ({ message: `The enum ${jdlEnum.name} is declared more than once.`, location: jdlEnum.location })),
+};
+
+export const duplicatedField: JDLSemanticRule = {
+  id: 'duplicated-field',
+  check: ast =>
+    ast.entities.flatMap(entity =>
+      redeclared(entity.body ?? []).map(field => ({
+        message: `The field ${field.name} is declared more than once in the entity ${entity.name}.`,
+        location: field.location,
+      })),
+    ),
+};
+
 export const semanticRules: JDLSemanticRule[] = [
   undeclaredRelationshipEntity,
   undeclaredApplicationEntity,
   entityOutsideApplication,
   undeclaredOptionEntity,
+  duplicatedEntity,
+  duplicatedEnum,
+  duplicatedField,
 ];
