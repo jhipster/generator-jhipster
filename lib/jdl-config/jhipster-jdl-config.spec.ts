@@ -35,8 +35,8 @@ describe('jdl definitions', () => {
   });
 
   it('should let a keyword be declared by both trees, each with its own definition', () => {
-    // serviceDiscoveryType is declared by spring-boot and by deployment: the two grammars are lexed in modes of their
-    // own, so it is a token of each, and neither tree needs to know what the other declares.
+    // serviceDiscoveryType is declared by spring-boot and by deployment. The same generic name token
+    // is validated against the definitions of the enclosing declaration.
     const shared = Object.keys(getDefaultJDLApplicationConfig().optionsTypes).filter(
       name => name in getDefaultJDLDeploymentConfig().optionsTypes,
     );
