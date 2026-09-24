@@ -36,9 +36,10 @@ import performJDLPostParsingTasks from './jdl-post-parsing-tasks.ts';
 const runtime = getDefaultRuntime();
 // These fixtures exercise individual grammar productions, including incomplete documents
 // and syntactically valid combinations which semantic validation deliberately rejects.
-// Keep syntax checking strict, then construct the legacy-shaped AST for existing snapshots.
+// Keep syntax checking strict and preserve the legacy-shaped AST for existing snapshots.
 const parseFromContent = (content: string) =>
   performJDLPostParsingTasks(buildJDLAstBuilderVisitor(runtime).visit(getCst(content, runtime)));
+const parseWithSemantics = (content: string) => originalParseFromContent(content, runtime);
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 const {
@@ -1873,53 +1874,53 @@ entity A {
   describe('when parsing a misspelled statement keyword', () => {
     it('should report the statement at the misspelled keyword', () => {
       // An option statement never opens a block, so `entiti Foo {` is not one: it is reported as an unknown statement.
-      expect(() => parseFromContent('entiti Foo {\n  name String\n}')).toThrow(
+      expect(() => parseWithSemantics('entiti Foo {\n  name String\n}')).toThrow(
         /^Unknown statement 'entiti', expected an entity, an enum, a relationship, an application, a deployment, a use statement, a constant or an option statement\.\n\tat line: 1, column: 1$/,
       );
     });
     it('should report the statement inside an application', () => {
-      expect(() => parseFromContent('entity A\napplication {\n  config { baseName foo }\n  entitis A {}\n}')).toThrow(
+      expect(() => parseWithSemantics('entity A\napplication {\n  config { baseName foo }\n  entitis A {}\n}')).toThrow(
         /^Unknown statement 'entitis', expected a config block, an entities statement, a use statement or an option statement\.\n\tat line: 4, column: 3$/,
       );
     });
     it('should report an unknown option statement by its name', () => {
-      expect(() => parseFromContent('entity A\nreadonly A')).toThrow(/^Unknown option: readonly\.\n\tat line: 2, column: 1$/);
+      expect(() => parseWithSemantics('entity A\nreadonly A')).toThrow(/^Unknown option: readonly\.\n\tat line: 2, column: 1$/);
     });
   });
   describe('when parsing an option statement of the wrong kind', () => {
     it('should report a unary option given a value', () => {
-      expect(() => parseFromContent('entity A\nreadOnly A with x')).toThrow(
+      expect(() => parseWithSemantics('entity A\nreadOnly A with x')).toThrow(
         /^The readOnly option takes no value\.\n\tat line: 2, column: 1$/,
       );
     });
     it('should report a binary option without a value', () => {
-      expect(() => parseFromContent('entity A\ndto A')).toThrow(
+      expect(() => parseWithSemantics('entity A\ndto A')).toThrow(
         /^The dto option needs a value: dto <entities> with <value>\.\n\tat line: 2, column: 1$/,
       );
     });
     it('should report it inside an application', () => {
-      expect(() => parseFromContent('entity A\napplication {\n  config { baseName foo }\n  entities A\n  dto A\n}')).toThrow(
+      expect(() => parseWithSemantics('entity A\napplication {\n  config { baseName foo }\n  entities A\n  dto A\n}')).toThrow(
         /^The dto option needs a value: dto <entities> with <value>\.\n\tat line: 5, column: 3$/,
       );
     });
   });
   describe('when parsing an unknown relationship option', () => {
     it('should report it at the option', () => {
-      expect(() => parseFromContent('entity A\nentity B\nrelationship OneToMany {\n  A{b} to B with cascade\n}')).toThrow(
+      expect(() => parseWithSemantics('entity A\nentity B\nrelationship OneToMany {\n  A{b} to B with cascade\n}')).toThrow(
         /^Unknown relationship option: cascade\.\n\tat line: 4, column: 18$/,
       );
     });
   });
   describe('when parsing an unknown deployment option', () => {
     it('should report it at the key', () => {
-      expect(() => parseFromContent('deployment {\n  deploymentType docker-compose\n  fooBar x\n}')).toThrow(
+      expect(() => parseWithSemantics('deployment {\n  deploymentType docker-compose\n  fooBar x\n}')).toThrow(
         /^Unknown deployment option: fooBar\.\n\tat line: 3, column: 3$/,
       );
     });
   });
   describe('when a jdl has several errors', () => {
     it('should report every one of them', () => {
-      expect(() => parseFromContent('application {\n  config {\n    fooBar true\n    serverPort abc\n  }\n}')).toThrow(
+      expect(() => parseWithSemantics('application {\n  config {\n    fooBar true\n    serverPort abc\n  }\n}')).toThrow(
         /^Unknown application option: fooBar\.\n\tat line: 3, column: 5\nAn integer literal is expected, but found: "abc"\n\tat line: 4, column: 16$/,
       );
     });
@@ -1930,8 +1931,9 @@ entity A {
 
     before(() => {
       warnSpy = esmocha.spyOn(logger, 'warn');
-      parsedOptions = parseFromContent('entity A\napplication {\n  config { baseName foo }\n  entities A\n  paginate A with pagination\n}')
-        .applications[0].options;
+      parsedOptions = parseWithSemantics(
+        'entity A\napplication {\n  config { baseName foo }\n  entities A\n  paginate A with pagination\n}',
+      ).applications[0].options;
     });
 
     after(() => {
