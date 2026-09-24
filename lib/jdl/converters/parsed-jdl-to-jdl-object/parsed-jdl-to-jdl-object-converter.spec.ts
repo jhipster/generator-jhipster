@@ -924,31 +924,6 @@ JDLDeployment {
         });
       });
       describe('when parsing entity options in applications', () => {
-        describe('if the entity list does not contain some entities mentioned in options', () => {
-          let parsedContent: ReturnType<typeof parseFromContent>;
-
-          before(() => {
-            parsedContent = parseFromContent(`application {
-  config {
-    baseName testApp1
-  }
-  entities A
-  readOnly B
-}
-
-entity A
-entity B
-`);
-          });
-
-          it('should fail', () => {
-            expect(() =>
-              parseFromConfigurationObject({
-                parsedContent,
-              }),
-            ).toThrow(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
-          });
-        });
         describe('if the entity list contains all the entities mentioned in options', () => {
           let optionsForFirstApplication: JDLOptions;
           let optionsForSecondApplication: JDLOptions;

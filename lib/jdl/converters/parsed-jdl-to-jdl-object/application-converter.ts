@@ -17,12 +17,9 @@
  * limitations under the License.
  */
 
-import { BASE_NAME_KEY } from '../../core/built-in-options/index.ts';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.ts';
 import { createJDLApplication } from '../../core/models/jdl-application-factory.ts';
 import type JDLApplication from '../../core/models/jdl-application.ts';
-import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import type JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import type { ParsedJDLApplication } from '../../core/parsing/types/parsed.ts';
 import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
 
@@ -42,37 +39,11 @@ export function convertApplications(parsedApplications: ParsedJDLApplication[], 
   return parsedApplications.map(parsedApplication => {
     const jdlApplication = createJDLApplication(parsedApplication.config, runtime, parsedApplication.namespaceConfigs);
     jdlApplication.addEntityNames(parsedApplication.entities);
-    const entityOptions = getEntityOptionsInApplication(parsedApplication);
-    checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY), entityOptions, parsedApplication.entities);
-    entityOptions.forEach(option => jdlApplication.addOption(option));
+    getEntityOptionsInApplication(parsedApplication).forEach(option => jdlApplication.addOption(option));
     return jdlApplication;
   });
 }
 
 function getEntityOptionsInApplication(parsedApplication: ParsedJDLApplication): AbstractJDLOption[] {
   return convertOptions(parsedApplication.options, parsedApplication.useOptions ?? []);
-}
-
-/**
- * Checks whether the entity names used in the options are present in the entity names declared for the application.
- * @param applicationName - the application's name
- * @param entityOptions - the options declared in the application
- * @param entityNamesInApplication - the entity names declared in the application
- */
-function checkEntityNamesInOptions(
-  applicationName: string,
-  entityOptions: (JDLUnaryOption | JDLBinaryOption)[],
-  entityNamesInApplication: string[] | undefined,
-) {
-  const entityNamesInApplicationSet = new Set<string>(entityNamesInApplication);
-  entityOptions.forEach(option => {
-    const entityNamesForTheOption = option.resolveEntityNames(entityNamesInApplication);
-    entityNamesForTheOption.forEach(entityNameForTheOption => {
-      if (!entityNamesInApplicationSet.has(entityNameForTheOption)) {
-        throw new Error(
-          `The entity ${entityNameForTheOption} in the ${option.name} option isn't declared in ${applicationName}'s entity list.`,
-        );
-      }
-    });
-  });
 }

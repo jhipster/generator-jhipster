@@ -216,35 +216,6 @@ describe('jdl - ApplicationConverter', () => {
         });
       });
       describe('when having entity options in an application', () => {
-        describe('if the entity list does not contain some entities mentioned in options', () => {
-          let applicationsToConvert: any[];
-
-          before(() => {
-            applicationsToConvert = [
-              {
-                config: {
-                  baseName: 'mono',
-                },
-                entities: ['A'],
-                options: {
-                  dto: {
-                    mapstruct: {
-                      list: ['C'],
-                      excluded: [],
-                    },
-                  },
-                },
-                useOptions: [],
-              },
-            ];
-          });
-
-          it('should fail', () => {
-            expect(() => convertApplications(applicationsToConvert)).toThrow(
-              /^The entity C in the dto option isn't declared in mono's entity list\.$/,
-            );
-          });
-        });
         describe('if the entity list contains the entities mentioned in options', () => {
           let convertedApplications: ReturnType<typeof convertApplications>;
 

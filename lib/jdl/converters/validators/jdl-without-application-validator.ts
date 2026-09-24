@@ -18,18 +18,14 @@
  */
 
 import fieldTypes from '../../../jhipster/field-types.ts';
-import { relationshipOptions } from '../../core/built-in-options/index.ts';
 import type JDLField from '../../core/models/jdl-field.ts';
 import type JDLObject from '../../core/models/jdl-object.ts';
-import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 
 import EntityValidator from './entity-validator.ts';
 import EnumValidator from './enum-validator.ts';
 import FieldValidator from './field-validator.ts';
 import RelationshipValidator from './relationship-validator.ts';
 import ValidationValidator from './validation-validator.ts';
-
-const { BUILT_IN_ENTITY } = relationshipOptions;
 
 /**
  * Constructor taking the jdl object to check against application settings.
@@ -86,10 +82,6 @@ export default function createValidator(jdlObject: JDLObject) {
     const validator = new RelationshipValidator();
     jdlObject.forEachRelationship(jdlRelationship => {
       validator.validate(jdlRelationship);
-      checkForAbsentEntities({
-        jdlRelationship,
-        doesEntityExist: entityName => !!jdlObject.getEntity(entityName),
-      });
     });
   }
 
@@ -101,29 +93,5 @@ export default function createValidator(jdlObject: JDLObject) {
     jdlObject.forEachEnum(jdlEnum => {
       validator.validate(jdlEnum);
     });
-  }
-}
-
-function checkForAbsentEntities({
-  jdlRelationship,
-  doesEntityExist,
-}: {
-  jdlRelationship: JDLRelationship;
-  doesEntityExist: (entityName: string) => boolean;
-}) {
-  const absentEntities: any[] = [];
-  if (!doesEntityExist(jdlRelationship.from)) {
-    absentEntities.push(jdlRelationship.from);
-  }
-  if (!doesEntityExist(jdlRelationship.to) && !jdlRelationship.options.global[BUILT_IN_ENTITY]) {
-    absentEntities.push(jdlRelationship.to);
-  }
-  if (absentEntities.length !== 0) {
-    throw new Error(
-      `In the relationship between ${jdlRelationship.from} and ${jdlRelationship.to}, ` +
-        `${absentEntities.join(' and ')} ${absentEntities.length === 1 ? 'is' : 'are'} not declared. If '${
-          jdlRelationship.to
-        }' is a built-in entity declare like '${jdlRelationship.from} to ${jdlRelationship.to} with builtInEntity'.`,
-    );
   }
 }

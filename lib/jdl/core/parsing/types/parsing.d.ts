@@ -47,6 +47,8 @@ export type JDLOptionStatementSpec = {
   keyword?: string;
   /** Deprecated keywords still accepted for the option, warned about. */
   deprecatedKeywords?: readonly string[];
+  /** A relationship option: the destination is a built-in entity, which the jdl does not declare. */
+  builtInEntity?: boolean;
 };
 
 /** An option of the entity or relationship statements, shaped like a command config. */

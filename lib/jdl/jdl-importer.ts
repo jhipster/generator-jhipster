@@ -38,6 +38,8 @@ import type JDLJSONEntity from './core/basic-types/json-entity.ts';
 import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 import type JDLDeployment from './core/models/jdl-deployment.ts';
 import type JDLObject from './core/models/jdl-object.ts';
+import { errorLocation } from './core/parsing/location.ts';
+import { checkSemantics } from './core/parsing/semantic/index.ts';
 import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
 import type { JDLApplicationConfig } from './core/parsing/types/parsing.ts';
 import type { JDLRuntime } from './core/parsing/types/runtime.ts';
@@ -131,6 +133,7 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
      *          - exportedEntities: the exported entities, or an empty list
      */
     import: () => {
+      checkSemanticErrors(content, runtime);
       const jdlObject = getJDLObject(content, configuration, runtime);
       checkForErrors(jdlObject);
       if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
@@ -165,6 +168,14 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JD
     },
     runtime,
   );
+}
+
+/** The semantic rules report every error of the jdl, with its position; the converters take a jdl without any. */
+function checkSemanticErrors(content: ParsedJDLApplications, runtime: JDLRuntime) {
+  const errors = checkSemantics(content, runtime).filter(diagnostic => diagnostic.severity === 'error');
+  if (errors.length > 0) {
+    throw new Error(errors.map(error => `${error.message}${errorLocation(error.location)}`).join('\n'));
+  }
 }
 
 function checkForErrors(jdlObject: JDLObject) {

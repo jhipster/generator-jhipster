@@ -41,20 +41,9 @@ function resolveApplicationEntityNames(application: ParsedJDLApplications['appli
   let applicationEntityNames = new Set(entityList);
   if (entityList.includes('*')) {
     applicationEntityNames = new Set(entityNames);
-  } else {
-    checkEntityNamesInApplication(application.config.baseName, applicationEntityNames, entityNames);
   }
   excluded.forEach(excludedEntityName => {
     applicationEntityNames.delete(excludedEntityName);
   });
   return [...applicationEntityNames];
-}
-
-function checkEntityNamesInApplication(applicationName: string, entityNamesInApplication: Set<string>, entityNames: string[]) {
-  const entityNameSet = new Set(entityNames);
-  entityNamesInApplication.forEach(entityNameInApplication => {
-    if (!entityNameSet.has(entityNameInApplication)) {
-      throw new Error(`The entity ${entityNameInApplication} which is declared in ${applicationName}'s entity list doesn't exist.`);
-    }
-  });
 }
