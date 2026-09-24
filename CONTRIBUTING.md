@@ -197,4 +197,4 @@ Note: The JHipster RFC process is inspired by [Rust RFCs](https://rust-lang.gith
 
 If you submitted a Pull Request that fixes a ticket with the "\$100" tag, then you are eligible for our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
 
-A bug bounty goes to the person who fixed the ticket, and a member of the core team confirms on the Pull Request that it is eligible before the expense is validated. Automated accounts are not eligible: a Pull Request opened by a bot, or by an agent acting on its own, never earns a bug bounty. Using an AI assistant as a tool is fine - the work is yours and you stand behind it in review.
+A bug bounty goes to the person who fixed the ticket, and a member of the core team confirms on the pull request that it is eligible before the expense is validated. Automated accounts are not eligible: a pull request opened by a bot, or by an agent acting on its own, never earns a bug bounty. Using an AI assistant as a tool is fine - the work is yours and you stand behind it in review.
