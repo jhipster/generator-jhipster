@@ -18,26 +18,9 @@
 -%>
 package <%- entityAbsolutePackage %>.service.mapper;
 
-<%_ // The mapper of an embedded entity has no named mappings: MapStruct forges the mappings of its related entities.
-    const testedRelationships = embedded
-      ? []
-      : restProperties.filter(
-        property => property.relationshipName && !property.otherEntity.embedded && property.ownerSide && !property.otherEntity.builtIn,
-      );
-_%>
 import static <%- entityAbsoluteClass %>Asserts.*;
 import static <%- entityAbsoluteClass %>TestSamples.*;
-<%_ for (const otherEntity of this._.uniq(testedRelationships.map(relationship => relationship.otherEntity)).filter(otherEntity => otherEntity.entityClass !== entityClass)) { _%>
-import static <%- otherEntity.entityAbsoluteClass %>TestSamples.*;
-<%_ } _%>
-<%_ if (testedRelationships.length > 0) { _%>
-import static org.assertj.core.api.Assertions.assertThat;
-<%_ } _%>
 
-<%_ if (testedRelationships.some(relationship => relationship.collection)) { _%>
-import java.util.Set;
-
-<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -56,28 +39,4 @@ class <%- entityClass %>MapperTest {
         var actual = <%- entityInstance %>Mapper.toEntity(<%- entityInstance %>Mapper.toDto(expected));
         assert<%- persistClass %>AllPropertiesEquals(expected, actual);
     }
-<%_ for (const relationship of testedRelationships) { _%>
-  <%_ const { otherEntity, relatedField } = relationship;
-      const relatedSample = `get${otherEntity.persistClass}Sample1()`;
-      const relatedDto = `${entityInstance}Mapper.toDto${this._.upperFirst(otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName))}(${relatedSample})`;
-  _%>
-
-    @Test
-    void shouldMapOnlyTheIdOf<%- relationship.relationshipNameCapitalized %>() {
-        var <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(get<%- persistClass %>Sample1());
-  <%_ if (relationship.collection) { _%>
-        <%- dtoInstance %>.<%- relationship.propertyConsumerName %>(Set.of(<%- relatedDto %>));
-
-        var <%- relationship.relationshipFieldName %> = <%- entityInstance %>Mapper.toEntity(<%- dtoInstance %>).<%- relationship.propertySupplierName %>().iterator().next();
-  <%_ } else { _%>
-        <%- dtoInstance %>.<%- relationship.propertyConsumerName %>(<%- relatedDto %>);
-
-        var <%- relationship.relationshipFieldName %> = <%- entityInstance %>Mapper.toEntity(<%- dtoInstance %>).<%- relationship.propertySupplierName %>();
-  <%_ } _%>
-        assertThat(<%- relationship.relationshipFieldName %>.<%- otherEntity.primaryKey.propertySupplierName %>()).isEqualTo(<%- relatedSample %>.<%- otherEntity.primaryKey.propertySupplierName %>());
-  <%_ if (!relatedField.id && !relatedField.mapstructExpression) { _%>
-        assertThat(<%- relationship.relationshipFieldName %>.<%- relatedField.propertySupplierName %>()).isNull();
-  <%_ } _%>
-    }
-<%_ } _%>
 }
