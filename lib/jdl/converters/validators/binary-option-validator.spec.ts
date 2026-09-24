@@ -49,13 +49,6 @@ describe('jdl - BinaryOptionValidator', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.toThrow();
         });
       });
-      describe('with an invalid value', () => {
-        it('should fail', () => {
-          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).toThrow(
-            /^The 'dto' option is not valid for value 'toto'\.$/,
-          );
-        });
-      });
     });
   });
 });

@@ -235,6 +235,36 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('option-value', () => {
+    it('reports a value outside the choices of the option, at its first statement', () => {
+      expect(check('entity A\nentity B\ndto A with foo\ndto B with foo')).toEqual([
+        { ruleId: 'option-value', message: "The 'dto' option is not valid for value 'foo'.", at: 'dto A with foo' },
+      ]);
+    });
+    it('reports it inside an application', () => {
+      expect(
+        check('entity A\napplication {\n  config { baseName foo }\n  entities A\n  service A with foo\n}').map(diagnostic => diagnostic.at),
+      ).toEqual(['service A with foo']);
+    });
+    it('accepts any value for an option without choices, and no', () => {
+      expect(check('entity A\nmicroservice A with anything\ndto A with no')).toEqual([]);
+    });
+    it('reports a use statement value that belongs to no option', () => {
+      expect(check('entity A\nuse mapstruct, foo, no for A')).toEqual([
+        {
+          ruleId: 'option-value',
+          message: "The value 'foo' of the use statement is the value of no option.",
+          at: 'use mapstruct, foo, no for A',
+        },
+        {
+          ruleId: 'option-value',
+          message: "The value 'no' of the use statement is the value of no option.",
+          at: 'use mapstruct, foo, no for A',
+        },
+      ]);
+    });
+  });
+
   it('reports every problem, in source order', () => {
     expect(check('dto B with mapstruct\nentity A\nrelationship OneToOne { A to C }').map(diagnostic => diagnostic.ruleId)).toEqual([
       'undeclared-option-entity',

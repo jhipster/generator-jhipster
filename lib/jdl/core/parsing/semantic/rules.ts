@@ -214,6 +214,50 @@ export const oneToOneDirection: JDLSemanticRule = {
       })),
 };
 
+/** Whether a value is one of the choices of an option, an option without choices taking any value. */
+const isOptionValue = (runtime: JDLRuntime, optionName: string, value: string): boolean => {
+  const choices = runtime.entityDefinition.configs[optionName]?.choices;
+  return !choices || choices.includes(value);
+};
+
+export const optionValue: JDLSemanticRule = {
+  id: 'option-value',
+  check: (ast, runtime) => {
+    const blocks = [ast, ...ast.applications];
+    const binaryOptions = blocks.flatMap(block =>
+      Object.entries(block.options ?? {}).flatMap(([optionName, config]) =>
+        Array.isArray((config as ParsedJDLOptionConfig).list) ?
+          []
+        : Object.entries(config as Record<string, ParsedJDLOptionConfig>).map(([value, valueConfig]) => ({
+            optionName,
+            value,
+            valueConfig,
+          })),
+      ),
+    );
+    const useOptions = blocks.flatMap(block => block.useOptions ?? []);
+    return [
+      ...binaryOptions
+        .filter(({ optionName, value }) => !isOptionValue(runtime, optionName, value))
+        .map(({ optionName, value, valueConfig }) => ({
+          message: `The '${optionName}' option is not valid for value '${value}'.`,
+          location: valueConfig.location,
+        })),
+      ...useOptions.flatMap(useOption =>
+        useOption.optionValues
+          // `no` is a value of several options, it selects none of them.
+          .filter(
+            value => value === 'no' || !Object.values(runtime.entityDefinition.configs).some(config => config.choices?.includes(value)),
+          )
+          .map(value => ({
+            message: `The value '${value}' of the use statement is the value of no option.`,
+            location: useOption.location,
+          })),
+      ),
+    ];
+  },
+};
+
 export const semanticRules: JDLSemanticRule[] = [
   undeclaredRelationshipEntity,
   undeclaredApplicationEntity,
@@ -226,4 +270,5 @@ export const semanticRules: JDLSemanticRule[] = [
   decimalValidationValue,
   requiredReflexiveRelationship,
   oneToOneDirection,
+  optionValue,
 ];

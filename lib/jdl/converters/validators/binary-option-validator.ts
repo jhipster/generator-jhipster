@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import BinaryOptions from '../../core/built-in-options/binary-options.ts';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 
 import OptionValidator from './option-validator.ts';
@@ -29,12 +28,5 @@ export default class BinaryOptionValidator extends OptionValidator {
 
   validate(jdlOption: JDLBinaryOption) {
     super.validate(jdlOption);
-    checkForInvalidValue(jdlOption);
-  }
-}
-
-function checkForInvalidValue(jdlOption: JDLBinaryOption) {
-  if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
-    throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
   }
 }
