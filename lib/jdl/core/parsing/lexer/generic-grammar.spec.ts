@@ -19,7 +19,7 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import type { CstNode } from 'chevrotain';
+import { type CstNode, tokenMatcher } from 'chevrotain';
 
 import { getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 import { parse as parseDocument } from '../api.ts';
@@ -46,7 +46,8 @@ describe('jdl - definition-independent grammar', () => {
     const text = 'application { config { skipClient true skipServer false } skipClient * skipServer * }';
     const names = lexer.tokenize(text).tokens.filter(token => ['skipClient', 'skipServer'].includes(token.image));
     expect(names).toHaveLength(4);
-    expect(names.every(token => token.tokenType === tokens.tokens.NAME)).toBe(true);
+    expect(names.every(token => token.tokenType === tokens.tokens.IDENTIFIER)).toBe(true);
+    expect(names.every(token => tokenMatcher(token, tokens.tokens.NAME))).toBe(true);
     parse(text);
   });
 
@@ -84,7 +85,11 @@ describe('jdl - definition-independent grammar', () => {
     const entity = result.children.entityDeclaration[0] as CstNode;
     const body = entity.children.entityBody[0] as CstNode;
     expect(body.children.fieldDeclaration).toHaveLength(2);
-    expect(customLexer.tokenize('required minlength').tokens.every(token => token.tokenType === custom.tokens.NAME)).toBe(true);
+    const undeclaredValidations = customLexer.tokenize('required minlength');
+    expect(undeclaredValidations.errors).toEqual([]);
+    expect(undeclaredValidations.tokens.map(token => token.image)).toEqual(['required', 'minlength']);
+    expect(undeclaredValidations.tokens.every(token => token.tokenType === custom.tokens.IDENTIFIER)).toBe(true);
+    expect(undeclaredValidations.tokens.every(token => tokenMatcher(token, custom.tokens.NAME))).toBe(true);
   });
 
   it('honors a supplied identifier pattern even when a name starts with a keyword', () => {
@@ -92,7 +97,8 @@ describe('jdl - definition-independent grammar', () => {
     const result = createJDLLexer(custom).tokenize('entity$ custom$value');
     expect(result.errors).toEqual([]);
     expect(result.tokens.map(token => token.image)).toEqual(['entity$', 'custom$value']);
-    expect(result.tokens.every(token => token.tokenType === custom.tokens.NAME)).toBe(true);
+    expect(result.tokens.every(token => token.tokenType === custom.tokens.IDENTIFIER)).toBe(true);
+    expect(result.tokens.every(token => tokenMatcher(token, custom.tokens.NAME))).toBe(true);
   });
 
   it('recovers a missing entity name without inventing a name or losing the following entity', () => {
