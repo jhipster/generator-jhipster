@@ -52,4 +52,74 @@ describe('independent JDL parser public API', () => {
       'experimental false',
     ]);
   });
+
+  it('accepts config definitions without lexer token mappings, including legacy validation keys', () => {
+    const runtime = createRuntime({
+      ...definitions,
+      application: {
+        validatorConfig: { baseName: { type: 'NAME' }, SERVER_PORT: { type: 'INTEGER' } },
+        optionsTypes: { baseName: { type: 'string' }, serverPort: { type: 'integer' } },
+        optionsValues: {},
+        quotedOptionNames: [],
+      },
+    });
+    const source = 'application { config { baseName foo serverPort 8080 } }';
+    expect(parse(source, runtime).diagnostics).toEqual([]);
+    expect(parseOrThrow(source, runtime).applications[0].config).toEqual({ baseName: 'foo', serverPort: '8080' });
+    expect(() => parseOrThrow('application { config { fooBar true serverPort abc } }', runtime)).toThrow(
+      'Unknown application option: fooBar.\n\tat line: 1, column: 24\nAn integer literal is expected, but found: "abc"\n\tat line: 1, column: 47',
+    );
+  });
+
+  it('keeps keyword names while distinguishing unknown block statements from generic options', () => {
+    const runtime = createRuntime(definitions);
+    expect(parseOrThrow('entity A { with String }', runtime).entities[0].body[0].name).toBe('with');
+    expect(() => parseOrThrow('entiti Foo { name String }', runtime)).toThrow(
+      "Unknown statement 'entiti', expected an entity, an enum, a relationship, an application, a deployment, a use statement, a constant or an option statement.\n\tat line: 1, column: 1",
+    );
+    expect(() => parseOrThrow('application { entitis A {} }', runtime)).toThrow(
+      "Unknown statement 'entitis', expected a config block, an entities statement, a use statement or an option statement.\n\tat line: 1, column: 15",
+    );
+  });
+
+  it('uses custom entity definitions for both top-level and application options', () => {
+    const runtime = createRuntime({
+      ...definitions,
+      entity: {
+        configs: {
+          audited: { jdl: { type: 'unary' } },
+          transfer: { jdl: { type: 'binary', keyword: 'dto', deprecatedKeywords: ['oldDto'] } },
+        },
+      },
+    });
+    const source = 'entity A\naudited A\napplication { entities A oldDto A with mapping }';
+    expect(parse(source, runtime).diagnostics.map(diagnostic => diagnostic.ruleId)).toEqual(['option.deprecated']);
+    expect(parseOrThrow(source, runtime).applications[0].options).toEqual({
+      transfer: { mapping: { list: ['A'], excluded: [] } },
+    });
+    expect(() => parseOrThrow('entity A\nreadOnly A', runtime)).toThrow('Unknown option: readOnly.\n\tat line: 2, column: 1');
+    expect(() => parseOrThrow('entity A\naudited A with mapping', runtime)).toThrow(
+      'The audited option takes no value.\n\tat line: 2, column: 1',
+    );
+    expect(() => parseOrThrow('entity A\napplication { entities A dto A }', runtime)).toThrow(
+      'The dto option needs a value: dto <entities> with <value>.\n\tat line: 2, column: 26',
+    );
+  });
+
+  it('accepts declared relationship keywords and aliases and diagnoses unknown ones consistently', () => {
+    const runtime = createRuntime({
+      ...definitions,
+      relationship: { configs: { cascading: { jdl: { type: 'unary', keyword: 'cascade', deprecatedKeywords: ['oldCascade'] } } } },
+    });
+    for (const option of ['cascade', 'oldCascade']) {
+      const source = `entity A\nentity B\nrelationship OneToMany { A{b} to B with ${option} }`;
+      expect(parse(source, runtime).diagnostics).toEqual([]);
+      expect(parseOrThrow(source, runtime).relationships[0].options.global).toEqual([{ optionName: option, type: 'UNARY' }]);
+    }
+    const source = 'entity A\nentity B\nrelationship OneToMany { A{b} to B with unknown }';
+    expect(parse(source, runtime).diagnostics).toEqual([
+      expect.objectContaining({ ruleId: 'option.unknown', message: 'Unknown relationship option: unknown.' }),
+    ]);
+    expect(() => parseOrThrow(source, runtime)).toThrow('Unknown relationship option: unknown.\n\tat line: 3, column: 41');
+  });
 });
