@@ -66,6 +66,10 @@ export function spanLocation(children: Record<string, CstElement[] | undefined>)
   };
 }
 
+/** The position of a node for an error message, in the form the parser reports it; empty when the node was not parsed. */
+export const errorLocation = (location: JDLLocation | undefined): string =>
+  location ? `\n\tat line: ${location.startLine}, column: ${location.startColumn}` : '';
+
 /**
  * Attach the location to a node of the AST. It is not enumerable so that the AST keeps its shape: a config is a record whose
  * entries are its options, and comparing or serializing a node ignores where it was written.

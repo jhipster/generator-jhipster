@@ -18,6 +18,7 @@
  */
 
 import JDLDeployment from '../../core/models/jdl-deployment.ts';
+import { errorLocation } from '../../core/parsing/location.ts';
 import type { ParsedJDLDeployment } from '../../core/parsing/types/parsed.ts';
 import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
 
@@ -41,7 +42,9 @@ export function convertDeployments(parsedDeployments: ParsedJDLDeployment[], run
         runtime.deploymentDefinition.doesOptionExist(optionName) &&
         !runtime.deploymentDefinition.doesOptionValueExist(optionName, optionValue)
       ) {
-        throw new Error(`The value '${optionValue}' is not allowed for the deployment option '${optionName}'.`);
+        throw new Error(
+          `The value '${optionValue}' is not allowed for the deployment option '${optionName}'.${errorLocation(parsedDeployment.keyLocations?.[optionName])}`,
+        );
       }
     }
     return new JDLDeployment(parsedDeployment);

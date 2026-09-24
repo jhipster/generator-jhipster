@@ -19,6 +19,7 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
+import { createImporterFromContent } from '../__test-support__/index.ts';
 import { parseFromContent } from '../readers/jdl-reader.ts';
 
 import type { JDLLocation, ParsedJDLApplications } from './types/parsed.ts';
@@ -136,5 +137,17 @@ describe('jdl - AST locations', () => {
     expect(Object.keys(deployment)).not.toContain('keyLocations');
     expect(Object.keys(ast.applications[0].config)).not.toContain('keyLocations');
     expect(JSON.stringify(ast)).not.toContain('Offset');
+  });
+
+  describe('when a deployment value is not allowed', () => {
+    it('reports where the deployment option is written', () => {
+      expect(() =>
+        createImporterFromContent(`deployment {
+  deploymentType kubernetes
+  appsFolders [jhipster]
+  serviceDiscoveryType zookeeper
+}`).import(),
+      ).toThrow(/^The value 'zookeeper' is not allowed for the deployment option 'serviceDiscoveryType'\.\n\tat line: 4, column: 3$/);
+    });
   });
 });
