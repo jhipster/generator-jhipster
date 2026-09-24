@@ -23,11 +23,12 @@ import type { JDLRuntime } from '../jdl/core/parsing/types/runtime.ts';
 
 import { getDefaultJDLEntityConfig } from './jdl-entity-config.ts';
 import { getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';
+import { getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
 /**
  * A runtime from the JHipster definitions, the ones not passed: the application and deployment options of the
- * generators, the entity and relationship option statements.
+ * generators, the entity and relationship option statements, the field validations.
  */
 export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDLRuntime =>
   createRuntime({
@@ -35,6 +36,7 @@ export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDL
     deployment: definitions.deployment ?? getDefaultJDLDeploymentConfig(),
     entity: definitions.entity ?? getDefaultJDLEntityConfig(),
     relationship: definitions.relationship ?? getDefaultJDLRelationshipConfig(),
+    validation: definitions.validation ?? getDefaultJDLValidationConfig(),
   });
 
 let defaultRuntime: JDLRuntime;

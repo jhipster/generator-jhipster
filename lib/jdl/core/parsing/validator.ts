@@ -36,7 +36,7 @@ interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
   entityDeclaration(context: any): void;
   fieldDeclaration(context: any): void;
   type(context: any): void;
-  minMaxValidation(context: any): void;
+  valuedValidation(context: any): void;
   relationshipSide(context: any): void;
   enumDeclaration(context: any): void;
   enumPropList(context: any): void;
@@ -237,8 +237,17 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
       this.checkNameSyntax(context.NAME[0], TYPE_NAME_PATTERN, 'typeName');
     }
 
-    minMaxValidation(context: Record<'NAME', IToken[]>) {
-      super.minMaxValidation(context);
+    valuedValidation(context: Record<'validationName' | 'NAME' | 'REGEX', IToken[]>) {
+      super.valuedValidation(context);
+      const name = context.validationName[0];
+      const definition = runtime.validationDefinition.configs[name.image];
+      if (!definition) {
+        this.errors.push({ message: `Unknown validation: ${name.image}.`, token: name });
+      } else if (definition.jdl.value === 'regex' && !context.REGEX) {
+        this.errors.push({ message: `The ${name.image} validation takes a regular expression: ${name.image}(/<pattern>/).`, token: name });
+      } else if (definition.jdl.value === 'number' && context.REGEX) {
+        this.errors.push({ message: `The ${name.image} validation takes a number or a constant: ${name.image}(<value>).`, token: name });
+      }
       if (context.NAME) {
         this.checkNameSyntax(context.NAME[0], CONSTANT_PATTERN, 'constant');
       }

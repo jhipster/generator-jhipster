@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 
-import MinMaxTokens from './minmax-tokens.ts';
 import createTokenFromConfig from './token-creator.ts';
 
+// The validations without a value are keywords: a name after the type of a field could be the next field otherwise.
+// The ones with a value, `minlength(3)`, come from the validation definitions.
 const validationTokens = [
   { name: 'REQUIRED', pattern: 'required' },
   { name: 'UNIQUE', pattern: 'unique' },
-  { name: 'PATTERN', pattern: 'pattern' },
 ].map(createTokenFromConfig);
 
 export default {
-  tokens: [...validationTokens, ...MinMaxTokens.tokens],
+  tokens: validationTokens,
 };

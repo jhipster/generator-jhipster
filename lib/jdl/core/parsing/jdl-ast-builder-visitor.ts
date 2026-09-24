@@ -285,7 +285,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       return context.NAME[0].image;
     }
 
-    validation(context: Record<'REQUIRED' | 'UNIQUE', IToken[]> & Record<'minMaxValidation' | 'pattern', CstNode[]>) {
+    validation(context: Record<'REQUIRED' | 'UNIQUE', IToken[]> & Record<'valuedValidation', CstNode[]>) {
       // only one of these alternatives can exist at the same time; a validation is keyed by its keyword, as written.
       const keyword = context.REQUIRED ?? context.UNIQUE;
       if (keyword) {
@@ -294,34 +294,19 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
           value: '',
         };
       }
-      if (context.minMaxValidation) {
-        return this.visit(context.minMaxValidation);
-      }
-      return this.visit(context.pattern);
+      return this.visit(context.valuedValidation);
     }
 
-    minMaxValidation(context: Record<'NAME' | 'MIN_MAX_KEYWORD' | 'INTEGER' | 'DECIMAL', IToken[]>) {
+    valuedValidation(context: Record<'validationName' | 'NAME' | 'INTEGER' | 'DECIMAL' | 'REGEX', IToken[]>) {
+      const key = context.validationName[0].image;
       if (context.NAME) {
-        return {
-          key: context.MIN_MAX_KEYWORD[0].image,
-          value: context.NAME[0].image,
-          constant: true,
-        };
+        return { key, value: context.NAME[0].image, constant: true };
       }
-
-      return {
-        key: context.MIN_MAX_KEYWORD[0].image,
-        value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image,
-      };
-    }
-
-    pattern(context: Record<'PATTERN' | 'REGEX', IToken[]>) {
-      const patternImage = context.REGEX[0].image;
-
-      return {
-        key: context.PATTERN[0].image,
-        value: patternImage.substring(1, patternImage.length - 1),
-      };
+      if (context.REGEX) {
+        const patternImage = context.REGEX[0].image;
+        return { key, value: patternImage.substring(1, patternImage.length - 1) };
+      }
+      return { key, value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image };
     }
 
     relationDeclaration(context: Record<'relationshipType' | 'relationshipBody', CstNode[]>) {
