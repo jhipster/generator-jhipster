@@ -1,0 +1,109 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import type { ITokenConfig } from 'chevrotain';
+
+export type JDLTokenConfig = Pick<ITokenConfig, 'name' | 'pattern'>;
+
+export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
+
+export type JDLValidatorOption = {
+  type: JDLValidatorOptionType;
+  pattern?: RegExp;
+  msg?: string;
+};
+
+export type JDLApplicationOptionValue = string | number | boolean | undefined | never[] | Record<string, string>;
+export type JDLApplicationOptionTypeValue = 'string' | 'integer' | 'boolean' | 'list' | 'quotedList';
+export type JDLApplicationOptionType = {
+  type: JDLApplicationOptionTypeValue;
+  /** Why the option is deprecated, warned about when the jdl sets it. */
+  deprecated?: string;
+};
+
+export type JDLApplicationConfig = {
+  /** Config keys that must occur explicitly, before generator defaults are applied. */
+  required?: readonly string[];
+  tokenConfigs: JDLTokenConfig[];
+  validatorConfig: Record<string, JDLValidatorOption>;
+  optionsValues: Record<string, JDLApplicationOptionValue>;
+  optionsTypes: Record<string, JDLApplicationOptionType>;
+  quotedOptionNames: string[];
+};
+
+/** The jdl spec of an option statement: `<option> <entities>` for a unary one, `<option> <entities> with <value>` for a binary one. */
+export type JDLOptionStatementSpec = {
+  type: 'unary' | 'binary';
+  /** The keyword of the statement, the option name by default. */
+  keyword?: string;
+  /** Deprecated keywords still accepted for the option, warned about. */
+  deprecatedKeywords?: readonly string[];
+};
+
+/** An option of the entity or relationship statements, shaped like a command config. */
+export type JDLOptionConfig = {
+  description?: string;
+  /** The values a binary option accepts; a binary option without choices accepts any name. */
+  choices?: readonly string[];
+  /** The value of the option for the entities the jdl does not set it on. */
+  default?: string;
+  jdl: JDLOptionStatementSpec;
+};
+
+/**
+ * The option statements of a jdl block, entity or relationship, shaped like a generator command so a generator may
+ * declare them the same way one day.
+ */
+export type JDLOptionsDefinition = {
+  configs: Readonly<Record<string, JDLOptionConfig>>;
+};
+
+/** Every definition a runtime is built from. */
+export type JDLDefinitions = {
+  /** Application list option declaring the namespaces allowed in namespace config blocks. */
+  namespaceConfigOption?: string;
+  /** The application config options. */
+  application: JDLApplicationConfig;
+  /** The deployment options. */
+  deployment: JDLApplicationConfig;
+  /** The option statements of entities. */
+  entity: JDLOptionsDefinition;
+  /** The option statements of relationships. */
+  relationship: JDLOptionsDefinition;
+  /** Identifier syntax; keeping this in the definitions lets dialects extend names. */
+  namePattern?: RegExp;
+  names?: Partial<
+    Record<'constant' | 'entity' | 'field' | 'type' | 'enum' | 'enumValue' | 'enumValueValue' | 'injectedField' | 'method' | 'path', RegExp>
+  >;
+  /** Field types and their permitted validations, supplied by the host. */
+  fieldTypes?: Readonly<Record<string, { validations: readonly string[] }>>;
+  enumValidations?: readonly string[];
+  validations?: Readonly<Record<string, { type: 'flag' | 'number' | 'pattern'; integer?: boolean }>>;
+};
+
+export type JHipsterOptionDefinition = {
+  name: string;
+  type: JDLApplicationOptionTypeValue;
+  tokenType: JDLValidatorOptionType;
+  tokenValuePattern?: RegExp;
+  knownChoices?: string[];
+  /** Whether the value should be quoted when written back to JDL (e.g. jhipsterVersion). */
+  quoted?: boolean;
+  /** The option is deprecated: setting it in the jdl warns with this reason. */
+  deprecated?: string;
+};
