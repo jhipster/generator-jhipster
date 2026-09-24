@@ -22,7 +22,7 @@ If you have a question on using JHipster, or if you need help with your JHipster
 
 ## <a name="issue"></a> Issues and Bugs
 
-If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
+If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a pull request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
 
 **Please see the Submission Guidelines below**.
 
@@ -31,8 +31,8 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 You can request a new feature by submitting a ticket to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). If you
 would like to implement a new feature then consider what kind of change it is:
 
-- **Major Changes** that you wish to contribute to the project should be discussed first. Please open a ticket which clearly states that it is a feature request in the title and explain clearly what you want to achieve in the description, and the JHipster team will discuss with you what should be done in that ticket. You can then start working on a Pull Request. In order to communicate major changes proposals and receive reviews from the core team, you can also submit an RFC.
-- **Small Changes** can be proposed without any discussion. Open up a ticket which clearly states that it is a feature request in the title. Explain your change in the description, and you can propose a Pull Request straight away.
+- **Major Changes** that you wish to contribute to the project should be discussed first. Please open a ticket which clearly states that it is a feature request in the title and explain clearly what you want to achieve in the description, and the JHipster team will discuss with you what should be done in that ticket. You can then start working on a pull request. In order to communicate major changes proposals and receive reviews from the core team, you can also submit an RFC.
+- **Small Changes** can be proposed without any discussion. Open up a ticket which clearly states that it is a feature request in the title. Explain your change in the description, and you can propose a pull request straight away.
 
 ## <a name="submit"></a> Submission Guidelines
 
@@ -69,11 +69,11 @@ Issues opened without any of these info will be **closed** without any explanati
 
 See our [Development Guide](DEVELOPMENT.md) for more information on how to configure the JHipster generator for contributing.
 
-### [Submitting a Pull Request](https://opensource.guide/how-to-contribute/#opening-a-pull-request)
+### [Submitting a pull request](https://opensource.guide/how-to-contribute/#opening-a-pull-request)
 
 Before you submit your pull request consider the following guidelines:
 
-- Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls?utf8=%E2%9C%93&q=is%3Apr) for an open or closed Pull Request
+- Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls?utf8=%E2%9C%93&q=is%3Apr) for an open or closed pull request
   that relates to your submission.
 - Follow our [Coding Rules](#rules).
 - In GitHub, send a pull request to `jhipster/generator-jhipster:main`.
@@ -169,6 +169,7 @@ AI coding assistants (GitHub Copilot, Claude, Cursor, and similar tools) are wel
 
 - **You remain responsible for the change.** Before submitting, you must read, understand, and test the code — including anything the assistant produced. Do not submit AI output you have not verified.
 - **The normal bar still applies.** Tests, lint, type-check, and all other Coding Rules above must pass. AI assistance does not lower the review bar; if anything, reviewers will look more carefully at AI-generated diffs.
+- **A bug bounty goes to a person.** An assistant is a tool, and using one keeps you eligible. An automated account is not: a pull request opened by a bot, or by an agent acting on its own, never earns a bug bounty. See [Bug bounties](#bounties).
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
@@ -177,7 +178,7 @@ AI coding assistants (GitHub Copilot, Claude, Cursor, and similar tools) are wel
 
 Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to present them because we will need a lot of going back and forth to reach a consensus.
 
-So we ask that these feature requests be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
+So we ask that these feature requests be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a pull request review.
 
 The RFC process is intended to provide a consistent and controlled path for major features and directions of the project.
 
@@ -187,12 +188,14 @@ To submit an RFC follow those steps:
 2. Create the initial GitHub issue for the Feature Request if it doesn't already exist
 3. Copy the `rfcs/0-jhipster-rfc-template.md` to `rfcs/${featureRequestIssueNumber}-my-feature-request-name.md`
 4. Fill in the RFC, make sure to complete every required section
-5. Submit the RFC as a Pull Request with the summary of the proposal in the PR description
+5. Submit the RFC as a pull request with the summary of the proposal in the PR description
 6. Build consensus and integrate feedback from the reviewers
-7. The Pull Request is either accepted (merged), rejected (closed) or postponed (given an "on hold" status)
+7. The pull request is either accepted (merged), rejected (closed) or postponed (given an "on hold" status)
 
 Note: The JHipster RFC process is inspired by [Rust RFCs](https://rust-lang.github.io/rfcs/).
 
 ## <a name="bounties"></a> Bug bounties
 
-If you submitted a Pull Request that fixes a ticket with the "\$100" tag, then you are eligible for our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
+If you submitted a pull request that fixes a ticket with the "\$100" tag, then you are eligible for our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
+
+A bug bounty goes to the person who fixed the ticket, and a member of the core team confirms on the pull request that it is eligible before the expense is validated. Automated accounts are not eligible: a pull request opened by a bot, or by an agent acting on its own, never earns a bug bounty. Using an AI assistant as a tool is fine - the work is yours and you stand behind it in review.

@@ -568,7 +568,7 @@ entity A
       });
 
       it('should report it', () => {
-        expect(caughtError.message).toBe("Got an invalid application config property: 'unknownOption'.\n\tat line: 5, column: 5");
+        expect(caughtError.message).toBe('Unknown application option: unknownOption.\n\tat line: 5, column: 5');
         const { diagnostics } = parse(content, getDefaultRuntime());
         expect(diagnostics.map(diagnostic => diagnostic.ruleId)).toEqual(['config.unknown']);
         expect(diagnostics[0].range.start).toEqual({ offset: content.indexOf('unknownOption'), line: 5, column: 5 });

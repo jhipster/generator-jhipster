@@ -94,7 +94,7 @@ describe('jdl - JDLReader', () => {
         it('should fail', () => {
           expect(() => {
             parseFromFiles(['test_file.jdl']);
-          }).toThrow("The option 'enity' does not exist.\n\tat line: 1, column: 1");
+          }).toThrow(/^Unknown option: enity\.\n\tat line: 1, column: 1$/);
           const text = fs.readFileSync('test_file.jdl', 'utf8');
           const { diagnostics } = parse(text, getDefaultRuntime());
           expect(diagnostics.map(diagnostic => diagnostic.ruleId)).toEqual(['option.unknown']);

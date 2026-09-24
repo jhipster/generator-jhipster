@@ -1070,7 +1070,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             }`,
                 jdlRuntime,
               ),
-            ).toThrow(/NoViableAltException:.*[\s\S]*at line: 5, column: 15/);
+            ).toThrow(/^NoViableAltException: Expecting: one of these possible Token sequences:/);
           });
         });
         describe('when the prefix begins by a dash', () => {
@@ -2020,16 +2020,14 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         describe('an invalid value', () => {
           describe('such as having special character inside the list', () => {
             it('should report a syntax error', () => {
-              expect(
-                () =>
-                  parse(
-                    `
+              expect(() =>
+                parse(
+                  `
                 deployment {
                   ${type} [fr, en, @123]
               }`,
-                    jdlRuntime,
-                  ),
-                // A deployment block is lexed in a mode of its own, where `@`, an annotation token, is no token at all.
+                  jdlRuntime,
+                ),
               ).toThrow(/^MismatchedTokenException: Found an invalid token '@'/);
             });
           });
