@@ -46,6 +46,7 @@ import type { JDLRuntime } from './core/parsing/types/runtime.ts';
 import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
 import type { JSONEntity } from './core/types/json-config.ts';
+import logger from './core/utils/objects/logger.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 
@@ -170,9 +171,16 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JD
   );
 }
 
-/** The semantic rules report every error of the jdl, with its position; the converters take a jdl without any. */
+/**
+ * The semantic rules report every problem of the jdl, with its position: the warnings are logged, the errors thrown together;
+ * the converters take a jdl without any error.
+ */
 function checkSemanticErrors(content: ParsedJDLApplications, runtime: JDLRuntime) {
-  const errors = checkSemantics(content, runtime).filter(diagnostic => diagnostic.severity === 'error');
+  const diagnostics = checkSemantics(content, runtime);
+  for (const warning of diagnostics.filter(diagnostic => diagnostic.severity === 'warning')) {
+    logger.warn(`${warning.message}${errorLocation(warning.location)}`);
+  }
+  const errors = diagnostics.filter(diagnostic => diagnostic.severity === 'error');
   if (errors.length > 0) {
     throw new Error(errors.map(error => `${error.message}${errorLocation(error.location)}`).join('\n'));
   }

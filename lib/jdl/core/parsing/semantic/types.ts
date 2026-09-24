@@ -31,5 +31,9 @@ export type JDLDiagnostic = {
 /** A check over the whole parsed jdl, reporting every problem it finds rather than the first one. */
 export type JDLSemanticRule = {
   id: string;
-  check: (ast: ParsedJDLApplications, runtime: JDLRuntime) => Omit<JDLDiagnostic, 'ruleId' | 'severity'>[];
+  /** The diagnostics are errors unless they say otherwise. */
+  check: (
+    ast: ParsedJDLApplications,
+    runtime: JDLRuntime,
+  ) => (Omit<JDLDiagnostic, 'ruleId' | 'severity'> & Partial<Pick<JDLDiagnostic, 'severity'>>)[];
 };

@@ -154,6 +154,38 @@ export const duplicatedField: JDLSemanticRule = {
     ),
 };
 
+export const fieldType: JDLSemanticRule = {
+  id: 'field-type',
+  check: (ast, runtime) => {
+    const { types } = runtime.fieldTypesDefinition;
+    const enumNames = new Set(ast.enums.map(jdlEnum => jdlEnum.name));
+    return ast.entities.flatMap(entity =>
+      (entity.body ?? []).flatMap(field => {
+        if (enumNames.has(field.type)) return [];
+        const type = types[field.type];
+        if (!type) {
+          return [
+            {
+              message: `The type ${field.type} of the field ${field.name} in the entity ${entity.name} is neither a field type nor an enum.`,
+              location: field.location,
+            },
+          ];
+        }
+        if (type.deprecated) {
+          return [
+            {
+              severity: 'warning' as const,
+              message: `The type ${field.type} of the field ${field.name} in the entity ${entity.name} is deprecated: ${type.deprecated}.`,
+              location: field.location,
+            },
+          ];
+        }
+        return [];
+      }),
+    );
+  },
+};
+
 export const validationForFieldType: JDLSemanticRule = {
   id: 'validation-for-field-type',
   check: (ast, runtime) => {
@@ -161,7 +193,9 @@ export const validationForFieldType: JDLSemanticRule = {
     const enumNames = new Set(ast.enums.map(jdlEnum => jdlEnum.name));
     return ast.entities.flatMap(entity =>
       (entity.body ?? []).flatMap(field => {
-        const allowed = enumNames.has(field.type) ? enumType.validations : (types[field.type]?.validations ?? []);
+        // An unknown type is the field-type rule's.
+        if (!enumNames.has(field.type) && !types[field.type]) return [];
+        const allowed = enumNames.has(field.type) ? enumType.validations : types[field.type].validations;
         return field.validations
           .filter(validation => !allowed.includes(validation.key))
           .map(validation => ({
@@ -266,6 +300,7 @@ export const semanticRules: JDLSemanticRule[] = [
   duplicatedEntity,
   duplicatedEnum,
   duplicatedField,
+  fieldType,
   validationForFieldType,
   decimalValidationValue,
   requiredReflexiveRelationship,

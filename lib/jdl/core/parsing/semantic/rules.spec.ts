@@ -16,12 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { describe, esmocha, expect, it } from 'esmocha';
 
 import { getDefaultJDLRelationshipConfig } from '../../../../jdl-config/jdl-relationship-config.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 import { createImporterFromContent } from '../../__test-support__/index.ts';
 import { parseFromContent } from '../../readers/jdl-reader.ts';
+import logger from '../../utils/objects/logger.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 import { checkSemantics } from './index.ts';
@@ -156,6 +157,25 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('field-type', () => {
+    it('reports a type that is neither a field type nor an enum, once', () => {
+      expect(check('enum E { X }\nentity A {\n  e E\n  name Strin required\n}')).toEqual([
+        {
+          ruleId: 'field-type',
+          message: 'The type Strin of the field name in the entity A is neither a field type nor an enum.',
+          at: 'name Strin required',
+        },
+      ]);
+    });
+    it('warns about a deprecated type', () => {
+      expect(
+        checkSemantics(parseFromContent('entity A {\n  start Date required\n}', getDefaultRuntime()), getDefaultRuntime()).map(
+          ({ severity, message }) => [severity, message],
+        ),
+      ).toEqual([['warning', 'The type Date of the field start in the entity A is deprecated: use Instant, which it is migrated to.']]);
+    });
+  });
+
   describe('validation-for-field-type', () => {
     it('reports a validation the type does not take, at the validation', () => {
       expect(check('entity A {\n  age Integer required minlength(3)\n}')).toEqual([
@@ -172,14 +192,15 @@ describe('jdl - semantic rules', () => {
       ]);
     });
     it('reports any validation of a type that takes none', () => {
-      // A field type not in the definitions takes no validation; ByteBuffer crashed the validator.
-      expect(check('entity A {\n  b ByteBuffer required\n  c Strin required\n}').map(diagnostic => diagnostic.message)).toEqual([
+      // ByteBuffer crashed the validator.
+      expect(check('entity A {\n  b ByteBuffer required\n}').map(diagnostic => diagnostic.message)).toEqual([
         "The validation 'required' isn't supported for the type 'ByteBuffer'.",
-        "The validation 'required' isn't supported for the type 'Strin'.",
       ]);
     });
     it('takes the field types from the definitions', () => {
-      const runtime = createJDLRuntime({ fieldTypes: { types: { Money: { validations: ['min'] } }, enum: { validations: [] } } });
+      const runtime = createJDLRuntime({
+        fieldTypes: { types: { Money: { validations: ['min'] }, String: { validations: [] } }, enum: { validations: [] } },
+      });
       expect(check('entity A {\n  price Money min(0)\n  name String required\n}', runtime).map(diagnostic => diagnostic.message)).toEqual([
         "The validation 'required' isn't supported for the type 'String'.",
       ]);
@@ -273,6 +294,21 @@ describe('jdl - semantic rules', () => {
   });
 
   describe('when importing', () => {
+    it('logs the warnings, with their position, and imports', () => {
+      const warn = esmocha.spyOn(logger, 'warn');
+      try {
+        const { exportedEntities } = createImporterFromContent('entity A {\n  start Date\n}', {
+          applicationName: 'foo',
+          databaseType: 'sql',
+        }).import();
+        expect(exportedEntities.map(entity => entity.name)).toEqual(['A']);
+        expect(warn).toHaveBeenCalledWith(
+          'The type Date of the field start in the entity A is deprecated: use Instant, which it is migrated to.\n\tat line: 2, column: 3',
+        );
+      } finally {
+        warn.mockRestore();
+      }
+    });
     it('throws every error, each with its position', () => {
       expect(() => createImporterFromContent('dto B with mapstruct\nentity A\nrelationship OneToOne { A to C }').import()).toThrow(
         new RegExp(

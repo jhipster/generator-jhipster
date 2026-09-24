@@ -86,8 +86,8 @@ export type JDLValidationsDefinition = {
 
 /** The field types and the validations each one takes. */
 export type JDLFieldTypesDefinition = {
-  /** The validations of a field by its type; a type not listed takes none. */
-  types: Readonly<Record<string, { validations: readonly string[] }>>;
+  /** The field types and their validations; a deprecated type is still accepted, warned about with the reason. */
+  types: Readonly<Record<string, { validations: readonly string[]; deprecated?: string }>>;
   /** The validations of a field whose type is an enum of the jdl. */
   enum: { validations: readonly string[] };
 };

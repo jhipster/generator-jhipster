@@ -26,6 +26,13 @@ const defaultJDLFieldTypesConfig: JDLFieldTypesDefinition = Object.freeze({
     ...Object.fromEntries(Object.entries(typeValidations).map(([type, validations]) => [type, { validations: [...validations] }])),
     // Supported by some databases only, they take no validation.
     ...Object.fromEntries(Object.values(RelationalOnlyDBTypes).map(type => [type, { validations: [] }])),
+    // The Joda-Time types of old applications, the server generator migrates them to Instant.
+    ...Object.fromEntries(
+      ['Date', 'DateTime'].map(type => [
+        type,
+        { validations: [...CommonDBValidations.Instant], deprecated: 'use Instant, which it is migrated to' },
+      ]),
+    ),
   },
   enum: { validations: [...enumValidations] },
 });
