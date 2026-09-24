@@ -51,6 +51,16 @@ function edgeToken(children: Record<string, CstElement[] | undefined>, last: boo
   return edge;
 }
 
+/** The source range of a token. */
+export const tokenLocation = (token: IToken): JDLLocation => ({
+  startOffset: token.startOffset,
+  endOffset: token.endOffset!,
+  startLine: token.startLine!,
+  startColumn: token.startColumn!,
+  endLine: token.endLine!,
+  endColumn: token.endColumn!,
+});
+
 /** The source range of the tokens of a rule, its sub rules included; undefined when it has none, a recovered rule. */
 export function spanLocation(children: Record<string, CstElement[] | undefined>): JDLLocation | undefined {
   const first = edgeToken(children, false);
@@ -80,6 +90,15 @@ export function setLocation<T extends object>(node: T, location: JDLLocation | u
 }
 
 /** Attach the locations of the keys of a record node, not enumerable for the same reason as {@link setLocation}. */
+/** Add the key locations of a node merged into another one, the first location of a key wins. */
+export function mergeKeyLocations(target: object, keyLocations: Record<string, JDLLocation | undefined> | undefined): void {
+  const merged = {
+    ...(keyLocations ?? {}),
+    ...((target as { keyLocations?: Record<string, JDLLocation | undefined> }).keyLocations ?? {}),
+  };
+  setKeyLocations(target, merged);
+}
+
 export function setKeyLocations<T extends object>(node: T, keyLocations: Record<string, JDLLocation | undefined>): T {
   Object.defineProperty(node, 'keyLocations', { value: keyLocations, enumerable: false, writable: true, configurable: true });
   return node;

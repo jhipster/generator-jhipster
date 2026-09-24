@@ -18,7 +18,7 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { setKeyLocations, setLocation, spanLocation } from './location.ts';
+import { mergeKeyLocations, setKeyLocations, setLocation, spanLocation, tokenLocation } from './location.ts';
 import type { JDLRelationshipType } from './relationship-types.ts';
 import type {
   JDLLocation,
@@ -152,6 +152,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
+            mergeKeyLocations(astResult, option.keyLocations);
           });
       }
 
@@ -173,6 +174,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
+            mergeKeyLocations(astResult, option.keyLocations);
           });
       }
 
@@ -546,6 +548,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
+            mergeKeyLocations(astResult, option.keyLocations);
           });
       }
 
@@ -566,6 +569,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
+            mergeKeyLocations(astResult, option.keyLocations);
           });
       }
 
@@ -718,6 +722,16 @@ function getOptionEntityAndExcludedEntityLists(
   return { entityList, excludedEntityList };
 }
 
+/** Where each entity name of a list, and of its exclusion, is written: the first occurrence of a name. */
+function getEntityNameLocations(context: Record<'filterDef' | 'exclusion', CstNode[]>): Record<string, JDLLocation> {
+  const nameTokens = [context.filterDef?.[0], context.exclusion?.[0]].flatMap(node => (node?.children.NAME ?? []) as IToken[]);
+  const keyLocations: Record<string, JDLLocation> = {};
+  for (const token of nameTokens) {
+    keyLocations[token.image] ??= tokenLocation(token);
+  }
+  return keyLocations;
+}
+
 function getEntityListFromContext(context: Record<'filterDef' | 'exclusion', CstNode[]>, visitor: ICstVisitor<any, any>) {
   const entityList = visitor.visit(context.filterDef);
 
@@ -726,7 +740,7 @@ function getEntityListFromContext(context: Record<'filterDef' | 'exclusion', Cst
     excluded = visitor.visit(context.exclusion);
   }
 
-  return { entityList, excluded };
+  return setKeyLocations({ entityList, excluded }, getEntityNameLocations(context));
 }
 
 /** An option statement: unary without a value, binary with the `with` value. */
@@ -736,12 +750,15 @@ function getOptionFromContext(
 ) {
   const { entityList, excluded } = getEntityListFromContext(context, visitor);
   const value = context.method?.[0] ?? context.methodPath?.[0];
-  return {
-    optionName: context.option[0].image,
-    ...(value ? { optionValue: value.image } : {}),
-    list: entityList,
-    excluded,
-  };
+  return setKeyLocations(
+    {
+      optionName: context.option[0].image,
+      ...(value ? { optionValue: value.image } : {}),
+      list: entityList,
+      excluded,
+    },
+    getEntityNameLocations(context),
+  );
 }
 
 function getSpecialUnaryOptionDeclaration(
@@ -756,11 +773,7 @@ function getSpecialUnaryOptionDeclaration(
     excluded = visitor.visit(context.exclusion);
   }
 
-  return {
-    optionValues,
-    list,
-    excluded,
-  };
+  return setKeyLocations({ optionValues, list, excluded }, getEntityNameLocations(context));
 }
 
 function trimComment(comment: string): string {

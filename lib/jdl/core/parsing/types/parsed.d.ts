@@ -84,7 +84,8 @@ export type ParsedJDLEnum = Located & {
   documentation?: string | null;
 };
 
-export type ParsedJDLOptionConfig = {
+/** The entities of an option; its key locations are where each entity name is written. */
+export type ParsedJDLOptionConfig = KeyLocated & {
   list: string[]; // entity names
   excluded: string[]; // excluded entity names
 };
@@ -142,7 +143,10 @@ export type ParsedJDLRelationship = Located & {
 };
 
 /** An application as the parser writes it: the entities statement is resolved into `entities` after parsing. */
-export type ParsedJDLApplicationDeclaration = ParsedJDLApplication & { entitiesOptions?: { entityList: string[]; excluded: string[] } };
+export type ParsedJDLApplicationDeclaration = ParsedJDLApplication & {
+  /** The entities statement; its key locations are where each entity name is written. */
+  entitiesOptions?: KeyLocated & { entityList: string[]; excluded: string[] };
+};
 
 export type ParsedJDLApplications = {
   applications: ParsedJDLApplicationDeclaration[];
