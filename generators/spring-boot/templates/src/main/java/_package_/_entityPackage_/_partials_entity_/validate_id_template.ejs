@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
         if (<%- restInstance %>.<%- primaryKey.propertySupplierName %>() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            throw BadRequestAlertException.idnull(ENTITY_NAME);
         }
         if (!Objects.equals(<%- primaryKey.name %>, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw BadRequestAlertException.idinvalid(ENTITY_NAME);
         }

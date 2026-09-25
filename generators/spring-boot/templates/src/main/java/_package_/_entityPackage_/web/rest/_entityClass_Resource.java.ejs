@@ -18,7 +18,21 @@
 -%>
 package <%- entityAbsolutePackage %>.web.rest;
 
-<%_ const viaService = !serviceNo; _%>
+<%_ const viaService = !serviceNo;
+    const injectVariables = [];
+    if (!readOnly && updatableEntity) {
+      injectVariables.push({ classPath: 'tools.jackson.databind.ObjectMapper', fieldName: 'om' });
+      if (anyPropertyHasValidation) {
+        injectVariables.push({ classPath: 'jakarta.validation.Validator', fieldName: 'validator' });
+      }
+      if (databaseTypeSql && !reactive) {
+        injectVariables.push({ classPath: 'jakarta.persistence.EntityManager', fieldName: 'em' });
+      }
+    }
+_%>
+<%_ for (const { classPath } of injectVariables) { _%>
+import <%- classPath %>;
+<%_ } _%>
 <%_ if (!dtoMapstruct || serviceNo) { _%>
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ } _%>
@@ -52,6 +66,13 @@ import <%- entityAbsolutePackage %>.service.<%- entityClass %>QueryService;
 <%_ } else if (jpaMetamodelFiltering && reactive) { _%>
 import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.node.ObjectNode;
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity && anyPropertyHasValidation) { _%>
+import jakarta.validation.ConstraintViolationException;
+<%_ } _%>
 
 import tech.jhipster.web.util.HeaderUtil;
 <%_ if (!paginationNo) { _%>
@@ -80,7 +101,7 @@ import org.springframework.web.util.ForwardedHeaderUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
   <%_ } _%>
 <%_ } _%>
-<%_ if (reactive || (!jpaMetamodelFiltering && !paginationNo)) { _%>
+<%_ if (reactive || (!jpaMetamodelFiltering && !paginationNo) || (!readOnly && updatableEntity)) { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -91,7 +112,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 import org.springframework.web.bind.annotation.*;
-<%_ if (reactive) { _%>
+<%_ if (reactive || (!readOnly && updatableEntity)) { _%>
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -101,9 +122,6 @@ import reactor.core.publisher.Mono;
 import jakarta.validation.Valid;
 <%_ } _%>
 
-<%_ if (anyPropertyHasValidation && !readOnly) { _%>
-import jakarta.validation.constraints.NotNull;
-<%_ } _%>
 import java.net.URI;
 import java.net.URISyntaxException;
 <%_ if (paginationNo && dtoMapstruct && !viaService && fieldsContainNoOwnerOneToOne) { _%>
@@ -117,9 +135,6 @@ import java.util.Objects;
 import java.util.Optional;
 <%_ if (primaryKey.hasUUID) { _%>
 import java.util.UUID;
-<%_ } _%>
-<%_ if (updatableEntity && !viaService && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
-import java.util.function.Consumer;
 <%_ } _%>
 <%_ if ((searchEngineAny || fieldsContainNoOwnerOneToOne) && !reactive) { _%>
   <%_ if (!viaService) { _%>
@@ -153,7 +168,7 @@ public class <%- entityClass %>Resource {
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::toDto`;
     const idToString = primaryKey.typeString ? '' : '.toString()';
-_%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }) -%>
+_%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive, injectVariables }) -%>
 <%_ if (!readOnly) { _%>
 
     /**
@@ -171,11 +186,11 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         LOG.debug("REST request to save <%- entityClass %> : {}", <%- instanceName %>);
   <%_ if (primaryKey.autoGenerate) { _%>
         if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() != null) {
-            throw new BadRequestAlertException("A new <%- entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
+            throw BadRequestAlertException.idexists(ENTITY_NAME);
         }
   <%_ } else if (!reactive) { _%>
         if (<%- entityInstance %>Repository.existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
-            throw new BadRequestAlertException("<%- entityInstance %> already exists", ENTITY_NAME, "idexists");
+            throw BadRequestAlertException.idexists(ENTITY_NAME);
         }
   <%_ } _%>
   <%_ if (isUsingMapsId) { _%>
@@ -196,7 +211,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             .existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())
             .flatMap(exists -> {
                 if (exists) {
-                    return Mono.error(new BadRequestAlertException("<%- entityInstance %> already exists", ENTITY_NAME, "idexists"));
+                    return Mono.error(BadRequestAlertException.idexists(ENTITY_NAME));
                 }
   <%_ } _%>
   <%_ if (serviceNo) { _%>
@@ -257,11 +272,11 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             .existsById(<%- primaryKey.name %>)
             .flatMap(exists -> {
                 if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+                    return Mono.error(BadRequestAlertException.idnotfound(ENTITY_NAME));
                 }
   <%_ } else { _%>
         if (!<%- entityInstance %>Repository.existsById(<%- primaryKey.name %>)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            throw BadRequestAlertException.idnotfound(ENTITY_NAME);
         }
   <%_ } _%>
 
@@ -309,41 +324,86 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ } _%>
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> partialUpdate<%- entityClass %>(
         @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
-        <%- anyPropertyHasValidation ? '@NotNull ' : '' %>@RequestBody <%- instanceType %> <%- instanceName %>
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = <%- instanceType %>.class)))
+        @RequestBody ObjectNode <%- instanceName %>
     ) throws URISyntaxException {
         LOG.debug("REST request to partially update <%- entityClass %> : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
-<%- include('../../_partials_entity_/validate_id_template') -%>
-
-  <%_ if (reactive) { _%>
-        return <%- entityInstance %>Repository.existsById(<%- primaryKey.name %>).flatMap(exists -> {
-            if (!exists) {
-                return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-            }
-  <%_ } else { _%>
-        if (!<%- entityInstance %>Repository.existsById(<%- primaryKey.name %>)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        var idNode = <%- instanceName %>.remove("<%- primaryKey.name %>");
+        if (idNode == null || idNode.isNull()) {
+            throw BadRequestAlertException.idnull(ENTITY_NAME);
         }
-  <%_ } _%>
+        if (!idNode.<%- primaryKey.typeLong || primaryKey.typeInteger ? 'isIntegralNumber' : 'isString' %>()) {
+            throw BadRequestAlertException.idinvalid(ENTITY_NAME);
+        }
+  <%_ const idNodeValue = { Long: 'longValue', Integer: 'intValue' }[primaryKey.type] ?? 'stringValue'; _%>
+        if (!Objects.equals(<%- primaryKey.name %><%- primaryKey.typeUUID ? '.toString()' : '' %>, idNode.<%- idNodeValue %>())) {
+            throw BadRequestAlertException.idinvalid(ENTITY_NAME);
+        }
 
+  <%_ const mapOrFlatMap = reactive ? 'flatMap' : 'map'; _%>
+        return <%- entityInstance %><%- serviceNo ? 'Repository.findById' : 'Service.findOne' %>(<%- primaryKey.name %>)
+  <%_ if (serviceNo && dtoMapstruct) { _%>
+            .map(<%- mapper %>::toDto)
+  <%_ } _%>
+            .map(existing<%- entityClass %> -> {
+                try {
+  <%_ if (databaseTypeSql && !reactive) { _%>
+                    em.clear();
+  <%_ } _%>
+                    existing<%- entityClass %> = this.om.readerForUpdating(existing<%- entityClass %>).readValue(<%- instanceName %>);
+  <%_ if (anyPropertyHasValidation) { _%>
+                    var violations = validator.validate(existing<%- entityClass %>);
+                    if (!violations.isEmpty()) {
+                        throw new ConstraintViolationException(violations);
+                    }
+  <%_ } _%>
   <%_ if (saveUserSnapshot) { _%>
-<%- include('../../_partials_entity_/save_user_snapshot_template') -%>
+    <%_ for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { _%>
+                    if (existing<%- entityClass %>.<%- userRelationship.propertySupplierName %>() != null) {
+      <%_ if (userRelationship.collection) { _%>
+                        // Save users in case they are new and only exist in gateway
+                        userRepository.saveAll(existing<%- entityClass %>.<%- userRelationship.propertySupplierName %>());
+      <%_ } else { _%>
+                        // Save user in case it's new and only exists in gateway
+                        userRepository.save(existing<%- entityClass %>.<%- userRelationship.propertySupplierName %>());
+      <%_ } _%>
+                    }
+    <%_ } _%>
   <%_ } _%>
-
-            <%- include('../../_partials_entity_/patch_template', { isService: false, viaService }) -%>
+                    return existing<%- entityClass %>;
+                } catch (JacksonException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid <%- entityInstance %>", e);
+                }
+            })
+  <%_ if (serviceNo && dtoMapstruct) { _%>
+            .map(<%- mapper %>::toEntity)
+  <%_ } _%>
+            .<%- mapOrFlatMap %>(<%- entityInstance %><%- serviceNo ? 'Repository::save' : 'Service::update' %>)
+  <%_ if (serviceNo && searchEngineElasticsearch) { _%>
+    <%_ if (reactive) { _%>
+            .flatMap(<%- entityInstance %>SearchRepository::save)
+    <%_ } else { _%>
+            .map(saved<%- entityClass %> -> {
+                <%- entityInstance %>SearchRepository.index(saved<%- entityClass %>);
+                return saved<%- entityClass %>;
+            })
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (serviceNo && dtoMapstruct) { _%>
+            .map(<%- mapper %>::toDto)
+  <%_ } _%>
   <%_ if (reactive) { _%>
-            return result
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                .map(res -> ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
-                .body(res)
-            );
-        });
-  <%_ } else { _%>
-            return ResponseUtil.wrapOrNotFound(
-                result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- instanceName %>.<%- primaryKey.propertySupplierName %>()<%- idToString %>)
-            );
+            .switchIfEmpty(Mono.error(BadRequestAlertException.idnotfound(ENTITY_NAME)))
   <%_ } _%>
+            .map(res ->
+                ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
+                    .body(res)
+            )
+  <%_ if (!reactive) { _%>
+            .orElseThrow(() -> BadRequestAlertException.idnotfound(ENTITY_NAME))
+  <%_ } _%>
+        ;
     }
 <%_ } _%>
 
@@ -472,13 +532,5 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
   <%_ } _%>
 <%- include('../../_partials_entity_/search_template', { viaService }) -%>
-<%_ } _%>
-<%_ if (updatableEntity && !viaService && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
-
-    private <T> void updateIfPresent(Consumer<T> setter, T value) {
-        if (value != null) {
-            setter.accept(value);
-        }
-    }
 <%_ } _%>
 }

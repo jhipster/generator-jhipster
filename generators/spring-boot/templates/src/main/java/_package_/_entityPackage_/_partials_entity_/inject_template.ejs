@@ -45,6 +45,9 @@
     if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
       beans.push({ class: 'UserRepository', instance: 'userRepository' });
     }
+    for (const variable of locals.injectVariables ?? []) {
+      beans.push({ class: variable.classPath.split('.').pop(), instance: variable.fieldName });
+    }
 _%>
 
 <%_ for (const bean of beans) { _%>

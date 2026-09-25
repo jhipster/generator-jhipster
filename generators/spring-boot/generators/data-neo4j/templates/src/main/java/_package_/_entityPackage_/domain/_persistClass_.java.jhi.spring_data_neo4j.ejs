@@ -57,9 +57,9 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ for (const relationship of relationships) { -%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipLeftSide) { _%>
-    @Relationship(value = "HAS_<%- this._.toUpper(this._.snakeCase(relationship.relationshipName)) %>", direction = Relationship.Direction.OUTGOING)
+    @Relationship(value = "HAS_<%- this._.toUpper(this._.snakeCase(relationship.relationshipName)) %>", direction = Relationship.Direction.OUTGOING, cascadeUpdates = false)
   <%_ } else { _%>
-    @Relationship(value = "HAS_<%- this._.toUpper(this._.snakeCase(relationship.otherRelationship.relationshipName)) %>", direction = Relationship.Direction.INCOMING)
+    @Relationship(value = "HAS_<%- this._.toUpper(this._.snakeCase(relationship.otherRelationship.relationshipName)) %>", direction = Relationship.Direction.INCOMING, cascadeUpdates = false)
   <%_ } _%>
 <&_ } -&>
 <%_ } -%>

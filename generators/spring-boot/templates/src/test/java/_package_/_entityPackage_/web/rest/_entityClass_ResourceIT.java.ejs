@@ -21,8 +21,63 @@ package <%- entityAbsolutePackage %>.web.rest;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
 import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
+<%_ if (!readOnly && updatableEntity) { _%>
+import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateBody;
+<%_ } _%>
 <%_ const filterTestableRelationships = (reactive ? relationships.filter(rel => rel.ownerSide && !rel.collection) : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
+    // Fields a request may not set to null. Each is patched to null by the same test.
+    const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
+    // Owner side relationships whose related entity has a field that can be observed after a request carrying a
+    // nested related object, to check the request does not write into the related entity.
+    // Couchbase stores a relationship as an id, and its findById projects the joined document over that same field,
+    // so an entity whose relationship is set cannot be read back: https://github.com/jhipster/generator-jhipster/issues
+    const noCascadeRelationships = readOnly || databaseTypeCouchbase || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
+      .filter(relationship =>
+        relationship.ownerSide
+          && !relationship.id
+          && !relationship.otherEntity.builtIn
+          && !relationship.otherEntity.embedded
+          && !relationship.otherEntity.skipServer
+          && relationship.otherEntity.entityClass !== entityClass
+          && relationship.otherEntity.primaryKey.ids.length === 1,
+      )
+      .map(relationship => ({
+        relationship,
+        observedField: relationship.otherEntity.fields.find(
+        field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
+      ),
+      }))
+      .filter(({ observedField }) => observedField);
+    const noCascadeOtherEntities = this._.uniq(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity));
+    // A related entity is created for each relationship, and createEntity may already have persisted one of the same
+    // class: the unique fields of the created ones are randomized so that none of them collide. The id is randomized
+    // too when it is not generated and the same entity is related more than once.
+    const noCascadeFakeValues = new Map(
+      noCascadeRelationships.map(({ relationship }) => {
+        const { otherEntity } = relationship;
+        const relatedMoreThanOnce = noCascadeRelationships.filter(other => other.relationship.otherEntity === otherEntity).length > 1;
+        const fakedFields = [
+          ...relatedMoreThanOnce ? otherEntity.primaryKey.fields.filter(field => !field.autoGenerate) : [],
+          ...otherEntity.fields.filter(field => field.unique && !field.id),
+        ];
+        return [
+          relationship,
+          fakedFields
+            .map(field => ({
+              property: field.propertyConsumerName,
+              value: {
+              String: `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`,
+              UUID: `UUID.fromString("${faker.string.uuid()}")`,
+              Long: `${faker.number.int({ min: 1, max: 1000000 })}L`,
+              Integer: `${faker.number.int({ min: 1, max: 1000000 })}`,
+            }[field.javaFieldType],
+            }))
+            .filter(fake => fake.value),
+        ];
+      }),
+    );
+    const noCascadeFakesUseUuid = [...noCascadeFakeValues.values()].flat().some(fake => fake.value.startsWith('UUID'));
     const hasUserRepository
       = filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
       || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
@@ -65,6 +120,7 @@ import <%- relationship.otherEntity.entityAbsolutePackage %>.domain.<%- relation
         .map(relationship => relationship.otherEntity)
         .filter(otherEntity => otherEntity.entityAbsolutePackage !== entityAbsolutePackage),
     );
+    noCascadeOtherEntities.filter(otherEntity => otherEntity.entityAbsolutePackage !== entityAbsolutePackage).forEach(otherEntity => otherEntityResourceITs.add(otherEntity));
 _%>
 <%_ for (const otherEntity of otherEntityResourceITs) { _%>
 import <%- otherEntity.entityAbsolutePackage %>.web.rest.<%- otherEntity.entityNameCapitalized %>ResourceIT;
@@ -73,6 +129,13 @@ import <%- otherEntity.entityAbsolutePackage %>.web.rest.<%- otherEntity.entityN
   <%_ for (const relationship of filterTestableRelationships) { _%>
 import <%- relationship.otherEntity.entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
   <%_ } _%>
+<%_ } else { _%>
+  <%_ for (const otherEntity of noCascadeOtherEntities) { _%>
+import <%- otherEntity.entityAbsolutePackage %>.repository.<%- otherEntity.entityNameCapitalized %>Repository;
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const otherEntity of noCascadeOtherEntities) { _%>
+import static <%- otherEntity.entityAbsolutePackage %>.domain.<%- otherEntity.persistClass %>TestSamples.*;
 <%_ } _%>
 <%_ if (hasUserRepository) { _%>
 import <%- user.entityAbsolutePackage %>.repository.UserRepository;
@@ -98,6 +161,13 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import tools.jackson.databind.ObjectMapper;
+<%_ if ((updatableEntity && fields.some(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired)) || noCascadeRelationships.length > 0) { _%>
+import tools.jackson.databind.node.ObjectNode;
+<%_ } _%>
+<%_ if (noCascadeRelationships.some(({ relationship }) => relationship.collection)) { _%>
+import java.util.HashSet;
+import java.util.Set;
+<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
 import org.springframework.data.util.Streamable;
@@ -109,6 +179,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
+<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+<%_ } _%>
 <%_ if (implementsEagerLoadApis || databaseTypeNeo4j) { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -187,7 +261,7 @@ import java.util.Base64;
 import java.util.stream.Stream;
 <%_ } _%>
 import java.util.List;
-<%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
+<%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID || noCascadeFakesUseUuid) { _%>
 import java.util.UUID;
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
@@ -507,6 +581,11 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) { _%>
     @Autowired
     private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ for (const otherEntity of noCascadeOtherEntities) { _%>
+    @Autowired
+    private <%- otherEntity.entityNameCapitalized %>Repository <%- otherEntity.persistInstance %>Repository;
   <%_ } _%>
 <%_ } _%>
 <%_ for (const fieldStatus of ['DEFAULT_', 'UPDATED_']) { _%>
@@ -923,6 +1002,37 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity && requiredFields.length > 0) { _%>
+
+    @ParameterizedTest
+    @ValueSource(strings = { <%- requiredFields.map(field => `"${field.fieldName}"`).join(', ') %> })<%- transactionalAnnotation %>
+    void checkFieldIsRequiredOnPatch(String fieldName) throws Exception {
+        // Initialize the database
+  <%_ if (!primaryKey.derived) { _%>
+    <%_ for (const pkField of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- pkField.propertyConsumerName %>(<%- pkField.fieldJavaValueGenerator %>);
+    <%_ } _%>
+  <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        // Patch the field to null, which fails.
+        ObjectNode <%- restInstance %>Patch = om.valueToTree(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(${persistInstance})` : persistInstance %>);
+        <%- restInstance %>Patch.putNull(fieldName);
+
+  <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>Patch))
+            .exchange()
+            .expectStatus().isBadRequest();
+  <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+            .contentType("application/merge-patch+json")
+            .content(om.writeValueAsBytes(<%- restInstance %>Patch)))
+            .andExpect(status().isBadRequest());
+  <%_ } _%>
+    }
 <%_ } _%>
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
 
@@ -1652,6 +1762,104 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         return { includeField, updateWithValue, testWithConstant, ...field };
       };
   _%>
+  <%_ if (noCascadeRelationships.length > 0) { _%>
+    <%_ const relatedVariable = relationship => `related${relationship.relationshipNameCapitalized}`;
+        const relatedRepository = relationship => `${relationship.otherEntity.persistInstance}Repository`;
+        const relatedId = relationship => `${relatedVariable(relationship)}.${relationship.otherEntity.primaryKey.propertySupplierName}()`;
+        const relationshipJson = relationship => relationship.collection ? `om.createArrayNode().add(${relatedVariable(relationship)}Json)` : `${relatedVariable(relationship)}Json`;
+    _%>
+
+    @Test<%- transactionalAnnotation %>
+    void shouldNotUpdateRelatedEntitiesThrough<%- entityClass %>() throws Exception {
+        // Persist the related entities and a <%- entityInstance %> related to them
+    <%_ for (const { relationship, observedField } of noCascadeRelationships) { _%>
+        var <%- relatedVariable(relationship) %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- (databaseTypeSql && relationship.otherEntity.anyRelationshipIsRequired) ? entityManagerVariable : '' %>)<%- createEntityPostfix %>;
+      <%_ for (const { property, value } of noCascadeFakeValues.get(relationship)) { _%>
+        <%- relatedVariable(relationship) %>.<%- property %>(<%- value %>);
+      <%_ } _%>
+      <%_ if (databaseTypeSql && !reactive) { _%>
+        em.persist(<%- relatedVariable(relationship) %>);
+      <%_ } else if (!databaseTypeSql) { _%>
+        <%- relatedVariable(relationship) %> = <%- relatedRepository(relationship) %>.save(<%- relatedVariable(relationship) %>)<%- callBlock %>;
+      <%_ } _%>
+        var <%- relatedVariable(relationship) %>Value = <%- relatedVariable(relationship) %>.<%- observedField.propertySupplierName %>();
+        <%- persistInstance %>.<%- relationship.propertyConsumerName %>(<%- relationship.collection ? `new HashSet<>(Set.of(${relatedVariable(relationship)}))` : relatedVariable(relationship) %>);
+    <%_ } _%>
+    <%_ if (databaseTypeSql && !reactive) { _%>
+        em.flush();
+    <%_ } _%>
+    <%_ if (!primaryKey.derived) { _%>
+      <%_ for (const pkField of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- pkField.propertyConsumerName %>(<%- pkField.fieldJavaValueGenerator %>);
+      <%_ } _%>
+    <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        // Each nested related object carries another value, which must stay in the request
+    <%_ for (const { relationship, observedField } of noCascadeRelationships) { _%>
+        var <%- relatedVariable(relationship) %>Json = om.createObjectNode();
+        <%- relatedVariable(relationship) %>Json.set("<%- relationship.otherEntity.primaryKey.name %>", om.valueToTree(<%- relatedId(relationship) %>));
+        <%- relatedVariable(relationship) %>Json.set("<%- observedField.propertyName %>", om.valueToTree(get<%- relationship.otherEntity.persistClass %>Sample2().<%- observedField.propertySupplierName %>()));
+    <%_ } _%>
+
+        ObjectNode updateJson = om.valueToTree(<%- dtoMapstruct ? `${entityInstance}Mapper.toDto(inserted${persistClass})` : `inserted${persistClass}` %>);
+    <%_ for (const { relationship } of noCascadeRelationships) { _%>
+        updateJson.set("<%- relationship.propertyName %>", <%- relationshipJson(relationship) %>);
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+        webTestClient.put().uri(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(om.writeValueAsBytes(updateJson))
+            .exchange()
+            .expectStatus().isOk();
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(om.writeValueAsBytes(updateJson)))
+            .andExpect(status().isOk());
+    <%_ } _%>
+
+        var patchJson = om.createObjectNode();
+        patchJson.set("<%- primaryKey.name %>", om.valueToTree(inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>()));
+    <%_ for (const { relationship } of noCascadeRelationships) { _%>
+        patchJson.set("<%- relationship.propertyName %>", <%- relationshipJson(relationship) %>);
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+        webTestClient.patch().uri(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
+            .contentType(MediaType.valueOf("application/merge-patch+json"))
+            .bodyValue(om.writeValueAsBytes(patchJson))
+            .exchange()
+            .expectStatus().isOk();
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, inserted<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
+            .contentType("application/merge-patch+json")
+            .content(om.writeValueAsBytes(patchJson)))
+            .andExpect(status().isOk());
+    <%_ } _%>
+
+    <%_ if (databaseTypeSql && !reactive) { _%>
+        em.flush();
+        em.clear();
+    <%_ } _%>
+    <%_ if (databaseTypeCouchbase) { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+    <%_ } _%>
+    <%_ for (const { relationship, observedField } of noCascadeRelationships) { _%>
+        assertThat(<%- relatedRepository(relationship) %>.findById(<%- relatedId(relationship) %>)<%- reactive ? '.block()' : '.orElseThrow()' %>.<%- observedField.propertySupplierName %>()).isEqualTo(<%- relatedVariable(relationship) %>Value);
+    <%_ } _%>
+    <%_ if (!databaseTypeSql || reactive) { _%>
+        // The entities the test created are removed; the ones of a transactional test go with its rollback.
+      <%_ if (databaseTypeSql) { _%>
+        <%- entityInstance %>Repository.delete(inserted<%- persistClass %>)<%- callBlock %>;
+        inserted<%- persistClass %> = null;
+      <%_ } _%>
+      <%_ for (const { relationship } of noCascadeRelationships) { _%>
+        <%- relatedRepository(relationship) %>.delete(<%- relatedVariable(relationship) %>)<%- callBlock %>;
+      <%_ } _%>
+    <%_ } _%>
+    }
+  <%_ } _%>
+
     @Test<%- transactionalAnnotation %>
     void partialUpdate<%- entityClass %>WithPatch() throws Exception {
         // Initialize the database

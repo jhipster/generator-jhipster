@@ -207,13 +207,21 @@ _%>
         if (problemProperties == null || !problemProperties.containsKey(PATH_KEY))
             problem.setProperty(PATH_KEY, getPathValue(request));
 
-        if ((err instanceof <%- reactive ? ' WebExchangeBindException ' : ' MethodArgumentNotValidException ' %> fieldException) &&
-                (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY)))
-            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
+        setFieldErrors(problem, err, problemProperties);
 
         problem.setCause(buildCause(err.getCause(), request).orElse(null));
 
         return problem;
+    }
+
+    private void setFieldErrors(ProblemDetailWithCause problem, Throwable err, Map<String, Object> problemProperties) {
+        if (problemProperties != null && problemProperties.containsKey(FIELD_ERRORS_KEY)) return;
+
+        if (err instanceof<%- reactive ? ' WebExchangeBindException ' : ' MethodArgumentNotValidException ' %>fieldException) {
+            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
+        } else if (err instanceof ConstraintViolationException constraintViolationException) {
+            problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(constraintViolationException));
+        }
     }
 
     private String extractTitle(Throwable err, int statusCode) {
@@ -229,6 +237,19 @@ _%>
                     f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
                     f.getField(),
                     StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
+                )
+            )
+            .toList();
+    }
+
+    private List<FieldErrorVM> getFieldErrors(ConstraintViolationException ex) {
+        return ex.getConstraintViolations()
+            .stream()
+            .map(violation ->
+                new FieldErrorVM(
+                    StringUtils.uncapitalize(violation.getRootBeanClass().getSimpleName()).replaceFirst("<%- dtoSuffix %>$", ""),
+                    violation.getPropertyPath().toString(),
+                    violation.getMessage()
                 )
             )
             .toList();

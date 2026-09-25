@@ -18,6 +18,8 @@
 -%>
 package <%- packageName %>.web.rest;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import tools.jackson.databind.ObjectMapper;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -261,4 +263,19 @@ public final class TestUtil {
     }
 
     private TestUtil() {}
+
+    /**
+     * Serializes the non-null properties of an object, as the body of a partial update.
+     *
+     * @param om the application object mapper.
+     * @param object the object to serialize.
+     * @return the JSON bytes.
+     */
+    public static byte[] convertObjectToPartialUpdateBody(ObjectMapper om, Object object) {
+        return om
+            .rebuild()
+            .changeDefaultPropertyInclusion(inclusion -> inclusion.withValueInclusion(JsonInclude.Include.NON_NULL))
+            .build()
+            .writeValueAsBytes(object);
+    }
 }

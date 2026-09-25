@@ -68,14 +68,6 @@ public interface <%- entityClass %>Service {
      * @return the persisted entity.
      */
     <%- reactive ? 'Mono<' : '' %><%- restClass %><%- reactive ? '>' : '' %> update(<%- restClass %> <%- restInstance %>);
-
-    /**
-     * Partially updates a <%- entityInstance %>.
-     *
-     * @param <%- restInstance %> the entity to update partially.
-     * @return the persisted entity.
-     */
-    <%- reactive ? 'Mono' : 'Optional' %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>);
 <%_ if (!jpaMetamodelFiltering) { _%>
 
     /**
