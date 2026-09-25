@@ -100,10 +100,19 @@ describe('jdl - ValidationConverter', () => {
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });
 
-          it('should format it', () => {
-            expect(valueFromTheConvertedValidation).toMatch("/[A-Z\\\\']/\\");
+          it('should escape the quotes', () => {
+            expect(valueFromTheConvertedValidation).toBe(String.raw`/[A-Z\']/`);
           });
         });
+        for (const [value, expected] of [
+          ["(^[a-z ,.'-]+$)", String.raw`(^[a-z ,.\'-]+$)`],
+          ["'a'b'", String.raw`\'a\'b\'`],
+          [String.raw`a\'b'c`, String.raw`a\'b\'c`],
+        ]) {
+          it(`should convert ${value} to ${expected}`, () => {
+            expect(convertValidations([{ key: 'pattern', value }], name => name)[0].value).toBe(expected);
+          });
+        }
       });
       describe('having one falsy element', () => {
         let convertedJDLValidations: JDLValidation[];

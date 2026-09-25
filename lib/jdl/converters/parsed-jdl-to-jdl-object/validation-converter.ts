@@ -72,14 +72,6 @@ function convertValidation(
 }
 
 function formatThePatternValidationValue(value: string): string {
-  if (!value.includes("'")) {
-    return value;
-  }
-  const chunks = value.split("'").map(chunk => {
-    if (!chunk.endsWith('\\')) {
-      return `${chunk}\\`;
-    }
-    return chunk;
-  });
-  return chunks.join(String.raw`\'`);
+  // Escape every quote that is not escaped yet.
+  return value.replaceAll(/(?<!\\)'/g, String.raw`\'`);
 }
