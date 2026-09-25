@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 
+import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../parsing/relationship-options.ts';
+
 const Options = {
-  BUILT_IN_ENTITY: 'builtInEntity',
+  BUILT_IN_ENTITY: JDL_RELATIONSHIP_BUILT_IN_ENTITY,
 } as const;
 
 function exists(option: string): boolean {

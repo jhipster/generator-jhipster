@@ -21,7 +21,6 @@ import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { getDefaultJDLEntityConfig } from '../../../jdl-config/jdl-entity-config.ts';
-import { getDefaultJDLRelationshipConfig } from '../../../jdl-config/jdl-relationship-config.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { getDefaultJDLValidationConfig } from '../../../jdl-config/jdl-validation-config.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
@@ -1995,7 +1994,7 @@ entity A {
             cache: { choices: ['redis', 'no'], jdl: { type: 'binary' } },
           },
         },
-        relationship: { configs: { ...getDefaultJDLRelationshipConfig().configs, cascade: { jdl: { type: 'unary' } } } },
+        relationship: { configs: { cascade: { jdl: { type: 'unary' } } } },
       });
       parsed = originalParseFromContent(
         `entity A
@@ -2014,6 +2013,25 @@ relationship OneToMany {
     });
     it('should parse the relationship option', () => {
       expect(parsed.relationships[0].options.global).toEqual([{ optionName: 'cascade', type: 'UNARY' }]);
+    });
+  });
+  describe('when parsing several relationship options', () => {
+    const runtime = createJDLRuntime({ relationship: { configs: { cascade: { jdl: { type: 'unary' } } } } });
+    const parseRelationships = (relationships: string) =>
+      originalParseFromContent(`relationship ManyToOne {\n${relationships}\n}`, runtime).relationships.map(
+        ({ from, to, options }) => `${from.name} to ${to.name}${options.global.map(({ optionName }) => ` ${optionName}`).join('')}`,
+      );
+
+    it('should parse the options separated by commas', () => {
+      expect(parseRelationships('A to User with builtInEntity, cascade')).toEqual(['A to User builtInEntity cascade']);
+    });
+    it('should parse the options across lines', () => {
+      expect(parseRelationships('A to User with builtInEntity,\ncascade')).toEqual(['A to User builtInEntity cascade']);
+    });
+    it('should tell the next relationship from an option', () => {
+      expect(
+        parseRelationships('A to B with cascade, C to D, E{f} to F with cascade,\n@Id G to H with cascade, /** doc */ I to J'),
+      ).toEqual(['A to B cascade', 'C to D', 'E to F cascade', 'G to H cascade', 'I to J']);
     });
   });
   describe('when parsing an option', () => {

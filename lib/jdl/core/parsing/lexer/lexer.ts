@@ -120,7 +120,6 @@ export const buildTokens = (): JDLTokens => {
   createTokenFromConfig({ name: 'LSQUARE', pattern: '[' });
   createTokenFromConfig({ name: 'RSQUARE', pattern: ']' });
   createTokenFromConfig({ name: 'COMMA', pattern: ',' });
-  createTokenFromConfig({ name: 'COMMA_WITHOUT_NEWLINE', pattern: /,[^\n\r]/ });
   createTokenFromConfig({ name: 'EQUALS', pattern: '=' });
   createTokenFromConfig({ name: 'DOT', pattern: '.' });
 

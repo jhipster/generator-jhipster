@@ -18,7 +18,6 @@
  */
 import { describe, esmocha, expect, it } from 'esmocha';
 
-import { getDefaultJDLRelationshipConfig } from '../../../../jdl-config/jdl-relationship-config.ts';
 import { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 import { createImporterFromContent } from '../../__test-support__/index.ts';
 import { parseFromContent } from '../../readers/jdl-reader.ts';
@@ -56,18 +55,64 @@ describe('jdl - semantic rules', () => {
     it('accepts a built-in destination', () => {
       expect(check('entity A\nrelationship ManyToOne { A to User with builtInEntity }')).toEqual([]);
     });
-    it('takes the built-in entity options from the relationship definitions', () => {
-      const runtime = createJDLRuntime({
-        relationship: {
-          configs: { ...getDefaultJDLRelationshipConfig().configs, external: { jdl: { type: 'unary', builtInEntity: true } } },
-        },
-      });
-      expect(check('entity A\nrelationship ManyToOne { A to Account with external }', runtime)).toEqual([]);
+    it('knows the built-in destination whatever the relationship definitions', () => {
+      const runtime = createJDLRuntime({ relationship: { configs: { cascade: { jdl: { type: 'unary' } } } } });
+      expect(check('entity A\nrelationship ManyToOne { A to User with builtInEntity }', runtime)).toEqual([]);
+    });
+    it('does not take a relationship option of the definitions as a built-in destination', () => {
+      const runtime = createJDLRuntime({ relationship: { configs: { cascade: { jdl: { type: 'unary' } } } } });
+      expect(check('entity A\nrelationship ManyToOne { A to User with cascade }', runtime).map(diagnostic => diagnostic.message)).toEqual([
+        "In the relationship between A and User, User is not declared. If 'User' is a built-in entity declare like 'A to User with builtInEntity'.",
+      ]);
     });
     it('still requires a declared source with a built-in destination', () => {
       expect(check('relationship ManyToOne { A to User with builtInEntity }').map(diagnostic => diagnostic.at)).toEqual([
         'A to User with builtInEntity',
       ]);
+    });
+    it('suggests builtInEntity only for an entity the runtime provides', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['User'] });
+      expect(check('entity A\nrelationship ManyToOne { A to User, A to Account }', runtime).map(diagnostic => diagnostic.message)).toEqual([
+        "In the relationship between A and User, User is not declared. If 'User' is a built-in entity declare like 'A to User with builtInEntity'.",
+        'In the relationship between A and Account, Account is not declared.',
+      ]);
+    });
+  });
+
+  describe('built-in-entity', () => {
+    it('accepts any destination when the runtime lists no built-in entity, as JHipster does', () => {
+      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }')).toEqual([]);
+    });
+    it('accepts a built-in entity the runtime provides', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['User', 'Authority'] });
+      expect(
+        check('entity A\nrelationship ManyToOne { A to User with builtInEntity, A{authority} to Authority with builtInEntity }', runtime),
+      ).toEqual([]);
+    });
+    it('reports a destination the runtime does not provide at the option', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['User', 'Authority'] });
+      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }', runtime)).toEqual([
+        {
+          ruleId: 'built-in-entity',
+          message:
+            'In the relationship between A and Account, Account is not a built-in entity, the built-in entities are: User, Authority.',
+          at: 'builtInEntity',
+        },
+      ]);
+    });
+    it('takes the built-in entities of the runtime', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['Account'] });
+      expect(
+        check('entity A\nrelationship ManyToOne { A to Account with builtInEntity, A{user} to User with builtInEntity }', runtime).map(
+          diagnostic => diagnostic.message,
+        ),
+      ).toEqual(['In the relationship between A and User, User is not a built-in entity, the built-in entities are: Account.']);
+    });
+    it('reports every destination when the runtime provides no built-in entity', () => {
+      const runtime = createJDLRuntime({ builtInEntities: [] });
+      expect(
+        check('entity A\nrelationship ManyToOne { A to User with builtInEntity }', runtime).map(diagnostic => diagnostic.message),
+      ).toEqual(['In the relationship between A and User, User is not a built-in entity, there is no built-in entity.']);
     });
   });
 

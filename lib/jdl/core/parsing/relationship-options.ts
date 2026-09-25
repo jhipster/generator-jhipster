@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLOptionsDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLOptionConfig } from './types/parsing.ts';
 
-const defaultJDLRelationshipConfig: JDLOptionsDefinition = Object.freeze({
-  configs: {
-    builtInEntity: { description: 'The other side is a built in entity, User or Authority', jdl: { type: 'unary', builtInEntity: true } },
+/** The relationship option relating to a built-in entity, which the jdl does not declare: `A to User with builtInEntity`. */
+export const JDL_RELATIONSHIP_BUILT_IN_ENTITY = 'builtInEntity';
+
+/** The relationship options of the language, known whatever the definitions. */
+export const builtInRelationshipOptions: Readonly<Record<string, JDLOptionConfig>> = Object.freeze({
+  [JDL_RELATIONSHIP_BUILT_IN_ENTITY]: {
+    description: 'The destination is a built-in entity, which the jdl does not declare',
+    jdl: { type: 'unary' },
   },
 });
-
-/**
- * The relationship JDL definitions: the option statements of relationships, `... to Other with builtInEntity`.
- */
-export const getDefaultJDLRelationshipConfig = (): Readonly<JDLOptionsDefinition> => defaultJDLRelationshipConfig;
