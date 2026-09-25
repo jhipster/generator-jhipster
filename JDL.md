@@ -11,7 +11,7 @@ built-in entities available depend on the generators in use: JHipster's own and 
 > [!NOTE]
 > The examples in this document use names that JHipster's generators accept, such as `packageName`, `dto`, `BigDecimal`,
 > `minlength` or `docker-compose`. They show the syntax: whether a given example works depends on the generators in use, and
-> the same statement may be rejected, or mean something else, with other generators or blueprints.
+> the same statement may be rejected, be ignored, or mean something else, with other generators or blueprints.
 
 ## Files
 
