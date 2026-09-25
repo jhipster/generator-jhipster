@@ -21,7 +21,6 @@ import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { getDefaultJDLEntityConfig } from '../../../jdl-config/jdl-entity-config.ts';
-import { getDefaultJDLRelationshipConfig } from '../../../jdl-config/jdl-relationship-config.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { getDefaultJDLValidationConfig } from '../../../jdl-config/jdl-validation-config.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
@@ -1995,7 +1994,7 @@ entity A {
             cache: { choices: ['redis', 'no'], jdl: { type: 'binary' } },
           },
         },
-        relationship: { configs: { ...getDefaultJDLRelationshipConfig().configs, cascade: { jdl: { type: 'unary' } } } },
+        relationship: { configs: { cascade: { jdl: { type: 'unary' } } } },
       });
       parsed = originalParseFromContent(
         `entity A

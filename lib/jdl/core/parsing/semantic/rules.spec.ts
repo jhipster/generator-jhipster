@@ -18,7 +18,6 @@
  */
 import { describe, esmocha, expect, it } from 'esmocha';
 
-import { getDefaultJDLRelationshipConfig } from '../../../../jdl-config/jdl-relationship-config.ts';
 import { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 import { createImporterFromContent } from '../../__test-support__/index.ts';
 import { parseFromContent } from '../../readers/jdl-reader.ts';
@@ -56,13 +55,15 @@ describe('jdl - semantic rules', () => {
     it('accepts a built-in destination', () => {
       expect(check('entity A\nrelationship ManyToOne { A to User with builtInEntity }')).toEqual([]);
     });
-    it('takes the built-in entity options from the relationship definitions', () => {
-      const runtime = createJDLRuntime({
-        relationship: {
-          configs: { ...getDefaultJDLRelationshipConfig().configs, external: { jdl: { type: 'unary', builtInEntity: true } } },
-        },
-      });
-      expect(check('entity A\nrelationship ManyToOne { A to Account with external }', runtime)).toEqual([]);
+    it('knows the built-in destination whatever the relationship definitions', () => {
+      const runtime = createJDLRuntime({ relationship: { configs: { cascade: { jdl: { type: 'unary' } } } } });
+      expect(check('entity A\nrelationship ManyToOne { A to User with builtInEntity }', runtime)).toEqual([]);
+    });
+    it('does not take a relationship option of the definitions as a built-in destination', () => {
+      const runtime = createJDLRuntime({ relationship: { configs: { cascade: { jdl: { type: 'unary' } } } } });
+      expect(check('entity A\nrelationship ManyToOne { A to User with cascade }', runtime).map(diagnostic => diagnostic.message)).toEqual([
+        "In the relationship between A and User, User is not declared. If 'User' is a built-in entity declare like 'A to User with builtInEntity'.",
+      ]);
     });
     it('still requires a declared source with a built-in destination', () => {
       expect(check('relationship ManyToOne { A to User with builtInEntity }').map(diagnostic => diagnostic.at)).toEqual([

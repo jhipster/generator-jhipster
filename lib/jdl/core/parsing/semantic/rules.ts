@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../relationship-options.ts';
 import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../relationship-types.ts';
 import type { ParsedJDLOptionConfig, ParsedJDLUseOption } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
@@ -53,13 +54,11 @@ const listedEntityNames = (config: ParsedJDLOptionConfig) => config.list.filter(
 
 export const undeclaredRelationshipEntity: JDLSemanticRule = {
   id: 'undeclared-relationship-entity',
-  check: (ast, runtime) => {
+  check: ast => {
     const entityNames = new Set(ast.entities.map(entity => entity.name));
     return ast.relationships.flatMap(relationship => {
       const { from, to } = relationship;
-      const toBuiltIn = relationship.options.global.some(
-        option => runtime.relationshipDefinition.configs[option.optionName]?.jdl.builtInEntity,
-      );
+      const toBuiltIn = relationship.options.global.some(option => option.optionName === JDL_RELATIONSHIP_BUILT_IN_ENTITY);
       const absent = [from.name, ...(toBuiltIn ? [] : [to.name])].filter(name => !entityNames.has(name));
       if (absent.length === 0) return [];
       return [

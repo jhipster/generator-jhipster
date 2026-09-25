@@ -23,20 +23,19 @@ import type { JDLRuntime } from '../jdl/core/parsing/types/runtime.ts';
 
 import { getDefaultJDLEntityConfig } from './jdl-entity-config.ts';
 import { getDefaultJDLFieldTypesConfig } from './jdl-field-types-config.ts';
-import { getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';
 import { jhipsterSemanticRules } from './jdl-semantic-rules.ts';
 import { getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
 /**
- * The JHipster definitions: the application and deployment options of the generators, the entity and relationship
- * option statements, the field validations and types, and the semantic rules of JHipster.
+ * The JHipster definitions: the application and deployment options of the generators, the entity option statements, the
+ * field validations and types, and the semantic rules of JHipster. JHipster adds no relationship option to the ones of the
+ * language.
  */
-export const getDefaultJDLDefinitions = (): Required<JDLDefinitions> => ({
+export const getDefaultJDLDefinitions = (): Required<Omit<JDLDefinitions, 'relationship'>> => ({
   application: getDefaultJDLApplicationConfig(),
   deployment: getDefaultJDLDeploymentConfig(),
   entity: getDefaultJDLEntityConfig(),
-  relationship: getDefaultJDLRelationshipConfig(),
   validation: getDefaultJDLValidationConfig(),
   fieldTypes: getDefaultJDLFieldTypesConfig(),
   rules: jhipsterSemanticRules,
@@ -49,7 +48,7 @@ export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDL
     application: definitions.application ?? defaults.application,
     deployment: definitions.deployment ?? defaults.deployment,
     entity: definitions.entity ?? defaults.entity,
-    relationship: definitions.relationship ?? defaults.relationship,
+    relationship: definitions.relationship,
     validation: definitions.validation ?? defaults.validation,
     fieldTypes: definitions.fieldTypes ?? defaults.fieldTypes,
     rules: definitions.rules ?? defaults.rules,

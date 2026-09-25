@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'esmocha';
 
-import { binaryOptions, relationshipOptions, unaryOptions } from '../jdl/core/built-in-options/index.ts';
+import { binaryOptions, unaryOptions } from '../jdl/core/built-in-options/index.ts';
 
 import { getDefaultJDLEntityConfig } from './jdl-entity-config.ts';
-import { getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';
 
 // The lexer and the parser take the option statements from the definitions, the code refers to the options through the
 // constants of the core tables: the two must agree.
@@ -30,9 +29,5 @@ describe('jdl entity definitions', () => {
         default: definition.default,
       });
     }
-  });
-
-  it('should declare the relationship options of the core', () => {
-    expect(Object.keys(getDefaultJDLRelationshipConfig().configs).sort()).toEqual([relationshipOptions.BUILT_IN_ENTITY].sort());
   });
 });

@@ -48,8 +48,6 @@ export type JDLOptionStatementSpec = {
   keyword?: string;
   /** Deprecated keywords still accepted for the option, warned about. */
   deprecatedKeywords?: readonly string[];
-  /** A relationship option: the destination is a built-in entity, which the jdl does not declare. */
-  builtInEntity?: boolean;
 };
 
 /** An option of the entity or relationship statements, shaped like a command config. */
@@ -101,8 +99,8 @@ export type JDLDefinitions = {
   deployment: JDLApplicationConfig;
   /** The option statements of entities. */
   entity: JDLOptionsDefinition;
-  /** The option statements of relationships. */
-  relationship: JDLOptionsDefinition;
+  /** The option statements of relationships the tool adds to the ones of the language, `builtInEntity`. */
+  relationship?: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validation: JDLValidationsDefinition;
   /** The field types and their validations; without them, a field takes any type and any validation. */

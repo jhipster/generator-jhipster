@@ -10,7 +10,7 @@ export type JDLRuntime = {
   applicationDefinition: JDLApplicationDefinition;
   /** The option statements of entities. */
   entityDefinition: JDLOptionsDefinition;
-  /** The option statements of relationships. */
+  /** The option statements of relationships: the ones of the language, `builtInEntity`, and the ones of the tool. */
   relationshipDefinition: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validationDefinition: JDLValidationsDefinition;

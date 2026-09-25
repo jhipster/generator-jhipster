@@ -22,6 +22,7 @@ import type { Lexer, TokenType } from 'chevrotain';
 import JDLApplicationDefinition from './jdl-application-definition.ts';
 import JDLParser from './jdl-parser.ts';
 import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './lexer/lexer.ts';
+import { builtInRelationshipOptions } from './relationship-options.ts';
 import { checkTokens } from './self-checks/parsing-system-checker.ts';
 import { semanticRules } from './semantic/rules.ts';
 import type { JDLDefinitions, JDLValidatorOption } from './types/parsing.ts';
@@ -29,7 +30,7 @@ import type { JDLRuntime } from './types/runtime.ts';
 
 /**
  * Builds a runtime, the lexer, the parser and the definitions the jdl is parsed and validated with, from every definition:
- * the core knows no option by itself, `lib/jdl-config` provides the default ones.
+ * the core knows no option by itself but the relationship options of the language, `lib/jdl-config` provides the default ones.
  */
 export const createRuntime = ({
   application: definition,
@@ -83,7 +84,8 @@ export const createRuntime = ({
     },
     applicationDefinition,
     entityDefinition,
-    relationshipDefinition,
+    // The options of the language come last: a definition does not redefine them.
+    relationshipDefinition: { configs: { ...relationshipDefinition?.configs, ...builtInRelationshipOptions } },
     validationDefinition,
     fieldTypesDefinition,
     semanticRules: [...semanticRules, ...rules],
