@@ -26,25 +26,31 @@ import { setModifiedFileState } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.ts';
-import type { JDLApplicationConfig } from '../../../lib/jdl/core/parsing/types/parsing.ts';
-import { createJDLRuntime } from '../../../lib/jdl-config/jdl-runtime.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/types/parsing.ts';
+import { createJDLRuntime, getDefaultRuntime } from '../../../lib/jdl-config/jdl-runtime.ts';
 import type { Entity } from '../../../lib/jhipster/types/entity.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
+import { resolveJDLDefinitions } from '../internal/jdl-definitions.ts';
 
 export const exportJDLTransform = ({
   destinationPath,
   jdlStorePath,
   throwOnMissingConfig = true,
   keepEntitiesConfig,
+  jdlDefinitions,
   jdlDefinition,
 }: {
   destinationPath: string;
   jdlStorePath: string;
   throwOnMissingConfig?: boolean;
   keepEntitiesConfig?: boolean;
-  jdlDefinition: JDLApplicationConfig;
+  /** The definitions of the jdl, the JHipster ones completing those not passed. */
+  jdlDefinitions?: Partial<JDLDefinitions>;
+  /** @deprecated use `jdlDefinitions`, `{ application: jdlDefinition }` */
+  jdlDefinition?: JDLApplicationConfig;
 }) =>
   Duplex.from(async function* (files: AsyncGenerator<ConflicterFile>) {
+    const definitions = resolveJDLDefinitions({ jdlDefinitions, jdlDefinition });
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesMatcher = new Minimatch(`${destinationPath}/.jhipster/*.json`);
     const entitiesFiles: ConflicterFile[] = [];
@@ -75,7 +81,7 @@ export const exportJDLTransform = ({
 
         const jdlObject = getJDLObjectFromSingleApplication(
           { ...contents, [GENERATOR_JHIPSTER]: { ...rest, incrementalChangelog } },
-          createJDLRuntime({ application: jdlDefinition }),
+          definitions ? createJDLRuntime(definitions) : getDefaultRuntime(),
           entitiesMap,
         );
 

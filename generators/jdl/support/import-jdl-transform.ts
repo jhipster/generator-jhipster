@@ -25,19 +25,24 @@ import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
-import type { JDLApplicationConfig } from '../../../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/types/parsing.ts';
 import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../../lib/utils/yo-rc.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
+import { resolveJDLDefinitions } from '../internal/jdl-definitions.ts';
 
 export const importJDLTransform = ({
   destinationPath,
   jdlStorePath,
+  jdlDefinitions,
   jdlDefinition,
 }: {
   destinationPath: string;
   jdlStorePath: string;
-  jdlDefinition: JDLApplicationConfig;
+  /** The definitions of the jdl, the JHipster ones completing those not passed. */
+  jdlDefinitions?: Partial<JDLDefinitions>;
+  /** @deprecated use `jdlDefinitions`, `{ application: jdlDefinition }` */
+  jdlDefinition?: JDLApplicationConfig;
 }) =>
   Duplex.from(async function* (files: AsyncGenerator<MemFsEditorFile>) {
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
@@ -74,7 +79,11 @@ export const importJDLTransform = ({
     if (entityFields.length > 0) {
       throw new Error('Entities configuration files are not supported by jdlStore');
     }
-    const importer = createImporterFromContent(jdlStoreContents.toString(), undefined, jdlDefinition);
+    const importer = createImporterFromContent(
+      jdlStoreContents.toString(),
+      undefined,
+      resolveJDLDefinitions({ jdlDefinitions, jdlDefinition }),
+    );
     const importState = importer.import();
     const applicationWithEntities = Object.values(importState.exportedApplicationsWithEntities);
     if (applicationWithEntities.length !== 1) {

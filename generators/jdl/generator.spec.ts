@@ -19,7 +19,10 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
+import { getDefaultJDLDefinitions } from '../../lib/jdl-config/jdl-runtime.ts';
+import { buildJDLApplicationConfig } from '../../lib/jdl-config/jhipster-jdl-config.ts';
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
+import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
@@ -189,6 +192,69 @@ describe(`generator - ${generator}`, () => {
 }
 `);
       });
+    });
+  });
+
+  describe('for application jdl with custom definitions', () => {
+    // The application definitions of a generator with one more option; `jdlDefinition`, application only, is deprecated.
+    const application = buildJDLApplicationConfig({
+      baseName: { description: 'Application name', jdl: { type: 'string', tokenType: 'NAME' }, scope: 'storage' },
+      myOption: { description: 'My option', jdl: { type: 'boolean', tokenType: 'BOOLEAN' }, scope: 'storage' },
+    });
+    const cliDefinitions = { application: getDefaultJDLDefinitions().application };
+    for (const [name, definitionsOptions] of Object.entries({
+      jdlDefinitions: { jdlDefinitions: { application } },
+      jdlDefinition: { jdlDefinition: application },
+      // A generator composing the jdl one with `jdlDefinition`, what the cli passes forwarded.
+      'jdlDefinition replacing the cli ones': { jdlDefinitions: cliDefinitions, jdlDefinition: application },
+    })) {
+      describe(`passed as ${name}`, () => {
+        before(async () => {
+          await helpers.runJHipster(generator).withOptions({
+            jsonOnly: true,
+            inline: 'application { config { baseName foo myOption true } }',
+            ...definitionsOptions,
+          });
+        });
+
+        it('should accept the option of the definitions', () => {
+          runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'foo', myOption: true } });
+        });
+      });
+    }
+  });
+
+  describe('composed by a generator passing the deprecated jdlDefinition', () => {
+    // A blueprint composing the jdl generator with its application definitions; the cli ones are forwarded.
+    const application = buildJDLApplicationConfig({
+      baseName: { description: 'Application name', jdl: { type: 'string', tokenType: 'NAME' }, scope: 'storage' },
+      myOption: { description: 'My option', jdl: { type: 'boolean', tokenType: 'BOOLEAN' }, scope: 'storage' },
+    });
+    class ComposingGenerator extends BaseGenerator {
+      get [BaseGenerator.COMPOSING]() {
+        return this.asComposingTaskGroup({
+          async composeJdl() {
+            await this.composeWithJHipster('jdl', { generatorOptions: { jdlDefinition: application } });
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      const { application: cliApplication } = getDefaultJDLDefinitions();
+      await helpers
+        .run(ComposingGenerator, { namespace: 'jhipster-composing:app' })
+        .withJHipsterGenerators()
+        .withOptions({
+          jsonOnly: true,
+          inline: 'application { config { baseName foo myOption true } }',
+          jdlDefinitions: { application: cliApplication },
+          jdlDefinition: cliApplication,
+        });
+    });
+
+    it('should accept the option of the definitions of the composing generator', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'foo', myOption: true } });
     });
   });
 
