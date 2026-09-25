@@ -34,7 +34,6 @@ import {
   createImporterFromContent as originalCreateImporterFromContent,
   createImporterFromFiles as originalCreateImporterFromFiles,
 } from '../../jdl-importer.ts';
-import { createJDLLinterFromContent as originalCreateJDLLinterFromContent } from '../linters/jdl-linter.ts';
 import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.ts';
 import type { ParsedJDLApplication } from '../parsing/types/parsed.ts';
 import type { JDLRuntime } from '../parsing/types/runtime.ts';
@@ -50,8 +49,6 @@ export const createImporterFromFiles = (files: any, configuration?: any) =>
 export const parseFromConfigurationObject = (configuration: ParsedJDLRoot) => originalParseFromConfigurationObject(configuration, runtime);
 export const parseFromFiles = (files: string[]) => originalParseFromFiles(files, runtime);
 export const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
-
-export const createJDLLinterFromContent = (content: string) => originalCreateJDLLinterFromContent(content, runtime);
 
 export const convertApplications = (applications: ParsedJDLApplication[]) => originalConvertApplications(applications, runtime);
 export const createJDLApplication = (config: any, runtime: JDLRuntime, namespaceConfigs?: Record<string, Record<string, any>>) =>
