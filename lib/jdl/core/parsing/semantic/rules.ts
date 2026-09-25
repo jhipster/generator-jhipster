@@ -18,7 +18,7 @@
  */
 import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../relationship-options.ts';
 import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../relationship-types.ts';
-import type { ParsedJDLOptionConfig, ParsedJDLUseOption } from '../types/parsed.ts';
+import type { ParsedJDLOptionConfig, ParsedJDLRelationship, ParsedJDLUseOption } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 import type { JDLSemanticRule } from './types.ts';
@@ -52,21 +52,52 @@ const allOptionEntityLists = (
 /** The entity names an option lists by name, `*` lists every entity. */
 const listedEntityNames = (config: ParsedJDLOptionConfig) => config.list.filter(name => name !== '*');
 
+/** The `builtInEntity` option of a relationship, if it has one. */
+const builtInEntityOption = (relationship: ParsedJDLRelationship) =>
+  relationship.options.global.find(option => option.optionName === JDL_RELATIONSHIP_BUILT_IN_ENTITY);
+
+/** Whether an entity may be the destination of a relationship `with builtInEntity`: any is, unless the runtime lists them. */
+const mayBeBuiltIn = (runtime: JDLRuntime, entityName: string): boolean => runtime.builtInEntities?.includes(entityName) ?? true;
+
 export const undeclaredRelationshipEntity: JDLSemanticRule = {
   id: 'undeclared-relationship-entity',
-  check: ast => {
+  check: (ast, runtime) => {
     const entityNames = new Set(ast.entities.map(entity => entity.name));
     return ast.relationships.flatMap(relationship => {
       const { from, to } = relationship;
-      const toBuiltIn = relationship.options.global.some(option => option.optionName === JDL_RELATIONSHIP_BUILT_IN_ENTITY);
+      // A destination the runtime does not provide is the built-in-entity rule's.
+      const toBuiltIn = builtInEntityOption(relationship) !== undefined;
       const absent = [from.name, ...(toBuiltIn ? [] : [to.name])].filter(name => !entityNames.has(name));
       if (absent.length === 0) return [];
+      const hint =
+        !toBuiltIn && absent.includes(to.name) && mayBeBuiltIn(runtime, to.name) ?
+          ` If '${to.name}' is a built-in entity declare like '${from.name} to ${to.name} with builtInEntity'.`
+        : '';
       return [
         {
-          message:
-            `In the relationship between ${from.name} and ${to.name}, ${absent.join(' and ')} ${absent.length === 1 ? 'is' : 'are'} not declared. ` +
-            `If '${to.name}' is a built-in entity declare like '${from.name} to ${to.name} with builtInEntity'.`,
+          message: `In the relationship between ${from.name} and ${to.name}, ${absent.join(' and ')} ${absent.length === 1 ? 'is' : 'are'} not declared.${hint}`,
           location: relationship.location,
+        },
+      ];
+    });
+  },
+};
+
+export const builtInEntity: JDLSemanticRule = {
+  id: 'built-in-entity',
+  check: (ast, runtime) => {
+    const { builtInEntities } = runtime;
+    if (!builtInEntities) return [];
+    return ast.relationships.flatMap(relationship => {
+      const option = builtInEntityOption(relationship);
+      const { from, to } = relationship;
+      if (!option || builtInEntities.includes(to.name)) return [];
+      const known =
+        builtInEntities.length === 0 ? 'there is no built-in entity' : `the built-in entities are: ${builtInEntities.join(', ')}`;
+      return [
+        {
+          message: `In the relationship between ${from.name} and ${to.name}, ${to.name} is not a built-in entity, ${known}.`,
+          location: option.location ?? relationship.location,
         },
       ];
     });
@@ -373,6 +404,7 @@ export const namespaceConfigBlueprint: JDLSemanticRule = {
 
 export const semanticRules: JDLSemanticRule[] = [
   undeclaredRelationshipEntity,
+  builtInEntity,
   undeclaredApplicationEntity,
   entityOutsideApplication,
   undeclaredOptionEntity,

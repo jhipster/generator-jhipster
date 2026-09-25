@@ -29,8 +29,8 @@ import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from '.
 
 /**
  * The JHipster definitions: the application and deployment options of the generators, the entity option statements, the
- * field validations and types, and the semantic rules of JHipster. JHipster adds no relationship option to the ones of the
- * language.
+ * field validations and types, the built-in entities, and the semantic rules of JHipster. JHipster adds no relationship
+ * option to the ones of the language.
  */
 export const getDefaultJDLDefinitions = (): Required<Omit<JDLDefinitions, 'relationship'>> => ({
   application: getDefaultJDLApplicationConfig(),
@@ -38,6 +38,7 @@ export const getDefaultJDLDefinitions = (): Required<Omit<JDLDefinitions, 'relat
   entity: getDefaultJDLEntityConfig(),
   validation: getDefaultJDLValidationConfig(),
   fieldTypes: getDefaultJDLFieldTypesConfig(),
+  builtInEntities: ['User', 'Authority'],
   rules: jhipsterSemanticRules,
 });
 
@@ -49,6 +50,7 @@ export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDL
     deployment: definitions.deployment ?? defaults.deployment,
     entity: definitions.entity ?? defaults.entity,
     relationship: definitions.relationship,
+    builtInEntities: definitions.builtInEntities ?? defaults.builtInEntities,
     validation: definitions.validation ?? defaults.validation,
     fieldTypes: definitions.fieldTypes ?? defaults.fieldTypes,
     rules: definitions.rules ?? defaults.rules,

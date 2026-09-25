@@ -37,6 +37,7 @@ export const createRuntime = ({
   deployment: deploymentDefinition,
   entity: entityDefinition,
   relationship: relationshipDefinition,
+  builtInEntities,
   validation: validationDefinition,
   fieldTypes: fieldTypesDefinition,
   rules = [],
@@ -87,6 +88,7 @@ export const createRuntime = ({
     // The options of the language come last: a definition does not redefine them.
     relationshipDefinition: { configs: { ...relationshipDefinition?.configs, ...builtInRelationshipOptions } },
     validationDefinition,
+    builtInEntities,
     fieldTypesDefinition,
     semanticRules: [...semanticRules, ...rules],
     propertyValidations,

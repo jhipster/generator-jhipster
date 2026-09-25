@@ -14,6 +14,8 @@ export type JDLRuntime = {
   relationshipDefinition: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validationDefinition: JDLValidationsDefinition;
+  /** The entities a relationship `with builtInEntity` may relate to; without them, any destination is accepted. */
+  builtInEntities?: readonly string[];
   /** The field types and their validations; without them, a field takes any type and any validation. */
   fieldTypesDefinition?: JDLFieldTypesDefinition;
   /** The semantic rules the jdl is checked with: the ones of the jdl, then the ones of the tool. */

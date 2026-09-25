@@ -101,6 +101,11 @@ export type JDLDefinitions = {
   entity: JDLOptionsDefinition;
   /** The option statements of relationships the tool adds to the ones of the language, `builtInEntity`. */
   relationship?: JDLOptionsDefinition;
+  /**
+   * The entities the tool provides, which a relationship `with builtInEntity` relates to without declaring them. When given,
+   * even empty, any other destination is an error; without them, any destination is accepted.
+   */
+  builtInEntities?: readonly string[];
   /** The field validations written with a value. */
   validation: JDLValidationsDefinition;
   /** The field types and their validations; without them, a field takes any type and any validation. */

@@ -237,7 +237,8 @@ and each side is:
   (unless annotations are placed before the source, see below).
 - In a `OneToOne` relationship, the source must own the relationship: naming the field on the destination only is an error.
 - A required relationship from an entity to itself is an error.
-- Both entities must be declared. To relate to a built-in entity (`User`, `Authority`), add `with builtInEntity`.
+- Both entities must be declared. To relate to a built-in entity instead, add `with builtInEntity`; the destination must
+  then be one of the built-in entities of the generator (`User` and `Authority` for JHipster).
 
 Relationship options follow `with`, separated by commas: `builtInEntity`, or an option the generator or a blueprint adds.
 An unknown option is an error.

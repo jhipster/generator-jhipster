@@ -41,15 +41,14 @@ describe('jdl - semantic rules', () => {
       expect(check('entity A\nrelationship OneToMany {\n  A to B\n}')).toEqual([
         {
           ruleId: 'undeclared-relationship-entity',
-          message:
-            "In the relationship between A and B, B is not declared. If 'B' is a built-in entity declare like 'A to B with builtInEntity'.",
+          message: 'In the relationship between A and B, B is not declared.',
           at: 'A to B',
         },
       ]);
     });
     it('reports both sides at once', () => {
       expect(check('entity A\nrelationship OneToMany { C to B }').map(diagnostic => diagnostic.message)).toEqual([
-        "In the relationship between C and B, C and B are not declared. If 'B' is a built-in entity declare like 'C to B with builtInEntity'.",
+        'In the relationship between C and B, C and B are not declared.',
       ]);
     });
     it('accepts a built-in destination', () => {
@@ -69,6 +68,49 @@ describe('jdl - semantic rules', () => {
       expect(check('relationship ManyToOne { A to User with builtInEntity }').map(diagnostic => diagnostic.at)).toEqual([
         'A to User with builtInEntity',
       ]);
+    });
+    it('suggests builtInEntity only for an entity the runtime provides', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['User'] });
+      expect(check('entity A\nrelationship ManyToOne { A to User, A to Account }', runtime).map(diagnostic => diagnostic.message)).toEqual([
+        "In the relationship between A and User, User is not declared. If 'User' is a built-in entity declare like 'A to User with builtInEntity'.",
+        'In the relationship between A and Account, Account is not declared.',
+      ]);
+    });
+  });
+
+  describe('built-in-entity', () => {
+    it('accepts any destination when the runtime lists no built-in entity', () => {
+      const { builtInEntities: _builtInEntities, ...definitions } = getDefaultJDLDefinitions();
+      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }', createRuntime(definitions))).toEqual([]);
+    });
+    it('accepts the built-in entities of JHipster', () => {
+      expect(
+        check('entity A\nrelationship ManyToOne { A to User with builtInEntity, A{authority} to Authority with builtInEntity }'),
+      ).toEqual([]);
+    });
+    it('reports a destination JHipster does not provide at the option', () => {
+      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }')).toEqual([
+        {
+          ruleId: 'built-in-entity',
+          message:
+            'In the relationship between A and Account, Account is not a built-in entity, the built-in entities are: User, Authority.',
+          at: 'builtInEntity',
+        },
+      ]);
+    });
+    it('takes the built-in entities of the runtime', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['Account'] });
+      expect(
+        check('entity A\nrelationship ManyToOne { A to Account with builtInEntity, A{user} to User with builtInEntity }', runtime).map(
+          diagnostic => diagnostic.message,
+        ),
+      ).toEqual(['In the relationship between A and User, User is not a built-in entity, the built-in entities are: Account.']);
+    });
+    it('reports every destination when the runtime provides no built-in entity', () => {
+      const runtime = createJDLRuntime({ builtInEntities: [] });
+      expect(
+        check('entity A\nrelationship ManyToOne { A to User with builtInEntity }', runtime).map(diagnostic => diagnostic.message),
+      ).toEqual(['In the relationship between A and User, User is not a built-in entity, there is no built-in entity.']);
     });
   });
 
@@ -399,7 +441,7 @@ describe('jdl - semantic rules', () => {
         new RegExp(
           [
             String.raw`^The entity B in the dto option is not declared\.\n\tat line: 1, column: 5`,
-            String.raw`In the relationship between A and C, C is not declared\. .*\n\tat line: 3, column: 25$`,
+            String.raw`In the relationship between A and C, C is not declared\.\n\tat line: 3, column: 25$`,
           ].join('\\n'),
         ),
       );
