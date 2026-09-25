@@ -18,7 +18,8 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { mergeKeyLocations, setKeyLocations, setLocation, spanLocation, tokenLocation } from './location.ts';
+import { mergeKeyLocations, setKeyLocations, setLocation, setOtherLocation, spanLocation, tokenLocation } from './location.ts';
+import { setKind } from './nodes.ts';
 import type { JDLRelationshipType } from './relationship-types.ts';
 import type {
   JDLLocation,
@@ -103,16 +104,19 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     prog(context: VisitorContext): ParsedJDLApplications {
-      const ast: ParsedJDLApplications = {
-        applications: [],
-        deployments: [],
-        constants: {},
-        entities: [],
-        relationships: [],
-        enums: [],
-        options: {},
-        useOptions: [],
-      };
+      const ast: ParsedJDLApplications = setKind(
+        {
+          applications: [],
+          deployments: [],
+          constants: setKind({}, 'Constants'),
+          entities: [],
+          relationships: [],
+          enums: [],
+          options: {},
+          useOptions: [],
+        },
+        'JDL',
+      );
 
       if (context.constantDeclaration) {
         const constants = context.constantDeclaration.map(element => this.visit(element));
@@ -150,7 +154,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
           .filter(option => option.optionValue === undefined)
           .forEach((option: ParsedJDLOption) => {
             if (!ast.options[option.optionName]) {
-              ast.options[option.optionName] = {};
+              ast.options[option.optionName] = setKind({}, 'Option');
             }
             const astResult = ast.options[option.optionName];
 
@@ -174,7 +178,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             }
             const optionValuesMap = ast.options[option.optionName] as Record<string, ParsedJDLOptionConfig>;
             if (!optionValuesMap[option.optionValue]) {
-              optionValuesMap[option.optionValue] = { list: [], excluded: [] };
+              optionValuesMap[option.optionValue] = setKind({ list: [], excluded: [] }, 'Option');
             }
             const astResult = optionValuesMap[option.optionValue];
 
@@ -230,13 +234,15 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         body = this.visit(context.entityBody);
       }
 
-      return setLocation({ annotations, name, tableName, body, documentation }, spanLocation(context));
+      const entity = setLocation(setKind({ annotations, name, tableName, body, documentation }, 'Entity'), spanLocation(context));
+      // An entity without fields may be declared with or without braces.
+      return context.entityBody ? setOtherLocation(entity, 'bodyLocation', spanLocation(context.entityBody[0].children)) : entity;
     }
 
     annotationDeclaration(context: Record<'AT' | 'value' | 'option', IToken[]>): ParsedJDLAnnotation {
       const optionName = context.option[0].image;
       if (!context.value) {
-        return setLocation({ optionName, type: 'UNARY' }, spanLocation(context));
+        return setLocation(setKind({ optionName, type: 'UNARY' }, 'Annotation'), spanLocation(context));
       }
       const { image: valueImage } = context.value[0];
       const { tokenType } = context.value[0];
@@ -260,7 +266,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         default:
           optionValue = valueImage;
       }
-      return setLocation({ optionName, optionValue, type: 'BINARY' }, spanLocation(context));
+      return setLocation(setKind({ optionName, optionValue, type: 'BINARY' }, 'Annotation'), spanLocation(context));
     }
 
     entityTableNameDeclaration(context: Record<'NAME', IToken[]>): string {
@@ -293,16 +299,19 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       }
 
       return setLocation(
-        {
-          name: context.NAME[0].image,
-          // context.type is an array with a single item.
-          // in that case:
-          // this.visit(context.type) is equivalent to this.visit(context.type[0])
-          type: this.visit(context.type),
-          validations,
-          documentation: comment,
-          annotations,
-        },
+        setKind(
+          {
+            name: context.NAME[0].image,
+            // context.type is an array with a single item.
+            // in that case:
+            // this.visit(context.type) is equivalent to this.visit(context.type[0])
+            type: this.visit(context.type),
+            validations,
+            documentation: comment,
+            annotations,
+          },
+          'Field',
+        ),
         spanLocation(context),
       );
     }
@@ -315,7 +324,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       // only one of these alternatives can exist at the same time; a validation is keyed by its keyword, as written.
       const keyword = context.REQUIRED ?? context.UNIQUE;
       const validation: ParsedJDLValidation = keyword ? { key: keyword[0].image, value: '' } : this.visit(context.valuedValidation);
-      return setLocation(validation, spanLocation(context));
+      return setLocation(setKind(validation, 'Validation'), spanLocation(context));
     }
 
     valuedValidation(context: Record<'validationName' | 'NAME' | 'INTEGER' | 'DECIMAL' | 'REGEX', IToken[]>): ParsedJDLValidation {
@@ -334,8 +343,10 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       const cardinality = this.visit(context.relationshipType);
       const relationshipBodies = context.relationshipBody.map(element => this.visit(element));
 
+      const declarationLocation = spanLocation(context);
       relationshipBodies.forEach(relationshipBody => {
         relationshipBody.cardinality = cardinality;
+        setOtherLocation(relationshipBody, 'declarationLocation', declarationLocation);
       });
 
       return relationshipBodies;
@@ -361,15 +372,21 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       }
 
       return setLocation(
-        {
-          from,
-          to,
-          options: {
-            global: relationshipOptions,
-            source: optionsForTheSourceSide,
-            destination: optionsForTheDestinationSide,
+        setKind(
+          {
+            from,
+            to,
+            options: setKind(
+              {
+                global: relationshipOptions,
+                source: optionsForTheSourceSide,
+                destination: optionsForTheDestinationSide,
+              },
+              'RelationshipOptions',
+            ),
           },
-        },
+          'Relationship',
+        ),
         spanLocation(context),
       );
     }
@@ -401,7 +418,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       if (!injectedField) {
         delete ast.required;
       }
-      return setLocation(ast, spanLocation(context));
+      return setLocation(setKind(ast, 'RelationshipSide'), spanLocation(context));
     }
 
     relationshipOptions(context: Record<'relationshipOption', CstNode[]>): ParsedJDLAnnotation[] {
@@ -409,7 +426,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     relationshipOption(context: Record<'NAME', IToken[]>): ParsedJDLAnnotation {
-      return setLocation({ optionName: context.NAME[0].image, type: 'UNARY' }, spanLocation(context));
+      return setLocation(setKind({ optionName: context.NAME[0].image, type: 'UNARY' }, 'Annotation'), spanLocation(context));
     }
 
     enumDeclaration(context: Record<'NAME' | 'JAVADOC', IToken[]> & Record<'enumPropList', CstNode[]>): ParsedJDLEnum {
@@ -420,7 +437,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         documentation = trimComment(context.JAVADOC[0].image);
       }
 
-      return setLocation({ name, values, documentation }, spanLocation(context));
+      return setLocation(setKind({ name, values, documentation }, 'Enum'), spanLocation(context));
     }
 
     enumPropList(context: Record<'enumProp', CstNode[]>): ParsedJDLEnumValue[] {
@@ -441,7 +458,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       if (context.enumPropValueWithQuotes) {
         prop.value = context.enumPropValueWithQuotes[0].image.replace(/"/g, '');
       }
-      return setLocation(prop, spanLocation(context));
+      return setLocation(setKind(prop, 'EnumValue'), spanLocation(context));
     }
 
     exclusion(context: Record<'NAME', IToken[]>): string[] {
@@ -451,11 +468,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     optionDeclaration(
       context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
     ): ParsedJDLOption {
-      return setLocation(getOptionFromContext(context, this), spanLocation(context));
+      return setLocation(setKind(getOptionFromContext(context, this), 'Option'), spanLocation(context));
     }
 
     useOptionDeclaration(context: Record<'NAME', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>): ParsedJDLUseOption {
-      return setLocation(getSpecialUnaryOptionDeclaration(context, this), spanLocation(context));
+      return setLocation(setKind(getSpecialUnaryOptionDeclaration(context, this), 'UseOption'), spanLocation(context));
     }
 
     filterDef(context: Record<'NAME' | 'STAR', IToken[]>): string[] {
@@ -482,7 +499,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     deploymentDeclaration(context: Record<'deploymentConfigDeclaration', CstNode[]>): ParsedJDLDeployment {
-      const config: ParsedJDLDeployment = {};
+      const config: ParsedJDLDeployment = setKind({}, 'Deployment');
       const keyLocations: Record<string, JDLLocation | undefined> = {};
 
       if (context.deploymentConfigDeclaration) {
@@ -523,9 +540,9 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       >,
     ): ParsedJDLApplicationDeclaration {
       const applicationSubDeclaration: ParsedJDLApplications['applications'][number] = {
-        config: {} as any,
+        config: setKind({}, 'ApplicationConfig') as ParsedJDLApplicationConfig,
         namespaceConfigs: {},
-        entitiesOptions: { entityList: [], excluded: [] },
+        entitiesOptions: setKind({ entityList: [], excluded: [] }, 'ApplicationEntities'),
         options: {},
         useOptions: [],
       };
@@ -550,7 +567,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
           .filter(option => option.optionValue === undefined)
           .forEach(option => {
             if (!applicationSubDeclaration.options![option.optionName]) {
-              applicationSubDeclaration.options![option.optionName] = {};
+              applicationSubDeclaration.options![option.optionName] = setKind({}, 'Option');
             }
             const astResult = applicationSubDeclaration.options![option.optionName];
 
@@ -573,7 +590,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             }
             const optionValuesMap = applicationSubDeclaration.options![option.optionName] as Record<string, ParsedJDLOptionConfig>;
             if (!optionValuesMap[option.optionValue]) {
-              optionValuesMap[option.optionValue] = { list: [], excluded: [] };
+              optionValuesMap[option.optionValue] = setKind({ list: [], excluded: [] }, 'Option');
             }
             const astResult = optionValuesMap[option.optionValue];
 
@@ -594,11 +611,11 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
           });
       }
 
-      return applicationSubDeclaration;
+      return setKind(applicationSubDeclaration, 'Application');
     }
 
     applicationSubNamespaceConfig(context: Record<'namespace', IToken[]> & Record<'applicationNamespaceConfigDeclaration', CstNode[]>) {
-      const config: any = {};
+      const config: any = setKind({}, 'NamespaceConfig');
 
       const keyLocations: Record<string, JDLLocation | undefined> = {};
       const namespace = context.namespace[0].image;
@@ -647,7 +664,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     applicationSubConfig(context: Record<'applicationConfigDeclaration', CstNode[]>): ParsedJDLApplicationConfig {
-      const config: any = {};
+      const config: any = setKind({}, 'ApplicationConfig');
       const keyLocations: Record<string, JDLLocation | undefined> = {};
 
       if (context.applicationConfigDeclaration) {
@@ -662,7 +679,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     applicationSubEntities(context: Record<'filterDef' | 'exclusion', CstNode[]>) {
-      return getEntityListFromContext(context, this);
+      return setKind(getEntityListFromContext(context, this), 'ApplicationEntities');
     }
 
     applicationConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'configValue', CstNode[]>) {

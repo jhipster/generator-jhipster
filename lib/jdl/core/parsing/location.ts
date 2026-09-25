@@ -89,6 +89,12 @@ export function setLocation<T extends object>(node: T, location: JDLLocation | u
   return node;
 }
 
+/** Attach another location to a node, not enumerable for the same reason as {@link setLocation}. */
+export function setOtherLocation<T extends object>(node: T, name: string, location: JDLLocation | undefined): T {
+  Object.defineProperty(node, name, { value: location, enumerable: false, writable: true, configurable: true });
+  return node;
+}
+
 /** Attach the locations of the keys of a record node, not enumerable for the same reason as {@link setLocation}. */
 /** Add the key locations of a node merged into another one, the first location of a key wins. */
 export function mergeKeyLocations(target: object, keyLocations: Record<string, JDLLocation | undefined> | undefined): void {
