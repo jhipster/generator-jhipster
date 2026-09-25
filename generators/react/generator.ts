@@ -40,9 +40,12 @@ import { isTranslatedReactFile, translateReactFilesTransform } from './support/i
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
+const REGEX_LITERAL_REPLACEMENTS: Record<string, string> = { '/': String.raw`\/`, [String.raw`\'`]: "'" };
 
 export default class ReactGenerator extends ClientApplicationGenerator<
-  ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string }> & { entityReactState?: string }
+  ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string; fieldValidateRulesPatternReactString?: string }> & {
+    entityReactState?: string;
+  }
 > {
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, { ...features, loadCommand: ['jhipster:server'] });
@@ -217,7 +220,16 @@ ${comment}
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       react({ field }) {
-        field.fieldValidateRulesPatternReact ??= field.fieldValidateRulesPattern?.replace(/'/g, String.raw`\'`);
+        const { fieldValidateRulesPattern } = field;
+        if (fieldValidateRulesPattern !== undefined) {
+          // Regex literal: escape unescaped `/`, drop the useless escape of `\'` (as produced by JDL), keep other escapes.
+          field.fieldValidateRulesPatternReact ??= fieldValidateRulesPattern.replace(
+            /\\.|\//g,
+            match => REGEX_LITERAL_REPLACEMENTS[match] ?? match,
+          );
+          // Single-quoted string literal content.
+          field.fieldValidateRulesPatternReactString ??= fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/'/g, String.raw`\'`);
+        }
       },
     });
   }

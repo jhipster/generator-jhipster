@@ -25,6 +25,18 @@
       "fieldValidateRules": ["pattern", "required"],
       "fieldValidateRulesPattern": "^\\d+$"
     },
+    {
+      "fieldName": "stringQuotePatternTom",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[a-zA-Z ,.'-]*$"
+    },
+    {
+      "fieldName": "stringEscapedQuotePatternTom",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[a-zA-Z ,.\\'-]*$"
+    },
     { "fieldName": "integerTom", "fieldType": "Integer" },
     { "fieldName": "integerRequiredTom", "fieldType": "Integer", "fieldValidateRules": ["required"] },
     { "fieldName": "integerMinTom", "fieldType": "Integer", "fieldValidateRules": ["min"], "fieldValidateRulesMin": 0 },
