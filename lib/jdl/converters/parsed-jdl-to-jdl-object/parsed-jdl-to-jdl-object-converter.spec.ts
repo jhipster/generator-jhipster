@@ -870,7 +870,7 @@ JDLDeployment {
         });
 
         it('formats it', () => {
-          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value).toContain(String.raw`\'`);
+          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value).toBe(String.raw`(^[a-z ,.\'-]+$)`);
         });
       });
       describe('when parsing a JDL with the unique constraint', () => {
