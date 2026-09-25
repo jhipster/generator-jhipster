@@ -16,12 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { describe, esmocha, expect, it } from 'esmocha';
 
 import { getDefaultJDLRelationshipConfig } from '../../../../jdl-config/jdl-relationship-config.ts';
-import { createJDLRuntime, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
+import { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 import { createImporterFromContent } from '../../__test-support__/index.ts';
 import { parseFromContent } from '../../readers/jdl-reader.ts';
+import logger from '../../utils/objects/logger.ts';
+import { createRuntime } from '../runtime.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 import { checkSemantics } from './index.ts';
@@ -156,6 +158,218 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('field-type', () => {
+    it('reports a type that is neither a field type nor an enum, once', () => {
+      expect(check('enum E { X }\nentity A {\n  e E\n  name Strin required\n}')).toEqual([
+        {
+          ruleId: 'field-type',
+          message: 'The type Strin of the field name in the entity A is neither a field type nor an enum.',
+          at: 'name Strin required',
+        },
+      ]);
+    });
+    it('warns about a deprecated type', () => {
+      expect(
+        checkSemantics(parseFromContent('entity A {\n  start Date required\n}', getDefaultRuntime()), getDefaultRuntime()).map(
+          ({ severity, message }) => [severity, message],
+        ),
+      ).toEqual([['warning', 'The type Date of the field start in the entity A is deprecated: use Instant, which it is migrated to.']]);
+    });
+  });
+
+  describe('without field types definitions', () => {
+    it('accepts any field type and any validation', () => {
+      const { fieldTypes: _fieldTypes, ...definitions } = getDefaultJDLDefinitions();
+      const runtime = createRuntime(definitions);
+      expect(check('entity A {\n  name Strin required minlength(3)\n  age Integer pattern(/a/)\n}', runtime)).toEqual([]);
+    });
+  });
+
+  describe('validation-for-field-type', () => {
+    it('reports a validation the type does not take, at the validation', () => {
+      expect(check('entity A {\n  age Integer required minlength(3)\n}')).toEqual([
+        {
+          ruleId: 'validation-for-field-type',
+          message: "The validation 'minlength' isn't supported for the type 'Integer'.",
+          at: 'minlength(3)',
+        },
+      ]);
+    });
+    it('takes the validations of an enum field from the enum type', () => {
+      expect(check('enum E { X }\nentity A {\n  e E required unique minlength(3)\n}').map(diagnostic => diagnostic.message)).toEqual([
+        "The validation 'minlength' isn't supported for the type 'E'.",
+      ]);
+    });
+    it('reports any validation of a type that takes none', () => {
+      // ByteBuffer crashed the validator.
+      expect(check('entity A {\n  b ByteBuffer required\n}').map(diagnostic => diagnostic.message)).toEqual([
+        "The validation 'required' isn't supported for the type 'ByteBuffer'.",
+      ]);
+    });
+    it('takes the field types from the definitions', () => {
+      const runtime = createJDLRuntime({
+        fieldTypes: { types: { Money: { validations: ['min'] }, String: { validations: [] } }, enum: { validations: [] } },
+      });
+      expect(check('entity A {\n  price Money min(0)\n  name String required\n}', runtime).map(diagnostic => diagnostic.message)).toEqual([
+        "The validation 'required' isn't supported for the type 'String'.",
+      ]);
+    });
+  });
+
+  describe('decimal-validation-value', () => {
+    it('reports a decimal given to a validation that takes an integer', () => {
+      expect(check('entity A {\n  name String minlength(1.5)\n}')).toEqual([
+        { ruleId: 'decimal-validation-value', message: 'Decimal values are forbidden for the minlength validation.', at: 'minlength(1.5)' },
+      ]);
+    });
+    it('reports it through a constant', () => {
+      expect(check('MINL = 1.5\nentity A {\n  name String minlength(MINL)\n}').map(diagnostic => diagnostic.at)).toEqual([
+        'minlength(MINL)',
+      ]);
+    });
+    it('accepts a decimal for a validation that takes a number', () => {
+      expect(check('entity A {\n  age Float min(1.5)\n}')).toEqual([]);
+    });
+  });
+
+  describe('required-reflexive-relationship', () => {
+    it('reports a required relationship to the same entity, on either side', () => {
+      expect(
+        check('entity A\nrelationship ManyToOne {\n  A{parent required} to A\n  A{other} to A{others required}\n}').map(diagnostic => [
+          diagnostic.ruleId,
+          diagnostic.at,
+        ]),
+      ).toEqual([
+        ['required-reflexive-relationship', 'A{parent required} to A'],
+        ['required-reflexive-relationship', 'A{other} to A{others required}'],
+      ]);
+    });
+    it('accepts an optional one', () => {
+      expect(check('entity A\nrelationship ManyToOne { A{parent} to A }')).toEqual([]);
+    });
+  });
+
+  describe('one-to-one-direction', () => {
+    it('reports a One-to-One relationship whose destination only has the injected field', () => {
+      expect(check('entity A\nentity B\nrelationship OneToOne { A to B{a} }')).toEqual([
+        {
+          ruleId: 'one-to-one-direction',
+          message:
+            'In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship.',
+          at: 'A to B{a}',
+        },
+      ]);
+    });
+    it('accepts one without any injected field, both sides get one', () => {
+      expect(check('entity A\nentity B\nrelationship OneToOne { A to B }')).toEqual([]);
+    });
+  });
+
+  describe('option-value', () => {
+    it('reports a value outside the choices of the option, at its first statement', () => {
+      expect(check('entity A\nentity B\ndto A with foo\ndto B with foo')).toEqual([
+        { ruleId: 'option-value', message: "The 'dto' option is not valid for value 'foo'.", at: 'dto A with foo' },
+      ]);
+    });
+    it('reports it inside an application', () => {
+      expect(
+        check('entity A\napplication {\n  config { baseName foo }\n  entities A\n  service A with foo\n}').map(diagnostic => diagnostic.at),
+      ).toEqual(['service A with foo']);
+    });
+    it('accepts any value for an option without choices, and no', () => {
+      expect(check('entity A\nmicroservice A with anything\ndto A with no')).toEqual([]);
+    });
+    it('reports a use statement value that belongs to no option', () => {
+      expect(check('entity A\nuse mapstruct, foo, no for A')).toEqual([
+        {
+          ruleId: 'option-value',
+          message: "The value 'foo' of the use statement is the value of no option.",
+          at: 'use mapstruct, foo, no for A',
+        },
+        {
+          ruleId: 'option-value',
+          message: "The value 'no' of the use statement is the value of no option.",
+          at: 'use mapstruct, foo, no for A',
+        },
+      ]);
+    });
+  });
+
+  describe('relationship-between-applications', () => {
+    const applications = (sourceApplications: string, destinationApplications: string) =>
+      `entity A\nentity B\napplication { config { baseName a } entities ${sourceApplications} }\napplication { config { baseName b } entities ${destinationApplications} }\nrelationship ManyToOne { A to B }`;
+    it('reports a relationship from an application that does not have the destination', () => {
+      expect(check(applications('A', 'B'))).toEqual([
+        {
+          ruleId: 'relationship-between-applications',
+          message: "Entities for the ManyToOne relationship from 'A' to 'B' do not belong to the same application.",
+          at: 'A to B',
+        },
+      ]);
+      expect(check(applications('A, B', 'A')).map(diagnostic => diagnostic.ruleId)).toEqual(['relationship-between-applications']);
+    });
+    it('accepts a destination in every application of the source', () => {
+      expect(check(applications('A, B', 'B'))).toEqual([]);
+    });
+    it('accepts an entity of no application', () => {
+      expect(check('entity A\nentity B\napplication { config { baseName a } entities A }\nrelationship ManyToOne { A to B }')).toEqual([]);
+    });
+  });
+
+  describe('application-option-value', () => {
+    it('reports a value outside the choices of an application option, at the option', () => {
+      expect(check('application {\n  config {\n    baseName foo\n    clientFramework svelte\n  }\n}')).toEqual([
+        {
+          ruleId: 'application-option-value',
+          message: "The value 'svelte' is not allowed for the option 'clientFramework'.",
+          at: 'clientFramework svelte',
+        },
+      ]);
+    });
+  });
+
+  describe('deployment-option-value', () => {
+    it('reports a value outside the choices of a deployment option, at the option', () => {
+      expect(check('deployment {\n  deploymentType kubernetes\n  serviceDiscoveryType zookeeper\n}')).toEqual([
+        {
+          ruleId: 'deployment-option-value',
+          message: "The value 'zookeeper' is not allowed for the deployment option 'serviceDiscoveryType'.",
+          at: 'serviceDiscoveryType zookeeper',
+        },
+      ]);
+    });
+    it('accepts any value for an option without choices', () => {
+      expect(check('deployment {\n  deploymentType kubernetes\n  kubernetesNamespace anything-goes\n}')).toEqual([]);
+    });
+  });
+
+  describe('namespace-config-blueprint', () => {
+    it('reports a namespace config without its blueprint, at the config', () => {
+      expect(check('application {\n  config { baseName a }\n  config(foo) { bar baz }\n}')).toEqual([
+        {
+          ruleId: 'namespace-config-blueprint',
+          message: 'Blueprint namespace config foo requires the blueprint foo',
+          at: 'config(foo) { bar baz }',
+        },
+      ]);
+    });
+    it('accepts it with its blueprint', () => {
+      expect(check('application {\n  config { baseName a blueprints [foo] }\n  config(foo) { bar baz }\n}')).toEqual([]);
+    });
+  });
+
+  describe('with rules of the runtime', () => {
+    it('checks them with the rules of the jdl', () => {
+      const runtime = createJDLRuntime({
+        rules: [{ id: 'no-b', check: ast => ast.entities.filter(entity => entity.name === 'B').map(() => ({ message: 'No B.' })) }],
+      });
+      expect(check('entity B\ndto C with mapstruct', runtime).map(diagnostic => diagnostic.ruleId)).toEqual([
+        'undeclared-option-entity',
+        'no-b',
+      ]);
+    });
+  });
+
   it('reports every problem, in source order', () => {
     expect(check('dto B with mapstruct\nentity A\nrelationship OneToOne { A to C }').map(diagnostic => diagnostic.ruleId)).toEqual([
       'undeclared-option-entity',
@@ -164,6 +378,21 @@ describe('jdl - semantic rules', () => {
   });
 
   describe('when importing', () => {
+    it('logs the warnings, with their position, and imports', () => {
+      const warn = esmocha.spyOn(logger, 'warn');
+      try {
+        const { exportedEntities } = createImporterFromContent('entity A {\n  start Date\n}', {
+          applicationName: 'foo',
+          databaseType: 'sql',
+        }).import();
+        expect(exportedEntities.map(entity => entity.name)).toEqual(['A']);
+        expect(warn).toHaveBeenCalledWith(
+          'The type Date of the field start in the entity A is deprecated: use Instant, which it is migrated to.\n\tat line: 2, column: 3',
+        );
+      } finally {
+        warn.mockRestore();
+      }
+    });
     it('throws every error, each with its position', () => {
       expect(() => createImporterFromContent('dto B with mapstruct\nentity A\nrelationship OneToOne { A to C }').import()).toThrow(
         new RegExp(

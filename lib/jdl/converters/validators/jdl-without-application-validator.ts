@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import fieldTypes from '../../../jhipster/field-types.ts';
 import type JDLField from '../../core/models/jdl-field.ts';
 import type JDLObject from '../../core/models/jdl-object.ts';
 
@@ -25,7 +24,6 @@ import EntityValidator from './entity-validator.ts';
 import EnumValidator from './enum-validator.ts';
 import FieldValidator from './field-validator.ts';
 import RelationshipValidator from './relationship-validator.ts';
-import ValidationValidator from './validation-validator.ts';
 
 /**
  * Constructor taking the jdl object to check against application settings.
@@ -60,18 +58,6 @@ export default function createValidator(jdlObject: JDLObject) {
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);
-      const isAnEnum = jdlObject.hasEnum(jdlField.type);
-      checkForValidationErrors(jdlField, isAnEnum);
-    });
-  }
-
-  function checkForValidationErrors(jdlField: JDLField, isAnEnum: boolean): void {
-    const validator = new ValidationValidator();
-    jdlField.forEachValidation(jdlValidation => {
-      validator.validate(jdlValidation);
-      if (!fieldTypes.hasValidation(jdlField.type, jdlValidation.name, isAnEnum)) {
-        throw new Error(`The validation '${jdlValidation.name}' isn't supported for the type '${jdlField.type}'.`);
-      }
     });
   }
 

@@ -84,11 +84,15 @@ export type ParsedJDLEnum = Located & {
   documentation?: string | null;
 };
 
-/** The entities of an option; its key locations are where each entity name is written. */
-export type ParsedJDLOptionConfig = KeyLocated & {
-  list: string[]; // entity names
-  excluded: string[]; // excluded entity names
-};
+/**
+ * The entities of an option; its key locations are where each entity name is written, its location the first statement
+ * of the option.
+ */
+export type ParsedJDLOptionConfig = Located &
+  KeyLocated & {
+    list: string[]; // entity names
+    excluded: string[]; // excluded entity names
+  };
 
 export type ParsedJDLOption = {
   optionName: string;
@@ -106,7 +110,7 @@ export type ParsedJDLUseOption = Located & {
 
 export type ParsedJDLApplication = Located & {
   config: ParsedJDLApplicationConfig;
-  namespaceConfigs?: Record<string, KeyLocated & Record<string, boolean | number | string[] | string>>;
+  namespaceConfigs?: Record<string, Located & KeyLocated & Record<string, boolean | number | string[] | string>>;
   entities?: string[];
   options?: Record<string, ParsedJDLOptionConfig | Record<string, ParsedJDLOptionConfig>>;
   useOptions?: ParsedJDLUseOption[];

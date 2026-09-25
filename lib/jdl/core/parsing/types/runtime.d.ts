@@ -2,8 +2,9 @@ import type { Lexer, TokenType } from 'chevrotain';
 
 import type JDLApplicationDefinition from '../jdl-application-definition.ts';
 import type JDLParser from '../jdl-parser.ts';
+import type { JDLSemanticRule } from '../semantic/types.ts';
 
-import type { JDLOptionsDefinition, JDLValidationsDefinition, JDLValidatorOption } from './parsing.ts';
+import type { JDLFieldTypesDefinition, JDLOptionsDefinition, JDLValidationsDefinition, JDLValidatorOption } from './parsing.ts';
 
 export type JDLRuntime = {
   applicationDefinition: JDLApplicationDefinition;
@@ -13,6 +14,10 @@ export type JDLRuntime = {
   relationshipDefinition: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validationDefinition: JDLValidationsDefinition;
+  /** The field types and their validations; without them, a field takes any type and any validation. */
+  fieldTypesDefinition?: JDLFieldTypesDefinition;
+  /** The semantic rules the jdl is checked with: the ones of the jdl, then the ones of the tool. */
+  semanticRules: readonly JDLSemanticRule[];
   tokens: Record<string, TokenType>;
   lexer: Lexer;
   parser: JDLParser;

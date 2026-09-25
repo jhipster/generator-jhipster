@@ -142,47 +142,6 @@ describe('jdl - RelationshipValidator', () => {
           });
         });
       });
-      describe('when having a reflexive relationship', () => {
-        describe('with both sides being required', () => {
-          let relationship: any;
-
-          before(() => {
-            relationship = {
-              from: 'A',
-              to: 'A',
-              type: ONE_TO_ONE,
-              injectedFieldInTo: 'aa',
-              isInjectedFieldInFromRequired: true,
-            };
-          });
-
-          it('should fail', () => {
-            expect(() => validator.validate(relationship)).toThrow(
-              /^Required relationships to the same entity are not supported, for relationship from and to 'A'\.$/,
-            );
-          });
-        });
-      });
-      describe(`when having a ${ONE_TO_ONE} relationship`, () => {
-        describe('without an injected field in the source entity', () => {
-          let relationship: any;
-
-          before(() => {
-            relationship = {
-              from: 'A',
-              to: 'B',
-              type: ONE_TO_ONE,
-              injectedFieldInTo: 'a',
-            };
-          });
-
-          it('should fail', () => {
-            expect(() => validator.validate(relationship)).toThrow(
-              /^In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship\.$/,
-            );
-          });
-        });
-      });
       describe(`when having a ${MANY_TO_ONE} relationship`, () => {
         describe('when having a bidirectional relationship', () => {
           let relationship: JDLRelationship;

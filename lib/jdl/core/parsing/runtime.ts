@@ -23,6 +23,7 @@ import JDLApplicationDefinition from './jdl-application-definition.ts';
 import JDLParser from './jdl-parser.ts';
 import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './lexer/lexer.ts';
 import { checkTokens } from './self-checks/parsing-system-checker.ts';
+import { semanticRules } from './semantic/rules.ts';
 import type { JDLDefinitions, JDLValidatorOption } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 
@@ -36,6 +37,8 @@ export const createRuntime = ({
   entity: entityDefinition,
   relationship: relationshipDefinition,
   validation: validationDefinition,
+  fieldTypes: fieldTypesDefinition,
+  rules = [],
 }: JDLDefinitions): JDLRuntime => {
   const propertyValidations: Record<string, JDLValidatorOption> = definition.validatorConfig;
   const deploymentPropertyValidations: Record<string, JDLValidatorOption> = deploymentDefinition.validatorConfig;
@@ -82,6 +85,8 @@ export const createRuntime = ({
     entityDefinition,
     relationshipDefinition,
     validationDefinition,
+    fieldTypesDefinition,
+    semanticRules: [...semanticRules, ...rules],
     propertyValidations,
     deploymentPropertyValidations,
     deploymentDefinition: jdlDeploymentDefinition,

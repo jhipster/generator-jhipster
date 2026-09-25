@@ -22,22 +22,39 @@ import type { JDLDefinitions } from '../jdl/core/parsing/types/parsing.ts';
 import type { JDLRuntime } from '../jdl/core/parsing/types/runtime.ts';
 
 import { getDefaultJDLEntityConfig } from './jdl-entity-config.ts';
+import { getDefaultJDLFieldTypesConfig } from './jdl-field-types-config.ts';
 import { getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';
+import { jhipsterSemanticRules } from './jdl-semantic-rules.ts';
 import { getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
 /**
- * A runtime from the JHipster definitions, the ones not passed: the application and deployment options of the
- * generators, the entity and relationship option statements, the field validations.
+ * The JHipster definitions: the application and deployment options of the generators, the entity and relationship
+ * option statements, the field validations and types, and the semantic rules of JHipster.
  */
-export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDLRuntime =>
-  createRuntime({
-    application: definitions.application ?? getDefaultJDLApplicationConfig(),
-    deployment: definitions.deployment ?? getDefaultJDLDeploymentConfig(),
-    entity: definitions.entity ?? getDefaultJDLEntityConfig(),
-    relationship: definitions.relationship ?? getDefaultJDLRelationshipConfig(),
-    validation: definitions.validation ?? getDefaultJDLValidationConfig(),
+export const getDefaultJDLDefinitions = (): Required<JDLDefinitions> => ({
+  application: getDefaultJDLApplicationConfig(),
+  deployment: getDefaultJDLDeploymentConfig(),
+  entity: getDefaultJDLEntityConfig(),
+  relationship: getDefaultJDLRelationshipConfig(),
+  validation: getDefaultJDLValidationConfig(),
+  fieldTypes: getDefaultJDLFieldTypesConfig(),
+  rules: jhipsterSemanticRules,
+});
+
+/** A runtime from the JHipster definitions, the ones not passed. */
+export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDLRuntime => {
+  const defaults = getDefaultJDLDefinitions();
+  return createRuntime({
+    application: definitions.application ?? defaults.application,
+    deployment: definitions.deployment ?? defaults.deployment,
+    entity: definitions.entity ?? defaults.entity,
+    relationship: definitions.relationship ?? defaults.relationship,
+    validation: definitions.validation ?? defaults.validation,
+    fieldTypes: definitions.fieldTypes ?? defaults.fieldTypes,
+    rules: definitions.rules ?? defaults.rules,
   });
+};
 
 let defaultRuntime: JDLRuntime;
 /** The runtime from the JHipster definitions. */

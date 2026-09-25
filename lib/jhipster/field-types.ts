@@ -59,7 +59,8 @@ export const BlobTypes = {
   TEXT: 'text',
 } as const;
 
-const CommonDBValidations = {
+/** The validations a field takes by its type; `Enum` is the one of a field whose type is an enum. */
+export const CommonDBValidations = {
   String: new Set([REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH, PATTERN]),
   Integer: new Set([REQUIRED, UNIQUE, MIN, MAX]),
   Long: new Set([REQUIRED, UNIQUE, MIN, MAX]),

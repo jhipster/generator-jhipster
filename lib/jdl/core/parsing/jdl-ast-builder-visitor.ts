@@ -153,6 +153,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
             mergeKeyLocations(astResult, option.keyLocations);
+            // The statements are merged: the first one locates them.
+            if (!astResult.location) setLocation(astResult, option.location);
           });
       }
 
@@ -175,6 +177,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
             mergeKeyLocations(astResult, option.keyLocations);
+            // The statements are merged: the first one locates them.
+            if (!astResult.location) setLocation(astResult, option.location);
           });
       }
 
@@ -442,7 +446,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     optionDeclaration(
       context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
     ): ParsedJDLOption {
-      return getOptionFromContext(context, this);
+      return setLocation(getOptionFromContext(context, this), spanLocation(context));
     }
 
     useOptionDeclaration(context: Record<'NAME', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>): ParsedJDLUseOption {
@@ -549,6 +553,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
             mergeKeyLocations(astResult, option.keyLocations);
+            // The statements are merged: the first one locates them.
+            if (!astResult.location) setLocation(astResult, option.location);
           });
       }
 
@@ -570,6 +576,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
             astResult.list = entityList;
             astResult.excluded = excludedEntityList;
             mergeKeyLocations(astResult, option.keyLocations);
+            // The statements are merged: the first one locates them.
+            if (!astResult.location) setLocation(astResult, option.location);
           });
       }
 
@@ -597,7 +605,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         });
       }
 
-      return { namespace, config: setKeyLocations(config, keyLocations) };
+      return { namespace, config: setKeyLocations(setLocation(config, spanLocation(context)), keyLocations) };
     }
 
     applicationNamespaceConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'namespaceConfigValue', CstNode[]>) {

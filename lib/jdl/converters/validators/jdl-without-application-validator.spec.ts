@@ -19,21 +19,15 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import fieldTypes from '../../../jhipster/field-types.ts';
 import { relationshipTypes } from '../../core/basic-types/index.ts';
-import { binaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { binaryOptions } from '../../core/built-in-options/index.ts';
 import { JDLEntity } from '../../core/models/index.ts';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
-import JDLValidation from '../../core/models/jdl-validation.ts';
 
 import createValidator from './jdl-without-application-validator.ts';
-
-const {
-  Validations: { MIN },
-} = validations;
 
 describe('jdl - JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {
@@ -69,35 +63,6 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
             validator.checkForErrors();
           }).not.toThrow();
         });
-      });
-    });
-    describe('when passing an unsupported validation for a field', () => {
-      let validator: ReturnType<typeof createValidator>;
-
-      before(() => {
-        const entity = new JDLEntity({
-          name: 'Valid',
-        });
-        const field = new JDLField({
-          name: 'validField',
-          type: fieldTypes.CommonDBTypes.STRING,
-        });
-        field.addValidation(
-          new JDLValidation({
-            name: MIN,
-            value: 42,
-          }),
-        );
-        entity.addField(field);
-        const jdlObject = new JDLObject();
-        jdlObject.addEntity(entity);
-        validator = createValidator(jdlObject);
-      });
-
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).toThrow("The validation 'min' isn't supported for the type 'String'.");
       });
     });
     describe('when having DTOs without services', () => {

@@ -19,25 +19,19 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import databaseTypes from '../../../jhipster/database-types.ts';
-import fieldTypes from '../../../jhipster/field-types.ts';
 import { relationshipTypes } from '../../core/basic-types/index.ts';
-import { binaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { binaryOptions } from '../../core/built-in-options/index.ts';
 import { JDLEntity } from '../../core/models/index.ts';
 import { createJDLApplication } from '../../core/models/jdl-application-factory.ts';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';
-import JDLValidation from '../../core/models/jdl-validation.ts';
 
 import createValidator from './jdl-with-application-validator.ts';
-
-const {
-  Validations: { MIN },
-} = validations;
 
 const runtime = getDefaultRuntime();
 
@@ -83,126 +77,6 @@ describe('jdl - JDLWithApplicationValidator', () => {
             validator.checkForErrors();
           }).not.toThrow();
         });
-      });
-    });
-    describe('when passing an unsupported validation for a field', () => {
-      let validator: ReturnType<typeof createValidator>;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application = createJDLApplication(
-          {
-            applicationType: APPLICATION_TYPE_MONOLITH,
-            databaseType: databaseTypes.SQL,
-          },
-          runtime,
-        );
-        const entity = new JDLEntity({
-          name: 'Valid',
-        });
-        const field = new JDLField({
-          name: 'validField',
-          type: fieldTypes.CommonDBTypes.STRING,
-        });
-        field.addValidation(
-          new JDLValidation({
-            name: MIN,
-            value: 42,
-          }),
-        );
-        entity.addField(field);
-        jdlObject.addEntity(entity);
-        application.addEntityName(entity.name);
-        jdlObject.addApplication(application);
-        validator = createValidator(jdlObject);
-      });
-
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).toThrow("The validation 'min' isn't supported for the type 'String'.");
-      });
-    });
-    describe('with relationships between multiple applications', () => {
-      let validator: ReturnType<typeof createValidator>;
-
-      before(() => {
-        const jdlObject = new JDLObject();
-        const application1 = createJDLApplication(
-          {
-            applicationType: APPLICATION_TYPE_MICROSERVICE,
-            baseName: 'app1',
-          },
-          runtime,
-        );
-        application1.addEntityNames(['A', 'B']);
-        const application2 = createJDLApplication(
-          {
-            applicationType: APPLICATION_TYPE_MICROSERVICE,
-            baseName: 'app2',
-          },
-          runtime,
-        );
-        application2.addEntityNames(['B', 'C']);
-        const application3 = createJDLApplication(
-          {
-            applicationType: APPLICATION_TYPE_MICROSERVICE,
-            baseName: 'app3',
-          },
-          runtime,
-        );
-        application3.addEntityNames(['A', 'B', 'C']);
-        jdlObject.addApplication(application1);
-        jdlObject.addApplication(application2);
-        jdlObject.addApplication(application3);
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'A',
-          }),
-        );
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'B',
-          }),
-        );
-        jdlObject.addEntity(
-          new JDLEntity({
-            name: 'C',
-          }),
-        );
-        jdlObject.addRelationship(
-          new JDLRelationship({
-            from: 'A',
-            to: 'B',
-            type: relationshipTypes.MANY_TO_MANY,
-            injectedFieldInFrom: 'b',
-            injectedFieldInTo: 'a',
-          }),
-        );
-        jdlObject.addRelationship(
-          new JDLRelationship({
-            from: 'B',
-            to: 'C',
-            type: relationshipTypes.MANY_TO_MANY,
-            injectedFieldInFrom: 'c',
-            injectedFieldInTo: 'd',
-          }),
-        );
-        jdlObject.addRelationship(
-          new JDLRelationship({
-            from: 'A',
-            to: 'C',
-            type: relationshipTypes.MANY_TO_MANY,
-            injectedFieldInFrom: 'c',
-            injectedFieldInTo: 'd',
-          }),
-        );
-        validator = createValidator(jdlObject);
-      });
-      it('should fail', () => {
-        expect(() => {
-          validator.checkForErrors();
-        }).toThrow("Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application.");
       });
     });
     describe('when having DTOs without services', () => {

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JDLSemanticRule } from '../semantic/types.ts';
 
 export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
 
@@ -70,18 +71,26 @@ export type JDLOptionsDefinition = {
 };
 
 /**
- * A field validation written with a value, `<name>(<value>)`: `number` takes an integer, a decimal or a constant, `regex`
- * a regular expression. The validations without a value, `required` and `unique`, are keywords of the grammar: a name
+ * A field validation written with a value, `<name>(<value>)`: `number` takes an integer, a decimal or a constant, `integer`
+ * the same but a decimal, `regex` a regular expression. The validations without a value, `required` and `unique`, are keywords of the grammar: a name
  * after the type of a field could be the next field otherwise.
  */
 export type JDLValidationConfig = {
   description?: string;
-  jdl: { value: 'number' | 'regex' };
+  jdl: { value: 'integer' | 'number' | 'regex' };
 };
 
 /** The field validations written with a value, shaped like the option statements. */
 export type JDLValidationsDefinition = {
   configs: Readonly<Record<string, JDLValidationConfig>>;
+};
+
+/** The field types and the validations each one takes. */
+export type JDLFieldTypesDefinition = {
+  /** The field types and their validations; a deprecated type is still accepted, warned about with the reason. */
+  types: Readonly<Record<string, { validations: readonly string[]; deprecated?: string }>>;
+  /** The validations of a field whose type is an enum of the jdl. */
+  enum: { validations: readonly string[] };
 };
 
 /** Every definition a runtime is built from. */
@@ -96,6 +105,10 @@ export type JDLDefinitions = {
   relationship: JDLOptionsDefinition;
   /** The field validations written with a value. */
   validation: JDLValidationsDefinition;
+  /** The field types and their validations; without them, a field takes any type and any validation. */
+  fieldTypes?: JDLFieldTypesDefinition;
+  /** Semantic rules of the tool, checked with the ones of the jdl. */
+  rules?: readonly JDLSemanticRule[];
 };
 
 export type JHipsterOptionDefinition = {
