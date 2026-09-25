@@ -4,9 +4,14 @@ JDL (JHipster Domain Language) describes applications, entities, enums, relation
 text file, which `jhipster jdl <file>` imports. This document lists everything that can be written in a JDL file. For a
 tutorial, see the [JDL documentation](https://www.jhipster.tech/jdl/intro) on the website.
 
-The application and deployment config keys, the entity and relationship options, the field types and the validations
-available depend on the generator and on the blueprints in use. `jhipster describe app`, `jhipster describe deployment` and
-`jhipster describe --config <name>` list them.
+The application and deployment config keys, the entity and relationship options, the field types, the validations and the
+built-in entities available depend on the generators in use: JHipster's own and those of the blueprints.
+`jhipster describe app`, `jhipster describe deployment` and `jhipster describe --config <name>` list them.
+
+> [!NOTE]
+> The examples in this document use names that JHipster's generators accept, such as `packageName`, `dto`, `BigDecimal`,
+> `minlength` or `docker-compose`. They show the syntax: whether a given example works depends on the generators in use, and
+> the same statement may be rejected, or mean something else, with other generators or blueprints.
 
 ## Files
 
