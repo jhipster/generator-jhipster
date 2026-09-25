@@ -279,7 +279,10 @@ and each side is:
 
 ### Relationship options
 
-Relationship options follow `with`, separated by commas. An unknown option is an error.
+Relationship options follow `with`, separated by commas: `A to B with builtInEntity, otherOption`. A relationship option is
+a flag, a bare name without a value; unlike [entity options](#entity-options), there is no `with <value>` form, and
+`with option(value)` is an error. To give a relationship a value, use an [annotation](#relationship-annotations) instead,
+such as `@OnDelete("CASCADE")`. An unknown option is an error.
 
 `builtInEntity` is an option of the JDL itself, available whatever the generators in use. It says that the destination is a
 built-in entity: an entity the generator provides, which the JDL file does not declare (for instance JHipster's `User` and
