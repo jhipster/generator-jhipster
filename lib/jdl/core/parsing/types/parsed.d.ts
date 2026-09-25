@@ -60,6 +60,8 @@ export type ParsedJDLEntityField = Located & {
 };
 
 export type ParsedJDLEntity = Located & {
+  /** Where the braces of the fields are, when the entity is declared with them; not enumerable. */
+  readonly bodyLocation?: JDLLocation;
   name: string;
   tableName?: string;
   /** The javadoc comment before the declaration, null when there is none. */
@@ -140,6 +142,8 @@ export type ParsedJDLRelationshipOption = {
 };
 
 export type ParsedJDLRelationship = Located & {
+  /** Where the relationship declaration it is part of is, which may declare several; not enumerable. */
+  readonly declarationLocation?: JDLLocation;
   from: ParsedJDLRelationshipSide;
   to: ParsedJDLRelationshipSide;
   cardinality: JDLRelationshipType;

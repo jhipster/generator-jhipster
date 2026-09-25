@@ -18,7 +18,7 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { mergeKeyLocations, setKeyLocations, setLocation, spanLocation, tokenLocation } from './location.ts';
+import { mergeKeyLocations, setKeyLocations, setLocation, setOtherLocation, spanLocation, tokenLocation } from './location.ts';
 import type { JDLRelationshipType } from './relationship-types.ts';
 import type {
   JDLLocation,
@@ -230,7 +230,9 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         body = this.visit(context.entityBody);
       }
 
-      return setLocation({ annotations, name, tableName, body, documentation }, spanLocation(context));
+      const entity = setLocation({ annotations, name, tableName, body, documentation }, spanLocation(context));
+      // An entity without fields may be declared with or without braces.
+      return context.entityBody ? setOtherLocation(entity, 'bodyLocation', spanLocation(context.entityBody[0].children)) : entity;
     }
 
     annotationDeclaration(context: Record<'AT' | 'value' | 'option', IToken[]>): ParsedJDLAnnotation {
@@ -334,8 +336,10 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       const cardinality = this.visit(context.relationshipType);
       const relationshipBodies = context.relationshipBody.map(element => this.visit(element));
 
+      const declarationLocation = spanLocation(context);
       relationshipBodies.forEach(relationshipBody => {
         relationshipBody.cardinality = cardinality;
+        setOtherLocation(relationshipBody, 'declarationLocation', declarationLocation);
       });
 
       return relationshipBodies;

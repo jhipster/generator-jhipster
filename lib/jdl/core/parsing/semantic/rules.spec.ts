@@ -28,12 +28,25 @@ import type { JDLRuntime } from '../types/runtime.ts';
 import { checkSemantics } from './index.ts';
 
 /** The diagnostics of a jdl, with the source each one points at. */
-const check = (content: string, runtime: JDLRuntime = getDefaultRuntime()) =>
-  checkSemantics(parseFromContent(content, runtime), runtime).map(({ ruleId, message, location }) => ({
+const diagnose = (content: string, runtime: JDLRuntime = getDefaultRuntime()) =>
+  checkSemantics(parseFromContent(content, runtime), runtime).map(({ ruleId, severity, message, location }) => ({
     ruleId,
+    severity,
     message,
     at: location && content.slice(location.startOffset, location.endOffset + 1),
   }));
+
+/** The errors and the warnings of a jdl, the suggestions left out. */
+const check = (content: string, runtime?: JDLRuntime) =>
+  diagnose(content, runtime)
+    .filter(({ severity }) => severity !== 'info')
+    .map(({ severity: _severity, ...diagnostic }) => diagnostic);
+
+/** The suggestions about how a jdl is written. */
+const suggest = (content: string) =>
+  diagnose(content)
+    .filter(({ severity }) => severity === 'info')
+    .map(({ ruleId, message, at }) => ({ ruleId, message, at }));
 
 describe('jdl - semantic rules', () => {
   describe('undeclared-relationship-entity', () => {
@@ -400,6 +413,43 @@ describe('jdl - semantic rules', () => {
     });
     it('accepts it with its blueprint', () => {
       expect(check('application {\n  config { baseName a blueprints [foo] }\n  config(foo) { bar baz }\n}')).toEqual([]);
+    });
+  });
+
+  describe('unused-enum', () => {
+    it('suggests removing an enum no field uses', () => {
+      expect(suggest('enum Used { X }\nenum Unused { Y }\nentity A {\n  used Used\n}')).toEqual([
+        { ruleId: 'unused-enum', message: 'The enum Unused is not used.', at: 'enum Unused { Y }' },
+      ]);
+    });
+  });
+
+  describe('empty-entity-body', () => {
+    it('suggests dropping the braces of an entity without field', () => {
+      expect(suggest('entity A {}\nentity B\nentity C {\n  name String\n}')).toEqual([
+        { ruleId: 'empty-entity-body', message: 'The entity A has no field, it can be declared without braces.', at: '{}' },
+      ]);
+    });
+  });
+
+  describe('individual-relationship-declaration', () => {
+    it('suggests grouping the declarations of a relationship type', () => {
+      expect(
+        suggest(
+          'entity A\nentity B\nrelationship OneToMany { A to B }\nrelationship OneToMany { B to A }\nrelationship ManyToOne { A{b} to B, B{a} to A }',
+        ),
+      ).toEqual([
+        {
+          ruleId: 'individual-relationship-declaration',
+          message: 'The OneToMany relationships are declared apart, they can be declared together.',
+          at: 'relationship OneToMany { A to B }',
+        },
+        {
+          ruleId: 'individual-relationship-declaration',
+          message: 'The OneToMany relationships are declared apart, they can be declared together.',
+          at: 'relationship OneToMany { B to A }',
+        },
+      ]);
     });
   });
 

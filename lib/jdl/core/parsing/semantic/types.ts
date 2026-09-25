@@ -23,7 +23,8 @@ import type { JDLRuntime } from '../types/runtime.ts';
 export type JDLDiagnostic = {
   /** The rule that reports it. */
   ruleId: string;
-  severity: 'error' | 'warning';
+  /** An info is a suggestion about how the jdl is written. */
+  severity: 'error' | 'warning' | 'info';
   message: string;
   location?: JDLLocation;
 };

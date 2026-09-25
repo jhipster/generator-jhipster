@@ -18,7 +18,7 @@
  */
 import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../relationship-options.ts';
 import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../relationship-types.ts';
-import type { ParsedJDLOptionConfig, ParsedJDLRelationship, ParsedJDLUseOption } from '../types/parsed.ts';
+import type { JDLLocation, ParsedJDLOptionConfig, ParsedJDLRelationship, ParsedJDLUseOption } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 import type { JDLSemanticRule } from './types.ts';
@@ -402,6 +402,49 @@ export const namespaceConfigBlueprint: JDLSemanticRule = {
     }),
 };
 
+export const unusedEnum: JDLSemanticRule = {
+  id: 'unused-enum',
+  check: ast => {
+    const fieldTypes = new Set(ast.entities.flatMap(entity => (entity.body ?? []).map(field => field.type)));
+    return ast.enums
+      .filter(jdlEnum => !fieldTypes.has(jdlEnum.name))
+      .map(jdlEnum => ({ severity: 'info' as const, message: `The enum ${jdlEnum.name} is not used.`, location: jdlEnum.location }));
+  },
+};
+
+export const emptyEntityBody: JDLSemanticRule = {
+  id: 'empty-entity-body',
+  check: ast =>
+    ast.entities
+      .filter(entity => entity.bodyLocation && (entity.body ?? []).length === 0)
+      .map(entity => ({
+        severity: 'info' as const,
+        message: `The entity ${entity.name} has no field, it can be declared without braces.`,
+        location: entity.bodyLocation,
+      })),
+};
+
+export const individualRelationshipDeclaration: JDLSemanticRule = {
+  id: 'individual-relationship-declaration',
+  check: ast => {
+    // The declarations of each relationship type, by where they start.
+    const declarations = new Map<string, Map<number, JDLLocation | undefined>>();
+    for (const { cardinality, declarationLocation } of ast.relationships) {
+      if (!declarations.has(cardinality)) declarations.set(cardinality, new Map());
+      declarations.get(cardinality)!.set(declarationLocation?.startOffset ?? -1, declarationLocation);
+    }
+    return [...declarations].flatMap(([cardinality, locations]) =>
+      locations.size < 2 ?
+        []
+      : [...locations.values()].map(location => ({
+          severity: 'info' as const,
+          message: `The ${cardinality} relationships are declared apart, they can be declared together.`,
+          location,
+        })),
+    );
+  },
+};
+
 export const semanticRules: JDLSemanticRule[] = [
   undeclaredRelationshipEntity,
   builtInEntity,
@@ -421,4 +464,7 @@ export const semanticRules: JDLSemanticRule[] = [
   applicationOptionValue,
   deploymentOptionValue,
   namespaceConfigBlueprint,
+  unusedEnum,
+  emptyEntityBody,
+  individualRelationshipDeclaration,
 ];
