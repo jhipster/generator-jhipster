@@ -25,24 +25,24 @@ import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.containers.Neo4jContainer;
+import org.testcontainers.neo4j.Neo4jContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class Neo4jTestContainer {
-    private static final Neo4jContainer NEO4J_CONTAINER = (Neo4jContainer) new Neo4jContainer(DockerImageName.parse("<%- dockerContainers.neo4j %>"))
+    private static final Neo4jContainer NEO4J_CONTAINER = new Neo4jContainer(DockerImageName.parse("<%- dockerContainers.neo4j %>"))
         .withoutAuthentication()
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(Neo4jTestContainer.class)));
 
     @Bean
     @ServiceConnection
-    Neo4jContainer<?> neo4jContainer() {
+    Neo4jContainer neo4jContainer() {
         return NEO4J_CONTAINER;
     }
 <%_ if (databaseMigrationLiquibase) { _%>
 
     @Bean
-    DynamicPropertyRegistrar neo4jProperties(Neo4jContainer<?> neo4jContainer) {
+    DynamicPropertyRegistrar neo4jProperties(Neo4jContainer neo4jContainer) {
         return registry ->
             registry.add(
                 "spring.liquibase.url",
