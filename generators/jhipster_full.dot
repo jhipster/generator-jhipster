@@ -1,0 +1,221 @@
+digraph jhipster_compose_bootstrap_only {
+  rankdir=LR;
+  node [fontsize=10];
+
+  // Notation: "<ns>" = main generator, "<ns>:bootstrap" = its bootstrap generator
+
+  // === App ===
+  "app"; "app:bootstrap";
+  "app" -> "app:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('app')
+  // composingComponent
+  "app" -> "common" [label="composingComponent.composeCommon"]; // composeWithJHipster('common')
+  "app" -> "server" [label="composingComponent.composeServer"]; // composeWithJHipster('server') if !skipServer
+  "app" -> "client" [label="composingComponent.composeClient"]; // composeWithJHipster('client') if !skipClient
+
+  // app bootstrap → client/server bootstraps
+  "app:bootstrap" -> "client:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('client')
+  "app:bootstrap" -> "server:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('server')
+
+  // === Common ===
+  "common"; "common:bootstrap";
+  "common" -> "common:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('common')
+  // composing()
+  "common" -> "jhipster:javascript-simple-application:prettier" [label="composing"]; // always
+  "common" -> "jhipster:javascript-simple-application:husky" [label="composing"]; // if !skipCommitHook
+
+  // common bootstrap → js-simple-app/base-app/languages bootstraps
+  "common:bootstrap" -> "javascript-simple-application:bootstrap" [label="beforeQueue"];
+  "common:bootstrap" -> "base-application:bootstrap" [label="beforeQueue"];
+  "common:bootstrap" -> "languages:bootstrap" [label="beforeQueue"];
+
+  // === Server ===
+  "server"; "server:bootstrap";
+  "server" -> "server:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('server')
+  // composing() → spring-boot as default backend
+  "server" -> "spring-boot" [label="composing.composeBackendType"]; // composeWithJHipster('spring-boot') when backend=java/spring
+
+  // server bootstrap → common bootstrap
+  "server:bootstrap" -> "common:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('common')
+
+  // === Client ===
+  "client"; "client:bootstrap";
+  "client" -> "client:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('client')
+  // composing() → client framework + cypress (conditional)
+  "client" -> "angular" [label="composing"]; // composeWithJHipster(clientFramework='angular')
+  "client" -> "react"   [label="composing"]; // composeWithJHipster(clientFramework='react')
+  "client" -> "vue"     [label="composing"]; // composeWithJHipster(clientFramework='vue')
+  "client" -> "cypress" [label="composing"]; // composeWithJHipster('cypress') if included
+
+  // client bootstrap → common bootstrap
+  "client:bootstrap" -> "common:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('common')
+
+  // === Angular ===
+  "angular"; "angular:bootstrap";
+  "angular" -> "angular:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('angular')
+  // composing()
+  "angular" -> "jhipster:client:common" [label="composing"]; // composeWithJHipster
+  // angular bootstrap → client bootstrap
+  "angular:bootstrap" -> "client:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('client')
+
+  // === React ===
+  "react"; "react:bootstrap";
+  "react" -> "react:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('react')
+  // composing()
+  "react" -> "jhipster:client:common" [label="composing"]; // composeWithJHipster
+  // react bootstrap → client bootstrap
+  "react:bootstrap" -> "client:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('client')
+
+  // === Vue ===
+  "vue"; "vue:bootstrap";
+  "vue" -> "vue:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('vue')
+  // composing()
+  "vue" -> "jhipster:client:common" [label="composing"]; // composeWithJHipster
+  // vue bootstrap → client bootstrap
+  "vue:bootstrap" -> "client:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('client')
+
+  // === Java ===
+  "java"; "java:bootstrap";
+  "java" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  // java bootstrap → base-app/java-simple-app/server bootstraps
+  "java:bootstrap" -> "base-application:bootstrap" [label="beforeQueue"];
+  "java:bootstrap" -> "java-simple-application:bootstrap" [label="beforeQueue"];
+  "java:bootstrap" -> "server:bootstrap" [label="beforeQueue"];
+
+  // === Spring Boot ===
+  "spring-boot"; "spring-boot:bootstrap";
+  "spring-boot" -> "spring-boot:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('spring-boot')
+  // spring boot bootstrap → java/server bootstraps
+  "spring-boot:bootstrap" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "spring-boot:bootstrap" -> "server:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('server')
+
+  // Spring Boot composing() family (in spring-boot/generator.ts)
+  "spring-boot" -> "jhipster:java:i18n" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "docker" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:java-simple-application:jib" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:java-simple-application:code-quality" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-boot:jwt" [label="composing"]; // composeWithJHipster (by auth type)
+  "spring-boot" -> "jhipster:java-simple-application:graalvm" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:java-simple-application:openapi-generator" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-cloud:gateway" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-boot:cucumber" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:java:gatling" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-boot:feign-client" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-data:relational" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-data:cassandra" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-data:couchbase" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-data:mongodb" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-data:neo4j" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "spring-cloud-stream" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-data:elasticsearch" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:spring-boot:websocket" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "spring-cache" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "jhipster:java:node" [label="composing"]; // composeWithJHipster
+  "spring-boot" -> "languages" [label="composing"]; // composeWithJHipster
+
+  // === Spring Data Family (composeWithJHipster edges from spring-data/generator.ts) ===
+  "spring-data" -> "jhipster:spring-data:relational" [label="composing"]; // composeWithJHipster
+  "spring-data" -> "jhipster:spring-data:mongodb" [label="composing"]; // composeWithJHipster
+  "spring-data" -> "jhipster:spring-data:neo4j" [label="composing"]; // composeWithJHipster
+  "spring-data" -> "jhipster:spring-data:cassandra" [label="composing"]; // composeWithJHipster
+  "spring-data" -> "jhipster:spring-data:couchbase" [label="composing"]; // composeWithJHipster
+  "spring-data" -> "jhipster:spring-data:elasticsearch" [label="composing"]; // composeWithJHipster
+
+  // === Client i18n (composeWithJHipster from languages/generator.ts) ===
+  "languages" -> "jhipster:client:i18n" [label="composing"]; // composeWithJHipster
+
+  // === Java simple application ===
+  "java-simple-application"; "java-simple-application:bootstrap";
+  "java-simple-application" -> "java-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java-simple-application')
+  // java-simple-application bootstrap → base-simple-application
+  "java-simple-application:bootstrap" -> "base-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('base-simple-application')
+
+  // === Java simple application: build-tool composing ===
+  "jhipster:java-simple-application:build-tool" -> "jhipster:java-simple-application:gradle" [label="composing"]; // composeWithJHipster
+  "jhipster:java-simple-application:build-tool" -> "jhipster:java-simple-application:maven"  [label="composing"]; // composeWithJHipster
+
+  // === Client framework-specific i18n bootstrap (from client i18n generator) ===
+  "jhipster:client:i18n" -> "client:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('client')
+  "jhipster:client:i18n" -> "angular:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap(clientFramework) conditional
+  "jhipster:client:i18n" -> "react:bootstrap"   [label="beforeQueue"]; // conditional
+  "jhipster:client:i18n" -> "vue:bootstrap"     [label="beforeQueue"]; // conditional
+
+  // === Docker ===
+  "docker"; "docker:bootstrap";
+  "docker" -> "docker:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('docker')
+  // docker bootstrap → base-simple-application
+  "docker:bootstrap" -> "base-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('base-simple-application')
+
+  // === Docker Compose & Workspaces ===
+  "docker-compose"; "base-workspaces:bootstrap";
+  "docker-compose" -> "base-workspaces:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('base-workspaces')
+
+  // === CI/CD ===
+  "ci-cd"; "ci-cd:bootstrap";
+  "ci-cd" -> "ci-cd:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('ci-cd')
+
+  // === Generate Blueprint ===
+  "generate-blueprint";
+  // composing in this generator triggers init etc., but we only show explicit composeWithJHipster and dependsOnBootstrap edges
+  "generate-blueprint" -> "ci-cd:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('ci-cd')
+  "generate-blueprint" -> "javascript-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('javascript-simple-application')
+
+  // === Languages ===
+  "languages"; "languages:bootstrap";
+  "languages" -> "languages:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('languages')
+  // languages bootstrap → base-application/js-simple-app bootstraps
+  "languages:bootstrap" -> "base-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('base-application')
+  "languages:bootstrap" -> "javascript-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('javascript-simple-application')
+
+  // === Spring Cache (bootstrap depends) ===
+  "spring-cache" -> "spring-boot:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('spring-boot')
+
+  // === Spring Cloud Stream ===
+  "spring-cloud-stream" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  // composing to specific brokers
+  "spring-cloud-stream" -> "jhipster:spring-cloud-stream:kafka"  [label="composing"]; // composeWithJHipster
+  "spring-cloud-stream" -> "jhipster:spring-cloud-stream:pulsar" [label="composing"]; // composeWithJHipster
+
+  // === Spring Cloud Gateway ===
+  "spring-cloud:gateway" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+
+  // === Spring Data sub-generators bootstraps ===
+  "jhipster:spring-boot:jwt"       -> "spring-boot:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('spring-boot')
+  "jhipster:spring-boot:oauth2"    -> "spring-boot:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('spring-boot')
+  "jhipster:spring-boot:websocket" -> "spring-boot:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('spring-boot')
+
+  // === Java tooling sub-gens bootstraps ===
+  "jhipster:java:gatling" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java:node"    -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java:i18n"    -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+
+  // === Java simple application sub-gens bootstraps ===
+  "jhipster:java-simple-application:gradle" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java-simple-application:maven"  -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java-simple-application:jib"    -> "java-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java-simple-application')
+  "jhipster:java-simple-application:code-quality" -> "java-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java-simple-application')
+  "jhipster:java-simple-application:openapi-generator" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java-simple-application:graalvm" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+
+  // === Java domain/i18n/node/server sub-gens bootstraps ===
+  "jhipster:java:domain"  -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java:i18n"    -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java:node"    -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+  "jhipster:java:server"  -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+
+  // === JavaScript simple application ===
+  "javascript-simple-application"; "javascript-simple-application:bootstrap";
+  "javascript-simple-application" -> "javascript-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap
+  "javascript-simple-application:bootstrap" -> "base-simple-application:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap
+
+  // === Workspaces ===
+  "workspaces" -> "base-workspaces:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('base-workspaces')
+
+  // === Entity / Heroku / Liquibase (bootstrap links only) ===
+  "entity" -> "app:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('app')
+  "heroku" -> "app:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('app')
+  "liquibase" -> "java:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('java')
+
+  // === Project name ===
+  "project-name"; "project-name:bootstrap";
+  "project-name" -> "project-name:bootstrap" [label="beforeQueue"]; // dependsOnBootstrap('project-name')
+}
