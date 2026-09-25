@@ -272,7 +272,7 @@ describe(`generator - ${clientFramework}`, () => {
       const updateFile = `${CLIENT_MAIN_SRC_DIR}app/entities/alumni/alumni-update.tsx`;
       runResult.assertFileContent(updateFile, String.raw`value: /(^[a-z ,.'-]+$)/,`);
       runResult.assertFileContent(updateFile, String.raw`pattern: "(^[a-z ,.'-]+$)"`);
-      runResult.assertFileContent(updateFile, String.raw`value: /(^[a-z ,.\'-]+$)/,`);
+      runResult.assertNoFileContent(updateFile, String.raw`value: /(^[a-z ,.\'-]+$)/,`);
       runResult.assertFileContent(updateFile, String.raw`pattern: "(^[a-z ,.\\'-]+$)"`);
       runResult.assertFileContent(updateFile, String.raw`value: /^\/a\/b$/,`);
       runResult.assertFileContent(updateFile, String.raw`pattern: "^/a\\/b$"`);

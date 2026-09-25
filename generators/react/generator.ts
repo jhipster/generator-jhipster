@@ -40,6 +40,7 @@ import { isTranslatedReactFile, translateReactFilesTransform } from './support/i
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
+const REGEX_LITERAL_REPLACEMENTS: Record<string, string> = { '/': String.raw`\/`, [String.raw`\'`]: "'" };
 
 export default class ReactGenerator extends ClientApplicationGenerator<
   ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string; fieldValidateRulesPatternReactString?: string }> & {
@@ -221,8 +222,11 @@ ${comment}
       react({ field }) {
         const { fieldValidateRulesPattern } = field;
         if (fieldValidateRulesPattern !== undefined) {
-          // Regex literal: escape unescaped `/`, keep existing escapes (e.g. `\'`) untouched.
-          field.fieldValidateRulesPatternReact ??= fieldValidateRulesPattern.replace(/\\.|\//g, match => (match === '/' ? '\\/' : match));
+          // Regex literal: escape unescaped `/`, drop the useless escape of `\'` (as produced by JDL), keep other escapes.
+          field.fieldValidateRulesPatternReact ??= fieldValidateRulesPattern.replace(
+            /\\.|\//g,
+            match => REGEX_LITERAL_REPLACEMENTS[match] ?? match,
+          );
           // Single-quoted string literal content.
           field.fieldValidateRulesPatternReactString ??= fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/'/g, String.raw`\'`);
         }
