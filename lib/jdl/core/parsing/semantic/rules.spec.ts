@@ -41,14 +41,15 @@ describe('jdl - semantic rules', () => {
       expect(check('entity A\nrelationship OneToMany {\n  A to B\n}')).toEqual([
         {
           ruleId: 'undeclared-relationship-entity',
-          message: 'In the relationship between A and B, B is not declared.',
+          message:
+            "In the relationship between A and B, B is not declared. If 'B' is a built-in entity declare like 'A to B with builtInEntity'.",
           at: 'A to B',
         },
       ]);
     });
     it('reports both sides at once', () => {
       expect(check('entity A\nrelationship OneToMany { C to B }').map(diagnostic => diagnostic.message)).toEqual([
-        'In the relationship between C and B, C and B are not declared.',
+        "In the relationship between C and B, C and B are not declared. If 'B' is a built-in entity declare like 'C to B with builtInEntity'.",
       ]);
     });
     it('accepts a built-in destination', () => {
@@ -79,17 +80,18 @@ describe('jdl - semantic rules', () => {
   });
 
   describe('built-in-entity', () => {
-    it('accepts any destination when the runtime lists no built-in entity', () => {
-      const { builtInEntities: _builtInEntities, ...definitions } = getDefaultJDLDefinitions();
-      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }', createRuntime(definitions))).toEqual([]);
+    it('accepts any destination when the runtime lists no built-in entity, as JHipster does', () => {
+      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }')).toEqual([]);
     });
-    it('accepts the built-in entities of JHipster', () => {
+    it('accepts a built-in entity the runtime provides', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['User', 'Authority'] });
       expect(
-        check('entity A\nrelationship ManyToOne { A to User with builtInEntity, A{authority} to Authority with builtInEntity }'),
+        check('entity A\nrelationship ManyToOne { A to User with builtInEntity, A{authority} to Authority with builtInEntity }', runtime),
       ).toEqual([]);
     });
-    it('reports a destination JHipster does not provide at the option', () => {
-      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }')).toEqual([
+    it('reports a destination the runtime does not provide at the option', () => {
+      const runtime = createJDLRuntime({ builtInEntities: ['User', 'Authority'] });
+      expect(check('entity A\nrelationship ManyToOne { A to Account with builtInEntity }', runtime)).toEqual([
         {
           ruleId: 'built-in-entity',
           message:
@@ -441,7 +443,7 @@ describe('jdl - semantic rules', () => {
         new RegExp(
           [
             String.raw`^The entity B in the dto option is not declared\.\n\tat line: 1, column: 5`,
-            String.raw`In the relationship between A and C, C is not declared\.\n\tat line: 3, column: 25$`,
+            String.raw`In the relationship between A and C, C is not declared\. .*\n\tat line: 3, column: 25$`,
           ].join('\\n'),
         ),
       );

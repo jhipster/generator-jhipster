@@ -29,16 +29,15 @@ import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from '.
 
 /**
  * The JHipster definitions: the application and deployment options of the generators, the entity option statements, the
- * field validations and types, the built-in entities, and the semantic rules of JHipster. JHipster adds no relationship
- * option to the ones of the language.
+ * field validations and types, and the semantic rules of JHipster. JHipster adds no relationship option to the ones of the
+ * language, and lists no built-in entity for now, so `with builtInEntity` accepts any destination, as it always did.
  */
-export const getDefaultJDLDefinitions = (): Required<Omit<JDLDefinitions, 'relationship'>> => ({
+export const getDefaultJDLDefinitions = (): Required<Omit<JDLDefinitions, 'relationship' | 'builtInEntities'>> => ({
   application: getDefaultJDLApplicationConfig(),
   deployment: getDefaultJDLDeploymentConfig(),
   entity: getDefaultJDLEntityConfig(),
   validation: getDefaultJDLValidationConfig(),
   fieldTypes: getDefaultJDLFieldTypesConfig(),
-  builtInEntities: ['User', 'Authority'],
   rules: jhipsterSemanticRules,
 });
 
@@ -50,7 +49,7 @@ export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDL
     deployment: definitions.deployment ?? defaults.deployment,
     entity: definitions.entity ?? defaults.entity,
     relationship: definitions.relationship,
-    builtInEntities: definitions.builtInEntities ?? defaults.builtInEntities,
+    builtInEntities: definitions.builtInEntities,
     validation: definitions.validation ?? defaults.validation,
     fieldTypes: definitions.fieldTypes ?? defaults.fieldTypes,
     rules: definitions.rules ?? defaults.rules,

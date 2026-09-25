@@ -574,10 +574,10 @@ entity A
 
       before(() => {
         const content = `entity A
-entity User
+entity B
 
 relationship OneToOne {
-  @id A{b} to @NotId(value) @Something User{a} with builtInEntity
+  @id A{b} to @NotId(value) @Something B{a} with builtInEntity
 }
 `;
         const importer = createImporterFromContent(content, { databaseType: 'postgresql', applicationName: 'toto' });
@@ -593,7 +593,7 @@ relationship OneToOne {
               "notId": "value",
               "something": true,
             },
-            "otherEntityName": "user",
+            "otherEntityName": "b",
             "otherEntityRelationshipName": "a",
             "relationshipName": "b",
             "relationshipSide": "left",

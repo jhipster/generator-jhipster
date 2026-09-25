@@ -242,11 +242,20 @@ and each side is:
   (unless annotations are placed before the source, see below).
 - In a `OneToOne` relationship, the source must own the relationship: naming the field on the destination only is an error.
 - A required relationship from an entity to itself is an error.
-- Both entities must be declared. To relate to a built-in entity instead, add `with builtInEntity`; the destination must
-  then be one of the built-in entities of the generator (`User` and `Authority` for JHipster).
+- Both entities must be declared, unless the relationship has the [`builtInEntity`](#relationship-options) option.
 
-Relationship options follow `with`, separated by commas: `builtInEntity`, or an option the generator or a blueprint adds.
-An unknown option is an error.
+### Relationship options
+
+Relationship options follow `with`, separated by commas. An unknown option is an error.
+
+`builtInEntity` is an option of the JDL itself, available whatever the generators in use. It says that the destination is a
+built-in entity: an entity the generator provides, which the JDL file does not declare (for instance JHipster's `User` and
+`Authority`). The source must still be declared. A generator may list its built-in entities; it then rejects
+`with builtInEntity` to any other destination. Without such a list, any destination is accepted.
+
+Any other relationship option is added by the generators or blueprints in use.
+
+### Relationship annotations
 
 Relationship annotations (e.g. `@OnDelete("CASCADE")`) land on the opposite side:
 
