@@ -209,16 +209,14 @@ is imported into `.jhipster/Order.json` (excerpt):
     "changelogDate": "20240101000000",
     "myEntityOption": true
   },
-  "name": "Order",
   "fields": [
     {
       "fieldName": "total",
-      "fieldType": "BigDecimal",
-      "options": {
-        "myFieldOption": ["x", "y"]
-      }
+      // ...
+      "options": { "myFieldOption": ["x", "y"] }
     }
   ]
+  // ...
 }
 ```
 
@@ -299,17 +297,14 @@ is imported into `.jhipster/Order.json` (excerpt), `builtInEntity` becoming `rel
 
 ```json
 {
-  "name": "Order",
   "relationships": [
     {
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "otherEntityName": "user",
       "relationshipName": "user",
-      "otherEntityField": "login",
+      // ...
       "relationshipWithBuiltInEntity": true
     }
   ]
+  // ...
 }
 ```
 
@@ -328,16 +323,14 @@ is imported into `.jhipster/Order.json` (excerpt):
 
 ```json
 {
-  "name": "Order",
   "relationships": [
     {
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "otherEntityName": "customer",
       "relationshipName": "customer",
+      // ...
       "options": { "audited": true }
     }
   ]
+  // ...
 }
 ```
 
@@ -345,16 +338,14 @@ and `.jhipster/Customer.json` (excerpt):
 
 ```json
 {
-  "name": "Customer",
   "relationships": [
     {
-      "relationshipSide": "right",
-      "relationshipType": "one-to-many",
-      "otherEntityName": "order",
       "relationshipName": "order",
+      // ...
       "options": { "audited": true }
     }
   ]
+  // ...
 }
 ```
 
@@ -379,16 +370,14 @@ is imported into `.jhipster/Order.json` (excerpt):
 
 ```json
 {
-  "name": "Order",
   "relationships": [
     {
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "otherEntityName": "customer",
       "relationshipName": "customer",
+      // ...
       "options": { "onDelete": "CASCADE" }
     }
   ]
+  // ...
 }
 ```
 
@@ -396,16 +385,14 @@ and `.jhipster/Customer.json` (excerpt):
 
 ```json
 {
-  "name": "Customer",
   "relationships": [
     {
-      "relationshipSide": "right",
-      "relationshipType": "one-to-many",
-      "otherEntityName": "order",
       "relationshipName": "order",
+      // ...
       "options": { "myOption": true }
     }
   ]
+  // ...
 }
 ```
 
