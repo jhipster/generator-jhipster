@@ -189,6 +189,39 @@ sets its property to `true`. Blueprints may read their own annotations.
 
 Annotations are not checked: an unknown one is kept as is.
 
+For example:
+
+```jdl
+@ChangelogDate("20240101000000")
+@MyEntityOption
+entity Order {
+  @MyFieldOption("x")
+  @MyFieldOption("y")
+  total BigDecimal
+}
+```
+
+is imported into `.jhipster/Order.json` (excerpt):
+
+```json
+{
+  "annotations": {
+    "changelogDate": "20240101000000",
+    "myEntityOption": true
+  },
+  "name": "Order",
+  "fields": [
+    {
+      "fieldName": "total",
+      "fieldType": "BigDecimal",
+      "options": {
+        "myFieldOption": ["x", "y"]
+      }
+    }
+  ]
+}
+```
+
 ## Enums
 
 ```jdl
@@ -262,8 +295,50 @@ Relationship annotations land on the opposite side:
 - Annotations before the **source** side apply to the relationship of the **destination** entity.
 - Annotations before the **destination** side apply to the relationship of the **source** entity.
 
-With JHipster, `Order to @OnDelete("CASCADE") Customer` sets `onDelete` on the relationship of `Order`, which holds the
-foreign key; placed before `Order`, the same annotation would land on the relationship of `Customer` and be ignored.
+For example:
+
+```jdl
+relationship ManyToOne {
+  @MyOption Order to @OnDelete("CASCADE") Customer
+}
+```
+
+is imported into `.jhipster/Order.json` (excerpt):
+
+```json
+{
+  "name": "Order",
+  "relationships": [
+    {
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "otherEntityName": "customer",
+      "relationshipName": "customer",
+      "options": { "onDelete": "CASCADE" }
+    }
+  ]
+}
+```
+
+and `.jhipster/Customer.json` (excerpt):
+
+```json
+{
+  "name": "Customer",
+  "relationships": [
+    {
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many",
+      "otherEntityName": "order",
+      "relationshipName": "order",
+      "options": { "myOption": true }
+    }
+  ]
+}
+```
+
+With JHipster, `onDelete` takes effect on the relationship of `Order`, which holds the foreign key; placed before `Order`, the
+same annotation would land on the relationship of `Customer` and be ignored.
 
 ## Entity options
 
