@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
-import org.infinispan.jboss.marshalling.core.JBossUserMarshaller;
+import org.infinispan.jboss.marshalling.commons.GenericJBossMarshaller;
 import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
 import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
@@ -111,7 +111,7 @@ public class CacheConfiguration {
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .serialization().marshaller(new JBossUserMarshaller())
+                    .serialization().marshaller(new GenericJBossMarshaller()).allowList().addRegexp(".*")
                     .build();
             } else if (discoveryClient.getInstances(registration.getServiceId()).isEmpty()) {
                 return () -> GlobalConfigurationBuilder
@@ -119,7 +119,7 @@ public class CacheConfiguration {
                     .transport(new JGroupsTransport())
                     .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .serialization().marshaller(new JBossUserMarshaller())
+                    .serialization().marshaller(new GenericJBossMarshaller()).allowList().addRegexp(".*")
                     .build();
             } else {
                 return () -> GlobalConfigurationBuilder
@@ -127,7 +127,7 @@ public class CacheConfiguration {
                     .transport(new JGroupsTransport(getTransportChannel()))
                     .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .serialization().marshaller(new JBossUserMarshaller())
+                    .serialization().marshaller(new GenericJBossMarshaller()).allowList().addRegexp(".*")
                     .build();
             }
 <%_ } else { _%>
@@ -136,7 +136,7 @@ public class CacheConfiguration {
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .serialization().marshaller(new JBossUserMarshaller())
+                    .serialization().marshaller(new GenericJBossMarshaller()).allowList().addRegexp(".*")
                     .build();
 <%_ } _%>
     }
