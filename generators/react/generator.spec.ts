@@ -29,6 +29,7 @@ import Generator from './index.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import {
+  basicHelpers,
   buildClientSamples,
   defaultHelpers as helpers,
   entitiesClientSamples as entities,
@@ -235,6 +236,46 @@ describe(`generator - ${clientFramework}`, () => {
         `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-detail.tsx`,
         'embeddedRelationship',
       );
+    });
+  });
+
+  describe('entity with quotes in validation patterns', () => {
+    before(async () => {
+      // Prettier is required: an invalid string literal fails to parse.
+      await basicHelpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework, skipServer: true }, [
+          {
+            name: 'Alumni',
+            fields: [
+              {
+                fieldName: 'firstName',
+                fieldType: 'String',
+                fieldValidateRules: ['pattern'],
+                fieldValidateRulesPattern: "(^[a-z ,.'-]+$)",
+              },
+              {
+                fieldName: 'lastName',
+                fieldType: 'String',
+                fieldValidateRules: ['pattern'],
+                fieldValidateRulesPattern: String.raw`(^[a-z ,.\'-]+$)`,
+              },
+              { fieldName: 'path', fieldType: 'String', fieldValidateRules: ['pattern'], fieldValidateRulesPattern: String.raw`^/a\/b$` },
+            ],
+          },
+        ])
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should generate valid regex and string literals', () => {
+      const updateFile = `${CLIENT_MAIN_SRC_DIR}app/entities/alumni/alumni-update.tsx`;
+      runResult.assertFileContent(updateFile, String.raw`value: /(^[a-z ,.'-]+$)/,`);
+      runResult.assertFileContent(updateFile, String.raw`pattern: "(^[a-z ,.'-]+$)"`);
+      runResult.assertFileContent(updateFile, String.raw`value: /(^[a-z ,.\'-]+$)/,`);
+      runResult.assertFileContent(updateFile, String.raw`pattern: "(^[a-z ,.\\'-]+$)"`);
+      runResult.assertFileContent(updateFile, String.raw`value: /^\/a\/b$/,`);
+      runResult.assertFileContent(updateFile, String.raw`pattern: "^/a\\/b$"`);
     });
   });
 

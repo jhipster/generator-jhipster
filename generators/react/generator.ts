@@ -42,7 +42,9 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
 
 export default class ReactGenerator extends ClientApplicationGenerator<
-  ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string }> & { entityReactState?: string }
+  ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string; fieldValidateRulesPatternReactString?: string }> & {
+    entityReactState?: string;
+  }
 > {
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, { ...features, loadCommand: ['jhipster:server'] });
@@ -217,7 +219,13 @@ ${comment}
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       react({ field }) {
-        field.fieldValidateRulesPatternReact ??= field.fieldValidateRulesPattern?.replace(/'/g, String.raw`\'`);
+        const { fieldValidateRulesPattern } = field;
+        if (fieldValidateRulesPattern !== undefined) {
+          // Regex literal: escape unescaped `/`, keep existing escapes (e.g. `\'`) untouched.
+          field.fieldValidateRulesPatternReact ??= fieldValidateRulesPattern.replace(/\\.|\//g, match => (match === '/' ? '\\/' : match));
+          // Single-quoted string literal content.
+          field.fieldValidateRulesPatternReactString ??= fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/'/g, String.raw`\'`);
+        }
       },
     });
   }
