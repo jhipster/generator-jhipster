@@ -43,7 +43,7 @@ public class RedisTestContainer {
         return registry ->
             registry.add(
                 "jhipster.cache.redis.server",
-                () -> "redis://" + redisContainer.getContainerIpAddress() + ":" + redisContainer.getMappedPort(6379)
+                () -> "redis://" + redisContainer.getHost() + ":" + redisContainer.getMappedPort(6379)
             );
     }
 }
