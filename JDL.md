@@ -237,6 +237,35 @@ enum Status {
   unless a comma separates them: in `A /** doc */ B` it documents `A`, in `A, /** doc */ B` it documents `B`.
 - An enum may be declared only once.
 
+An enum has no JSON file of its own: it is bundled into every field that uses it. When several entities use the same enum,
+each of their JSON files holds a copy of it, and an enum no field uses is not imported at all. For example:
+
+```jdl
+entity Product {
+  status Status
+}
+entity Order {
+  status Status
+}
+```
+
+is imported into `.jhipster/Product.json` and `.jhipster/Order.json` with the same field (excerpt):
+
+```json
+{
+  "fields": [
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValues": "AVAILABLE (available),RESTOCK (re stock),DISCONTINUED",
+      "fieldTypeDocumentation": "Status of a product",
+      "fieldValuesJavadocs": { "AVAILABLE": "in stock" }
+    }
+  ]
+  // ...
+}
+```
+
 ## Relationships
 
 ```jdl
