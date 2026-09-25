@@ -27,7 +27,7 @@
   "devDependencies": {
     "@eslint-react/eslint-plugin": "5.20.3",
     "@eslint/js": "10.0.1",
-    "@module-federation/runtime": "2.9.0",
+    "@module-federation/runtime": "2.9.1",
     "@module-federation/vite": "1.22.1",
     "@testing-library/react": "16.3.3",
     "@types/node": "22.20.4",
