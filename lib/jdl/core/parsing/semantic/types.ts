@@ -16,15 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLOptionsDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLLocation, ParsedJDLApplications } from '../types/parsed.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
 
-const defaultJDLRelationshipConfig: JDLOptionsDefinition = Object.freeze({
-  configs: {
-    builtInEntity: { description: 'The other side is a built in entity, User or Authority', jdl: { type: 'unary', builtInEntity: true } },
-  },
-});
+/** A problem a semantic rule finds in the parsed jdl, where it is written. */
+export type JDLDiagnostic = {
+  /** The rule that reports it. */
+  ruleId: string;
+  severity: 'error' | 'warning';
+  message: string;
+  location?: JDLLocation;
+};
 
-/**
- * The relationship JDL definitions: the option statements of relationships, `... to Other with builtInEntity`.
- */
-export const getDefaultJDLRelationshipConfig = (): Readonly<JDLOptionsDefinition> => defaultJDLRelationshipConfig;
+/** A check over the whole parsed jdl, reporting every problem it finds rather than the first one. */
+export type JDLSemanticRule = {
+  id: string;
+  check: (ast: ParsedJDLApplications, runtime: JDLRuntime) => Omit<JDLDiagnostic, 'ruleId' | 'severity'>[];
+};
