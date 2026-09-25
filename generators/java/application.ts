@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { upperFirst } from 'lodash-es';
-
 import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import {
   type MutateDataParam,
@@ -81,19 +79,7 @@ const sampleValues = (fieldName: string, javaFieldType: (typeof primaryKeyTypes)
 export const mutateField = {
   __override__: false,
   transient: ({ mapstructExpression }) => (mapstructExpression ? true : undefined),
-  fieldInJavaBeanMethod: ({ fieldName }) => {
-    // Handle the specific case when the second letter is capitalized
-    // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-    if (fieldName.length > 1) {
-      const firstLetter = fieldName.charAt(0);
-      const secondLetter = fieldName.charAt(1);
-      if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
-        return firstLetter.toLowerCase() + fieldName.slice(1);
-      }
-      return upperFirst(fieldName);
-    }
-    return upperFirst(fieldName);
-  },
+  fieldInJavaBeanMethod: ({ fieldName }) => javaBeanCase(fieldName),
   propertyJavaBeanName: ({ propertyName }) => javaBeanCase(propertyName),
   propertyConsumerName: ({ propertyJavaBeanName }) => `set${propertyJavaBeanName}`,
   propertySupplierName: ({ propertyJavaBeanName }) => `get${propertyJavaBeanName}`,

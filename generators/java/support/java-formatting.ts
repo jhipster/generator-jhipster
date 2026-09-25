@@ -19,18 +19,23 @@
 import { upperFirst } from 'lodash-es';
 
 /**
- * @private
  * Convert to Java bean name case
  *
  * Handle the specific case when the second letter is capitalized
  * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
  *
+ * A name shorter than two characters has no second letter and is always capitalized.
+ * A non-letter second character such as a digit or an underscore counts as capitalized,
+ * so `v2` is returned unchanged.
+ *
  * @param beanName
  */
 export const javaBeanCase = (beanName: string): string => {
-  const secondLetter = beanName.charAt(1);
-  if (secondLetter === secondLetter?.toUpperCase()) {
-    return beanName;
+  if (beanName.length > 1) {
+    const secondLetter = beanName.charAt(1);
+    if (secondLetter === secondLetter.toUpperCase()) {
+      return beanName;
+    }
   }
   return upperFirst(beanName);
 };

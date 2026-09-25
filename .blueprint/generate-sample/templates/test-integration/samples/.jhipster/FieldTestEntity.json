@@ -97,7 +97,8 @@
       "fieldValidateRulesMaxbytes": 10000
     },
     { "fieldName": "byteTextTom", "fieldType": "byte[]", "fieldTypeBlobContent": "text" },
-    { "fieldName": "byteTextRequiredTom", "fieldType": "byte[]", "fieldTypeBlobContent": "text", "fieldValidateRules": ["required"] }
+    { "fieldName": "byteTextRequiredTom", "fieldType": "byte[]", "fieldTypeBlobContent": "text", "fieldValidateRules": ["required"] },
+    { "fieldName": "x", "fieldType": "String" }
   ],
   "fluentMethods": true,
   "pagination": "no",
