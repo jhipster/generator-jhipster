@@ -289,7 +289,76 @@ built-in entity: an entity the generator provides, which the JDL file does not d
 `Authority`). The source must still be declared. A generator may list its built-in entities; it then rejects
 `with builtInEntity` to any other destination. Without such a list, any destination is accepted.
 
-Any other relationship option is added by the generators or blueprints in use.
+```jdl
+relationship ManyToOne {
+  Order{user(login)} to User with builtInEntity
+}
+```
+
+is imported into `.jhipster/Order.json` (excerpt), `builtInEntity` becoming `relationshipWithBuiltInEntity`:
+
+```json
+{
+  "name": "Order",
+  "relationships": [
+    {
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "otherEntityField": "login",
+      "relationshipWithBuiltInEntity": true
+    }
+  ]
+}
+```
+
+`User` is not declared, so no JSON is written for it.
+
+Any other relationship option is added by the generators or blueprints in use, and is imported as `true` under `options`, on
+both sides of the relationship. With a generator adding an `audited` option:
+
+```jdl
+relationship ManyToOne {
+  Order{customer} to Customer{order} with audited
+}
+```
+
+is imported into `.jhipster/Order.json` (excerpt):
+
+```json
+{
+  "name": "Order",
+  "relationships": [
+    {
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "otherEntityName": "customer",
+      "relationshipName": "customer",
+      "options": { "audited": true }
+    }
+  ]
+}
+```
+
+and `.jhipster/Customer.json` (excerpt):
+
+```json
+{
+  "name": "Customer",
+  "relationships": [
+    {
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many",
+      "otherEntityName": "order",
+      "relationshipName": "order",
+      "options": { "audited": true }
+    }
+  ]
+}
+```
+
+If the relationship is unidirectional (`Order{customer} to Customer with audited`), only `Order` gets it.
 
 ### Relationship annotations
 
