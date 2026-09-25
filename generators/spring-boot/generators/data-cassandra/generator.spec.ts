@@ -20,6 +20,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
+import type { Entity } from '../../../../lib/jhipster/types/entity.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import { filterBasicServerGenerators, shouldComposeWithLiquibase } from '../../../server/__test-support/index.ts';
 import Generator from '../../../server/index.ts';
@@ -36,6 +37,40 @@ const testSamples = buildServerSamples(commonConfig);
 describe(`generator - ${databaseType}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('with a paginated entity', () => {
+    // Cassandra has no pagination: the entity is rejected, or, when the checks are skipped, its pagination disabled.
+    const paginatedEntities = [
+      {
+        name: 'Paginated',
+        changelogDate: '20220129000100',
+        pagination: 'pagination',
+        fields: [{ fieldName: 'name', fieldType: 'String' }],
+      },
+    ] satisfies Entity[];
+    const runWithPaginatedEntity = () =>
+      helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ databaseType }, paginatedEntities)
+        .withSkipWritingPriorities()
+        .withMockedJHipsterGenerators();
+
+    it('should fail', async () => {
+      await expect(runWithPaginatedEntity().withOptions({ skipChecks: false })).rejects.toThrow(
+        'Pagination is not supported for entity Paginated when the app uses Cassandra.',
+      );
+    });
+
+    describe('when skipping the checks', () => {
+      before(async () => {
+        await runWithPaginatedEntity();
+      });
+
+      it('should disable the pagination of the entity', () => {
+        runResult.assertJsonFileContent('.jhipster/Paginated.json', { pagination: 'no' });
+      });
+    });
+  });
 
   describe('migration', () => {
     describe('databaseMigration option', () => {

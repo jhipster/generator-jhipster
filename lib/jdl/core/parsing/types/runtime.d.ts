@@ -21,6 +21,8 @@ export type JDLRuntime = {
   tokens: Record<string, TokenType>;
   lexer: Lexer;
   parser: JDLParser;
+  /** A parser that goes on after an error, for the tools that want every error and what could be parsed. */
+  recoveringParser: JDLParser;
   propertyValidations: Record<string, JDLValidatorOption>;
   deploymentPropertyValidations: Record<string, JDLValidatorOption>;
   /** The deployment options, with their types and allowed values, as the applicationDefinition holds the application ones. */

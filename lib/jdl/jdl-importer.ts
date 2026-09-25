@@ -32,8 +32,6 @@ import exportEntities from './converters/exporters/jhipster-entity-exporter.ts';
 import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.ts';
 import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
 import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.ts';
-import createWithApplicationValidator from './converters/validators/jdl-with-application-validator.ts';
-import createWithoutApplicationValidator from './converters/validators/jdl-without-application-validator.ts';
 import type JDLJSONEntity from './core/basic-types/json-entity.ts';
 import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 import type JDLDeployment from './core/models/jdl-deployment.ts';
@@ -136,7 +134,6 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
     import: () => {
       checkSemanticErrors(content, runtime);
       const jdlObject = getJDLObject(content, configuration, runtime);
-      checkForErrors(jdlObject);
       if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
         importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
       } else if (jdlObject.getApplicationQuantity() === 1) {
@@ -184,16 +181,6 @@ function checkSemanticErrors(content: ParsedJDLApplications, runtime: JDLRuntime
   if (errors.length > 0) {
     throw new Error(errors.map(error => `${error.message}${errorLocation(error.location)}`).join('\n'));
   }
-}
-
-function checkForErrors(jdlObject: JDLObject) {
-  let validator;
-  if (jdlObject.getApplicationQuantity() === 0) {
-    validator = createWithoutApplicationValidator(jdlObject);
-  } else {
-    validator = createWithApplicationValidator(jdlObject);
-  }
-  validator.checkForErrors();
 }
 
 function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {

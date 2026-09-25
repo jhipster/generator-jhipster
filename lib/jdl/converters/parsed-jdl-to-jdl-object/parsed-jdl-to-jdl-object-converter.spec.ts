@@ -466,23 +466,6 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           });
         });
       });
-      describe('when having a cassandra app with paginated entities', () => {
-        let input: ReturnType<typeof parseFromFiles>;
-
-        before(() => {
-          input = parseFromFiles([getTestFile('cassandra_jdl.jdl')]);
-        });
-
-        it('should fail', () => {
-          try {
-            parseFromConfigurationObject({
-              parsedContent: input,
-            });
-          } catch (error) {
-            expect((error as Error).name).toBe('IllegalOptionException');
-          }
-        });
-      });
       describe('when parsing applications', () => {
         let parsedConfig: ReturnType<typeof parseFromConfigurationObject>['applications']['toto'];
 

@@ -66,25 +66,30 @@ const parseStringLiteral = (image: string): string => image.slice(1, -1);
 const deduplicate = <T>(array: T[]): T[] => [...new Set(array)];
 
 /**
- * @param onWarning - receives the warnings about what the jdl uses, a deprecated option for instance.
+ * @param onWarning - receives the warnings about what the jdl uses, a deprecated option for instance, with where it is written.
  */
-export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (message: string) => void) => {
+export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (message: string, location?: JDLLocation) => void) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
 
-  const warnIfDeprecated = (key: string, optionType: JDLApplicationOptionType | undefined, grammar: 'application' | 'deployment') => {
+  const warnIfDeprecated = (
+    key: string,
+    optionType: JDLApplicationOptionType | undefined,
+    grammar: 'application' | 'deployment',
+    context: Parameters<typeof spanLocation>[0],
+  ) => {
     if (optionType?.deprecated) {
-      onWarning(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`);
+      onWarning(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`, spanLocation(context));
     }
   };
 
   /** The binary option a statement keyword names, warning about a deprecated keyword. */
-  const binaryOptionName = (keyword: string): string => {
+  const binaryOptionName = (keyword: string, location: JDLLocation | undefined): string => {
     for (const [name, { jdl }] of Object.entries(runtime.entityDefinition.configs)) {
       if ((jdl.keyword ?? name) === keyword) {
         return name;
       }
       if (jdl.deprecatedKeywords?.includes(keyword)) {
-        onWarning(`The ${keyword} option is deprecated, please use ${name} instead.`);
+        onWarning(`The ${keyword} option is deprecated, please use ${name} instead.`, location);
         return name;
       }
     }
@@ -162,7 +167,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         options
           .filter((option): option is ParsedJDLBinaryOption => option.optionValue !== undefined)
           .forEach((option: ParsedJDLBinaryOption) => {
-            option.optionName = binaryOptionName(option.optionName);
+            option.optionName = binaryOptionName(option.optionName, option.location);
             const newOption = !ast.options[option.optionName];
             if (newOption) {
               ast.options[option.optionName] = {};
@@ -496,7 +501,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       const key = context.NAME[0].image;
       const value = this.visit(context.deploymentConfigValue);
 
-      warnIfDeprecated(key, runtime.deploymentDefinition.optionTypes[key], 'deployment');
+      warnIfDeprecated(key, runtime.deploymentDefinition.optionTypes[key], 'deployment', context);
 
       return { key, value, location: spanLocation(context) };
     }
@@ -562,7 +567,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
         options
           .filter((option): option is ParsedJDLBinaryOption => option.optionValue !== undefined)
           .forEach(option => {
-            option.optionName = binaryOptionName(option.optionName);
+            option.optionName = binaryOptionName(option.optionName, option.location);
             if (!applicationSubDeclaration.options![option.optionName]) {
               applicationSubDeclaration.options![option.optionName] = {};
             }
@@ -664,7 +669,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       const key = context.NAME[0].image;
       const value = this.visit(context.configValue);
 
-      warnIfDeprecated(key, runtime.applicationDefinition.optionTypes[key], 'application');
+      warnIfDeprecated(key, runtime.applicationDefinition.optionTypes[key], 'application', context);
 
       return { key, value, location: spanLocation(context) };
     }
