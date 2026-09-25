@@ -51,7 +51,7 @@ export const getTestcontainerSupport = ({
       },
       mysql: {
         testcontainerClass: 'MySQLContainer',
-        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassPackage: 'org.testcontainers.mysql',
         testcontainerClassInitialization: '.withConfigurationOverride("conf/mysql")',
         testcontainerDockerImageName: dockerContainers.mysql,
       },
