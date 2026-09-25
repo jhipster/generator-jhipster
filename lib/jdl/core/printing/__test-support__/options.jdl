@@ -1,0 +1,17 @@
+entity A
+entity B
+entity C
+
+noFluentMethod A
+filter *
+readOnly * except C
+skipClient B, C
+dto * with mapstruct except C
+service A, B with serviceClass
+pagination A with infinite-scroll
+search * with elasticsearch except A
+microservice A, B with store
+angularSuffix A with mySuffix
+clientRootFolder A with "../folder"
+use mapstruct, serviceImpl, pagination for B
+use couchbase for C

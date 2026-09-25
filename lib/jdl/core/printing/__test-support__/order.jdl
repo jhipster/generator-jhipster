@@ -1,0 +1,26 @@
+entity A
+
+dto A with mapstruct
+
+entity B
+
+dto B with mapstruct
+
+relationship OneToOne {
+  A{b} to B
+}
+
+enum Kind {
+  ONE
+}
+
+relationship OneToOne {
+  B{a} to A
+}
+
+entity C {
+  kind Kind
+}
+
+use serviceImpl for A
+dto C with mapstruct
