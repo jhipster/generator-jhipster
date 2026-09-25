@@ -4,15 +4,18 @@ JDL (JHipster Domain Language) describes applications, entities, enums, relation
 text file, which `jhipster jdl <file>` imports. This document lists everything the language accepts, as implemented in this
 repository. For a tutorial, see the [JDL documentation](https://www.jhipster.tech/jdl/intro) on the website.
 
+The language is generic: the grammar knows the structure of a document only. The option keys an application or a
+deployment accepts, the entity and relationship options, the validations and the field types are **definitions** handed to
+the parser, and JHipster provides its own (see [definitions](#definitions)). This document describes the language and lists
+only the values the language itself depends on; for the values JHipster defines, use `jhipster describe app`,
+`jhipster describe deployment` or `jhipster describe --config <name>`, or read `lib/jdl-config/`.
+
 Where the pieces live:
 
 - Lexer and grammar: `lib/jdl/core/parsing/lexer/`, `lib/jdl/core/parsing/jdl-parser.ts`.
-- Syntax checks (name patterns, known options): `lib/jdl/core/parsing/validator.ts`.
-- Semantic rules (cross references, value checks): `lib/jdl/core/parsing/semantic/rules.ts` and `lib/jdl-config/jdl-semantic-rules.ts`.
-- Definitions (entity options, validations, field types, relationship options): `lib/jdl-config/`.
-- Application and deployment options: **not** hard coded. They are the `configs` with a `jdl` entry in the `command.ts` of the
-  `app` and `deployment` generators and of every generator they import (`lib/jdl-config/jhipster-jdl-config.ts`). The tables
-  below are a snapshot; `jhipster describe app` and `jhipster describe --config <name>` are authoritative.
+- Syntax checks (name patterns, names and value kinds against the definitions): `lib/jdl/core/parsing/validator.ts`.
+- Semantic rules: `lib/jdl/core/parsing/semantic/rules.ts`.
+- JHipster definitions and rules: `lib/jdl-config/`.
 
 ## Files
 
@@ -43,17 +46,17 @@ entity Product {
 
 ## Literals and names
 
-| Kind           | Syntax                     | Notes                                                                                                                                                                   |
-| -------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Name           | `[a-zA-Z_][a-zA-Z_\-0-9]*` | Keywords (`entity`, `config`, `required`, ...) may be used as names where a name is expected, e.g. as a field name.                                                     |
-| Qualified name | `name.name.name`           | Used for `packageName`.                                                                                                                                                 |
-| Integer        | `-?[0-9]+`                 |                                                                                                                                                                         |
-| Decimal        | `-?[0-9]+.[0-9]+`          |                                                                                                                                                                         |
-| Boolean        | `true`, `false`            |                                                                                                                                                                         |
-| String         | `"..."`                    | Single line or multi line. `\"` does not close the string; backslashes are otherwise kept as written.                                                                   |
-| Regex          | `/.../`                    | Only inside `pattern(...)`. It extends to the **last** `/` of its line, so do not put anything containing a `/` (such as a `/** comment */`) after it on the same line. |
-| List           | `[a, b, c]`                | Names, comma separated; may be empty.                                                                                                                                   |
-| Quoted list    | `["a", "b"]`               | Strings, comma separated; used by `routes`.                                                                                                                             |
+| Kind           | Syntax                     | Notes                                                                                                                                                                                          |
+| -------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name           | `[a-zA-Z_][a-zA-Z_\-0-9]*` | Keywords (`entity`, `config`, `required`, ...) may be used as names where a name is expected, e.g. as a field name.                                                                            |
+| Qualified name | `name.name.name`           | A config value, e.g. a Java package.                                                                                                                                                           |
+| Integer        | `-?[0-9]+`                 |                                                                                                                                                                                                |
+| Decimal        | `-?[0-9]+.[0-9]+`          |                                                                                                                                                                                                |
+| Boolean        | `true`, `false`            |                                                                                                                                                                                                |
+| String         | `"..."`                    | Single line or multi line. `\"` does not close the string; backslashes are otherwise kept as written.                                                                                          |
+| Regex          | `/.../`                    | Only as a validation value, e.g. `pattern(/.../)`. It extends to the **last** `/` of its line, so do not put anything containing a `/` (such as a `/** comment */`) after it on the same line. |
+| List           | `[a, b, c]`                | Names, comma separated; may be empty.                                                                                                                                                          |
+| Quoted list    | `["a", "b"]`               | Strings, comma separated.                                                                                                                                                                      |
 
 Naming rules checked by the parser:
 
@@ -88,7 +91,7 @@ DEFAULT_MIN_LENGTH = 1
 MAX_PRICE = 999.99
 ```
 
-A constant holds an integer or a decimal and can be used as the value of a validation: `minlength(DEFAULT_MIN_LENGTH)`.
+A constant holds an integer or a decimal and can be used as the value of a numeric validation: `minlength(DEFAULT_MIN_LENGTH)`.
 Constants cannot be used anywhere else.
 
 ## Applications
@@ -97,12 +100,9 @@ Constants cannot be used anywhere else.
 application {
   config {
     baseName store
-    applicationType monolith
     packageName com.mycompany.store
-    authenticationType jwt
     languages [en, fr]
     blueprints [generator-jhipster-foo]
-    jwtSecretKey "..."
   }
   config(generator-jhipster-foo) {
     someOption someValue
@@ -117,7 +117,7 @@ Inside an `application` block:
 
 | Statement                     | Meaning                                                                                                                                                                                                         |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config { key value ... }`    | The application options, one per line, an optional comma after each. If several `config` blocks are given, only the last one is kept.                                                                           |
+| `config { key value ... }`    | The [application config](#application-config), one entry per line, an optional comma after each. If several `config` blocks are given, only the last one is kept.                                               |
 | `config(<blueprint>) { ... }` | Options of a blueprint, exported as `namespaceConfigs.<blueprint>`. Keys are not checked; values are any config value. The blueprint must be listed in `blueprints`. Only the last `config(...)` block is kept. |
 | `entities <list>`             | The entities of the application: `*` or `all`, or a comma separated list, optionally followed by `except <list>`. Only the last `entities` statement is kept. Without it, the application has no entity.        |
 | Option and `use` statements   | [Entity options](#entity-options) that apply to this application only. Every entity they name must belong to the application.                                                                                   |
@@ -126,70 +126,22 @@ Inside an `application` block:
 Several applications may be declared in one file; each one is written to a folder named after its `baseName`. An entity may
 belong to several applications. A relationship whose entities belong to different applications is rejected.
 
-A JDL without an `application` block imports its entities into the current application.
+A JDL without an `application` block imports its entities into the current application, whose name and type come from the
+importer configuration rather than from the JDL.
 
-### Application options
+### Application config
 
-Values are checked against the value kind below, against a name pattern where one is declared, and against the allowed
-values when a list is given. An unknown option is an error; a deprecated one is a warning.
+Each `config` entry is `<key> <value>`, where the value is a boolean, an integer, a string, a name, a qualified name, a list or
+a quoted list. The keys, the kind of value each takes, an optional pattern for its names, and an optional list of allowed
+values come from the definitions: an unknown key or a value of the wrong kind is an error, a value outside the allowed list
+is an error, a deprecated key is a warning. `config(<blueprint>)` entries are not checked.
 
-| Option                   | Value           | Allowed values                                                                                          |
-| ------------------------ | --------------- | ------------------------------------------------------------------------------------------------------- |
-| `applicationType`        | name            | `monolith`, `gateway`, `microservice`                                                                   |
-| `authenticationType`     | name            | `jwt`, `oauth2`, `session`                                                                              |
-| `baseName`               | name            |                                                                                                         |
-| `blueprints`             | list of names   |                                                                                                         |
-| `blueprint`              | name            |                                                                                                         |
-| `buildTool`              | name            | `maven`, `gradle`                                                                                       |
-| `cacheProvider`          | name            | `no`, `caffeine`, `ehcache`, `hazelcast`, `infinispan`, `memcached`, `redis`                            |
-| `clientBundler`          | name            | `webpack`, `vite`, `esbuild`, `rsbuild`                                                                 |
-| `clientFramework`        | name            | `angular`, `react`, `vue`, `no`                                                                         |
-| `clientTestFramework`    | name            | `vitest`                                                                                                |
-| `clientTheme`            | name            |                                                                                                         |
-| `clientThemeVariant`     | name            | `primary`, `dark`, `light`                                                                              |
-| `creationTimestamp`      | integer         |                                                                                                         |
-| `databaseMigration`      | name            | `liquibase`, `loader`, `no`                                                                             |
-| `databaseType`           | name            | `sql`, `mongodb`, `couchbase`, `cassandra`, `neo4j`, `no`                                               |
-| `devDatabaseType`        | name            | `postgresql`, `mysql`, `mariadb`, `oracle`, `mssql`, `h2Disk`, `h2Memory`                               |
-| `dtoSuffix`              | name            |                                                                                                         |
-| `enableGradleDevelocity` | boolean         |                                                                                                         |
-| `enableHibernateCache`   | boolean         |                                                                                                         |
-| `enableSwaggerCodegen`   | boolean         |                                                                                                         |
-| `enableTranslation`      | boolean         |                                                                                                         |
-| `entitySuffix`           | name            |                                                                                                         |
-| `feignClient`            | boolean         |                                                                                                         |
-| `gatewayServerPort`      | integer         |                                                                                                         |
-| `graalvmSupport`         | boolean         |                                                                                                         |
-| `gradleDevelocityHost`   | string          |                                                                                                         |
-| `incrementalChangelog`   | boolean         |                                                                                                         |
-| `jhiPrefix`              | name            |                                                                                                         |
-| `jhipsterVersion`        | string          | _Deprecated: it is stamped by the generator, do not set it in JDL; it will be removed in JHipster v10._ |
-| `jwtSecretKey`           | string          |                                                                                                         |
-| `languages`              | list of names   |                                                                                                         |
-| `messageBroker`          | name            | `kafka`, `pulsar`, `no`                                                                                 |
-| `microfrontend`          | boolean         |                                                                                                         |
-| `microfrontends`         | list of names   |                                                                                                         |
-| `nativeLanguage`         | name            |                                                                                                         |
-| `nodePackageManager`     | name            |                                                                                                         |
-| `packageName`            | qualified name  |                                                                                                         |
-| `prodDatabaseType`       | name            | `postgresql`, `mysql`, `mariadb`, `oracle`, `mssql`                                                     |
-| `reactive`               | boolean         |                                                                                                         |
-| `rememberMeKey`          | string          |                                                                                                         |
-| `removeNeedles`          | boolean         |                                                                                                         |
-| `routes`                 | list of strings | Each `"app"`, `"app:host"` or `"app:host:port"`.                                                        |
-| `searchEngine`           | name            | `no`, `elasticsearch`, `couchbase`                                                                      |
-| `serverPort`             | integer         |                                                                                                         |
-| `serviceDiscoveryType`   | name            | `consul`, `eureka`, `no`                                                                                |
-| `skipClient`             | boolean         |                                                                                                         |
-| `skipServer`             | boolean         |                                                                                                         |
-| `skipUserManagement`     | boolean         |                                                                                                         |
-| `syncUserWithIdp`        | boolean         |                                                                                                         |
-| `testFrameworks`         | list of names   |                                                                                                         |
-| `websocket`              | name            |                                                                                                         |
-| `withAdminUi`            | boolean         |                                                                                                         |
+The language itself relies on these keys:
 
-Notable name patterns: `baseName` `[A-Za-z]\w*`; `packageName` segments `[a-z_][a-z0-9_]*`; `languages` and `nativeLanguage`
-`[a-z]+(-[A-Za-z0-9]+)*`; `blueprints` and `blueprint` an npm package name, scoped or not.
+| Key          | Used for                                                                                                                                                     |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `baseName`   | The name of the application: its output folder when several applications are declared, the key of its entities, and the application named in error messages. |
+| `blueprints` | A list of blueprint names. A `config(<blueprint>)` block is only accepted for a blueprint listed here.                                                       |
 
 ## Entities
 
@@ -220,49 +172,23 @@ entity Tag
 
 `[/** doc */] [@annotation ...] <name> <Type> [validation ...] [/** doc on the same line */]`
 
-The type is a field type or the name of an enum declared in the document.
-
-| Type               | Validations                                                       |
-| ------------------ | ----------------------------------------------------------------- |
-| `String`           | `required`, `unique`, `minlength`, `maxlength`, `pattern`         |
-| `Integer`          | `required`, `unique`, `min`, `max`                                |
-| `Long`             | `required`, `unique`, `min`, `max`                                |
-| `BigDecimal`       | `required`, `unique`, `min`, `max`                                |
-| `Float`            | `required`, `unique`, `min`, `max`                                |
-| `Double`           | `required`, `unique`, `min`, `max`                                |
-| `Boolean`          | `required`, `unique`                                              |
-| `LocalDate`        | `required`, `unique`                                              |
-| `LocalTime`        | `required`, `unique`                                              |
-| `ZonedDateTime`    | `required`, `unique`                                              |
-| `Instant`          | `required`, `unique`                                              |
-| `Duration`         | `required`, `unique`                                              |
-| `UUID`             | `required`, `unique`                                              |
-| `Blob`             | `required`, `unique`, `minbytes`, `maxbytes`                      |
-| `AnyBlob`          | `required`, `unique`, `minbytes`, `maxbytes`                      |
-| `ImageBlob`        | `required`, `unique`, `minbytes`, `maxbytes`                      |
-| `TextBlob`         | `required`, `unique`                                              |
-| `ByteBuffer`       | none; supported by some databases only                            |
-| an enum            | `required`, `unique`                                              |
-| `Date`, `DateTime` | `required`, `unique`; deprecated (warning), migrated to `Instant` |
-
-An unknown type, or a validation the type does not support, is an error.
+The type is a field type from the definitions, or the name of an enum declared in the document. The definitions give each
+field type (and enums as a whole) the validations it accepts, and may mark a type as deprecated. An unknown type or a
+validation the type does not accept is an error; a deprecated type is a warning. JHipster's types are in
+`lib/jdl-config/jdl-field-types-config.ts`.
 
 ### Validations
 
-| Validation           | Value                                              |
-| -------------------- | -------------------------------------------------- |
-| `required`           | none                                               |
-| `unique`             | none                                               |
-| `min(<n>)`           | integer, decimal or constant                       |
-| `max(<n>)`           | integer, decimal or constant                       |
-| `minlength(<n>)`     | integer or constant; decimals are rejected         |
-| `maxlength(<n>)`     | integer or constant; decimals are rejected         |
-| `minbytes(<n>)`      | integer or constant; decimals are rejected         |
-| `maxbytes(<n>)`      | integer or constant; decimals are rejected         |
-| `pattern(/<regex>/)` | a regular expression, exported without the slashes |
+Validations follow the type, separated by spaces:
 
-A validation name followed by a value that is not in the list is an error (`Unknown validation`). There is no `email`
-validation in JDL.
+| Form              | Meaning                                                                                                                                                                                                                                      |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `required`        | Keyword of the language, takes no value.                                                                                                                                                                                                     |
+| `unique`          | Keyword of the language, takes no value.                                                                                                                                                                                                     |
+| `<name>(<value>)` | A validation from the definitions. Its definition says whether it takes a number (integer, decimal or constant), an integer (integer or constant; a decimal is an error) or a regular expression `/<regex>/` (exported without the slashes). |
+
+A name followed by a parenthesis that is not a defined validation is an error (`Unknown validation`). JHipster's
+validations are in `lib/jdl-config/jdl-validation-config.ts`.
 
 ## Annotations
 
@@ -270,10 +196,10 @@ An annotation is `@name` or `@name(value)`, where the value is a string, an inte
 Annotations may be placed before an entity, before a field, and before either side of a relationship. The name is exported
 with a lower-case first letter (`@ChangelogDate` becomes `changelogDate`); an annotation without a value is `true`.
 
-- **Entity** annotations are exported under `annotations` in the entity JSON. When the generator loads the entity, they are
-  merged into it, so they can set any entity property: `@ChangelogDate("20240101000000")`, `@skipClient`, `@dto(mapstruct)`,
-  and blueprint-specific properties. The same annotation given twice keeps the last value.
-- **Field** annotations are exported under the field's `options` and merged into the field when it is loaded. An annotation
+- **Entity** annotations are exported under `annotations` in the entity JSON; JHipster merges them into the entity when it
+  loads it, so they can set any entity property (e.g. `@ChangelogDate("20240101000000")`). The same annotation given twice
+  keeps the last value.
+- **Field** annotations are exported under the field's `options`, which JHipster merges into the field. An annotation
   repeated with different values becomes a list.
 - **Relationship** annotations are described in [relationships](#relationships).
 
@@ -333,17 +259,14 @@ and each side is:
   (unless annotations are placed before the source, see below).
 - In a `OneToOne` relationship, the source must own the relationship: naming the field on the destination only is an error.
 - A required relationship from an entity to itself is an error.
-- Both entities must be declared, unless the relationship has `with builtInEntity`, which allows a destination that is a
-  built-in entity (`User`, `Authority`).
+- Both entities must be declared, unless the relationship has an option whose definition marks the destination as a
+  built-in entity (JHipster's `builtInEntity`, for `User` and `Authority`).
 
-Relationship options, after `with`, are separated by commas on the same line. The only option is:
+Relationship options, after `with`, are names from the definitions, separated by commas on the same line; an unknown one is
+an error.
 
-| Option          | Meaning                                                                                  |
-| --------------- | ---------------------------------------------------------------------------------------- |
-| `builtInEntity` | The destination is a built-in entity; exported as `relationshipWithBuiltInEntity: true`. |
-
-Relationship annotations are exported under `options` of the relationship JSON and merged into the relationship when it is
-loaded (for instance `@OnDelete("CASCADE")`, `@OnUpdate("SET NULL")`, `@Id`). Note on which side each one lands:
+Relationship annotations are exported under `options` of the relationship JSON, which JHipster merges into the relationship
+(e.g. `@OnDelete("CASCADE")`). Note on which side each one lands:
 
 - Annotations before the **source** side go to the relationship of the **destination** entity.
 - Annotations before the **destination** side go to the relationship of the **source** entity.
@@ -368,97 +291,71 @@ use mapstruct, serviceImpl, pagination for * except Tag
 The entity list is `*`, `all` (on its own), or comma-separated entity names, optionally followed by `except <names>`.
 Statements naming the same option (and value) accumulate. Every entity named must be declared.
 
-Unary options take no value:
+Each option is defined as either:
 
-| Option           | Meaning                                          |
-| ---------------- | ------------------------------------------------ |
-| `skipClient`     | Skip the client code of the entities             |
-| `skipServer`     | Skip the server code of the entities             |
-| `noFluentMethod` | Generate no fluent setters                       |
-| `readOnly`       | Read only entities                               |
-| `filter`         | Filtering of the entities with the JPA metamodel |
-| `embedded`       | Embedded entities                                |
+- **unary**: `<option> <entities> [except <entities>]`, no value;
+- **binary**: `<option> <entities> with <value> [except <entities>]`, where the value is a name matching
+  `[A-Za-z][A-Za-z0-9-_]*` or a string not starting with `/`. The definition may restrict the value to a list of choices.
 
-Binary options take a value after `with` (a name matching `[A-Za-z][A-Za-z0-9-_]*`, or a string not starting with `/`):
-
-| Option             | Values                                                                                         |
-| ------------------ | ---------------------------------------------------------------------------------------------- |
-| `dto`              | `mapstruct`, `no`                                                                              |
-| `service`          | `serviceClass`, `serviceImpl`, `no`                                                            |
-| `pagination`       | `pagination`, `infinite-scroll`, `no`. The keyword `paginate` is a deprecated alias (warning). |
-| `search`           | `elasticsearch`, `couchbase`, `no`                                                             |
-| `microservice`     | the name of the microservice                                                                   |
-| `angularSuffix`    | any suffix                                                                                     |
-| `clientRootFolder` | any folder                                                                                     |
-
-A unary option given a value, a binary option given none, an unknown option or a value outside the list is an error.
-`dto` and `filter` set `service` to `serviceClass` for the entities that have no `service` value.
+An unknown option, a unary option given a value, a binary option given none, or a value outside the choices is an error. A
+definition may also declare deprecated keywords for an option, accepted with a warning. JHipster's options are in
+`lib/jdl-config/jdl-entity-config.ts`.
 
 The `use` statement sets several binary options at once by value: `use <value>, ... for <entities> [except <entities>]`. Each
-value selects the option it belongs to (`mapstruct` → `dto`, `serviceImpl` → `service`, `infinite-scroll` → `pagination`,
-`elasticsearch` → `search`, ...). `no`, which belongs to several options, is not accepted.
+value selects the option whose choices contain it (with JHipster's options, `mapstruct` selects `dto` and `serviceImpl`
+selects `service`). A value that belongs to no option, or `no`, which belongs to several, is an error.
 
 ## Deployments
 
 ```jdl
 deployment {
-  deploymentType kubernetes
+  deploymentType docker-compose
   appsFolders [gateway, store]
   dockerRepositoryName "myrepo"
-  kubernetesServiceType Ingress
-  ingressDomain "example.com"
-  istio true
-  serviceDiscoveryType consul
 }
 ```
 
-`deployment { key value ... }` with one option per line and an optional comma after each. Several deployments may be
-declared. `deploymentType` is mandatory. With `deploymentType kubernetes` and `istio true`, `ingressDomain` is mandatory.
-Options not given take the defaults of the deployment generator of that type.
+`deployment { key value ... }` with one entry per line and an optional comma after each. Several deployments may be
+declared. As with the application config, the keys, their value kinds and allowed values come from the definitions.
 
-| Option                        | Value         | Allowed values                                                                                 |
-| ----------------------------- | ------------- | ---------------------------------------------------------------------------------------------- |
-| `appsFolders`                 | list of names |                                                                                                |
-| `clusteredDbApps`             | list of names |                                                                                                |
-| `deploymentType`              | name          | `docker-compose`, `kubernetes`                                                                 |
-| `directoryPath`               | string        |                                                                                                |
-| `dockerPushCommand`           | string        |                                                                                                |
-| `dockerRepositoryName`        | string        | a host, URL or plain name                                                                      |
-| `gatewayType`                 | name          | `SpringCloudGateway`. _Deprecated: no generator reads it, it will be removed in JHipster v10._ |
-| `ingressDomain`               | string        | a host or URL                                                                                  |
-| `ingressType`                 | name          | `nginx`, `gke`                                                                                 |
-| `istio`                       | boolean       |                                                                                                |
-| `kubernetesNamespace`         | name          |                                                                                                |
-| `kubernetesServiceType`       | name          | `LoadBalancer`, `NodePort`, `Ingress`                                                          |
-| `kubernetesStorageClassName`  | string        |                                                                                                |
-| `kubernetesUseDynamicStorage` | boolean       |                                                                                                |
-| `monitoring`                  | name          | `no`, `prometheus`                                                                             |
-| `registryReplicas`            | integer       | _Deprecated: no generator reads it, it will be removed in JHipster v10._                       |
-| `serviceDiscoveryType`        | name          | `consul`, `eureka`, `no`                                                                       |
-| `storageType`                 | name          | _Deprecated: no generator reads it, it will be removed in JHipster v10._                       |
+## Definitions
+
+The parser is built from a runtime holding these definitions (`createRuntime` in `lib/jdl/core/parsing/runtime.ts`;
+JHipster's are assembled by `lib/jdl-config/jdl-runtime.ts`):
+
+| Definition     | Provides                                                                                                                                                                                       |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `application`  | The application config keys: value kind, name pattern, allowed values, deprecation. JHipster collects the `jdl` entries of the `configs` of the `app` command and of every command it imports. |
+| `deployment`   | The deployment keys, the same way, from the `deployment` command tree.                                                                                                                         |
+| `entity`       | The entity options: unary or binary, choices, deprecated keywords.                                                                                                                             |
+| `relationship` | The relationship options, and which one marks a built-in destination.                                                                                                                          |
+| `validation`   | The validations with a value, and the kind of value each takes.                                                                                                                                |
+| `fieldTypes`   | The field types, the validations each accepts (and those of enums), deprecations.                                                                                                              |
+| `rules`        | Additional semantic rules, run after the language's own.                                                                                                                                       |
 
 ## Errors and warnings
 
 Parsing stops at the first lexical or grammar error. Name, option and value-kind errors are then reported together, and the
 semantic rules report every remaining problem with its line and column: errors fail the import, warnings (deprecated types
-and options) are logged. The semantic rules are:
+and options) are logged. The rules of the language are:
 
-| Rule                                                       | Reports                                                                       |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `undeclared-relationship-entity`                           | A relationship naming an undeclared entity (without `builtInEntity`)          |
-| `undeclared-application-entity`                            | An application `entities` statement naming an undeclared entity               |
-| `entity-outside-application`                               | An application option naming an entity outside the application                |
-| `undeclared-option-entity`                                 | A top-level option naming an undeclared entity                                |
-| `duplicated-entity`, `duplicated-enum`, `duplicated-field` | A declaration repeated                                                        |
-| `field-type`                                               | An unknown field type (error), a deprecated one (warning)                     |
-| `validation-for-field-type`                                | A validation the field type does not support                                  |
-| `decimal-validation-value`                                 | A decimal given to `minlength`, `maxlength`, `minbytes` or `maxbytes`         |
-| `required-reflexive-relationship`                          | A required relationship from an entity to itself                              |
-| `one-to-one-direction`                                     | A `OneToOne` relationship owned by the destination only                       |
-| `option-value`                                             | An entity option value outside its list; a `use` value belonging to no option |
-| `relationship-between-applications`                        | A relationship between entities of different applications                     |
-| `application-option-value`                                 | An application option value outside its list                                  |
-| `deployment-option-value`                                  | A deployment option value outside its list                                    |
-| `namespace-config-blueprint`                               | A `config(<blueprint>)` block for a blueprint not in `blueprints`             |
-| `deployment-type`                                          | A deployment without `deploymentType`                                         |
-| `kubernetes-istio-ingress-domain`                          | A Kubernetes deployment with Istio and no `ingressDomain`                     |
+| Rule                                                       | Reports                                                                         |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `undeclared-relationship-entity`                           | A relationship naming an undeclared entity (unless the destination is built in) |
+| `undeclared-application-entity`                            | An application `entities` statement naming an undeclared entity                 |
+| `entity-outside-application`                               | An application option naming an entity outside the application                  |
+| `undeclared-option-entity`                                 | A top-level option naming an undeclared entity                                  |
+| `duplicated-entity`, `duplicated-enum`, `duplicated-field` | A declaration repeated                                                          |
+| `field-type`                                               | An unknown field type (error), a deprecated one (warning)                       |
+| `validation-for-field-type`                                | A validation the field type does not support                                    |
+| `decimal-validation-value`                                 | A decimal given to a validation that takes an integer                           |
+| `required-reflexive-relationship`                          | A required relationship from an entity to itself                                |
+| `one-to-one-direction`                                     | A `OneToOne` relationship owned by the destination only                         |
+| `option-value`                                             | An entity option value outside its list; a `use` value belonging to no option   |
+| `relationship-between-applications`                        | A relationship between entities of different applications                       |
+| `application-option-value`                                 | An application option value outside its list                                    |
+| `deployment-option-value`                                  | A deployment option value outside its list                                      |
+| `namespace-config-blueprint`                               | A `config(<blueprint>)` block for a blueprint not in `blueprints`               |
+
+Definitions may add rules; JHipster adds `deployment-type` (a deployment needs `deploymentType`) and
+`kubernetes-istio-ingress-domain`.
