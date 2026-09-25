@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { type CstNode, CstParser, type TokenType } from 'chevrotain';
+import { type CstNode, CstParser, type TokenType, tokenMatcher } from 'chevrotain';
 
 import { NAME } from './lexer/shared-tokens.ts';
 
@@ -327,10 +327,18 @@ export default class JDLParser extends CstParser {
 
   relationshipOptions(): CstNode {
     this.RULE('relationshipOptions', () => {
-      this.AT_LEAST_ONE_SEP({
-        SEP: this.tokens.COMMA_WITHOUT_NEWLINE,
+      this.SUBRULE(this.relationshipOption, { LABEL: 'relationshipOption' });
+      this.MANY({
+        // A comma also separates the relationships of a block: the next relationship starts with its source, a name
+        // followed by `to` or by its field in braces, an option is a name followed by neither.
+        GATE: () =>
+          this.LA(1).tokenType === this.tokens.COMMA &&
+          tokenMatcher(this.LA(2), this.tokens.NAME) &&
+          this.LA(3).tokenType !== this.tokens.TO &&
+          this.LA(3).tokenType !== this.tokens.LCURLY,
         DEF: () => {
-          this.SUBRULE(this.relationshipOption, { LABEL: 'relationshipOption' });
+          this.CONSUME(this.tokens.COMMA);
+          this.SUBRULE2(this.relationshipOption, { LABEL: 'relationshipOption' });
         },
       });
     });
