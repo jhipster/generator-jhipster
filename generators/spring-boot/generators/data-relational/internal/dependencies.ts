@@ -43,7 +43,7 @@ export const getTestcontainerSupport = ({
       },
       mssql: {
         testcontainerClass: 'MSSQLServerContainer',
-        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassPackage: 'org.testcontainers.mssqlserver',
         testcontainerClassInitialization: `// You are required to accept EULA license for SQL server containers
                 // Refer to https://java.testcontainers.org/modules/databases/mssqlserver/
                 //.acceptLicense()`,
