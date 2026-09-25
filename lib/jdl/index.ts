@@ -19,3 +19,7 @@
 
 export * from './jdl-importer.ts';
 export * from './core/parsing/api.ts';
+export { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
+export { buildJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
+export type { JDLApplicationConfig, JDLDefinitions } from './core/parsing/types/parsing.ts';
+export type { JDLRuntime } from './core/parsing/types/runtime.ts';

@@ -39,7 +39,7 @@ import type JDLObject from './core/models/jdl-object.ts';
 import { errorLocation } from './core/parsing/location.ts';
 import { checkSemantics } from './core/parsing/semantic/index.ts';
 import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
-import type { JDLApplicationConfig } from './core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from './core/parsing/types/parsing.ts';
 import type { JDLRuntime } from './core/parsing/types/runtime.ts';
 import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
@@ -66,16 +66,31 @@ type JDLApplicationConfiguration = {
 };
 
 /**
+ * The definitions of an importer: the application options of a generator, the JHipster definitions completing the others;
+ * or definitions, the JHipster ones completing those not passed.
+ */
+export type JDLImporterDefinitions = JDLApplicationConfig | Partial<JDLDefinitions>;
+
+const getRuntime = (definitions?: JDLImporterDefinitions): JDLRuntime => {
+  if (!definitions) return getDefaultRuntime();
+  return createJDLRuntime('validatorConfig' in definitions ? { application: definitions } : definitions);
+};
+
+/**
  * Creates a new JDL importer from files.
  * There are two ways to create an importer:
  *   - By providing an existing application content, if there's one
  *   - Deprecated: providing some application options
  */
-export function createImporterFromFiles(files: string[], configuration?: JDLApplicationConfiguration, definition?: JDLApplicationConfig) {
+export function createImporterFromFiles(
+  files: string[],
+  configuration?: JDLApplicationConfiguration,
+  definitions?: JDLImporterDefinitions,
+) {
   if (!files) {
     throw new Error('Files must be passed to create a new JDL importer.');
   }
-  const runtime = definition ? createJDLRuntime({ application: definition }) : getDefaultRuntime();
+  const runtime = getRuntime(definitions);
   const content = parseFromFiles(files, runtime);
   return makeJDLImporter(content, configuration ?? {}, runtime);
 }
@@ -89,12 +104,12 @@ export function createImporterFromFiles(files: string[], configuration?: JDLAppl
 export function createImporterFromContent(
   jdlString: string,
   configuration?: JDLApplicationConfiguration,
-  definition?: JDLApplicationConfig,
+  definitions?: JDLImporterDefinitions,
 ) {
   if (!jdlString) {
     throw new Error('A JDL content must be passed to create a new JDL importer.');
   }
-  const runtime = definition ? createJDLRuntime({ application: definition }) : getDefaultRuntime();
+  const runtime = getRuntime(definitions);
   const content = parseFromContent(jdlString, runtime);
   return makeJDLImporter(content, configuration ?? {}, runtime);
 }

@@ -19,7 +19,7 @@
 import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
 
 import type { JHipsterCommandDefinition, JHipsterConfigs } from '../../lib/command/types.ts';
-import type { JDLApplicationConfig } from '../../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from '../../lib/jdl/core/parsing/types/parsing.ts';
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
@@ -40,7 +40,12 @@ export type Options = YeomanOptions & {
 
   skipPriorities?: string[];
 
-  /** @experimental */
+  /**
+   * The definitions of the jdl, the JHipster ones completing those not passed.
+   * @experimental
+   */
+  jdlDefinitions?: Partial<JDLDefinitions>;
+  /** @deprecated use `jdlDefinitions`, `{ application: jdlDefinition }` */
   jdlDefinition?: JDLApplicationConfig;
   /** @experimental */
   commandsConfigs?: JHipsterConfigs;

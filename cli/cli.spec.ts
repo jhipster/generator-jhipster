@@ -28,6 +28,8 @@ import { coerce } from 'semver';
 import type FullEnvironment from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../generators/index.ts';
+import type { JHipsterConfigs } from '../lib/command/types.ts';
+import type { JDLDefinitions } from '../lib/jdl/index.ts';
 
 import type JHipsterCommand from './jhipster-command.ts';
 import { createProgram } from './program.ts';
@@ -271,6 +273,29 @@ describe('cli', () => {
         expect(command).toEqual('jhipster:mocked');
         expect(options.foo).toBe(true);
         expect(options.fooBar).toBe(true);
+      });
+
+      it('should pass the application jdl definitions of the configs of the command', async () => {
+        await mockCli(argv, { commands, env });
+        const [, options] = runArgs;
+        expect(Object.keys(options.jdlDefinitions)).toEqual(['application']);
+        expect(options.jdlDefinitions.application.validatorConfig).toBeDefined();
+        // The deprecated option, still read by generators, is the same object.
+        expect(options.jdlDefinition).toBe(options.jdlDefinitions.application);
+      });
+
+      it('should pass the jdl definitions of getJDLDefinitions', async () => {
+        const getJDLDefinitions = esmocha.fn(({ defaults }: { defaults: JDLDefinitions; commandsConfigs: JHipsterConfigs }) => ({
+          entity: defaults.entity,
+        }));
+        await mockCli(argv, { commands, env, getJDLDefinitions });
+        const [, options] = runArgs;
+        const [[{ defaults, commandsConfigs }]] = getJDLDefinitions.mock.calls;
+        expect(Object.keys(defaults)).toEqual(expect.arrayContaining(['application', 'deployment', 'entity', 'fieldTypes']));
+        expect(commandsConfigs).toBe(options.commandsConfigs);
+        // The application definitions the cli passes are the JHipster ones, the deprecated option too.
+        expect(options.jdlDefinitions).toEqual({ entity: defaults.entity, application: defaults.application });
+        expect(options.jdlDefinition).toBe(options.jdlDefinitions.application);
       });
     });
 

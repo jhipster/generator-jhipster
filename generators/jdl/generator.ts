@@ -37,7 +37,7 @@ import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 
-import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.ts';
+import { addApplicationIndex, allNewApplications, customizeForMicroservices, resolveJDLDefinitions } from './internal/index.ts';
 import type { Config as JdlConfig, Options as JdlOptions } from './types.ts';
 
 /**
@@ -140,7 +140,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
             // Deployment configuration is written through the in-memory file system, like the application one.
             skipDeploymentFileGeneration: true,
           },
-          this.options.jdlDefinition,
+          resolveJDLDefinitions(this.options),
         );
 
         const importState = importer.import();

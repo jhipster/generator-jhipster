@@ -134,6 +134,13 @@ const command = {
       jdl: { type: 'string', tokenType: 'NAME', tokenValuePattern: NPM_PACKAGE_NAME_PATTERN },
       scope: 'none',
     },
+    jdlDefinitions: {
+      internal: {
+        type: Object,
+      },
+      scope: 'none',
+    },
+    /** @deprecated use `jdlDefinitions` */
     jdlDefinition: {
       internal: {
         type: Object,

@@ -26,8 +26,10 @@ import didYouMean from 'didyoumean';
 import type Environment from 'yeoman-environment';
 
 import baseCommand from '../generators/base/command.ts';
-import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
+import { type JHipsterCommandDefinition, type JHipsterConfigs, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
+import type { JDLDefinitions } from '../lib/jdl/core/parsing/types/parsing.ts';
+import { getDefaultJDLDefinitions } from '../lib/jdl-config/jdl-runtime.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
 import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';
 import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
@@ -61,6 +63,15 @@ type BuildCommands = {
   printLogo?: () => void | Promise<void>;
   printBlueprintLogo?: () => void | Promise<void>;
   createEnvBuilder: (options?: BaseEnvironmentOptions, prepareOptions?: PrepareOptions) => Promise<EnvironmentBuilder>;
+  /**
+   * The definitions of the jdl, for a cli that customizes it, a blueprint's own cli. It receives the JHipster definitions and
+   * the configs of the command, blueprint ones included; the JHipster definitions complete the ones it does not return.
+   * Without it, the jdl takes the JHipster definitions and the application options of the configs of the command.
+   */
+  getJDLDefinitions?: (context: {
+    defaults: JDLDefinitions;
+    commandsConfigs: JHipsterConfigs;
+  }) => Partial<JDLDefinitions> | Promise<Partial<JDLDefinitions>>;
 };
 
 type BuildJHipsterOptions = Partial<BuildCommands> & {
@@ -187,6 +198,7 @@ export const buildCommands = ({
   printBlueprintLogo = () => {},
   createEnvBuilder,
   silent,
+  getJDLDefinitions = ({ commandsConfigs }) => ({ application: buildJDLApplicationConfig(commandsConfigs) }),
 }: BuildCommands) => {
   defaultCommand ??= resolveDefaultCommand();
   /* create commands */
@@ -288,7 +300,12 @@ export const buildCommands = ({
         const cmdOptions = everything.pop();
         const args = everything;
         const commandsConfigs = Object.freeze({ ...command.configs, ...command.blueprintConfigs });
-        const jdlDefinition = buildJDLApplicationConfig(commandsConfigs);
+        const defaultJDLDefinitions = getDefaultJDLDefinitions();
+        const customJDLDefinitions = await getJDLDefinitions({ defaults: defaultJDLDefinitions, commandsConfigs });
+        // `jdlDefinition`, deprecated, is the same object as the application definitions: a generator composed with another
+        // `jdlDefinition` is told apart from one that just got it forwarded.
+        const jdlDefinition = customJDLDefinitions.application ?? defaultJDLDefinitions.application;
+        const jdlDefinitions = { ...customJDLDefinitions, application: jdlDefinition };
         const options = {
           ...program.opts(),
           ...cmdOptions,
@@ -297,6 +314,7 @@ export const buildCommands = ({
           entrypointGenerator,
           blueprints: envBuilder?.getBlueprintsOption(),
           positionalArguments: args,
+          jdlDefinitions,
           jdlDefinition,
           commandsConfigs,
         };
