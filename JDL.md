@@ -215,7 +215,7 @@ relationship OneToMany {
 
 relationship ManyToOne {
   Product{owner(login)} to User with builtInEntity
-  @OnDelete("CASCADE") Order to @Id Customer
+  Order to @OnDelete("CASCADE") Customer
 }
 
 relationship ManyToMany {
@@ -257,10 +257,13 @@ Any other relationship option is added by the generators or blueprints in use.
 
 ### Relationship annotations
 
-Relationship annotations (e.g. `@OnDelete("CASCADE")`) land on the opposite side:
+Relationship annotations land on the opposite side:
 
 - Annotations before the **source** side apply to the relationship of the **destination** entity.
 - Annotations before the **destination** side apply to the relationship of the **source** entity.
+
+With JHipster, `Order to @OnDelete("CASCADE") Customer` sets `onDelete` on the relationship of `Order`, which holds the
+foreign key; placed before `Order`, the same annotation would land on the relationship of `Customer` and be ignored.
 
 ## Entity options
 
