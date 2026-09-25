@@ -222,7 +222,7 @@ relationship ManyToMany {
 
 A block holds one or more relationships of the same type, separated by commas or newlines. Each relationship is:
 
-`[@annotation ...] <side> to [@annotation ...] <side> [with <option>]`
+`[@annotation ...] <side> to [@annotation ...] <side> [with <option>, ...]`
 
 and each side is:
 
@@ -239,8 +239,8 @@ and each side is:
 - A required relationship from an entity to itself is an error.
 - Both entities must be declared. To relate to a built-in entity (`User`, `Authority`), add `with builtInEntity`.
 
-A relationship takes one option, after `with`: `builtInEntity`, or an option the generator or a blueprint adds. An unknown
-option is an error.
+Relationship options follow `with`, separated by commas: `builtInEntity`, or an option the generator or a blueprint adds.
+An unknown option is an error.
 
 Relationship annotations (e.g. `@OnDelete("CASCADE")`) land on the opposite side:
 
