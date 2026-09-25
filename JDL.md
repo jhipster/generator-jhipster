@@ -367,9 +367,30 @@ An option takes either no value or one value:
 An unknown option, a value given to an option without one, a missing value, or a value the option does not allow is an
 error.
 
-The `use` statement sets several options at once by their values: `use <value>, ... for <entities> [except <entities>]`. Each
-value selects the option it belongs to: `mapstruct` sets `dto`, `serviceImpl` sets `service`. A value that belongs to no
-option, or `no`, which belongs to several, is an error.
+### The `use` statement
+
+`use <value>, ... for <entities> [except <entities>]` is a shorthand for options with a value: it lists **values**, not
+option names, and each value sets the option whose allowed values contain it. With JHipster's generators:
+
+```jdl
+use mapstruct, serviceImpl, infinite-scroll for Product, Order
+```
+
+is the same as:
+
+```jdl
+dto Product, Order with mapstruct
+service Product, Order with serviceImpl
+pagination Product, Order with infinite-scroll
+```
+
+So `use` only works with options that take a value from a fixed list. It is an error to give it:
+
+- an option without a value, such as `readOnly` (write `readOnly Product` instead);
+- an option name, such as `dto`;
+- a value of an option that accepts any value, such as `microservice` or `clientRootFolder`, since the value tells no
+  option;
+- `no`, which is an allowed value of several options.
 
 ## Deployments
 
