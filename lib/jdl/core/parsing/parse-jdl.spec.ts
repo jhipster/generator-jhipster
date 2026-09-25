@@ -38,6 +38,20 @@ describe('jdl - parseJDL', () => {
     expect(ast?.entities.map(entity => entity.name)).toEqual(['A']);
   });
 
+  it('returns the comments and directives, javadoc included, in source order', () => {
+    const content = '#fill: #eee\n// line\n/** doc */\nentity A { /* block */ }';
+    const { comments, diagnostics } = parseJDL(content, getDefaultRuntime());
+    expect(diagnostics.filter(({ severity }) => severity !== 'info')).toEqual([]);
+    expect(comments.map(({ type, value, location }) => [type, value, content.slice(location.startOffset, location.endOffset + 1)])).toEqual(
+      [
+        ['Directive', 'fill: #eee', '#fill: #eee'],
+        ['Line', ' line', '// line'],
+        ['Block', '* doc ', '/** doc */'],
+        ['Block', ' block ', '/* block */'],
+      ],
+    );
+  });
+
   it('reports every lexing error, without an AST', () => {
     const result = parseJDL('entity A {\n  name String ^\n  age Integer ^\n}', getDefaultRuntime());
     expect(result.ast).toBeUndefined();

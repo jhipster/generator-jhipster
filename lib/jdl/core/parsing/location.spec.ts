@@ -24,7 +24,10 @@ import { parseFromContent } from '../readers/jdl-reader.ts';
 
 import type { JDLLocation, ParsedJDLApplications } from './types/parsed.ts';
 
-const content = `/** The answer */
+// Comments and directives are before and inside the declarations: the locations are offsets in the source as written.
+const content = `#fill: #eee
+// The constants
+/** The answer */
 MAX = 42
 
 application {
@@ -47,7 +50,7 @@ deployment {
 @ChangelogDate(20200101000000)
 entity A (a_table) {
   /** A field */
-  @Id name String required maxlength(MAX)
+  @Id name String required maxlength(MAX) // the name
   age Integer
 }
 

@@ -24,6 +24,19 @@ import { IDENTIFIER, NAME } from './shared-tokens.ts';
 import createTokenFromConfigCreator from './token-creator.ts';
 import ValidationTokens from './validation-tokens.ts';
 
+/** The lexing group of the comments and directives: kept out of the parser input, returned apart for tools. */
+export const COMMENTS_GROUP = 'comments';
+
+const DIRECTIVE = /#[^\n\r\u2028\u2029]*/y;
+
+/** A directive, `#` up to the end of the line, only at the start of a line. */
+function matchDirective(text: string, offset: number): RegExpExecArray | null {
+  const previous = offset === 0 ? undefined : text[offset - 1];
+  if (previous !== undefined && !'\n\r\u2028\u2029'.includes(previous)) return null;
+  DIRECTIVE.lastIndex = offset;
+  return DIRECTIVE.exec(text);
+}
+
 export type JDLTokens = {
   /** The tokens the parser refers to by name. */
   tokens: Record<string, TokenType>;
@@ -63,11 +76,24 @@ export const buildTokens = (): JDLTokens => {
     pattern: /\/\*\*([\s\S]*?)\*\//,
   });
 
-  // Comments
   createTokenFromConfig({
     name: 'BLOCK_COMMENT',
     pattern: /\/\*([\s\S]*?)\*\//,
-    group: Lexer.SKIPPED,
+    group: COMMENTS_GROUP,
+  });
+  // Before REGEX, which would read `// a /` as a pattern.
+  createTokenFromConfig({
+    name: 'LINE_COMMENT',
+    pattern: /\/\/[^\n\r\u2028\u2029]*/,
+    group: COMMENTS_GROUP,
+  });
+  // A line starting with `#` is a directive for other tools (JDL Studio), ignored by the jdl.
+  createTokenFromConfig({
+    name: 'DIRECTIVE',
+    pattern: { exec: matchDirective },
+    start_chars_hint: ['#'],
+    line_breaks: false,
+    group: COMMENTS_GROUP,
   });
 
   // Constants
@@ -105,7 +131,8 @@ export const buildTokens = (): JDLTokens => {
     _tokens[token.name] = token;
   });
 
-  createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\// });
+  // A pattern is always the argument of a validation: it ends at the last `/` closed by `)`, so a comment may follow it.
+  createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\/(?=\s*\))/ });
   createTokenFromConfig({ name: 'DECIMAL', pattern: /-?\d+\.\d+/ });
   createTokenFromConfig({ name: 'INTEGER', pattern: /-?\d+/ });
   // A backslash is a literal character, except that `\"` does not close the literal, e.g. "java(\"a\")".

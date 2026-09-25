@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { Lexer, type Rule, type TokenType } from 'chevrotain';
+import type { Rule, TokenType } from 'chevrotain';
 
 import TokenCollectorVisitor from './token-collector-visitor.ts';
 
@@ -44,5 +44,6 @@ function getUselessTokens(usedTokens: TokenType[], allDefinedTokens: TokenType[]
   const directlyUsedTokens = new Set(usedTokens);
   const notDirectlyUsedTokens = allDefinedTokens.filter(token => !directlyUsedTokens.has(token));
   const redundant = notDirectlyUsedTokens.filter(token => !token.CATEGORIES?.some(category => usedCategories.has(category)));
-  return redundant.filter(tokenType => tokenType.GROUP !== Lexer.SKIPPED);
+  // A skipped or grouped token never reaches the parser.
+  return redundant.filter(tokenType => tokenType.GROUP === undefined);
 }

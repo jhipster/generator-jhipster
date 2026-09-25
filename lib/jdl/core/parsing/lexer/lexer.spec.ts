@@ -88,6 +88,31 @@ describe('jdl - JDLLexer', () => {
     });
   });
 
+  describe('when passing comments and directives', () => {
+    it('should lex them apart from the tokens', () => {
+      const { tokens, groups, errors } = JDLLexer.tokenize('#fill: #eee\n// a / b\nentity /* c */ A');
+      expect(errors).toHaveLength(0);
+      expect(tokens.map(token => token.tokenType.name)).toEqual(['ENTITY', 'IDENTIFIER']);
+      expect(groups.comments.map(token => [token.tokenType.name, token.image])).toEqual([
+        ['DIRECTIVE', '#fill: #eee'],
+        ['LINE_COMMENT', '// a / b'],
+        ['BLOCK_COMMENT', '/* c */'],
+      ]);
+    });
+
+    it('should lex a directive only at the start of a line', () => {
+      const { errors } = JDLLexer.tokenize('entity A #fill');
+      expect(errors.map(error => error.message)).toEqual([expect.stringContaining('->#<-')]);
+    });
+
+    it('should end a pattern before a comment', () => {
+      const { tokens, groups, errors } = JDLLexer.tokenize('pattern(/a\\/b/) // c/');
+      expect(errors).toHaveLength(0);
+      expect(tokens.map(token => token.image)).toEqual(['pattern', '(', '/a\\/b/', ')']);
+      expect(groups.comments.map(token => token.image)).toEqual(['// c/']);
+    });
+  });
+
   describe('when passing an invalid JDL input', () => {
     let lexingResult: ReturnType<typeof JDLLexer.tokenize>;
 

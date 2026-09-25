@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-import { type CstNode, EOF, type ILexingError, type IRecognitionException, type IToken } from 'chevrotain';
+import { type CstNode, EOF, type ILexingError, type ILexingResult, type IRecognitionException, type IToken } from 'chevrotain';
 
 import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
 import performJDLPostParsingTasks from './jdl-post-parsing-tasks.ts';
+import { COMMENTS_GROUP } from './lexer/lexer.ts';
 import { tokenLocation } from './location.ts';
 import { checkSemantics } from './semantic/index.ts';
 import type { JDLDiagnostic } from './semantic/types.ts';
@@ -45,7 +46,35 @@ export type JDLParseResult = {
   ast?: ParsedJDLApplications;
   /** Every problem found, errors and warnings, in source order. */
   diagnostics: JDLDiagnostic[];
+  /** The comments and directives, javadoc included, in source order: the AST keeps only the javadoc, as documentation. */
+  comments: JDLComment[];
 };
+
+export type JDLComment = {
+  /** `Line` is `// …`, `Block` is `/* … *\/` or a javadoc, `Directive` is a line starting with `#`. */
+  type: 'Line' | 'Block' | 'Directive';
+  /** The text without its delimiters. */
+  value: string;
+  location: JDLLocation;
+};
+
+const COMMENT_TYPES: Record<string, { type: JDLComment['type']; value: (image: string) => string }> = {
+  LINE_COMMENT: { type: 'Line', value: image => image.slice(2) },
+  BLOCK_COMMENT: { type: 'Block', value: image => image.slice(2, -2) },
+  JAVADOC: { type: 'Block', value: image => image.slice(2, -2) },
+  DIRECTIVE: { type: 'Directive', value: image => image.slice(1) },
+};
+
+const toComment = (token: IToken): JDLComment => {
+  const { type, value } = COMMENT_TYPES[token.tokenType.name];
+  return { type, value: value(token.image), location: tokenLocation(token) };
+};
+
+/** The comments of a lexed jdl; the javadoc is a token of the grammar, not of the comments group. */
+function getComments(lexResult: ILexingResult): JDLComment[] {
+  const comments = [...(lexResult.groups[COMMENTS_GROUP] ?? []), ...lexResult.tokens.filter(token => token.tokenType.name === 'JAVADOC')];
+  return comments.sort((a, b) => a.startOffset - b.startOffset).map(toComment);
+}
 
 /** The location of a token, none for one inserted by recovery or the end of the input. */
 const locationOfToken = (token: IToken): JDLLocation | undefined =>
@@ -79,8 +108,9 @@ const parsingDiagnostic = (error: IRecognitionException): JDLDiagnostic => ({
  */
 export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<ParseOptions, 'startRule'>): JDLParseResult {
   const lexResult = runtime.lexer.tokenize(input);
+  const comments = getComments(lexResult);
   if (lexResult.errors.length > 0) {
-    return { diagnostics: lexResult.errors.map(lexingDiagnostic) };
+    return { diagnostics: lexResult.errors.map(lexingDiagnostic), comments };
   }
   const { recoveringParser } = runtime;
   recoveringParser.input = lexResult.tokens;
@@ -88,7 +118,7 @@ export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<Pars
   const cst = (recoveringParser as unknown as Record<string, () => CstNode>)[startRule]();
   if (recoveringParser.errors.length > 0) {
     // The CST has what could be parsed; the checks would report the consequences of the errors, only the errors are.
-    return { ast: buildRecoveredAst(cst, runtime), diagnostics: recoveringParser.errors.map(parsingDiagnostic) };
+    return { ast: buildRecoveredAst(cst, runtime), diagnostics: recoveringParser.errors.map(parsingDiagnostic), comments };
   }
   const diagnostics: JDLDiagnostic[] = performAdditionalSyntaxChecks(cst, runtime).map(error => ({
     ruleId: 'syntax',
@@ -104,7 +134,7 @@ export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<Pars
     diagnostics.push(...checkSemantics(performJDLPostParsingTasks(ast), runtime));
   }
   diagnostics.sort((a, b) => (a.location?.startOffset ?? Infinity) - (b.location?.startOffset ?? Infinity));
-  return { ast, diagnostics };
+  return { ast, diagnostics, comments };
 }
 
 /** The AST of what could be parsed, none when the CST misses what the AST builder needs. */
