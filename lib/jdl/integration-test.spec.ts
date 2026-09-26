@@ -508,6 +508,15 @@ application {
       "stringConfig": "barValue",
       "trueConfig": true,
     },
+    "foo": {
+      "falseConfig": false,
+      "integerConfig": 123,
+      "listConfig": [
+        "fooitem",
+      ],
+      "stringConfig": "fooValue",
+      "trueConfig": true,
+    },
   },
 }
 `);

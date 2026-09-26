@@ -69,8 +69,33 @@ describe('jdl - statements', () => {
   });
 
   it('should group the statements into the AST', () => {
-    expect(ast.applications[0].config.baseName).toBe('two');
+    expect(ast.applications[0].config.baseName).toBe('one');
     expect(ast.options).toEqual({ dto: { mapstruct: { list: ['A', 'B'], excluded: [] } } });
     expect(ast.relationships.map(relationship => relationship.from.injectedField)).toEqual(['b', 'c']);
+  });
+
+  describe('an application with several statements of a kind', () => {
+    const source = `application {
+  config { baseName one }
+  config(foo) { a 1 }
+  entities A
+  config { baseName two }
+  config(bar) { b 2 }
+  config(foo) { c 3 }
+  entities B
+}
+entity A
+entity B
+`;
+    const [application] = parse(source, runtime, { onWarning: () => {} }).applications;
+
+    it('should keep the first config and entities statements, the others being reported', () => {
+      expect(application.config).toEqual({ baseName: 'one' });
+      expect(application.entitiesOptions).toEqual({ entityList: ['A'], excluded: [] });
+    });
+
+    it('should keep the config of every namespace, the first one of each', () => {
+      expect(application.namespaceConfigs).toEqual({ foo: { a: '1' }, bar: { b: '2' } });
+    });
   });
 });

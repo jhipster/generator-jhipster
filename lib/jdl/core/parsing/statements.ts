@@ -91,7 +91,8 @@ function mergeOptions(options: ParsedJDLOption[], binaryOptionName: BinaryOption
 }
 
 /**
- * The application of an application block: the last config and entities statements win, the option statements are merged.
+ * The application of an application block: its first config, first config of each namespace and first entities
+ * statements, the duplicated-application-statement rule reporting the others; its option statements merged.
  */
 export function groupApplicationStatements(
   statements: JDLApplicationStatement[],
@@ -105,12 +106,11 @@ export function groupApplicationStatements(
     useOptions: [],
   };
   const options: ParsedJDLOption[] = [];
-  for (const statement of statements) {
+  for (const statement of statements.filter(statement => !isDuplicatedApplicationStatement(statements, statement))) {
     if (statement.type === 'config') {
       application.config = statement.config;
     } else if (statement.type === 'namespaceConfig') {
-      // Only the last namespace config is kept, whatever its namespace.
-      application.namespaceConfigs = { [statement.namespace]: statement.config };
+      application.namespaceConfigs![statement.namespace] = statement.config;
     } else if (statement.type === 'entities') {
       application.entitiesOptions = statement.entities;
     } else if (statement.type === 'option') {
@@ -122,6 +122,22 @@ export function groupApplicationStatements(
   application.options = mergeOptions(options, binaryOptionName);
   return setKind(application, 'Application');
 }
+
+/** What an application statement declares once: its config, the config of a namespace, its entities; none for an option. */
+const declares = (statement: JDLApplicationStatement): string | undefined => {
+  if (statement.type === 'config' || statement.type === 'entities') return statement.type;
+  if (statement.type === 'namespaceConfig') return `config(${statement.namespace})`;
+  return undefined;
+};
+
+/** Whether an application statement declares again what an earlier one declares. */
+export function isDuplicatedApplicationStatement(statements: JDLApplicationStatement[], statement: JDLApplicationStatement): boolean {
+  const declared = declares(statement);
+  return declared !== undefined && statements.find(other => declares(other) === declared) !== statement;
+}
+
+/** What a duplicated application statement declares, to report it. */
+export const applicationStatementName = (statement: JDLApplicationStatement): string => declares(statement) ?? statement.type;
 
 /**
  * The AST of a jdl from its statements: each kind of statement in its own list, the constants in a record, the option

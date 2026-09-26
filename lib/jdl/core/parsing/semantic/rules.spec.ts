@@ -196,6 +196,35 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('duplicated-application-statement', () => {
+    it('reports a config, a namespace config or an entities statement declared again in an application', () => {
+      expect(
+        check(`application {
+  config { baseName app blueprints [foo, bar] }
+  config(foo) { a 1 }
+  config(bar) { b 2 }
+  entities A
+  config { baseName other }
+  config(foo) { c 3 }
+  entities A
+}
+entity A`),
+      ).toEqual([
+        {
+          ruleId: 'duplicated-application-statement',
+          message: 'The application app declares config more than once.',
+          at: 'config { baseName other }',
+        },
+        {
+          ruleId: 'duplicated-application-statement',
+          message: 'The application app declares config(foo) more than once.',
+          at: 'config(foo) { c 3 }',
+        },
+        { ruleId: 'duplicated-application-statement', message: 'The application app declares entities more than once.', at: 'entities A' },
+      ]);
+    });
+  });
+
   describe('duplicated-enum', () => {
     it('reports a second declaration', () => {
       expect(check('enum E { X }\nenum E { Y }')).toEqual([

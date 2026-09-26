@@ -18,6 +18,7 @@
  */
 import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../relationship-options.ts';
 import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../relationship-types.ts';
+import { type JDLApplicationStatement, applicationStatementName, getStatements, isDuplicatedApplicationStatement } from '../statements.ts';
 import type { JDLLocation, ParsedJDLOptionConfig, ParsedJDLRelationship, ParsedJDLUseOption } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
@@ -388,6 +389,20 @@ export const deploymentOptionValue: JDLSemanticRule = {
 };
 
 /** A namespace config configures the blueprint of the same name, which the application must use. */
+export const duplicatedApplicationStatement: JDLSemanticRule = {
+  id: 'duplicated-application-statement',
+  check: ast =>
+    ast.applications.flatMap(application => {
+      const statements = getStatements<JDLApplicationStatement>(application) ?? [];
+      return statements
+        .filter(statement => isDuplicatedApplicationStatement(statements, statement))
+        .map(statement => ({
+          message: `The application ${application.config.baseName} declares ${applicationStatementName(statement)} more than once.`,
+          location: statement.location,
+        }));
+    }),
+};
+
 export const namespaceConfigBlueprint: JDLSemanticRule = {
   id: 'namespace-config-blueprint',
   check: ast =>
@@ -454,6 +469,7 @@ export const semanticRules: JDLSemanticRule[] = [
   duplicatedEntity,
   duplicatedEnum,
   duplicatedField,
+  duplicatedApplicationStatement,
   fieldType,
   validationForFieldType,
   decimalValidationValue,

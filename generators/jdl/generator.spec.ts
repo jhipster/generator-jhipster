@@ -184,6 +184,9 @@ describe(`generator - ${generator}`, () => {
   },
   "generator-jhipster-bar": {
     "config": "barValue"
+  },
+  "generator-jhipster-foo": {
+    "config": "fooValue"
   }
 }
 ",
