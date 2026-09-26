@@ -82,8 +82,9 @@ function mergeOptions(options: ParsedJDLOption[], binaryOptionName: BinaryOption
     mergeOption(merged[option.optionName] as ParsedJDLOptionConfig, option);
   }
   for (const option of options.filter(option => option.optionValue !== undefined)) {
-    option.optionName = binaryOptionName(option.optionName, option.location);
-    const byValue = (merged[option.optionName] ??= {}) as Record<string, ParsedJDLOptionConfig>;
+    // The statement keeps its keyword as written; the AST is keyed by the option it names.
+    const optionName = binaryOptionName(option.optionName, option.location);
+    const byValue = (merged[optionName] ??= {}) as Record<string, ParsedJDLOptionConfig>;
     byValue[option.optionValue!] ??= setKind({ list: [], excluded: [] }, 'Option');
     mergeOption(byValue[option.optionValue!], option);
   }

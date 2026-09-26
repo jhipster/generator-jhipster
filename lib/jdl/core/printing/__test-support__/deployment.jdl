@@ -1,0 +1,12 @@
+deployment {
+  deploymentType docker-compose
+  appsFolders [store, invoice]
+  dockerRepositoryName "myrepo"
+  monitoring no
+}
+deployment {
+  deploymentType kubernetes
+  appsFolders [store]
+  dockerRepositoryName "myrepo"
+  kubernetesNamespace store
+}
