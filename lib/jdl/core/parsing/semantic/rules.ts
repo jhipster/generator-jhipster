@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { getDuplicatedKeys } from '../location.ts';
 import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../relationship-options.ts';
 import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../relationship-types.ts';
 import { type JDLApplicationStatement, applicationStatementName, getStatements, isDuplicatedApplicationStatement } from '../statements.ts';
@@ -403,6 +404,43 @@ export const duplicatedApplicationStatement: JDLSemanticRule = {
     }),
 };
 
+export const duplicatedApplication: JDLSemanticRule = {
+  id: 'duplicated-application',
+  check: ast => {
+    const seen = new Set<string>();
+    return ast.applications
+      .filter(({ config: { baseName } }) => baseName !== undefined && (seen.has(baseName) || !seen.add(baseName)))
+      .map(application => ({
+        message: `The application ${application.config.baseName} is declared more than once.`,
+        location: application.location,
+      }));
+  },
+};
+
+export const duplicatedConfigKey: JDLSemanticRule = {
+  id: 'duplicated-config-key',
+  check: ast => [
+    ...ast.applications.flatMap(application => [
+      ...getDuplicatedKeys(application.config).map(({ key, location }) => ({
+        message: `The application ${application.config.baseName} declares the option ${key} more than once.`,
+        location,
+      })),
+      ...Object.entries(application.namespaceConfigs ?? {}).flatMap(([namespace, config]) =>
+        getDuplicatedKeys(config).map(({ key, location }) => ({
+          message: `The application ${application.config.baseName} declares ${key} more than once in config(${namespace}).`,
+          location,
+        })),
+      ),
+    ]),
+    ...ast.deployments.flatMap(deployment =>
+      getDuplicatedKeys(deployment).map(({ key, location }) => ({
+        message: `The ${deployment.deploymentType} deployment declares the option ${key} more than once.`,
+        location,
+      })),
+    ),
+  ],
+};
+
 export const namespaceConfigBlueprint: JDLSemanticRule = {
   id: 'namespace-config-blueprint',
   check: ast =>
@@ -469,7 +507,9 @@ export const semanticRules: JDLSemanticRule[] = [
   duplicatedEntity,
   duplicatedEnum,
   duplicatedField,
+  duplicatedApplication,
   duplicatedApplicationStatement,
+  duplicatedConfigKey,
   fieldType,
   validationForFieldType,
   decimalValidationValue,

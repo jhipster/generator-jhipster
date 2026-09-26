@@ -196,6 +196,46 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('duplicated-application', () => {
+    it('reports every application declared again with the same base name', () => {
+      expect(
+        check(
+          'application { config { baseName app } }\napplication { config { baseName other } }\napplication { config { baseName app } }',
+        ),
+      ).toEqual([
+        {
+          ruleId: 'duplicated-application',
+          message: 'The application app is declared more than once.',
+          at: 'application { config { baseName app } }',
+        },
+      ]);
+    });
+  });
+
+  describe('duplicated-config-key', () => {
+    it('reports an option written again in a config, a namespace config or a deployment', () => {
+      expect(
+        check(`application {
+  config { baseName app blueprints [foo] baseName other }
+  config(foo) { a 1 a 2 }
+}
+deployment { deploymentType docker-compose appsFolders [app] monitoring no monitoring prometheus }`),
+      ).toEqual([
+        {
+          ruleId: 'duplicated-config-key',
+          message: 'The application app declares the option baseName more than once.',
+          at: 'baseName other',
+        },
+        { ruleId: 'duplicated-config-key', message: 'The application app declares a more than once in config(foo).', at: 'a 2' },
+        {
+          ruleId: 'duplicated-config-key',
+          message: 'The docker-compose deployment declares the option monitoring more than once.',
+          at: 'monitoring prometheus',
+        },
+      ]);
+    });
+  });
+
   describe('duplicated-application-statement', () => {
     it('reports a config, a namespace config or an entities statement declared again in an application', () => {
       expect(

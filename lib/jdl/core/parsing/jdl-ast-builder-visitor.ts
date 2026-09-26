@@ -18,7 +18,7 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { setKeyLocations, setLocation, setOtherLocation, spanLocation, tokenLocation } from './location.ts';
+import { setKeyLocations, setKeyValues, setLocation, setOtherLocation, spanLocation, tokenLocation } from './location.ts';
 import { setKind } from './nodes.ts';
 import type { JDLRelationshipType } from './relationship-types.ts';
 import {
@@ -443,19 +443,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     deploymentDeclaration(context: Record<'deploymentConfigDeclaration', CstNode[]>): ParsedJDLDeployment {
-      const config: ParsedJDLDeployment = setKind({}, 'Deployment');
-      const keyLocations: Record<string, JDLLocation | undefined> = {};
-
-      if (context.deploymentConfigDeclaration) {
-        const configProps: { key: string; value: string | boolean | string[]; location?: JDLLocation }[] =
-          context.deploymentConfigDeclaration.map(element => this.visit(element));
-        configProps.forEach(configProp => {
-          config[configProp.key] = configProp.value;
-          keyLocations[configProp.key] = configProp.location;
-        });
-      }
-
-      return setKeyLocations(setLocation(config, spanLocation(context)), keyLocations);
+      const configProps = (context.deploymentConfigDeclaration ?? []).map(element => this.visit(element));
+      return setLocation(setKeyValues(setKind({}, 'Deployment') as ParsedJDLDeployment, configProps), spanLocation(context));
     }
 
     deploymentConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
@@ -497,19 +486,9 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     applicationSubNamespaceConfig(context: Record<'namespace', IToken[]> & Record<'applicationNamespaceConfigDeclaration', CstNode[]>) {
-      const config: any = setKind({}, 'NamespaceConfig');
-
-      const keyLocations: Record<string, JDLLocation | undefined> = {};
       const namespace = context.namespace[0].image;
-      if (context.applicationNamespaceConfigDeclaration) {
-        const configProps = context.applicationNamespaceConfigDeclaration.map(element => this.visit(element));
-        configProps.forEach(configProp => {
-          config[configProp.key] = configProp.value;
-          keyLocations[configProp.key] = configProp.location;
-        });
-      }
-
-      return { namespace, config: setKeyLocations(setLocation(config, spanLocation(context)), keyLocations) };
+      const configProps = (context.applicationNamespaceConfigDeclaration ?? []).map(element => this.visit(element));
+      return { namespace, config: setLocation(setKeyValues(setKind({}, 'NamespaceConfig') as any, configProps), spanLocation(context)) };
     }
 
     applicationNamespaceConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'namespaceConfigValue', CstNode[]>) {
@@ -546,18 +525,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     applicationSubConfig(context: Record<'applicationConfigDeclaration', CstNode[]>): ParsedJDLApplicationConfig {
-      const config: any = setKind({}, 'ApplicationConfig');
-      const keyLocations: Record<string, JDLLocation | undefined> = {};
-
-      if (context.applicationConfigDeclaration) {
-        const configProps = context.applicationConfigDeclaration.map(element => this.visit(element));
-        configProps.forEach(configProp => {
-          config[configProp.key] = configProp.value;
-          keyLocations[configProp.key] = configProp.location;
-        });
-      }
-
-      return setKeyLocations(config, keyLocations);
+      const configProps = (context.applicationConfigDeclaration ?? []).map(element => this.visit(element));
+      return setKeyValues(setKind({}, 'ApplicationConfig') as ParsedJDLApplicationConfig, configProps);
     }
 
     applicationSubEntities(context: Record<'filterDef' | 'exclusion', CstNode[]>) {
