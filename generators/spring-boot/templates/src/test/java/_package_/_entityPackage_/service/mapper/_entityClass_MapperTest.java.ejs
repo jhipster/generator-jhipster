@@ -24,10 +24,13 @@ package <%- entityAbsolutePackage %>.service.mapper;
       : restProperties.filter(
         property => property.relationshipName && !property.otherEntity.embedded && property.ownerSide && !property.otherEntity.builtIn,
       );
+    const relatedEntities = this._.uniq(testedRelationships.map(relationship => relationship.otherEntity));
+    const testedOtherEntities = relatedEntities.filter(otherEntity => otherEntity.entityClass !== entityClass);
 _%>
 import static <%- entityAbsoluteClass %>Asserts.*;
 import static <%- entityAbsoluteClass %>TestSamples.*;
-<%_ for (const otherEntity of this._.uniq(testedRelationships.map(relationship => relationship.otherEntity)).filter(otherEntity => otherEntity.entityClass !== entityClass)) { _%>
+<%_ for (const otherEntity of testedOtherEntities) { _%>
+import static <%- otherEntity.entityAbsoluteClass %>Asserts.*;
 import static <%- otherEntity.entityAbsoluteClass %>TestSamples.*;
 <%_ } _%>
 <%_ if (testedRelationships.length > 0) { _%>
@@ -37,6 +40,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (testedRelationships.some(relationship => relationship.collection)) { _%>
 import java.util.Set;
 
+<%_ } _%>
+<%_ for (const otherEntity of relatedEntities) { _%>
+import <%- otherEntity.entityAbsoluteClass %>;
+<%_ } _%>
+<%_ for (const otherEntity of testedOtherEntities.filter(otherEntity => otherEntity.entityAbsolutePackage !== entityAbsolutePackage)) { _%>
+import <%- otherEntity.entityAbsolutePackage %>.service.mapper.<%- otherEntity.entityClass %>MapperImpl;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,9 +66,11 @@ class <%- entityClass %>MapperTest {
         assert<%- persistClass %>AllPropertiesEquals(expected, actual);
     }
 <%_ for (const relationship of testedRelationships) { _%>
-  <%_ const { otherEntity, relatedField } = relationship;
+  <%_ const { otherEntity } = relationship;
       const relatedSample = `get${otherEntity.persistClass}Sample1()`;
-      const relatedDto = `${entityInstance}Mapper.toDto${this._.upperFirst(otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName))}(${relatedSample})`;
+      // A related DTO with every property its own mapper fills, so each one other than the id must be dropped.
+      const relatedMapper = otherEntity.entityClass === entityClass ? `${entityInstance}Mapper` : `new ${otherEntity.entityClass}MapperImpl()`;
+      const relatedDto = `${relatedMapper}.toDto(${relatedSample})`;
   _%>
 
     @Test
@@ -75,9 +86,9 @@ class <%- entityClass %>MapperTest {
         var <%- relationship.relationshipFieldName %> = <%- entityInstance %>Mapper.toEntity(<%- dtoInstance %>).<%- relationship.propertySupplierName %>();
   <%_ } _%>
         assertThat(<%- relationship.relationshipFieldName %>.<%- otherEntity.primaryKey.propertySupplierName %>()).isEqualTo(<%- relatedSample %>.<%- otherEntity.primaryKey.propertySupplierName %>());
-  <%_ if (!relatedField.id && !relatedField.mapstructExpression) { _%>
-        assertThat(<%- relationship.relationshipFieldName %>.<%- relatedField.propertySupplierName %>()).isNull();
-  <%_ } _%>
+        var expected = new <%- otherEntity.persistClass %>();
+        expected.<%- otherEntity.primaryKey.propertyConsumerName %>(<%- relatedSample %>.<%- otherEntity.primaryKey.propertySupplierName %>());
+        assert<%- otherEntity.persistClass %>AllPropertiesEquals(expected, <%- relationship.relationshipFieldName %>);
     }
 <%_ } _%>
 }
