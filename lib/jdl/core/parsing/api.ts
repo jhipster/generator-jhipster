@@ -118,7 +118,11 @@ export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<Pars
   const cst = (recoveringParser as unknown as Record<string, () => CstNode>)[startRule]();
   if (recoveringParser.errors.length > 0) {
     // The CST has what could be parsed; the checks would report the consequences of the errors, only the errors are.
-    return { ast: buildRecoveredAst(cst, runtime), diagnostics: recoveringParser.errors.map(parsingDiagnostic), comments };
+    // A token is reported once: after an error in a statement, the parser may report the same token again.
+    const errors = recoveringParser.errors.filter(
+      (error, index, all) => all.findIndex(other => Object.is(other.token.startOffset, error.token.startOffset)) === index,
+    );
+    return { ast: buildRecoveredAst(cst, runtime), diagnostics: errors.map(parsingDiagnostic), comments };
   }
   const diagnostics: JDLDiagnostic[] = performAdditionalSyntaxChecks(cst, runtime).map(error => ({
     ruleId: 'syntax',
@@ -180,8 +184,8 @@ export function getCst(input: string, runtime: JDLRuntime, options?: ParseOption
 
 /** What a statement may be, by the rule it is parsed in: the list chevrotain expects is a wall of token sequences. */
 const EXPECTED_STATEMENTS: Record<string, string> = {
-  prog: 'an entity, an enum, a relationship, an application, a deployment, a use statement, a constant or an option statement',
-  applicationSubDeclaration: 'a config block, an entities statement, a use statement or an option statement',
+  statement: 'an entity, an enum, a relationship, an application, a deployment, a use statement, a constant or an option statement',
+  applicationStatement: 'a config block, an entities statement, a use statement or an option statement',
 };
 
 /** A statement starting with a name that is no keyword: a misspelled keyword, or an option statement opening a block. */

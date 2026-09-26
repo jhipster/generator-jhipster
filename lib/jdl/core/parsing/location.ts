@@ -109,3 +109,36 @@ export function setKeyLocations<T extends object>(node: T, keyLocations: Record<
   Object.defineProperty(node, 'keyLocations', { value: keyLocations, enumerable: false, writable: true, configurable: true });
   return node;
 }
+
+/** A key written again in a key/value block, where it is written: the block keeps the first one. */
+export type JDLDuplicatedKey = { key: string; location?: JDLLocation };
+
+/** Sets the keys a key/value block writes again; not enumerable, like the key locations. */
+export function setDuplicatedKeys<T extends object>(node: T, duplicatedKeys: JDLDuplicatedKey[]): T {
+  Object.defineProperty(node, 'duplicatedKeys', { value: duplicatedKeys, enumerable: false, writable: true, configurable: true });
+  return node;
+}
+
+export const getDuplicatedKeys = (node: object): JDLDuplicatedKey[] =>
+  (node as { duplicatedKeys?: JDLDuplicatedKey[] }).duplicatedKeys ?? [];
+
+/**
+ * Fills a key/value block, its config or deployment options: the first value of a key is kept, the keys written again are
+ * set apart with where they are written.
+ */
+export function setKeyValues<T extends Record<string, any>>(
+  node: T,
+  entries: { key: string; value: unknown; location?: JDLLocation }[],
+): T {
+  const keyLocations: Record<string, JDLLocation | undefined> = {};
+  const duplicatedKeys: JDLDuplicatedKey[] = [];
+  for (const { key, value, location } of entries) {
+    if (key in keyLocations) {
+      duplicatedKeys.push({ key, location });
+      continue;
+    }
+    (node as Record<string, unknown>)[key] = value;
+    keyLocations[key] = location;
+  }
+  return setDuplicatedKeys(setKeyLocations(node, keyLocations), duplicatedKeys);
+}

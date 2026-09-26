@@ -18,23 +18,28 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { mergeKeyLocations, setKeyLocations, setLocation, setOtherLocation, spanLocation, tokenLocation } from './location.ts';
+import { setKeyLocations, setKeyValues, setLocation, setOtherLocation, spanLocation, tokenLocation } from './location.ts';
 import { setKind } from './nodes.ts';
 import type { JDLRelationshipType } from './relationship-types.ts';
+import {
+  type JDLApplicationStatement,
+  type JDLStatement,
+  groupApplicationStatements,
+  groupStatements,
+  setStatements,
+} from './statements.ts';
 import type {
   JDLLocation,
   ParsedJDLAnnotation,
   ParsedJDLApplicationConfig,
   ParsedJDLApplicationDeclaration,
   ParsedJDLApplications,
-  ParsedJDLBinaryOption,
   ParsedJDLDeployment,
   ParsedJDLEntity,
   ParsedJDLEntityField,
   ParsedJDLEnum,
   ParsedJDLEnumValue,
   ParsedJDLOption,
-  ParsedJDLOptionConfig,
   ParsedJDLRelationship,
   ParsedJDLRelationshipSide,
   ParsedJDLUseOption,
@@ -43,20 +48,29 @@ import type {
 import type { JDLApplicationOptionType } from './types/parsing.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 
-type VisitorContext = {
-  applicationDeclaration?: CstNode[];
-  entityDeclaration?: CstNode[];
-  constantDeclaration?: CstNode[];
-  deploymentDeclaration?: CstNode[];
-  relationDeclaration?: CstNode[];
-  enumDeclaration?: CstNode[];
-  optionDeclaration?: CstNode[];
-  useOptionDeclaration?: CstNode[];
-  // filterDef?: CstNode[];
-  // exclusion?: CstNode[];
-  // comment?: CstNode[];
-  // applicationSubDeclaration?: CstNode[];
-};
+/** A statement node holds one declaration. */
+type StatementContext = Partial<
+  Record<
+    | 'applicationDeclaration'
+    | 'entityDeclaration'
+    | 'constantDeclaration'
+    | 'deploymentDeclaration'
+    | 'relationDeclaration'
+    | 'enumDeclaration'
+    | 'optionDeclaration'
+    | 'useOptionDeclaration',
+    CstNode[]
+  >
+> &
+  Partial<Record<'JAVADOC', IToken[]>>;
+
+/** An application statement node holds one declaration. */
+type ApplicationStatementContext = Partial<
+  Record<
+    'applicationSubConfig' | 'applicationSubNamespaceConfig' | 'applicationSubEntities' | 'optionDeclaration' | 'useOptionDeclaration',
+    CstNode[]
+  >
+>;
 
 /**
  * Drop the quotes of a STRING token. The content is kept as written, an escaped quote stays `\"`: a
@@ -103,99 +117,29 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       this.validateVisitor();
     }
 
-    prog(context: VisitorContext): ParsedJDLApplications {
-      const ast: ParsedJDLApplications = setKind(
-        {
-          applications: [],
-          deployments: [],
-          constants: setKind({}, 'Constants'),
-          entities: [],
-          relationships: [],
-          enums: [],
-          options: {},
-          useOptions: [],
-        },
-        'JDL',
-      );
+    prog(context: Record<'statement', CstNode[]>): ParsedJDLApplications {
+      const statements: JDLStatement[] = (context.statement ?? []).map(node => this.visit(node)).filter(Boolean);
+      return setStatements(groupStatements(statements, binaryOptionName), statements);
+    }
 
+    /** The statement a node holds, located where it is written; none for a javadoc that documents nothing. */
+    statement(context: StatementContext): JDLStatement | undefined {
+      const location = spanLocation(context);
       if (context.constantDeclaration) {
-        const constants = context.constantDeclaration.map(element => this.visit(element));
-        const keyLocations: Record<string, JDLLocation | undefined> = {};
-        constants.forEach(currConst => {
-          ast.constants[currConst.name] = currConst.value;
-          keyLocations[currConst.name] = currConst.location;
-        });
-        setKeyLocations(ast.constants, keyLocations);
+        const { name, value } = this.visit(context.constantDeclaration);
+        return { type: 'constant', name, value, location };
       }
-
-      if (context.applicationDeclaration) {
-        ast.applications = context.applicationDeclaration.map(element => this.visit(element));
-      }
-
-      if (context.deploymentDeclaration) {
-        ast.deployments = context.deploymentDeclaration.map(element => this.visit(element));
-      }
-
-      if (context.entityDeclaration) {
-        ast.entities = context.entityDeclaration.map(element => this.visit(element));
-      }
-
+      if (context.applicationDeclaration) return { type: 'application', application: this.visit(context.applicationDeclaration), location };
+      if (context.deploymentDeclaration) return { type: 'deployment', deployment: this.visit(context.deploymentDeclaration), location };
+      if (context.entityDeclaration) return { type: 'entity', entity: this.visit(context.entityDeclaration), location };
+      if (context.enumDeclaration) return { type: 'enum', enum: this.visit(context.enumDeclaration), location };
       if (context.relationDeclaration) {
-        ast.relationships = context.relationDeclaration.flatMap(element => this.visit(element));
+        const relationships: ParsedJDLRelationship[] = this.visit(context.relationDeclaration);
+        return { type: 'relationships', cardinality: relationships[0]?.cardinality, relationships, location };
       }
-
-      if (context.enumDeclaration) {
-        ast.enums = context.enumDeclaration.map(element => this.visit(element));
-      }
-
-      const options: ParsedJDLOption[] = context.optionDeclaration?.map(element => this.visit(element)) ?? [];
-      if (options.some(option => option.optionValue === undefined)) {
-        options
-          .filter(option => option.optionValue === undefined)
-          .forEach((option: ParsedJDLOption) => {
-            if (!ast.options[option.optionName]) {
-              ast.options[option.optionName] = setKind({}, 'Option');
-            }
-            const astResult = ast.options[option.optionName];
-
-            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-            astResult.list = entityList;
-            astResult.excluded = excludedEntityList;
-            mergeKeyLocations(astResult, option.keyLocations);
-            // The statements are merged: the first one locates them.
-            if (!astResult.location) setLocation(astResult, option.location);
-          });
-      }
-
-      if (options.some(option => option.optionValue !== undefined)) {
-        options
-          .filter((option): option is ParsedJDLBinaryOption => option.optionValue !== undefined)
-          .forEach((option: ParsedJDLBinaryOption) => {
-            option.optionName = binaryOptionName(option.optionName, option.location);
-            const newOption = !ast.options[option.optionName];
-            if (newOption) {
-              ast.options[option.optionName] = {};
-            }
-            const optionValuesMap = ast.options[option.optionName] as Record<string, ParsedJDLOptionConfig>;
-            if (!optionValuesMap[option.optionValue]) {
-              optionValuesMap[option.optionValue] = setKind({ list: [], excluded: [] }, 'Option');
-            }
-            const astResult = optionValuesMap[option.optionValue];
-
-            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-            astResult.list = entityList;
-            astResult.excluded = excludedEntityList;
-            mergeKeyLocations(astResult, option.keyLocations);
-            // The statements are merged: the first one locates them.
-            if (!astResult.location) setLocation(astResult, option.location);
-          });
-      }
-
-      if (context.useOptionDeclaration) {
-        ast.useOptions = context.useOptionDeclaration.map(element => this.visit(element));
-      }
-
-      return ast;
+      if (context.optionDeclaration) return { type: 'option', option: this.visit(context.optionDeclaration), location };
+      if (context.useOptionDeclaration) return { type: 'use', use: this.visit(context.useOptionDeclaration), location };
+      return undefined;
     }
 
     constantDeclaration(context: Record<'INTEGER' | 'NAME' | 'DECIMAL', IToken[]>) {
@@ -499,19 +443,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     deploymentDeclaration(context: Record<'deploymentConfigDeclaration', CstNode[]>): ParsedJDLDeployment {
-      const config: ParsedJDLDeployment = setKind({}, 'Deployment');
-      const keyLocations: Record<string, JDLLocation | undefined> = {};
-
-      if (context.deploymentConfigDeclaration) {
-        const configProps: { key: string; value: string | boolean | string[]; location?: JDLLocation }[] =
-          context.deploymentConfigDeclaration.map(element => this.visit(element));
-        configProps.forEach(configProp => {
-          config[configProp.key] = configProp.value;
-          keyLocations[configProp.key] = configProp.location;
-        });
-      }
-
-      return setKeyLocations(setLocation(config, spanLocation(context)), keyLocations);
+      const configProps = (context.deploymentConfigDeclaration ?? []).map(element => this.visit(element));
+      return setLocation(setKeyValues(setKind({}, 'Deployment') as ParsedJDLDeployment, configProps), spanLocation(context));
     }
 
     deploymentConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
@@ -533,101 +466,29 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       return setLocation(this.visit(context.applicationSubDeclaration), spanLocation(context));
     }
 
-    applicationSubDeclaration(
-      context: Record<
-        'applicationSubConfig' | 'applicationSubNamespaceConfig' | 'applicationSubEntities' | 'optionDeclaration' | 'useOptionDeclaration',
-        CstNode[]
-      >,
-    ): ParsedJDLApplicationDeclaration {
-      const applicationSubDeclaration: ParsedJDLApplications['applications'][number] = {
-        config: setKind({}, 'ApplicationConfig') as ParsedJDLApplicationConfig,
-        namespaceConfigs: {},
-        entitiesOptions: setKind({ entityList: [], excluded: [] }, 'ApplicationEntities'),
-        options: {},
-        useOptions: [],
-      };
+    applicationSubDeclaration(context: Record<'applicationStatement', CstNode[]>): ParsedJDLApplicationDeclaration {
+      const statements: JDLApplicationStatement[] = (context.applicationStatement ?? []).map(node => this.visit(node)).filter(Boolean);
+      return setStatements(groupApplicationStatements(statements, binaryOptionName), statements);
+    }
 
-      if (context.applicationSubConfig) {
-        // Apparently the pegjs grammar only returned the last config
-        applicationSubDeclaration.config = this.visit(context.applicationSubConfig.at(-1)!);
-      }
+    /** The statement of an application block a node holds, located where it is written. */
+    applicationStatement(context: ApplicationStatementContext): JDLApplicationStatement | undefined {
+      const location = spanLocation(context);
+      if (context.applicationSubConfig) return { type: 'config', config: this.visit(context.applicationSubConfig), location };
       if (context.applicationSubNamespaceConfig) {
-        const { namespace, config } = this.visit(context.applicationSubNamespaceConfig.at(-1)!);
-        applicationSubDeclaration.namespaceConfigs![namespace] = config;
+        const { namespace, config } = this.visit(context.applicationSubNamespaceConfig);
+        return { type: 'namespaceConfig', namespace, config, location };
       }
-
-      if (context.applicationSubEntities) {
-        // Apparently the pegjs grammar only returned the last entities
-        applicationSubDeclaration.entitiesOptions = this.visit(context.applicationSubEntities.at(-1)!);
-      }
-
-      const options: ParsedJDLOption[] = context.optionDeclaration?.map(element => this.visit(element)) ?? [];
-      if (options.some(option => option.optionValue === undefined)) {
-        options
-          .filter(option => option.optionValue === undefined)
-          .forEach(option => {
-            if (!applicationSubDeclaration.options![option.optionName]) {
-              applicationSubDeclaration.options![option.optionName] = setKind({}, 'Option');
-            }
-            const astResult = applicationSubDeclaration.options![option.optionName];
-
-            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-            astResult.list = entityList;
-            astResult.excluded = excludedEntityList;
-            mergeKeyLocations(astResult, option.keyLocations);
-            // The statements are merged: the first one locates them.
-            if (!astResult.location) setLocation(astResult, option.location);
-          });
-      }
-
-      if (options.some(option => option.optionValue !== undefined)) {
-        options
-          .filter((option): option is ParsedJDLBinaryOption => option.optionValue !== undefined)
-          .forEach(option => {
-            option.optionName = binaryOptionName(option.optionName, option.location);
-            if (!applicationSubDeclaration.options![option.optionName]) {
-              applicationSubDeclaration.options![option.optionName] = {};
-            }
-            const optionValuesMap = applicationSubDeclaration.options![option.optionName] as Record<string, ParsedJDLOptionConfig>;
-            if (!optionValuesMap[option.optionValue]) {
-              optionValuesMap[option.optionValue] = setKind({ list: [], excluded: [] }, 'Option');
-            }
-            const astResult = optionValuesMap[option.optionValue];
-
-            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-            astResult.list = entityList;
-            astResult.excluded = excludedEntityList;
-            mergeKeyLocations(astResult, option.keyLocations);
-            // The statements are merged: the first one locates them.
-            if (!astResult.location) setLocation(astResult, option.location);
-          });
-      }
-
-      if (context.useOptionDeclaration) {
-        context.useOptionDeclaration
-          .map(element => this.visit(element))
-          .forEach(option => {
-            applicationSubDeclaration.useOptions!.push(option);
-          });
-      }
-
-      return setKind(applicationSubDeclaration, 'Application');
+      if (context.applicationSubEntities) return { type: 'entities', entities: this.visit(context.applicationSubEntities), location };
+      if (context.optionDeclaration) return { type: 'option', option: this.visit(context.optionDeclaration), location };
+      if (context.useOptionDeclaration) return { type: 'use', use: this.visit(context.useOptionDeclaration), location };
+      return undefined;
     }
 
     applicationSubNamespaceConfig(context: Record<'namespace', IToken[]> & Record<'applicationNamespaceConfigDeclaration', CstNode[]>) {
-      const config: any = setKind({}, 'NamespaceConfig');
-
-      const keyLocations: Record<string, JDLLocation | undefined> = {};
       const namespace = context.namespace[0].image;
-      if (context.applicationNamespaceConfigDeclaration) {
-        const configProps = context.applicationNamespaceConfigDeclaration.map(element => this.visit(element));
-        configProps.forEach(configProp => {
-          config[configProp.key] = configProp.value;
-          keyLocations[configProp.key] = configProp.location;
-        });
-      }
-
-      return { namespace, config: setKeyLocations(setLocation(config, spanLocation(context)), keyLocations) };
+      const configProps = (context.applicationNamespaceConfigDeclaration ?? []).map(element => this.visit(element));
+      return { namespace, config: setLocation(setKeyValues(setKind({}, 'NamespaceConfig') as any, configProps), spanLocation(context)) };
     }
 
     applicationNamespaceConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'namespaceConfigValue', CstNode[]>) {
@@ -664,18 +525,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     }
 
     applicationSubConfig(context: Record<'applicationConfigDeclaration', CstNode[]>): ParsedJDLApplicationConfig {
-      const config: any = setKind({}, 'ApplicationConfig');
-      const keyLocations: Record<string, JDLLocation | undefined> = {};
-
-      if (context.applicationConfigDeclaration) {
-        const configProps = context.applicationConfigDeclaration.map(element => this.visit(element));
-        configProps.forEach(configProp => {
-          config[configProp.key] = configProp.value;
-          keyLocations[configProp.key] = configProp.location;
-        });
-      }
-
-      return setKeyLocations(config, keyLocations);
+      const configProps = (context.applicationConfigDeclaration ?? []).map(element => this.visit(element));
+      return setKeyValues(setKind({}, 'ApplicationConfig') as ParsedJDLApplicationConfig, configProps);
     }
 
     applicationSubEntities(context: Record<'filterDef' | 'exclusion', CstNode[]>) {
@@ -736,21 +587,6 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
 
   return new JDLAstBuilderVisitor();
 };
-
-function getOptionEntityAndExcludedEntityLists(
-  astResult: ParsedJDLOptionConfig | Record<string, ParsedJDLOptionConfig>,
-  option: ParsedJDLOption,
-) {
-  const { list, excluded } = astResult;
-  let entityList = Array.isArray(list) ? list : [];
-  entityList = deduplicate(entityList.concat(option.list));
-
-  let excludedEntityList = Array.isArray(excluded) ? excluded : [];
-  if (option.excluded) {
-    excludedEntityList = deduplicate(excludedEntityList.concat(option.excluded));
-  }
-  return { entityList, excludedEntityList };
-}
 
 /** Where each entity name of a list, and of its exclusion, is written: the first occurrence of a name. */
 function getEntityNameLocations(context: Record<'filterDef' | 'exclusion', CstNode[]>): Record<string, JDLLocation> {

@@ -196,6 +196,75 @@ describe('jdl - semantic rules', () => {
     });
   });
 
+  describe('duplicated-application', () => {
+    it('reports every application declared again with the same base name', () => {
+      expect(
+        check(
+          'application { config { baseName app } }\napplication { config { baseName other } }\napplication { config { baseName app } }',
+        ),
+      ).toEqual([
+        {
+          ruleId: 'duplicated-application',
+          message: 'The application app is declared more than once.',
+          at: 'application { config { baseName app } }',
+        },
+      ]);
+    });
+  });
+
+  describe('duplicated-config-key', () => {
+    it('reports an option written again in a config, a namespace config or a deployment', () => {
+      expect(
+        check(`application {
+  config { baseName app blueprints [foo] baseName other }
+  config(foo) { a 1 a 2 }
+}
+deployment { deploymentType docker-compose appsFolders [app] monitoring no monitoring prometheus }`),
+      ).toEqual([
+        {
+          ruleId: 'duplicated-config-key',
+          message: 'The application app declares the option baseName more than once.',
+          at: 'baseName other',
+        },
+        { ruleId: 'duplicated-config-key', message: 'The application app declares a more than once in config(foo).', at: 'a 2' },
+        {
+          ruleId: 'duplicated-config-key',
+          message: 'The docker-compose deployment declares the option monitoring more than once.',
+          at: 'monitoring prometheus',
+        },
+      ]);
+    });
+  });
+
+  describe('duplicated-application-statement', () => {
+    it('reports a config, a namespace config or an entities statement declared again in an application', () => {
+      expect(
+        check(`application {
+  config { baseName app blueprints [foo, bar] }
+  config(foo) { a 1 }
+  config(bar) { b 2 }
+  entities A
+  config { baseName other }
+  config(foo) { c 3 }
+  entities A
+}
+entity A`),
+      ).toEqual([
+        {
+          ruleId: 'duplicated-application-statement',
+          message: 'The application app declares config more than once.',
+          at: 'config { baseName other }',
+        },
+        {
+          ruleId: 'duplicated-application-statement',
+          message: 'The application app declares config(foo) more than once.',
+          at: 'config(foo) { c 3 }',
+        },
+        { ruleId: 'duplicated-application-statement', message: 'The application app declares entities more than once.', at: 'entities A' },
+      ]);
+    });
+  });
+
   describe('duplicated-enum', () => {
     it('reports a second declaration', () => {
       expect(check('enum E { X }\nenum E { Y }')).toEqual([
