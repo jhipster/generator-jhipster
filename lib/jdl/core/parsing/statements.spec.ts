@@ -98,4 +98,9 @@ entity B
       expect(application.namespaceConfigs).toEqual({ foo: { a: '1' }, bar: { b: '2' } });
     });
   });
+
+  it('should leave an option statement as written, its deprecated keyword included', () => {
+    const statements = getStatements(parse('entity A\npaginate A with pagination', runtime, { onWarning: () => {} }))!;
+    expect(statements[1]).toMatchObject({ type: 'option', option: { optionName: 'paginate', optionValue: 'pagination' } });
+  });
 });
