@@ -84,6 +84,13 @@ describe('jdl - parseJDL', () => {
     expect(ast?.entities.map(entity => entity.name)).toEqual(['A', 'B', 'C']);
   });
 
+  it('locates a node the parser recovered from an error where it is written', () => {
+    const content = 'entity A\nentity B {\n  x\n}';
+    const { ast } = parseJDL(content, getDefaultRuntime());
+    const { location } = ast!.entities[1];
+    expect(content.slice(location!.startOffset, location!.endOffset + 1)).toBe('entity B {\n  x\n}');
+  });
+
   it('reports a parsing error at the end of the input without a location', () => {
     expect(diagnose('entity A {').map(({ ruleId, at }) => [ruleId, at])).toEqual([['parsing', undefined]]);
   });
