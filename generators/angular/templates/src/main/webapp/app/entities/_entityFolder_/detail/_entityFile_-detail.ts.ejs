@@ -33,11 +33,17 @@ import { TranslateDirective } from 'app/shared/language';
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+import { filter, tap } from 'rxjs';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util';
 import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
+import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
+<%_ } _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+import { Router } from '@angular/router';
 
 @Component({
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-detail',
@@ -45,30 +51,30 @@ import { type BlobType } from 'app/shared/jhipster/data-utils';
     imports: [
       FontAwesomeModule,
 <%_ if (anyFieldHasDocumentation) { _%>
-      NgbTooltip,
+        NgbTooltip,
 <%_ } _%>
-      Alert,
-      AlertError,
+        Alert,
+        AlertError,
 <%_ if (enableTranslation) { _%>
-      TranslateDirective,
+        TranslateDirective,
 <%_ } _%>
 <%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
-      TranslatePipe,
+        TranslatePipe,
 <%_ } _%>
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
-      RouterLink,
+        RouterLink,
 <%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>
-      DurationPipe,
+        DurationPipe,
 <%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
-      FormatMediumDatetimePipe,
+        FormatMediumDatetimePipe,
 <%_ } _%>
 <%_ if (anyFieldIsLocalDate) { _%>
-      FormatMediumDatePipe,
+        FormatMediumDatePipe,
 <%_ } _%>
-    ],
-})
+        ],
+    })
 export class <%- entityAngularName %>Detail {
     readonly <%- entityInstance %> = input<I<%- entityAngularName %> | null>(null);
 
@@ -88,4 +94,28 @@ export class <%- entityAngularName %>Detail {
         globalThis.history.back();
     }
 
+    delete(): void {
+        const modalRef = this.modalService.open(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.<%- entityInstance %> = this.<%- entityInstance %>();
+        modalRef.closed
+          .pipe(
+            filter(reason => reason === 'ITEM_DELETED_EVENT'),
+            tap(() => this.router.navigate(['/<%- entityPage %>']))
+          ).subscribe();
+    }
+
+    confirmDelete(): void {
+        this.<%- entityAngularName %>Service.delete(this.<%- entityInstance %>()?.<%- primaryKey.name %>!).subscribe({
+            next: () => {
+                this.router.navigate(['/<%- entityPage %>']);
+            },
+            error: (err) => {
+                // The AlertError component in template will handle the error if the service updates state
+            }
+        });
+    }
+
+    // Added to make the template reference accessible
+    protected modalService = inject(NgbModal);
+    protected router = inject(Router);
 }

@@ -131,7 +131,12 @@
         <fa-icon icon="arrow-left" />&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
 <%_ if (!readOnly && updatableEntity) { _%>
-
+      <button type="button"
+          (click)="delete()"
+          class="btn btn-danger"
+          data-cy="entityDetailsDeleteButton">
+        <fa-icon icon="trash" />&nbsp;<span>__jhiTranslateTag__('entity.action.delete')</span>
+      </button>
       <button type="button"
           [routerLink]="['/<%- entityPage %>', <%- entityInstance %>Ref.<%- primaryKey.name %>, 'edit']"
           class="btn btn-primary">
@@ -139,6 +144,3 @@
       </button>
 <%_ } _%>
     </div>
-    }
-  </div>
-</div>
