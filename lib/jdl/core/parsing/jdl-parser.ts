@@ -37,6 +37,7 @@ export default class JDLParser extends CstParser {
 
   parse() {
     this.prog();
+    this.statement();
     this.constantDeclaration();
     this.entityDeclaration();
     this.annotationDeclaration();
@@ -65,6 +66,7 @@ export default class JDLParser extends CstParser {
     this.deploymentConfigValue();
     this.applicationDeclaration();
     this.applicationSubDeclaration();
+    this.applicationStatement();
     this.applicationSubConfig();
     this.applicationSubNamespaceConfig();
     this.applicationSubEntities();
@@ -85,33 +87,41 @@ export default class JDLParser extends CstParser {
   prog(): CstNode {
     this.RULE('prog', () => {
       this.MANY(() => {
-        this.OR([
-          { ALT: () => this.SUBRULE(this.entityDeclaration) },
-          { ALT: () => this.SUBRULE(this.relationDeclaration) },
-          { ALT: () => this.SUBRULE(this.enumDeclaration) },
-          { ALT: () => this.CONSUME(this.tokens.JAVADOC) },
-          { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
-          { ALT: () => this.SUBRULE(this.applicationDeclaration) },
-          { ALT: () => this.SUBRULE(this.deploymentDeclaration) },
-          // A constant and an option statement start with a NAME, but any keyword is also a NAME.
-          // So to avoid conflicts with the above alternatives (which start with keywords) these alternatives must be last.
-          {
-            // - A Constant starts with a NAME
-            // - NAME tokens are very common
-            // That is why a more precise lookahead condition is used (The GATE)
-            // To avoid confusing errors ("expecting EQUALS but found ...")
-            GATE: () => this.LA(2).tokenType === this.tokens.EQUALS,
-            ALT: () => this.SUBRULE(this.constantDeclaration),
-          },
-          // The option statements: the lexer knows no option, the option names are checked against the definitions.
-          {
-            // A block never follows an option statement: `entiti Foo {` is a misspelled keyword statement rather than an
-            // option statement, reported at the misspelled keyword with the statements expected there.
-            GATE: () => !this.isBlockStatement(),
-            ALT: () => this.SUBRULE(this.optionDeclaration),
-          },
-        ]);
+        this.SUBRULE(this.statement);
       });
+    });
+    return noopCst;
+  }
+
+  /** A statement of a jdl: the statements of the jdl are the children of the prog in the order they are written. */
+  statement(): CstNode {
+    this.RULE('statement', () => {
+      this.OR([
+        { ALT: () => this.SUBRULE(this.entityDeclaration) },
+        { ALT: () => this.SUBRULE(this.relationDeclaration) },
+        { ALT: () => this.SUBRULE(this.enumDeclaration) },
+        { ALT: () => this.CONSUME(this.tokens.JAVADOC) },
+        { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
+        { ALT: () => this.SUBRULE(this.applicationDeclaration) },
+        { ALT: () => this.SUBRULE(this.deploymentDeclaration) },
+        // A constant and an option statement start with a NAME, but any keyword is also a NAME.
+        // So to avoid conflicts with the above alternatives (which start with keywords) these alternatives must be last.
+        {
+          // - A Constant starts with a NAME
+          // - NAME tokens are very common
+          // That is why a more precise lookahead condition is used (The GATE)
+          // To avoid confusing errors ("expecting EQUALS but found ...")
+          GATE: () => this.LA(2).tokenType === this.tokens.EQUALS,
+          ALT: () => this.SUBRULE(this.constantDeclaration),
+        },
+        // The option statements: the lexer knows no option, the option names are checked against the definitions.
+        {
+          // A block never follows an option statement: `entiti Foo {` is a misspelled keyword statement rather than an
+          // option statement, reported at the misspelled keyword with the statements expected there.
+          GATE: () => !this.isBlockStatement(),
+          ALT: () => this.SUBRULE(this.optionDeclaration),
+        },
+      ]);
     });
     return noopCst;
   }
@@ -535,14 +545,22 @@ export default class JDLParser extends CstParser {
   applicationSubDeclaration(): CstNode {
     this.RULE('applicationSubDeclaration', () => {
       this.MANY(() => {
-        this.OR([
-          { ALT: () => this.SUBRULE(this.applicationSubNamespaceConfig) },
-          { ALT: () => this.SUBRULE(this.applicationSubConfig) },
-          { ALT: () => this.SUBRULE(this.applicationSubEntities) },
-          { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
-          { GATE: () => !this.isBlockStatement(), ALT: () => this.SUBRULE(this.optionDeclaration) },
-        ]);
+        this.SUBRULE(this.applicationStatement);
       });
+    });
+    return noopCst;
+  }
+
+  /** A statement of an application block, in the order they are written. */
+  applicationStatement(): CstNode {
+    this.RULE('applicationStatement', () => {
+      this.OR([
+        { ALT: () => this.SUBRULE(this.applicationSubNamespaceConfig) },
+        { ALT: () => this.SUBRULE(this.applicationSubConfig) },
+        { ALT: () => this.SUBRULE(this.applicationSubEntities) },
+        { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
+        { GATE: () => !this.isBlockStatement(), ALT: () => this.SUBRULE(this.optionDeclaration) },
+      ]);
     });
     return noopCst;
   }
