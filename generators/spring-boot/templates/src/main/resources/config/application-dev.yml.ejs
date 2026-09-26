@@ -55,22 +55,18 @@ eureka:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
-<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice || searchEngineElasticsearch) { _%>
 management:
-  <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
   health:
     elasticsearch:
       enabled: false
-  <%_ } _%>
-  <%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
+<%_ } _%>
   tracing:
+    export:
+      zipkin: # Use the "zipkin" Maven/Gradle profile to add the Zipkin dependencies
+        endpoint: http://localhost:9411/api/v2/spans
     sampling:
       probability: 1.0 # report 100% of traces
-  <%_ } _%>
-<%_ } _%>
 
 <%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
 org:

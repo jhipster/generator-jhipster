@@ -74,6 +74,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
@@ -87,6 +90,12 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/tracing/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
@@ -132,6 +141,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -333,6 +345,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {

@@ -281,6 +281,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       templates: [
         'TechnicalStructureTest.java',
         'aop/logging/LoggingAspectTest.java',
+        'aop/tracing/TracingAspectTest.java',
         'config/AsyncSyncConfiguration.java',
         'IntegrationTest.java',
         'config/SpringBootTestClassOrderer.java',
@@ -293,12 +294,14 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       renameTo: moveToJavaPackageSrcDir,
       templates: [
         'aop/logging/LoggingAspect.java',
+        'aop/tracing/TracingAspect.java',
         'config/AsyncConfiguration.java',
         'config/CRLFLogConverter.java',
         'config/DateTimeFormatConfiguration.java',
         'config/LoggingConfiguration.java',
         'config/ApplicationProperties.java',
         'config/LoggingAspectConfiguration.java',
+        'config/TracingAspectConfiguration.java',
         'config/WebConfigurer.java',
       ],
     },

@@ -23,6 +23,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -48,6 +51,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -111,6 +117,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
@@ -190,6 +199,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -215,6 +227,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -278,6 +293,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
@@ -357,6 +375,9 @@ exports[`generator - server composing databaseType option no with session should
   "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -382,6 +403,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -445,6 +469,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
@@ -599,6 +626,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
@@ -612,6 +642,12 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/tracing/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
@@ -654,6 +690,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -903,6 +942,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {

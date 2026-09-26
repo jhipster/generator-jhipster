@@ -408,7 +408,6 @@
                 </plugins>
             </build>
         </profile>
-<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
         <profile>
             <!--
                 Profile for tracing requests with Zipkin.
@@ -416,20 +415,11 @@
             <id>zipkin</id>
             <dependencies>
                 <dependency>
-                    <groupId>io.micrometer</groupId>
-                    <artifactId>micrometer-tracing</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.micrometer</groupId>
-                    <artifactId>micrometer-tracing-bridge-brave</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.zipkin.reporter2</groupId>
-                    <artifactId>zipkin-reporter-brave</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-zipkin</artifactId>
                 </dependency>
             </dependencies>
         </profile>
-<%_ } _%>
         <profile>
             <!--
                 Profile for applying IDE-specific configuration.

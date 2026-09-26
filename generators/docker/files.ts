@@ -171,7 +171,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
     {
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
-      templates: ['sonar.yml', 'prometheus/prometheus.yml'],
+      templates: ['sonar.yml', 'zipkin.yml', 'prometheus/prometheus.yml'],
     },
     {
       condition: ctx => ctx.dockerServices.includes('elasticsearch'),
@@ -209,12 +209,6 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
       renameTo,
       transform: false,
       templates: ['realm-config/keycloak-health-check.sh'],
-    },
-    {
-      condition: ctx => ctx.dockerServices.includes('zipkin'),
-      path: TEMPLATES_DOCKER_DIR,
-      renameTo,
-      templates: ['zipkin.yml'],
     },
   ],
 });
