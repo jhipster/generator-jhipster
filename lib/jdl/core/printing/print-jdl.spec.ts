@@ -23,7 +23,7 @@ import { join } from 'node:path';
 
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { parse } from '../parsing/api.ts';
-import { getStatements } from '../parsing/statements.ts';
+import { type JDLStatement, getStatements } from '../parsing/statements.ts';
 
 import { printJDL } from './print-jdl.ts';
 
@@ -65,5 +65,47 @@ relationship OneToMany {
 
 entity B
 `);
+  });
+
+  describe('with the source of the statements', () => {
+    const source = `// The shop.
+
+/** A product. */
+entity Product {
+  /** Its name. */
+  name String required // kept
+  price BigDecimal
+}
+
+// Kinds.
+enum Kind {
+  ONE,
+  TWO
+}
+
+entity Order
+`;
+    const statementsOf = (jdl: string) => getStatements(parse(jdl, runtime, { onWarning: () => {} }))!;
+
+    it('should print the statements it parsed as written', () => {
+      expect(printJDL(statementsOf(source), runtime, { source })).toBe(source);
+    });
+
+    it('should print a new node, keeping the text of the others and around it', () => {
+      const statements = statementsOf(source);
+      const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
+      // A new node has no location: the field changed, rather than the one parsed.
+      entity.body![1] = { ...entity.body![1], type: 'Integer' };
+      expect(printJDL(statements, runtime, { source })).toBe(source.replace('price BigDecimal', 'price Integer'));
+    });
+
+    it('should print a new field after the ones written', () => {
+      const statements = statementsOf(source);
+      const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
+      entity.body!.push({ name: 'stock', type: 'Integer', validations: [] });
+      expect(printJDL(statements, runtime, { source })).toBe(
+        source.replace('  price BigDecimal\n', '  price BigDecimal\n  stock Integer\n'),
+      );
+    });
   });
 });
