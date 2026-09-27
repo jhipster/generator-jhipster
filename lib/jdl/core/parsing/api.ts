@@ -19,12 +19,14 @@
 
 import { type CstNode, EOF, type ILexingError, type ILexingResult, type IRecognitionException, type IToken } from 'chevrotain';
 
+import { attachComments } from './comments.ts';
 import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
 import performJDLPostParsingTasks from './jdl-post-parsing-tasks.ts';
 import { COMMENTS_GROUP } from './lexer/lexer.ts';
 import { tokenLocation } from './location.ts';
 import { checkSemantics } from './semantic/index.ts';
 import type { JDLDiagnostic } from './semantic/types.ts';
+import { getStatements } from './statements.ts';
 import type { JDLLocation, ParsedJDLApplications } from './types/parsed.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 import performAdditionalSyntaxChecks from './validator.ts';
@@ -130,9 +132,12 @@ export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<Pars
     message: error.message,
     location: locationOfToken(error.token),
   }));
-  const ast: ParsedJDLApplications = buildJDLAstBuilderVisitor(runtime, (message, location) =>
-    diagnostics.push({ ruleId: 'deprecated', severity: 'warning', message, location }),
-  ).visit(cst);
+  const ast: ParsedJDLApplications = withComments(
+    buildJDLAstBuilderVisitor(runtime, (message, location) =>
+      diagnostics.push({ ruleId: 'deprecated', severity: 'warning', message, location }),
+    ).visit(cst),
+    lexResult,
+  );
   // The semantic rules are about a whole jdl.
   if (startRule === 'prog') {
     diagnostics.push(...checkSemantics(performJDLPostParsingTasks(ast), runtime));
@@ -151,16 +156,28 @@ function buildRecoveredAst(cst: CstNode, runtime: JDLRuntime): ParsedJDLApplicat
 }
 
 export function parse(input: string, runtime: JDLRuntime, options?: ParseOptions): ParsedJDLApplications {
-  const cst = getCst(input, runtime, options);
+  const lexResult = runtime.lexer.tokenize(input);
+  const cst = parseTokens(lexResult, runtime, options);
   // The parser has no logger of its own: a caller that passes none still sees the warnings.
   // eslint-disable-next-line no-console
   const astBuilderVisitor = buildJDLAstBuilderVisitor(runtime, options?.onWarning ?? (message => console.warn(message)));
-  return astBuilderVisitor.visit(cst);
+  return withComments(astBuilderVisitor.visit(cst), lexResult);
+}
+
+/** Gives the statements of the AST their comments, the javadocs being documentation or statements. */
+function withComments(ast: ParsedJDLApplications, lexResult: ILexingResult): ParsedJDLApplications {
+  const statements = getStatements(ast);
+  if (statements) {
+    attachComments(statements, (lexResult.groups[COMMENTS_GROUP] ?? []).map(toComment));
+  }
+  return ast;
 }
 
 export function getCst(input: string, runtime: JDLRuntime, options?: ParseOptions): CstNode {
-  const lexResult = runtime.lexer.tokenize(input);
+  return parseTokens(runtime.lexer.tokenize(input), runtime, options);
+}
 
+function parseTokens(lexResult: ILexingResult, runtime: JDLRuntime, options?: ParseOptions): CstNode {
   if (lexResult.errors.length > 0) {
     throw new Error(lexResult.errors[0].message);
   }

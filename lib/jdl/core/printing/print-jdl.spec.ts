@@ -108,4 +108,51 @@ entity Order
       );
     });
   });
+
+  describe('with comments', () => {
+    const source = `// The shop.
+entity Product {
+  // The name.
+  /* Required. */
+  name String required // kept
+  price BigDecimal
+  // No more fields.
+}
+
+entity Order
+
+/** A note documenting nothing. */
+`;
+    const statementsOf = (jdl: string) => getStatements(parse(jdl, runtime, { onWarning: () => {} }))!;
+
+    it('should keep a javadoc documenting nothing as a statement', () => {
+      expect(statementsOf(source).map(statement => statement.type)).toEqual(['entity', 'entity', 'comment']);
+    });
+
+    it('should keep the comments of the nodes of a statement printed again', () => {
+      const statements = statementsOf(source);
+      const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
+      entity.body!.push({ name: 'stock', type: 'Integer', validations: [] });
+      expect(printJDL(statements, runtime, { source })).toBe(
+        source.replace('  // No more fields.\n', '  // No more fields.\n  stock Integer\n'),
+      );
+    });
+
+    it('should print the comments without the source', () => {
+      expect(printJDL(statementsOf(source), runtime)).toMatchInlineSnapshot(`
+"// The shop.
+entity Product {
+  // The name.
+  /* Required. */
+  name String required // kept
+  price BigDecimal
+  // No more fields.
+}
+entity Order
+
+/** A note documenting nothing. */
+"
+`);
+    });
+  });
 });

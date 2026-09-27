@@ -53,7 +53,9 @@ export type JDLStatement =
   | Statement<'enum', { enum: ParsedJDLEnum }>
   | Statement<'relationships', { cardinality: JDLRelationshipType; relationships: ParsedJDLRelationship[] }>
   | Statement<'option', { option: ParsedJDLOption }>
-  | Statement<'use', { use: ParsedJDLUseOption }>;
+  | Statement<'use', { use: ParsedJDLUseOption }>
+  /** A javadoc that documents no declaration, as written. */
+  | Statement<'comment', { comment: string }>;
 
 /** The option name a statement keyword stands for. */
 export type BinaryOptionName = (keyword: string, location: JDLLocation | undefined) => string;

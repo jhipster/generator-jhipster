@@ -122,7 +122,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       return setStatements(groupStatements(statements, binaryOptionName), statements);
     }
 
-    /** The statement a node holds, located where it is written; none for a javadoc that documents nothing. */
+    /** The statement a node holds, located where it is written. */
     statement(context: StatementContext): JDLStatement | undefined {
       const location = spanLocation(context);
       if (context.constantDeclaration) {
@@ -139,6 +139,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
       }
       if (context.optionDeclaration) return { type: 'option', option: this.visit(context.optionDeclaration), location };
       if (context.useOptionDeclaration) return { type: 'use', use: this.visit(context.useOptionDeclaration), location };
+      if (context.JAVADOC) return { type: 'comment', comment: context.JAVADOC[0].image, location };
       return undefined;
     }
 

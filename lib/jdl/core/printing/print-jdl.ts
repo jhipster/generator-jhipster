@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import type { JDLComment } from '../parsing/api.ts';
+import { getNodeComments } from '../parsing/comments.ts';
 import { type JDLApplicationStatement, type JDLStatement, getStatements } from '../parsing/statements.ts';
 import type {
   JDLLocation,
@@ -76,14 +78,16 @@ const withoutIndent = (printed: string) => printed.replace(/^[ \t]+/, '');
 
 /** The source a jdl is printed from: a node that has a location there is copied as written. */
 type SourceText = {
-  /** The text of a node as written; undefined for a node without location, a new or changed one. */
+  /** The text of a node as written; undefined for a node without location or holding a new one. */
   of: (node: object) => string | undefined;
   /** The text between two nodes, when they followed each other as written. */
   between: (previous: object, next: object) => string | undefined;
+  /** The comments before a node and its indentation, as written, or printed at the indentation. */
+  leadingComments: (node: object, indent: string) => string;
   /** The comment ending the line of a node, as written. */
-  sameLine: (node: object) => string;
-  /** The comment lines just above a node and its indentation, as written. */
-  above: (node: object) => string;
+  trailingComment: (node: object) => string;
+  /** The comments after the last node of a block, as written, or printed at the indentation. */
+  afterComments: (node: object, indent: string) => string;
   /** The text before a node, when only blanks and comments. */
   before: (node: object) => string | undefined;
   /** The text after a node, when only blanks and comments. */
@@ -92,12 +96,20 @@ type SourceText = {
   slice: (start: number, end: number) => string | undefined;
 };
 
+/** A comment, from its type and text, when there is no source to copy it from. */
+const COMMENT_DELIMITERS: Record<JDLComment['type'], [string, string]> = { Line: ['//', ''], Block: ['/*', '*/'], Directive: ['#', ''] };
+
 function sourceText(source?: string): SourceText {
   const of = (node: object) => {
     const location = locationOf(node);
     return source === undefined || !location || !isWritten(node) ? undefined : source.slice(location.startOffset, location.endOffset + 1);
   };
   const trivia = (text: string) => (TRIVIA.test(text) ? text : undefined);
+  const comment = ({ type, value, location }: JDLComment) =>
+    source === undefined ?
+      `${COMMENT_DELIMITERS[type][0]}${value}${COMMENT_DELIMITERS[type][1]}`
+    : source.slice(location.startOffset, location.endOffset + 1);
+  const lineStart = (offset: number) => source!.lastIndexOf('\n', offset - 1) + 1;
   return {
     of,
     slice: (start, end) => (source === undefined ? undefined : source.slice(start, end)),
@@ -106,31 +118,28 @@ function sourceText(source?: string): SourceText {
       if (source === undefined || !from || !to || from.endOffset >= to.startOffset) return undefined;
       return trivia(source.slice(from.endOffset + 1, to.startOffset));
     },
-    sameLine: node => {
+    leadingComments: (node, indent) => {
+      const comments = getNodeComments(node)?.leading ?? [];
       const location = locationOf(node);
-      if (source === undefined || !location) return '';
-      const end = source.indexOf('\n', location.endOffset + 1);
-      const rest = source.slice(location.endOffset + 1, end === -1 ? undefined : end);
-      return /^[ \t]*(?:\/\/.*|\/\*.*?\*\/[ \t]*)?$/.test(rest) ? rest.trimEnd() : '';
+      if (comments.length === 0) return '';
+      if (source === undefined || !location) return `${comments.map(leading => `${indent}${comment(leading)}\n`).join('')}${indent}`;
+      return source.slice(lineStart(comments[0].location.startOffset), location.startOffset);
     },
-    above: node => {
+    trailingComment: node => {
+      const trailing = getNodeComments(node)?.trailing;
       const location = locationOf(node);
-      if (source === undefined || !location) return '';
-      let start = source.lastIndexOf('\n', location.startOffset - 1) + 1;
-      if (source.slice(start, location.startOffset).trim() !== '') return '';
-      // The comment lines right above, up to a blank line or code.
-      while (start > 0) {
-        const lineStart = source.lastIndexOf('\n', start - 2) + 1;
-        if (
-          !source
-            .slice(lineStart, start - 1)
-            .trim()
-            .startsWith('//')
-        )
-          break;
-        start = lineStart;
-      }
-      return source.slice(start, location.startOffset);
+      if (!trailing) return '';
+      return source === undefined || !location ?
+          ` ${comment(trailing)}`
+        : source.slice(location.endOffset + 1, trailing.location.endOffset + 1);
+    },
+    afterComments: (node, indent) => {
+      const { after = [], trailing } = getNodeComments(node) ?? {};
+      const location = locationOf(node);
+      if (after.length === 0) return '';
+      if (source === undefined || !location) return after.map(afterComment => `\n${indent}${comment(afterComment)}`).join('');
+      const start = (trailing?.location ?? location).endOffset + 1;
+      return source.slice(start, after.at(-1)!.location.endOffset + 1);
     },
     before: node => {
       const location = locationOf(node);
@@ -145,27 +154,41 @@ function sourceText(source?: string): SourceText {
 
 /**
  * Prints nodes one after the other. A node written in the source is copied, with the text that separated it from the
- * previous one when they followed each other, or else the comment lines above it; any other node is printed, the
- * separator given by the caller. The comment ending the line of a copied node goes with it.
+ * previous one when they followed each other; any other node is printed, the separator given by the caller. The
+ * comments of a node go with it: those before it, the one ending its line and those that followed it at the end of its
+ * block.
  */
 function printSequence<T extends object>(
   nodes: readonly T[],
   print: (node: T) => string,
   text: SourceText,
-  { indent = '', separator, aboveFirst = true }: { indent?: string; separator: (previous: T, next: T) => string; aboveFirst?: boolean },
+  {
+    indent = '',
+    separator,
+    leadingFirst = true,
+    closed = true,
+  }: {
+    indent?: string;
+    separator: (previous: T, next: T) => string;
+    /** Whether the comments before the first node are printed, rather than copied with the text before it. */
+    leadingFirst?: boolean;
+    /** Whether the sequence is the content of a block, which ends with the comments after its last node. */
+    closed?: boolean;
+  },
 ): string {
-  return nodes
+  const printed = nodes
     .map((node, index) => {
       const previous = nodes[index - 1];
       const written = text.of(node);
       const between = previous ? text.between(previous, node) : undefined;
       if (between !== undefined) return `${between}${written ?? withoutIndent(print(node))}`;
-      const start = previous ? `${text.sameLine(previous)}${separator(previous, node)}` : '';
-      const above = previous || aboveFirst ? text.above(node) : '';
-      if (written !== undefined) return `${start}${above || indent}${written}`;
-      return `${start}${above ? `${above}${withoutIndent(print(node))}` : print(node)}`;
+      const start = previous ? `${text.trailingComment(previous)}${text.afterComments(previous, indent)}${separator(previous, node)}` : '';
+      const leading = previous || leadingFirst ? text.leadingComments(node, indent) : '';
+      return `${start}${leading || indent}${written ?? withoutIndent(print(node))}`;
     })
     .join('');
+  const last = nodes.at(-1);
+  return closed && last ? `${printed}${text.trailingComment(last)}${text.afterComments(last, indent)}` : printed;
 }
 
 /** A blank line between two groups of statements. */
@@ -195,9 +218,10 @@ export function printJDL(statements: readonly JDLStatement[], runtime: JDLRuntim
   const trailing = text.after(last);
   const printed = printSequence(statements, statement => printStatement(statement, runtime, text), text, {
     separator: statementSeparator,
-    aboveFirst: leading === undefined,
+    leadingFirst: leading === undefined,
+    closed: false,
   });
-  return `${leading ?? ''}${printed}${trailing ?? `${text.sameLine(last)}\n`}`;
+  return `${leading ?? ''}${printed}${trailing ?? `${text.trailingComment(last)}${text.afterComments(last, '')}\n`}`;
 }
 
 function printStatement(statement: JDLStatement, runtime: JDLRuntime, text: SourceText): string {
@@ -223,6 +247,8 @@ function printStatement(statement: JDLStatement, runtime: JDLRuntime, text: Sour
       return printOption(statement.option);
     case 'use':
       return printUse(statement.use);
+    case 'comment':
+      return statement.comment;
   }
 }
 
