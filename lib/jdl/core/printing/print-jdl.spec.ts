@@ -28,14 +28,15 @@ import { type JDLStatement, getStatements } from '../parsing/statements.ts';
 import { printJDL } from './print-jdl.ts';
 
 const runtime = getDefaultRuntime();
-const print = (jdl: string) => printJDL(getStatements(parse(jdl, runtime, { onWarning: () => {} }))!, runtime);
+/** Prints a jdl in the layout of printJDL, the text it was written with being ignored. */
+const print = (jdl: string) => printJDL(getStatements(parse(jdl, runtime, { onWarning: () => {} }))!, runtime, { format: true });
 
 /** Jdls written as printJDL writes them, one per kind of statement. */
 const testFilesDir = join(import.meta.dirname, '__test-support__');
 
 describe('jdl - printJDL', () => {
   for (const file of readdirSync(testFilesDir).filter(file => file.endsWith('.jdl'))) {
-    it(`should print ${file} as it is written`, () => {
+    it(`should format ${file} into the same text`, () => {
       const jdl = readFileSync(join(testFilesDir, file)).toString();
       expect(print(jdl)).toBe(jdl);
     });
@@ -67,7 +68,7 @@ entity B
 `);
   });
 
-  describe('with the source of the statements', () => {
+  describe('statements parsed from a jdl', () => {
     const source = `// The shop.
 
 /** A product. */
@@ -87,8 +88,8 @@ entity Order
 `;
     const statementsOf = (jdl: string) => getStatements(parse(jdl, runtime, { onWarning: () => {} }))!;
 
-    it('should print the statements it parsed as written', () => {
-      expect(printJDL(statementsOf(source), runtime, { source })).toBe(source);
+    it('should print the jdl as written', () => {
+      expect(printJDL(statementsOf(source), runtime)).toBe(source);
     });
 
     it('should print a new node, keeping the text of the others and around it', () => {
@@ -96,16 +97,14 @@ entity Order
       const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
       // A new node has no location: the field changed, rather than the one parsed.
       entity.body![1] = { ...entity.body![1], type: 'Integer' };
-      expect(printJDL(statements, runtime, { source })).toBe(source.replace('price BigDecimal', 'price Integer'));
+      expect(printJDL(statements, runtime)).toBe(source.replace('price BigDecimal', 'price Integer'));
     });
 
     it('should print a new field after the ones written', () => {
       const statements = statementsOf(source);
       const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
       entity.body!.push({ name: 'stock', type: 'Integer', validations: [] });
-      expect(printJDL(statements, runtime, { source })).toBe(
-        source.replace('  price BigDecimal\n', '  price BigDecimal\n  stock Integer\n'),
-      );
+      expect(printJDL(statements, runtime)).toBe(source.replace('  price BigDecimal\n', '  price BigDecimal\n  stock Integer\n'));
     });
   });
 
@@ -133,13 +132,11 @@ entity Order
       const statements = statementsOf(source);
       const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
       entity.body!.push({ name: 'stock', type: 'Integer', validations: [] });
-      expect(printJDL(statements, runtime, { source })).toBe(
-        source.replace('  // No more fields.\n', '  // No more fields.\n  stock Integer\n'),
-      );
+      expect(printJDL(statements, runtime)).toBe(source.replace('  // No more fields.\n', '  // No more fields.\n  stock Integer\n'));
     });
 
-    it('should print the comments without the source', () => {
-      expect(printJDL(statementsOf(source), runtime)).toMatchInlineSnapshot(`
+    it('should format the comments with the nodes', () => {
+      expect(printJDL(statementsOf(source), runtime, { format: true })).toMatchInlineSnapshot(`
 "// The shop.
 entity Product {
   // The name.

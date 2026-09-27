@@ -205,3 +205,58 @@ export function setStatements<T extends object>(node: T, statements: readonly un
 }
 
 export const getStatements = <T = JDLStatement>(node: object): T[] | undefined => (node as { statements?: T[] }).statements;
+
+/** The nodes printed on their own a statement holds, in the order they are written: none for a statement not holding any. */
+export function getStatementChildren(node: object): object[] {
+  const statement = node as JDLStatement;
+  switch (statement.type) {
+    case 'entity':
+      return statement.entity.body ?? [];
+    case 'enum':
+      return statement.enum.values;
+    case 'relationships':
+      return statement.relationships;
+    case 'application':
+      return getStatements<JDLApplicationStatement>(statement.application) ?? [];
+    default:
+      return [];
+  }
+}
+
+/** The node a statement holds, if any: an entity, an enum, an application, a deployment, an option statement. */
+export function getStatementNode(statement: JDLStatement): object | undefined {
+  switch (statement.type) {
+    case 'entity':
+      return statement.entity;
+    case 'enum':
+      return statement.enum;
+    case 'application':
+      return statement.application;
+    case 'deployment':
+      return statement.deployment;
+    case 'option':
+      return statement.option;
+    case 'use':
+      return statement.use;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Gives the statements, the nodes they hold and the nodes printed on their own inside them the text they were parsed
+ * from, which printJDL copies what was written from. A reference, not enumerable like the locations.
+ */
+export function setSource(statements: readonly JDLStatement[], source: string): void {
+  const set = (node: object) =>
+    Object.defineProperty(node, 'source', { value: source, enumerable: false, writable: true, configurable: true });
+  for (const statement of statements) {
+    set(statement);
+    const node = getStatementNode(statement);
+    if (node) set(node);
+    getStatementChildren(statement).forEach(set);
+  }
+}
+
+/** The text a node was parsed from; none for a node the parser did not build. */
+export const getSource = (node: object): string | undefined => (node as { source?: string }).source;

@@ -19,7 +19,7 @@
 
 import type { JDLComment } from '../parsing/api.ts';
 import { getNodeComments } from '../parsing/comments.ts';
-import { type JDLApplicationStatement, type JDLStatement, getStatements } from '../parsing/statements.ts';
+import { type JDLApplicationStatement, type JDLStatement, getSource, getStatements } from '../parsing/statements.ts';
 import type {
   JDLLocation,
   ParsedJDLAnnotation,
@@ -76,9 +76,9 @@ const isWritten = (node: object): boolean => locationOf(node) !== undefined && p
 /** A printed node without the indentation of its first line, which the copied text before it holds. */
 const withoutIndent = (printed: string) => printed.replace(/^[ \t]+/, '');
 
-/** The source a jdl is printed from: a node that has a location there is copied as written. */
+/** The text the nodes were parsed from, which a node the parser built, holding no new node, is copied from as written. */
 type SourceText = {
-  /** The text of a node as written; undefined for a node without location or holding a new one. */
+  /** The text of a node as written; undefined for a node without source or holding a new one. */
   of: (node: object) => string | undefined;
   /** The text between two nodes, when they followed each other as written. */
   between: (previous: object, next: object) => string | undefined;
@@ -92,61 +92,67 @@ type SourceText = {
   before: (node: object) => string | undefined;
   /** The text after a node, when only blanks and comments. */
   after: (node: object) => string | undefined;
-  /** A part of the source. */
-  slice: (start: number, end: number) => string | undefined;
+  /** A part of the text a node was parsed from. */
+  slice: (node: object, start: number, end: number) => string | undefined;
 };
 
 /** A comment, from its type and text, when there is no source to copy it from. */
 const COMMENT_DELIMITERS: Record<JDLComment['type'], [string, string]> = { Line: ['//', ''], Block: ['/*', '*/'], Directive: ['#', ''] };
 
-function sourceText(source?: string): SourceText {
-  const of = (node: object) => {
-    const location = locationOf(node);
-    return source === undefined || !location || !isWritten(node) ? undefined : source.slice(location.startOffset, location.endOffset + 1);
-  };
+/**
+ * @param format - whether every node is printed, the text it was parsed from being ignored.
+ */
+function sourceText(format = false): SourceText {
+  const sourceOf = (node: object) => (format ? undefined : getSource(node));
   const trivia = (text: string) => (TRIVIA.test(text) ? text : undefined);
-  const comment = ({ type, value, location }: JDLComment) =>
+  const comment = (source: string | undefined, { type, value, location }: JDLComment) =>
     source === undefined ?
       `${COMMENT_DELIMITERS[type][0]}${value}${COMMENT_DELIMITERS[type][1]}`
     : source.slice(location.startOffset, location.endOffset + 1);
-  const lineStart = (offset: number) => source!.lastIndexOf('\n', offset - 1) + 1;
+  const lineStart = (source: string, offset: number) => source.lastIndexOf('\n', offset - 1) + 1;
   return {
-    of,
-    slice: (start, end) => (source === undefined ? undefined : source.slice(start, end)),
+    of: node => {
+      const [source, location] = [sourceOf(node), locationOf(node)];
+      return source === undefined || !location || !isWritten(node) ? undefined : source.slice(location.startOffset, location.endOffset + 1);
+    },
+    slice: (node, start, end) => sourceOf(node)?.slice(start, end),
     between: (previous, next) => {
+      const source = sourceOf(previous);
       const [from, to] = [locationOf(previous), locationOf(next)];
-      if (source === undefined || !from || !to || from.endOffset >= to.startOffset) return undefined;
+      if (source === undefined || source !== sourceOf(next) || !from || !to || from.endOffset >= to.startOffset) return undefined;
       return trivia(source.slice(from.endOffset + 1, to.startOffset));
     },
     leadingComments: (node, indent) => {
       const comments = getNodeComments(node)?.leading ?? [];
-      const location = locationOf(node);
+      const [source, location] = [sourceOf(node), locationOf(node)];
       if (comments.length === 0) return '';
-      if (source === undefined || !location) return `${comments.map(leading => `${indent}${comment(leading)}\n`).join('')}${indent}`;
-      return source.slice(lineStart(comments[0].location.startOffset), location.startOffset);
+      if (source === undefined || !location) {
+        return `${comments.map(leading => `${indent}${comment(source, leading)}\n`).join('')}${indent}`;
+      }
+      return source.slice(lineStart(source, comments[0].location.startOffset), location.startOffset);
     },
     trailingComment: node => {
       const trailing = getNodeComments(node)?.trailing;
-      const location = locationOf(node);
+      const [source, location] = [sourceOf(node), locationOf(node)];
       if (!trailing) return '';
       return source === undefined || !location ?
-          ` ${comment(trailing)}`
+          ` ${comment(source, trailing)}`
         : source.slice(location.endOffset + 1, trailing.location.endOffset + 1);
     },
     afterComments: (node, indent) => {
       const { after = [], trailing } = getNodeComments(node) ?? {};
-      const location = locationOf(node);
+      const [source, location] = [sourceOf(node), locationOf(node)];
       if (after.length === 0) return '';
-      if (source === undefined || !location) return after.map(afterComment => `\n${indent}${comment(afterComment)}`).join('');
+      if (source === undefined || !location) return after.map(afterComment => `\n${indent}${comment(source, afterComment)}`).join('');
       const start = (trailing?.location ?? location).endOffset + 1;
       return source.slice(start, after.at(-1)!.location.endOffset + 1);
     },
     before: node => {
-      const location = locationOf(node);
+      const [source, location] = [sourceOf(node), locationOf(node)];
       return source === undefined || !location ? undefined : trivia(source.slice(0, location.startOffset));
     },
     after: node => {
-      const location = locationOf(node);
+      const [source, location] = [sourceOf(node), locationOf(node)];
       return source === undefined || !location ? undefined : trivia(source.slice(location.endOffset + 1));
     },
   };
@@ -195,23 +201,23 @@ function printSequence<T extends object>(
 const statementSeparator = (previous: { type: string }, next: { type: string }) =>
   statementGroup(previous.type) === statementGroup(next.type) ? '\n' : '\n\n';
 
-/** What printJDL prints from. */
+/** How printJDL prints. */
 export type PrintJDLOptions = {
   /**
-   * The text the statements were parsed from: a node with a location, as the parser gives them, is copied from it as
-   * written, comments and blanks included, unless it holds a new node; any other node, a new one, is printed, the text
-   * around a node holding a new one being kept.
+   * Whether every node is printed in the layout of printJDL, the text it was parsed from being ignored. By default, a
+   * node the parser built is copied as written, comments and blanks included, unless it holds a new node; a new node is
+   * printed, the text around it being kept.
    */
-  source?: string;
+  format?: boolean;
 };
 
 /**
  * Prints a jdl from its statements, as the parser keeps them (`getStatements(ast)`), in their order: parsing the printed jdl
- * gives the same statements again, without the locations.
+ * gives the same statements again, without the locations. The statements parsed from a jdl print it as it was written.
  */
 export function printJDL(statements: readonly JDLStatement[], runtime: JDLRuntime, options: PrintJDLOptions = {}): string {
   if (statements.length === 0) return '\n';
-  const text = sourceText(options.source);
+  const text = sourceText(options.format);
   const [first, last] = [statements[0], statements.at(-1)!];
   // The text before the first statement and after the last one, when they are copied.
   const leading = text.before(first);
@@ -351,7 +357,8 @@ function printEntityHeader(entity: ParsedJDLEntity): string {
 function printEntity(entity: ParsedJDLEntity, text: SourceText): string {
   // The header of an entity holding a new field is copied as written.
   const { location, bodyLocation } = entity as { location?: JDLLocation; bodyLocation?: JDLLocation };
-  const writtenHeader = location && bodyLocation ? text.slice(location.startOffset, bodyLocation.startOffset)?.trimEnd() : undefined;
+  const writtenHeader =
+    location && bodyLocation ? text.slice(entity, location.startOffset, bodyLocation.startOffset)?.trimEnd() : undefined;
   let printed = writtenHeader ?? printEntityHeader(entity);
   if (entity.body?.length) {
     const fields = printSequence(entity.body, field => printField(field), text, { indent: INDENT, separator: () => '\n' });

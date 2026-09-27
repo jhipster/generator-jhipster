@@ -26,7 +26,7 @@ import { COMMENTS_GROUP } from './lexer/lexer.ts';
 import { tokenLocation } from './location.ts';
 import { checkSemantics } from './semantic/index.ts';
 import type { JDLDiagnostic } from './semantic/types.ts';
-import { getStatements } from './statements.ts';
+import { getStatements, setSource } from './statements.ts';
 import type { JDLLocation, ParsedJDLApplications } from './types/parsed.ts';
 import type { JDLRuntime } from './types/runtime.ts';
 import performAdditionalSyntaxChecks from './validator.ts';
@@ -137,6 +137,7 @@ export function parseJDL(input: string, runtime: JDLRuntime, options?: Pick<Pars
       diagnostics.push({ ruleId: 'deprecated', severity: 'warning', message, location }),
     ).visit(cst),
     lexResult,
+    input,
   );
   // The semantic rules are about a whole jdl.
   if (startRule === 'prog') {
@@ -161,14 +162,18 @@ export function parse(input: string, runtime: JDLRuntime, options?: ParseOptions
   // The parser has no logger of its own: a caller that passes none still sees the warnings.
   // eslint-disable-next-line no-console
   const astBuilderVisitor = buildJDLAstBuilderVisitor(runtime, options?.onWarning ?? (message => console.warn(message)));
-  return withComments(astBuilderVisitor.visit(cst), lexResult);
+  return withComments(astBuilderVisitor.visit(cst), lexResult, input);
 }
 
-/** Gives the statements of the AST their comments, the javadocs being documentation or statements. */
-function withComments(ast: ParsedJDLApplications, lexResult: ILexingResult): ParsedJDLApplications {
+/**
+ * Gives the statements of the AST their comments, the javadocs being documentation or statements, and the text they were
+ * parsed from.
+ */
+function withComments(ast: ParsedJDLApplications, lexResult: ILexingResult, input: string): ParsedJDLApplications {
   const statements = getStatements(ast);
   if (statements) {
     attachComments(statements, (lexResult.groups[COMMENTS_GROUP] ?? []).map(toComment));
+    setSource(statements, input);
   }
   return ast;
 }

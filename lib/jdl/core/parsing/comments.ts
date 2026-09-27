@@ -18,7 +18,7 @@
  */
 
 import type { JDLComment } from './api.ts';
-import { type JDLApplicationStatement, type JDLStatement, getStatements } from './statements.ts';
+import { getStatementChildren } from './statements.ts';
 import type { JDLLocation } from './types/parsed.ts';
 
 /**
@@ -46,23 +46,6 @@ function nodeComments(node: object): JDLNodeComments {
     Object.defineProperty(node, 'comments', { value: comments, enumerable: false, writable: true, configurable: true });
   }
   return comments;
-}
-
-/** The nodes printed on their own a statement holds, in the order they are written. */
-function childrenOf(node: object): object[] {
-  const statement = node as JDLStatement;
-  switch (statement.type) {
-    case 'entity':
-      return statement.entity.body ?? [];
-    case 'enum':
-      return statement.enum.values;
-    case 'relationships':
-      return statement.relationships;
-    case 'application':
-      return getStatements<JDLApplicationStatement>(statement.application) ?? [];
-    default:
-      return [];
-  }
 }
 
 /**
@@ -94,6 +77,6 @@ export function attachComments(statements: readonly object[], comments: readonly
     }
   }
   for (const [holder, holderComments] of inside) {
-    attachComments(childrenOf(holder), holderComments);
+    attachComments(getStatementChildren(holder), holderComments);
   }
 }
