@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-// The task module of the piscina pools. piscina loads a task module with `require()` first, and on Node versions with
-// `require(esm)` it loads an ES module that way; several worker threads doing that at the same time abort the process
-// (`v8::Module::IsGraphAsync must be used on an instantiated module`). A CommonJS module is required without that, and
-// loads the ES module of the pool, `workerData.workerModule`, with `import()`.
+// The task module of the piscina pools. piscina loads a task module with `require()` first, and since `require(esm)`
+// it loads an ES module that way; on Node 22, several worker threads doing that at the same time abort the process
+// (`v8::Module::IsGraphAsync must be used on an instantiated module`), Node 24 is not affected. A CommonJS module is
+// required without that, and loads the ES module of the pool, `workerData.workerModule`, with `import()`.
+// To reevaluate in JHipster v10: remove it once Node 22 is no longer supported, see `esmWorkerPoolOptions`.
 const { workerData } = require('piscina');
 
 let handler;

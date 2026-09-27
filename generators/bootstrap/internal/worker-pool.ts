@@ -19,8 +19,10 @@
 
 /**
  * The piscina options of a pool whose tasks run the default export of an ES module. The pool loads `import-worker.cjs`,
- * which imports the module: piscina would load it with `require()`, which aborts the process when worker threads do it
- * at the same time.
+ * which imports the module: piscina would load it with `require()`, which on Node 22 aborts the process when worker
+ * threads do it at the same time. Node 24 is not affected.
+ * @deprecated to reevaluate in JHipster v10: once Node 22 is no longer supported, pass the ES module to piscina as
+ * `filename` again and remove `import-worker.cjs`.
  */
 export const esmWorkerPoolOptions = (workerModule: URL) => ({
   filename: new URL('./import-worker.cjs', import.meta.url).href,
