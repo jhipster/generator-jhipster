@@ -338,9 +338,7 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
       {},
       {
         get(target: any, name: string) {
-          if (!target[name]) {
-            target[name] = defaultMockFactory();
-          }
+          target[name] ??= defaultMockFactory();
           return target[name];
         },
         set(target: any, property: string, value: any) {
