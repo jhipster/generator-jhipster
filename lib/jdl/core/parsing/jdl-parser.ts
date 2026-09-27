@@ -31,7 +31,8 @@ export default class JDLParser extends CstParser {
    * It slows down the parsing of a valid jdl by about 10%, which the generator does not need.
    */
   constructor(tokens: Record<string, TokenType>, { recoveryEnabled = false }: { recoveryEnabled?: boolean } = {}) {
-    super(tokens, { outputCst: true, recoveryEnabled } as any);
+    // The parser tracks where each node of the CST is written, which the AST keeps.
+    super(tokens, { outputCst: true, recoveryEnabled, nodeLocationTracking: 'full' } as any);
     this.tokens = tokens;
   }
 

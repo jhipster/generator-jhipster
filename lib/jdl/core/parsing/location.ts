@@ -16,40 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { CstElement, CstNode, IToken } from 'chevrotain';
+import type { CstNode, IToken } from 'chevrotain';
 
 import type { JDLLocation } from './types/parsed.ts';
-
-const isCstNode = (element: CstElement): element is CstNode => 'children' in element;
-
-/** A token inserted by error recovery has no position. */
-const isPositioned = (token: IToken) => !Number.isNaN(token.startOffset);
-
-/**
- * The first or the last positioned token of a rule, its sub rules included. The elements of a label are in source order, so only the
- * first (or last) element of each label is a candidate: a rule is not walked whole.
- */
-function edgeToken(children: Record<string, CstElement[] | undefined>, last: boolean): IToken | undefined {
-  let edge: IToken | undefined;
-  for (const elements of Object.values(children)) {
-    if (!elements) continue;
-    // A recovered element has no position, try the next one of the label.
-    for (let index = 0; index < elements.length; index++) {
-      const element = elements[last ? elements.length - 1 - index : index];
-      let token: IToken | undefined;
-      if (isCstNode(element)) {
-        token = edgeToken(element.children, last);
-      } else if (isPositioned(element)) {
-        token = element;
-      }
-      if (token) {
-        if (!edge || (last ? token.startOffset > edge.startOffset : token.startOffset < edge.startOffset)) edge = token;
-        break;
-      }
-    }
-  }
-  return edge;
-}
 
 /** The source range of a token. */
 export const tokenLocation = (token: IToken): JDLLocation => ({
@@ -61,18 +30,20 @@ export const tokenLocation = (token: IToken): JDLLocation => ({
   endColumn: token.endColumn!,
 });
 
-/** The source range of the tokens of a rule, its sub rules included; undefined when it has none, a recovered rule. */
-export function spanLocation(children: Record<string, CstElement[] | undefined>): JDLLocation | undefined {
-  const first = edgeToken(children, false);
-  const last = edgeToken(children, true);
-  if (!first || !last) return undefined;
+/**
+ * The source range of a node of the CST, as the parser tracks it; undefined for a node without token, an empty rule or a
+ * rule recovered from an error.
+ */
+export function nodeLocation(node: CstNode | undefined): JDLLocation | undefined {
+  const location = node?.location;
+  if (!location || !(location.startOffset >= 0) || !(location.endOffset! >= 0)) return undefined;
   return {
-    startOffset: first.startOffset,
-    endOffset: last.endOffset!,
-    startLine: first.startLine!,
-    startColumn: first.startColumn!,
-    endLine: last.endLine!,
-    endColumn: last.endColumn!,
+    startOffset: location.startOffset,
+    endOffset: location.endOffset!,
+    startLine: location.startLine!,
+    startColumn: location.startColumn!,
+    endLine: location.endLine!,
+    endColumn: location.endColumn!,
   };
 }
 
