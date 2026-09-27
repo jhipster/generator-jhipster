@@ -1385,7 +1385,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
       <%_ } _%>
       <%_ if (reactive) { _%>
-        <%- relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
+        <%- relationship.otherEntity.builtInUser ? 'user' : relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
       <%_ } else { _%>
         em.persist(<%- relationship.relationshipFieldName %>);
         em.flush();
