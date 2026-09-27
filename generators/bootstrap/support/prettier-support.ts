@@ -24,6 +24,7 @@ import { Piscina } from 'piscina';
 
 import { isDistFolder } from '../../../lib/index.ts';
 import type CoreGenerator from '../../base-core/index.ts';
+import { esmWorkerPoolOptions } from '../internal/worker-pool.ts';
 
 import type prettierWorker from './prettier-worker.ts';
 
@@ -48,7 +49,7 @@ export const createPrettierTransform = async function (
 
   const pool = new Piscina<Parameters<typeof prettierWorker>[0], Awaited<ReturnType<typeof prettierWorker>>>({
     maxThreads: 1,
-    filename: new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
+    ...esmWorkerPoolOptions(new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url)),
     ...options,
   });
 

@@ -24,6 +24,7 @@ import { Piscina } from 'piscina';
 import { isDistFolder } from '../../../lib/index.ts';
 import type BaseGenerator from '../../base-core/index.ts';
 import { addLineNumbers } from '../internal/transform-utils.ts';
+import { esmWorkerPoolOptions } from '../internal/worker-pool.ts';
 
 import type eslintWorker from './eslint-worker.ts';
 
@@ -41,7 +42,7 @@ export const createESLintTransform = async function (
   const pool = new Piscina<Parameters<typeof eslintWorker>[0], ReturnType<typeof eslintWorker>>({
     maxThreads: 2,
     idleTimeout: 100,
-    filename: new URL(`./eslint-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
+    ...esmWorkerPoolOptions(new URL(`./eslint-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url)),
     ...poolOptions,
   });
 
