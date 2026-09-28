@@ -11,6 +11,9 @@ exports[`generator - server - support - needles generated project should match s
   ".mvn/jvm.config": {
     "stateCleared": "modified",
   },
+  ".mvn/mvnw.mjs": {
+    "stateCleared": "modified",
+  },
   ".mvn/wrapper/maven-wrapper.jar": {
     "stateCleared": "modified",
   },
