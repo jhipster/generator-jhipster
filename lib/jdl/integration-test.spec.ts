@@ -22,9 +22,11 @@ import { beforeEach, describe, expect, it } from 'esmocha';
 import helpers from 'yeoman-test';
 
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
+import { getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 
+import { astToFiles } from './converters/ast-to-files/ast-to-files.ts';
+import { applyCompatibilityDefaults } from './converters/ast-to-files/compatibility-defaults.ts';
 import exportToJDL from './converters/exporters/jdl-exporter.ts';
-import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
 import {
   createImporterFromContent,
   getTestFile,
@@ -62,6 +64,9 @@ describe('jdl - integration tests', () => {
 
   describe('when parsing entities JDL', () => {
     const applicationName = 'jhipster';
+    /** The json entities of a jdl without application, by the name of the application they are imported into. */
+    const convertEntities = (jdl: string) =>
+      new Map([[applicationName, Object.values(applyCompatibilityDefaults(astToFiles(parseFromContent(jdl), getDefaultRuntime())).files)]]);
 
     describe('with annotations', () => {
       let result: Map<any, any[]>;
@@ -84,7 +89,7 @@ entity A
           parsedContent: parseFromContent(jdl),
           applicationType: APPLICATION_TYPE_MONOLITH,
         });
-        result = convertWithoutApplication(jdlObject, applicationName);
+        result = convertEntities(jdl);
         convertedJdl = jdlObject.toString();
       });
 
@@ -95,8 +100,7 @@ entity A
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
-    JSONEntity {
-      "angularJSSuffix": undefined,
+    {
       "annotations": {
         "booleanFalse": false,
         "booleanTrue": true,
@@ -111,22 +115,9 @@ Map {
       "applications": [
         "*",
       ],
-      "clientRootFolder": undefined,
-      "documentation": undefined,
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
-      "microserviceName": undefined,
       "name": "A",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [],
-      "service": undefined,
-      "skipClient": undefined,
-      "skipServer": undefined,
     },
   ],
 }
@@ -145,13 +136,7 @@ relationship ManyToOne {
 `;
 
       beforeEach(() => {
-        result = convertWithoutApplication(
-          parseFromConfigurationObject({
-            parsedContent: parseFromContent(jdl),
-            applicationType: APPLICATION_TYPE_MONOLITH,
-          }),
-          applicationName,
-        );
+        result = convertEntities(jdl);
       });
 
       it('should add relationship at both sides', () => {
@@ -163,24 +148,13 @@ relationship ManyToOne {
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
-    JSONEntity {
-      "angularJSSuffix": undefined,
+    {
       "annotations": {},
       "applications": [
         "*",
       ],
-      "clientRootFolder": undefined,
-      "documentation": undefined,
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
-      "microserviceName": undefined,
       "name": "A",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "otherEntityName": "b",
@@ -190,28 +164,14 @@ Map {
           "relationshipType": "many-to-one",
         },
       ],
-      "service": undefined,
-      "skipClient": undefined,
-      "skipServer": undefined,
     },
-    JSONEntity {
-      "angularJSSuffix": undefined,
+    {
       "annotations": {},
       "applications": [
         "*",
       ],
-      "clientRootFolder": undefined,
-      "documentation": undefined,
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
-      "microserviceName": undefined,
       "name": "B",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "otherEntityName": "a",
@@ -221,9 +181,6 @@ Map {
           "relationshipType": "one-to-many",
         },
       ],
-      "service": undefined,
-      "skipClient": undefined,
-      "skipServer": undefined,
     },
   ],
 }
@@ -247,7 +204,7 @@ relationship ManyToOne {
           parsedContent: parseFromContent(jdl),
           applicationType: APPLICATION_TYPE_MONOLITH,
         });
-        result = convertWithoutApplication(jdlObject, applicationName);
+        result = convertEntities(jdl);
         convertedJdl = jdlObject.toString();
       });
 
@@ -264,24 +221,13 @@ relationship ManyToOne {
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
-    JSONEntity {
-      "angularJSSuffix": undefined,
+    {
       "annotations": {},
       "applications": [
         "*",
       ],
-      "clientRootFolder": undefined,
-      "documentation": undefined,
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
-      "microserviceName": undefined,
       "name": "A",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "options": {
@@ -293,32 +239,15 @@ Map {
           "relationshipType": "many-to-one",
         },
       ],
-      "service": undefined,
-      "skipClient": undefined,
-      "skipServer": undefined,
     },
-    JSONEntity {
-      "angularJSSuffix": undefined,
+    {
       "annotations": {},
       "applications": [
         "*",
       ],
-      "clientRootFolder": undefined,
-      "documentation": undefined,
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
-      "microserviceName": undefined,
       "name": "B",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [],
-      "service": undefined,
-      "skipClient": undefined,
-      "skipServer": undefined,
     },
   ],
 }
@@ -337,13 +266,7 @@ relationship ManyToOne {
 `;
 
       beforeEach(() => {
-        result = convertWithoutApplication(
-          parseFromConfigurationObject({
-            parsedContent: parseFromContent(jdl),
-            applicationType: APPLICATION_TYPE_MONOLITH,
-          }),
-          applicationName,
-        );
+        result = convertEntities(jdl);
       });
 
       it('should add relationship at both sides', () => {
@@ -355,24 +278,13 @@ relationship ManyToOne {
         expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
-    JSONEntity {
-      "angularJSSuffix": undefined,
+    {
       "annotations": {},
       "applications": [
         "*",
       ],
-      "clientRootFolder": undefined,
-      "documentation": undefined,
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
-      "microserviceName": undefined,
       "name": "A",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "options": {
@@ -384,28 +296,14 @@ Map {
           "relationshipType": "many-to-one",
         },
       ],
-      "service": undefined,
-      "skipClient": undefined,
-      "skipServer": undefined,
     },
-    JSONEntity {
-      "angularJSSuffix": undefined,
+    {
       "annotations": {},
       "applications": [
         "*",
       ],
-      "clientRootFolder": undefined,
-      "documentation": undefined,
-      "dto": undefined,
-      "embedded": undefined,
-      "entityTableName": undefined,
       "fields": [],
-      "fluentMethods": undefined,
-      "jpaMetamodelFiltering": undefined,
-      "microserviceName": undefined,
       "name": "B",
-      "pagination": undefined,
-      "readOnly": undefined,
       "relationships": [
         {
           "options": {
@@ -418,9 +316,6 @@ Map {
           "relationshipType": "one-to-many",
         },
       ],
-      "service": undefined,
-      "skipClient": undefined,
-      "skipServer": undefined,
     },
   ],
 }
@@ -488,10 +383,10 @@ application {
     "baseName": "jhipster",
     "blueprints": [
       {
-        "name": "foo",
+        "name": "generator-jhipster-foo",
       },
       {
-        "name": "entity-audit",
+        "name": "generator-jhipster-entity-audit",
       },
     ],
     "entities": [],
@@ -499,7 +394,7 @@ application {
   },
   "entities": [],
   "namespaceConfigs": {
-    "entity-audit": {
+    "generator-jhipster-entity-audit": {
       "falseConfig": false,
       "integerConfig": 321,
       "listConfig": [
@@ -508,7 +403,7 @@ application {
       "stringConfig": "barValue",
       "trueConfig": true,
     },
-    "foo": {
+    "generator-jhipster-foo": {
       "falseConfig": false,
       "integerConfig": 123,
       "listConfig": [
