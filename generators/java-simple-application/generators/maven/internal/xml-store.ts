@@ -110,9 +110,7 @@ export default class XmlStorage {
   }
 
   protected load() {
-    if (!this._cachedStore) {
-      this._cachedStore = this.parser.parse(this.loadFile());
-    }
+    this._cachedStore ??= this.parser.parse(this.loadFile());
   }
 
   protected mergeContent<T>(existing: T, newContent?: string): T {

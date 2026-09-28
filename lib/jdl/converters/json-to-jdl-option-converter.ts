@@ -35,7 +35,7 @@ export default {
  */
 export function convertServerOptionsToJDL(config: any, jdl: JDLObject): JDLObject {
   const jdlObject = jdl || new JDLObject();
-  const jhipsterConfig = config || {};
+  const jhipsterConfig = config ?? {};
   [SKIP_CLIENT, SKIP_SERVER].forEach(option => {
     if (jhipsterConfig[option] === true) {
       jdlObject.addOption(

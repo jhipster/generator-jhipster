@@ -82,7 +82,7 @@ relationship OneToMany {
             return 1;
           })
           .map((exportedEntity: any) => {
-            exportedEntity.documentation ||= '';
+            exportedEntity.documentation ??= '';
             return exportedEntity;
           });
       });
@@ -128,7 +128,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -160,7 +160,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -200,7 +200,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -226,7 +226,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -263,7 +263,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         importState.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = importState.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -459,7 +459,7 @@ ${entities}`,
         it('should return the corresponding exportedApplicationsWithEntities', () => {
           returned.exportedApplications.forEach((application: any) => {
             const applicationConfig = application['generator-jhipster'];
-            const entityNames = applicationConfig.entities || [];
+            const entityNames = applicationConfig.entities ?? [];
             const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
             expect(applicationConfig).toEqual(applicationWithEntities.config);
             expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);

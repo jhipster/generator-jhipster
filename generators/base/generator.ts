@@ -750,7 +750,7 @@ export default class BaseGenerator<
     } catch {
       // Ignore
     }
-    let argvBlueprints = this.options.blueprints || '';
+    let argvBlueprints = this.options.blueprints ?? '';
     // check for old single blueprint declaration
     let { blueprint } = this.options;
     if (blueprint) {
