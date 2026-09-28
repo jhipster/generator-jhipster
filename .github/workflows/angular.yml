@@ -118,6 +118,8 @@ jobs:
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
           JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: jhipster.cjs info
+      # The build tool scripts must run with npm's default script-shell (cmd.exe on Windows)
+      - run: npm run backend:info --if-present
       # Make sure that the script-shell is set to bash, otherwise npm scripts will fail on Windows runners
       - run: npm config -L project set script-shell=bash
       #----------------------------------------------------------------------
