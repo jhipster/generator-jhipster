@@ -74,7 +74,6 @@ updates:
       angular:
         patterns:
           - '@angular/*'
-          # native-federation peer depends on the exact @angular/build minor.
           - '@angular-architects/native-federation'
           - '@angular-builders/*'
           - '@angular-devkit/*'
