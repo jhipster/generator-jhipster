@@ -532,4 +532,21 @@ describe('generator - Docker Compose', () => {
       runResult.assertFile(expectedFiles.monolith);
     });
   });
+
+  describe('with a config holding only the type and the applications', () => {
+    const chosenApps = ['01-gateway', '02-mysql'];
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+      await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withFiles({
+        'docker-compose/.yo-rc.json': { 'generator-jhipster': { deploymentType: 'docker-compose', appsFolders: chosenApps } },
+      });
+    });
+    it('should generate with the defaults, without asking', () => {
+      expect(runResult.askedQuestions).toEqual([]);
+      runResult.assertFile(expectedFiles.dockercompose);
+    });
+  });
 });

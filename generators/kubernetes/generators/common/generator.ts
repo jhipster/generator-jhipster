@@ -131,7 +131,7 @@ export default class KubernetesCommonGenerator extends BaseKubernetesGenerator {
         if (!this.shouldAskForPrompts({ control })) return;
 
         // The workspaces root holds this deployment folder, it is looked up outside of the destination root.
-        const workspacesRoot = this.destinationPath(this.jhipsterConfig.directoryPath, { allowOutsideRoot: true });
+        const workspacesRoot = this.destinationPath(this.jhipsterConfigWithDefaults.directoryPath, { allowOutsideRoot: true });
         const appsFolders = getAppFolders
           .call(this, workspacesRoot, this.jhipsterConfigWithDefaults.deploymentApplicationType)
           .filter(appFolder => appFolder !== 'jhipster-registry' && appFolder !== 'registry');
