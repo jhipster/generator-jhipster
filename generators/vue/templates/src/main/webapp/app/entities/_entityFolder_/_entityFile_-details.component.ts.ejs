@@ -71,7 +71,12 @@ export default defineComponent({
     const handleDelete = async () => {
       try {
         await <%- entityInstance %>Service().delete(route.params.<%- entityInstance %>Id);
-        alertService.showInfo('entity.action.delete.success');
+<%_ if (enableTranslation) { _%>
+        const message = t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: route.params.<%- entityInstance %>Id }).toString();
+<%_ } else { _%>
+        const message = `A <%- entityAngularName %> is deleted with identifier ${route.params.<%- entityInstance %>Id}`;
+<%_ } _%>
+        alertService.showInfo(message, { variant: 'danger' });
         router.push({ name: '<%- entityAngularName %>Home' });
       } catch (error) {
         alertService.showHttpError(error.response);
