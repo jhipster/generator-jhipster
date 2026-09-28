@@ -580,7 +580,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
   <%_ for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) { _%>
     @Autowired
-    private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
+    private <%- relationship.otherEntity.entityNameCapitalized %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
   <%_ } _%>
 <%_ } else { _%>
   <%_ for (const otherEntity of noCascadeOtherEntities) { _%>
