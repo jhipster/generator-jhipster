@@ -64,9 +64,10 @@ package <%- entityAbsolutePackage %>.service.mapper;
       const overridesToDto = dtoRelationships.length > 0 || expressionFields.length > 0;
       const overridesToEntity = dtoRelationships.length > 0 || primaryKey.ids.length > 1;
       // With every nested bean covered by a named mapping, a relationship a mapping forgets must be a compile error
-      // instead of a mapping forged by MapStruct. Embedded entities and composite ids still rely on forged mappings.
+      // instead of a mapping forged by MapStruct. Embedded entities are copied whole and still need forged mappings;
+      // nested targets such as `id.<name>` of a composite id are generated regardless of this flag.
       const disableSubMappingMethodsGeneration
-        = !embedded && primaryKey.ids.length === 1 && !restProperties.some(property => property.relationshipName && property.otherEntity.embedded);
+        = !embedded && !restProperties.some(property => property.relationshipName && property.otherEntity.embedded);
 _%>
 <%_ if (hasCollectionMapping) { _%>
 import java.util.Set;
