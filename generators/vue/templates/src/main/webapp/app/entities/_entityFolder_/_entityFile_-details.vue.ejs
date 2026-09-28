@@ -29,13 +29,14 @@
                     </dt>
                     <dd>
   <%_ if (field.fieldIsEnum) { _%>
-                        <span><% if (enableTranslation) { %>{{%- fieldType %>.' + <%- entityInstance %>.<%- fieldName %>)}}<% } else { %>{{ <%- entityInstance %>.<%- fieldName %> }}<% } %></span>
+                        <span><% if (enableTranslation) { %>{{ t$('<%- frontendAppName %>.<%- fieldType %>.' + <%- entityInstance %>.<%- fieldName %>) }}<% } else { %>{{ <%- entityInstance %>.<%- fieldName %> }}<% } %></span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%- entityInstance %>.<%- fieldName %>">
                             <a @click="openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>, 'image')">
-                                <img :src="'data:' + <%- entitContentType + ';base64,' + <%- entityInstance %>.<%- fieldName%>" style="max-width: 100%;" alt="<%- entityInstance %>"/>
+                                <img :src="'data:' + <%- entityInstance %>.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-width: 100%;" alt="<%- entityInstance %>"/>
                             </a>
-                            {{<%- entityInstance %>.<%- fieldNze(<%- entityInstance %>.<%- fieldName %>)}}                        </div>
+                            {{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{byteSize(<%- entityInstance %>.<%- fieldName %>)}}
+                        </div>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                         <div v-if="<%- entityInstance %>.<%- fieldName %>">
                             <a @click="openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{       t$('entity.action.open') }}</a>
@@ -51,25 +52,28 @@
                     </dd>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>            <%_ if (relationship.persistableRelationship) { _%>
+  <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>
+  <%_ if (relationship.persistableRelationship) { _%>
                     <dt>
                         <span>{{ t$('<%- i18nKeyPrefix %>.<%- relationshipName %>') }}</span>
-                    </dt>                                                                                                                                                <dd>
+                    </dt>
+                    <dd>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
                             {{<%- relationshipFieldName %>.<%- otherEntityField %>}}
                         </span>
       <%_ } else { _%>
-                        {{<%- `${entityInstance}.${relationshipFieldName}` %> ? <%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` ''}}
+                        {{<%- `${entityInstance}.${relationshipFieldName}` %> ? <%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %> : ''}}
       <%_ } _%>
-    <%_ } else { _%>                                                                                                                                       <%_ if (relationship.relationshipManyToMany) { _%>
+    <%_ } else { _%>
+      <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
                             <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
-                        </span>                                                                                                                            <%_ } else { _%>
+                        </span>
+      <%_ } else { _%>
                         <div v-if="<%- `${entityInstance}.${relationshipFieldName}` %>">
-                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationshe %>}}">{{<%-
-`${entityInstance}.${relationshipFieldName}.${otherEntityField
+                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </div>
       <%_ } _%>
     <%_ } _%>
@@ -85,11 +89,11 @@
                 </button>
 <%_ if (!readOnly) { _%>
                 <router-link v-if="<%- entityInstance %>.<%- primaryKey.name %>" :to="{name: '<%- entityAngularName %>Edit', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}" custom v-slot="{ navigate }">
-                    <button @click="navigate" class="btn btn-p
+                    <button @click="navigate" class="btn btn-primary">
                         <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.edit') }}</span>
                     </button>
                     </router-link>
-                <button @click="deleteModalOpen = true" class=
+                <button @click="deleteModalOpen = true" class="btn btn-danger">
                     <font-awesome-icon icon="trash"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
                 </button>
 <%_ } _%>
@@ -99,7 +103,7 @@
                 <template #title>
                     <span>{{ t$('entity.delete.title') }}</span>
                 </template>
-                <p>{{ t$('delete.question', { id: <%- entityInstance %>.<%- primaryKey.name %> }) }}</p>
+                <p>{{ t$('<%- i18nKeyPrefix %>.delete.question', { id: <%- entityInstance %>.<%- primaryKey.name %> }) }}</p>
             </b-modal>
 <%_ } _%>
         </div>
