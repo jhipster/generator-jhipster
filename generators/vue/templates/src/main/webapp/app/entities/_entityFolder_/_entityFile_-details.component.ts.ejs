@@ -48,6 +48,9 @@ export default defineComponent({
     const router = useRouter();
 
     const deleteModalOpen = ref(false);
+<%_ if (enableTranslation) { _%>
+    const t$ = useI18n().t;
+<%_ } _%>
 
     const previousState = () => router.go(-1);
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref({});
