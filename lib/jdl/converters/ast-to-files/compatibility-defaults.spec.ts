@@ -31,12 +31,6 @@ const convert = (jdl: string) =>
   applyCompatibilityDefaults(astToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime)).files;
 
 describe('jdl - applyCompatibilityDefaults', () => {
-  it('should give an application without base name the name of its folder', () => {
-    expect(convert('application {\n  config { applicationType monolith }\n}')['jhipster/.yo-rc.json']).toEqual({
-      'generator-jhipster': { baseName: 'jhipster', applicationType: 'monolith', entities: [] },
-    });
-  });
-
   it('should give a deployment the defaults of its type, and empty lists', () => {
     expect(convert('deployment { deploymentType docker-compose appsFolders [shop] monitoring prometheus }')).toMatchInlineSnapshot(`
 {

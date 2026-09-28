@@ -19,7 +19,6 @@
 
 import { capitalize, kebabCase, lowerFirst, upperFirst } from 'lodash-es';
 
-import { normalizeBlueprintName } from '../../../utils/blueprint-name.ts';
 import { customCamelCase } from '../../../utils/string-utils.ts';
 import { asJdlRelationshipType } from '../../core/basic-types/relationship-types.ts';
 import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
@@ -38,6 +37,8 @@ import type {
 } from '../../core/parsing/types/parsed.ts';
 import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
 import { formatComment } from '../../core/utils/format-utils.ts';
+
+import { jhipsterCustomizations } from './jhipster-customizations.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const {
@@ -171,14 +172,10 @@ function relationshipSide(
 
 /**
  * Adds a relationship to the entities of its sides: always to the source, to the destination when that side is
- * navigable (it injects a field) or annotated. A relationship injecting no field is bidirectional.
+ * navigable (it injects a field) or annotated.
  */
 function addRelationship(entities: Map<string, JSONEntity>, relationship: ParsedJDLRelationship) {
-  let { from, to } = relationship;
-  if (!from.injectedField && !to.injectedField) {
-    from = { ...from, injectedField: lowerFirst(to.name) };
-    to = { ...to, injectedField: lowerFirst(from.name) };
-  }
+  const { from, to } = relationship;
   const type = asJdlRelationshipType(relationship.cardinality);
   const global = annotationsToOptions(relationship.options.global);
   const source = annotationsToOptions(relationship.options.source);
@@ -245,14 +242,8 @@ function convertNamespaceValue(value: unknown): unknown {
   return Array.isArray(value) ? [...new Set(value)] : value;
 }
 
-/** The folder of an application: its base name, or `jhipster` for an application without one. */
-const applicationFolder = (application: ParsedJDLApplication): string => application.config.baseName ?? 'jhipster';
-
-/**
- * The `.yo-rc.json` of an application, with the options it declares; a blueprint, and its namespace config, named after
- * its package, as a jdl names them without the generator-jhipster- prefix.
- */
-function applicationFile(application: ParsedJDLApplication, runtime: JDLRuntime): Record<string, any> {
+/** The `.yo-rc.json` of an application, with the options it declares. */
+function applicationFile(application: JDLApplicationDeclaration, entities: string[], runtime: JDLRuntime): Record<string, any> {
   const { applicationDefinition } = runtime;
   const config: Record<string, any> = {};
   for (const [name, value] of Object.entries<unknown>(application.config)) {
@@ -262,15 +253,13 @@ function applicationFile(application: ParsedJDLApplication, runtime: JDLRuntime)
     config[name] = type === 'list' || type === 'quotedList' ? [...new Set(value as string[])] : value;
   }
   if (config.creationTimestamp !== undefined) config.creationTimestamp = Number.parseInt(config.creationTimestamp, 10);
-  if (config.blueprints) config.blueprints = config.blueprints.map((name: string) => ({ name: normalizeBlueprintName(name) }));
+  if (config.blueprints) config.blueprints = config.blueprints.map((name: string) => ({ name }));
   if (config.microfrontends) config.microfrontends = config.microfrontends.map((baseName: string) => ({ baseName }));
-  config.entities = application.entities ?? [];
+  config.entities = entities;
 
   const file: Record<string, any> = {};
-  for (const [namespace, namespaceConfig] of Object.entries(application.namespaceConfigs ?? {})) {
-    file[normalizeBlueprintName(namespace)] = Object.fromEntries(
-      Object.entries(namespaceConfig).map(([name, value]) => [name, convertNamespaceValue(value)]),
-    );
+  for (const [namespace, namespaceConfig] of Object.entries(application.namespaceConfigs)) {
+    file[namespace] = Object.fromEntries(Object.entries(namespaceConfig).map(([name, value]) => [name, convertNamespaceValue(value)]));
   }
   file[GENERATOR_JHIPSTER] = config;
   return file;
@@ -295,13 +284,33 @@ function applicationEntities(entities: Map<string, JSONEntity>, names: string[],
   return [...own.values()];
 }
 
+/** An application, as a customization receives and returns it: its config and the configs of its namespaces. */
+export type JDLApplicationDeclaration = {
+  config: Record<string, any>;
+  namespaceConfigs: Record<string, Record<string, any>>;
+};
+
+/** The customizations a tool makes to the conversion of a jdl, outside what the jdl declares. */
+export type JDLConversionCustomizations = {
+  /** Customizes an application before it is converted. */
+  application?: (application: JDLApplicationDeclaration) => JDLApplicationDeclaration;
+  /** Customizes a relationship before it is converted. */
+  relationship?: (relationship: ParsedJDLRelationship) => ParsedJDLRelationship;
+};
+
 /**
  * Converts the AST of a jdl, checked by the semantic rules, to the json files of its applications, entities and
  * deployments, walking its statements in the order they are written: a later option statement overrides an earlier
- * one. It reads and writes no file: merging them with the files on the disk is left to the caller.
+ * one. The files hold what the jdl declares, and the customizations passed. It reads and writes no file: merging them
+ * with the files on the disk is left to the caller.
  * @param ast - the AST of the jdl.
+ * @param customizations - what a tool adds to the conversion.
  */
-export function astToFiles(ast: ParsedJDLApplications, runtime: JDLRuntime): JDLFiles {
+export function convertAstToFiles(
+  ast: ParsedJDLApplications,
+  runtime: JDLRuntime,
+  customizations: JDLConversionCustomizations = {},
+): JDLFiles {
   const statements = getStatements<JDLStatement>(ast) ?? [];
   const enums = new Map(ast.enums.map(jdlEnum => [jdlEnum.name, jdlEnum]));
   const entities = new Map<string, JSONEntity>();
@@ -321,7 +330,9 @@ export function astToFiles(ast: ParsedJDLApplications, runtime: JDLRuntime): JDL
   }
   for (const statement of statements) {
     if (statement.type === 'relationships') {
-      for (const relationship of statement.relationships) addRelationship(entities, relationship);
+      for (const relationship of statement.relationships) {
+        addRelationship(entities, customizations.relationship?.(relationship) ?? relationship);
+      }
     }
   }
   for (const statement of optionStatements(statements)) applyOption(entities, statement);
@@ -335,22 +346,37 @@ export function astToFiles(ast: ParsedJDLApplications, runtime: JDLRuntime): JDL
       files[`.jhipster/${entity.name}.json`] = entity;
     }
   }
+  const folders: string[] = [];
   for (const application of applications) {
-    const file = applicationFile(application, runtime);
-    const baseName = applicationFolder(application);
-    files[`${baseName}/.yo-rc.json`] = file;
+    const declared = { config: application.config, namespaceConfigs: application.namespaceConfigs ?? {} };
+    const customized = customizations.application?.(declared) ?? declared;
+    const folder: string | undefined = customized.config.baseName;
+    if (!folder) {
+      throw new Error('An application without baseName has no folder to be converted to.');
+    }
+    folders.push(folder);
+    files[`${folder}/.yo-rc.json`] = applicationFile(customized, application.entities ?? [], runtime);
     const applicationStatements = optionStatements(getStatements<JDLApplicationStatement>(application) ?? []);
     for (const entity of applicationEntities(entities, application.entities ?? [], applicationStatements)) {
-      files[`${baseName}/.jhipster/${entity.name}.json`] = entity;
+      files[`${folder}/.jhipster/${entity.name}.json`] = entity;
     }
   }
   Object.assign(files, deploymentFiles);
 
   let relativeRoot: string | null = '';
-  if (applications.length === 1) {
-    relativeRoot = applicationFolder(applications[0]);
+  if (folders.length === 1) {
+    relativeRoot = folders[0];
   } else if (applications.length === 0 && entities.size === 0 && Object.keys(deploymentFiles).length > 0) {
     relativeRoot = null;
   }
   return { files, relativeRoot };
+}
+
+/**
+ * Converts the AST of a jdl, checked by the semantic rules, to the json files of its applications, entities and
+ * deployments (see `convertAstToFiles`), with the customizations of JHipster (see `jhipsterCustomizations`).
+ * @param ast - the AST of the jdl.
+ */
+export function astToFiles(ast: ParsedJDLApplications, runtime: JDLRuntime): JDLFiles {
+  return convertAstToFiles(ast, runtime, jhipsterCustomizations);
 }

@@ -23,7 +23,7 @@ import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { parse } from '../../core/parsing/api.ts';
 import performJDLPostParsingTasks from '../../core/parsing/jdl-post-parsing-tasks.ts';
 
-import { astToFiles } from './ast-to-files.ts';
+import { astToFiles, convertAstToFiles } from './ast-to-files.ts';
 
 const runtime = getDefaultRuntime();
 
@@ -334,9 +334,29 @@ application {
     });
   });
 
-  it('should put an application without base name in the jhipster folder, without adding it', () => {
-    const { files, relativeRoot } = convert('application {\n  config { applicationType monolith }\n}');
-    expect(relativeRoot).toBe('jhipster');
-    expect(files).toEqual({ 'jhipster/.yo-rc.json': { 'generator-jhipster': { applicationType: 'monolith', entities: [] } } });
+  describe('convertAstToFiles, without customization', () => {
+    const convertPlain = (jdl: string) =>
+      convertAstToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime).files;
+
+    it('should give a relationship naming no field its source side only', () => {
+      expect(
+        Object.values(convertPlain('entity A\nentity B\nrelationship OneToMany { A to B }')).map(entity => entity.relationships),
+      ).toEqual([[{ relationshipSide: 'left', relationshipType: 'one-to-many', otherEntityName: 'b', relationshipName: 'b' }], []]);
+    });
+
+    it('should keep the blueprint and namespace config names as written', () => {
+      expect(
+        convertPlain('application {\n  config { baseName shop blueprints [foo] }\n  config(foo) { flag true }\n}')['shop/.yo-rc.json'],
+      ).toEqual({
+        foo: { flag: true },
+        'generator-jhipster': { baseName: 'shop', blueprints: [{ name: 'foo' }], entities: [] },
+      });
+    });
+
+    it('should refuse an application without base name', () => {
+      expect(() => convertPlain('application {\n  config { applicationType monolith }\n}')).toThrow(
+        'An application without baseName has no folder to be converted to.',
+      );
+    });
   });
 });

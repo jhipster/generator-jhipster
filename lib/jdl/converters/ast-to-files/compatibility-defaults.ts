@@ -33,19 +33,13 @@ const { SERVICE_CLASS } = binaryOptions.Values.service;
  * TODO: the compatibility defaults are customizations of the generators, and each one should move to the generator it
  * belongs to, rather than to the jdl conversion or the jdl generator: the client root folder of a microservice entity to
  * the preparation of the entities (base-application, as the microservice name already is), the defaults of a deployment
- * type to the deployment generators, the service of an entity with a dto or filtering to the server generators, the base
- * name to the application generators. A default leaves this layer once its generator applies it.
+ * type to the deployment generators, the service of an entity with a dto or filtering to the server generators. A
+ * default leaves this layer once its generator applies it.
  */
 
-/**
- * The `.yo-rc.json` of an application: its base name is the name of its folder; it has the blueprints and
- * microfrontends keys, undefined without them, as the importer wrote them.
- */
-function applicationFile(folder: string, { [GENERATOR_JHIPSTER]: config, ...namespaceConfigs }: Record<string, any>) {
-  return {
-    ...namespaceConfigs,
-    [GENERATOR_JHIPSTER]: { baseName: folder, ...config, blueprints: config.blueprints, microfrontends: config.microfrontends },
-  };
+/** The `.yo-rc.json` of an application: it has the blueprints and microfrontends keys, undefined without them, as the importer wrote them. */
+function applicationFile({ [GENERATOR_JHIPSTER]: config, ...namespaceConfigs }: Record<string, any>) {
+  return { ...namespaceConfigs, [GENERATOR_JHIPSTER]: { ...config, blueprints: config.blueprints, microfrontends: config.microfrontends } };
 }
 
 /** The options of a deployment, in the order the importer wrote them; the other ones follow. */
@@ -135,8 +129,7 @@ function withServiceClass(entity: Record<string, any>) {
 /**
  * Adds to the json files of a jdl the values the jdl does not declare, and shapes them as the importer wrote them, for
  * the generators and the projects written before:
- * - the base name of an application, the defaults of a deployment type, the service of an entity with a dto or
- *   filtering;
+ * - the defaults of a deployment type, the service of an entity with a dto or filtering;
  * - the entities imported into a microservice get its name, unless the jdl names microservices, and its client root
  *   folder, unless the jdl gives them another; a microservice leaves out the entities of another microservice;
  * - an entity lists the applications it is in, `*` for a jdl without application, and has annotations;
@@ -153,7 +146,7 @@ export function applyCompatibilityDefaults({ files, relativeRoot }: JDLFiles, ta
   const applications = new Map(
     entries
       .filter(({ yoRc, content }) => yoRc && !content[GENERATOR_JHIPSTER]?.deploymentType)
-      .map(({ folder, content }) => [folder, { baseName: content[GENERATOR_JHIPSTER].baseName ?? folder, ...content[GENERATOR_JHIPSTER] }]),
+      .map(({ folder, content }) => [folder, content[GENERATOR_JHIPSTER]]),
   );
   const entityApplications = new Map<string, string[]>();
   for (const { baseName, entities = [] } of applications.values()) {
@@ -175,7 +168,7 @@ export function applyCompatibilityDefaults({ files, relativeRoot }: JDLFiles, ta
   const result: JDLFiles['files'] = {};
   for (const { path, folder, yoRc, content } of entries) {
     if (yoRc) {
-      result[path] = content[GENERATOR_JHIPSTER]?.deploymentType ? deploymentFile(content) : applicationFile(folder, content);
+      result[path] = content[GENERATOR_JHIPSTER]?.deploymentType ? deploymentFile(content) : applicationFile(content);
       continue;
     }
     let entity = withServiceClass(content);
