@@ -188,7 +188,12 @@ function printSequence<T extends object>(
       const written = text.of(node);
       const between = previous ? text.between(previous, node) : undefined;
       if (between !== undefined) return `${between}${written ?? withoutIndent(print(node))}`;
-      const start = previous ? `${text.trailingComment(previous)}${text.afterComments(previous, indent)}${separator(previous, node)}` : '';
+      // The separator's punctuation goes before the comment ending the previous line, its line breaks after. A comment
+      // copied from the source starts with the comma written before it, which the separator's one replaces.
+      const [, punctuation = '', breaks = ''] = previous ? /^([^\n]*)(\n*)$/.exec(separator(previous, node))! : [];
+      const trailing = previous ? text.trailingComment(previous) : '';
+      const comment = punctuation === ',' ? trailing.replace(/^\s*,/, '') : trailing;
+      const start = previous ? `${punctuation}${comment}${text.afterComments(previous, indent)}${breaks}` : '';
       const leading = previous || leadingFirst ? text.leadingComments(node, indent) : '';
       return `${start}${leading || indent}${written ?? withoutIndent(print(node))}`;
     })
@@ -290,7 +295,7 @@ function printConfigValue(value: unknown, quoted: boolean): string {
   if (Array.isArray(value)) {
     return `[${value.map(item => printConfigValue(item, quoted)).join(', ')}]`;
   }
-  if (typeof value !== 'string' || /^\d+$/.test(value)) {
+  if (typeof value !== 'string' || (!quoted && /^\d+$/.test(value))) {
     return String(value);
   }
   // A value holding a quote is written as it was read.

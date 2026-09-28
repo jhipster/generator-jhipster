@@ -68,6 +68,13 @@ entity B
 `);
   });
 
+  it('should quote a string of digits of a string option', () => {
+    // Unquoted, it would be read back as an integer, which a string option rejects.
+    const jdl =
+      'application {\n  config {\n    baseName a\n    jwtSecretKey "123456"\n  }\n}\n\ndeployment {\n  deploymentType docker-compose\n  directoryPath "666"\n}\n';
+    expect(print(jdl)).toBe(jdl);
+  });
+
   describe('statements parsed from a jdl', () => {
     const source = `// The shop.
 
@@ -133,6 +140,37 @@ entity Order
       const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
       entity.body!.push({ name: 'stock', type: 'Integer', validations: [] });
       expect(printJDL(statements, runtime)).toBe(source.replace('  // No more fields.\n', '  // No more fields.\n  stock Integer\n'));
+    });
+
+    describe('ending the line of an enum value', () => {
+      const enumSource = 'enum Kind {\n  A, // first\n  B // last\n}\n';
+      const enumOf = (statements: JDLStatement[]) => (statements[0] as Extract<JDLStatement, { type: 'enum' }>).enum;
+
+      it('should write the comma before the comment, formatting the same text again', () => {
+        const formatted = print(enumSource);
+        expect(formatted).toBe(enumSource);
+        expect(print(formatted)).toBe(formatted);
+      });
+
+      it('should write the comma before the comment when a value is added after it', () => {
+        const statements = statementsOf(enumSource);
+        enumOf(statements).values.push({ key: 'C' });
+        expect(printJDL(statements, runtime)).toBe('enum Kind {\n  A, // first\n  B, // last\n  C\n}\n');
+      });
+
+      it('should write one comma when a value is inserted after one written with it', () => {
+        const statements = statementsOf(enumSource);
+        enumOf(statements).values.splice(1, 0, { key: 'X' });
+        expect(printJDL(statements, runtime)).toBe('enum Kind {\n  A, // first\n  X,\n  B // last\n}\n');
+      });
+    });
+
+    it('should keep the comma written before the comment of a field when a field is inserted after it', () => {
+      const entitySource = 'entity A {\n  name String, // the name\n  age Integer\n}\n';
+      const statements = statementsOf(entitySource);
+      const { entity } = statements[0] as Extract<JDLStatement, { type: 'entity' }>;
+      entity.body!.splice(1, 0, { name: 'nick', type: 'String', validations: [] });
+      expect(printJDL(statements, runtime)).toBe('entity A {\n  name String, // the name\n  nick String\n  age Integer\n}\n');
     });
 
     it('should format the comments with the nodes', () => {
