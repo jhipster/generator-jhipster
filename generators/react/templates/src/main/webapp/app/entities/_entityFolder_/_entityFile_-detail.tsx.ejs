@@ -171,27 +171,4 @@ export const <%- entityReactName %>Detail = () => {
   );
 };
 
-<div style={{ display: 'none' }}>
-  <Modal
-    show={showDeleteModal}
-    onHide={() => setShowDeleteModal(false)}
-    centered
-  >
-    <Modal.Header closeButton>
-      <Modal.Title><Translate contentKey="entity.action.delete">Confirm Deletion</Translate></Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <Translate contentKey="entity.action.deleteConfirm">Are you sure you want to delete this <%- entityName %>? This action cannot be undone.</Translate>
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-        <Translate contentKey="entity.action.cancel">Cancel</Translate>
-      </Button>
-      <Button variant="danger" onClick={handleDelete}>
-        <Translate contentKey="entity.action.delete">Delete</Translate>
-      </Button>
-    </Modal.Footer>
-  </Modal>
-</div>
-
 export default <%- entityReactName %>Detail;
