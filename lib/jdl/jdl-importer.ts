@@ -22,6 +22,7 @@ import { APPLICATION_TYPE_KEY, type ApplicationType } from '../core/application-
 import { createJDLRuntime, getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 import { readCurrentPathYoRcFile } from '../utils/yo-rc.ts';
 
+import { checkSemanticErrors } from './convert-jdl-to-files.ts';
 import {
   formatApplicationToExport,
   formatApplicationsToExport,
@@ -36,15 +37,12 @@ import type JDLJSONEntity from './core/basic-types/json-entity.ts';
 import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 import type JDLDeployment from './core/models/jdl-deployment.ts';
 import type JDLObject from './core/models/jdl-object.ts';
-import { errorLocation } from './core/parsing/location.ts';
-import { checkSemantics } from './core/parsing/semantic/index.ts';
 import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
 import type { JDLApplicationConfig, JDLDefinitions } from './core/parsing/types/parsing.ts';
 import type { JDLRuntime } from './core/parsing/types/runtime.ts';
 import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
 import type { JSONEntity } from './core/types/json-config.ts';
-import logger from './core/utils/objects/logger.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 
@@ -181,21 +179,6 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JD
     },
     runtime,
   );
-}
-
-/**
- * The semantic rules report every problem of the jdl, with its position: the warnings are logged, the errors thrown together;
- * the converters take a jdl without any error.
- */
-function checkSemanticErrors(content: ParsedJDLApplications, runtime: JDLRuntime) {
-  const diagnostics = checkSemantics(content, runtime);
-  for (const warning of diagnostics.filter(diagnostic => diagnostic.severity === 'warning')) {
-    logger.warn(`${warning.message}${errorLocation(warning.location)}`);
-  }
-  const errors = diagnostics.filter(diagnostic => diagnostic.severity === 'error');
-  if (errors.length > 0) {
-    throw new Error(errors.map(error => `${error.message}${errorLocation(error.location)}`).join('\n'));
-  }
 }
 
 function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
