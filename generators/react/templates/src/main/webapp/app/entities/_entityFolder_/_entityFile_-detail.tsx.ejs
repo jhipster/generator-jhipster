@@ -45,8 +45,6 @@ import { getEntity } from './<%- entityFileName %>.reducer';
 
 export const <%- entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const { id } = useParams<'id'>();
 
