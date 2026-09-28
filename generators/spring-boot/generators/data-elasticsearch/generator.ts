@@ -99,17 +99,6 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addAnnotations({ application, source }) {
-        source.editJavaFile!(`${application.javaPackageSrcDir}${application.mainClass}.java`, {
-          annotations: [
-            {
-              annotation: `Enable${application.emptyOrReactive}ElasticsearchRepositories`,
-              package: 'org.springframework.data.elasticsearch.repository.config',
-              parameters: () => `"${application.packageName}.repository.search"`,
-            },
-          ],
-        });
-      },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
           imports: [
