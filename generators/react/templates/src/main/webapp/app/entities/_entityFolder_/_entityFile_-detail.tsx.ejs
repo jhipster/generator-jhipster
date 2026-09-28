@@ -53,18 +53,6 @@ export const <%- entityReactName %>Detail = () => {
   }, []);
 
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
-
-  const handleDelete = async () => {
-    try {
-      await dispatch(deleteEntity(<%- entityInstance %>Entity.<%- primaryKey.name %>));
-      navigate('/<%- entityPage %>');
-    } catch (error) {
-      console.error('Error deleting entity:', error);
-    } finally {
-      setShowDeleteModal(false);
-    }
-  };
-
   return (
     <Row>
       <Col md="8">
