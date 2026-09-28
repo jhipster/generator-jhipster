@@ -193,8 +193,8 @@ Unit tests are run by <%- clientTestFrameworkName %>. They're located near compo
 ```
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>
-<%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-- [Jest](https://jestjs.io)
+<%_ if (clientTestFrameworkVitest) { _%>
+- [Vitest](https://vitest.dev)
 <%_ } -%>
 - [Leaflet](https://leafletjs.com/)
 - [DefinitelyTyped](https://definitelytyped.org/)
