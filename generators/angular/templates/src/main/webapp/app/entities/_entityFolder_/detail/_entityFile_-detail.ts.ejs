@@ -21,7 +21,6 @@ import { Component, inject, input } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { filter, tap } from 'rxjs';
 import { ITEM_DELETED_EVENT } from 'app/config';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
