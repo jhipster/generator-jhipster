@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2026 the original author or authors from the JHipster project.
+ Copyright 2013-2026 the original author or authors by the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -55,7 +55,7 @@ export default defineComponent({
     const previousState = () => router.go(-1);
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref({});
 
-    const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
+    const retrieve<%- entityAngularName %> = async <%- entityICapitalized %> => {
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
         <%- entityInstance %>.value = res;
@@ -84,8 +84,7 @@ export default defineComponent({
         deleteModalOpen.value = false;
       }
     };
-
-    return {
+ return {
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>
@@ -97,7 +96,7 @@ export default defineComponent({
       deleteModalOpen,
       handleDelete,
 <%_ if (enableTranslation) { _%>
-      t$: useI18n().t,
+      t$,
 <%_ } _%>
     };
   },
