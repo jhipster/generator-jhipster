@@ -83,6 +83,7 @@ export class <%- entityAngularName %>Detail {
     }
 
 <%_ if (!readOnly && updatableEntity) { _%>
+<%_ if (!readOnly && updatableEntity) { _%>
     delete(): void {
         const modalRef = this.modalService.open(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.<%- entityInstance %> = this.<%- entityInstance %>();
