@@ -5,7 +5,7 @@
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
-      // Update the VARIANT arg to pick a Java version: 17, 19
+      // Update the VARIANT arg to pick a Java version: 21, 25
       // Append -bullseye or -buster to pin to an OS version.
       // Use the -bullseye variants on local arm64/Apple Silicon.
       "VARIANT": "<%- javaVersion %>-bullseye",
@@ -43,15 +43,8 @@
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
-<%_ if (clientFrameworkAngular) { _%>
-    4200,
-<%_ } _%>
-<%_ if (clientFrameworkReact || clientFrameworkVue) { _%>
-    9060,
-<%_ } _%>
 <%_ if (!skipClient) { _%>
-    3001,
-    9000,
+    <%- devServerPort %>,
 <%_ } _%>
     <%- serverPort %>
   ],
