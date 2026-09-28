@@ -98,9 +98,14 @@
                 </button>
 <%_ } _%>
             </div>
-            <b-modal v-model="deleteModalOpen" title="Delete" @ok="handleDelete">
-                <p>{{ t$('entity.action.confirmDelete') }}</p>
+<%_ if (!readOnly) { _%>
+            <b-modal v-model="deleteModalOpen" @ok="handleDelete">
+                <template #title>
+                    <span>{{ t$('entity.delete.title') }}</span>
+                </template>
+                <p>{{ t$('<%- i18nKeyPrefix %>.delete.question', { id: <%- entityInstance %>.<%- primaryKey.name %> }) }}</p>
             </b-modal>
+<%_ } _%>
         </div>
     </div>
 </template>
