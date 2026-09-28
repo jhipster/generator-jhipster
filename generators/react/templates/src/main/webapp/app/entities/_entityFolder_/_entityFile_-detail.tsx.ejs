@@ -41,7 +41,7 @@ import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity, deleteEntity } from './<%- entityFileName %>.reducer';
+import { getEntity } from './<%- entityFileName %>.reducer';
 
 export const <%- entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
