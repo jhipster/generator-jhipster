@@ -34,9 +34,14 @@ import org.springframework.data.elasticsearch.repository.<%- reactivePrefix %>El
 
 import reactor.core.publisher.Flux;
 <%_ } else { _%>
-import <%- packageName %>.util.TransactionUtils;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.Async;
+  <%_ if (databaseTypeSql) { _%>
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+  <%_ } _%>
+import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 <%_ } _%>
 <%_ if (databaseTypeCassandra || user.primaryKey.hasUUID) { _%>
@@ -82,14 +87,18 @@ interface UserSearchRepositoryInternal {
 
 class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
+    record IndexRequest(<%- user.primaryKey.type %> id) {}
+
+    record DeleteRequest(<%- user.persistClass %> entity) {}
+
     private final ElasticsearchTemplate elasticsearchTemplate;
     private final UserRepository repository;
-    private final Executor taskExecutor;
+    private final ApplicationEventPublisher events;
 
-    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, UserRepository repository, Executor taskExecutor) {
+    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, UserRepository repository, ApplicationEventPublisher events) {
         this.elasticsearchTemplate = elasticsearchTemplate;
         this.repository = repository;
-        this.taskExecutor = taskExecutor;
+        this.events = events;
     }
 
     @Override
@@ -103,13 +112,27 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
     @Override
     public void index(<%- user.persistClass %> entity) {
-        <%- user.primaryKey.type %> id = entity.getId();
-        TransactionUtils.runAfterCommit(() -> taskExecutor.execute(() -> repository.find<%- databaseTypeSql ? 'OneWithAuthoritiesById' : 'ById' %>(id).ifPresent(elasticsearchTemplate::save)));
+        events.publishEvent(new IndexRequest(entity.getId()));
     }
 
     @Override
     public void deleteFromIndex(<%- user.persistClass %> entity) {
-        TransactionUtils.runAfterCommit(() -> taskExecutor.execute(() -> elasticsearchTemplate.delete(entity)));
+        events.publishEvent(new DeleteRequest(entity));
+    }
+
+    @Async
+    @TransactionalEventListener(fallbackExecution = true)
+  <%_ if (databaseTypeSql) { _%>
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+  <%_ } _%>
+    void onIndex(IndexRequest request) {
+        repository.findById(request.id()).ifPresent(elasticsearchTemplate::save);
+    }
+
+    @Async
+    @TransactionalEventListener(fallbackExecution = true)
+    void onDelete(DeleteRequest request) {
+        elasticsearchTemplate.delete(request.entity());
     }
 }
 <%_ } _%>

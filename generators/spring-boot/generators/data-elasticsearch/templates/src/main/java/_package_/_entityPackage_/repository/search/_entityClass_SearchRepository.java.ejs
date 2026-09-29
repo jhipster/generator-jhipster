@@ -44,9 +44,10 @@ import org.springframework.data.elasticsearch.repository.<%- reactivePrefix %>El
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 <%_ } else { _%>
-import <%- packageName %>.util.TransactionUtils;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 <%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
@@ -112,14 +113,18 @@ interface <%- entityClass %>SearchRepositoryInternal {
 
 class <%- entityClass %>SearchRepositoryInternalImpl implements <%- entityClass %>SearchRepositoryInternal {
 
+    record IndexRequest(<%- primaryKey.type %> id) {}
+
+    record DeleteRequest(<%- primaryKey.type %> id) {}
+
     private final ElasticsearchTemplate elasticsearchTemplate;
     private final <%- entityClass %>Repository repository;
-    private final Executor taskExecutor;
+    private final ApplicationEventPublisher events;
 
-    <%- entityClass %>SearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, <%- entityClass %>Repository repository, Executor taskExecutor) {
+    <%- entityClass %>SearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, <%- entityClass %>Repository repository, ApplicationEventPublisher events) {
         this.elasticsearchTemplate = elasticsearchTemplate;
         this.repository = repository;
-        this.taskExecutor = taskExecutor;
+        this.events = events;
     }
 
   <%_ if (paginationNo) { _%>
@@ -153,15 +158,24 @@ class <%- entityClass %>SearchRepositoryInternalImpl implements <%- entityClass 
 
     @Override
     public void index(<%- persistClass %> entity) {
-        <%- primaryKey.type %> id = entity.<%- primaryKey.propertySupplierName %>();
-        TransactionUtils.runAfterCommit(() ->
-            taskExecutor.execute(() -> repository.find<%- implementsEagerLoadApis ? 'OneWithEagerRelationships' : 'ById' %>(id).ifPresent(elasticsearchTemplate::save))
-        );
+        events.publishEvent(new IndexRequest(entity.<%- primaryKey.propertySupplierName %>()));
     }
 
     @Override
     public void deleteFromIndexById(<%- primaryKey.type %> id) {
-        TransactionUtils.runAfterCommit(() -> taskExecutor.execute(() -> elasticsearchTemplate.delete(String.valueOf(id), <%- persistClass %>.class)));
+        events.publishEvent(new DeleteRequest(id));
+    }
+
+    @Async
+    @TransactionalEventListener(fallbackExecution = true)
+    void onIndex(IndexRequest request) {
+        repository.find<%- implementsEagerLoadApis ? 'OneWithEagerRelationships' : 'ById' %>(request.id()).ifPresent(elasticsearchTemplate::save);
+    }
+
+    @Async
+    @TransactionalEventListener(fallbackExecution = true)
+    void onDelete(DeleteRequest request) {
+        elasticsearchTemplate.delete(String.valueOf(request.id()), <%- persistClass %>.class);
     }
 }
 <%_ } _%>

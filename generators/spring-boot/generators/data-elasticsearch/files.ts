@@ -33,12 +33,6 @@ export const files = asWriteFilesSection<JavaApplication>({
       ],
     },
     {
-      condition: generator => !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['util/TransactionUtils.java'],
-    },
-    {
       condition: generator => generator.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
