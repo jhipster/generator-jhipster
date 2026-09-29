@@ -339,7 +339,7 @@ export class UserManagementDetail {
     modalRef.closed
       .pipe(
         filter((reason) => reason === ITEM_DELETED_EVENT),
-        tap(() => this.router.navigate(["/user-management"])),
+        tap(() => void this.router.navigate(["/user-management"])),
       )
       .subscribe();
   }

@@ -106,7 +106,7 @@ export class <%- entityAngularName %>Detail {
         modalRef.closed
           .pipe(
             filter(reason => reason === ITEM_DELETED_EVENT),
-            tap(() => this.router.navigate(['/<%- entityPage %>']))
+            tap(() => void this.router.navigate(['/<%- entityPage %>']))
           ).subscribe();
     }
 <%_ } _%>
