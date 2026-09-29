@@ -104,7 +104,7 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     @Override
     public void index(<%- user.persistClass %> entity) {
         <%- user.primaryKey.type %> id = entity.getId();
-        TransactionUtils.runAfterCommit(() -> taskExecutor.execute(() -> repository.findById(id).ifPresent(elasticsearchTemplate::save)));
+        TransactionUtils.runAfterCommit(() -> taskExecutor.execute(() -> repository.find<%- databaseTypeSql ? 'OneWithAuthoritiesById' : 'ById' %>(id).ifPresent(elasticsearchTemplate::save)));
     }
 
     @Override
