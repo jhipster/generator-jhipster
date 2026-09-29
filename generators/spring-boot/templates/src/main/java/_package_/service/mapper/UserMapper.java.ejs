@@ -166,12 +166,9 @@ public class UserMapper {
             return Set.of();
         }
 
-        Set<<%- user.dtoClass %>> userSet = new HashSet<>();
-        for ( <%- user.persistClass %> userEntity : users ) {
-            userSet.add( this.toDtoId( userEntity ) );
-        }
-
-        return userSet;
+        return users.stream()
+            .map(this::toDtoId)
+            .collect(Collectors.toSet());
     }
 
     @Named("login")
@@ -193,15 +190,12 @@ public class UserMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
     public Set<<%- user.dtoClass %>> toDtoLoginSet(Set<<%- user.persistClass %>> users) {
-        if ( users == null ) {
+        if (users == null) {
             return Set.of();
         }
 
-        Set<<%- user.dtoClass %>> userSet = new HashSet<>();
-        for ( <%- user.persistClass %> userEntity : users ) {
-            userSet.add( this.toDtoLogin( userEntity ) );
-        }
-
-        return userSet;
+        return users.stream()
+            .map(this::toDtoLogin)
+            .collect(Collectors.toSet());
     }
 }
