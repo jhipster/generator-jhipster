@@ -36,10 +36,6 @@ import reactor.core.publisher.Flux;
 <%_ } else { _%>
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
-  <%_ if (databaseTypeSql) { _%>
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-  <%_ } _%>
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.stream.Stream;
@@ -122,11 +118,8 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
 
     @Async
     @TransactionalEventListener(fallbackExecution = true)
-  <%_ if (databaseTypeSql) { _%>
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-  <%_ } _%>
     void onIndex(IndexRequest request) {
-        repository.findById(request.id()).ifPresent(elasticsearchTemplate::save);
+        repository.find<%- databaseTypeSql ? 'OneWithAuthoritiesById' : 'ById' %>(request.id()).ifPresent(elasticsearchTemplate::save);
     }
 
     @Async
