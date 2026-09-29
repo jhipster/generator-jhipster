@@ -63,3 +63,7 @@ Two options (see `DEVELOPMENT.md`):
 - **Tests required** for every feature or bug fix. When behavior touches generated output, update/extend snapshots rather than asserting strings by hand.
 - **Path aliases** for tests: `#testing` → `lib/testing/index.ts`, `#test-support` → `test/support/index.ts`.
 - **Node version**: CI and local must match `engines` in `package.json`; avoid APIs only in newer releases.
+
+## Reviewing pull requests
+
+- Post reviews as comments (`gh pr review --comment` or `gh pr comment`). Never submit a "request changes" review: it blocks the merge, and that decision belongs to a human reviewer alone.
