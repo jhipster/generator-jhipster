@@ -16,20 +16,37 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, input } from '@angular/core';
+import { Component, <%- anyFieldIsBlobDerived || (entityFileName !== 'authority' && !readOnly && updatableEntity) ? 'inject, ' : '' %>input } from '@angular/core';
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
+<%_ } _%>
+<%_ if (entityFileName !== 'authority' && !readOnly && updatableEntity) { _%>
+import { Router } from '@angular/router';
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+import { filter, tap } from 'rxjs';
 import { ITEM_DELETED_EVENT } from 'app/config';
 <%_ } _%>
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Alert, AlertError } from 'app/shared/alert';
+<%_ if (anyFieldHasDocumentation) { _%>
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+<%_ if (angularEntityDetailsRequiresTranslationPipe) { _%>
+import { TranslatePipe } from '@ngx-translate/core';
+<%_ } _%>
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util';
-import { type BlobType } from 'app/shared/jhipster/data-utils'
+import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
 
 @Component({
-    selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-de
+    selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-detail',
     templateUrl: './<%- entityFileName %>-detail.html',
     imports: [
       FontAwesomeModule,
@@ -74,7 +91,7 @@ export class <%- entityAngularName %>Detail {
     }
 
     openFile(base64String: string, contentType: string | null | undefined, blobType?: BlobType): void {
-        this.dataUtils.openFile(base64String, contentType, blo
+        this.dataUtils.openFile(base64String, contentType, blobType);
     }
 <%_ } _%>
 
@@ -82,15 +99,14 @@ export class <%- entityAngularName %>Detail {
         globalThis.history.back();
     }
 
-<%_ if (!readOnly && updatableEntity) { _%>
-<%_ if (!readOnly && updatableEntity) { _%>
+<%_ if (entityFileName !== 'authority' && !readOnly && updatableEntity) { _%>
     delete(): void {
         const modalRef = this.modalService.open(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.<%- entityInstance %> = this.<%- entityInstance %>();
         modalRef.closed
           .pipe(
             filter(reason => reason === ITEM_DELETED_EVENT),
-            tap(() => this.router.navigate(['/<%- entityPage %>', 'view']))
+            tap(() => this.router.navigate(['/<%- entityPage %>']))
           ).subscribe();
     }
 <%_ } _%>
