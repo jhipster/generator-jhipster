@@ -33,9 +33,9 @@ export class SortByDirective {
 
   readonly iconComponent = contentChild(FaIconComponent);
 
-  protected sortIcon = faSort;
-  protected sortAscIcon = faSortUp;
-  protected sortDescIcon = faSortDown;
+  private readonly sortIcon = faSort;
+  private readonly sortAscIcon = faSortUp;
+  private readonly sortDescIcon = faSortDown;
 
   private readonly sort = inject(SortDirective, { host: true });
 

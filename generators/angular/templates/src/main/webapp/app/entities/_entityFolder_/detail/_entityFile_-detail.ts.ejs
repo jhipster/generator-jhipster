@@ -73,7 +73,7 @@ export class <%- entityAngularName %>Detail {
     readonly <%- entityInstance %> = input<I<%- entityAngularName %> | null>(null);
 
 <%_ if (anyFieldIsBlobDerived) { _%>
-    protected dataUtils = inject(DataUtils);
+    private readonly dataUtils = inject(DataUtils);
 
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
