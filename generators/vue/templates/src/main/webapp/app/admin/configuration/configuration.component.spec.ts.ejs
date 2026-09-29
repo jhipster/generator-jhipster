@@ -32,7 +32,6 @@ describe('Configuration Component', () => {
   let configuration: ConfigurationComponentType;
 
   beforeEach(() => {
-    axiosStub.get.mockReset();
     axiosStub.get.mockResolvedValue({
       data: { contexts: [{ beans: [{ prefix: 'A' }, { prefix: 'B' }] }], propertySources: [{ properties: { key1: { value: 'value' } } }] },
     });

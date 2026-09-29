@@ -61,10 +61,6 @@ describe('Locale reducer tests', () => {
   });
 
   describe('setLocale reducer', () => {
-    beforeEach(() => {
-      dispatch.mockClear();
-    });
-
     describe('with default language loaded', () => {
       it('dispatches updateLocale action for default locale', async () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
@@ -97,10 +93,6 @@ describe('Locale reducer tests', () => {
 
   describe('addTranslationSourcePrefix reducer', () => {
     const sourcePrefix = 'foo/';
-
-    beforeEach(() => {
-      dispatch.mockClear();
-    });
 
     describe('with no keys loaded', () => {
       it('dispatches loaded action with the prefixed key', async () => {
