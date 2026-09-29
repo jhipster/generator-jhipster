@@ -879,7 +879,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
     "resetFakerSeed": Any<Function>,
     "restProperties": Any<Array>,
     "searchEngine": "no",
-    "service": "no",
+    "service": "serviceClass",
     "skipUiGrouping": false,
     "updatableEntity": true,
     "useMicroserviceJson": false,

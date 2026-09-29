@@ -121,7 +121,19 @@ export const entityDefaultConfig = {
 
 export default function prepareEntity(entityWithConfig: BaseApplicationEntity, generator: CoreGenerator) {
   const entityName = upperFirst(entityWithConfig.name);
-  mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
+  mutateData(
+    entityWithConfig,
+    {
+      __override__: false,
+      // Filtering needs a service.
+      // TODO: filtering is an option of spring-boot, move it to the spring-boot generator once entities support delayed
+      // mutations; until then the service default of the entity, `no`, is applied before it.
+      service: ({ jpaMetamodelFiltering }) =>
+        jpaMetamodelFiltering ? binaryOptions.Values.service.SERVICE_CLASS : binaryOptions.DefaultValues[binaryOptions.Options.SERVICE],
+    },
+    entityDefaultConfig,
+    BASE_TEMPLATE_DATA,
+  );
 
   if (entityWithConfig.changelogDate) {
     try {

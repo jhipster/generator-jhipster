@@ -1238,7 +1238,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
     "searchEngineCouchbase": false,
     "searchEngineElasticsearch": false,
     "searchEngineNo": true,
-    "service": "no",
+    "service": "serviceClass",
     "skipUiGrouping": false,
     "uniqueEnums": Any<Array>,
     "updatableEntity": true,
