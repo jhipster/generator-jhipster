@@ -55,7 +55,8 @@ export const createPrettierTransform = async function (
 
   return passthrough(
     async (file: VinylMemFsEditorFile) => {
-      if (!minimatch.match(file.path) || !isFileStateModified(file)) {
+      // Besides the extensions, files written with the `prettier` editor metadata are formatted too.
+      if (!(minimatch.match(file.path) || file.editorMetadata?.prettier) || !isFileStateModified(file)) {
         return;
       }
       if (!file.contents) {

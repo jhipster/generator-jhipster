@@ -58,7 +58,7 @@ export default async ({
     if (prettierJava && filePath.endsWith('.java')) {
       fileOptions.plugins!.push(prettierPluginJava);
     }
-    if (prettierProperties) {
+    if (prettierProperties && filePath.endsWith('.properties')) {
       fileOptions.plugins!.push(prettierPluginProperties);
     }
     return { result: await format(fileContents, fileOptions) };

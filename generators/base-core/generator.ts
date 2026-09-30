@@ -1016,6 +1016,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       noEjs?: boolean;
       transform?: any[];
       binary?: boolean;
+      metadata?: EditorMetadata;
     };
 
     const renderTemplate = ({
@@ -1026,6 +1027,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       noEjs,
       transform,
       binary,
+      metadata,
     }: RenderTemplateParam): undefined | string => {
       if (condition !== undefined && !resolveCallback(condition)) {
         return undefined;
@@ -1105,7 +1107,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
       try {
         if (noEjs || (!appendEjs && extname(sourceFileFrom) !== '.ejs')) {
-          this.copyTemplate(sourceFileFrom, targetFile, { noGlob: true });
+          this.copyTemplate(sourceFileFrom, targetFile, { noGlob: true, metadata });
         } else {
           if ((templateData as any).entityClass) {
             if (!(templateData as any).baseName) {
@@ -1123,14 +1125,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             // together with the compiled template function.
             cache: false,
           };
-          const copyOptions = { noGlob: true, transformOptions };
+          const copyOptions = { noGlob: true, transformOptions, metadata };
           this.renderTemplate(appendEjs ? `${sourceFileFrom}.ejs` : sourceFileFrom, targetFile, templateData as any, copyOptions);
         }
       } catch (error) {
         throw new Error(`Error rendering template ${sourceFileFrom} to ${targetFile}: ${error}`, { cause: error });
       }
       if (!isBinary && transform?.length) {
-        this.editFile(targetFile, ...transform);
+        this.editFile(targetFile, { metadata }, ...transform);
       }
       return targetFile;
     };
@@ -1191,7 +1193,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               return { sourceFile, destinationFile, noEjs, transform: derivedTransform };
             }
 
-            const { condition, options, file, renameTo, transform: fileTransform = [], binary } = fileSpec;
+            const { condition, options, file, renameTo, transform: fileTransform = [], binary, metadata } = fileSpec;
             let { sourceFile, destinationFile } = fileSpec;
 
             if (typeof fileTransform === 'boolean') {
@@ -1231,6 +1233,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               transform: derivedTransform,
               noEjs,
               binary,
+              metadata,
             };
           });
         })
@@ -1316,7 +1319,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
-      const { autoCrlf = isWin32, assertModified } = actualOptions;
+      const { autoCrlf = isWin32, assertModified, metadata } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
@@ -1327,7 +1330,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           }
           this.log(errorMessage);
         }
-        this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent);
+        this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent, { metadata });
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`, { cause: error });
