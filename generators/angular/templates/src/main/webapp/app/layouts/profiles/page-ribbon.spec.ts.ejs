@@ -34,7 +34,6 @@ describe('Page Ribbon Component', () => {
   };
 
   beforeEach(() => {
-    profileServiceMock.getProfileInfo.mockReset();
     profileServiceMock.getProfileInfo.mockReturnValue(of(new ProfileInfo([], 'testEnv')));
 
     TestBed.configureTestingModule({

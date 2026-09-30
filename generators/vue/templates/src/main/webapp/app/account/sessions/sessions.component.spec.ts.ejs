@@ -39,7 +39,6 @@ describe('Sessions Component', () => {
   let sessions: SessionsComponentType;
 
   beforeEach(() => {
-    axiosStub.get.mockReset();
     axiosStub.get.mockResolvedValue({ data: [] });
     axiosStub.delete.mockReset();
 
