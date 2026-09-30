@@ -108,13 +108,13 @@
       <%_ if (relationship.collection) { _%>
         @for (<%- relationshipFieldName %> of <%- entityInstance %>Ref.<%- relationshipFieldNamePlural %>; track $index; let last = $last) {
           <span>
-            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- relationshipFieldName %>?.<%- otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- relationshipFieldName %>.<%- otherEntityField %> }}</a>{{ last ? '' : ', ' }}
           </span>
         }
       <%_ } else { _%>
         @if (<%- entityInstance %>Ref.<%- relationshipFieldName %>) {
           <div>
-            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- entityInstance %>Ref.<%- relationshipFieldName %>?.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- entityInstance %>Ref.<%- relationshipFieldName %>?.<%- otherEntityField %> }}</a>
+            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- entityInstance %>Ref.<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- entityInstance %>Ref.<%- relationshipFieldName %>.<%- otherEntityField %> }}</a>
           </div>
         }
       <%_ } _%>
