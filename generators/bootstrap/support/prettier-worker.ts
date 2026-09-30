@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { join } from 'node:path';
+
 import { type Options, format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
@@ -29,6 +31,7 @@ export default async ({
   relativeFilePath,
   filePath,
   fileContents,
+  configRoot,
   prettierOptions,
   prettierPackageJson,
   prettierJava,
@@ -37,13 +40,15 @@ export default async ({
   relativeFilePath: string;
   filePath: string;
   fileContents: string;
+  /** Folder with the prettier config files not committed to disk yet, resolve the config from it instead of the disk. */
+  configRoot?: string;
   prettierOptions?: Record<string, unknown>;
   prettierPackageJson?: boolean;
   prettierJava?: boolean;
   prettierProperties?: boolean;
 }): Promise<{ result: string } | { errorMessage: string }> => {
   try {
-    const resolvedDestinationFileOptions = await resolveConfig(relativeFilePath);
+    const resolvedDestinationFileOptions = await resolveConfig(configRoot ? join(configRoot, relativeFilePath) : relativeFilePath);
     const fileOptions: Options = {
       // Config from disk
       ...resolvedDestinationFileOptions,
