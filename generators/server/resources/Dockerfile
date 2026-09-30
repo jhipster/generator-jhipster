@@ -31,7 +31,7 @@ FROM cassandra:6.0
 FROM mcr.microsoft.com/mssql/server:2025-latest
 LABEL ALIAS=mssql
 
-FROM neo4j:5.26.30
+FROM neo4j:5.26.31
 
 FROM hazelcast/management-center:5.11.1
 LABEL ALIAS=hazelcast
