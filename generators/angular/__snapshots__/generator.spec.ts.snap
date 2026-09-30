@@ -230,7 +230,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter, withComponentInputBinding } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
-import { faArrowLeft, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { of } from "rxjs";
 
 import { UserManagementDetail } from "./user-management-detail";
@@ -262,6 +266,7 @@ describe("UserManagement Management Detail Component", () => {
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
+    library.addIcons(faTrashAlt);
   });
 
   beforeEach(() => {
