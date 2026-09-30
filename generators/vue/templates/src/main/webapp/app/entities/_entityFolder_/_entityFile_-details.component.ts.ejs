@@ -55,7 +55,7 @@ export default defineComponent({
     const previousState = () => router.go(-1);
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref({});
 
-    const retrieve<%- entityAngularName %> = async <%- entityICapitalized %> => {
+    const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
         <%- entityInstance %>.value = res;
