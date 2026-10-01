@@ -91,7 +91,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       setWorkspacesRoot() {
-        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfig.directoryPath, { allowOutsideRoot: true }));
+        this.setWorkspacesRoot(this.destinationPath(this.jhipsterConfigWithDefaults.directoryPath, { allowOutsideRoot: true }));
       },
     });
   }
