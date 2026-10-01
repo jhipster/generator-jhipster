@@ -381,7 +381,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             .<%- mapOrFlatMap %>(<%- entityInstance %><%- serviceNo ? 'Repository::save' : 'Service::update' %>)
   <%_ if (serviceNo && searchEngineElasticsearch) { _%>
     <%_ if (reactive) { _%>
-            .flatMap(<%- entityInstance %>SearchRepository::save)
+            .flatMap(<%- entityInstance %>SearchRepository::index)
     <%_ } else { _%>
             .map(saved<%- entityClass %> -> {
                 <%- entityInstance %>SearchRepository.index(saved<%- entityClass %>);

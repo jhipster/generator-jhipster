@@ -22,7 +22,7 @@
 _%>
         return <%- entityInstance %>Repository.save(<% if (dtoMapstruct) { %><%- dtoToEntity %>(<% } %><%- restInstance %><%- dtoMapstruct ? ')' : '' %><%- !saveNewEntityOperation && requiresPersistableImplementation ? '.setIsPersisted()' : '' %>)
 <%_ if (searchEngineElasticsearch) { %>
-            .flatMap(<%- entityInstance %>SearchRepository::save)
+            .flatMap(<%- entityInstance %>SearchRepository::index)
 <%_ } -%>
 <%_ if (dtoMapstruct) { _%>
             .map(<%- entityToDtoReference %>)

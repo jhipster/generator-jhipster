@@ -43,6 +43,7 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.repository.<%- reactivePrefix %>ElasticsearchRepository;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 <%_ } else { _%>
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
@@ -67,14 +68,18 @@ interface <%- entityClass %>SearchRepositoryInternal {
     Flux<<%- persistClass %>> search(String query<%- paginationNo ? '' : ', Pageable pageable' %>);
 
     Flux<<%- persistClass %>> search(Query query);
+
+    Mono<<%- persistClass %>> index(<%- persistClass %> entity);
 }
 
 class <%- entityClass %>SearchRepositoryInternalImpl implements <%- entityClass %>SearchRepositoryInternal {
 
     private final ReactiveElasticsearchTemplate reactiveElasticsearchTemplate;
+    private final <%- entityClass %>Repository repository;
 
-    <%- entityClass %>SearchRepositoryInternalImpl(ReactiveElasticsearchTemplate reactiveElasticsearchTemplate) {
+    <%- entityClass %>SearchRepositoryInternalImpl(ReactiveElasticsearchTemplate reactiveElasticsearchTemplate, <%- entityClass %>Repository repository) {
         this.reactiveElasticsearchTemplate = reactiveElasticsearchTemplate;
+        this.repository = repository;
     }
 
     @Override
@@ -91,6 +96,13 @@ class <%- entityClass %>SearchRepositoryInternalImpl implements <%- entityClass 
         return reactiveElasticsearchTemplate
             .search(query, <%- persistClass %>.class)
             .map(SearchHit::getContent);
+    }
+
+    @Override
+    public Mono<<%- persistClass %>> index(<%- persistClass %> entity) {
+        return repository.find<%- implementsEagerLoadApis ? 'OneWithEagerRelationships' : 'ById' %>(entity.<%- primaryKey.propertySupplierName %>())
+            .flatMap(reactiveElasticsearchTemplate::save)
+            .thenReturn(entity);
     }
 }
 <%_ } else { _%>
