@@ -81,17 +81,15 @@ const objectIdentifier = (oid: string): Buffer => {
   }
   return tlv(0x06, Buffer.from(bytes));
 };
-// GeneralizedTime, required for dates from 2050 on, which a 99999 days validity reaches.
-const generalizedTime = (date: Date) =>
-  tlv(
-    0x18,
-    Buffer.from(
-      date
-        .toISOString()
-        .replace(/\.\d+Z$/, 'Z')
-        .replace(/[-:T]/g, ''),
-    ),
-  );
+// RFC 5280: UTCTime (two-digit year) for dates through 2049, GeneralizedTime from 2050 on, which a 99999 days validity
+// reaches.
+const time = (date: Date) => {
+  const generalized = date
+    .toISOString()
+    .replace(/\.\d+Z$/, 'Z')
+    .replace(/[-:T]/g, '');
+  return date.getUTCFullYear() < 2050 ? tlv(0x17, Buffer.from(generalized.slice(2))) : tlv(0x18, Buffer.from(generalized));
+};
 const algorithmIdentifier = (oid: string) => sequence(objectIdentifier(oid), nullValue());
 
 /**
@@ -158,7 +156,7 @@ export const createKeyStore = ({ packageName }: { packageName: string }): Buffer
     integer(Buffer.concat([Buffer.from([1]), randomBytes(8)])),
     algorithmIdentifier(OID.sha256WithRSAEncryption),
     name,
-    sequence(generalizedTime(notBefore), generalizedTime(notAfter)),
+    sequence(time(notBefore), time(notAfter)),
     name,
     publicKey.export({ type: 'spki', format: 'der' }),
   );

@@ -94,6 +94,14 @@ describe('generator - java - support - key-store-node-crypto', () => {
       expect(Math.round(days)).toBe(99999);
     });
 
+    it('should encode the validity as UTCTime through 2049 and GeneralizedTime from 2050 on, as RFC 5280 requires', () => {
+      const [certificate] = decodeDer(keyStore.certificate.raw);
+      const [tbsCertificate] = certificate.children;
+      const validity = tbsCertificate.children[4];
+      // UTCTime notBefore (now), GeneralizedTime notAfter (2300).
+      expect(validity.children.map(({ tag }) => tag)).toEqual([0x17, 0x18]);
+    });
+
     it('should generate a new key each time', () => {
       const other = readKeyStore(createKeyStore({ packageName: 'com.mycompany.myapp' }));
       expect(other.certificate.publicKey.equals(keyStore.certificate.publicKey)).toBe(false);
