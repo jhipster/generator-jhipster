@@ -93,12 +93,13 @@ export const microfrontendClientFramework: JDLSemanticRule = {
       if ((!microfrontend && !servesMicrofrontends) || (config.clientFramework !== undefined && config.clientFramework !== 'no')) {
         return [];
       }
+      const name = config.baseName ? ` ${config.baseName}` : '';
       return [
         {
           message:
             microfrontend ?
-              `The microfrontend ${config.baseName} needs a client framework.`
-            : `The gateway ${config.baseName} serves microfrontends, and needs a client framework.`,
+              `The microfrontend${name} needs a client framework.`
+            : `The gateway${name} serves microfrontends, and needs a client framework.`,
           location:
             config.keyLocations?.clientFramework ??
             (microfrontend ? config.keyLocations?.microfrontend : config.keyLocations?.microfrontends) ??

@@ -91,6 +91,11 @@ microservice Order with orders
         { ruleId: 'microfrontend-client-framework', message: 'The microfrontend blog needs a client framework.', at: 'microfrontend true' },
       ]);
     });
+    it('reports a microfrontend without base name', () => {
+      expect(check('application {\n  config { microfrontend true }\n}')).toEqual([
+        { ruleId: 'microfrontend-client-framework', message: 'The microfrontend needs a client framework.', at: 'microfrontend true' },
+      ]);
+    });
     it('reports a microfrontend with no client framework, at the client framework', () => {
       expect(
         check('application {\n  config { baseName blog applicationType microservice microfrontend true clientFramework no }\n}'),
