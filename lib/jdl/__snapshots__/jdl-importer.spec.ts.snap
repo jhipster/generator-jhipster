@@ -404,6 +404,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
   "exportedApplications": [
     {
       "generator-jhipster": {
+        "applicationIndex": 1,
         "applicationType": "monolith",
         "baseName": "tata",
         "blueprints": undefined,
@@ -414,6 +415,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
     },
     {
       "generator-jhipster": {
+        "applicationIndex": 0,
         "applicationType": "gateway",
         "baseName": "titi",
         "blueprints": undefined,
@@ -424,6 +426,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
     },
     {
       "generator-jhipster": {
+        "applicationIndex": 2,
         "applicationType": "microservice",
         "baseName": "toto",
         "blueprints": undefined,
@@ -434,6 +437,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
     },
     {
       "generator-jhipster": {
+        "applicationIndex": 3,
         "applicationType": "monolith",
         "baseName": "tutu",
         "blueprints": undefined,
@@ -446,6 +450,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
   "exportedApplicationsWithEntities": {
     "tata": {
       "config": {
+        "applicationIndex": 1,
         "applicationType": "monolith",
         "baseName": "tata",
         "blueprints": undefined,
@@ -457,6 +462,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
     },
     "titi": {
       "config": {
+        "applicationIndex": 0,
         "applicationType": "gateway",
         "baseName": "titi",
         "blueprints": undefined,
@@ -468,6 +474,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
     },
     "toto": {
       "config": {
+        "applicationIndex": 2,
         "applicationType": "microservice",
         "baseName": "toto",
         "blueprints": undefined,
@@ -479,6 +486,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
     },
     "tutu": {
       "config": {
+        "applicationIndex": 3,
         "applicationType": "monolith",
         "baseName": "tutu",
         "blueprints": undefined,
@@ -515,6 +523,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
   "exportedApplications": [
     {
       "generator-jhipster": {
+        "applicationIndex": 1,
         "applicationType": "monolith",
         "baseName": "tata",
         "blueprints": undefined,
@@ -525,6 +534,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
     },
     {
       "generator-jhipster": {
+        "applicationIndex": 0,
         "applicationType": "gateway",
         "baseName": "titi",
         "blueprints": undefined,
@@ -535,6 +545,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
     },
     {
       "generator-jhipster": {
+        "applicationIndex": 2,
         "applicationType": "microservice",
         "baseName": "toto",
         "blueprints": undefined,
@@ -545,6 +556,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
     },
     {
       "generator-jhipster": {
+        "applicationIndex": 3,
         "applicationType": "monolith",
         "baseName": "tutu",
         "blueprints": undefined,
@@ -557,6 +569,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
   "exportedApplicationsWithEntities": {
     "tata": {
       "config": {
+        "applicationIndex": 1,
         "applicationType": "monolith",
         "baseName": "tata",
         "blueprints": undefined,
@@ -568,6 +581,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
     },
     "titi": {
       "config": {
+        "applicationIndex": 0,
         "applicationType": "gateway",
         "baseName": "titi",
         "blueprints": undefined,
@@ -579,6 +593,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
     },
     "toto": {
       "config": {
+        "applicationIndex": 2,
         "applicationType": "microservice",
         "baseName": "toto",
         "blueprints": undefined,
@@ -590,6 +605,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
     },
     "tutu": {
       "config": {
+        "applicationIndex": 3,
         "applicationType": "monolith",
         "baseName": "tutu",
         "blueprints": undefined,

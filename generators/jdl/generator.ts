@@ -37,7 +37,7 @@ import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 
-import { addApplicationIndex, allNewApplications, customizeForMicroservices, resolveJDLDefinitions } from './internal/index.ts';
+import { allNewApplications, resolveJDLDefinitions } from './internal/index.ts';
 import type { Config as JdlConfig, Options as JdlOptions } from './types.ts';
 
 /**
@@ -178,9 +178,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
               app.sharedFs = createMemFs();
             }
           }
-          addApplicationIndex(this.applications);
         }
-        customizeForMicroservices(this.exportedApplicationsWithEntities);
       },
       async generateJson() {
         if (this.applications.length === 0) {
