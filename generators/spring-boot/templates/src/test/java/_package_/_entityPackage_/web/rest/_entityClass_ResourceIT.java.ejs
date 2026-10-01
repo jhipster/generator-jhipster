@@ -1053,7 +1053,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%- entityInstance %>Repository.save(<%- persistInstance %>)<%- callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         List<<%- persistClass %>> <%- entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
             .accept(MediaType.APPLICATION_NDJSON)
