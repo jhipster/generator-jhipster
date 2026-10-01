@@ -1,0 +1,199 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { createHash, createHmac, generateKeyPairSync, randomBytes, sign } from 'node:crypto';
+
+const KEY_STORE_ALIAS = 'selfsigned';
+const KEY_STORE_PASSWORD = 'password';
+const KEY_STORE_VALIDITY_DAYS = 99_999;
+const MAC_ITERATIONS = 10_000;
+
+const OID = {
+  data: '1.2.840.113549.1.7.1',
+  sha256WithRSAEncryption: '1.2.840.113549.1.1.11',
+  sha256: '2.16.840.1.101.3.4.2.1',
+  organizationName: '2.5.4.10',
+  organizationalUnitName: '2.5.4.11',
+  commonName: '2.5.4.3',
+  friendlyName: '1.2.840.113549.1.9.20',
+  localKeyId: '1.2.840.113549.1.9.21',
+  x509Certificate: '1.2.840.113549.1.9.22.1',
+  pkcs8ShroudedKeyBag: '1.2.840.113549.1.12.10.1.2',
+  certBag: '1.2.840.113549.1.12.10.1.3',
+} as const;
+
+// A minimal DER encoder, enough for the certificate and the PKCS#12 structures.
+const encodeLength = (length: number): Buffer => {
+  if (length < 0x80) {
+    return Buffer.from([length]);
+  }
+  const bytes: number[] = [];
+  for (let remaining = length; remaining > 0; remaining = Math.floor(remaining / 256)) {
+    bytes.unshift(remaining % 256);
+  }
+  return Buffer.from([0x80 | bytes.length, ...bytes]);
+};
+const tlv = (tag: number, ...contents: Buffer[]): Buffer => {
+  const value = Buffer.concat(contents);
+  return Buffer.concat([Buffer.from([tag]), encodeLength(value.length), value]);
+};
+const sequence = (...contents: Buffer[]) => tlv(0x30, ...contents);
+const set = (...contents: Buffer[]) => tlv(0x31, ...contents);
+const explicit = (tagNumber: number, ...contents: Buffer[]) => tlv(0xa0 + tagNumber, ...contents);
+const octetString = (value: Buffer) => tlv(0x04, value);
+const nullValue = () => tlv(0x05);
+const utf8String = (value: string) => tlv(0x0c, Buffer.from(value, 'utf8'));
+const bmpString = (value: string) => tlv(0x1e, Buffer.from(value, 'utf16le').swap16());
+const bitString = (value: Buffer) => tlv(0x03, Buffer.from([0]), value);
+/** A non-negative INTEGER, from its unsigned big-endian bytes or a number. */
+const integer = (value: Buffer | number): Buffer => {
+  const hex = typeof value === 'number' ? value.toString(16) : '';
+  let bytes = typeof value === 'number' ? Buffer.from(hex.length % 2 ? `0${hex}` : hex, 'hex') : value;
+  while (bytes.length > 1 && bytes[0] === 0) {
+    bytes = bytes.subarray(1);
+  }
+  return tlv(0x02, bytes[0] >= 0x80 ? Buffer.concat([Buffer.from([0]), bytes]) : bytes);
+};
+const objectIdentifier = (oid: string): Buffer => {
+  const [first, second, ...rest] = oid.split('.').map(Number);
+  const bytes = [first * 40 + second];
+  for (const arc of rest) {
+    const base128 = [arc % 128];
+    for (let remaining = Math.floor(arc / 128); remaining > 0; remaining = Math.floor(remaining / 128)) {
+      base128.unshift(0x80 | (remaining % 128));
+    }
+    bytes.push(...base128);
+  }
+  return tlv(0x06, Buffer.from(bytes));
+};
+// GeneralizedTime, required for dates from 2050 on, which a 99999 days validity reaches.
+const generalizedTime = (date: Date) =>
+  tlv(
+    0x18,
+    Buffer.from(
+      date
+        .toISOString()
+        .replace(/\.\d+Z$/, 'Z')
+        .replace(/[-:T]/g, ''),
+    ),
+  );
+const algorithmIdentifier = (oid: string) => sequence(objectIdentifier(oid), nullValue());
+
+/**
+ * The PKCS#12 key derivation function (RFC 7292, appendix B.2) with SHA-256, used to derive the integrity (MAC) key.
+ */
+const pkcs12Kdf = (password: string, salt: Buffer, id: number, iterations: number, length: number): Buffer => {
+  const u = 32;
+  const v = 64;
+  const repeatToBlocks = (bytes: Buffer) => {
+    const repeated = Buffer.alloc(v * Math.ceil(bytes.length / v));
+    for (let index = 0; index < repeated.length; index++) {
+      repeated[index] = bytes[index % bytes.length];
+    }
+    return repeated;
+  };
+  // The password as a null-terminated BMPString.
+  const passwordBytes = Buffer.concat([Buffer.from(password, 'utf16le').swap16(), Buffer.alloc(2)]);
+  const input = Buffer.concat([repeatToBlocks(salt), repeatToBlocks(passwordBytes)]);
+  const diversifier = Buffer.alloc(v, id);
+  const result: Buffer[] = [];
+  for (let produced = 0; produced < length; produced += u) {
+    let hash = createHash('sha256').update(diversifier).update(input).digest();
+    for (let iteration = 1; iteration < iterations; iteration++) {
+      hash = createHash('sha256').update(hash).digest();
+    }
+    result.push(hash);
+    // Adds B + 1, B being the hash repeated to v bytes, to each v bytes block of the input.
+    const block = repeatToBlocks(hash);
+    for (let offset = 0; offset < input.length; offset += v) {
+      let carry = 1;
+      for (let index = v - 1; index >= 0; index--) {
+        const sum = input[offset + index] + block[index] + carry;
+        input[offset + index] = sum & 0xff;
+        carry = sum >> 8;
+      }
+    }
+  }
+  return Buffer.concat(result).subarray(0, length);
+};
+
+/**
+ * The contents of a PKCS#12 KeyStore holding a 2048 bits RSA key and its self-signed certificate, under the `selfsigned`
+ * alias and the `password` password, valid for 99999 days, as `keytool -genkey` created it.
+ * Built with node crypto only: the key is encrypted with PBES2 (PBKDF2 with HMAC-SHA256, AES-256-CBC) and the KeyStore
+ * is protected by an HMAC-SHA256 MAC.
+ */
+export const createKeyStore = ({ packageName }: { packageName: string }): Buffer => {
+  const { privateKey, publicKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+
+  // Most significant first: `CN=Java Hipster, OU=Development, O=<packageName>`.
+  const name = sequence(
+    ...[
+      [OID.organizationName, packageName],
+      [OID.organizationalUnitName, 'Development'],
+      [OID.commonName, 'Java Hipster'],
+    ].map(([oid, value]) => set(sequence(objectIdentifier(oid), utf8String(value)))),
+  );
+  const notBefore = new Date();
+  const notAfter = new Date(notBefore.getTime() + KEY_STORE_VALIDITY_DAYS * 24 * 60 * 60 * 1000);
+  const tbsCertificate = sequence(
+    // Version 3.
+    explicit(0, integer(2)),
+    // A positive serial number.
+    integer(Buffer.concat([Buffer.from([1]), randomBytes(8)])),
+    algorithmIdentifier(OID.sha256WithRSAEncryption),
+    name,
+    sequence(generalizedTime(notBefore), generalizedTime(notAfter)),
+    name,
+    publicKey.export({ type: 'spki', format: 'der' }),
+  );
+  const certificate = sequence(
+    tbsCertificate,
+    algorithmIdentifier(OID.sha256WithRSAEncryption),
+    bitString(sign('sha256', tbsCertificate, privateKey)),
+  );
+
+  // The same attributes on both bags pair the key with its certificate under the alias.
+  const bagAttributes = set(
+    sequence(objectIdentifier(OID.friendlyName), set(bmpString(KEY_STORE_ALIAS))),
+    sequence(objectIdentifier(OID.localKeyId), set(octetString(createHash('sha1').update(certificate).digest()))),
+  );
+  // A ContentInfo of type data holding a SafeContents with a single SafeBag.
+  const safeContents = (bagId: string, bagValue: Buffer) =>
+    sequence(
+      objectIdentifier(OID.data),
+      explicit(0, octetString(sequence(sequence(objectIdentifier(bagId), explicit(0, bagValue), bagAttributes)))),
+    );
+  const authenticatedSafe = sequence(
+    safeContents(OID.certBag, sequence(objectIdentifier(OID.x509Certificate), explicit(0, octetString(certificate)))),
+    // An EncryptedPrivateKeyInfo: PBES2, PBKDF2 with HMAC-SHA256 and AES-256-CBC.
+    safeContents(
+      OID.pkcs8ShroudedKeyBag,
+      privateKey.export({ type: 'pkcs8', format: 'der', cipher: 'aes-256-cbc', passphrase: KEY_STORE_PASSWORD }),
+    ),
+  );
+
+  const macSalt = randomBytes(20);
+  const macKey = pkcs12Kdf(KEY_STORE_PASSWORD, macSalt, 3, MAC_ITERATIONS, 32);
+  const mac = createHmac('sha256', macKey).update(authenticatedSafe).digest();
+  return sequence(
+    integer(3),
+    sequence(objectIdentifier(OID.data), explicit(0, octetString(authenticatedSafe))),
+    sequence(sequence(algorithmIdentifier(OID.sha256), octetString(mac)), octetString(macSalt), integer(MAC_ITERATIONS)),
+  );
+};
