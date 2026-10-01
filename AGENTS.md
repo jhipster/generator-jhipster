@@ -64,6 +64,12 @@ Two options (see `DEVELOPMENT.md`):
 - **Path aliases** for tests: `#testing` → `lib/testing/index.ts`, `#test-support` → `test/support/index.ts`.
 - **Node version**: CI and local must match `engines` in `package.json`; avoid APIs only in newer releases.
 
+## Opening pull requests
+
+- Open pull requests as draft (`gh pr create --draft`).
+- Use `.github/PULL_REQUEST_TEMPLATE.md` as the body: the description in place of its first comment, and its checklist kept.
+- Leave the "I have personally reviewed, understood, and tested the changes" item unchecked. The user checks it after reviewing the changes, and marks the pull request ready for review.
+
 ## Reviewing pull requests
 
 - Post reviews as comments (`gh pr review --comment` or `gh pr comment`). Never submit a "request changes" review: it blocks the merge, and that decision belongs to a human reviewer alone.
