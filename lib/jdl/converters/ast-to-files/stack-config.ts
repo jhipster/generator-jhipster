@@ -28,8 +28,8 @@ type StackApplication = { folder: string; config: Record<string, any>; microserv
  * Adds to the json files of a jdl the config its applications derive from one another, as a stack:
  * - with several applications, each one gets its index, the gateways first;
  * - a gateway gets the applications it serves, its microfrontends and the microservices of its entities, with their
- *   client framework, ports and index, and each of them gets the server port of the gateway as its gateway server port;
- * - a microfrontend of the jdl must use the client framework of its gateway.
+ *   client framework, ports and index, and each of them gets the server port of the gateway as its gateway server port.
+ * The semantic rules check that a microfrontend uses the client framework of its gateway.
  */
 export function applyStackConfig({ files, relativeRoot }: JDLFiles): JDLFiles {
   const result: JDLFiles['files'] = Object.fromEntries(Object.entries(files).map(([path, content]) => [path, structuredClone(content)]));
@@ -57,16 +57,7 @@ export function applyStackConfig({ files, relativeRoot }: JDLFiles): JDLFiles {
   }
 
   for (const gateway of applications.filter(isGateway)) {
-    const { microfrontends = [], clientFramework: gatewayClientFramework, serverPort: gatewayServerPort } = gateway.config;
-    for (const { baseName } of microfrontends as { baseName: string }[]) {
-      const microfrontend = byBaseName.get(baseName);
-      const clientFramework = microfrontend?.config.clientFramework;
-      if (microfrontend && clientFramework !== gatewayClientFramework) {
-        throw new Error(
-          `Using different client frameworks in microfrontends is not supported. Tried to use: ${gatewayClientFramework} with ${clientFramework} (${baseName})`,
-        );
-      }
-    }
+    const { microfrontends = [], serverPort: gatewayServerPort } = gateway.config;
     const relatedBaseNames = [
       ...new Set([...microfrontends.map(({ baseName }: { baseName: string }) => baseName), ...gateway.microserviceNames]),
     ];

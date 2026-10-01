@@ -65,23 +65,6 @@ describe('jdl - applyStackConfig', () => {
     expect(files['store/.yo-rc.json'][GENERATOR_JHIPSTER].gatewayServerPort).toBe(8080);
   });
 
-  it('should refuse a microfrontend of another client framework', () => {
-    expect(() =>
-      applyStackConfig({
-        files: {
-          'gateway/.yo-rc.json': yoRc({
-            baseName: 'gateway',
-            applicationType: 'gateway',
-            clientFramework: 'angular',
-            microfrontends: [{ baseName: 'blog' }],
-          }),
-          'blog/.yo-rc.json': yoRc({ baseName: 'blog', applicationType: 'microservice', clientFramework: 'react' }),
-        },
-        relativeRoot: '',
-      }),
-    ).toThrow('Using different client frameworks in microfrontends is not supported. Tried to use: angular with react (blog)');
-  });
-
   it('should not change the files passed', () => {
     const files = { 'store/.yo-rc.json': yoRc({ baseName: 'store' }), 'gateway/.yo-rc.json': yoRc({ baseName: 'gateway' }) };
     applyStackConfig({ files, relativeRoot: '' });
