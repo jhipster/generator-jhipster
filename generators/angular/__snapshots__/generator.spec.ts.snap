@@ -776,6 +776,7 @@ describe("UserManagement Management Component", () => {
   computed,
   effect,
   inject,
+  linkedSignal,
   signal,
   WritableSignal,
   untracked,
@@ -837,7 +838,11 @@ import { UserManagementDeleteDialog } from "../delete/user-management-delete-dia
   ],
 })
 export class UserManagement {
-  readonly userManagements = signal<IUserManagement[]>([]);
+  readonly userManagements = linkedSignal(() =>
+    this.fillComponentAttributesFromResponseBody([
+      ...this.userManagementService.userManagements(),
+    ]),
+  );
 
   sortState = sortStateSignal({});
 
@@ -874,13 +879,6 @@ export class UserManagement {
       if (headers) {
         this.fillComponentAttributesFromResponseHeader(headers);
       }
-    });
-    effect(() => {
-      this.userManagements.set(
-        this.fillComponentAttributesFromResponseBody([
-          ...this.userManagementService.userManagements(),
-        ]),
-      );
     });
     effect(() => {
       const activatedRouteState = this.activatedRouteState();
