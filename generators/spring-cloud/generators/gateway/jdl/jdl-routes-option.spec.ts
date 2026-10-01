@@ -53,6 +53,11 @@ describe('generators - spring-cloud:gateway - jdl', () => {
       /The routes property name must match:/,
     );
   });
+  it('should not accept names', () => {
+    expect(() => createImporterFromContent(`application { config { ${optionName} [blog] } }`)).toThrow(
+      /^An array of strings is expected, but found: "\["/,
+    );
+  });
   it('should not accept non numeric port', () => {
     expect(() => createImporterFromContent(`application { config { ${optionName} ["foo:foo_host:1a"] } }`)).toThrow(
       /The routes property name must match:/,
@@ -63,7 +68,7 @@ describe('generators - spring-cloud:gateway - jdl', () => {
 
     before(() => {
       const importer = createImporterFromContent(
-        `application { config { ${optionName} ["blog:blog_host:123", "store:store_host", "notification"] } }`,
+        `application { config { ${optionName} ["blog:blog_host:123", "store:store_host", "notification", "cart:c:8080"] } }`,
       );
       state = importer.import();
     });
@@ -73,7 +78,31 @@ describe('generators - spring-cloud:gateway - jdl', () => {
         'blog:blog_host:123',
         'store:store_host',
         'notification',
+        'cart:c:8080',
       ]);
+    });
+  });
+  describe(`parsing an empty ${optionName}`, () => {
+    let state: ImportState;
+
+    before(() => {
+      state = createImporterFromContent(`application { config { ${optionName} [] } }`).import();
+    });
+
+    it('should set an empty value', () => {
+      expect(state.exportedApplicationsWithEntities.jhipster.config[optionName]).toEqual([]);
+    });
+  });
+  describe(`export an empty ${optionName}`, () => {
+    let jdl: string;
+
+    before(() => {
+      jdl = convertSingleContentToJDL({ 'generator-jhipster': { baseName: 'bar', [optionName]: [] } }, runtime);
+    });
+
+    it('should export a jdl it imports', () => {
+      expect(jdl).toContain(`${optionName} []`);
+      expect(createImporterFromContent(jdl).import().exportedApplicationsWithEntities.bar.config[optionName]).toEqual([]);
     });
   });
   describe(`export ${optionName}`, () => {
