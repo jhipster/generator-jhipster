@@ -59,7 +59,17 @@ Two options (see `DEVELOPMENT.md`):
 - **Config access**: prefer `this.jhipsterConfig` (persists to `.yo-rc.json`), `this.jhipsterConfigWithDefaults` (read-only with defaults applied), and the `application`/`entity`/`field`/`relationship` context objects injected into tasks. Derived booleans (e.g. `entity.dtoMapstruct`, `field.fieldTypeInteger`) belong in `preparing*` priorities, not in templates.
 - **Writing files**: use `this.writeFiles({ blocks, context })` with `condition` functions on blocks rather than branching inside templates. Use `editFile(path, transform)` or the needle APIs on `source` in `postWriting` to inject into already-written files.
 - **Templates**: EJS (`.ejs`). Two-space indent for template logic; generated file's own rules apply to content. Factor shared fragments into `.ejs` sub-templates included via `<%- include('../path', { ... }) -%>`.
-- **Commit messages** (enforced at review): imperative present tense, lowercase first letter, no trailing dot, header ≤100 chars. Reference issues in footer (`Fix #1234`). Use `[ci skip]` for docs-only commits.
+- **Commit messages** (enforced at review): imperative present tense, lowercase first letter, no trailing dot, header ≤100 chars. Do not reference issues in commit messages: GitHub adds every commit that mentions an issue (on each push, rebase and amend) to the issue timeline, and agents create many commits. Reference the issue in the pull request description instead (`Fix #1234`). Do not use `[ci skip]` or `[skip ci]`, even for docs-only commits: it blocks the required CI workflows.
 - **Tests required** for every feature or bug fix. When behavior touches generated output, update/extend snapshots rather than asserting strings by hand.
 - **Path aliases** for tests: `#testing` → `lib/testing/index.ts`, `#test-support` → `test/support/index.ts`.
 - **Node version**: CI and local must match `engines` in `package.json`; avoid APIs only in newer releases.
+
+## Opening pull requests
+
+- Open pull requests as draft (`gh pr create --draft`).
+- Use `.github/PULL_REQUEST_TEMPLATE.md` as the body: the description in place of its first comment, and its checklist kept.
+- Leave the "I have personally reviewed, understood, and tested the changes" item unchecked. The user checks it after reviewing the changes, and marks the pull request ready for review.
+
+## Reviewing pull requests
+
+- Post reviews as comments (`gh pr review --comment` or `gh pr comment`). Never submit a "request changes" review: it blocks the merge, and that decision belongs to a human reviewer alone.
