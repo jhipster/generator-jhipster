@@ -371,4 +371,27 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+
+  describe('with filtering entities', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators })
+        .withJHipsterConfig({ skipClient: true }, [
+          { name: 'Foo', changelogDate: '20160926101210', jpaMetamodelFiltering: true, fields: [] },
+          { name: 'Bar', changelogDate: '20160926101211', dto: 'mapstruct', fields: [] },
+        ]);
+    });
+
+    it('should give an entity filtering without service a service class, without writing it to its config', () => {
+      runResult.assertFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`);
+      runResult.assertFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooQueryService.java`);
+      runResult.assertNoJsonFileContent('.jhipster/Foo.json', { service: 'serviceClass' });
+    });
+
+    it('should not give an entity with a dto a service', () => {
+      runResult.assertNoFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/BarService.java`);
+    });
+  });
 });

@@ -1238,7 +1238,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
     "searchEngineCouchbase": false,
     "searchEngineElasticsearch": false,
     "searchEngineNo": true,
-    "service": "no",
+    "service": "serviceClass",
     "skipUiGrouping": false,
     "uniqueEnums": Any<Array>,
     "updatableEntity": true,

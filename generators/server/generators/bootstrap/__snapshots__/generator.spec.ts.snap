@@ -1239,7 +1239,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
     "searchEngineCouchbase": false,
     "searchEngineElasticsearch": false,
     "searchEngineNo": true,
-    "service": "no",
+    "service": "serviceClass",
     "skipUiGrouping": false,
     "uniqueEnums": Any<Array>,
     "updatableEntity": true,
