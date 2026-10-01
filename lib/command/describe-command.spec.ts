@@ -23,7 +23,7 @@ import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
 import { getPackageRoot } from '../index.ts';
 import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
-import { customizeNestedNamespace, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
+import { customizeJHipsterNamespace, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
 
 import { describeCommand, findConfigOwners } from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
@@ -99,7 +99,7 @@ describe('command - describe command', () => {
       store.lookupSync({
         packagePaths: [getPackageRoot()],
         lookups: jhipsterGeneratorsLookup,
-        customizeNamespace: customizeNestedNamespace,
+        customizeNamespace: customizeJHipsterNamespace,
       });
       const blueprintCommand: JHipsterCommandDefinition = {
         configs: { databaseType: { cli: { type: String }, scope: 'storage' }, blueprintOnly: { cli: { type: Boolean }, scope: 'storage' } },

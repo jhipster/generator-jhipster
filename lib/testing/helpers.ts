@@ -607,15 +607,19 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
         jhipsterSettings,
       );
     }
-    const generatorSpec =
-      !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
+    const jhipsterNamespace =
+      !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : undefined;
+    const generatorSpec = jhipsterNamespace ?? jhipsterGenerator;
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
       envOptions === undefined && (opt === undefined || 'useMock' in opt || 'useDefaultMocks' in opt || 'prepareEnvironment' in opt);
     if (isRunJHipster(settings)) {
       return this.run<Generator>(generatorSpec).withJHipsterContextOptions(settings);
     }
 
-    return this.run<Generator>(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators().withCommandName();
+    // Register the generator under its jhipster namespace, yeoman would derive it from the path, which depends on the folder name.
+    return this.run<Generator>(getGenerator(generatorSpec), { namespace: jhipsterNamespace, ...settings }, envOptions)
+      .withJHipsterGenerators()
+      .withCommandName();
   }
 
   runCli<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
@@ -659,7 +663,12 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions,
   ): JHipsterRunContext<Generator> {
-    const context = runResult.create(getGenerator(jhipsterGenerator), settings, envOptions) as JHipsterRunContext<Generator>;
+    // Register the generator under its jhipster namespace, yeoman would derive it from the path, which depends on the folder name.
+    const context = runResult.create(
+      getGenerator(jhipsterGenerator),
+      { namespace: toJHipsterNamespace(jhipsterGenerator), ...settings },
+      envOptions,
+    ) as JHipsterRunContext<Generator>;
     return context.withJHipsterGenerators();
   }
 
