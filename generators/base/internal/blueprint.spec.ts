@@ -20,7 +20,7 @@
 import { describe, expect, it } from 'esmocha';
 import assert from 'node:assert';
 
-import { mergeBlueprints, normalizeBlueprintName, parseBlueprints, removeBlueprintDuplicates } from './blueprint.ts';
+import { mergeBlueprints, parseBlueprints, removeBlueprintDuplicates } from './blueprint.ts';
 
 describe('generator - base - internal - blueprint', () => {
   describe('::parseBlueprints', () => {
@@ -133,20 +133,6 @@ describe('generator - base - internal - blueprint', () => {
       const expected = [{ name: 'generator-jhipster-foo' }];
       const actual = removeBlueprintDuplicates(argumentsToPass);
       assert.deepStrictEqual(actual, expected);
-    });
-  });
-  describe('::normalizeBlueprintName', () => {
-    it('adds generator-jhipster prefix if it is absent', () => {
-      const generatorName = normalizeBlueprintName('foo');
-      expect(generatorName).toBe('generator-jhipster-foo');
-    });
-    it('keeps generator-jhipster prefix if it is present', () => {
-      const generatorName = normalizeBlueprintName('generator-jhipster-foo');
-      expect(generatorName).toBe('generator-jhipster-foo');
-    });
-    it('adds generator-jhipster prefix for scoped package', () => {
-      const generatorName = normalizeBlueprintName('@corp/foo');
-      expect(generatorName).toBe('@corp/generator-jhipster-foo');
     });
   });
 });

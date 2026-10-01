@@ -16,35 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { uniqBy } from 'lodash-es';
+import { join } from 'node:path';
 
-import { APPLICATION_TYPE_KEY, type ApplicationType } from '../core/application-types.ts';
+import type { ApplicationType } from '../core/application-types.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
-import { readCurrentPathYoRcFile } from '../utils/yo-rc.ts';
+import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.ts';
+import { readCurrentPathYoRcFile, readEntityFile } from '../utils/yo-rc.ts';
 
-import {
-  formatApplicationToExport,
-  formatApplicationsToExport,
-} from './converters/exporters/applications/jhipster-application-formatter.ts';
-import { GENERATOR_NAME } from './converters/exporters/export-utils.ts';
-import exportDeployments from './converters/exporters/jhipster-deployment-exporter.ts';
-import exportEntities from './converters/exporters/jhipster-entity-exporter.ts';
-import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.ts';
-import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
-import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.ts';
-import type JDLJSONEntity from './core/basic-types/json-entity.ts';
-import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
-import type JDLDeployment from './core/models/jdl-deployment.ts';
-import type JDLObject from './core/models/jdl-object.ts';
-import { errorLocation } from './core/parsing/location.ts';
-import { checkSemantics } from './core/parsing/semantic/index.ts';
+import { type ImportTarget, type JDLFiles, checkSemanticErrors } from './convert-jdl-to-files.ts';
+import { astToFiles } from './converters/ast-to-files/ast-to-files.ts';
+import { applyCompatibilityDefaults } from './converters/ast-to-files/compatibility-defaults.ts';
+import { writeConfigFile } from './converters/exporters/export-utils.ts';
 import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
 import type { JDLApplicationConfig, JDLDefinitions } from './core/parsing/types/parsing.ts';
 import type { JDLRuntime } from './core/parsing/types/runtime.ts';
 import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
 import type { JSONEntity } from './core/types/json-config.ts';
-import logger from './core/utils/objects/logger.ts';
+import { createFolderIfItDoesNotExist, doesFileExist } from './core/utils/file-utils.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 
@@ -131,13 +120,6 @@ export type ImportState = {
 };
 
 function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLApplicationConfiguration, runtime: JDLRuntime) {
-  let importState: ImportState = {
-    exportedApplications: [],
-    exportedApplicationsWithEntities: {},
-    exportedEntities: [],
-    exportedDeployments: [],
-  };
-
   return {
     /**
      * Processes JDL files and converts them to JSON.
@@ -146,151 +128,92 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
      *          - exportedApplications: the exported applications, or an empty list
      *          - exportedEntities: the exported entities, or an empty list
      */
-    import: () => {
+    import: (): ImportState => {
       checkSemanticErrors(content, runtime);
-      const jdlObject = getJDLObject(content, configuration, runtime);
-      if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
-        importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
-      } else if (jdlObject.getApplicationQuantity() === 1) {
-        importState = importOneApplicationAndEntities(jdlObject);
-      } else {
-        importState = importApplicationsAndEntities(jdlObject);
-      }
-      if (jdlObject.getDeploymentQuantity()) {
-        importState.exportedDeployments = importDeployments(jdlObject.deployments, configuration);
-      }
-      return importState;
+      const target = importTarget(content, configuration);
+      const { files } = applyCompatibilityDefaults(astToFiles(content, runtime), target);
+      return toImportState(files, content.applications.length > 1, configuration);
     },
   };
 }
 
-function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JDLApplicationConfiguration, runtime: JDLRuntime) {
-  let baseName = configuration.applicationName;
-  let { applicationType } = configuration;
-
-  if (configuration.application) {
-    baseName ??= configuration.application[GENERATOR_JHIPSTER].baseName;
-    applicationType ??= configuration.application[GENERATOR_JHIPSTER].applicationType;
+/** The application a jdl without application is imported into: the one passed, else the one of the current folder. */
+function importTarget(content: ParsedJDLApplications, configuration: JDLApplicationConfiguration): ImportTarget {
+  const application = configuration.application?.[GENERATOR_JHIPSTER];
+  let applicationName = configuration.applicationName ?? application?.baseName;
+  if (content.applications.length === 0 && content.entities.length > 0) {
+    applicationName ??= readCurrentPathYoRcFile<{ baseName?: string }>()?.[GENERATOR_JHIPSTER]?.baseName;
+    if (!applicationName) {
+      // The message of the importer before.
+      throw new Error("The JDL object and its application's name are mandatory.");
+    }
   }
+  return { applicationName, applicationType: configuration.applicationType ?? application?.applicationType };
+}
 
-  return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject(
-    {
-      parsedContent: parsedJDLContent,
-      applicationType,
-      applicationName: baseName,
-    },
-    runtime,
-  );
+/** An entity written before keeps its changelog date. */
+function withExistingEntity(folder: string, entity: JSONEntity): JSONEntity {
+  try {
+    const fileOnDisk = readEntityFile<JSONEntity>(folder, entity.name);
+    if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
+      return { ...fileOnDisk, ...entity, annotations: { ...entity.annotations, changelogDate: fileOnDisk.annotations.changelogDate } };
+    }
+  } catch {
+    // A new entity.
+  }
+  return entity;
 }
 
 /**
- * The semantic rules report every problem of the jdl, with its position: the warnings are logged, the errors thrown together;
- * the converters take a jdl without any error.
+ * The state of the importer from the json files of the jdl; the deployment files are written, unless skipped.
+ * @param severalApplications - whether the jdl declares several applications, whose entities are then in their folders.
  */
-function checkSemanticErrors(content: ParsedJDLApplications, runtime: JDLRuntime) {
-  const diagnostics = checkSemantics(content, runtime);
-  for (const warning of diagnostics.filter(diagnostic => diagnostic.severity === 'warning')) {
-    logger.warn(`${warning.message}${errorLocation(warning.location)}`);
-  }
-  const errors = diagnostics.filter(diagnostic => diagnostic.severity === 'error');
-  if (errors.length > 0) {
-    throw new Error(errors.map(error => `${error.message}${errorLocation(error.location)}`).join('\n'));
-  }
-}
-
-function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
-  let { applicationName } = configuration;
-
-  let { application } = configuration;
-  application ??= readCurrentPathYoRcFile();
-  if (application?.[GENERATOR_JHIPSTER]) {
-    applicationName ??= application[GENERATOR_JHIPSTER].baseName;
-  }
-
-  const entitiesPerApplicationMap = JDLWithoutApplicationToJSONConverter.convert(jdlObject, applicationName!);
-  const jsonEntities = entitiesPerApplicationMap.get(applicationName!);
-  return exportJSONEntities(jsonEntities!, configuration);
-}
-
-function importOneApplicationAndEntities(jdlObject: JDLObject) {
+function toImportState(files: JDLFiles['files'], severalApplications: boolean, configuration: JDLApplicationConfiguration): ImportState {
   const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
     exportedEntities: [],
     exportedDeployments: [],
   };
-  const formattedApplication: PostProcessedJDLJSONApplication = formatApplicationToExport(jdlObject.getApplications()[0]);
-  importState.exportedApplications.push(formattedApplication);
-  const jdlApplication = jdlObject.getApplications()[0];
-  const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME_KEY);
-  const entitiesPerApplicationMap = convert(jdlObject);
-  const jsonEntities: any = entitiesPerApplicationMap.get(applicationName);
-  const { [GENERATOR_NAME]: config, ...remaining } = formattedApplication;
-  importState.exportedApplicationsWithEntities[applicationName] = {
-    config,
-    ...remaining,
-    entities: [],
-  };
-  if (jsonEntities.length !== 0) {
-    const exportedJSONEntities = exportJSONEntities(jsonEntities, {
-      applicationName,
-      applicationType: jdlApplication.getConfigurationOptionValue(APPLICATION_TYPE_KEY),
-      forSeveralApplications: false,
-    });
-    importState.exportedApplicationsWithEntities[applicationName].entities = exportedJSONEntities;
-    importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
+  const entitiesWithoutApplication: JSONEntity[] = [];
+  for (const [path, content] of Object.entries(files)) {
+    const [folder, ...rest] = path.split('/');
+    if (folder === '.jhipster') {
+      entitiesWithoutApplication.push(content as JSONEntity);
+    } else if (content[GENERATOR_JHIPSTER]?.deploymentType) {
+      if (!configuration.skipDeploymentFileGeneration) writeDeploymentFile(folder, content);
+      importState.exportedDeployments.push(content);
+    } else if (rest[0] === '.yo-rc.json') {
+      const { [GENERATOR_JHIPSTER]: config, ...namespaceConfigs } = content;
+      const namespaces = Object.keys(namespaceConfigs).length > 0 ? { namespaceConfigs } : {};
+      importState.exportedApplications.push({ [GENERATOR_JHIPSTER]: config, ...namespaces });
+      importState.exportedApplicationsWithEntities[config.baseName] = { config, ...namespaces, entities: [] };
+    } else {
+      const entity = withExistingEntity(severalApplications ? folder : '', content as JSONEntity);
+      importState.exportedApplicationsWithEntities[folder].entities.push(entity);
+      if (!importState.exportedEntities.some(({ name }) => name === entity.name)) {
+        importState.exportedEntities.push(entity);
+      }
+    }
   }
+  for (const entity of entitiesWithoutApplication) {
+    importState.exportedEntities.push(withExistingEntity('', entity));
+  }
+  // The applications listing entities come first, as the importer listed them.
+  const applicationsWithEntities = Object.entries(importState.exportedApplicationsWithEntities);
+  const listsEntities = ([, { config }]: (typeof applicationsWithEntities)[number]) => config.entities?.length > 0;
+  importState.exportedApplicationsWithEntities = Object.fromEntries([
+    ...applicationsWithEntities.filter(application => listsEntities(application)),
+    ...applicationsWithEntities.filter(application => !listsEntities(application)),
+  ]);
   return importState;
 }
 
-function importApplicationsAndEntities(jdlObject: JDLObject) {
-  const importState: ImportState = {
-    exportedApplications: [],
-    exportedApplicationsWithEntities: {},
-    exportedEntities: [],
-    exportedDeployments: [],
-  };
-
-  const formattedApplications = formatApplicationsToExport(jdlObject.applications);
-  importState.exportedApplications = formattedApplications;
-  const entitiesPerApplicationMap: Map<any, any> = convert(jdlObject);
-  entitiesPerApplicationMap.forEach((jsonEntities, applicationName) => {
-    const jdlApplication = jdlObject.getApplication(applicationName);
-    const exportedJSONEntities = exportJSONEntities(jsonEntities, {
-      applicationName,
-      applicationType: jdlApplication!.getConfigurationOptionValue(APPLICATION_TYPE_KEY),
-      forSeveralApplications: true,
-    });
-    const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
-    const { 'generator-jhipster': config, ...remaining } = exportedConfig!;
-    importState.exportedApplicationsWithEntities[applicationName] = {
-      config,
-      ...remaining,
-      entities: exportedJSONEntities,
-    };
-    importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');
-  });
-  return importState;
-}
-
-function importDeployments(deployments: Record<string, JDLDeployment>, configuration: JDLApplicationConfiguration) {
-  return exportDeployments(deployments, { skipFileGeneration: configuration.skipDeploymentFileGeneration });
-}
-
-function exportJSONEntities(entities: JDLJSONEntity[], configuration: JDLApplicationConfiguration): JSONEntity[] {
-  let baseName = configuration.applicationName;
-  let { applicationType } = configuration;
-
-  if (configuration.application) {
-    ({ baseName, applicationType } = configuration.application[GENERATOR_JHIPSTER]);
+/** Writes the `.yo-rc.json` of a deployment in the folder named after its type, merged with the one there. */
+function writeDeploymentFile(folder: string, deployment: Record<string, any>) {
+  if (doesFileExist(folder)) {
+    throw new Error(`A file named '${folder}' already exists, so a folder of the same name can't be created for the application.`);
   }
-
-  return exportEntities({
-    entities,
-    application: {
-      name: baseName!,
-      type: applicationType!,
-      forSeveralApplications: !!configuration.forSeveralApplications,
-    },
-  });
+  createFolderIfItDoesNotExist(folder);
+  writeConfigFile(deployment as YoRcJHipsterContent, join(folder, '.yo-rc.json'));
 }

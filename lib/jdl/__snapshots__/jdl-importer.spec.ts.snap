@@ -7,7 +7,7 @@ exports[`jdl - JDLImporter import when importing a JDL application with blueprin
       "baseName": "appWithBlueprints",
       "blueprints": [
         {
-          "name": "vuejs",
+          "name": "generator-jhipster-vuejs",
         },
         {
           "name": "generator-jhipster-dotnetcore",

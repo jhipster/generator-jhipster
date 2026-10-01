@@ -29,6 +29,7 @@ import type { PackageJson } from 'type-fest';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
+import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import type { EditorMetadata } from '../base-core/api.ts';
 import CoreGenerator from '../base-core/index.ts';
@@ -36,7 +37,7 @@ import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
-import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.ts';
+import { mergeBlueprints, parseBlueprints } from './internal/index.ts';
 import {
   CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
   CONTEXT_DATA_EXISTING_PROJECT,

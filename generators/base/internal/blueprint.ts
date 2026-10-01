@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { requireNamespace } from '@yeoman/namespace';
+import { normalizeBlueprintName } from '../../../lib/utils/blueprint-name.ts';
 
 export type Blueprint = {
   name: string;
@@ -102,28 +102,4 @@ export function parseBlueprintInfo(blueprint: string): Blueprint {
   return {
     name: bpName,
   };
-}
-
-/**
- * @private
- * Normalize blueprint name: prepend 'generator-jhipster-' if needed
- * @param {string} blueprint - name of the blueprint
- * @returns {string} the normalized blueprint name
- */
-export function normalizeBlueprintName(blueprint: string): string {
-  try {
-    const ns = requireNamespace(blueprint);
-    if (ns.unscoped.startsWith('generator-jhipster-')) {
-      return ns.toString();
-    }
-    return ns.with({ unscoped: `generator-jhipster-${ns.unscoped}` }).toString();
-    // eslint-disable-next-line no-empty
-  } catch {}
-  if (blueprint?.startsWith('@')) {
-    return blueprint;
-  }
-  if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-    return `generator-jhipster-${blueprint}`;
-  }
-  return blueprint;
 }
