@@ -6,7 +6,7 @@
     "babel-plugin-istanbul": "8.0.0",
     "cypress": "16.1.0",
     "cypress-audit": "1.1.0",
-    "cypress-terminal-report": "7.3.3",
+    "cypress-terminal-report": "7.4.0",
     "eslint-plugin-cypress": "7.0.2",
     "lighthouse": "13.5.0",
     "monocart-coverage-reports": "2.13.0",
