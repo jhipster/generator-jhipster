@@ -359,6 +359,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
             ignoreErrors,
             prettierPackageJson: true,
             prettierJava: this.prettierJava,
+            // For .properties files written with the `prettier` editor metadata, like sonar-project.properties.
+            prettierProperties: true,
             extensions: this.prettierExtensions.join(','),
             prettierOptions: this.prettierOptions,
           }),

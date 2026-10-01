@@ -27,7 +27,7 @@ import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
-import { defaultHelpers as helpers, result, skipPrettierHelpers } from '#testing';
+import { basicHelpers, defaultHelpers as helpers, result, skipPrettierHelpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -83,6 +83,34 @@ describe(`generator - ${generator}`, () => {
       it('should keep needles', () => {
         result.assertEqualsFileContent('file.txt', content);
       });
+    });
+  });
+
+  describe('prettier editor metadata', () => {
+    const unformatted = 'key=value\nother.key   =   other value\n';
+    const formatted = 'key = value\nother.key = other value\n';
+
+    class PropertiesGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('flagged.properties', unformatted, { metadata: { prettier: true } });
+            this.writeDestination('not-flagged.properties', unformatted);
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await basicHelpers.run(PropertiesGenerator).withJHipsterGenerators();
+    });
+
+    it('formats files written with the prettier metadata, even if prettier does not format their extension', () => {
+      result.assertEqualsFileContent('flagged.properties', formatted);
+    });
+
+    it('does not format the other files with that extension', () => {
+      result.assertEqualsFileContent('not-flagged.properties', unformatted);
     });
   });
 

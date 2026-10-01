@@ -17,13 +17,10 @@
  * limitations under the License.
  */
 
-import { isFileStateModified } from 'mem-fs-editor/state';
-
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { type PropertiesFileLines, editPropertiesFileCallback } from '../base-core/support/index.ts';
-import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
 
-import { writeFiles } from './files.ts';
+import { SONAR_PROPERTIES_METADATA, writeFiles } from './files.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -99,6 +96,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
         source.ignoreSonarRule = ({ ruleId, ruleKey, resourceKey, comment }) => {
           this.editFile(
             'sonar-project.properties',
+            { metadata: SONAR_PROPERTIES_METADATA },
             editPropertiesFileCallback([
               {
                 key: 'sonar.issue.ignore.multicriteria',
@@ -121,6 +119,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
           // Adds new properties before the sonar.issue.ignore.multicriteria key
           this.editFile(
             'sonar-project.properties',
+            { metadata: SONAR_PROPERTIES_METADATA },
             editPropertiesFileCallback((lines, newValueCallback) => {
               let multicriteriaIndex = lines.findIndex(line => Array.isArray(line) && line[0] === 'sonar.issue.ignore.multicriteria');
               if (lines[multicriteriaIndex - 1] === '') {
@@ -182,26 +181,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      async formatSonarProperties() {
-        this.queueTransformStream(
-          {
-            name: 'prettifying sonar-project.properties',
-            filter: file =>
-              isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && file.path.endsWith('sonar-project.properties'),
-            refresh: false,
-          },
-          await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }),
-        );
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
