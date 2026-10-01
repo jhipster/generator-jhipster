@@ -82,6 +82,29 @@ describe('generators - spring-cloud:gateway - jdl', () => {
       ]);
     });
   });
+  describe(`parsing an empty ${optionName}`, () => {
+    let state: ImportState;
+
+    before(() => {
+      state = createImporterFromContent(`application { config { ${optionName} [] } }`).import();
+    });
+
+    it('should set an empty value', () => {
+      expect(state.exportedApplicationsWithEntities.jhipster.config[optionName]).toEqual([]);
+    });
+  });
+  describe(`export an empty ${optionName}`, () => {
+    let jdl: string;
+
+    before(() => {
+      jdl = convertSingleContentToJDL({ 'generator-jhipster': { baseName: 'bar', [optionName]: [] } }, runtime);
+    });
+
+    it('should export a jdl it imports', () => {
+      expect(jdl).toContain(`${optionName} []`);
+      expect(createImporterFromContent(jdl).import().exportedApplicationsWithEntities.bar.config[optionName]).toEqual([]);
+    });
+  });
   describe(`export ${optionName}`, () => {
     let jdl: string;
 
