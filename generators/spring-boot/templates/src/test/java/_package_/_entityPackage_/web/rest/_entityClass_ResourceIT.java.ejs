@@ -214,6 +214,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
   <%_ if (databaseTypeSql) { _%>
+    <%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.test.context.transaction.TestTransaction;
+    <%_ } _%>
 import org.springframework.transaction.annotation.Transactional;
   <%_ } _%>
 <%_ } _%>
@@ -786,6 +789,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         assert<%- persistClass %>UpdatableFieldsEquals(returned<%- persistClass %>, getPersisted<%- persistClass %>(returned<%- persistClass %>));
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (databaseTypeSql && !reactive) { _%>
+
+        // Commit so the after-commit indexing runs before checking the search index
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+    <%_ } _%>
 
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
@@ -1622,6 +1631,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         assertPersisted<%- persistClass %>ToMatchAllProperties(updated<%- persistClass %>);
 
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (databaseTypeSql && !reactive) { _%>
+        // Commit so the after-commit indexing runs before checking the search index
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+
+    <%_ } _%>
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -2037,7 +2052,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         long databaseSizeBeforeDelete = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+    <%_ if (databaseTypeSql && !reactive) { _%>
+      <%_ // committing tests leave the required entities of createEntity(em) behind, so the sizes are not comparable _%>
+        assertThat(<%- entityInstance %>SearchRepository.existsById(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>())).isTrue();
+    <%_ } else { _%>
         assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);
+    <%_ } _%>
   <%_ } _%>
 
         // Delete the <%- entityInstance %>
@@ -2058,8 +2078,22 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (reactive) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+    <%_ } else { _%>
+      <%_ if (databaseTypeSql) { _%>
+
+        // Commit so the after-commit indexing runs before checking the search index
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+
+      <%_ } _%>
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+            assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+        });
+    <%_ } _%>
   <%_ } _%>
 
     }
