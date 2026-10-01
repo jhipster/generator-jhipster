@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'node:assert';
 import { existsSync } from 'node:fs';
 import path, { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -29,12 +28,17 @@ import Environment, { Store } from 'yeoman-environment';
 import BaseGenerator from '../generators/base/index.ts';
 import { type Blueprint, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../lib/index.ts';
-import { customizeNestedNamespace, generatorsLookup, jhipsterGeneratorsLookup } from '../lib/resolver/lookups.ts';
+import {
+  customizeJHipsterNamespace,
+  customizeNestedNamespace,
+  generatorsLookup,
+  jhipsterGeneratorsLookup,
+} from '../lib/resolver/lookups.ts';
 import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
 import type { CliCommand } from './types.d.ts';
-import { CLI_NAME, logger } from './utils.ts';
+import { logger } from './utils.ts';
 
 const jhipsterDevBlueprintPath =
   process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
@@ -200,17 +204,10 @@ export default class EnvironmentBuilder {
    */
   async _lookupJHipster() {
     // Register jhipster generators.
-    const generators = await this.env.lookup({
+    await this.env.lookup({
       packagePaths: [getPackageRoot()],
       lookups: jhipsterGeneratorsLookup,
-    });
-
-    generators.forEach(generator => {
-      // Verify jhipster generators namespace.
-      assert(
-        generator.namespace.startsWith(`${CLI_NAME}:`),
-        `Error on the registered namespace ${generator.namespace}, make sure your folder is called generator-jhipster.`,
-      );
+      customizeNamespace: customizeJHipsterNamespace,
     });
 
     // TODO: remove aliases in JHipster 10
