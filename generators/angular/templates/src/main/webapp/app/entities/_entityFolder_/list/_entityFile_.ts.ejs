@@ -442,7 +442,7 @@ export class <%- componentName %> {
       }
 <%_ } _%>
 
-      this.router.navigate(['./'], {
+      void this.router.navigate(['./'], {
         relativeTo: this.activatedRoute,
         queryParams: queryParamsObj,
       });

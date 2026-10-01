@@ -62,7 +62,7 @@ export default class Home {
 <%_ if (authenticationTypeOauth2) { _%>
     this.loginService.login();
 <%_ } else { _%>
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
 <%_ } _%>
   }
 }

@@ -973,7 +973,7 @@ export class UserManagement {
       sort: this.sortService.buildSortParam(sortState),
     };
 
-    this.router.navigate(["./"], {
+    void this.router.navigate(["./"], {
       relativeTo: this.activatedRoute,
       queryParams: queryParamsObj,
     });
@@ -1132,9 +1132,9 @@ const userManagementResolve = (
     return service.find(login).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 404) {
-          router.navigate(["404"]);
+          void router.navigate(["404"]);
         } else {
-          router.navigate(["error"]);
+          void router.navigate(["error"]);
         }
         return EMPTY;
       }),

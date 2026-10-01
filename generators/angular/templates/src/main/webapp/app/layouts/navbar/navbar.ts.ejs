@@ -125,14 +125,14 @@ export default class Navbar implements OnInit {
 <%_ if (authenticationTypeOauth2) { _%>
     this.loginService.login();
 <%_ } else { _%>
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
 <%_ } _%>
   }
 
   logout(): void {
     this.collapseNavbar();
     this.loginService.logout();
-    this.router.navigate(['']);
+    void this.router.navigate(['']);
   }
 
 <%_ if (microfrontend) { _%>
