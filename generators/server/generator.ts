@@ -127,6 +127,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
           entityConfig.jpaMetamodelFiltering &&
           (!databaseTypeSql || entityConfig.service === NO_SERVICE)
         ) {
+          // TODO v10: throw instead, filtering needs a sql database and a service.
           this.log.warn('Not compatible with jpaMetamodelFiltering, disabling');
           entityConfig.jpaMetamodelFiltering = false;
         }

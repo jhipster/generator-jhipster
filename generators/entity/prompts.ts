@@ -793,7 +793,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
     },
     {
       when: answers => {
-        if (application.generateBuiltInUserEntity && answers.otherEntityName.toLowerCase() === 'user)') {
+        if (application.generateBuiltInUserEntity && answers.otherEntityName.toLowerCase() === 'user') {
           answers.bidirectional = false;
           return false;
         }

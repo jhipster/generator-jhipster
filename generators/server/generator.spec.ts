@@ -124,4 +124,36 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('with a filtering entity declaring no service', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withJHipsterConfig({ skipClient: true }, [
+          { name: 'Foo', changelogDate: '20160926101210', jpaMetamodelFiltering: true, service: 'no', fields: [] },
+        ]);
+    });
+
+    it('should disable its filtering', () => {
+      runResult.assertNoFile('src/main/java/com/mycompany/myapp/service/FooQueryService.java');
+      runResult.assertJsonFileContent('.jhipster/Foo.json', { jpaMetamodelFiltering: false, service: 'no' });
+    });
+  });
+
+  describe('with a filtering entity of a mongodb application', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withJHipsterConfig({ skipClient: true, databaseType: 'mongodb' }, [
+          { name: 'Foo', changelogDate: '20160926101210', jpaMetamodelFiltering: true, fields: [] },
+        ]);
+    });
+
+    it('should disable its filtering', () => {
+      runResult.assertNoFile('src/main/java/com/mycompany/myapp/service/FooQueryService.java');
+      runResult.assertJsonFileContent('.jhipster/Foo.json', { jpaMetamodelFiltering: false });
+    });
+  });
 });

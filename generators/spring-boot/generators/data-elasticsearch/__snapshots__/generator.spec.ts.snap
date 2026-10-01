@@ -137,6 +137,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -1245,6 +1248,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
@@ -2982,6 +2988,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
@@ -3692,6 +3701,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/service/UserService.java": {

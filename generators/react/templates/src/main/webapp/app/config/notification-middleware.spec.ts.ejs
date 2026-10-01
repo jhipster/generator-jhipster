@@ -193,7 +193,6 @@ describe('Notification Middleware', () => {
 <%_ } _%>
   beforeEach(() => {
     store = makeStore();
-    vi.clearAllMocks();
     // ignore console errors
     vi.spyOn(globalThis.console, 'error').mockImplementation();
   });

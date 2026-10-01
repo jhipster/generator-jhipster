@@ -117,8 +117,8 @@ import { ITEM_DELETED_EVENT } from "app/config";
 export class UserManagementDeleteDialog {
   userManagement?: IUserManagement;
 
-  protected readonly userManagementService = inject(UserManagementService);
-  protected readonly activeModal = inject(NgbActiveModal);
+  private readonly userManagementService = inject(UserManagementService);
+  private readonly activeModal = inject(NgbActiveModal);
 
   cancel(): void {
     this.activeModal.dismiss();
@@ -847,12 +847,12 @@ export class UserManagement {
 
   readonly router = inject(Router);
   readonly currentAccount = inject(AccountService).account;
-  protected readonly userManagementService = inject(UserManagementService);
+  private readonly userManagementService = inject(UserManagementService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading =
     this.userManagementService.userManagementsResource.isLoading;
-  protected readonly activatedRoute = inject(ActivatedRoute);
-  protected readonly activatedRouteState = toSignal(
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRouteState = toSignal(
     combineLatest([
       this.activatedRoute.queryParamMap,
       this.activatedRoute.data,
@@ -864,8 +864,8 @@ export class UserManagement {
       },
     },
   );
-  protected readonly sortService = inject(SortService);
-  protected modalService = inject(NgbModal);
+  private readonly sortService = inject(SortService);
+  private readonly modalService = inject(NgbModal);
 
   constructor() {
     effect(() => {
@@ -931,10 +931,7 @@ export class UserManagement {
     this.handleNavigation(page, this.sortState());
   }
 
-  protected fillComponentAttributeFromRoute(
-    params: ParamMap,
-    data: Data,
-  ): void {
+  private fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     const page = params.get(PAGE_HEADER);
     this.page.set(+(page ?? 1));
     this.sortState.set(
@@ -944,19 +941,19 @@ export class UserManagement {
     );
   }
 
-  protected fillComponentAttributesFromResponseBody(
+  private fillComponentAttributesFromResponseBody(
     data: IUserManagement[],
   ): IUserManagement[] {
     return data;
   }
 
-  protected fillComponentAttributesFromResponseHeader(
+  private fillComponentAttributesFromResponseHeader(
     headers: HttpHeaders,
   ): void {
     this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
   }
 
-  protected queryBackend(): void {
+  private queryBackend(): void {
     const pageToLoad: number = this.page();
     const queryObject: any = {
       page: pageToLoad - 1,
@@ -966,14 +963,14 @@ export class UserManagement {
     this.userManagementService.userManagementsParams.set(queryObject);
   }
 
-  protected handleNavigation(page: number, sortState: SortState): void {
+  private handleNavigation(page: number, sortState: SortState): void {
     const queryParamsObj = {
       page,
       size: this.itemsPerPage(),
       sort: this.sortService.buildSortParam(sortState),
     };
 
-    this.router.navigate(["./"], {
+    void this.router.navigate(["./"], {
       relativeTo: this.activatedRoute,
       queryParams: queryParamsObj,
     });
@@ -1132,9 +1129,9 @@ const userManagementResolve = (
     return service.find(login).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 404) {
-          router.navigate(["404"]);
+          void router.navigate(["404"]);
         } else {
-          router.navigate(["error"]);
+          void router.navigate(["error"]);
         }
         return EMPTY;
       }),
@@ -2229,10 +2226,12 @@ export class UserManagementUpdate implements OnInit {
   readonly isSaving = signal(false);
   userManagement: IUserManagement | null = null;
 
-  protected userManagementService = inject(UserManagementService);
-  protected userManagementFormService = inject(UserManagementFormService);
-  protected activatedRoute = inject(ActivatedRoute);
-  protected readonly authorityService = inject(AuthorityService);
+  private readonly userManagementService = inject(UserManagementService);
+  private readonly userManagementFormService = inject(
+    UserManagementFormService,
+  );
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly authorityService = inject(AuthorityService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly authorities = computed(() =>
     this.authorityService.authorities().map((authority) => authority.name),
@@ -2273,7 +2272,7 @@ export class UserManagementUpdate implements OnInit {
     }
   }
 
-  protected subscribeToSaveResponse(
+  private subscribeToSaveResponse(
     result: Observable<IUserManagement | null>,
   ): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
@@ -2282,19 +2281,19 @@ export class UserManagementUpdate implements OnInit {
     });
   }
 
-  protected onSaveSuccess(): void {
+  private onSaveSuccess(): void {
     this.previousState();
   }
 
-  protected onSaveError(): void {
+  private onSaveError(): void {
     // Api for inheritance.
   }
 
-  protected onSaveFinalize(): void {
+  private onSaveFinalize(): void {
     this.isSaving.set(false);
   }
 
-  protected updateForm(userManagement: IUserManagement): void {
+  private updateForm(userManagement: IUserManagement): void {
     this.userManagement = userManagement;
     this.userManagementFormService.resetForm(this.editForm, userManagement);
   }

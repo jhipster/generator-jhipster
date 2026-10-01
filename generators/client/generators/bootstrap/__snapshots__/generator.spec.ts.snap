@@ -1067,7 +1067,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
     "resetFakerSeed": Any<Function>,
     "restProperties": Any<Array>,
     "searchEngine": "no",
-    "service": "no",
+    "service": "serviceClass",
     "skipUiGrouping": false,
     "tsKeyType": "number",
     "tsPrimaryKeySamples": Any<Array>,

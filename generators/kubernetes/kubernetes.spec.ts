@@ -872,4 +872,21 @@ describe('generator - Kubernetes', () => {
       runResult.assertFile(expectedFiles.applyScript);
     });
   });
+
+  describe('with a config holding only the type and the applications', () => {
+    const chosenApps = ['01-gateway', '02-mysql'];
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withFiles({ 'kubernetes/.yo-rc.json': { 'generator-jhipster': { deploymentType: 'kubernetes', appsFolders: chosenApps } } });
+    });
+    it('should generate with the defaults, without asking', () => {
+      expect(runResult.askedQuestions).toEqual([]);
+      runResult.assertFile('kubernetes/kubectl-apply.sh');
+    });
+  });
 });

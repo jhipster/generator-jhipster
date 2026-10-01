@@ -45,7 +45,7 @@ export const userRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapsh
         if (isDevMode()) {
           console.error('User does not have any of the required authorities:', authorities);
         }
-        router.navigate(['accessdenied']);
+        void router.navigate(['accessdenied']);
         return false;
       }
 
@@ -53,7 +53,7 @@ export const userRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapsh
 <%_ if (authenticationTypeOauth2) { _%>
       authServerProvider.login();
 <%_ } else { _%>
-      router.navigate(['/login']);
+      void router.navigate(['/login']);
 <%_ } _%>
       return false;
     }),

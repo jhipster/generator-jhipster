@@ -169,28 +169,28 @@ export class <%- componentName %> {
 <%_ if (builtInUserManagement) { _%>
   readonly currentAccount = inject(AccountService).account;
 <%_ } _%>
-  protected readonly <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
+  private readonly <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading = this.<%- entityInstance %>Service.<%- entityInstancePlural %>Resource.isLoading;
-  protected readonly activatedRoute = inject(ActivatedRoute);
-  protected readonly activatedRouteState = toSignal(
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRouteState = toSignal(
     combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       map(([queryParamMap, data]) => ({ queryParamMap, data })),
     ),
     { initialValue: { queryParamMap: this.activatedRoute.snapshot.queryParamMap, data: this.activatedRoute.snapshot.data } },
   );
-  protected readonly sortService = inject(SortService);
+  private readonly sortService = inject(SortService);
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-  protected readonly filterOptions = toSignal(this.filters.filterChanges);
+  private readonly filterOptions = toSignal(this.filters.filterChanges);
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
-  protected parseLinks = inject(ParseLinks);
+  private readonly parseLinks = inject(ParseLinks);
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
-  protected dataUtils = inject(DataUtils);
+  private readonly dataUtils = inject(DataUtils);
 <%_ } _%>
 <%_ if (!readOnly) { _%>
-  protected modalService = inject(NgbModal);
+  private readonly modalService = inject(NgbModal);
 <%_ } _%>
 
   constructor() {
@@ -317,7 +317,7 @@ export class <%- componentName %> {
     }
 
 <%_ } _%>
-    protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    private fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
 <%_ if (paginationPagination) { _%>
       const page = params.get(PAGE_HEADER);
       this.page.set(+ (page ?? 1));
@@ -340,13 +340,13 @@ export class <%- componentName %> {
     }
 
 <%_ if (paginationNo) { _%>
-    protected refineData(data: I<%- entityAngularName %>[]): I<%- entityAngularName %>[] {
+    private refineData(data: I<%- entityAngularName %>[]): I<%- entityAngularName %>[] {
       const { predicate, order } = this.sortState();
       return predicate && order ? data.sort(this.sortService.startSort({ predicate, order })) : data;
     }
 
 <%_ } _%>
-  protected fillComponentAttributesFromResponseBody(data: I<%- entityAngularName %>[]<% if (paginationInfiniteScroll) { %>, currentValue: I<%- entityAngularName %>[]<% } %>): I<%- entityAngularName %>[] {
+  private fillComponentAttributesFromResponseBody(data: I<%- entityAngularName %>[]<% if (paginationInfiniteScroll) { %>, currentValue: I<%- entityAngularName %>[]<% } %>): I<%- entityAngularName %>[] {
 <%_ if (paginationInfiniteScroll) { _%>
     const <%- entityInstancePlural %>New = [...currentValue];
     for (const d of data) {
@@ -367,7 +367,7 @@ export class <%- componentName %> {
   }
 
 <%_ if (!paginationNo) { _%>
-    protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
+    private fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
   <%_ if (paginationPagination) { _%>
       this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
   <%_ } else if (paginationInfiniteScroll) { _%>
@@ -381,7 +381,7 @@ export class <%- componentName %> {
     }
 
 <%_ } _%>
-    protected queryBackend(): void {
+    private queryBackend(): void {
 <%_ if (paginationPagination) { _%>
       const pageToLoad: number = this.page();
 <%_ } _%>
@@ -418,7 +418,7 @@ export class <%- componentName %> {
       this.<%- entityInstance %>Service.<%- entityInstancePlural %>Params.set(queryObject);
     }
 
-    protected handleNavigation(<%- paginationPagination ? 'page: number, ' : '' %>sortState: SortState<%- jpaMetamodelFiltering && paginationPagination ? ', filterOptions?: IFilterOption[]' : '' %><%- searchEngineAny ? ', currentSearch?: string' : '' %>): void {
+    private handleNavigation(<%- paginationPagination ? 'page: number, ' : '' %>sortState: SortState<%- jpaMetamodelFiltering && paginationPagination ? ', filterOptions?: IFilterOption[]' : '' %><%- searchEngineAny ? ', currentSearch?: string' : '' %>): void {
 <%_ if (paginationInfiniteScroll) { _%>
       this.links.set({});
 
@@ -442,7 +442,7 @@ export class <%- componentName %> {
       }
 <%_ } _%>
 
-      this.router.navigate(['./'], {
+      void this.router.navigate(['./'], {
         relativeTo: this.activatedRoute,
         queryParams: queryParamsObj,
       });
