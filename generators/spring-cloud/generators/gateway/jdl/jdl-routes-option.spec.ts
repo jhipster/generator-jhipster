@@ -68,7 +68,7 @@ describe('generators - spring-cloud:gateway - jdl', () => {
 
     before(() => {
       const importer = createImporterFromContent(
-        `application { config { ${optionName} ["blog:blog_host:123", "store:store_host", "notification"] } }`,
+        `application { config { ${optionName} ["blog:blog_host:123", "store:store_host", "notification", "cart:c:8080"] } }`,
       );
       state = importer.import();
     });
@@ -78,6 +78,7 @@ describe('generators - spring-cloud:gateway - jdl', () => {
         'blog:blog_host:123',
         'store:store_host',
         'notification',
+        'cart:c:8080',
       ]);
     });
   });
