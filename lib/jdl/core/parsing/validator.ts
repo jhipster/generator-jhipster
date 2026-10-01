@@ -138,7 +138,7 @@ export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDL
         case 'quotedList':
           if (!('name' in actual) || actual.name !== 'quotedList') {
             this.errors.push({
-              message: `An array of names is expected, but found: "${getFirstToken(actual).image}"`,
+              message: `An array of strings is expected, but found: "${getFirstToken(actual).image}"`,
               token: getFirstToken(actual),
             });
             return false;

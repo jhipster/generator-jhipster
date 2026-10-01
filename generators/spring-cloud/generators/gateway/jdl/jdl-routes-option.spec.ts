@@ -53,6 +53,11 @@ describe('generators - spring-cloud:gateway - jdl', () => {
       /The routes property name must match:/,
     );
   });
+  it('should not accept names', () => {
+    expect(() => createImporterFromContent(`application { config { ${optionName} [blog] } }`)).toThrow(
+      /^An array of strings is expected, but found: "\["/,
+    );
+  });
   it('should not accept non numeric port', () => {
     expect(() => createImporterFromContent(`application { config { ${optionName} ["foo:foo_host:1a"] } }`)).toThrow(
       /The routes property name must match:/,
