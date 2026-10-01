@@ -74,8 +74,6 @@ jobs:
       !contains(github.event.head_commit.message, '[vue]') &&
       !contains(github.event.pull_request.title, '[react]') &&
       !contains(github.event.pull_request.title, '[vue]') &&
-      !contains(github.event.head_commit.message, '[ci skip]') &&
-      !contains(github.event.head_commit.message, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
       github.event.action != 'closed' &&
