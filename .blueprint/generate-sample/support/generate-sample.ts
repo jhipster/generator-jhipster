@@ -52,12 +52,10 @@ export const generateSample = async (
     console.log(`Sample ${sampleName} was not found`);
   }
 
-  if (profile) {
-    process.env.JHI_PROFILE = profile;
-  }
-  if (war) {
-    process.env.JHI_WAR = '1';
-  }
+  const generatorOptions = {
+    ...(profile ? { defaultEnvironment: profile } : {}),
+    ...(war ? { defaultPackaging: 'war' } : {}),
+  };
 
   if (entitiesSample) {
     copyEntitySamples(memFs, destProjectFolder, entitiesSample);
@@ -80,6 +78,7 @@ export const generateSample = async (
       generator: 'jdl',
       jdlFiles: true,
       sample,
+      generatorOptions,
     };
   }
 
@@ -92,5 +91,6 @@ export const generateSample = async (
     generator: 'app',
     jdlFiles: jdlEntityNames.length > 0,
     sample,
+    generatorOptions,
   };
 };
