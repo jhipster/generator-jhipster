@@ -51,6 +51,12 @@ describe('resolver - generator dependencies', () => {
       expect(dependencies.find(({ namespace }) => namespace === 'java')?.command?.configs).toBeTruthy();
     });
 
+    it('should resolve once a generator requested without the prefix and by its namespace', () => {
+      expect(namespaces(resolve(['java', 'jhipster:java']))).toEqual(namespaces(resolve(['java'])));
+      expect(namespaces(resolve(['jhipster:java', 'java']))[0]).toBe('jhipster:java');
+      expect(namespaces(resolve(['jhipster:java', 'java'])).filter(namespace => /^(jhipster:)?java$/.test(namespace))).toHaveLength(1);
+    });
+
     it('should report missing generators', () => {
       const missing: string[] = [];
       resolveGeneratorDependencies(['unknown'], {

@@ -53,10 +53,12 @@ export const resolveGeneratorDependencies = (
   { getGeneratorMeta, blueprintNamespaces = [], namespacePrefix = 'jhipster', onMissing }: ResolveGeneratorDependenciesOptions,
 ): GeneratorDependency[] => {
   const dependencies: GeneratorDependency[] = [];
-  const isRegistered = (namespace: string) => dependencies.some(dependency => dependency.namespace === namespace);
+  // A generator is requested without the prefix (`java`) or by its namespace (`jhipster:java`): the same generator.
+  const toNamespace = (namespace: string) => (namespace.includes(':') ? namespace : `${namespacePrefix}:${namespace}`);
+  const isRegistered = (namespace: string) => dependencies.some(dependency => toNamespace(dependency.namespace) === toNamespace(namespace));
 
   const register = ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
-    const meta = getGeneratorMeta(namespace.includes(':') ? namespace : `${namespacePrefix}:${namespace}`);
+    const meta = getGeneratorMeta(toNamespace(namespace));
     if (!meta) {
       if (!blueprintNamespace) onMissing?.(namespace);
       return undefined;

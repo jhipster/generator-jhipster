@@ -18,7 +18,7 @@
  */
 import { kebabCase } from 'lodash-es';
 
-import { type GeneratorsStore, lookupGeneratorCommands } from '../resolver/generator-commands.ts';
+import { type GeneratorsStore, lookupGeneratorCommands, toCommandNamespace } from '../resolver/generator-commands.ts';
 import type { GeneratorDependency } from '../resolver/generator-dependencies.ts';
 
 import { convertConfigToOption, extractArgumentsFromConfigs } from './converter.ts';
@@ -125,21 +125,24 @@ export const describeCommand = ({
   usage?: string;
   dependencies: GeneratorDependency[];
 }): CommandDescription => {
-  const rootCommand = dependencies.find(dependency => dependency.namespace === namespace)?.command;
+  // A dependency is named as it is imported, with the prefix for a nested generator (`jhipster:spring-boot:cache`) and
+  // without it for the others (`spring-boot`): the generators are described under the name the cli gives them.
+  const commandNamespace = toCommandNamespace(namespace);
+  const rootCommand = dependencies.find(dependency => toCommandNamespace(dependency.namespace) === commandNamespace)?.command;
   const configs = new Map<string, ConfigDescription>();
   for (const dependency of dependencies) {
     for (const [name, config] of Object.entries(dependency.command?.configs ?? {})) {
       // The owning command asks the prompt; keep the position of the last declaration.
       configs.delete(name);
-      configs.set(name, describeConfig(name, config, dependency.namespace, dependency.blueprintNamespace));
+      configs.set(name, describeConfig(name, config, toCommandNamespace(dependency.namespace), dependency.blueprintNamespace));
     }
   }
   const commandArguments = rootCommand?.arguments ?? extractArgumentsFromConfigs(rootCommand?.configs);
   return {
-    namespace,
+    namespace: commandNamespace,
     description,
     usage,
-    dependencies: dependencies.map(dependency => dependency.namespace),
+    dependencies: dependencies.map(dependency => toCommandNamespace(dependency.namespace)),
     arguments: Object.entries(commandArguments).map(([name, argument]) => ({
       name,
       description: argument.description,
