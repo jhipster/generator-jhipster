@@ -47,7 +47,7 @@
       </thead>
 
       <tbody>
-        @for (logger of filteredAndOrderedLoggers(); track $index) {
+        @for (logger of filteredAndOrderedLoggers(); track logger.name) {
           <tr>
             <td>
               <small>{{ logger.name | slice: 0 : 140 }}</small>
