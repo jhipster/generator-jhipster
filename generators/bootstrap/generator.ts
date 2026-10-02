@@ -363,6 +363,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
             prettierProperties: true,
             extensions: this.prettierExtensions.join(','),
             prettierOptions: this.prettierOptions,
+            // Export and defer don't write the prettier config files to disk.
+            configFromMemFs: !diskMode,
           }),
         );
       }

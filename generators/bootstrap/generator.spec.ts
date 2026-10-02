@@ -173,6 +173,61 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('prettier config generated in the same run', () => {
+    const unformatted = 'function answer() {\nreturn 42;\n}\n';
+    const formattedWithTabWidth2 = 'function answer() {\n  return 42;\n}\n';
+    const formattedWithTabWidth4 = 'function answer() {\n    return 42;\n}\n';
+    // tabWidth 4 only applies to ts files, through an override.
+    const prettierConfig = "tabWidth: 2\noverrides:\n  - files: '*.ts'\n    options:\n      tabWidth: 4\n";
+
+    class PrettierConfigGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('.prettierrc', prettierConfig);
+            this.writeDestination('src/file.ts', unformatted);
+            this.writeDestination('src/file.js', unformatted);
+          },
+        });
+      }
+    }
+
+    describe('with exportApplication', () => {
+      before(async () => {
+        await basicHelpers.run(PrettierConfigGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+      });
+
+      it('formats with the generated prettier config and its overrides, which are not on disk', () => {
+        const archive = unzipSync(readFileSync(join(result.cwd, 'export-application.zip')));
+        expect(Buffer.from(archive['src/file.ts']).toString('utf8')).toBe(formattedWithTabWidth4);
+        expect(Buffer.from(archive['src/file.js']).toString('utf8')).toBe(formattedWithTabWidth2);
+      });
+    });
+
+    describe('with deferCommit', () => {
+      before(async () => {
+        await basicHelpers.run(PrettierConfigGenerator).withOptions({ deferCommit: true }).withJHipsterGenerators();
+      });
+
+      it('formats with the generated prettier config and its overrides, which are not on disk', () => {
+        const snapshot = result.getSnapshot(file => file.path.includes('file.'));
+        expect(snapshot['src/file.ts'].contents).toBe(formattedWithTabWidth4);
+        expect(snapshot['src/file.js'].contents).toBe(formattedWithTabWidth2);
+      });
+    });
+
+    describe('committing to disk', () => {
+      before(async () => {
+        await basicHelpers.run(PrettierConfigGenerator).withJHipsterGenerators();
+      });
+
+      it('formats with the generated prettier config and its overrides', () => {
+        result.assertEqualsFileContent('src/file.ts', formattedWithTabWidth4);
+        result.assertEqualsFileContent('src/file.js', formattedWithTabWidth2);
+      });
+    });
+  });
+
   describe('exportApplication with a registered path outside of the destination root', () => {
     class SiblingGenerator extends BaseGenerator {
       get [BaseGenerator.WRITING]() {
