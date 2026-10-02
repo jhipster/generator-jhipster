@@ -137,7 +137,7 @@ export class UserManagementDeleteDialog {
     "contents": "<div class="d-flex justify-content-center">
   <div class="col-8">
     @if (userManagement(); as userManagementRef) {
-    <div>
+    <div class="row">
       <h2 data-cy="userManagementDetailsHeading"><span>User</span></h2>
 
       <hr />
@@ -207,6 +207,9 @@ export class UserManagementDeleteDialog {
         <fa-icon icon="arrow-left" />&nbsp;<span>Back</span>
       </button>
 
+      <button type="button" (click)="delete()" class="btn btn-danger">
+        <fa-icon icon="trash-alt" />&nbsp;<span>Delete</span>
+      </button>
       <button
         type="button"
         [routerLink]="['/user-management', userManagementRef.login, 'edit']"
@@ -227,7 +230,11 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter, withComponentInputBinding } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
-import { faArrowLeft, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { of } from "rxjs";
 
 import { UserManagementDetail } from "./user-management-detail";
@@ -259,6 +266,7 @@ describe("UserManagement Management Detail Component", () => {
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
+    library.addIcons(faTrashAlt);
   });
 
   beforeEach(() => {
@@ -290,9 +298,13 @@ describe("UserManagement Management Detail Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
-    "contents": "import { Component, input } from "@angular/core";
+    "contents": "import { Component, inject, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
-
+import { Router } from "@angular/router";
+import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { filter, tap } from "rxjs";
+import { ITEM_DELETED_EVENT } from "app/config";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { Alert, AlertError } from "app/shared/alert";
 import {
@@ -314,10 +326,27 @@ import { IUserManagement } from "../user-management.model";
   ],
 })
 export class UserManagementDetail {
-  readonly userManagement = input<IUserManagement | null>(null);
+  readonly userManagement = input<IUserManagement>();
+
+  protected modalService = inject(NgbModal);
+  protected router = inject(Router);
 
   previousState(): void {
     globalThis.history.back();
+  }
+
+  delete(): void {
+    const modalRef = this.modalService.open(UserManagementDeleteDialog, {
+      size: "lg",
+      backdrop: "static",
+    });
+    modalRef.componentInstance.userManagement = this.userManagement();
+    modalRef.closed
+      .pipe(
+        filter((reason) => reason === ITEM_DELETED_EVENT),
+        tap(() => void this.router.navigate(["/user-management"])),
+      )
+      .subscribe();
   }
 }
 ",
