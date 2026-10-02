@@ -16,6 +16,170 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * The development KeyStore of a generated application, built in memory with `node:crypto` alone.
+ *
+ * ## What it is for
+ *
+ * A generated Spring Boot application has a `tls` profile (`application-tls.yml`) that serves HTTPS from
+ * `config/tls/keystore.p12`, a PKCS#12 KeyStore with the well-known password `password`, holding a self-signed
+ * certificate under the `selfsigned` alias (`server.ssl.key-alias`). It is a development convenience: the file is
+ * committed with the application and its password is public, so it gives a working TLS endpoint, not secrecy.
+ * Production deployments provide their own KeyStore.
+ *
+ * `keytool -genkey` used to create that file, which needs a JDK when generating, can only write to the disk and
+ * takes about half a second. This module creates an equivalent file in about 50 ms, without a JDK, a child process, a
+ * temporary file or a dependency.
+ *
+ * ## What is delegated to OpenSSL (through node), and what is implemented here
+ *
+ * Every cryptographic operation is done by `node:crypto`, that is, by the OpenSSL node ships:
+ *
+ * - the RSA 2048 key pair: `generateKeyPairSync`;
+ * - the certificate signature, RSASSA-PKCS1-v1_5 with SHA-256: `sign`;
+ * - the encryption of the private key: `privateKey.export` with a cipher and a passphrase, which returns a complete
+ *   `EncryptedPrivateKeyInfo` (PBES2: PBKDF2 with HMAC-SHA256, a random salt, 2048 iterations, then AES-256-CBC with
+ *   a random initialization vector; salt, iterations and vector are chosen by OpenSSL);
+ * - the hashes and the MAC: `createHash`, `createHmac`;
+ * - the random values: `randomBytes`.
+ *
+ * Implemented here, because node has no API for them:
+ *
+ * - a DER encoder (ITU-T X.690) for the few ASN.1 types the structures need. It only encodes: the module never
+ *   parses DER, a KeyStore, or any other input. Definite lengths, tags below 31, and positive integers whose first
+ *   byte is below 0x80, anything else is refused with an error;
+ * - the X.509 certificate structure (RFC 5280) around the public key and the signature node provides;
+ * - the PKCS#12 container (RFC 7292) around the certificate and the encrypted key;
+ * - the derivation of the MAC key from the password (RFC 7292, appendix B.2), see `pkcs12MacKey`. It is the only
+ *   cryptographic algorithm written here, and it is made of SHA-256 calls only.
+ *
+ * ## The file, element by element
+ *
+ * ```
+ * PFX                                        RFC 7292, section 4
+ * ├─ version                                 3
+ * ├─ authSafe: ContentInfo, type data        the contents, in an OCTET STRING:
+ * │  └─ AuthenticatedSafe
+ * │     ├─ ContentInfo, type data            not encrypted: a certificate is public
+ * │     │  └─ SafeContents
+ * │     │     └─ SafeBag, type certBag       attributes: friendlyName, localKeyId
+ * │     │        └─ CertBag, x509Certificate
+ * │     │           └─ Certificate           RFC 5280, see below
+ * │     └─ ContentInfo, type data
+ * │        └─ SafeContents
+ * │           └─ SafeBag, type pkcs8ShroudedKeyBag   attributes: friendlyName, localKeyId
+ * │              └─ EncryptedPrivateKeyInfo  RFC 5958, PBES2 of RFC 8018, from node
+ * └─ macData
+ *    ├─ mac: DigestInfo                      SHA-256, the HMAC of the AuthenticatedSafe
+ *    ├─ macSalt                              20 random bytes
+ *    └─ iterations                           10000
+ * ```
+ *
+ * The certificate:
+ *
+ * ```
+ * Certificate
+ * ├─ tbsCertificate
+ * │  ├─ version                              v3 (the value 2)
+ * │  ├─ serialNumber                         the byte 01 then 8 random bytes: positive, 64 random bits
+ * │  ├─ signature                            sha256WithRSAEncryption
+ * │  ├─ issuer                               the same name as the subject: self-signed
+ * │  ├─ validity                             now, to now + 99999 days
+ * │  ├─ subject                              O=<packageName>, OU=Development, CN=Java Hipster
+ * │  └─ subjectPublicKeyInfo                 from node
+ * ├─ signatureAlgorithm                      sha256WithRSAEncryption
+ * └─ signatureValue                          from node, over the DER of tbsCertificate
+ * ```
+ *
+ * - The name is encoded most significant attribute first, one attribute per relative distinguished name, as
+ *   UTF8String. Java prints it in the reverse order: `CN=Java Hipster, OU=Development, O=<packageName>`.
+ * - RFC 5280 requires the validity dates through 2049 as UTCTime and from 2050 on as GeneralizedTime, both without
+ *   fractional seconds. 99999 days end around the year 2300, so the two dates use different types.
+ * - There are no extensions. Without basic constraints, RFC 5280 does not let a version 3 certificate be used as a
+ *   certificate authority.
+ *
+ * The bag attributes are what makes Java and OpenSSL see one entry: both bags carry the same `friendlyName`, the
+ * alias, as a BMPString, and the same `localKeyId`. The `localKeyId` is the SHA-1 of the certificate, as OpenSSL
+ * writes it; it is an identifier that pairs the key with its certificate, not a security function.
+ *
+ * ## The integrity of the file
+ *
+ * The MAC is an HMAC-SHA256 of the DER of the AuthenticatedSafe. Its key is derived from the password with the
+ * PKCS#12 key derivation function, 10000 iterations and the salt stored beside the MAC. A reader derives the same key
+ * from the password it is given and compares the MAC: a wrong password and a modified file fail the same way.
+ *
+ * ## Compared to the KeyStore keytool creates
+ *
+ * Measured on a KeyStore created by the command the generator used to run, with the keytool of JDK 17, both files read
+ * with `keytool -list -v` and `openssl pkcs12 -info`:
+ *
+ * ```
+ * keytool -genkey -noprompt -storetype PKCS12 -keyalg RSA -keysize 2048 -alias selfsigned -validity 99999 \
+ *   -keystore keystore.p12 -storepass password -keypass password \
+ *   -dname "CN=Java Hipster, OU=Development, O=<packageName>, L=, ST=, C="
+ * ```
+ *
+ * What is the same:
+ *
+ * |                       | keytool and this module                                        |
+ * | --------------------- | -------------------------------------------------------------- |
+ * | Format                | PKCS#12, one private key entry with a chain of one certificate |
+ * | Alias, password       | `selfsigned`, `password`                                       |
+ * | Key                   | RSA, 2048 bits, public exponent 65537                          |
+ * | Certificate           | X.509 version 3, self-signed, SHA-256 with RSA                 |
+ * | Validity              | 99999 days, to the year 2300                                   |
+ * | Key encryption scheme | PBES2: PBKDF2 with HMAC-SHA256, AES-256-CBC                    |
+ * | Integrity             | HMAC-SHA256, 10000 iterations, 20 bytes salt                   |
+ * | Host name             | none: no subjectAltName, and the common name is not a host     |
+ *
+ * The last line is why a browser warns about the certificate of the `tls` profile, with either KeyStore.
+ *
+ * What differs, and the consequence of each difference:
+ *
+ * | | keytool | this module | Consequence |
+ * | --- | --- | --- | --- |
+ * | Key encryption iterations | 10000 | 2048 | A guess of the password costs less work. |
+ * | Certificate bag | encrypted | not encrypted | The certificate is readable without the password. |
+ * | Subject and issuer | ends with `L=, ST=, C=` | `CN`, `OU`, `O` only | The name prints shorter. |
+ * | SubjectKeyIdentifier | present | absent | None for a certificate that issues no other. |
+ * | Serial number | 64 random bits | `01`, then 64 random bits | None: positive and unique in both. |
+ * | `localKeyId` | the text `Time <milliseconds>` | SHA-1 of the certificate | None: an opaque identifier. |
+ *
+ * - Key encryption iterations. PBKDF2 is repeated to make each guess of the password slower. 2048 is the default of
+ *   OpenSSL, and `privateKey.export` has no option to change it. Here the password is `password` and is written in
+ *   `application-tls.yml`, so there is nothing to guess and nothing is lost. It would be a weakness for a KeyStore
+ *   with a secret password: do not use this module for one without encrypting the key with more iterations, which
+ *   means building the PBES2 structure here from `pbkdf2Sync` and `createCipheriv`.
+ * - Certificate bag. keytool encrypts the certificate with the password too, so its subject, which holds the package
+ *   name, and its public key cannot be read from the file without it. A certificate is public by purpose: the
+ *   server sends it to every client that connects. Leaving the bag in clear exposes nothing more, and keeps one more
+ *   encrypted structure out of this module.
+ * - Subject and issuer. keytool was given empty locality, state and country, and wrote them as empty attributes.
+ *   They are left out: the certificate reads `CN=Java Hipster, OU=Development, O=<packageName>`. Nothing in the
+ *   generated application reads the name; something that compared it to the exact text keytool printed would differ.
+ * - SubjectKeyIdentifier. The extension identifies the key of a certificate so that the certificates it issued can
+ *   point to it, which helps a client to build a chain. This certificate is its own issuer and issues nothing, there
+ *   is no chain to build. `keytool -list -v` prints no `Extensions` block for it.
+ * - Serial number and `localKeyId`. Different values of the same kind, read by nothing.
+ *
+ * Not about the file: keytool needed a JDK when generating and about half a second, wrote to the disk only, and when
+ * it was missing the KeyStore was not created, with a warning. This module always creates it.
+ *
+ * ## How it is checked
+ *
+ * `key-store-node-crypto.spec.ts` reads the result back with a DER reader of its own and asserts the structure, the
+ * algorithms (from object identifiers written in the spec, not computed by this encoder), that the key, the serial
+ * number, the salts and the initialization vector change at each call, and loads the file with two independent
+ * implementations: the OpenSSL of node (`tls.createSecureContext`), and Java through `keytool -list`, where a JDK is
+ * installed. Both verify the MAC, so they check `pkcs12MacKey` against their own implementation.
+ *
+ * ## When changing it
+ *
+ * - Keep every cryptographic operation in `node:crypto`. Do not implement a cipher, a signature or a random source.
+ * - DER requires the elements of a SET OF in the order of their encoding: the two bag attributes are written in it.
+ * - `integer` only encodes the positive values described on it and throws on the others, `time` only whole seconds.
+ * - Run the spec with a JDK: Java is the reader that matters, and the keytool tests are skipped without one.
+ */
 import { createHash, createHmac, generateKeyPairSync, randomBytes, sign } from 'node:crypto';
 
 const KEY_STORE_ALIAS = 'selfsigned';
