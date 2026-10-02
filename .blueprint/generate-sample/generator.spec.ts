@@ -20,6 +20,8 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
+import { defaultGithubEnvironment } from '../../lib/ci/index.ts';
+
 import Generator from './generator.ts';
 
 import { shouldSupportFeatures } from '#test-support';
@@ -44,6 +46,24 @@ describe(`generator - ${generator}`, () => {
 
     it('should match matrix value', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
+  describe('the secrets of a sample', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withArguments('ng-default')
+        .withOptions({
+          sampleOnly: true,
+        });
+    });
+
+    it('should be fixed for every generator of the sample, so it generates the same code each time', () => {
+      expect(runResult.env.sharedOptions).toMatchObject({
+        jwtSecretKey: process.env.JHI_JWT_SECRET_KEY ?? defaultGithubEnvironment['jwt-secret-key'],
+        dbRandomPassword: 'sample-db-password',
+      });
     });
   });
 
