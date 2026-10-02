@@ -23,7 +23,7 @@ import type { StoreGeneratorMeta } from 'yeoman-environment';
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
 import { lookupGeneratorCommands } from './generator-commands.ts';
-import { type GeneratorDependency, resolveGeneratorDependencies } from './generator-dependencies.ts';
+import { type GeneratorDependency, resolveCommandDependencies, resolveGeneratorDependencies } from './generator-dependencies.ts';
 
 /** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
 const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
@@ -51,6 +51,12 @@ describe('resolver - generator dependencies', () => {
       expect(dependencies.find(({ namespace }) => namespace === 'java')?.command?.configs).toBeTruthy();
     });
 
+    it('should resolve once a generator requested without the prefix and by its namespace', () => {
+      expect(namespaces(resolve(['java', 'jhipster:java']))).toEqual(namespaces(resolve(['java'])));
+      expect(namespaces(resolve(['jhipster:java', 'java']))[0]).toBe('jhipster:java');
+      expect(namespaces(resolve(['jhipster:java', 'java'])).filter(namespace => /^(jhipster:)?java$/.test(namespace))).toHaveLength(1);
+    });
+
     it('should report missing generators', () => {
       const missing: string[] = [];
       resolveGeneratorDependencies(['unknown'], {
@@ -71,6 +77,32 @@ describe('resolver - generator dependencies', () => {
 
       const overriding = resolve(['git'], { 'jhipster-foo:git': { ...blueprint, override: true } }, ['jhipster-foo']);
       expect(namespaces(overriding)).toEqual(['jhipster-foo:git']);
+    });
+  });
+
+  describe('resolveCommandDependencies', () => {
+    const resolveCommand = (command: Parameters<typeof resolveCommandDependencies>[0]) =>
+      namespaces(resolveCommandDependencies(command, { getGeneratorMeta: metaLookup() }));
+
+    it('should resolve the bootstrap generator, then the generator of the command with its imports', () => {
+      expect(resolveCommand({ command: 'spring-boot' })).toEqual(namespaces(resolve(['bootstrap', 'spring-boot'])));
+    });
+
+    it('should add the generator the jdl command runs, app by default', () => {
+      expect(resolveCommand({ command: 'jdl' })).toEqual(namespaces(resolve(['bootstrap', 'jdl', 'app'])));
+      expect(resolveCommand({ command: 'jdl' })).toEqual(expect.arrayContaining(['jdl', 'app', 'spring-boot']));
+      expect(resolveCommand({ command: 'jdl', entrypointGenerator: 'spring-boot' })).toEqual(
+        namespaces(resolve(['bootstrap', 'jdl', 'spring-boot'])),
+      );
+    });
+
+    it('should resolve the generator of a blueprint command', () => {
+      const blueprint = { configs: { fooOption: { cli: { type: Boolean }, scope: 'storage' } }, import: [] } as const;
+      const dependencies = resolveCommandDependencies(
+        { command: 'foo', generator: 'jhipster-foo:foo' },
+        { getGeneratorMeta: metaLookup({ 'jhipster-foo:foo': blueprint }) },
+      );
+      expect(namespaces(dependencies).at(-1)).toBe('jhipster-foo:foo');
     });
   });
 

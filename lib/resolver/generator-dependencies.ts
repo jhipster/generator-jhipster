@@ -53,10 +53,12 @@ export const resolveGeneratorDependencies = (
   { getGeneratorMeta, blueprintNamespaces = [], namespacePrefix = 'jhipster', onMissing }: ResolveGeneratorDependenciesOptions,
 ): GeneratorDependency[] => {
   const dependencies: GeneratorDependency[] = [];
-  const isRegistered = (namespace: string) => dependencies.some(dependency => dependency.namespace === namespace);
+  // A generator is requested without the prefix (`java`) or by its namespace (`jhipster:java`): the same generator.
+  const toNamespace = (namespace: string) => (namespace.includes(':') ? namespace : `${namespacePrefix}:${namespace}`);
+  const isRegistered = (namespace: string) => dependencies.some(dependency => toNamespace(dependency.namespace) === toNamespace(namespace));
 
   const register = ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
-    const meta = getGeneratorMeta(namespace.includes(':') ? namespace : `${namespacePrefix}:${namespace}`);
+    const meta = getGeneratorMeta(toNamespace(namespace));
     if (!meta) {
       if (!blueprintNamespace) onMissing?.(namespace);
       return undefined;
@@ -97,3 +99,15 @@ export const resolveGeneratorDependencies = (
   }
   return dependencies;
 };
+
+/**
+ * The generators contributing options to a cli command: the bootstrap generator, the generator of the command with its
+ * imports and, for the `jdl` command, the generator it runs with its options (the entrypoint generator, `app` by
+ * default). What the cli registers the options of, and what `jhipster describe` describes.
+ */
+export const resolveCommandDependencies = (
+  { command, generator = command, entrypointGenerator = 'app' }: { command: string; generator?: string; entrypointGenerator?: string },
+  options: ResolveGeneratorDependenciesOptions,
+): GeneratorDependency[] =>
+  // The bootstrap options may be dropped once every generator depends on bootstrap.
+  resolveGeneratorDependencies(['bootstrap', generator, ...(command === 'jdl' ? [entrypointGenerator] : [])], options);

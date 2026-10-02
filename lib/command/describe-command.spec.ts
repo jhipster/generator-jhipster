@@ -58,7 +58,54 @@ describe('command - describe command', () => {
         derivedProperties: ['messageBrokerKafka', 'messageBrokerPulsar', 'messageBrokerNo', 'messageBrokerAny'],
         jdl: true,
       });
-      expect(command.configs.find(({ name }) => name === 'buildTool')?.owner).toBe('jhipster:java-simple-application:build-tool');
+      expect(command.configs.find(({ name }) => name === 'buildTool')?.owner).toBe('java-simple-application:build-tool');
+    });
+
+    it('should give the flags the cli registers, and none for a config that is not an option', () => {
+      const { configs } = describeCommand({ namespace: 'app', dependencies: resolve(['bootstrap', 'app']) });
+      const cliOption = (config: string) => configs.find(({ name }) => name === config)?.cliOption;
+      expect(cliOption('baseName')).toBe('--base-name <value>');
+      expect(cliOption('skipClient')).toBe('--skip-client');
+      // A list of values.
+      expect(cliOption('testFrameworks')).toBe('--test-frameworks <value...>');
+      // Internal, and only set by the jdl: the cli registers no option.
+      expect(configs.find(({ name }) => name === 'validateBaseName')).toMatchObject({ type: 'Function', cliOption: undefined });
+      expect(configs.find(({ name }) => name === 'jhipsterVersion')).toMatchObject({ cliOption: undefined });
+    });
+
+    it('should name the generators as the cli does, without the jhipster prefix', () => {
+      // A nested generator is imported by its namespace, `jhipster:spring-boot:cache`.
+      const dependencies = resolve(['bootstrap', 'spring-boot']);
+      expect(dependencies.map(({ namespace }) => namespace)).toContain('jhipster:spring-boot:cache');
+
+      const command = describeCommand({ namespace: 'spring-boot', dependencies });
+      expect(command.dependencies).toEqual(expect.arrayContaining(['spring-boot', 'java', 'spring-boot:cache', 'java:domain']));
+      const names = [...command.dependencies, ...command.configs.map(({ owner }) => owner)];
+      expect(names.filter(name => name.startsWith('jhipster:'))).toEqual([]);
+    });
+
+    it('should describe a generator given by its namespace under its cli name', () => {
+      const command = describeCommand({ namespace: 'jhipster:spring-boot:cache', dependencies: resolve(['jhipster:spring-boot:cache']) });
+      expect(command.namespace).toBe('spring-boot:cache');
+      expect(command.dependencies[0]).toBe('spring-boot:cache');
+      // The arguments and configs of the command itself are found.
+      expect(command.configs.find(({ name }) => name === 'cacheProvider')?.owner).toBe('spring-boot:cache');
+    });
+
+    it('should keep the namespace of the generators of a blueprint', () => {
+      const blueprint = {
+        configs: { fooOption: { cli: { type: Boolean }, scope: 'storage' } },
+        import: [],
+      } as const satisfies JHipsterCommandDefinition;
+      const command = describeCommand({
+        namespace: 'git',
+        dependencies: resolve(['git'], { 'jhipster-foo:git': blueprint }, ['jhipster-foo']),
+      });
+      expect(command.dependencies).toEqual(['jhipster-foo:git', 'git']);
+      expect(command.configs.find(({ name }) => name === 'fooOption')).toMatchObject({
+        owner: 'jhipster-foo:git',
+        blueprint: 'jhipster-foo',
+      });
     });
 
     it('should describe the application configuration through the imports', () => {

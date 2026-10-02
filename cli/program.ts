@@ -32,7 +32,7 @@ import type { JDLDefinitions } from '../lib/jdl/core/parsing/types/parsing.ts';
 import { getDefaultJDLDefinitions } from '../lib/jdl-config/jdl-runtime.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
 import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';
-import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
+import { resolveCommandDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
@@ -43,8 +43,6 @@ import type { CliCommand } from './types.ts';
 import { CLI_NAME, done, getCommand, logger } from './utils.ts';
 
 const GENERATOR_APP = 'app';
-const GENERATOR_JDL = 'jdl';
-const GENERATOR_BOOTSTRAP = 'bootstrap';
 
 const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
@@ -270,16 +268,14 @@ export const buildCommands = ({
 
           await addCommandRootGeneratorOptions(command, generatorMeta);
 
-          // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
-          const bootstrapGen = [GENERATOR_BOOTSTRAP, generator];
-          if (cmdName === GENERATOR_JDL) {
-            bootstrapGen.push(entrypointGenerator ?? GENERATOR_APP);
-          }
-          const allDependencies = resolveGeneratorDependencies(bootstrapGen, {
-            getGeneratorMeta: namespace => env.getGeneratorMeta(namespace),
-            blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
-            onMissing: namespace => logger.warn(`Generator ${namespace} not found.`),
-          });
+          const allDependencies = resolveCommandDependencies(
+            { command: cmdName, generator, entrypointGenerator },
+            {
+              getGeneratorMeta: namespace => env.getGeneratorMeta(namespace),
+              blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
+              onMissing: namespace => logger.warn(`Generator ${namespace} not found.`),
+            },
+          );
           for (const { meta: generatorMeta, blueprintNamespace } of allDependencies) {
             if (blueprintNamespace) {
               const blueprintOptionDescription = chalk.yellow(` (blueprint option: ${blueprintNamespace.replace(/^jhipster-/, '')})`);

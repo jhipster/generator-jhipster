@@ -16,12 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kebabCase } from 'lodash-es';
 
-import { type GeneratorsStore, lookupGeneratorCommands } from '../resolver/generator-commands.ts';
+import { type GeneratorsStore, lookupGeneratorCommands, toCommandNamespace } from '../resolver/generator-commands.ts';
 import type { GeneratorDependency } from '../resolver/generator-dependencies.ts';
 
-import { convertConfigToOption, extractArgumentsFromConfigs } from './converter.ts';
+import { convertConfigToCliOption, convertConfigToOption, extractArgumentsFromConfigs, formatOptionFlags } from './converter.ts';
 import { getCommandDerivedPropertyMutations } from './mutations.ts';
 import type { JHipsterConfig } from './types.ts';
 
@@ -58,13 +57,6 @@ export type CommandDescription = {
 
 export type ConfigOwners = { name: string; owners: ConfigDescription[] };
 
-const describeCliOption = (name: string, config: JHipsterConfig): string | undefined => {
-  const option = convertConfigToOption(name, config);
-  if (!option) return undefined;
-  const optionName = kebabCase(option.name ?? name);
-  return option.type === Boolean ? `--${optionName}` : `--${optionName} <value>`;
-};
-
 /**
  * Prompt factories receive the generator; a stub with empty configurations recovers the message of most of them.
  */
@@ -92,13 +84,15 @@ const describeDerivedProperties = (name: string, config: JHipsterConfig): string
 
 export const describeConfig = (name: string, config: JHipsterConfig, owner: string, blueprint?: string): ConfigDescription => {
   const option = convertConfigToOption(name, config);
+  const cliOption = convertConfigToCliOption(name, config);
   return {
     name,
     owner,
     blueprint,
     description: config.description ?? config.cli?.description,
     scope: config.scope,
-    cliOption: describeCliOption(name, config),
+    // The flags the cli registers for the config, when it registers an option for it.
+    cliOption: cliOption && formatOptionFlags(cliOption.optionName, cliOption.option),
     cliHidden: config.cli?.hide ? true : undefined,
     argument: config.argument ? true : undefined,
     type: option?.type?.name ?? config.internal?.type?.name,
@@ -125,21 +119,30 @@ export const describeCommand = ({
   usage?: string;
   dependencies: GeneratorDependency[];
 }): CommandDescription => {
-  const rootCommand = dependencies.find(dependency => dependency.namespace === namespace)?.command;
+  // A dependency is named as it is imported, with the prefix for a nested generator (`jhipster:spring-boot:cache`) and
+  // without it for the others (`spring-boot`): the generators are described under the name the cli gives them.
+  const commandNamespace = toCommandNamespace(namespace);
+  const rootCommand = dependencies.find(dependency => toCommandNamespace(dependency.namespace) === commandNamespace)?.command;
   const configs = new Map<string, ConfigDescription>();
+  // The cli registers the option of the first declaration of a config that has one, a later declaration may have none.
+  const cliOptions = new Map<string, Pick<ConfigDescription, 'cliOption' | 'cliHidden'>>();
   for (const dependency of dependencies) {
     for (const [name, config] of Object.entries(dependency.command?.configs ?? {})) {
+      const described = describeConfig(name, config, toCommandNamespace(dependency.namespace), dependency.blueprintNamespace);
+      if (described.cliOption && !cliOptions.has(name)) {
+        cliOptions.set(name, { cliOption: described.cliOption, cliHidden: described.cliHidden });
+      }
       // The owning command asks the prompt; keep the position of the last declaration.
       configs.delete(name);
-      configs.set(name, describeConfig(name, config, dependency.namespace, dependency.blueprintNamespace));
+      configs.set(name, { ...described, ...cliOptions.get(name) });
     }
   }
   const commandArguments = rootCommand?.arguments ?? extractArgumentsFromConfigs(rootCommand?.configs);
   return {
-    namespace,
+    namespace: commandNamespace,
     description,
     usage,
-    dependencies: dependencies.map(dependency => dependency.namespace),
+    dependencies: dependencies.map(dependency => toCommandNamespace(dependency.namespace)),
     arguments: Object.entries(commandArguments).map(([name, argument]) => ({
       name,
       description: argument.description,
