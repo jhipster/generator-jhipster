@@ -18,7 +18,8 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
+import { basename, join } from 'node:path';
+import { createSecureContext } from 'node:tls';
 
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
@@ -64,6 +65,36 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.getSnapshot('**/spring.factories')).toMatchSnapshot();
     });
   });
+  describe('KeyStore', () => {
+    const keyStoreFile = 'src/main/resources/config/tls/keystore.p12';
+
+    describe('without an existing KeyStore', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }).withOptions({ fakeKeytool: false });
+      });
+
+      it('should write a PKCS#12 KeyStore that loads with the password', () => {
+        const pfx = runResult.fs.read(join(runResult.cwd, keyStoreFile), { raw: true });
+        expect(() => createSecureContext({ pfx, passphrase: 'password' })).not.toThrow();
+        expect(() => createSecureContext({ pfx, passphrase: 'wrong' })).toThrow('mac verify failure');
+      });
+    });
+
+    describe('with an existing KeyStore', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true })
+          .withFiles({ [keyStoreFile]: 'existing' })
+          .withOptions({ fakeKeytool: false });
+      });
+
+      it('should leave it unchanged', () => {
+        runResult.assertFileContent(keyStoreFile, /^existing$/);
+      });
+    });
+  });
+
   describe('with jwt', () => {
     before(async () => {
       await helpers
