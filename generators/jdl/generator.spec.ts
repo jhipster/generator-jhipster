@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { getDefaultJDLDefinitions } from '../../lib/jdl-config/jdl-runtime.ts';
@@ -320,6 +320,36 @@ describe(`generator - ${generator}`, () => {
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toEqual({});
+      });
+    });
+
+    describe('with the createEnvBuilder option', () => {
+      const run = esmocha.fn();
+      const createEnvBuilder = esmocha.fn().mockResolvedValue({ getEnvironment: () => ({ run }) });
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators([MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE])
+          .onEnvironment(env => {
+            // The adapter of the tests cannot create the adapter of another environment.
+            const adapter = env.adapter as typeof env.adapter & { newAdapter: () => typeof env.adapter };
+            adapter.newAdapter = () => adapter;
+          })
+          .withOptions({
+            inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
+            createEnvBuilder,
+          });
+      });
+
+      it('should build the environment of each application with it', () => {
+        expect(createEnvBuilder).toHaveBeenCalledTimes(2);
+        expect(createEnvBuilder.mock.calls.map(([envOptions]) => basename(envOptions.cwd)).sort()).toEqual(['jhipster', 'jhipster2']);
+      });
+
+      it('should run the application generator in each environment', () => {
+        expect(run).toHaveBeenCalledTimes(2);
+        expect(run).toHaveBeenCalledWith(['jhipster:app'], expect.objectContaining({ skipPriorities: ['prompting'] }));
       });
     });
 

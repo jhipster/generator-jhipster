@@ -275,6 +275,22 @@ describe('cli', () => {
         expect(options.fooBar).toBe(true);
       });
 
+      it('should not give the builder of its environment to the command', async () => {
+        await mockCli(argv, { commands, env, createEnvBuilder: esmocha.fn<any>() });
+        const [, options] = runArgs;
+        expect(options.createEnvBuilder).toBeUndefined();
+      });
+
+      for (const cliCommand of ['jdl', 'upgrade']) {
+        it(`should give the builder of its environment to the ${cliCommand} command, which runs generators in other environments`, async () => {
+          const createEnvBuilder = esmocha.fn<any>();
+          await mockCli(['jhipster', 'jhipster', cliCommand], { env, createEnvBuilder });
+          const [command, options] = runArgs;
+          expect(command).toEqual(`jhipster:${cliCommand}`);
+          expect(options.createEnvBuilder).toBe(createEnvBuilder);
+        });
+      }
+
       it('should pass the application jdl definitions of the configs of the command', async () => {
         await mockCli(argv, { commands, env });
         const [, options] = runArgs;

@@ -88,6 +88,13 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
         }
       },
+      initializeOptions() {
+        // The cli gives the builder of its environment: the applications are generated in environments built like it,
+        // with its blueprints and lookups.
+        if (this.options.createEnvBuilder) {
+          this.createEnvBuilder = this.options.createEnvBuilder;
+        }
+      },
       existingProject() {
         this.existingProject = this.jhipsterConfig.baseName !== undefined && this.config.existed;
       },

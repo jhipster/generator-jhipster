@@ -345,6 +345,9 @@ export const buildCommands = ({
         }
         if (cmdName === 'upgrade') {
           options.programName = program.name();
+        }
+        if (cmdName === 'upgrade' || cmdName === GENERATOR_JDL) {
+          // These generators run generators in environments of their own, built like the one of the cli.
           options.createEnvBuilder = createEnvBuilder;
         }
         const namespace = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
