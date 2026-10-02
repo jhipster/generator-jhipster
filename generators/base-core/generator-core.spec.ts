@@ -18,6 +18,9 @@
  */
 
 import { before, beforeEach, describe, expect, it } from 'esmocha';
+import { mkdtempSync, utimesSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { createJHipsterLogger } from '../../lib/utils/index.ts';
 
@@ -117,6 +120,72 @@ describe('generator - base-core', () => {
       expect(base.jdlFiles[0]).toBe('foo');
     });
   });
+  describe('developerTimestamp', () => {
+    let templates: string;
+    beforeEach(async () => {
+      templates = mkdtempSync(join(tmpdir(), 'jhipster-developer-timestamp-'));
+      for (const name of ['kept', 'modified', 'missing']) {
+        writeFileSync(join(templates, `${name}.txt.ejs`), `${name} template`);
+      }
+      const past = new Date(Date.now() - 60_000);
+      for (const name of ['kept', 'missing']) {
+        utimesSync(join(templates, `${name}.txt.ejs`), past, past);
+      }
+    });
+
+    it('skips the templates not modified since the timestamp whose file exists', async () => {
+      await helpers
+        .run('dummy')
+        .withGenerators([
+          [
+            helpers.createDummyGenerator(Base, {
+              async [Base.WRITING]() {
+                await this.writeFiles({ templates: ['kept.txt', 'modified.txt', 'missing.txt'], rootTemplatesPath: templates });
+              },
+            }),
+            { namespace: 'dummy' },
+          ],
+        ])
+        .onTargetDirectory(dir => {
+          writeFileSync(join(dir, 'kept.txt'), 'previous generation');
+          writeFileSync(join(dir, 'modified.txt'), 'previous generation');
+        })
+        .withOptions({ developerTimestamp: Date.now() - 30_000 });
+      runResult.assertFileContent('kept.txt', 'previous generation');
+      runResult.assertFileContent('modified.txt', 'modified template');
+      runResult.assertFileContent('missing.txt', 'missing template');
+    });
+
+    it('keeps the previous file written by writeFile and copyTemplate too', async () => {
+      writeFileSync(join(templates, 'copied.txt'), 'copied template');
+      const past = new Date(Date.now() - 60_000);
+      utimesSync(join(templates, 'copied.txt'), past, past);
+      await helpers
+        .run('dummy')
+        .withGenerators([
+          [
+            helpers.createDummyGenerator(Base, {
+              [Base.WRITING]() {
+                this.writeFile(join(templates, 'kept.txt.ejs'), 'kept.txt');
+                this.writeFile(join(templates, 'modified.txt.ejs'), 'modified.txt');
+                this.copyTemplate(join(templates, 'copied.txt'), 'copied.txt');
+              },
+            }),
+            { namespace: 'dummy' },
+          ],
+        ])
+        .onTargetDirectory(dir => {
+          for (const name of ['kept', 'modified', 'copied']) {
+            writeFileSync(join(dir, `${name}.txt`), 'previous generation');
+          }
+        })
+        .withOptions({ developerTimestamp: Date.now() - 30_000 });
+      runResult.assertFileContent('kept.txt', 'previous generation');
+      runResult.assertFileContent('copied.txt', 'previous generation');
+      runResult.assertFileContent('modified.txt', 'modified template');
+    });
+  });
+
   describe('editPropertiesFile', () => {
     it('supports callbacks', async () => {
       await helpers.run('dummy').withGenerators([

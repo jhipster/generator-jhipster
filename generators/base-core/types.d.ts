@@ -39,6 +39,11 @@ export type Options = YeomanOptions & {
   devBlueprintEnabled?: boolean;
 
   skipPriorities?: string[];
+  /**
+   * Developing JHipster, regenerating over a previous generation: the templates not modified since this timestamp (in
+   * milliseconds) are skipped when their file exists on disk, the `.jhi` fragments are always written.
+   */
+  developerTimestamp?: number;
 
   /**
    * The definitions of the jdl, the JHipster ones completing those not passed.

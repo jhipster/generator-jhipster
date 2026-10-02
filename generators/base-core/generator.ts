@@ -880,6 +880,48 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Remove File
    */
+  /**
+   * Developing JHipster over a previous generation (developerTimestamp): its file, on disk, is kept when the template was
+   * not modified since. A file created earlier in this run is in memory only, the later templates merging into it are
+   * written. A .jhi fragment is always written, the file it is merged into would miss it.
+   */
+  #keepsPreviousFile(template: string, destination: string): boolean {
+    const { developerTimestamp } = this.options;
+    if (developerTimestamp === undefined || destination.endsWith('.jhi') || !existsSync(destination) || !existsSync(template)) {
+      return false;
+    }
+    if (statSync(template).mtimeMs >= developerTimestamp) {
+      return false;
+    }
+    this.log.debug(`Keeping ${destination}, its template ${template} was not modified since ${developerTimestamp}`);
+    return true;
+  }
+
+  override renderTemplate(...args: Parameters<YeomanGenerator['renderTemplate']>): ReturnType<YeomanGenerator['renderTemplate']> {
+    const [source = '', destination = source] = args;
+    if (
+      typeof source === 'string' &&
+      typeof destination === 'string' &&
+      this.#keepsPreviousFile(this.templatePath(source), this.destinationPath(destination))
+    ) {
+      return undefined;
+    }
+    return super.renderTemplate(...args);
+  }
+
+  override copyTemplate(...args: Parameters<YeomanGenerator['copyTemplate']>): ReturnType<YeomanGenerator['copyTemplate']> {
+    const [from, to] = args;
+    // A file (a glob is no file).
+    if (
+      typeof from === 'string' &&
+      typeof to === 'string' &&
+      this.#keepsPreviousFile(isAbsolute(from) ? from : this.templatePath(from), this.destinationPath(to))
+    ) {
+      return undefined;
+    }
+    return super.copyTemplate(...args);
+  }
+
   removeFile(...path: string[]): string {
     const destinationFile = this.destinationPath(...path);
     const relativePath = relative(this.env.logCwd, destinationFile);

@@ -87,6 +87,15 @@ const command = {
       },
       scope: 'none',
     },
+    developerTimestamp: {
+      description:
+        'Developing JHipster, over a previous generation: skip the templates not modified since this timestamp (in milliseconds) whose file exists',
+      cli: {
+        type: Number,
+        hide: true,
+      },
+      scope: 'none',
+    },
     ignoreNeedlesError: {
       description: 'Ignore needles failures',
       cli: {
