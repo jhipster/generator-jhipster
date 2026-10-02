@@ -72,7 +72,7 @@
     <div class="table-responsive table-entities" id="entities">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+                <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortStateChange)="navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
   <%_ const { fieldSupportsSortBy } = field; _%>
   <%_ if (builtInUserManagement && field.fieldName === 'activated') { _%>
