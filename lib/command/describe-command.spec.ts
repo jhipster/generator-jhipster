@@ -61,6 +61,18 @@ describe('command - describe command', () => {
       expect(command.configs.find(({ name }) => name === 'buildTool')?.owner).toBe('java-simple-application:build-tool');
     });
 
+    it('should give the flags the cli registers, and none for a config that is not an option', () => {
+      const { configs } = describeCommand({ namespace: 'app', dependencies: resolve(['bootstrap', 'app']) });
+      const cliOption = (config: string) => configs.find(({ name }) => name === config)?.cliOption;
+      expect(cliOption('baseName')).toBe('--base-name <value>');
+      expect(cliOption('skipClient')).toBe('--skip-client');
+      // A list of values.
+      expect(cliOption('testFrameworks')).toBe('--test-frameworks <value...>');
+      // Internal, and only set by the jdl: the cli registers no option.
+      expect(configs.find(({ name }) => name === 'validateBaseName')).toMatchObject({ type: 'Function', cliOption: undefined });
+      expect(configs.find(({ name }) => name === 'jhipsterVersion')).toMatchObject({ cliOption: undefined });
+    });
+
     it('should name the generators as the cli does, without the jhipster prefix', () => {
       // A nested generator is imported by its namespace, `jhipster:spring-boot:cache`.
       const dependencies = resolve(['bootstrap', 'spring-boot']);

@@ -19,13 +19,13 @@
 
 import chalk from 'chalk';
 import { Argument, Command, Option } from 'commander';
-import { kebabCase } from 'lodash-es';
 
 import {
   type JHipsterArgumentsWithChoices,
   type JHipsterCommandOptions,
   type JHipsterConfigs,
-  convertConfigToOption,
+  convertConfigToCliOption,
+  formatOptionFlags,
 } from '../lib/command/index.ts';
 
 import type { CliCommandOptions } from './types.ts';
@@ -153,14 +153,12 @@ export default class JHipsterCommand extends Command {
 
   addJHipsterConfigs(configs: JHipsterConfigs = {}, blueprintOptionDescription?: string): this {
     Object.assign(blueprintOptionDescription ? this.blueprintConfigs : this.configs, configs);
-    Object.entries(configs)
-      .filter(([_name, config]) => config.cli)
-      .forEach(([name, config]) => {
-        const option = convertConfigToOption(name, config);
-        if (option) {
-          this._addGeneratorOption(kebabCase(option.name), option, blueprintOptionDescription);
-        }
-      });
+    Object.entries(configs).forEach(([name, config]) => {
+      const cliOption = convertConfigToCliOption(name, config);
+      if (cliOption) {
+        this._addGeneratorOption(cliOption.optionName, cliOption.option, blueprintOptionDescription);
+      }
+    });
     return this;
   }
 
@@ -174,16 +172,7 @@ export default class JHipsterCommand extends Command {
       return existingOption;
     }
 
-    let cmdString = '';
-    if (optionDefinition.alias) {
-      cmdString = `-${optionDefinition.alias}, `;
-    }
-    cmdString = `${cmdString}${longOption}`;
-    if (optionDefinition.type === Array) {
-      cmdString = optionDefinition.required === false ? `${cmdString} [value...]` : `${cmdString} <value...>`;
-    } else if (optionDefinition.type && optionDefinition.type !== Boolean) {
-      cmdString = optionDefinition.required === false ? `${cmdString} [value]` : `${cmdString} <value>`;
-    }
+    const cmdString = formatOptionFlags(optionName, optionDefinition);
     // Passing default to `commander` (`.default(optionDefinition.default)`), will set at options passed to initial generator, so it's used in entire generation process.
     // We want default value to be set on jhipster options parsing so ignore default at commander.
     let defaultDescription = '';

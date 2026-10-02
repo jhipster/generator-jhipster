@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { kebabCase } from 'lodash-es';
+
 import type {
   CliSpec,
   CommandConfigDefault,
@@ -49,6 +51,24 @@ export type JHipsterCommandOptions = CliSpec & {
   default?: CommandConfigDefault<any>;
 };
 
+/**
+ * The flags of an option, as the cli registers it and prints it in its help: `-a, --name <value>`, `<value...>` for a
+ * list, `[value]` when the value is optional, and no value for a boolean.
+ */
+export const formatOptionFlags = (
+  optionName: string,
+  { alias, type, required }: Pick<JHipsterCommandOptions, 'alias' | 'type' | 'required'>,
+): string => {
+  const flags = `${alias ? `-${alias}, ` : ''}--${optionName}`;
+  if (type === Array) {
+    return required === false ? `${flags} [value...]` : `${flags} <value...>`;
+  }
+  if (type && type !== Boolean) {
+    return required === false ? `${flags} [value]` : `${flags} <value>`;
+  }
+  return flags;
+};
+
 export const convertConfigToOption = <const T extends ConfigSpec<any>>(name: string, config: T): JHipsterCommandOptions | undefined => {
   const { cli } = config;
   const type = cli?.type ?? config.internal?.type;
@@ -65,4 +85,16 @@ export const convertConfigToOption = <const T extends ConfigSpec<any>>(name: str
     scope: config.scope,
     type: type!,
   };
+};
+
+/**
+ * The option the cli registers for a config, with its name in the command line: none for a config without `cli`, like
+ * the internal ones and the ones only the jdl sets.
+ */
+export const convertConfigToCliOption = <const T extends ConfigSpec<any>>(
+  name: string,
+  config: T,
+): { optionName: string; option: JHipsterCommandOptions } | undefined => {
+  const option = config.cli ? convertConfigToOption(name, config) : undefined;
+  return option && { optionName: kebabCase(option.name ?? name), option };
 };

@@ -27,7 +27,7 @@ import {
 } from '../lib/command/describe-command.ts';
 import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';
 import { readUsage, toCommandNamespace } from '../lib/resolver/generator-commands.ts';
-import { resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
+import { resolveCommandDependencies, resolveGeneratorDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import defaultCommands from './commands.ts';
@@ -189,13 +189,13 @@ const describeCliCommand = async (
     blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
     onMissing: (ns: string) => logger.warn(`Generator ${ns} not found.`),
   };
-  // Like the cli, a command carries the options of the bootstrap generator, its own and the imported ones.
+  // The generators the cli registers the options of, or the command alone.
   const dependencies =
     options.imports === false ?
       resolveGeneratorDependencies([namespace], { ...resolveOptions, blueprintNamespaces: [] }).filter(
         dependency => dependency.namespace === namespace,
       )
-    : resolveGeneratorDependencies(['bootstrap', namespace], resolveOptions);
+    : resolveCommandDependencies({ command: commandNamespace, generator: namespace }, resolveOptions);
   const description = describeCommand({
     namespace,
     description: command?.desc,

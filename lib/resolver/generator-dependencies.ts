@@ -99,3 +99,15 @@ export const resolveGeneratorDependencies = (
   }
   return dependencies;
 };
+
+/**
+ * The generators contributing options to a cli command: the bootstrap generator, the generator of the command with its
+ * imports and, for the `jdl` command, the generator it runs with its options (the entrypoint generator, `app` by
+ * default). What the cli registers the options of, and what `jhipster describe` describes.
+ */
+export const resolveCommandDependencies = (
+  { command, generator = command, entrypointGenerator = 'app' }: { command: string; generator?: string; entrypointGenerator?: string },
+  options: ResolveGeneratorDependenciesOptions,
+): GeneratorDependency[] =>
+  // The bootstrap options may be dropped once every generator depends on bootstrap.
+  resolveGeneratorDependencies(['bootstrap', generator, ...(command === 'jdl' ? [entrypointGenerator] : [])], options);

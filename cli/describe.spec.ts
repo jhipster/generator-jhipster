@@ -21,9 +21,11 @@ import { afterEach, beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import type Environment from 'yeoman-environment';
 
 import type { CommandDescription } from '../lib/command/describe-command.ts';
+import { resolveCommandDependencies } from '../lib/resolver/generator-dependencies.ts';
 import { getJHipsterStore } from '../lib/resolver/lookups.ts';
 
 import describeCliCommand from './describe.ts';
+import JHipsterCommand from './jhipster-command.ts';
 
 const store = getJHipsterStore();
 // What the command reads from the environment: the registered generators.
@@ -70,6 +72,31 @@ describe('cli - describe', () => {
     printed = [];
     expect(await describeJson('jhipster:app')).toEqual(withoutPrefix);
   });
+
+  it('should describe the jdl command with the options of the application it generates, like the cli', async () => {
+    const { dependencies, configs } = await describeJson('jdl');
+    expect(dependencies.slice(0, 2)).toEqual(['bootstrap', 'jdl']);
+    expect(dependencies).toEqual(expect.arrayContaining(['app', 'spring-boot', 'client']));
+    expect(configs.map(({ name }) => name)).toEqual(expect.arrayContaining(['ignoreApplication', 'clientFramework', 'databaseType']));
+  });
+
+  for (const command of ['app', 'jdl', 'spring-boot']) {
+    it(`should give the ${command} command the flags the cli registers for it`, async () => {
+      // The options the cli registers: the configs of each dependency, added to a command.
+      const cliCommand = new JHipsterCommand();
+      for (const dependency of resolveCommandDependencies({ command }, { getGeneratorMeta: env.getGeneratorMeta })) {
+        cliCommand.addJHipsterConfigs(dependency.command?.configs);
+      }
+      const flags = cliCommand.options.map(option => option.flags);
+      // The cli also registers the negation of each boolean option, `--no-skip-client`.
+      const isNegationOf = (flag: string, other: string) => other.split(', ').at(-1)!.split(' ')[0] === `--${flag.slice('--no-'.length)}`;
+      const registered = flags.filter(flag => !(flag.startsWith('--no-') && flags.some(other => isNegationOf(flag, other)))).sort();
+      expect(registered.length).toBeGreaterThan(20);
+
+      const { configs } = await describeJson(command);
+      expect(configs.flatMap(({ cliOption }) => cliOption ?? []).sort()).toEqual(registered);
+    });
+  }
 
   it('should describe the generators it gives as dependencies', async () => {
     const { dependencies } = await describeJson('spring-boot');
