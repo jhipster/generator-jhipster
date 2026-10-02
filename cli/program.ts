@@ -342,7 +342,7 @@ export const buildCommands = ({
         if (cmdName === 'upgrade') {
           options.programName = program.name();
         }
-        if (cmdName === 'upgrade' || cmdName === GENERATOR_JDL) {
+        if (cmdName === 'upgrade' || cmdName === 'jdl') {
           // These generators run generators in environments of their own, built like the one of the cli.
           options.createEnvBuilder = createEnvBuilder;
         }
