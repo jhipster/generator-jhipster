@@ -35,6 +35,10 @@ export default defineConfig({
   reporter: process.env.CI ? [['list'], ['html', { open: 'never', outputFolder: '<%- this.relativeDir(clientRootDir, playwrightTemporaryDir) %>report' }]] : [['list']],
   use: {
     baseURL,
+<%_ if (locals.e2eTls) { _%>
+    // The certificate of the tls profile is self-signed and names no host.
+    ignoreHTTPSErrors: baseURL.startsWith('https://localhost'),
+<%_ } _%>
     viewport: { width: 1200, height: 720 },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',

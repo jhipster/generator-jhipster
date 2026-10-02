@@ -34,6 +34,15 @@ export CYPRESS_E2E_PASSWORD="<your-password>"
 ```
 
 See Cypress documentation for setting OS [environment variables](https://docs.cypress.io/app/references/environment-variables#Setting) to learn more.
+<%_ if (locals.e2eTls) { _%>
+
+The end-to-end tests of the packaged application (`<%- nodePackageManagerCommand %> run ci:e2e:run`) run over https: the server is started with its `tls` profile, which serves the development certificate, and the tests are given its https url.
+To run the tests against a server you started with the `tls` profile, give them that url:
+
+```bash
+export CYPRESS_BASE_URL="https://localhost:<%- gatewayServerPort || serverPort %>/"
+```
+<%_ } _%>
 
 #### Lighthouse audits
 

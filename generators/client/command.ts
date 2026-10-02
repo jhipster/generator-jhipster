@@ -174,6 +174,14 @@ const command = {
       ],
       scope: 'storage',
     },
+    e2eTls: {
+      description: 'Run the end-to-end tests of the packaged application over TLS, the server started with its tls profile',
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      scope: 'storage',
+    },
     withAdminUi: {
       description: 'Generate administrative user interface',
       cli: {
