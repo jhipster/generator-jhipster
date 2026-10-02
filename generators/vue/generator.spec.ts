@@ -142,6 +142,16 @@ describe(`generator - ${clientFramework}`, () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
 
+      it('should link the custom ID detail view to its component', () => {
+        const clientSourceDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
+        const entityDetailsPath = `${clientSourceDir}app/entities/entity-with-custom-id/entity-with-custom-id-details`;
+        runResult.assertFileContent(`${entityDetailsPath}.vue`, '<script lang="ts" src="./entity-with-custom-id-details.component.ts">');
+        runResult.assertFileContent(
+          `${entityDetailsPath}.component.ts`,
+          'const retrieveEntityWithCustomId = async entityWithCustomIdId => {',
+        );
+      });
+
       it('should match application snapshot', () => {
         const { application } = runResult;
         expect(application).toMatchSnapshot({
