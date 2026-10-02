@@ -148,7 +148,9 @@ describe('jdl options', () => {
           let state: ImportState;
 
           before(() => {
-            const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue} } }`);
+            // A microfrontend needs a client framework.
+            const extraConfig = optionName === 'microfrontend' && optionValue === true ? ' clientFramework angular' : '';
+            const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue}${extraConfig} } }`);
             state = importer.import();
           });
 

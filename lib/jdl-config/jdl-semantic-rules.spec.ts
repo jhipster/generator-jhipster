@@ -8,7 +8,15 @@ import { getDefaultRuntime } from './jdl-runtime.ts';
 /** The diagnostics of the JHipster rules, with the source each one points at. */
 const check = (content: string) =>
   checkSemantics(parseFromContent(content, getDefaultRuntime()), getDefaultRuntime())
-    .filter(({ ruleId }) => ['deployment-type', 'kubernetes-istio-ingress-domain', 'microservice-entity'].includes(ruleId))
+    .filter(({ ruleId }) =>
+      [
+        'deployment-type',
+        'kubernetes-istio-ingress-domain',
+        'microservice-entity',
+        'microfrontend-client-framework',
+        'gateway-microfrontends-client-framework',
+      ].includes(ruleId),
+    )
     .map(({ ruleId, message, location }) => ({
       ruleId,
       message,
@@ -74,6 +82,65 @@ microservice Order with orders
           'application {\n  config { baseName gw applicationType gateway }\n  entities *\n}\nentity Order\nmicroservice Order with orders',
         ),
       ).toEqual([]);
+    });
+  });
+
+  describe('microfrontend-client-framework', () => {
+    it('reports a microfrontend without client framework, at the microfrontend option', () => {
+      expect(check('application {\n  config { baseName blog applicationType microservice microfrontend true }\n}')).toEqual([
+        { ruleId: 'microfrontend-client-framework', message: 'The microfrontend blog needs a client framework.', at: 'microfrontend true' },
+      ]);
+    });
+    it('reports a microfrontend without base name', () => {
+      expect(check('application {\n  config { microfrontend true }\n}')).toEqual([
+        { ruleId: 'microfrontend-client-framework', message: 'The microfrontend needs a client framework.', at: 'microfrontend true' },
+      ]);
+    });
+    it('reports a microfrontend with no client framework, at the client framework', () => {
+      expect(
+        check('application {\n  config { baseName blog applicationType microservice microfrontend true clientFramework no }\n}'),
+      ).toMatchObject([{ ruleId: 'microfrontend-client-framework', at: 'clientFramework no' }]);
+    });
+    it('reports a gateway serving microfrontends without client framework, at its microfrontends', () => {
+      expect(check('application {\n  config { baseName gateway applicationType gateway microfrontends [blog] }\n}')).toEqual([
+        {
+          ruleId: 'microfrontend-client-framework',
+          message: 'The gateway gateway serves microfrontends, and needs a client framework.',
+          at: 'microfrontends [blog]',
+        },
+      ]);
+    });
+    it('accepts a gateway serving microfrontends with a client framework', () => {
+      expect(
+        check('application {\n  config { baseName gateway applicationType gateway clientFramework vue microfrontends [blog] }\n}'),
+      ).toEqual([]);
+    });
+    it('accepts a microfrontend with a client framework', () => {
+      expect(
+        check('application {\n  config { baseName blog applicationType microservice microfrontend true clientFramework react }\n}'),
+      ).toEqual([]);
+    });
+  });
+
+  describe('gateway-microfrontends-client-framework', () => {
+    const jdl = (microfrontendClientFramework: string) => `application {
+  config { baseName gateway applicationType gateway clientFramework angular microfrontends [blog] }
+}
+application {
+  config { baseName blog applicationType microservice microfrontend true clientFramework ${microfrontendClientFramework} }
+}`;
+
+    it('reports a microfrontend of another client framework than its gateway, at its client framework', () => {
+      expect(check(jdl('react'))).toEqual([
+        {
+          ruleId: 'gateway-microfrontends-client-framework',
+          message: 'The microfrontend blog uses the client framework react, its gateway gateway angular: they must use the same one.',
+          at: 'clientFramework react',
+        },
+      ]);
+    });
+    it('accepts microfrontends of the client framework of their gateway', () => {
+      expect(check(jdl('angular'))).toEqual([]);
     });
   });
 });

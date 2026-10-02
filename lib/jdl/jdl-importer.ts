@@ -26,6 +26,7 @@ import { readCurrentPathYoRcFile, readEntityFile } from '../utils/yo-rc.ts';
 import { type ImportTarget, type JDLFiles, checkSemanticErrors } from './convert-jdl-to-files.ts';
 import { astToFiles } from './converters/ast-to-files/ast-to-files.ts';
 import { applyCompatibilityDefaults } from './converters/ast-to-files/compatibility-defaults.ts';
+import { applyStackConfig } from './converters/ast-to-files/stack-config.ts';
 import { writeConfigFile } from './converters/exporters/export-utils.ts';
 import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
 import type { JDLApplicationConfig, JDLDefinitions } from './core/parsing/types/parsing.ts';
@@ -131,7 +132,7 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
     import: (): ImportState => {
       checkSemanticErrors(content, runtime);
       const target = importTarget(content, configuration);
-      const { files } = applyCompatibilityDefaults(astToFiles(content, runtime), target);
+      const { files } = applyStackConfig(applyCompatibilityDefaults(astToFiles(content, runtime), target));
       return toImportState(files, content.applications.length > 1, configuration);
     },
   };

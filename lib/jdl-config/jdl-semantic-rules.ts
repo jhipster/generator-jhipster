@@ -83,5 +83,57 @@ export const microserviceEntity: JDLSemanticRule = {
   },
 };
 
+export const microfrontendClientFramework: JDLSemanticRule = {
+  id: 'microfrontend-client-framework',
+  check: ast =>
+    ast.applications.flatMap(({ config, location }) => {
+      const microfrontend = config.microfrontend === true;
+      const servesMicrofrontends =
+        config.applicationType === 'gateway' && ((config.microfrontends as string[] | undefined) ?? []).length > 0;
+      if ((!microfrontend && !servesMicrofrontends) || (config.clientFramework !== undefined && config.clientFramework !== 'no')) {
+        return [];
+      }
+      const name = config.baseName ? ` ${config.baseName}` : '';
+      return [
+        {
+          message:
+            microfrontend ?
+              `The microfrontend${name} needs a client framework.`
+            : `The gateway${name} serves microfrontends, and needs a client framework.`,
+          location:
+            config.keyLocations?.clientFramework ??
+            (microfrontend ? config.keyLocations?.microfrontend : config.keyLocations?.microfrontends) ??
+            location,
+        },
+      ];
+    }),
+};
+
+export const gatewayMicrofrontendsClientFramework: JDLSemanticRule = {
+  id: 'gateway-microfrontends-client-framework',
+  check: ast => {
+    const applications = new Map(ast.applications.map(application => [application.config.baseName, application]));
+    return ast.applications
+      .filter(({ config }) => config.applicationType === 'gateway' && config.clientFramework !== undefined)
+      .flatMap(({ config: gateway }) =>
+        ((gateway.microfrontends as string[] | undefined) ?? [])
+          .map(baseName => applications.get(baseName)?.config)
+          .filter(
+            microfrontend => microfrontend?.clientFramework !== undefined && microfrontend.clientFramework !== gateway.clientFramework,
+          )
+          .map(microfrontend => ({
+            message: `The microfrontend ${microfrontend!.baseName} uses the client framework ${microfrontend!.clientFramework}, its gateway ${gateway.baseName} ${gateway.clientFramework}: they must use the same one.`,
+            location: microfrontend!.keyLocations?.clientFramework,
+          })),
+      );
+  },
+};
+
 /** The semantic rules of JHipster, checked with the ones of the jdl. */
-export const jhipsterSemanticRules: readonly JDLSemanticRule[] = [deploymentType, kubernetesIstioIngressDomain, microserviceEntity];
+export const jhipsterSemanticRules: readonly JDLSemanticRule[] = [
+  deploymentType,
+  kubernetesIstioIngressDomain,
+  microserviceEntity,
+  microfrontendClientFramework,
+  gatewayMicrofrontendsClientFramework,
+];
