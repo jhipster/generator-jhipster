@@ -134,7 +134,7 @@ describe(`generator - ${generator}`, () => {
       const [sample] = runResult.generator.samples;
       expect(sample.jdlEntity).toBe('*');
       expect(sample.jdlEntityFiles).toContain('.blueprint/generate-sample/templates/test-integration/samples/jdl-entities/custom-id.jdl');
-      expect(sample.generatorOptions).toEqual({ removeNeedles: true });
+      expect(sample.generatorOptions).toEqual({ removeNeedles: true, e2eTls: true });
       expect(runResult.generator.format()).toContain('jdl entities:');
     });
   });

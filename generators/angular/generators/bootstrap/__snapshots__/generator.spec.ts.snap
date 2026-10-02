@@ -123,6 +123,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,

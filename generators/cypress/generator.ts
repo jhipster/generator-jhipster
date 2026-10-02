@@ -105,9 +105,14 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'e2e:headless': 'npm run e2e:cypress --',
         });
 
+        // With e2eTls the packaged server is started with its tls profile: wait for it and test it over https, at the port
+        // of the package.json config, like the other scripts.
+        const e2eTlsEnv =
+          application.e2eTls ? 'E2E_SERVER_PROTOCOL=https CYPRESS_BASE_URL=https://localhost:$npm_package_config_backend_port/ ' : '';
+
         // Scripts that handle server and client concurrently should be added to the root package.json
         Object.assign(application.packageJsonScripts, {
-          'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
+          'ci:e2e:run': `${e2eTlsEnv}concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless`,
           'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
           'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
           'e2e:devserver':
