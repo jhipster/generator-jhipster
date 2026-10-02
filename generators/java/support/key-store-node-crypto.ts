@@ -60,14 +60,17 @@ const nullValue = () => tlv(0x05);
 const utf8String = (value: string) => tlv(0x0c, Buffer.from(value, 'utf8'));
 const bmpString = (value: string) => tlv(0x1e, Buffer.from(value, 'utf16le').swap16());
 const bitString = (value: Buffer) => tlv(0x03, Buffer.from([0]), value);
-/** A non-negative INTEGER, from its unsigned big-endian bytes or a number. */
+/**
+ * A positive INTEGER, from its big-endian bytes or a number, whose first byte is from 0x01 to 0x7f. That is all the
+ * structures need, so neither the zero byte a set high bit requires nor the removal of leading zeros is implemented.
+ */
 const integer = (value: Buffer | number): Buffer => {
   const hex = typeof value === 'number' ? value.toString(16) : '';
-  let bytes = typeof value === 'number' ? Buffer.from(hex.length % 2 ? `0${hex}` : hex, 'hex') : value;
-  while (bytes.length > 1 && bytes[0] === 0) {
-    bytes = bytes.subarray(1);
+  const bytes = typeof value === 'number' ? Buffer.from(hex.length % 2 ? `0${hex}` : hex, 'hex') : value;
+  if (bytes.length === 0 || bytes[0] === 0 || bytes[0] >= 0x80) {
+    throw new Error('Unsupported INTEGER: its first byte must be from 0x01 to 0x7f');
   }
-  return tlv(0x02, bytes[0] >= 0x80 ? Buffer.concat([Buffer.from([0]), bytes]) : bytes);
+  return tlv(0x02, bytes);
 };
 const objectIdentifier = (oid: string): Buffer => {
   const [first, second, ...rest] = oid.split('.').map(Number);
@@ -93,13 +96,15 @@ const time = (date: Date) => {
 const algorithmIdentifier = (oid: string) => sequence(objectIdentifier(oid), nullValue());
 
 /**
- * The PKCS#12 key derivation function (RFC 7292, appendix B.2) with SHA-256, used to derive the integrity (MAC) key.
+ * The integrity (MAC) key of a PKCS#12 KeyStore: the PKCS#12 key derivation function (RFC 7292, appendix B.2) with
+ * SHA-256, for a key of the size of the hash, which is the first block of the function.
  */
-const pkcs12Kdf = (password: string, salt: Buffer, id: number, iterations: number, length: number): Buffer => {
-  const u = 32;
-  const v = 64;
+const pkcs12MacKey = (password: string, salt: Buffer, iterations: number): Buffer => {
+  // The block size of SHA-256, and the diversifier of a MAC key.
+  const blockSize = 64;
+  const macKeyId = 3;
   const repeatToBlocks = (bytes: Buffer) => {
-    const repeated = Buffer.alloc(v * Math.ceil(bytes.length / v));
+    const repeated = Buffer.alloc(blockSize * Math.ceil(bytes.length / blockSize));
     for (let index = 0; index < repeated.length; index++) {
       repeated[index] = bytes[index % bytes.length];
     }
@@ -107,27 +112,15 @@ const pkcs12Kdf = (password: string, salt: Buffer, id: number, iterations: numbe
   };
   // The password as a null-terminated BMPString.
   const passwordBytes = Buffer.concat([Buffer.from(password, 'utf16le').swap16(), Buffer.alloc(2)]);
-  const input = Buffer.concat([repeatToBlocks(salt), repeatToBlocks(passwordBytes)]);
-  const diversifier = Buffer.alloc(v, id);
-  const result: Buffer[] = [];
-  for (let produced = 0; produced < length; produced += u) {
-    let hash = createHash('sha256').update(diversifier).update(input).digest();
-    for (let iteration = 1; iteration < iterations; iteration++) {
-      hash = createHash('sha256').update(hash).digest();
-    }
-    result.push(hash);
-    // Adds B + 1, B being the hash repeated to v bytes, to each v bytes block of the input.
-    const block = repeatToBlocks(hash);
-    for (let offset = 0; offset < input.length; offset += v) {
-      let carry = 1;
-      for (let index = v - 1; index >= 0; index--) {
-        const sum = input[offset + index] + block[index] + carry;
-        input[offset + index] = sum & 0xff;
-        carry = sum >> 8;
-      }
-    }
+  let key = createHash('sha256')
+    .update(Buffer.alloc(blockSize, macKeyId))
+    .update(repeatToBlocks(salt))
+    .update(repeatToBlocks(passwordBytes))
+    .digest();
+  for (let iteration = 1; iteration < iterations; iteration++) {
+    key = createHash('sha256').update(key).digest();
   }
-  return Buffer.concat(result).subarray(0, length);
+  return key;
 };
 
 /**
@@ -187,7 +180,7 @@ export const createKeyStore = ({ packageName }: { packageName: string }): Buffer
   );
 
   const macSalt = randomBytes(20);
-  const macKey = pkcs12Kdf(KEY_STORE_PASSWORD, macSalt, 3, MAC_ITERATIONS, 32);
+  const macKey = pkcs12MacKey(KEY_STORE_PASSWORD, macSalt, MAC_ITERATIONS);
   const mac = createHmac('sha256', macKey).update(authenticatedSafe).digest();
   return sequence(
     integer(3),
