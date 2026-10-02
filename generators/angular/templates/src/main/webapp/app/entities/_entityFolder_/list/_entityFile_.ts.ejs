@@ -28,7 +28,7 @@
 
     const componentName = entityAngularName;
 _%>
-import { Component, computed, effect, inject, signal, WritableSignal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, signal, WritableSignal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
@@ -144,7 +144,14 @@ export class <%- componentName %> {
     private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
 
 <%_ } _%>
-    readonly <%- entityInstancePlural %> = signal<I<%- entityAngularName %>[]>([]);
+<%_ if (paginationInfiniteScroll) { _%>
+    readonly <%- entityInstancePlural %> = linkedSignal<I<%- entityAngularName %>[], I<%- entityAngularName %>[]>({
+      source: () => this.<%- entityInstance %>Service.<%- entityInstancePlural %>(),
+      computation: (<%- entityInstancePlural %>, previous) => this.fillComponentAttributesFromResponseBody([...<%- entityInstancePlural %>], previous?.value ?? []),
+    });
+<%_ } else { _%>
+    readonly <%- entityInstancePlural %> = linkedSignal(() => this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]));
+<%_ } _%>
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
@@ -202,13 +209,6 @@ export class <%- componentName %> {
       }
     });
 <%_ } _%>
-    effect(() => {
-<%_ if (paginationInfiniteScroll) { _%>
-      this.<%- entityInstancePlural %>.update(<%- entityInstancePlural %> => this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()], <%- entityInstancePlural %>));
-<%_ } else { _%>
-      this.<%- entityInstancePlural %>.set(this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]));
-<%_ } _%>
-    });
     effect(() => {
       const activatedRouteState = this.activatedRouteState();
       untracked(() => {
