@@ -24,12 +24,16 @@ import { globSync } from 'tinyglobby';
 
 import BaseGenerator from '../../generators/base-core/index.ts';
 import type { Config } from '../../generators/base-core/types.ts';
+import { defaultGithubEnvironment } from '../../lib/ci/index.ts';
 import { packageJson } from '../../lib/index.ts';
 import { promptSamplesFolder } from '../support.ts';
 
 const GENERATOR_JDL = 'jdl';
 const GENERATOR_APP = 'app';
 const GENERATOR_INFO = 'info';
+
+/** The password of the databases of the deployments of a sample, which a deployment draws otherwise. */
+const SAMPLE_DB_RANDOM_PASSWORD = 'sample-db-password';
 
 import { entitiesByType, generateSample } from './support/index.ts';
 
@@ -47,6 +51,14 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
     return this.asAnyTaskGroup({
       projectVersion() {
         this.projectVersion = `${packageJson.version}-git`;
+      },
+      sampleSecrets() {
+        // A sample generates the same code each time: the secrets a generator draws when it is given none are fixed, for
+        // every generator of the sample, the deployments of a workspace included. The ci workflows give the jwt secret key.
+        Object.assign(this.env.sharedOptions, {
+          jwtSecretKey: process.env.JHI_JWT_SECRET_KEY ?? defaultGithubEnvironment['jwt-secret-key'],
+          dbRandomPassword: SAMPLE_DB_RANDOM_PASSWORD,
+        });
       },
     });
   }

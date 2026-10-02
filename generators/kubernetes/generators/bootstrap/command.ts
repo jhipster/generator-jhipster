@@ -27,6 +27,14 @@ const command = {
       },
       scope: 'storage',
     },
+    dbRandomPassword: {
+      description: 'Password of the databases of the deployment, a random one is generated when it is not given',
+      // Not a cli option: given by a generator composing the deployment, like the samples for a reproducible one.
+      internal: {
+        type: String,
+      },
+      scope: 'storage',
+    },
   },
   import: [],
 } as const satisfies JHipsterCommandDefinition;
