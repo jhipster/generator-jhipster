@@ -16,18 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
-
+import type { CSSProperties, ReactNode } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface INavDropdown {
-  children: React.ReactNode;
+  children: ReactNode;
   icon: IconProp;
   name?: string;
   id?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   'data-cy'?: string;
 }
 
