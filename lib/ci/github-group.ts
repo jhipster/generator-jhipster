@@ -38,8 +38,11 @@ export const getGithubSamplesGroup = async (
   const samplesFolderContent = await getGithubSamplesGroups(samplesGroupFolder, true);
   const groupExt = ['js', 'ts', 'json'].find(ext => samplesFolderContent.includes(`${group}.${ext}`));
   if (groupExt === 'js' || groupExt === 'ts') {
-    const jsGroup: { default: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.${groupExt}`));
-    samples = Object.fromEntries(Object.entries(jsGroup.default).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]));
+    const jsGroup: { default?: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.${groupExt}`));
+    // A module without default export (dev-server.ts, whose matrices are built by the generator) defines no sample.
+    samples = Object.fromEntries(
+      Object.entries(jsGroup.default ?? {}).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]),
+    );
   } else if (groupExt === 'json') {
     const jsonFile = await readFile(join(samplesGroupFolder, `${group}.json`));
     samples = Object.fromEntries(
