@@ -47,8 +47,9 @@ export type ResolvedSample = {
   jdlSampleNames: string[];
   /** `jdl-samples` folders (copied with their content) or jdl entity files listed by `jdl-samples`. */
   jdlSampleFiles: string[];
-  /** `JHI_PROFILE` value. */
+  /** `defaultEnvironment` option. */
   profile?: string;
+  /** `defaultPackaging: 'war'` option. */
   war: boolean;
 };
 

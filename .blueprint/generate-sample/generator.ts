@@ -133,6 +133,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         let generatorOptions: any = {
           projectVersion: this.projectVersion,
           destinationRoot: this.projectFolder,
+          ...sample.generatorOptions,
           ...workflowSample.generatorOptions,
         };
         if (workflowSample.workspaces && workflowSample.workspaces !== 'false') {
