@@ -146,6 +146,50 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('a postgresql microservice with the password of the databases given', () => {
+    before(async () => {
+      const chosenApps = ['03-psql'];
+
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+          dbRandomPassword: 'given-password',
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+
+    it('should store it instead of generating one', () => {
+      runResult.assertJsonFileContent('./kubernetes/.yo-rc.json', { 'generator-jhipster': { dbRandomPassword: 'given-password' } });
+    });
+
+    it('should deploy the databases with it', () => {
+      runResult.assertFileContent(
+        './kubernetes/mspsql-k8s/mspsql-postgresql.yml',
+        `postgresql-password: ${Buffer.from('given-password').toString('base64')}`,
+      );
+    });
+  });
+
   describe('only gateway with eureka', () => {
     before(async () => {
       const chosenApps = ['01-gateway'];
