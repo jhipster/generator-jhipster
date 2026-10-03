@@ -79,7 +79,7 @@ export default class extends BaseGenerator {
                 disabled: !generateBlueprint && !devBlueprint && !base,
               },
               graalvm: {
-                disabled: !graalvm,
+                disabled: !graalvm && !changes.graalvmWorkflow,
               },
             };
             break;
