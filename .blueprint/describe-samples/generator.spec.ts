@@ -158,6 +158,23 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a group sample defined by a jdl', () => {
+    before(async () => {
+      await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true }).withArguments('gradle-reactive(true)');
+    });
+
+    it('should describe the jdl generator run and the configuration of the jdl', () => {
+      const [sample] = runResult.generator.samples;
+      expect(sample).toMatchObject({
+        workflow: 'graalvm',
+        generator: 'jdl',
+        command: "jhipster generate-sample 'gradle-reactive(true)'",
+        config: { buildTool: 'gradle', reactive: true, graalvmSupport: true, testFrameworks: ['cypress'] },
+        jdl: expect.stringContaining('graalvmSupport true'),
+      });
+    });
+  });
+
   describe('with an unknown sample', () => {
     it('should fail', async () => {
       await expect(

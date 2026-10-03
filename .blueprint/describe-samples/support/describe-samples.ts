@@ -27,6 +27,7 @@ import {
   getGithubSamplesGroup,
 } from '../../../lib/ci/index.ts';
 import { getPackageRoot } from '../../../lib/index.ts';
+import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.ts';
 import { getWorkflowNames, getWorkflowSamples, isDaily } from '../../generate-sample/support/get-workflow-samples.ts';
 import { type ResolvedSample, resolveSample } from '../../generate-sample/support/resolve-sample.ts';
 import { workflowChoices } from '../../github-build-matrix/command.ts';
@@ -59,6 +60,7 @@ const CONFIG_KEYS = [
   'languages',
   'cypressCoverage',
   'cypressAudit',
+  'graalvmSupport',
 ];
 
 export type SampleDescription = {
@@ -80,6 +82,8 @@ export type SampleDescription = {
   /** `jdl-samples` value of the workflow sample. */
   jdlSamples?: string;
   jdlSampleFiles: string[];
+  /** The inline JDL a group sample is generated from (`JHI_JDL` in the workflow). */
+  jdl?: string;
   generatorOptions?: Record<string, unknown>;
   args?: string;
   environment?: string;
@@ -87,11 +91,17 @@ export type SampleDescription = {
   matrix: { os: string; node: string; java: string };
 };
 
+const pickConfig = (config: Record<string, unknown>): Record<string, unknown> =>
+  Object.fromEntries(CONFIG_KEYS.filter(key => config[key] !== undefined).map(key => [key, config[key]]));
+
 const readConfig = (yoRcFile: string | undefined): Record<string, unknown> | undefined => {
   if (!yoRcFile || !existsSync(yoRcFile)) return undefined;
-  const config = JSON.parse(readFileSync(yoRcFile, 'utf8'))['generator-jhipster'] ?? {};
-  return Object.fromEntries(CONFIG_KEYS.filter(key => config[key] !== undefined).map(key => [key, config[key]]));
+  return pickConfig(JSON.parse(readFileSync(yoRcFile, 'utf8'))['generator-jhipster'] ?? {});
 };
+
+/** The configuration the application of an inline JDL declares. */
+const readJDLConfig = (jdl: string): Record<string, unknown> =>
+  pickConfig(createImporterFromContent(jdl).import().exportedApplications[0]?.['generator-jhipster'] ?? {});
 
 const matrixOf = (item: GitHubMatrix | undefined) => ({
   os: item?.os ?? '',
@@ -154,6 +164,22 @@ const describeGroupSamples = async (workflow: string, samplesFolder: string): Pr
   const matrix = convertToGitHubMatrix(group);
   return Object.entries(group).map(([name, item]) => {
     const entry = matrix.include.find(candidate => candidate['job-name'] === name);
+    if (item.jdl) {
+      // A sample defined by a jdl, with no sample folder: the workflow gives the jdl to the jdl generator through JHI_JDL.
+      return {
+        name,
+        workflow,
+        jobName: name,
+        generator: 'jdl',
+        command: `jhipster generate-sample '${name}'`,
+        config: readJDLConfig(item.jdl),
+        entityFiles: [],
+        jdlEntityFiles: [],
+        jdlSampleFiles: [],
+        jdl: item.jdl,
+        matrix: matrixOf(entry),
+      };
+    }
     const samplePath = item.sample ?? name;
     const resolved = resolveSample(samplePath.replace(/^samples\//, ''));
     const args = item.args ?? '';
@@ -236,7 +262,7 @@ export const formatSample = (sample: SampleDescription): string => {
   }
   if (sample.generatorOptions) lines.push(`generator options: ${JSON.stringify(sample.generatorOptions)}`);
   if (sample.args) lines.push(`args: ${sample.args}`);
-  if (sample.yoRcFile) lines.push('', `configuration (${sample.yoRcFile}):`);
+  if (sample.yoRcFile || sample.jdl) lines.push('', `configuration${sample.yoRcFile ? ` (${sample.yoRcFile})` : ''}:`);
   for (const [key, value] of Object.entries(sample.config ?? {})) {
     lines.push(`  ${key}: ${Array.isArray(value) ? value.join(', ') : String(value)}`);
   }
@@ -247,5 +273,6 @@ export const formatSample = (sample: SampleDescription): string => {
   }
   if (sample.jdlEntityFiles.length > 0) lines.push('', 'jdl entities:', ...sample.jdlEntityFiles.map(file => `  ${file}`));
   if (sample.jdlSampleFiles.length > 0) lines.push('', 'jdl samples:', ...sample.jdlSampleFiles.map(file => `  ${file}`));
+  if (sample.jdl) lines.push('', 'jdl (JHI_JDL):', ...sample.jdl.split('\n').map(line => `  ${line}`));
   return lines.join('\n');
 };
