@@ -19,7 +19,7 @@
 
 import { validations } from '../../core/built-in-options/index.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import type { ParsedJDLValidation } from '../../core/parsing/types/parsed.ts';
+import type { ParsedJDLValidation } from '../../core/parsing/index.ts';
 
 const {
   Validations: { PATTERN },

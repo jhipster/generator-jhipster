@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../parsing/relationship-options.ts';
+import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../parsing/index.ts';
 
 const Options = {
   BUILT_IN_ENTITY: JDL_RELATIONSHIP_BUILT_IN_ENTITY,

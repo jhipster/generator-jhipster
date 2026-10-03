@@ -24,7 +24,7 @@ import {
   JDL_RELATIONSHIP_MANY_TO_ONE,
   JDL_RELATIONSHIP_ONE_TO_MANY,
   JDL_RELATIONSHIP_ONE_TO_ONE,
-} from '../relationship-types.ts';
+} from '../runtime/relationship-types.ts';
 
 import createTokenFromConfig from './token-creator.ts';
 

@@ -23,7 +23,7 @@ import {
   JDL_RELATIONSHIP_MANY_TO_ONE,
   JDL_RELATIONSHIP_ONE_TO_MANY,
   JDL_RELATIONSHIP_ONE_TO_ONE,
-} from '../parsing/relationship-types.ts';
+} from '../parsing/index.ts';
 
 export const RELATIONSHIP_ONE_TO_ONE = 'one-to-one';
 export const RELATIONSHIP_ONE_TO_MANY = 'one-to-many';

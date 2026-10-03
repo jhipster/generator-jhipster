@@ -35,8 +35,7 @@ import {
   createImporterFromFiles as originalCreateImporterFromFiles,
 } from '../../jdl-importer.ts';
 import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.ts';
-import type { ParsedJDLApplication } from '../parsing/types/parsed.ts';
-import type { JDLRuntime } from '../parsing/types/runtime.ts';
+import type { JDLRuntime, ParsedJDLApplication } from '../parsing/index.ts';
 import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.ts';
 
 const runtime = getDefaultRuntime();

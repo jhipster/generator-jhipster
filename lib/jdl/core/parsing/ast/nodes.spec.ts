@@ -19,11 +19,11 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
+import { getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
+import { parseJDL } from '../api.ts';
+import type { JDLLocation, ParsedJDLApplications } from '../types/parsed.ts';
 
-import { parseJDL } from './api.ts';
 import { type JDLNode, getKind, visitorKeys, walkJDL } from './nodes.ts';
-import type { JDLLocation, ParsedJDLApplications } from './types/parsed.ts';
 
 const content = `MAX = 42
 

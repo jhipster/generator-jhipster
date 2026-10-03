@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import type { JDLNodeKind } from './types/parsed.ts';
+import type { JDLNodeKind } from '../types/parsed.ts';
 
-export type { JDLNodeKind } from './types/parsed.ts';
+export type { JDLNodeKind } from '../types/parsed.ts';
 
 /**
  * The properties of each kind of node that hold its child nodes, in the order they are visited. A property may hold a node,

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLValidationsDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLValidationsDefinition } from '../jdl/core/parsing/index.ts';
 
 const defaultJDLValidationConfig: JDLValidationsDefinition = Object.freeze({
   configs: {

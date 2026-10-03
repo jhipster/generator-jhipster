@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLFieldTypesDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLFieldTypesDefinition } from '../jdl/core/parsing/index.ts';
 import { CommonDBValidations, RelationalOnlyDBTypes } from '../jhipster/field-types.ts';
 
 const { Enum: enumValidations, ...typeValidations } = CommonDBValidations;
