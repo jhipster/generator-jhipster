@@ -16,10 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getDuplicatedKeys } from '../location.ts';
-import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../relationship-options.ts';
-import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../relationship-types.ts';
-import { type JDLApplicationStatement, applicationStatementName, getStatements, isDuplicatedApplicationStatement } from '../statements.ts';
+import { getDuplicatedKeys } from '../ast/location.ts';
+import {
+  type JDLApplicationStatement,
+  applicationStatementName,
+  getStatements,
+  isDuplicatedApplicationStatement,
+} from '../ast/statements.ts';
+import { JDL_RELATIONSHIP_BUILT_IN_ENTITY } from '../runtime/relationship-options.ts';
+import { JDL_RELATIONSHIP_ONE_TO_ONE } from '../runtime/relationship-types.ts';
 import type { JDLLocation, ParsedJDLOptionConfig, ParsedJDLRelationship, ParsedJDLUseOption } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 

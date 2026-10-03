@@ -26,8 +26,13 @@ import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import type JDLField from '../../core/models/jdl-field.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
 import type JDLValidation from '../../core/models/jdl-validation.ts';
-import type { ParsedJDLAnnotation, ParsedJDLApplications, ParsedJDLEntity, ParsedJDLEntityField } from '../../core/parsing/types/parsed.ts';
-import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
+import type {
+  JDLRuntime,
+  ParsedJDLAnnotation,
+  ParsedJDLApplications,
+  ParsedJDLEntity,
+  ParsedJDLEntityField,
+} from '../../core/parsing/index.ts';
 
 import { convertApplications } from './application-converter.ts';
 import { convertDeployments } from './deployment-converter.ts';

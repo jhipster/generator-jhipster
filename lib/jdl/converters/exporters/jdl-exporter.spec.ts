@@ -26,7 +26,7 @@ import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { JDLEntity } from '../../core/models/index.ts';
 import JDLApplication from '../../core/models/jdl-application.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
-import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.ts';
+import type { JDLJSONApplicationConfiguration } from '../../core/parsing/index.ts';
 
 import exportToJDL from './jdl-exporter.ts';
 

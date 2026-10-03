@@ -18,11 +18,10 @@
  */
 import { before, describe, expect, it } from 'esmocha';
 
-import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
-import { createImporterFromContent } from '../__test-support__/index.ts';
-import { parseFromContent } from '../readers/jdl-reader.ts';
-
-import type { JDLLocation, ParsedJDLApplications } from './types/parsed.ts';
+import { getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
+import { createImporterFromContent } from '../../__test-support__/index.ts';
+import { parseFromContent } from '../../readers/jdl-reader.ts';
+import type { JDLLocation, ParsedJDLApplications } from '../types/parsed.ts';
 
 // Comments and directives are before and inside the declarations: the locations are offsets in the source as written.
 const content = `#fill: #eee
