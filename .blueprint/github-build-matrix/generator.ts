@@ -82,7 +82,8 @@ export default class extends BaseGenerator {
           case 'graalvm': {
             if (hasWorkflowChanges || java || graalvm) {
               const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
-              matrix = samples;
+              // The workflow generates each sample with generate-sample, which reads its jdl from the group.
+              matrix = Object.fromEntries(Object.entries(samples).map(([name, { jdl: _jdl, ...sample }]) => [name, sample]));
               if (warnings.length) {
                 this.log.warn(warnings.join('\n'));
               }
