@@ -115,7 +115,7 @@
   _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="mb-3">
-                        <label class="form-control-label" for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
+                        <label class="form-control-label" for="<%- entityFileName %>-<%- relationshipName %>">{{ t$('<%- translationKey %>') }}</label>
                         <select class="form-select" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
     <%_ if (relationshipRequired) { _%>
                             <option v-if="!<%- entityInstance %>.<%- relationshipName %>" :value="null" selected></option>
@@ -127,7 +127,7 @@
                     </div>
   <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="mb-3">
-                        <label for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
+                        <label for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
                         <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
                             <option :value="getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
                         </select>
