@@ -56,7 +56,6 @@ export default Object.fromEntries(
     key as string,
     {
       'cmd-e2e': 'npm run ci:e2e:dev',
-      args: 'jdl',
       jdl: convertOptionsToJDL(value as MatrixSample),
     },
   ]),

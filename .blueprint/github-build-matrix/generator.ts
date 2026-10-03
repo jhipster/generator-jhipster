@@ -43,6 +43,15 @@ export default class extends BaseGenerator {
   eventName?: (typeof eventNameChoices)[number];
   matrix!: string;
 
+  /** The samples of the group of the workflow, without their jdl: the workflow generates each one with generate-sample. */
+  async getGroupMatrix(): Promise<GitHubMatrixGroup> {
+    const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
+    if (warnings.length) {
+      this.log.warn(warnings.join('\n'));
+    }
+    return Object.fromEntries(Object.entries(samples).map(([name, { jdl: _jdl, ...sample }]) => [name, sample]));
+  }
+
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async buildMatrix() {
@@ -57,11 +66,7 @@ export default class extends BaseGenerator {
         let randomEnvironment = false;
         switch (this.workflow) {
           case 'docker-compose-integration': {
-            const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
-            matrix = samples;
-            if (warnings.length) {
-              this.log.warn(warnings.join('\n'));
-            }
+            matrix = await this.getGroupMatrix();
             break;
           }
           case 'generators': {
@@ -81,12 +86,7 @@ export default class extends BaseGenerator {
           }
           case 'graalvm': {
             if (hasWorkflowChanges || java || graalvm) {
-              const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
-              // The workflow generates each sample with generate-sample, which reads its jdl from the group.
-              matrix = Object.fromEntries(Object.entries(samples).map(([name, { jdl: _jdl, ...sample }]) => [name, sample]));
-              if (warnings.length) {
-                this.log.warn(warnings.join('\n'));
-              }
+              matrix = await this.getGroupMatrix();
             }
             break;
           }
