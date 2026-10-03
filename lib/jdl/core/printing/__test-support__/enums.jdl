@@ -1,0 +1,15 @@
+/**
+ * Kinds of products.
+ */
+enum Kind {
+  /**
+   * The first one.
+   */
+  ONE (one),
+  TWO ("two words"),
+  THREE
+}
+enum Plain {
+  A,
+  B
+}

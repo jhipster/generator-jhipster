@@ -1,0 +1,32 @@
+entity A
+entity B
+entity C
+
+relationship OneToOne {
+  A{b} to B
+  /**
+   * The side of A.
+   */
+  A{c(name) required} to
+  /**
+   * The side of C.
+   */
+  C{a}
+}
+relationship ManyToOne {
+  @OnDelete("CASCADE") @Id A{user(login)} to @Other("x") User with builtInEntity
+  @Opt
+  /**
+   * Commented after an annotation.
+   */
+  B{c} to C
+}
+relationship OneToMany {
+  A to B
+}
+relationship OneToOne {
+  C to A
+}
+relationship ManyToMany {
+  A{tag required} to B{a}
+}

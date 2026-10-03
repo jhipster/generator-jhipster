@@ -1,0 +1,25 @@
+MAX_NAME = 42
+MIN_PRICE = 0.5
+
+/**
+ * An entity.
+ */
+@ChangelogDate("20200101000000")
+@Paginate("pagination")
+@Skip
+entity Product (product_table) {
+  /**
+   * First line.
+   * Second line.
+   */
+  @Id
+  @Custom(1)
+  @Flag(false)
+  name String required unique minlength(2) maxlength(MAX_NAME) pattern(/^[a-z' ]+$/)
+  price BigDecimal min(MIN_PRICE)
+  quantity Integer min(0) max(100)
+  picture ImageBlob maxbytes(1000)
+}
+entity Empty
+@Unary
+entity Annotated
