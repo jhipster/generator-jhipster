@@ -34,3 +34,6 @@ export const dailyBuildsFolder = join(testIntegrationFolder, 'daily-builds');
 export const jdlEntitiesSamplesFolder = join(samplesFolder, 'jdl-entities');
 
 export const entitiesSamplesDir = join(samplesFolder, '.jhipster');
+
+/** The `github-build-matrix/samples/<group>.ts` files, the samples of the group workflows. */
+export const githubSamplesGroupFolder = join(packageRoot, '.blueprint/github-build-matrix/samples');
