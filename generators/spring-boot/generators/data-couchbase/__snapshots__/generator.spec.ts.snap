@@ -29,6 +29,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -60,6 +63,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -273,6 +279,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -475,6 +484,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -506,6 +518,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -629,6 +644,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -792,6 +810,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -820,6 +841,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -987,6 +1011,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/tracing/TracingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1133,6 +1160,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -1161,6 +1191,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -1269,6 +1302,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -1420,6 +1456,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -1457,6 +1496,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -1571,6 +1613,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -1725,6 +1770,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -1756,6 +1804,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -1872,6 +1923,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/tracing/TracingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1982,6 +2036,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -2013,6 +2070,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -2228,6 +2288,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/tracing/TracingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2428,6 +2491,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -2456,6 +2522,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -2573,6 +2642,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
@@ -2694,6 +2766,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -2722,6 +2797,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -2833,6 +2911,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
@@ -2990,6 +3071,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -3024,6 +3108,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -3149,6 +3236,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/aop/tracing/TracingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3271,6 +3361,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -3299,6 +3392,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -3517,6 +3613,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/aop/logging/LoggingAspectTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/aop/tracing/TracingAspectTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3714,6 +3813,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -3745,6 +3847,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -3868,6 +3973,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {

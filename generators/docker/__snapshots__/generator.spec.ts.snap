@@ -1061,6 +1061,9 @@ exports[`generator - docker monolith-jwt-reactive(false)-maven-enableTranslation
   "src/main/docker/sonar.yml": {
     "stateCleared": "modified",
   },
+  "src/main/docker/zipkin.yml": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -1294,6 +1297,9 @@ exports[`generator - docker monolith-oauth2-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }
@@ -1549,6 +1555,9 @@ exports[`generator - docker monolith-session-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/zipkin.yml": {
     "stateCleared": "modified",
   },
 }

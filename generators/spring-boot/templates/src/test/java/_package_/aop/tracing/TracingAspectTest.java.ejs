@@ -1,0 +1,241 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.aop.tracing;
+
+import io.micrometer.common.KeyValue;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationHandler;
+import io.micrometer.observation.ObservationRegistry;
+<%_ if (reactive) { _%>
+import io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor;
+<%_ } _%>
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.util.context.Context;
+<%_ } _%>
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class TracingAspectTest {
+
+    private static final String METHOD = "tracedMethod";
+
+    private final ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
+    private final MethodSignature signature = mock(MethodSignature.class);
+    private final RecordingHandler handler = new RecordingHandler();
+    private ObservationRegistry observationRegistry;
+    private TracingAspect aspect;
+
+    @BeforeEach
+    void setup() {
+        when(signature.getDeclaringType()).thenReturn(TracedService.class);
+        when(signature.getName()).thenReturn(METHOD);
+        when(signature.getReturnType()).thenReturn(Object.class);
+        when(joinPoint.getSignature()).thenReturn(signature);
+        when(joinPoint.getThis()).thenReturn(new TracedService());
+
+        observationRegistry = ObservationRegistry.create();
+        observationRegistry.observationConfig().observationHandler(handler);
+
+        aspect = new TracingAspect(observationRegistry);
+    }
+
+    @Test
+    void observeServiceObservesMethodExecution() throws Throwable {
+        when(joinPoint.proceed()).thenReturn("result");
+
+        Object result = aspect.observeService(joinPoint);
+
+        assertThat(result).isEqualTo("result");
+        assertThat(handler.started).hasSize(1);
+        assertThat(handler.stopped).hasSize(1);
+        Observation.Context context = handler.stopped.getFirst();
+        assertThat(context.getName()).isEqualTo("application.method");
+        assertThat(context.getContextualName()).isEqualTo("TracedService.tracedMethod");
+        assertThat(context.getLowCardinalityKeyValues()).contains(
+            KeyValue.of("layer", "service"),
+            KeyValue.of("class", "TracedService"),
+            KeyValue.of("method", METHOD)
+        );
+        assertThat(context.getError()).isNull();
+    }
+
+    @Test
+    void observeServiceRecordsAndRethrowsExceptions() throws Throwable {
+        IllegalStateException exception = new IllegalStateException("failed");
+        when(joinPoint.proceed()).thenThrow(exception);
+
+        assertThatThrownBy(() -> aspect.observeService(joinPoint)).isSameAs(exception);
+
+        assertThat(handler.stopped).hasSize(1);
+        assertThat(handler.stopped.getFirst().getError()).isSameAs(exception);
+    }
+
+    @Test
+    void observeControllerUsesControllerLayer() throws Throwable {
+        when(joinPoint.proceed()).thenReturn("result");
+
+        aspect.observeController(joinPoint);
+
+        assertThat(handler.stopped.getFirst().getLowCardinalityKeyValue("layer").getValue()).isEqualTo("controller");
+    }
+
+    @Test
+    void observeRepositoryUsesApplicationRepositoryInterfaceName() throws Throwable {
+        when(joinPoint.getThis()).thenReturn(new TracedRepositoryProxy());
+        when(joinPoint.proceed()).thenReturn("result");
+
+        aspect.observeRepository(joinPoint);
+
+        Observation.Context context = handler.stopped.getFirst();
+        assertThat(context.getContextualName()).isEqualTo("TracedRepository.tracedMethod");
+        assertThat(context.getLowCardinalityKeyValues()).contains(KeyValue.of("layer", "repository"), KeyValue.of("class", "TracedRepository"));
+    }
+
+    @Test
+    void observeServiceUsesCurrentObservationAsParent() throws Throwable {
+        when(joinPoint.proceed()).thenReturn("result");
+        Observation parent = Observation.start("parent", observationRegistry);
+
+        try (Observation.Scope scope = parent.openScope()) {
+            aspect.observeService(joinPoint);
+        } finally {
+            parent.stop();
+        }
+
+        Observation.Context context = handler.contextNamed("application.method");
+        assertThat(context.getParentObservation()).isSameAs(parent);
+    }
+<%_ if (reactive) { _%>
+
+    @Test
+    void observeServiceObservesMonoFromSubscriptionUntilCompletion() throws Throwable {
+        when(signature.getReturnType()).thenReturn(Mono.class);
+        when(joinPoint.proceed()).thenReturn(Mono.just("result"));
+
+        Object result = aspect.observeService(joinPoint);
+
+        assertThat(result).isInstanceOf(Mono.class);
+        assertThat(handler.started).isEmpty();
+
+        assertThat(((Mono<?>) result).block()).isEqualTo("result");
+        assertThat(handler.started).hasSize(1);
+        assertThat(handler.stopped).hasSize(1);
+        assertThat(handler.stopped.getFirst().getContextualName()).isEqualTo("TracedService.tracedMethod");
+        assertThat(handler.stopped.getFirst().getError()).isNull();
+    }
+
+    @Test
+    void observeServiceObservesFluxUntilCompletion() throws Throwable {
+        when(signature.getReturnType()).thenReturn(Flux.class);
+        when(joinPoint.proceed()).thenReturn(Flux.just("first", "second"));
+
+        Object result = aspect.observeService(joinPoint);
+
+        assertThat(result).isInstanceOf(Flux.class);
+        assertThat(handler.started).isEmpty();
+
+        assertThat(((Flux<?>) result).cast(String.class).collectList().block()).containsExactly("first", "second");
+        assertThat(handler.started).hasSize(1);
+        assertThat(handler.stopped).hasSize(1);
+    }
+
+    @Test
+    void observeServiceRecordsMonoErrors() throws Throwable {
+        IllegalStateException exception = new IllegalStateException("failed");
+        when(signature.getReturnType()).thenReturn(Mono.class);
+        when(joinPoint.proceed()).thenReturn(Mono.error(exception));
+
+        Object result = aspect.observeService(joinPoint);
+
+        assertThatThrownBy(() -> ((Mono<?>) result).block()).isSameAs(exception);
+        assertThat(handler.stopped).hasSize(1);
+        assertThat(handler.stopped.getFirst().getError()).isSameAs(exception);
+    }
+
+    @Test
+    void observeServiceRecordsFluxErrors() throws Throwable {
+        IllegalStateException exception = new IllegalStateException("failed");
+        when(signature.getReturnType()).thenReturn(Flux.class);
+        when(joinPoint.proceed()).thenReturn(Flux.concat(Flux.just("first"), Flux.error(exception)));
+
+        Object result = aspect.observeService(joinPoint);
+
+        assertThatThrownBy(() -> ((Flux<?>) result).blockLast()).isSameAs(exception);
+        assertThat(handler.stopped).hasSize(1);
+        assertThat(handler.stopped.getFirst().getError()).isSameAs(exception);
+    }
+
+    @Test
+    void observeServiceUsesReactorContextObservationAsParent() throws Throwable {
+        when(signature.getReturnType()).thenReturn(Mono.class);
+        when(joinPoint.proceed()).thenReturn(Mono.just("result"));
+        Observation parent = Observation.start("parent", observationRegistry);
+
+        Object result = aspect.observeService(joinPoint);
+        ((Mono<?>) result).contextWrite(Context.of(ObservationThreadLocalAccessor.KEY, parent)).block();
+        parent.stop();
+
+        Observation.Context context = handler.contextNamed("application.method");
+        assertThat(context.getParentObservation()).isSameAs(parent);
+    }
+<%_ } _%>
+
+    private static final class TracedService {}
+
+    private interface TracedRepository {}
+
+    private static final class TracedRepositoryProxy implements TracedRepository {}
+
+    private static final class RecordingHandler implements ObservationHandler<Observation.Context> {
+
+        private final List<Observation.Context> started = new ArrayList<>();
+        private final List<Observation.Context> stopped = new ArrayList<>();
+
+        @Override
+        public void onStart(Observation.Context context) {
+            started.add(context);
+        }
+
+        @Override
+        public void onStop(Observation.Context context) {
+            stopped.add(context);
+        }
+
+        @Override
+        public boolean supportsContext(Observation.Context context) {
+            return true;
+        }
+
+        private Observation.Context contextNamed(String name) {
+            return stopped.stream().filter(context -> name.equals(context.getName())).findFirst().orElseThrow();
+        }
+    }
+}

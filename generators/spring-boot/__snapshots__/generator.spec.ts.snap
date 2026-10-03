@@ -692,6 +692,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -717,6 +720,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -861,6 +867,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
@@ -1567,6 +1576,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/aop/tracing/TracingAspect.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -1592,6 +1604,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/TracingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -1661,6 +1676,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/aop/logging/LoggingAspectTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/aop/tracing/TracingAspectTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {

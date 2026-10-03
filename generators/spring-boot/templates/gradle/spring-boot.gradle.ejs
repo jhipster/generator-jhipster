@@ -46,11 +46,9 @@ if (project.hasProperty("war")) {
     apply from: "gradle/war.gradle"
 }
 
-<%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
 if (project.hasProperty("zipkin")) {
     apply from: "gradle/zipkin.gradle"
 }
-<%_ } _%>
 
 defaultTasks "bootRun"
 

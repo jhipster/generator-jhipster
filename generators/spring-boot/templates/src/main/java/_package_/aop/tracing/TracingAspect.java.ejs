@@ -1,0 +1,161 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.aop.tracing;
+
+import io.micrometer.observation.Observation;
+<%_ if (reactive) { _%>
+import io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor;
+<%_ } _%>
+import io.micrometer.observation.ObservationRegistry;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+<%_ if (reactive) { _%>
+import org.aspectj.lang.reflect.MethodSignature;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
+
+/**
+ * Aspect creating an observation (a span in Zipkin) for each call to a Web REST endpoint, a service or a repository.
+ *
+ * Observations are exported as spans to Zipkin when a tracing bridge is on the classpath (see the "zipkin" build profile).
+<%_ if (reactive) { _%>
+ *
+ * Reactive return types ({@link Mono} and {@link Flux}) are observed from subscription until termination,
+ * since the advised method only assembles the pipeline and returns immediately.
+<%_ } _%>
+ */
+@Aspect
+public class TracingAspect {
+
+    private static final String OBSERVATION_NAME = "application.method";
+
+    private static final String APPLICATION_PACKAGE_PREFIX = "<%- packageName %>.";
+
+    private final ObservationRegistry observationRegistry;
+
+    public TracingAspect(ObservationRegistry observationRegistry) {
+        this.observationRegistry = observationRegistry;
+    }
+
+    /**
+     * Pointcut that matches all Web REST endpoints.
+     */
+    @Pointcut("within(<%- packageName %>.web.rest..*) && within(@org.springframework.web.bind.annotation.RestController *)")
+    public void controllerPointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
+    }
+
+    /**
+     * Pointcut that matches all services.
+     */
+    @Pointcut("within(<%- packageName %>.service..*) && within(@org.springframework.stereotype.Service *) && !@annotation(org.springframework.scheduling.annotation.Async)")
+    public void servicePointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
+    }
+
+    /**
+<%_ if (databaseTypeNo) { _%>
+     * Pointcut that matches all repositories.
+     */
+    @Pointcut("within(<%- packageName %>.repository..*)")
+<%_ } else { _%>
+     * Pointcut that matches all repositories, including methods inherited from Spring Data interfaces (findAll, save...).
+     */
+    @Pointcut("this(org.springframework.data.repository.Repository) || within(<%- packageName %>.repository..*)")
+<%_ } _%>
+    public void repositoryPointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
+    }
+
+    @Around("controllerPointcut()")
+    public Object observeController(ProceedingJoinPoint joinPoint) throws Throwable {
+        return observe(joinPoint, "controller");
+    }
+
+    @Around("servicePointcut()")
+    public Object observeService(ProceedingJoinPoint joinPoint) throws Throwable {
+        return observe(joinPoint, "service");
+    }
+
+    @Around("repositoryPointcut()")
+    public Object observeRepository(ProceedingJoinPoint joinPoint) throws Throwable {
+        return observe(joinPoint, "repository");
+    }
+
+    private Object observe(ProceedingJoinPoint joinPoint, String layer) throws Throwable {
+<%_ if (reactive) { _%>
+        Class<?> returnType = ((MethodSignature) joinPoint.getSignature()).getReturnType();
+        if (Mono.class.isAssignableFrom(returnType)) {
+            Mono<?> mono = (Mono<?>) joinPoint.proceed();
+            return Mono.deferContextual(contextView -> {
+                Observation observation = createObservation(joinPoint, layer)
+                    .parentObservation(contextView.getOrDefault(ObservationThreadLocalAccessor.KEY, null))
+                    .start();
+                return mono
+                    .doOnError(observation::error)
+                    .doFinally(signal -> observation.stop())
+                    .contextWrite(context -> context.put(ObservationThreadLocalAccessor.KEY, observation));
+            });
+        }
+        if (Flux.class.isAssignableFrom(returnType)) {
+            Flux<?> flux = (Flux<?>) joinPoint.proceed();
+            return Flux.deferContextual(contextView -> {
+                Observation observation = createObservation(joinPoint, layer)
+                    .parentObservation(contextView.getOrDefault(ObservationThreadLocalAccessor.KEY, null))
+                    .start();
+                return flux
+                    .doOnError(observation::error)
+                    .doFinally(signal -> observation.stop())
+                    .contextWrite(context -> context.put(ObservationThreadLocalAccessor.KEY, observation));
+            });
+        }
+<%_ } _%>
+        Observation.CheckedCallable<Object, Throwable> proceed = joinPoint::proceed;
+        return createObservation(joinPoint, layer).observeChecked(proceed);
+    }
+
+    private Observation createObservation(JoinPoint joinPoint, String layer) {
+        String className = simpleClassName(joinPoint);
+        String methodName = joinPoint.getSignature().getName();
+        return Observation.createNotStarted(OBSERVATION_NAME, observationRegistry)
+            .contextualName(className + "." + methodName)
+            .lowCardinalityKeyValue("layer", layer)
+            .lowCardinalityKeyValue("class", className)
+            .lowCardinalityKeyValue("method", methodName);
+    }
+
+    /**
+     * Spring Data repositories are proxies: use the repository interface name rather than the proxy/SimpleJpaRepository one.
+     */
+    private String simpleClassName(JoinPoint joinPoint) {
+        Object target = joinPoint.getThis();
+        if (target != null) {
+            for (Class<?> itf : target.getClass().getInterfaces()) {
+                if (itf.getName().startsWith(APPLICATION_PACKAGE_PREFIX)) {
+                    return itf.getSimpleName();
+                }
+            }
+        }
+        return joinPoint.getSignature().getDeclaringType().getSimpleName();
+    }
+}
