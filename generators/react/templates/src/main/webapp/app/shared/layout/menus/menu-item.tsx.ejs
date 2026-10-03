@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
+import type { ReactNode } from 'react';
 import { DropdownItem } from 'react-bootstrap';
 import { NavLink as Link } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface IMenuItem {
-  children: React.ReactNode;
+  children: ReactNode;
   icon: IconProp;
   to: string;
   id?: string;

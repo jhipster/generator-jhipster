@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
+import { Component, type ReactNode } from 'react';
 
 interface IErrorBoundaryProps {
-  readonly children: React.ReactNode;
+  readonly children: ReactNode;
 }
 
 interface IErrorBoundaryState {
@@ -27,7 +27,7 @@ interface IErrorBoundaryState {
   readonly errorInfo: any;
 }
 
-class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryState> {
+class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> {
   readonly state: IErrorBoundaryState = { error: undefined, errorInfo: undefined };
 
   componentDidCatch(error, errorInfo) {
