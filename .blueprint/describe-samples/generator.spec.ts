@@ -78,6 +78,14 @@ describe(`generator - ${generator}`, () => {
       }
     });
 
+    it('should give each sample a name of its own across the workflows', () => {
+      const workflowsByName = Object.groupBy(runResult.generator.samples, sample => sample.name);
+      const duplicated = Object.entries(workflowsByName)
+        .filter(([_name, samples]) => samples!.length > 1)
+        .map(([name, samples]) => `${name} (${samples!.map(sample => sample.workflow).join(', ')})`);
+      expect(duplicated).toEqual([]);
+    });
+
     it('should print json', () => {
       expect(JSON.parse(runResult.generator.format())).toHaveLength(runResult.generator.samples.length);
     });

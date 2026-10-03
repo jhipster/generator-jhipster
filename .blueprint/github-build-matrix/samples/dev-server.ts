@@ -39,14 +39,14 @@ export const devServerMatrix = {
     },
   },
   react: {
-    'react-default': {
+    'react-default-devserver': {
       sample: 'samples/react-default',
       args: '--sample-yorc-folder --entities-sample sqllight',
       os: 'macos-latest',
     },
   },
   vue: {
-    'vue-default': {
+    'vue-default-devserver': {
       sample: 'samples/vue-default',
       args: '--sample-yorc-folder --entities-sample sqllight',
     },
