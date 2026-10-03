@@ -5,6 +5,9 @@ exports[`generator - java-simple-application:jib with defaults options should ma
   ".mvn/jvm.config": {
     "stateCleared": "modified",
   },
+  ".mvn/mvnw.mjs": {
+    "stateCleared": "modified",
+  },
   ".mvn/wrapper/maven-wrapper.jar": {
     "stateCleared": "modified",
   },
@@ -131,6 +134,9 @@ exports[`generator - java-simple-application:jib with gradle buildTool should ma
     "stateCleared": "modified",
   },
   "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/gradlew.mjs": {
     "stateCleared": "modified",
   },
   "gradle/libs.versions.toml": {

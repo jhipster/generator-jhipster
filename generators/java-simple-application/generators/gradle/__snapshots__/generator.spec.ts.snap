@@ -14,6 +14,9 @@ exports[`generator - java-simple-application:gradle with empty configuration sho
   "buildSrc/gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
+  "gradle/gradlew.mjs": {
+    "stateCleared": "modified",
+  },
   "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
@@ -44,6 +47,9 @@ exports[`generator - java-simple-application:gradle with valid configuration sho
     "stateCleared": "modified",
   },
   "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/gradlew.mjs": {
     "stateCleared": "modified",
   },
   "gradle/libs.versions.toml": {

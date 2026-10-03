@@ -533,6 +533,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   ".mvn/jvm.config": {
     "stateCleared": "modified",
   },
+  ".mvn/mvnw.mjs": {
+    "stateCleared": "modified",
+  },
   ".mvn/wrapper/maven-wrapper.jar": {
     "stateCleared": "modified",
   },

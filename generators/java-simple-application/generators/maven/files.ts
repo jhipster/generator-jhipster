@@ -20,7 +20,7 @@
 export default {
   maven: [
     {
-      templates: ['.prettierignore.jhi.maven'],
+      templates: ['.prettierignore.jhi.maven', '.mvn/mvnw.mjs'],
     },
     {
       transform: false,
