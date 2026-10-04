@@ -226,6 +226,55 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('.cleanupBlueprintFiles of a blueprint, the control created by a jhipster generator', () => {
+      let removeFiles: ReturnType<typeof esmocha.fn>;
+
+      class BlueprintGenerator extends BaseGenerator {
+        rootGeneratorName() {
+          return 'generator-jhipster-foo';
+        }
+
+        get [BaseGenerator.POST_WRITING]() {
+          return this.asPostWritingTaskGroup({
+            async cleanup({ control }) {
+              control.removeFiles = removeFiles;
+              await control.cleanupBlueprintFiles({ '1.0.1': ['1.0.1-file.txt'] });
+            },
+          });
+        }
+      }
+
+      before(async () => {
+        removeFiles = esmocha.fn();
+
+        await helpers
+          .run(
+            class extends CustomGenerator {
+              rootGeneratorName() {
+                return 'generator-jhipster';
+              }
+
+              async beforeQueue() {
+                await super.beforeQueue();
+                // The version of the blueprint that generated the project, as storeBlueprintVersion records it.
+                this.getContextData('oldVersion:generator-jhipster-foo', { replacement: '1.0.0' });
+                // Composed like a side by side blueprint: its tasks are queued after the ones of this generator.
+                await this.composeWithJHipster('jhipster-foo:blueprint');
+              }
+            },
+          )
+          .withJHipsterConfig({ jhipsterVersion: '1.0.0' })
+          .commitFiles()
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withGenerators([[BlueprintGenerator, { namespace: 'jhipster-foo:blueprint' }]])
+          .withTask('initializing', () => {});
+      });
+
+      it('should remove the files with the old version of the blueprint', () => {
+        expect(removeFiles).toHaveBeenCalledWith({ oldVersion: '1.0.0', removedInVersion: '1.0.1' }, '1.0.1-file.txt');
+      });
+    });
+
     describe('.removeFiles', () => {
       before(async () => {
         await helpers
