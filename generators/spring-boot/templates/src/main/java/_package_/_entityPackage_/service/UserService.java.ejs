@@ -499,10 +499,7 @@ public class UserService {
             .map
       <%_ } %>(user -> {
     <%_ } else { _%>
-        return Optional.of(userRepository
-            .findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+        return userRepository.findById(userDTO.getId())
             .map(user -> {
     <%_ } _%>
     <%_ if (databaseTypeCouchbase) { _%>
