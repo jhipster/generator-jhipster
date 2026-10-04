@@ -19,7 +19,7 @@
 import type { ComposeOptions } from 'yeoman-generator';
 
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { createDelayedMutationContext, mutateData } from '../../lib/utils/index.ts';
+import { createDelayedMutationContext, droppedMutationMessage, mutateData } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
@@ -104,7 +104,11 @@ export default class BaseSimpleApplicationGenerator<
 
   get #application(): Application {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => createDelayedMutationContext<Application>({ autoDelay: true }),
+      factory: () =>
+        createDelayedMutationContext<Application>({
+          autoDelay: true,
+          onDroppedMutation: dropped => this.log.debug(droppedMutationMessage(dropped)),
+        }),
     });
   }
 

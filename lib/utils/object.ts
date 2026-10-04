@@ -101,9 +101,26 @@ const OverrideMutation = Symbol('OverrideMutation');
 export type MutateDataFunction<Data extends object = any> = ((ctx: Data, opts: MutateDataCallbackOptions<Data>) => any) & {
   [OverrideMutation]?: boolean;
 };
+export type DroppedMutation = {
+  /** The key of the delayed mutation. */
+  key: string;
+  /** The property the mutation was waiting for, not defined yet when it was tried. */
+  waitingFor?: string;
+  /** The value another mutation set first, which is kept. */
+  value: unknown;
+};
+
+/** A message telling that a delayed mutation was dropped, for a debug log. */
+export const droppedMutationMessage = ({ key, waitingFor, value }: DroppedMutation): string =>
+  `The delayed default of ${key} was dropped: ${waitingFor ? `it waited for ${waitingFor}, and ` : ''}another mutation set ${key} (${JSON.stringify(value)}) first.`;
+
 type MutationContextOptions = {
   autoDelay?: boolean;
+  /** Called when a delayed mutation is dropped because another mutation defined its key first. */
+  onDroppedMutation?: (dropped: DroppedMutation) => void;
   delayContext: Record<string, MutateDataFunction[]>;
+  /** The property each delayed mutation was waiting for. */
+  waitingFor?: Record<string, string>;
 };
 type ContextWithMutationOptions<T extends object = object> = T & { [MUTATION_CONTEXT_SYMBOL]: MutationContextOptions };
 
@@ -118,13 +135,18 @@ export const dontOverrideMutateDataProperty = <const T extends MutateDataFunctio
 };
 
 class PropertyNotYetDefinedError extends Error {
+  readonly property: string;
+
   constructor(property: string) {
     super(`Property ${property} is not defined yet`);
     this.name = 'PropertyNotYetDefinedError';
+    this.property = property;
   }
 }
 
-export const createDelayedMutationContext = <T extends object>(options: Omit<MutationContextOptions, 'delayContext'> = {}): T => {
+export const createDelayedMutationContext = <T extends object>(
+  options: Omit<MutationContextOptions, 'delayContext' | 'waitingFor'> = {},
+): T => {
   const context: T = {} as T;
   (context as ContextWithMutationOptions<typeof context>)[MUTATION_CONTEXT_SYMBOL] = { ...options, delayContext: {} };
   return context;
@@ -143,7 +165,7 @@ const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
     },
   });
 
-const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaults }: { defaults?: boolean }): any => {
+const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaults, key }: { defaults?: boolean; key: string }): any => {
   const mutationContext = isMutationContext(context);
   const { autoDelay = false } = mutationContext ? (context[MUTATION_CONTEXT_SYMBOL] ?? {}) : {};
   try {
@@ -155,6 +177,9 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
     );
   } catch (error) {
     if (error instanceof PropertyNotYetDefinedError) {
+      if (mutationContext) {
+        (context[MUTATION_CONTEXT_SYMBOL].waitingFor ??= {})[key] = error.property;
+      }
       return DelayedMutation;
     }
     throw error;
@@ -169,10 +194,13 @@ const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { def
     for (const [key, value] of Object.entries(delayedContext)) {
       if (key in context && (context as any)[key] !== undefined) {
         delete delayedContext[key];
+        const { onDroppedMutation, waitingFor } = context[MUTATION_CONTEXT_SYMBOL];
+        onDroppedMutation?.({ key, waitingFor: waitingFor?.[key], value: (context as any)[key] });
+        delete waitingFor?.[key];
       } else {
         let result = undefined;
         for (const fn of value) {
-          result = handleMutateDataCallback(fn, context, { defaults });
+          result = handleMutateDataCallback(fn, context, { defaults, key });
           if (result !== DelayedMutation && result !== undefined) {
             break;
           }
@@ -256,7 +284,7 @@ export function mutateData<T extends Record<string | number, any>>(
           context[key] === undefined ||
           value[OverrideMutation] === true
         ) {
-          const result = handleMutateDataCallback(value, context, { defaults: false });
+          const result = handleMutateDataCallback(value, context, { defaults: false, key });
           if (result === DelayedMutation) {
             if (isMutationContext(context)) {
               const delayed = (context[MUTATION_CONTEXT_SYMBOL].delayContext[key] ??= []);
