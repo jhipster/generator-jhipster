@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { lowerFirst, sortedUniqBy } from 'lodash-es';
+import { lowerFirst, uniqBy } from 'lodash-es';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
@@ -587,7 +587,7 @@ ${classProperties
             ...entity.fields.filter(field => field.filterableField),
             ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
           ],
-          entityJavaCustomFilters: sortedUniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
+          entityJavaCustomFilters: uniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
         });
       },
     });

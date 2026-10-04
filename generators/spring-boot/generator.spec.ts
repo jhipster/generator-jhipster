@@ -307,6 +307,42 @@ describe(`generator - ${generator}`, () => {
     });
   }
 
+  for (const reactive of [false, true]) {
+    describe(`with ${reactive ? 'reactive ' : ''}filtering and non-adjacent fields sharing a custom filter`, () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedSource({ except: ['addTestSpringFactory'] })
+          .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators })
+          .withJHipsterConfig({ skipClient: true, reactive }, [
+            {
+              name: 'Shop',
+              changelogDate: '20160926101210',
+              jpaMetamodelFiltering: true,
+              fields: [
+                { fieldName: 'status', fieldType: 'ShopStatus', fieldValues: 'OPEN,CLOSED' },
+                { fieldName: 'opensAt', fieldType: 'LocalTime' },
+                { fieldName: 'kind', fieldType: 'ShopKind', fieldValues: 'RETAIL,ONLINE' },
+                { fieldName: 'previousStatus', fieldType: 'ShopStatus', fieldValues: 'OPEN,CLOSED' },
+                { fieldName: 'closesAt', fieldType: 'LocalTime' },
+              ],
+            },
+          ]);
+      });
+
+      it('should declare each custom filter class once in the criteria', () => {
+        const shopCriteria = runResult.fs.read(
+          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/${reactive ? 'domain' : 'service'}/criteria/ShopCriteria.java`,
+        );
+        expect(shopCriteria.match(/(?<=public static class )\w+ extends \S+(?= \{)/g)).toEqual([
+          'ShopStatusFilter extends Filter<ShopStatus>',
+          'LocalTimeFilter extends RangeFilter<LocalTime>',
+          'ShopKindFilter extends Filter<ShopKind>',
+        ]);
+      });
+    });
+  }
+
   describe('source api', () => {
     describe('editJavaFile with springBeans', () => {
       before(async () => {
