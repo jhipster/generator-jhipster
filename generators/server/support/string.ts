@@ -44,7 +44,11 @@ export function hibernateSnakeCase(value: string): string {
         res += value[i];
       }
     }
-    res += value.at(-1);
+    const lastCharacter = value.at(-1)!;
+    if (lastCharacter !== lastCharacter.toLowerCase() && value.at(-2) !== value.at(-2)!.toUpperCase()) {
+      res += '_';
+    }
+    res += lastCharacter;
     res = res.toLowerCase();
   }
   return res;

@@ -51,7 +51,8 @@ describe('generator - server - support - database', () => {
         expect(hibernateSnakeCase('colName')).toBe('col_name');
         expect(hibernateSnakeCase('colNName')).toBe('colnname');
         expect(hibernateSnakeCase('A')).toBe('a');
-        expect(hibernateSnakeCase('EntityA')).toBe('entitya');
+        expect(hibernateSnakeCase('EntityA')).toBe('entity_a');
+        expect(hibernateSnakeCase('oneToOneOwnerX')).toBe('one_to_one_owner_x');
       });
     });
   });
