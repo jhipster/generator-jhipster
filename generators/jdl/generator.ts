@@ -32,6 +32,7 @@ import { type ApplicationWithEntities, createImporterFromContent } from '../../l
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import BaseGenerator from '../base/index.ts';
+import { getBlueprintsResolver } from '../base/internal/index.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
@@ -196,6 +197,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           );
         } else {
           this.writeConfig(...this.applications.map(app => (this.ignoreApplication ? { ...app, config: undefined } : app)));
+          // Writing the config resolves the blueprints again for the generators composed next.
+          await getBlueprintsResolver(this).getBlueprints();
         }
 
         if (!this.ignoreDeployments) {

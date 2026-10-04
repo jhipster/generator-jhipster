@@ -11,6 +11,13 @@ jhipster generate-blueprint
 When creating blueprints it's cleaner to have the blueprint forwarding to a custom generator and keep main generators like client/common/server with customizations.
 Example [jOOQ Blueprint](https://github.com/jhipster/generator-jhipster-jooq/blob/ce48a06a2b031013383db01cc787bbe94aa2c683/generators/server/generator.mjs#L21)
 
+## Blueprints declared in a JDL
+
+A JDL may declare the blueprints of an application (`application { config { blueprints [foo] } }`). They generate the
+application, but `jhipster jdl` resolves its own blueprints before it reads the JDL, so the `jdl` generator of a
+blueprint declared only in the JDL is not used. The `jdl` generator of a blueprint is used when the blueprint is given
+with `--blueprints foo`, is already stored in the `.yo-rc.json`, or when the blueprint's own cli runs the JDL.
+
 ## Public API and semver
 
 A blueprint should only import `generator-jhipster` through the entry points declared in the [`exports`](package.json) field of `package.json`.
