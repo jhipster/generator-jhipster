@@ -171,10 +171,6 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -467,10 +463,6 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -743,10 +735,6 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -998,10 +986,6 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -1270,10 +1254,6 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -1508,10 +1488,6 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -1769,10 +1745,6 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -2021,10 +1993,6 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -2306,10 +2274,6 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -2648,10 +2612,6 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -2932,10 +2892,6 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -3253,10 +3209,6 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -3570,10 +3522,6 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -3868,10 +3816,6 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -4170,10 +4114,6 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -4458,10 +4398,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -4687,10 +4623,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -4923,10 +4855,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -5188,10 +5116,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -5409,10 +5333,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -5652,10 +5572,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -5885,10 +5801,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -6147,10 +6059,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -6367,10 +6275,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -6648,10 +6552,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -6905,10 +6805,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -7164,10 +7060,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -7458,10 +7350,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -7732,10 +7620,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -8009,10 +7893,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -8294,10 +8174,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -8583,10 +8459,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -8830,10 +8702,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -9098,10 +8966,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -9348,10 +9212,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -9613,10 +9473,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -9849,10 +9705,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -10091,10 +9943,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -10340,10 +10188,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -10602,10 +10446,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -10822,10 +10662,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -11103,10 +10939,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -11360,10 +11192,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -11619,10 +11447,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -11881,10 +11705,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -12136,10 +11956,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -12393,10 +12209,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -12631,10 +12443,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -12876,10 +12684,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -13129,10 +12933,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -13414,10 +13214,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -13732,10 +13528,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -14016,10 +13808,6 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -14313,10 +14101,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -14600,10 +14384,6 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -14894,10 +14674,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -15168,10 +14944,6 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
       {
         "dependencies": [
           {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
-          {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
           },
@@ -15429,10 +15201,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -15701,10 +15469,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",
@@ -15991,10 +15755,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
       },
       {
         "dependencies": [
-          {
-            "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "tools.jackson.module",
-          },
           {
             "artifactId": "HikariCP",
             "groupId": "com.zaxxer",

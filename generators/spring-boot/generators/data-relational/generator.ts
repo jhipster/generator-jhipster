@@ -281,10 +281,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           },
           {
             dependencies: [
-              {
-                groupId: 'tools.jackson.module',
-                artifactId: 'jackson-module-jaxb-annotations',
-              },
               { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
               { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-jdbc' },
