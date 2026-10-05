@@ -17,137 +17,31 @@
  * limitations under the License.
  */
 
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
-
 import BaseGenerator from '../../generators/base-core/index.ts';
-import {
-  type GitHubMatrixGroup,
-  type WorkflowSamples,
-  convertToGitHubMatrix,
-  getGithubOutputFile,
-  getGithubSamplesGroup,
-  setGithubTaskOutput,
-} from '../../lib/ci/index.ts';
-import { testIntegrationFolder } from '../constants.ts';
-import { isDaily } from '../generate-sample/support/get-workflow-samples.ts';
+import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/ci/index.ts';
 
 import type { eventNameChoices, workflowChoices } from './command.ts';
-import { devServerMatrix } from './samples/dev-server.ts';
-import { getGitChanges } from './support/git-changes.ts';
-import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from './support/integration-test-constants.ts';
-import { buildDailyWorkflowMatrix, buildWorkflowMatrix } from './support/workflow-matrix.ts';
+import { buildMatrix } from './support/build-matrix.ts';
+import { allChanges } from './support/git-changes.ts';
 
 export default class extends BaseGenerator {
   workflow!: (typeof workflowChoices)[number] | `daily-${string}`;
   eventName?: (typeof eventNameChoices)[number];
   matrix!: string;
 
-  /** The samples of the group of the workflow, without their jdl: the workflow generates each one with generate-sample. */
-  async getGroupMatrix(): Promise<GitHubMatrixGroup> {
-    const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
-    if (warnings.length) {
-      this.log.warn(warnings.join('\n'));
-    }
-    return Object.fromEntries(Object.entries(samples).map(([name, { jdl: _jdl, ...sample }]) => [name, sample]));
-  }
-
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async buildMatrix() {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
         const useChanges = this.eventName === 'pull_request';
-        const changes = await getGitChanges({ allTrue: !useChanges });
-        const { base, common, devBlueprint, client, e2e, generateBlueprint, graalvm, java, workspaces, springBootDefaults } = changes;
-        const hasWorkflowChanges = (changes as Record<string, boolean>)[`${this.workflow}Workflow`];
-
-        let matrix: GitHubMatrixGroup = {};
-        let convertToGitHubMatrixInclude = true;
-        let randomEnvironment = false;
-        switch (this.workflow) {
-          case 'docker-compose-integration': {
-            matrix = await this.getGroupMatrix();
-            break;
-          }
-          case 'generators': {
-            convertToGitHubMatrixInclude = false;
-            matrix = {
-              'database-changelog': {
-                disabled: !springBootDefaults,
-              },
-              'generate-blueprint': {
-                disabled: !generateBlueprint && !devBlueprint && !base,
-              },
-              graalvm: {
-                disabled: !graalvm && !changes.graalvmWorkflow,
-              },
-            };
-            break;
-          }
-          case 'graalvm': {
-            if (hasWorkflowChanges || java || graalvm) {
-              matrix = await this.getGroupMatrix();
-            }
-            break;
-          }
-          case 'devserver': {
-            if (devBlueprint || hasWorkflowChanges || client || e2e) {
-              matrix = { ...devServerMatrix.angular, ...devServerMatrix.react, ...devServerMatrix.vue };
-            } else {
-              for (const client of ['angular', 'react', 'vue']) {
-                if ((changes as Record<string, boolean>)[client]) {
-                  Object.assign(matrix, (devServerMatrix as Record<string, GitHubMatrixGroup>)[client]);
-                }
-              }
-            }
-            break;
-          }
-          case 'angular':
-          case 'react':
-          case 'vue': {
-            const hasClientFrameworkChanges = changes[this.workflow];
-            const hasSonarPrChanges = changes.sonarPr && this.workflow === 'angular';
-            const enableAllTests = base || common || hasWorkflowChanges || devBlueprint;
-            const enableBackendTests = enableAllTests || java;
-            const enableFrontendTests = enableAllTests || client || hasClientFrameworkChanges;
-            const enableE2eTests = enableBackendTests || enableFrontendTests || e2e || workspaces;
-            const enableAnyTest = enableE2eTests;
-
-            randomEnvironment = true;
-            if (enableAnyTest || hasSonarPrChanges) {
-              const content = await readFile(join(testIntegrationFolder, `workflow-samples/${this.workflow}.json`));
-              const parsed: WorkflowSamples = JSON.parse(content.toString());
-              matrix = buildWorkflowMatrix(parsed.include, {
-                enableBackendTests,
-                enableFrontendTests,
-                sonarOnly: !enableAnyTest,
-                skipSonarCompare: changes.sonarPr,
-              });
-            }
-            break;
-          }
-          default: {
-            if (isDaily(this.workflow)) {
-              matrix = buildDailyWorkflowMatrix(this.workflow);
-            }
-            break;
-          }
-        }
-
-        Object.values(matrix).forEach(job => {
-          Object.assign(job, {
-            'build-jhipster-bom': BUILD_JHIPSTER_BOM,
-            'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
-            'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
-          });
+        const matrix = await buildMatrix({
+          workflow: this.workflow,
+          changes: useChanges ? undefined : allChanges(),
+          samplesFolder: this.templatePath('../samples/'),
+          useVersionPlaceholders: this.useVersionPlaceholders,
+          warn: message => this.log.warn(message),
         });
-
-        const { useVersionPlaceholders } = this;
-        this.matrix = JSON.stringify(
-          convertToGitHubMatrixInclude ? convertToGitHubMatrix(matrix, { randomEnvironment, useVersionPlaceholders }) : matrix,
-          null,
-          2,
-        );
+        this.matrix = JSON.stringify(matrix, null, 2);
         const githubOutputFile = getGithubOutputFile();
         this.log.info('matrix', this.matrix);
         if (githubOutputFile) {
