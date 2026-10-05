@@ -26,6 +26,7 @@ import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
 import Generator from './generator.ts';
+import type { Entity as SpringBootEntity } from './types.d.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { createTestHelpers, typedResult } from '#testing';
@@ -303,6 +304,36 @@ describe(`generator - ${generator}`, () => {
           nodeResourceIT,
           /import com\.mycompany\.myapp\.domain\.Node;[\s\S]*import com\.mycompany\.myapp\.domain\.Node;/,
         );
+      });
+    });
+  }
+
+  for (const reactive of [false, true]) {
+    describe(`with ${reactive ? 'reactive ' : ''}filtering and non-adjacent fields sharing a custom filter`, () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedSource({ except: ['addTestSpringFactory'] })
+          .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators })
+          .withJHipsterConfig({ skipClient: true, reactive }, [
+            {
+              name: 'Shop',
+              changelogDate: '20160926101210',
+              jpaMetamodelFiltering: true,
+              fields: [
+                { fieldName: 'status', fieldType: 'ShopStatus', fieldValues: 'OPEN,CLOSED' },
+                { fieldName: 'opensAt', fieldType: 'LocalTime' },
+                { fieldName: 'kind', fieldType: 'ShopKind', fieldValues: 'RETAIL,ONLINE' },
+                { fieldName: 'previousStatus', fieldType: 'ShopStatus', fieldValues: 'OPEN,CLOSED' },
+                { fieldName: 'closesAt', fieldType: 'LocalTime' },
+              ],
+            },
+          ]);
+      });
+
+      it('should prepare one custom filter per type', () => {
+        const types = (runResult.entities!.Shop as SpringBootEntity).entityJavaCustomFilters.map(({ type }) => type);
+        expect(types).toEqual([...new Set(types)]);
       });
     });
   }
