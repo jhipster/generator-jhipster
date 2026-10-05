@@ -54,13 +54,6 @@ public class UserMapper {
         return new <%- user.dtoClass %>(user);
     }
 
-    public List<<%- user.adminUserDto %>> usersToAdminUserDTOs(List<<%- user.persistClass %>> users) {
-        return users.stream()
-            .filter(Objects::nonNull)
-            .map(this::userToAdminUserDTO)
-            .toList();
-    }
-
     public <%- user.adminUserDto %> userToAdminUserDTO(<%- user.persistClass %> user) {
         return new <%- user.adminUserDto %>(user);
     }
