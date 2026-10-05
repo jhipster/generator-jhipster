@@ -21,8 +21,15 @@ import { join } from 'node:path';
 
 import { globSync } from 'tinyglobby';
 
-import type { WorkflowSample } from '../../../lib/ci/index.ts';
-import { dailyBuildsFolder, entitiesSamplesDir, jdlEntitiesSamplesFolder, jdlSamplesFolder, samplesFolder } from '../../constants.ts';
+import { type WorkflowSample, getGithubSamplesGroup, getGithubSamplesGroups } from '../../../lib/ci/index.ts';
+import {
+  dailyBuildsFolder,
+  entitiesSamplesDir,
+  githubSamplesGroupFolder,
+  jdlEntitiesSamplesFolder,
+  jdlSamplesFolder,
+  samplesFolder,
+} from '../../constants.ts';
 
 import { entitiesByType } from './copy-entity-samples.ts';
 import { jdlEntitySamplePath } from './copy-jdl-entity-samples.ts';
@@ -47,8 +54,9 @@ export type ResolvedSample = {
   jdlSampleNames: string[];
   /** `jdl-samples` folders (copied with their content) or jdl entity files listed by `jdl-samples`. */
   jdlSampleFiles: string[];
-  /** `JHI_PROFILE` value. */
+  /** `defaultEnvironment` option. */
   profile?: string;
+  /** `defaultPackaging: 'war'` option. */
   war: boolean;
 };
 
@@ -56,6 +64,18 @@ export type ResolvedSample = {
 const resolveEntitiesSample = (entity?: string): string | undefined => {
   if (entity === 'mongodb' || entity === 'couchbase') return 'document';
   return entity === 'none' ? undefined : entity;
+};
+
+/**
+ * A sample of a group workflow (`github-build-matrix/samples/<group>.ts`) defined by a jdl, which the workflow gives to the
+ * jdl generator through JHI_JDL.
+ */
+export const resolveGroupJdlSample = async (sampleName: string): Promise<{ group: string; jdl: string } | undefined> => {
+  for (const group of await getGithubSamplesGroups(githubSamplesGroupFolder)) {
+    const { jdl } = (await getGithubSamplesGroup(githubSamplesGroupFolder, group)).samples[sampleName] ?? {};
+    if (jdl) return { group, jdl };
+  }
+  return undefined;
 };
 
 const findWorkflowSample = (sampleName: string): WorkflowSample | undefined =>

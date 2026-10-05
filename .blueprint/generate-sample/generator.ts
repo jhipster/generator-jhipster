@@ -127,12 +127,19 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         if (extname(this.sampleName) === '.jdl' || this.sampleYorcFolder || this.sampleOnly) return;
 
         const { sample } = this;
+        if (sample?.inline) {
+          await this.composeWithJHipster(GENERATOR_JDL, {
+            generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder, inline: sample.inline },
+          });
+          return;
+        }
         assert.ok(sample?.sample, `Sample ${this.sampleName} not found`);
 
         const workflowSample = sample.sample;
         let generatorOptions: any = {
           projectVersion: this.projectVersion,
           destinationRoot: this.projectFolder,
+          ...sample.generatorOptions,
           ...workflowSample.generatorOptions,
         };
         if (workflowSample.workspaces && workflowSample.workspaces !== 'false') {

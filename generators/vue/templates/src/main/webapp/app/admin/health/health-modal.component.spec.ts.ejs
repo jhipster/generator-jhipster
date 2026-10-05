@@ -30,7 +30,7 @@ describe('Health Modal Component', () => {
 
   beforeEach(() => {
     const wrapper = shallowMount(HealthModal, {
-      propsData: {
+      props: {
         currentHealth: {},
       },
       global: {
@@ -79,7 +79,7 @@ describe('Health Modal Component for diskSpace', () => {
 
   beforeEach(() => {
     const wrapper = shallowMount(HealthModal, {
-      propsData: {
+      props: {
         currentHealth: { name: 'diskSpace' },
       },
       global: {

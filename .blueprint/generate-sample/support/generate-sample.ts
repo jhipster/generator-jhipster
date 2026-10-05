@@ -26,7 +26,7 @@ import { jdlSamplesFolder } from '../../constants.ts';
 
 import copyEntitySamples from './copy-entity-samples.ts';
 import copyJdlEntitySamples from './copy-jdl-entity-samples.ts';
-import { resolveSample } from './resolve-sample.ts';
+import { resolveGroupJdlSample, resolveSample } from './resolve-sample.ts';
 
 export const generateSample = async (
   sampleName = process.env.JHI_APP,
@@ -48,16 +48,18 @@ export const generateSample = async (
   const { sample, profile, war, entitiesSample, jdlEntityNames, jdlSampleNames, yoRcFile } = resolved;
 
   if (!sample) {
+    const groupSample = await resolveGroupJdlSample(sampleName);
+    if (groupSample) {
+      return { generator: 'jdl', inline: groupSample.jdl };
+    }
     // eslint-disable-next-line no-console
     console.log(`Sample ${sampleName} was not found`);
   }
 
-  if (profile) {
-    process.env.JHI_PROFILE = profile;
-  }
-  if (war) {
-    process.env.JHI_WAR = '1';
-  }
+  const generatorOptions = {
+    ...(profile ? { defaultEnvironment: profile } : {}),
+    ...(war ? { defaultPackaging: 'war' } : {}),
+  };
 
   if (entitiesSample) {
     copyEntitySamples(memFs, destProjectFolder, entitiesSample);
@@ -80,6 +82,7 @@ export const generateSample = async (
       generator: 'jdl',
       jdlFiles: true,
       sample,
+      generatorOptions,
     };
   }
 
@@ -92,5 +95,6 @@ export const generateSample = async (
     generator: 'app',
     jdlFiles: jdlEntityNames.length > 0,
     sample,
+    generatorOptions,
   };
 };

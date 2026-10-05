@@ -42,8 +42,8 @@ describe('build-matrix', () => {
       expect(samples).toEqual(expect.arrayContaining([expect.stringMatching(/^ng-default /)]));
     });
 
-    it('should run the group of the graalvm workflow for a change of its generator', async () => {
-      expect(await samplesOf('graalvm', ['generators/java-simple-application/generators/graalvm/generator.ts'])).toEqual([
+    it('should run the group of the graalvm workflow for a change of the workflow', async () => {
+      expect(await samplesOf('graalvm', ['.github/workflows/generator-graalvm.yml'])).toEqual([
         'maven',
         'maven-reactive(true)',
         'gradle',

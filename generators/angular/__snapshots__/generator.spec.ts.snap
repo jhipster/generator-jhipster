@@ -365,7 +365,7 @@ export class UserManagementDetail {
         <tr
           jhiSort
           [(sortState)]="sortState"
-          (sortChange)="navigateToWithComponentValues($event)"
+          (sortStateChange)="navigateToWithComponentValues($event)"
         >
           <th scope="col" jhiSortBy="login">
             <div class="d-flex">
@@ -2568,6 +2568,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": false,
   "enableI18nRTL": false,
@@ -3637,6 +3638,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": false,
   "enableI18nRTL": false,
@@ -4927,6 +4929,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
@@ -6004,6 +6007,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
@@ -7228,6 +7232,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
@@ -8703,6 +8708,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
@@ -9742,6 +9748,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,

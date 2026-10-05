@@ -74,7 +74,7 @@ const config = defineConfig({
     minify: false,
     cssCodeSplit: false,
 <%_ } _%>
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),
       },

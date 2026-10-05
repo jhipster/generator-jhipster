@@ -134,7 +134,7 @@ describe(`generator - ${generator}`, () => {
       const [sample] = runResult.generator.samples;
       expect(sample.jdlEntity).toBe('*');
       expect(sample.jdlEntityFiles).toContain('.blueprint/generate-sample/templates/test-integration/samples/jdl-entities/custom-id.jdl');
-      expect(sample.generatorOptions).toEqual({ removeNeedles: true });
+      expect(sample.generatorOptions).toEqual({ removeNeedles: true, e2eTls: true });
       expect(runResult.generator.format()).toContain('jdl entities:');
     });
   });
@@ -154,6 +154,23 @@ describe(`generator - ${generator}`, () => {
           'jhipster generate-sample samples/ng-default --auth oauth2 --sample-yorc-folder --entities-sample sqllight --microfrontend',
         entitiesSample: 'sqllight',
         config: expect.objectContaining({ clientFramework: 'angular' }),
+      });
+    });
+  });
+
+  describe('with a group sample defined by a jdl', () => {
+    before(async () => {
+      await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true }).withArguments('gradle-reactive(true)');
+    });
+
+    it('should describe the jdl generator run and the configuration of the jdl', () => {
+      const [sample] = runResult.generator.samples;
+      expect(sample).toMatchObject({
+        workflow: 'graalvm',
+        generator: 'jdl',
+        command: "jhipster generate-sample 'gradle-reactive(true)'",
+        config: { buildTool: 'gradle', reactive: true, graalvmSupport: true, testFrameworks: ['cypress'] },
+        jdl: expect.stringContaining('graalvmSupport true'),
       });
     });
   });

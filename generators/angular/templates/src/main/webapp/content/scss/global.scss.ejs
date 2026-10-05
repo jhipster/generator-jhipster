@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+@use 'sass:color';
+
 @import 'bootstrap-variables';
 @import 'bootstrap/scss/functions';
 <%_ if (!clientThemeNone) { _%>
@@ -49,7 +51,7 @@ a:not([href]):not([tabindex]):hover.dropdown-item {
 
 /* override .dropdown-item.active background-color on hover */
 .dropdown-item.active:hover {
-  background-color: mix($dropdown-link-hover-bg, $dropdown-link-active-bg, 50%);
+  background-color: color.mix($dropdown-link-hover-bg, $dropdown-link-active-bg, 50%);
 }
 <%_ } _%>
 
@@ -247,10 +249,6 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
 /* page-ribbon.scss */
 .ribbon {
   left: -3.5em;
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 

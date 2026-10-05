@@ -47,6 +47,7 @@ const patterns = {
     'generators/spring-boot/{resources,templates,generators/bootstrap,generators/data-relational,generators/graalvm,generators/liquibase,generators/jwt}/**',
     'generators/liquibase/**',
   ],
+  graalvmWorkflow: ['.github/workflows/generator-graalvm.yml', '.blueprint/github-build-matrix/samples/graalvm.ts'],
   java: ['generators/{java,java-simple-application,liquibase,server,spring*}/**'],
   react: ['generators/react/**'],
   reactWorkflow: clientPatterns('react'),

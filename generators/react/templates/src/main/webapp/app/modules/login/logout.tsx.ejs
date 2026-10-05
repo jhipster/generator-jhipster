@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { logout } from 'app/shared/reducers/authentication';
@@ -25,11 +25,11 @@ export const Logout = () => {
   const authentication = useAppSelector(state => state.authentication);
   const dispatch = useAppDispatch();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     dispatch(logout());
   }, [dispatch]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (authentication.logoutUrl) {
       globalThis.location.href = authentication.logoutUrl;
     } else if (!authentication.isAuthenticated) {

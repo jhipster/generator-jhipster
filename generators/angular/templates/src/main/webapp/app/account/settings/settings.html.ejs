@@ -140,7 +140,7 @@
         <div class="mb-3">
           <label class="form-label" for="langKey">__jhiTranslateTag__('settings.form.language')</label>
           <select class="form-select" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
-          @for (language of languages; track $index) {
+          @for (language of languages; track language) {
             <option [value]="language">{{ language | findLanguageFromKey }}</option>
           }
           </select>

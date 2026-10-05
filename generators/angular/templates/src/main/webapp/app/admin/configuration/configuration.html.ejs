@@ -35,7 +35,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (bean of beans(); track $index) {
+        @for (bean of beans(); track bean.prefix) {
           <tr>
             <td class="break">
               <span>{{ bean.prefix }}</span>

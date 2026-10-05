@@ -40,7 +40,7 @@
         </tr>
       </thead>
       <tbody>
-      @for (session of sessions; track $index) {
+      @for (session of sessions; track session.series) {
         <tr>
           <td>{{ session.ipAddress }}</td>
           <td>{{ session.userAgent }}</td>

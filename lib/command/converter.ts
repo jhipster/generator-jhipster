@@ -88,6 +88,12 @@ export const convertConfigToOption = <const T extends ConfigSpec<any>>(name: str
 };
 
 /**
+ * The name of the option of a config in the command line. A digit followed by a lower case letter stays in its word
+ * (`e2eTls` is `e2e-tls`): kebabCase gives `e-2-e-tls`, which the cli reads as another option (`e2ETls`).
+ */
+const toOptionName = (name: string) => (/\d[a-z]/.test(name) ? name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase() : kebabCase(name));
+
+/**
  * The option the cli registers for a config, with its name in the command line: none for a config without `cli`, like
  * the internal ones and the ones only the jdl sets.
  */
@@ -96,5 +102,5 @@ export const convertConfigToCliOption = <const T extends ConfigSpec<any>>(
   config: T,
 ): { optionName: string; option: JHipsterCommandOptions } | undefined => {
   const option = config.cli ? convertConfigToOption(name, config) : undefined;
-  return option && { optionName: kebabCase(option.name ?? name), option };
+  return option && { optionName: toOptionName(option.name ?? name), option };
 };

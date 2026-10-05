@@ -64,13 +64,13 @@ export const buildMatrix = async ({
   const { base, common, devBlueprint, client, e2e, generateBlueprint, graalvm, java, workspaces, springBootDefaults } = changes;
   const hasWorkflowChanges = (changes as Record<string, boolean>)[`${workflow}Workflow`];
 
-  /** The samples of the group of the workflow. */
+  /** The samples of the group of the workflow, without their jdl: the workflow generates each one with generate-sample. */
   const getGroupMatrix = async (): Promise<GitHubMatrixGroup> => {
     const { samples, warnings } = await getGithubSamplesGroup(samplesFolder, workflow);
     if (warnings.length) {
       warn(warnings.join('\n'));
     }
-    return samples;
+    return Object.fromEntries(Object.entries(samples).map(([name, { jdl: _jdl, ...sample }]) => [name, sample]));
   };
 
   let matrix: GitHubMatrixGroup = {};
@@ -91,7 +91,7 @@ export const buildMatrix = async ({
           disabled: !generateBlueprint && !devBlueprint && !base,
         },
         graalvm: {
-          disabled: !graalvm,
+          disabled: !graalvm && !changes.graalvmWorkflow,
         },
       };
       break;

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
+import type { ReactNode } from 'react';
 import { useLocation, Navigate, PathRouteProps } from 'react-router';
 import { Translate } from 'react-jhipster';
 
@@ -25,7 +25,7 @@ import ErrorBoundary from 'app/shared/error/error-boundary';
 
 interface IOwnProps extends PathRouteProps {
   hasAnyAuthorities?: string[];
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
