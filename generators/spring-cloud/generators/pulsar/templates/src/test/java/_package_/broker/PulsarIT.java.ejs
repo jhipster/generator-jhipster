@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Integration test for the Spring Cloud Stream Pulsar Binder.
  */
 @IntegrationTest
-public class PulsarIT {
+class PulsarIT {
 
     @Autowired
     BlockingQueue<String> testInputQueue;
@@ -39,7 +39,7 @@ public class PulsarIT {
     BlockingQueue<String> testOutputQueue;
 
     @Test
-    public void testPulsar() throws Exception {
+    void testPulsar() throws Exception {
         String value = UUID.randomUUID().toString();
         testInputQueue.put(value);
         assertThat(testOutputQueue.poll(5, TimeUnit.SECONDS)).isEqualTo(value);
