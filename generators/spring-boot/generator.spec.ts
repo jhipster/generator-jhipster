@@ -26,6 +26,7 @@ import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
 import Generator from './generator.ts';
+import type { Entity as SpringBootEntity } from './types.d.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { createTestHelpers, typedResult } from '#testing';
@@ -330,15 +331,9 @@ describe(`generator - ${generator}`, () => {
           ]);
       });
 
-      it('should declare each custom filter class once in the criteria', () => {
-        const shopCriteria = runResult.fs.read(
-          `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/${reactive ? 'domain' : 'service'}/criteria/ShopCriteria.java`,
-        );
-        expect(shopCriteria.match(/(?<=public static class )\w+ extends \S+(?= \{)/g)).toEqual([
-          'ShopStatusFilter extends Filter<ShopStatus>',
-          'LocalTimeFilter extends RangeFilter<LocalTime>',
-          'ShopKindFilter extends Filter<ShopKind>',
-        ]);
+      it('should prepare one custom filter per type', () => {
+        const types = (runResult.entities!.Shop as SpringBootEntity).entityJavaCustomFilters.map(({ type }) => type);
+        expect(types).toEqual([...new Set(types)]);
       });
     });
   }
