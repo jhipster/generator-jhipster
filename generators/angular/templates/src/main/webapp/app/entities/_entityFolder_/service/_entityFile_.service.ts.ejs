@@ -60,14 +60,6 @@ type RestOf<T extends I<%- entityAngularName %><% if (!readOnly) { %> | New<%- e
   };
 
 export type <%- entityRestName %> = RestOf<I<%- entityAngularName %>>;
-  <%_ if (!readOnly) { _%>
-
-export type New<%- entityRestName %> = RestOf<New<%- entityAngularName %>>;
-  <%_ } _%>
-  <%_ if (!readOnly && updatableEntity) { _%>
-
-export type PartialUpdate<%- entityRestName %> = RestOf<PartialUpdate<%- entityAngularName %>>;
-  <%_ } _%>
 <%_ } _%>
 
 @Service()

@@ -1422,11 +1422,6 @@ type RestOf<T extends IUserManagement | NewUserManagement> = Omit<
 
 export type RestUserManagement = RestOf<IUserManagement>;
 
-export type NewRestUserManagement = RestOf<NewUserManagement>;
-
-export type PartialUpdateRestUserManagement =
-  RestOf<PartialUpdateUserManagement>;
-
 @Service()
 export class UserManagementsService {
   readonly userManagementsParams = signal<
