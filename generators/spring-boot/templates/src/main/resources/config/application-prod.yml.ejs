@@ -70,10 +70,10 @@ management:
       export:
         enabled: false
 <%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
   tracing:
+    export:
+      zipkin: # Use the "zipkin" Maven/Gradle profile to add the Zipkin dependencies
+        endpoint: http://localhost:9411/api/v2/spans
     sampling:
       probability: 1.0 # report 100% of traces
 <%_ } _%>
