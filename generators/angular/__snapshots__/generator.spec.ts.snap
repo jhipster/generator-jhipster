@@ -365,7 +365,7 @@ export class UserManagementDetail {
         <tr
           jhiSort
           [(sortState)]="sortState"
-          (sortChange)="navigateToWithComponentValues($event)"
+          (sortStateChange)="navigateToWithComponentValues($event)"
         >
           <th scope="col" jhiSortBy="login">
             <div class="d-flex">
