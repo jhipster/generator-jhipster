@@ -42,6 +42,9 @@ import jakarta.validation.constraints.*;
   <%_ if (field.fieldValidationRequired) { _%>
       @NotNull
   <%_ } _%>
+  <%_ if (field.blobContentTypeImage) { _%>
+    <%- field.javaContentTypeValidatorsPartial %>
+  <%_ } _%>
 <&_ } -&>
 <%_ } -%>
 
