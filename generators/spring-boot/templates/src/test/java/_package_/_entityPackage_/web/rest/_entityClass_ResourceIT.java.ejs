@@ -583,7 +583,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
   <%_ for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) { _%>
     @Autowired
-    private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
+    private <%- relationship.otherEntity.entityNameCapitalized %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
   <%_ } _%>
 <%_ } else { _%>
   <%_ for (const otherEntity of noCascadeOtherEntities) { _%>
@@ -1394,7 +1394,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
       <%_ } _%>
       <%_ if (reactive) { _%>
-        <%- relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
+        <%- relationship.otherEntity.builtInUser ? 'user' : relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
       <%_ } else { _%>
         em.persist(<%- relationship.relationshipFieldName %>);
         em.flush();
