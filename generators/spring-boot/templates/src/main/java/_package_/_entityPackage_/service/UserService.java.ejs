@@ -1006,10 +1006,10 @@ public class UserService {
   <%_ } _%>
     public <% if (reactive) { %>Mono<<%- user.adminUserDto %>><% } else { %><%- user.adminUserDto %><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
-        if (authToken instanceof OAuth2AuthenticationToken) {
-            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
-        } else if (authToken instanceof JwtAuthenticationToken) {
-            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+        if (authToken instanceof OAuth2AuthenticationToken oauth2Token) {
+            attributes = oauth2Token.getPrincipal().getAttributes();
+        } else if (authToken instanceof JwtAuthenticationToken jwtToken) {
+            attributes = jwtToken.getTokenAttributes();
         } else {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
