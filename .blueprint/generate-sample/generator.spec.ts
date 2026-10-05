@@ -127,6 +127,20 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with gradle-reactive(true), a group sample defined by a jdl', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withArguments('gradle-reactive(true)')
+        .withMockedGenerators(['jhipster:jdl', 'jhipster:info']);
+    });
+
+    it('should give the jdl inline to the jdl generator', () => {
+      const [, options] = runResult.getGeneratorMock('jhipster:jdl').calls.at(-1)!.arguments;
+      expect(options).toMatchObject({ inline: expect.stringContaining('graalvmSupport true') });
+    });
+  });
+
   describe(`with daily-builds/ngx-oauth2 (daily-builds sample)`, () => {
     before(async () => {
       await helpers
