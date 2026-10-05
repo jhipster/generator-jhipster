@@ -52,7 +52,7 @@
   },
   "devDependencies": {
 <%_ if (skipServer) { _%>
-    "sonar-scanner": "3.1.0",
+    "sonar-scanner": "<%- nodeDependencies['sonar-scanner'] %>",
 <%_ } _%>
     "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
     "@angular/build": "<%- nodeDependencies['@angular/cli'] %>",
