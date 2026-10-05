@@ -16,9 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+@use 'sass:color';
+
 $header-color: #fff;
 $header-color-secondary: #bbb;
-$header-color-hover: darken($header-color, 20%);
+$header-color-hover: color.adjust($header-color, $lightness: -20%);
 
 /* ==========================================================================
 Development Ribbon
