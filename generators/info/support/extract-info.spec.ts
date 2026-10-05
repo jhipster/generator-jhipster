@@ -82,6 +82,11 @@ describe('extract-info', () => {
       "filename": ".yo-rc.json",
       "type": "yo-rc",
     },
+    {
+      "content": "{ "generator-jhipster": { "clientFramework": "angular" } }",
+      "filename": "app/.yo-rc.json",
+      "type": "yo-rc",
+    },
   ],
   "yoRcBlank": false,
   "yoRcContent": "{"generator-jhipster":{}}",
@@ -173,6 +178,9 @@ describe('extract-info', () => {
       "type": "yo-rc",
     },
   ],
+  "ignoredFiles": [
+    "other.json",
+  ],
   "yoRcBlank": true,
 }
 `);
@@ -200,6 +208,9 @@ describe('extract-info', () => {
       "filename": "app-1.jdl",
       "type": "jdl",
     },
+  ],
+  "ignoredFiles": [
+    "readme.md",
   ],
   "yoRcBlank": true,
 }
@@ -229,6 +240,9 @@ describe('extract-info', () => {
       "type": "json",
     },
   ],
+  "ignoredFiles": [
+    "other/file.json",
+  ],
   "yoRcBlank": true,
 }
 `);
@@ -242,6 +256,9 @@ describe('extract-info', () => {
       expect(filterData(data)).toMatchInlineSnapshot(`
 {
   "files": [],
+  "ignoredFiles": [
+    ".jhipster/.json",
+  ],
   "yoRcBlank": true,
 }
 `);
@@ -259,9 +276,56 @@ describe('extract-info', () => {
       expect(filterData(data)).toMatchInlineSnapshot(`
 {
   "files": [],
+  "ignoredFiles": [
+    "package.json",
+    "config.yaml",
+    "README.md",
+  ],
   "yoRcBlank": true,
 }
 `);
+    });
+
+    it('should keep the files of an application folder', () => {
+      const data = {
+        yoRcBlank: true,
+        files: [
+          { filename: 'app/.yo-rc.json', content: '{}', type: 'yo-rc' as const },
+          { filename: 'app/.jhipster/User.json', content: '{}', type: 'json' as const },
+          { filename: 'apps/gateway/.jhipster/User.json', content: '{}', type: 'json' as const },
+        ],
+      };
+      expect(filterData(data).files.map(file => file.filename)).toEqual([
+        'app/.yo-rc.json',
+        'app/.jhipster/User.json',
+        'apps/gateway/.jhipster/User.json',
+      ]);
+    });
+
+    it('should ignore the files outside the project', () => {
+      const data = {
+        yoRcBlank: true,
+        files: [
+          { filename: '../.yo-rc.json', content: '{}', type: 'yo-rc' as const },
+          { filename: '../../other/.jhipster/User.json', content: '{}', type: 'json' as const },
+          { filename: 'app/../../.jhipster/User.json', content: '{}', type: 'json' as const },
+          { filename: '/tmp/.jhipster/User.json', content: '{}', type: 'json' as const },
+          { filename: '..\\.jhipster\\User.json', content: '{}', type: 'json' as const },
+        ],
+      };
+      expect(filterData(data)).toEqual({ yoRcBlank: true, files: [], ignoredFiles: data.files.map(file => file.filename) });
+    });
+
+    it('should ignore the files that only end like a reproduction file', () => {
+      const data = {
+        yoRcBlank: true,
+        files: [
+          { filename: 'x.jhipster/User.json', content: '{}', type: 'json' as const },
+          { filename: 'app.yo-rc.json', content: '{}', type: 'yo-rc' as const },
+          { filename: 'src/main/app.jdl', content: 'entity A', type: 'json' as const },
+        ],
+      };
+      expect(filterData(data)).toEqual({ yoRcBlank: true, files: [], ignoredFiles: data.files.map(file => file.filename) });
     });
 
     it('should handle empty files array', () => {
@@ -300,6 +364,9 @@ describe('extract-info', () => {
       "type": "json",
     },
   ],
+  "ignoredFiles": [
+    ".jhipster/package.json",
+  ],
   "yoRcBlank": true,
 }
 `);
@@ -324,6 +391,9 @@ describe('extract-info', () => {
       "filename": ".yo-rc.json",
       "type": "yo-rc",
     },
+  ],
+  "ignoredFiles": [
+    "other.json",
   ],
   "jdlApplications": 2,
   "yoRcBlank": false,
