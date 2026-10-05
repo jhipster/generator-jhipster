@@ -52,6 +52,10 @@ describe('command - converter', () => {
       );
     });
 
+    it('should name the option so that the cli reads it back as the config', () => {
+      expect(convertConfigToCliOption('e2eTls', { cli: { type: Boolean }, scope: 'storage' })?.optionName).toBe('e2e-tls');
+    });
+
     it('should give no option to a config without cli', () => {
       expect(convertConfigToCliOption('validateBaseName', { internal: { type: Function }, scope: 'generator' })).toBeUndefined();
       expect(

@@ -92,7 +92,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${application.javaPackagingDestDir}e2e.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+          'ci:e2e:server:start': `java -jar ${application.javaPackagingDestDir}e2e.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment${application.e2eTls ? ',tls' : ''} ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
       packageJsonE2eScripts({ application }) {
@@ -100,10 +100,15 @@ export default class ServerGenerator extends JavaApplicationGenerator {
 
         let applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
         applicationWaitTimeout = application.authenticationTypeOauth2 ? applicationWaitTimeout * 2 : applicationWaitTimeout;
+        // With e2eTls, `ci:e2e:run` sets E2E_SERVER_PROTOCOL to https, the packaged server being started with its tls
+        // profile; the server of the development flows keeps http. wait-on does not verify the certificate, which is
+        // self-signed.
+        // eslint-disable-next-line no-template-curly-in-string
+        const protocol = application.e2eTls ? '${E2E_SERVER_PROTOCOL:-http}' : 'http';
         const applicationEndpoint =
           application.applicationTypeMicroservice ?
             `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
-          : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
+          : `${protocol}-get://127.0.0.1:$npm_package_config_backend_port/management/health`;
         scriptsStorage.set({
           'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
         });

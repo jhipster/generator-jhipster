@@ -132,6 +132,13 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
+      prepareE2eTls({ application }) {
+        // Only for an application whose e2e tests run against its own packaged server: a microservice is tested through its gateway.
+        application.e2eTls &&=
+          !application.applicationTypeMicroservice &&
+          !application.skipServer &&
+          Boolean(application.testFrameworks?.includes(CYPRESS) || application.testFrameworks?.includes(PLAYWRIGHT));
+      },
       addExternalResource({ application, source }) {
         if (!application.clientFrameworkBuiltIn) {
           return;

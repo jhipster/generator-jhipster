@@ -42,7 +42,8 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
-        "removeNeedles": true
+        "removeNeedles": true,
+        "e2eTls": true
       },
       "workspaces": "false",
       "disabled": false,
@@ -71,6 +72,34 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "testFrameworks": [
           "playwright"
         ]
+      },
+      "workspaces": "false",
+      "disabled": false,
+      "build-jhipster-bom": true,
+      "jhipster-bom-branch": "main",
+      "jhipster-bom-cicd-version": "0.0.0-CICD"
+    },
+    {
+      "job-name": "ng-default-playwright-tls (n[2]/j[2])",
+      "sample": "ng-default-playwright-tls",
+      "os": "ubuntu-latest",
+      "node-version": "[2]",
+      "java-version": "[2]",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-compare": "false",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-default-playwright-tls",
+      "entity": "none",
+      "app-sample": "ng-default-playwright",
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "testFrameworks": [
+          "playwright"
+        ],
+        "e2eTls": true
       },
       "workspaces": "false",
       "disabled": false,
