@@ -22,7 +22,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPencilAlt<%- readOnly ? '' : ', faTimes' %> } from '@fortawesome/free-solid-svg-icons';
+<% if (!readOnly) { %>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<% } %>
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -44,6 +47,9 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+<% if (!readOnly) { %>
+        { provide: NgbModal, useValue: { open: vi.fn() } },
+<% } %>
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
 <%_ } _%>
@@ -62,6 +68,9 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
+<% if (!readOnly) { %>
+    library.addIcons(faTimes);
+<% } %>
 <%_ if (anyFieldIsBlobDerived) { _%>
     dataUtils = TestBed.inject(DataUtils);
     vi.spyOn(window, 'open').mockImplementation(() => null);

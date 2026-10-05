@@ -75,10 +75,29 @@
                         <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.edit') }}</span>
                     </button>
                     </router-link>
+                <b-button v-if="<%- entityInstance %>.<%- primaryKey.name %>" @click="prepareRemove(<%- entityInstance %>)" variant="danger" data-cy="entityDeleteButton">
+                    <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+                </b-button>
 <%_ } _%>
             </div>
         </div>
     </div>
+<%_ if (!readOnly) { _%>
+    <b-modal ref="removeEntity" id="removeEntity">
+        <template #title>
+            <span id="<%- i18nKeyPrefix %>.delete.question" data-cy="<%- entityInstance %>DeleteDialogHeading">{{ t$('entity.delete.title') }}</span>
+        </template>
+        <div class="modal-body">
+            <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
+        </div>
+        <template #footer>
+            <div>
+                <button type="button" class="btn btn-secondary" @click="closeDialog()">{{ t$('entity.action.cancel') }}</button>
+                <button type="button" class="btn btn-primary" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">{{ t$('entity.action.delete') }}</button>
+            </div>
+        </template>
+    </b-modal>
+<%_ } _%>
 </template>
 
 <script lang="ts" src="./<%- entityFileName %>-details.component.ts">

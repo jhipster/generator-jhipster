@@ -303,7 +303,9 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   <%_ if (clientFrameworkReact) { _%>
         cy.intercept('GET', '/<%- baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
   <%_ } _%>
-        cy.get(entityDeleteButtonSelector).last().click();
+        cy.get(entityDetailsButtonSelector).first().click();
+        cy.getEntityDetailsHeading('<%- entityInstance %>').should('exist');
+        cy.get(entityDeleteButtonSelector).click();
   <%_ if (clientFrameworkReact) { _%>
         cy.wait('@dialogDeleteRequest');
   <%_ } _%>
@@ -314,6 +316,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
+          expect(response?.body).not.to.deep.include(<%- entityInstance %>);
         });
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
   <%_ if (cypressBootstrapEntities) { _%>

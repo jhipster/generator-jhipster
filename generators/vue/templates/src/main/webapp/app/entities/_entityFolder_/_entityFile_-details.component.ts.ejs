@@ -49,6 +49,32 @@ export default defineComponent({
 
     const previousState = () => router.go(-1);
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref({});
+<%_ if (!readOnly) { _%>
+    const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: I<%- entityAngularName %>) => {
+      removeId.value = instance.<%- primaryKey.name %>;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const remove<%- entityAngularName %> = async () => {
+      try {
+        await <%- entityInstance %>Service().delete(removeId.value);
+  <%_ if (enableTranslation) { _%>
+        const message = t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: removeId.value }).toString();
+  <%_ } else { _%>
+        const message = `A <%- entityAngularName %> is deleted with identifier ${removeId.value}`;
+  <%_ } _%>
+        alertService.showInfo(message, { variant: 'danger' });
+        closeDialog();
+        await router.push({ name: '<%- entityAngularName %>' });
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+<%_ } _%>
 
     const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
       try {
@@ -72,6 +98,13 @@ export default defineComponent({
       ...dataUtils,
 <% } %>
       previousState,
+<%_ if (!readOnly) { _%>
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      remove<%- entityAngularName %>,
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
