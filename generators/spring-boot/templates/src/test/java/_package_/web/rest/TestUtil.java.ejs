@@ -43,11 +43,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 <%_ } _%>
-<%_ if (searchEngineCouchbase) { _%>
-import java.util.concurrent.Callable;
-import java.time.Duration;
-import java.time.Instant;
-<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -198,32 +193,6 @@ public final class TestUtil {
         CriteriaQuery<T> all = cq.select(rootEntry);
         TypedQuery<T> allQuery = em.createQuery(all);
         return allQuery.getResultList();
-    }
-<%_ } _%>
-<%_ if (searchEngineCouchbase) { _%>
-
-    /**
-     * Couchbase search results are eventually consistent and non-monotonic: a document can show up
-     * in one query and be missing from the next one until the index fully catches up.
-     * Retries the whole callable, assertions included, until it succeeds.
-     */
-    public static <T> T retryUntilSuccess(Callable<T> callable) {
-        Instant timeout = Instant.now().plus(Duration.ofMinutes(1));
-        while (true) {
-            try {
-                return callable.call();
-            } catch (Throwable throwable) {
-                if (Instant.now().isAfter(timeout)) {
-                    throw new AssertionError("Condition not fulfilled within timeout", throwable);
-                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    throw new IllegalStateException(e);
-                }
-            }
-        }
     }
 <%_ } _%>
 

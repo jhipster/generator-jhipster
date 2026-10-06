@@ -21,7 +21,7 @@ package <%- packageName %>.web.rest;
 import <%- packageName %>.IntegrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.awaitility.Awaitility.await;
 <%_ if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,15 +87,13 @@ class <%- upperFirstCamelCaseBaseName %>KafkaResourceIT {
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
             .andReturn();
-        for (int i = 0; i < 100; i++) {
-            input.send(testMessage);
-            Thread.sleep(100);
-            String content = mvcResult.getResponse().getContentAsString();
-            if (content.contains("data:value-consume")) {
-                restMockMvc.perform(get("/api/<%- dasherizedBaseName %>-kafka/unregister"));
-                return;
-            }
-        }
-        fail("Expected content data:value-consume not received");
+        await()
+            .atMost(Duration.ofSeconds(10))
+            .pollInterval(Duration.ofMillis(100))
+            .until(() -> {
+                input.send(testMessage);
+                return mvcResult.getResponse().getContentAsString().contains("data:value-consume");
+            });
+        restMockMvc.perform(get("/api/<%- dasherizedBaseName %>-kafka/unregister"));
     }
 }

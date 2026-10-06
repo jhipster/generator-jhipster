@@ -96,6 +96,9 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-couchbase' },
         ]);
+        if (application.searchEngineCouchbase) {
+          source.addJavaDependencies?.([{ scope: 'test', groupId: 'org.awaitility', artifactId: 'awaitility' }]);
+        }
       },
       blockHound({ application, source }) {
         if (!application.reactive) return;
