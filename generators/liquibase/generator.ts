@@ -173,12 +173,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      migrateIncrementalChangelogDate({ entityName, entityConfig }) {
+      migrateIncrementalChangelogDate({ control, entityName, entityConfig }) {
         // An entity created in incremental mode by JHipster 7, without the flag: its changelog is in the incremental section.
         const { changelogDate, ...annotations } = entityConfig.annotations ?? {};
+        if (!changelogDate || !control.isJhipsterVersionLessThan('9.4.1')) return;
         this.#masterXml ??= this.readDestination('src/main/resources/config/liquibase/master.xml', { defaults: '' });
         const incrementalSection = this.#masterXml.split('jhipster-needle-liquibase-add-constraints-changelog')[1] ?? '';
-        if (changelogDate && incrementalSection.includes(`/${changelogDate}_added_entity_${entityName}.xml"`)) {
+        if (incrementalSection.includes(`/${changelogDate}_added_entity_${entityName}.xml"`)) {
           entityConfig.annotations = { ...annotations, incrementalChangelogDate: changelogDate };
         }
       },

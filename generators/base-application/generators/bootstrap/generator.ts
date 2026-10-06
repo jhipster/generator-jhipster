@@ -124,7 +124,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      configureEntity({ application, entityName, entityStorage, entityConfig }) {
+      configureEntity({ application, control, entityName, entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
         for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
@@ -137,7 +137,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           delete entityConfig.changelogDate;
         }
         // Older versions stored the creation of an entity in incremental mode as a flag.
-        if ('incrementalChangelog' in entityConfig) {
+        if (control.isJhipsterVersionLessThan('9.4.1') && 'incrementalChangelog' in entityConfig) {
           const { incrementalChangelog } = entityConfig as { incrementalChangelog?: boolean };
           delete (entityConfig as { incrementalChangelog?: boolean }).incrementalChangelog;
           const { changelogDate, ...otherAnnotations } = entityConfig.annotations!;

@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, resolve } from 'node:path';
+import { writeFileSync } from 'node:fs';
+import { basename, join, resolve } from 'node:path';
 
 import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
@@ -64,6 +65,7 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({ skipUserManagement: true }, [
           { name: 'Foo', annotations: { changelogDate: '20200101000100' }, incrementalChangelog: true, fields: [] } as any,
         ])
+        .doInDir(cwd => writeFileSync(join(cwd, '.yo-rc.json'), JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0' } })))
         .withSkipWritingPriorities();
     });
 
