@@ -54,18 +54,17 @@ describe('ci samples groups', () => {
     it('describes the samples of every group', async () => {
       const samples = await describeGithubSamples({ samplesGroupFolder: valid, root: fixtures, cli: './cli/cli.cjs' });
       expect(
-        samples.map(({ name, generator, command, yoRcFile, jdlSampleFiles, jdl, config, generatorOptions, matrix }) => ({
-          name,
-          generator,
-          command,
-          yoRcFile,
-          jdlSampleFiles,
-          jdl,
-          config,
-          generatorOptions,
-          os: matrix.os,
-        })),
-      ).toMatchInlineSnapshot(`
+  samples.map(({ name, command, config, generatorOptions, matrix, ...sample }) => ({
+    name,
+    command,
+    config,
+    generatorOptions,
+    os: matrix.os,
+    ...(sample.generator === 'jdl' ?
+    { generator: sample.generator, jdl: sample.jdl, jdlSampleFiles: sample.jdlSampleFiles } :
+    { generator: sample.generator, yoRcFile: sample.yoRcFile })
+  }))
+).toMatchInlineSnapshot(`
 [
   {
     "command": "./cli/cli.cjs generate-sample 'custom-jdl'",
@@ -82,7 +81,6 @@ describe('ci samples groups', () => {
     ],
     "name": "custom-jdl",
     "os": "ubuntu-latest",
-    "yoRcFile": undefined,
   },
   {
     "command": "./cli/cli.cjs generate-sample 'custom-yo-rc'",
@@ -91,8 +89,6 @@ describe('ci samples groups', () => {
     },
     "generator": "app",
     "generatorOptions": undefined,
-    "jdl": undefined,
-    "jdlSampleFiles": [],
     "name": "custom-yo-rc",
     "os": "macos-latest",
     "yoRcFile": "valid/files/app-yo-rc/.yo-rc.json",
@@ -104,8 +100,6 @@ describe('ci samples groups', () => {
     },
     "generator": "app",
     "generatorOptions": undefined,
-    "jdl": undefined,
-    "jdlSampleFiles": [],
     "name": "app-yo-rc",
     "os": "ubuntu-latest",
     "yoRcFile": "valid/files/app-yo-rc/.yo-rc.json",
@@ -123,7 +117,6 @@ describe('ci samples groups', () => {
     ],
     "name": "app",
     "os": "ubuntu-latest",
-    "yoRcFile": undefined,
   },
   {
     "command": "./cli/cli.cjs generate-sample 'inline-jdl'",
@@ -136,7 +129,6 @@ describe('ci samples groups', () => {
     "jdlSampleFiles": [],
     "name": "inline-jdl",
     "os": "ubuntu-latest",
-    "yoRcFile": undefined,
   },
 ]
 `);

@@ -19,6 +19,7 @@
 import { relative } from 'node:path';
 
 import {
+  type BaseSampleDescription,
   type GitHubMatrix,
   type SampleDescription,
   type WorkflowSample,
@@ -45,27 +46,36 @@ const describeResolved = (
   command: string,
 ): SampleDescription => {
   const { sample } = resolved;
-  return {
+  const base: BaseSampleDescription = {
     name: resolved.name,
     workflow,
     jobName: item?.['job-name'] ?? sample?.['job-name'] ?? resolved.name,
     disabled: sample?.disabled ? true : undefined,
     sonar: sample?.['sonar-analyse'] === 'true' ? true : undefined,
-    generator: resolved.generator,
     command,
+    generatorOptions: sample?.generatorOptions,
+    args: sample?.['extra-args'],
+    environment: resolved.profile,
+    war: resolved.war || undefined,
+    matrix: sampleMatrixOf(item),
+  };
+  if (resolved.generator === 'jdl') {
+    return {
+      ...base,
+      generator: 'jdl',
+      jdlSamples: sample?.['jdl-samples'],
+      jdlSampleFiles: resolved.jdlSampleFiles.map(relativeToRoot),
+    };
+  }
+  return {
+    ...base,
+    generator: 'app',
     yoRcFile: resolved.yoRcFile ? relativeToRoot(resolved.yoRcFile) : undefined,
     config: readSampleConfig(resolved.yoRcFile),
     entitiesSample: resolved.entitiesSample,
     entityFiles: resolved.entityFiles.map(relativeToRoot),
     jdlEntity: sample?.['jdl-entity'],
     jdlEntityFiles: resolved.jdlEntityFiles.map(relativeToRoot),
-    jdlSamples: sample?.['jdl-samples'],
-    jdlSampleFiles: resolved.jdlSampleFiles.map(relativeToRoot),
-    generatorOptions: sample?.generatorOptions,
-    args: sample?.['extra-args'],
-    environment: resolved.profile,
-    war: resolved.war || undefined,
-    matrix: sampleMatrixOf(item),
   };
 };
 
@@ -93,8 +103,10 @@ const describeGroupSamples = (workflow: string, samplesFolder: string): Promise<
       const samplePath = item.sample ?? name;
       const resolved = resolveSample(samplePath.replace(/^samples\//, ''));
       const args = item.args ?? '';
+      const description = describeResolved(resolved, workflow, matrix, `jhipster generate-sample ${samplePath} ${args}`.trim());
+      if (description.generator === 'jdl') return { ...description, name, jobName: name, args: args || undefined };
       return {
-        ...describeResolved(resolved, workflow, matrix, `jhipster generate-sample ${samplePath} ${args}`.trim()),
+        ...description,
         name,
         jobName: name,
         args: args || undefined,
