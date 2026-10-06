@@ -156,8 +156,13 @@ function importTarget(content: ParsedJDLApplications, configuration: JDLApplicat
 function withExistingEntity(folder: string, entity: JSONEntity): JSONEntity {
   try {
     const fileOnDisk = readEntityFile<JSONEntity>(folder, entity.name);
-    if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
-      return { ...fileOnDisk, ...entity, annotations: { ...entity.annotations, changelogDate: fileOnDisk.annotations.changelogDate } };
+    const { changelogDate, incrementalChangelogDate } = fileOnDisk?.annotations ?? {};
+    if (
+      !entity.annotations?.changelogDate &&
+      !entity.annotations?.incrementalChangelogDate &&
+      (changelogDate || incrementalChangelogDate)
+    ) {
+      return { ...fileOnDisk, ...entity, annotations: { ...entity.annotations, changelogDate, incrementalChangelogDate } };
     }
   } catch {
     // A new entity.

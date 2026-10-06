@@ -57,6 +57,23 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with an entity written by an older version', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          { name: 'Foo', annotations: { changelogDate: '20200101000100' }, incrementalChangelog: true, fields: [] } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    it('should store the incrementalChangelog flag as the incrementalChangelogDate', () => {
+      result.assertJsonFileContent('.jhipster/Foo.json', { annotations: { incrementalChangelogDate: '20200101000100' } });
+      result.assertNoFileContent('.jhipster/Foo.json', '"changelogDate"');
+      result.assertNoFileContent('.jhipster/Foo.json', '"incrementalChangelog"');
+    });
+  });
+
   describe('security hardening', () => {
     before(async () => {
       await helpers

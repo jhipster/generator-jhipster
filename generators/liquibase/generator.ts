@@ -83,6 +83,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   LiquibaseOptions,
   LiquibaseSource
 > {
+  #masterXml?: string;
   numberOfRows!: number;
   databaseChangelogs: BaseChangelog<LiquibaseEntity>[] = [];
   injectBuildTool = true;
@@ -168,6 +169,24 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get [BaseEntityChangesGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      migrateIncrementalChangelogDate({ entityName, entityConfig }) {
+        // An entity created in incremental mode by JHipster 7, without the flag: its changelog is in the incremental section.
+        const { changelogDate, ...annotations } = entityConfig.annotations ?? {};
+        this.#masterXml ??= this.readDestination('src/main/resources/config/liquibase/master.xml', { defaults: '' });
+        const incrementalSection = this.#masterXml.split('jhipster-needle-liquibase-add-constraints-changelog')[1] ?? '';
+        if (changelogDate && incrementalSection.includes(`/${changelogDate}_added_entity_${entityName}.xml"`)) {
+          entityConfig.annotations = { ...annotations, incrementalChangelogDate: changelogDate };
+        }
+      },
+    });
+  }
+
+  get [BaseEntityChangesGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
   get preparingEachEntityField() {
@@ -660,11 +679,14 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     source: LiquibaseSource;
   }) {
     const fileName = `${databaseChangelog.changelogDate}_added_entity_${entity.entityClass}`;
-    source.addLiquibaseChangelog!({ changelogName: fileName, section: entity.incremental ? 'incremental' : 'base' });
+    source.addLiquibaseChangelog!({ changelogName: fileName, section: databaseChangelog.incremental ? 'incremental' : 'base' });
 
     if (entity.anyRelationshipIsOwnerSide) {
       const constFileName = `${databaseChangelog.changelogDate}_added_entity_constraints_${entity.entityClass}`;
-      source.addLiquibaseChangelog!({ changelogName: constFileName, section: entity.incremental ? 'incremental' : 'constraints' });
+      source.addLiquibaseChangelog!({
+        changelogName: constFileName,
+        section: databaseChangelog.incremental ? 'incremental' : 'constraints',
+      });
     }
   }
 

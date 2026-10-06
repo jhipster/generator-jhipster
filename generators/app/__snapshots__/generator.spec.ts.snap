@@ -145,7 +145,7 @@ exports[`generator - app jdlStore with incremental changelog application and ent
   ".jhipster/Bar.json": {
     "contents": "{
   "annotations": {
-    "changelogDate": "20200101000200"
+    "incrementalChangelogDate": "20200101000200"
   },
   "fields": [],
   "name": "Bar",
@@ -157,7 +157,7 @@ exports[`generator - app jdlStore with incremental changelog application and ent
   ".jhipster/Foo.json": {
     "contents": "{
   "annotations": {
-    "changelogDate": "20200101000100"
+    "incrementalChangelogDate": "20200101000100"
   },
   "fields": [],
   "name": "Foo",
@@ -188,9 +188,9 @@ exports[`generator - app jdlStore with incremental changelog application and ent
   entities Foo, Bar
 }
 
-@ChangelogDate("20200101000100")
+@IncrementalChangelogDate("20200101000100")
 entity Foo
-@ChangelogDate("20200101000200")
+@IncrementalChangelogDate("20200101000200")
 entity Bar
 ",
     "stateCleared": "modified",

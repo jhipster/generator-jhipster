@@ -243,10 +243,11 @@ export default class BaseApplicationGenerator<
    */
   getExistingEntities(): { name: string; definition: Entity }[] {
     function isBefore(
-      e1: { definition: { annotations?: { changelogDate?: number } } },
-      e2: { definition: { annotations?: { changelogDate?: number } } },
+      e1: { definition: { annotations?: { changelogDate?: number; incrementalChangelogDate?: number } } },
+      e2: { definition: { annotations?: { changelogDate?: number; incrementalChangelogDate?: number } } },
     ): number {
-      return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
+      const date = ({ definition: { annotations } }: typeof e1) => annotations?.incrementalChangelogDate ?? annotations?.changelogDate ?? 0;
+      return date(e1) - date(e2);
     }
 
     const configDir = this.getEntitiesConfigPath();

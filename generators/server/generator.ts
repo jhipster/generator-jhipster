@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import { existsSync } from 'node:fs';
-
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.ts';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.ts';
@@ -165,17 +163,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
           : entityTableName;
         if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
-        }
-
-        if (entityConfig.incrementalChangelog === undefined) {
-          // Keep entity's original incrementalChangelog option.
-          entityConfig.incrementalChangelog =
-            application.incrementalChangelog &&
-            !existsSync(
-              this.destinationPath(
-                `src/main/resources/config/liquibase/changelog/${entityConfig.annotations?.changelogDate}_added_entity_${entityConfig.name}.xml`,
-              ),
-            );
         }
       },
 

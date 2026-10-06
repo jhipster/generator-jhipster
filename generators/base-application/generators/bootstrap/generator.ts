@@ -136,15 +136,31 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           entityConfig.annotations!.changelogDate = entityConfig.changelogDate;
           delete entityConfig.changelogDate;
         }
-        if (!entityConfig.annotations!.changelogDate) {
+        // Older versions stored the creation of an entity in incremental mode as a flag.
+        if ('incrementalChangelog' in entityConfig) {
+          const { incrementalChangelog } = entityConfig as { incrementalChangelog?: boolean };
+          delete (entityConfig as { incrementalChangelog?: boolean }).incrementalChangelog;
+          const { changelogDate, ...otherAnnotations } = entityConfig.annotations!;
+          if (incrementalChangelog && changelogDate && !otherAnnotations.incrementalChangelogDate) {
+            entityConfig.annotations = { ...otherAnnotations, incrementalChangelogDate: changelogDate };
+          }
+        }
+        const annotations = entityConfig.annotations!;
+        if (annotations.changelogDate && annotations.incrementalChangelogDate) {
+          throw new Error(`Entity ${entityName} cannot have both changelogDate and incrementalChangelogDate.`);
+        }
+        if (!annotations.changelogDate && !annotations.incrementalChangelogDate) {
           if (
             (entityName === 'UserManagement' && application.generateUserManagement) ||
             (entityName === 'User' && application.generateBuiltInUserEntity) ||
             (entityName === 'Authority' && application.generateBuiltInAuthorityEntity)
           ) {
-            entityConfig.annotations!.changelogDate = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp)[entityName];
+            annotations.changelogDate = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp)[entityName];
+          } else if (application.incrementalChangelog) {
+            // Its changelog goes to the incremental section of master.xml, also when master.xml is written again.
+            annotations.incrementalChangelogDate = this.nextTimestamp();
           } else {
-            entityConfig.annotations!.changelogDate = this.nextTimestamp();
+            annotations.changelogDate = this.nextTimestamp();
           }
           entityStorage.save();
         }
@@ -254,6 +270,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             let entity = entityStorage.getAll() as BaseEntity;
             entity.name ??= entityName;
             entity = { ...entity, ...entity.annotations };
+            entity.changelogDate ??= entity.incrementalChangelogDate;
             Object.assign(entityBootstrap, entity);
           }
         }
