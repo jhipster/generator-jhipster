@@ -307,49 +307,28 @@ export default class BaseGenerator<
     if (this.features.uniqueGlobally) {
       throw new Error('Timestamp generation is not supported in unique globally generators.');
     }
-    const reproducible = Boolean(this.options.reproducible);
-    // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
-    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
-    let now = new Date();
     // Milliseconds are ignored for changelogDate.
-    now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with reproducible option or a specific timestamp.
-    if (reproducible || creationTimestamp) {
-      now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
-        factory: () => {
-          const newCreationTimestamp: string | number | undefined = creationTimestamp ?? this.config.get('creationTimestamp');
-          let newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
-          // Continue after the changelogs of a previous run, else they would be generated again with the same name.
-          const { lastLiquibaseTimestamp } = this.jhipsterConfig;
-          if (lastLiquibaseTimestamp && lastLiquibaseTimestamp > newDate.getTime()) {
-            newDate = new Date(lastLiquibaseTimestamp);
-          }
-          newDate.setMilliseconds(0);
-          return newDate;
-        },
+    const toSeconds = (time: number) => Math.floor(time / 1000) * 1000;
+    const { lastLiquibaseTimestamp = 0 } = this.jhipsterConfig;
+    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
+    let next: number;
+    if (this.options.reproducible || creationTimestamp) {
+      // One minute per changelog from the creation timestamp, after the changelogs of a previous run.
+      const previous = this.getContextData<Date>(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
+        factory: () =>
+          new Date(
+            Math.max(new Date(creationTimestamp ?? this.config.get('creationTimestamp') ?? Date.now()).getTime(), lastLiquibaseTimestamp),
+          ),
       });
-      now.setMinutes(now.getMinutes() + 1);
-      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { replacement: now });
-
-      // Reproducible build can create future timestamp, save it.
-      const { lastLiquibaseTimestamp } = this.jhipsterConfig;
-      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
-        this.config.set('lastLiquibaseTimestamp', now.getTime());
-      }
+      next = toSeconds(previous.getTime()) + 60_000;
+      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { replacement: new Date(next) });
     } else {
-      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      const { lastLiquibaseTimestamp } = this.jhipsterConfig;
-      if (lastLiquibaseTimestamp) {
-        const lastTimestampDate = new Date(lastLiquibaseTimestamp);
-        if (lastTimestampDate >= now) {
-          now = lastTimestampDate;
-          now.setSeconds(now.getSeconds() + 1);
-          now.setMilliseconds(0);
-        }
-      }
-      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
+      // The stored timestamp can be in the future, after a reproducible run.
+      const now = toSeconds(Date.now());
+      next = lastLiquibaseTimestamp >= now ? toSeconds(lastLiquibaseTimestamp) + 1000 : now;
     }
-    return formatDateForChangelog(now);
+    this.jhipsterConfig.lastLiquibaseTimestamp = next;
+    return formatDateForChangelog(new Date(next));
   }
 
   /**
