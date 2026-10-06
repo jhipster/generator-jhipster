@@ -47,6 +47,7 @@ import {
   isGitConfigFilePath,
   isPrettierConfigFilePath,
 } from './support/index.ts';
+import TemplateFileFs from './support/multi-step-transform/template-file-fs.ts';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;
@@ -70,6 +71,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   /** Paths, outside of the destination root, whose files must be part of the exported archive. */
   private exportPaths: string[] = [];
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
+  private lateTemplatesListener?: (filePath: string) => void;
   prettierJava = false;
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
@@ -120,7 +122,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
    * Queue multi step templates transform
    */
   queueMultistepTransform() {
-    const multiStepTransform = createMultiStepTransform();
+    const multiStepTransform = createMultiStepTransform({ log: message => this.log.debug(message) });
     const listener = (filePath: string) => {
       if (multiStepTransform.templateFileFs.isTemplate(filePath)) {
         this.env.sharedFs.removeListener('change', listener);
@@ -181,16 +183,29 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   async commitTask() {
     if (this.deferCommit) {
       await this.deferSharedFs();
-      return;
-    }
-    if (this.exportApplication) {
+    } else if (this.exportApplication) {
       await this.exportSharedFs();
-      return;
+    } else {
+      await this.commitSharedFs(
+        { refresh: this.refreshOnCommit },
+        ...this.env.findFeature('commitTransformFactory').flatMap(({ feature }) => feature()),
+      );
     }
-    await this.commitSharedFs(
-      { refresh: this.refreshOnCommit },
-      ...this.env.findFeature('commitTransformFactory').flatMap(({ feature }) => feature()),
-    );
+    this.logLateTemplates();
+  }
+
+  /**
+   * A multi-step template written after the commit is never merged.
+   */
+  private logLateTemplates() {
+    if (this.lateTemplatesListener) return;
+    const templateFileFs = new TemplateFileFs();
+    this.lateTemplatesListener = (filePath: string) => {
+      if (templateFileFs.isTemplate(filePath)) {
+        this.log.debug(`The template ${filePath} was written after the commit, it will not be merged.`);
+      }
+    };
+    this.env.sharedFs.on('change', this.lateTemplatesListener);
   }
 
   /**

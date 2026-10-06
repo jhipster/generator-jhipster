@@ -22,9 +22,10 @@ import { type DuplexWithDebug, transform } from 'p-transform';
 import TemplateFileFs from './template-file-fs.ts';
 import type TemplateFile from './template-file.ts';
 
-export const createMultiStepTransform = () => {
+export const createMultiStepTransform = ({ log }: { log?: (message: string) => void } = {}) => {
   const templateFileFs = new TemplateFileFs({});
   const templateFiles: TemplateFile[] = [];
+  const fragmentFiles: TemplateFile[] = [];
 
   const duplex: DuplexWithDebug & { templateFileFs: TemplateFileFs } = transform(
     (file: MemFsEditorFile) => {
@@ -34,10 +35,17 @@ export const createMultiStepTransform = () => {
       const templateFile = templateFileFs.add(file);
       if (templateFile.rootTemplate) {
         templateFiles.push(templateFile);
+      } else {
+        fragmentFiles.push(templateFile);
       }
       return undefined;
     },
     async function () {
+      for (const fragment of fragmentFiles) {
+        if (!templateFileFs.get(fragment.parentPath!).filePath) {
+          log?.(`The fragment ${fragment.filePath} was dropped: its template ${fragment.parentPath} was not written with it.`);
+        }
+      }
       for (const templateFile of templateFiles) {
         const file = templateFile.file!;
         file.path = templateFile.basePath!;
