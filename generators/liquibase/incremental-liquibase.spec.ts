@@ -406,6 +406,57 @@ entity Customer {
     });
   });
 
+  describe('when adding fields in two reproducible runs', () => {
+    before(async () => {
+      await helpers.runJDL(`
+${jdlApplication}
+entity Customer {
+    original String
+}
+`);
+
+      await helpers
+        .runJDLInApplication(
+          `
+${jdlApplication}
+entity Customer {
+    original String
+    foo String
+}
+`,
+        )
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
+      await helpers
+        .runJDLInApplication(
+          `
+${jdlApplication}
+entity Customer {
+    original String
+    foo String
+    bar String
+}
+`,
+        )
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+    });
+
+    it('should keep the changelog of the first run', () => {
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_updated_entity_Customer.xml`,
+        'column name="foo" type="varchar(255)"',
+      );
+    });
+    it('should create the changelog of the second run after the last one', () => {
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000300_updated_entity_Customer.xml`,
+        'column name="bar" type="varchar(255)"',
+      );
+    });
+  });
+
   describe('when regenerating an entity with a MapStruct expression', () => {
     before(async () => {
       await helpers

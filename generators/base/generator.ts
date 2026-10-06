@@ -318,7 +318,12 @@ export default class BaseGenerator<
       now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
         factory: () => {
           const newCreationTimestamp: string | number | undefined = creationTimestamp ?? this.config.get('creationTimestamp');
-          const newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
+          let newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
+          // Continue after the changelogs of a previous run, else they would be generated again with the same name.
+          const { lastLiquibaseTimestamp } = this.jhipsterConfig;
+          if (lastLiquibaseTimestamp && lastLiquibaseTimestamp > newDate.getTime()) {
+            newDate = new Date(lastLiquibaseTimestamp);
+          }
           newDate.setMilliseconds(0);
           return newDate;
         },
