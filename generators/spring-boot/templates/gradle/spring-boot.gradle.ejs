@@ -24,7 +24,9 @@ ext {
         springProfiles = "dev"
         springTestProfiles = "test,testdev"
     }
-    if (project.hasProperty("tls")) {
+    if (project.hasProperty("tls-samples")) {
+        springProfiles += ",tls,tls-samples"
+    } else if (project.hasProperty("tls")) {
         springProfiles += ",tls"
     }
     if (project.hasProperty("e2e")) {

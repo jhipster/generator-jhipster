@@ -89,7 +89,7 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
           'e2e:headless': 'npm run e2e:playwright --',
         });
 
-        // With e2eTls the packaged server is started with its tls profile: wait for it and test it over https, at the port
+        // With e2eTls the packaged server is started with its tls and tls-samples profiles: wait for it and test it over https, at the port
         // of the package.json config, like the other scripts.
         const e2eTlsEnv =
           application.e2eTls ? 'E2E_SERVER_PROTOCOL=https E2E_BASE_URL=https://localhost:$npm_package_config_backend_port/ ' : '';

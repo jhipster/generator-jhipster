@@ -194,6 +194,9 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -212,7 +215,7 @@ exports[`generator - cassandra gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -532,6 +535,9 @@ exports[`generator - cassandra gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -550,7 +556,7 @@ exports[`generator - cassandra gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -849,6 +855,9 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -861,7 +870,7 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1106,6 +1115,9 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1118,7 +1130,7 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1393,6 +1405,9 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1411,7 +1426,7 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1680,6 +1695,9 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1698,7 +1716,7 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1991,6 +2009,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2009,7 +2030,7 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2326,6 +2347,9 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2338,7 +2362,7 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2574,6 +2598,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2586,7 +2613,7 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2867,6 +2894,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2885,7 +2915,7 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3193,6 +3223,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3205,7 +3238,7 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3522,6 +3555,9 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3540,7 +3576,7 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
   "src/main/resources/config/liquibase/changelog/20220129000200_added_entity_AnotherSimple.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
