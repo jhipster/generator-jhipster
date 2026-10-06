@@ -1,0 +1,232 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { existsSync, readFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
+
+import { createImporterFromContent } from '../jdl/jdl-importer.ts';
+
+import { getGithubSamplesGroup, getGithubSamplesGroups } from './github-group.ts';
+import { type GitHubMatrix, type GitHubMatrixGroupItem, convertToGitHubMatrix } from './github-matrix.ts';
+
+/** The `.yo-rc.json` keys worth showing in a sample description. */
+const CONFIG_KEYS = [
+  'applicationType',
+  'clientFramework',
+  'clientBundler',
+  'microfrontend',
+  'authenticationType',
+  'databaseType',
+  'prodDatabaseType',
+  'devDatabaseType',
+  'reactive',
+  'buildTool',
+  'cacheProvider',
+  'enableHibernateCache',
+  'searchEngine',
+  'messageBroker',
+  'serviceDiscoveryType',
+  'websocket',
+  'testFrameworks',
+  'enableTranslation',
+  'languages',
+  'cypressCoverage',
+  'cypressAudit',
+  'graalvmSupport',
+];
+
+export type SampleDescription = {
+  name: string;
+  /** The workflow, or samples group, of the sample. */
+  workflow: string;
+  jobName: string;
+  disabled?: boolean;
+  sonar?: boolean;
+  generator: 'jdl' | 'app';
+  /** The command that generates the sample. */
+  command: string;
+  yoRcFile?: string;
+  config?: Record<string, unknown>;
+  entitiesSample?: string;
+  entityFiles: string[];
+  /** `jdl-entity` value of the workflow sample. */
+  jdlEntity?: string;
+  jdlEntityFiles: string[];
+  /** `jdl-samples` value of the workflow sample. */
+  jdlSamples?: string;
+  /** The jdl files the sample is generated from. */
+  jdlSampleFiles: string[];
+  /** The inline JDL a sample is generated from. */
+  jdl?: string;
+  generatorOptions?: Record<string, unknown>;
+  args?: string;
+  environment?: string;
+  war?: boolean;
+  matrix: { os: string; node: string; java: string };
+};
+
+const pickConfig = (config: Record<string, unknown>): Record<string, unknown> =>
+  Object.fromEntries(CONFIG_KEYS.filter(key => config[key] !== undefined).map(key => [key, config[key]]));
+
+/** The configuration of a `.yo-rc.json` file worth showing. */
+export const readSampleConfig = (yoRcFile: string | undefined): Record<string, unknown> | undefined => {
+  if (!yoRcFile || !existsSync(yoRcFile)) return undefined;
+  return pickConfig(JSON.parse(readFileSync(yoRcFile, 'utf8'))['generator-jhipster'] ?? {});
+};
+
+/** The configuration the first application of a JDL declares, worth showing. */
+export const readSampleJDLConfig = (jdl: string): Record<string, unknown> | undefined => {
+  try {
+    return pickConfig(createImporterFromContent(jdl).import().exportedApplications[0]?.['generator-jhipster'] ?? {});
+  } catch {
+    // A template JDL completed by the generator options.
+    return undefined;
+  }
+};
+
+export const sampleMatrixOf = (item: GitHubMatrix | undefined): SampleDescription['matrix'] => ({
+  os: item?.os ?? '',
+  node: item?.['node-version'] ?? '',
+  java: item?.['java-version'] ?? '',
+});
+
+export type DescribeGithubSamplesOptions = {
+  /** The folder of the samples groups. */
+  samplesGroupFolder: string;
+  /** The groups to describe, every group of the folder when omitted. */
+  groups?: string[];
+  /** The folder the described files are relative to. */
+  root: string;
+  /** The command line of the generator, `jhipster` for generator-jhipster, the cli of a blueprint otherwise. */
+  cli?: string;
+  /** Describes a sample the contract does not define, like a sample folder given with its arguments. */
+  describeSample?: (sample: {
+    name: string;
+    group: string;
+    item: GitHubMatrixGroupItem;
+    matrix: GitHubMatrix | undefined;
+  }) => SampleDescription | undefined;
+};
+
+/**
+ * Describe the samples of the samples groups: a sample is generated from an inline `jdl`, or from the `jdl` or `yo-rc`
+ * (`sample-type`) file `sample-file` (the sample name by default) of the `sample-folder` (the group by default) of the
+ * samples groups folder.
+ */
+export const describeGithubSamples = async ({
+  samplesGroupFolder,
+  groups,
+  root,
+  cli = 'jhipster',
+  describeSample,
+}: DescribeGithubSamplesOptions): Promise<SampleDescription[]> => {
+  const relativeToRoot = (file: string) => relative(root, file);
+  const descriptions: SampleDescription[] = [];
+  for (const group of groups ?? (await getGithubSamplesGroups(samplesGroupFolder))) {
+    const { samples } = await getGithubSamplesGroup(samplesGroupFolder, group);
+    const matrix = convertToGitHubMatrix(samples);
+    for (const [name, item] of Object.entries(samples)) {
+      const entry = matrix.include.find(candidate => candidate['job-name'] === name);
+      const custom = describeSample?.({ name, group, item, matrix: entry });
+      if (custom) {
+        descriptions.push(custom);
+        continue;
+      }
+      const description: SampleDescription = {
+        name,
+        workflow: group,
+        jobName: name,
+        disabled: item.disabled ? true : undefined,
+        generator: item.jdl || item['sample-type'] === 'jdl' ? 'jdl' : 'app',
+        command: `${cli} generate-sample '${name}'`,
+        entityFiles: [],
+        jdlEntityFiles: [],
+        jdlSampleFiles: [],
+        generatorOptions: item.generatorOptions,
+        matrix: sampleMatrixOf(entry),
+      };
+      const sampleFile = join(samplesGroupFolder, item['sample-folder'] ?? group, item['sample-file'] ?? name);
+      if (item.jdl) {
+        description.jdl = item.jdl;
+        description.config = readSampleJDLConfig(item.jdl);
+      } else if (item['sample-type'] === 'jdl') {
+        description.jdlSampleFiles = [relativeToRoot(`${sampleFile}.jdl`)];
+        description.config = readSampleJDLConfig(readFileSync(`${sampleFile}.jdl`, 'utf8'));
+      } else if (item['sample-type'] === 'yo-rc') {
+        description.yoRcFile = relativeToRoot(join(sampleFile, '.yo-rc.json'));
+        description.config = readSampleConfig(join(sampleFile, '.yo-rc.json'));
+      } else {
+        throw new Error(`Sample ${name} of the ${group} samples group has no jdl, nor a jdl or yo-rc sample-type`);
+      }
+      descriptions.push(description);
+    }
+  }
+  return descriptions;
+};
+
+const table = (rows: string[][]): string => {
+  const widths = rows[0].map((_cell, column) => Math.max(...rows.map(row => row[column].length)));
+  return rows
+    .map(row =>
+      row
+        .map((cell, column) => cell.padEnd(widths[column]))
+        .join('  ')
+        .trimEnd(),
+    )
+    .join('\n');
+};
+
+export const formatSamplesList = (samples: SampleDescription[]): string =>
+  table([
+    ['workflow', 'sample', 'job', 'app sample', 'entities', 'jdl', 'os', 'node', 'java'],
+    ...samples.map(sample => [
+      sample.workflow,
+      sample.name + (sample.disabled ? ' (disabled)' : ''),
+      sample.jobName,
+      sample.yoRcFile?.split('/').slice(-2, -1)[0] ?? (sample.generator === 'jdl' ? 'jdl' : ''),
+      sample.entitiesSample ?? '',
+      sample.jdlEntity ?? sample.jdlSamples ?? '',
+      sample.matrix.os,
+      sample.matrix.node,
+      sample.matrix.java,
+    ]),
+  ]);
+
+export const formatSample = (sample: SampleDescription): string => {
+  const lines = [`${sample.name} (${sample.workflow} workflow, job ${sample.jobName}${sample.disabled ? ', disabled' : ''})`];
+  lines.push(`command: ${sample.command}`);
+  lines.push(`environment: ${sample.matrix.os}, node ${sample.matrix.node}, java ${sample.matrix.java}`);
+  if (sample.environment || sample.war) {
+    lines.push(`profile: ${sample.environment ?? ''}${sample.war ? ' (war)' : ''}`.trim());
+  }
+  if (sample.generatorOptions) lines.push(`generator options: ${JSON.stringify(sample.generatorOptions)}`);
+  if (sample.args) lines.push(`args: ${sample.args}`);
+  if (sample.yoRcFile || sample.jdl) lines.push('', `configuration${sample.yoRcFile ? ` (${sample.yoRcFile})` : ''}:`);
+  for (const [key, value] of Object.entries(sample.config ?? {})) {
+    lines.push(`  ${key}: ${Array.isArray(value) ? value.join(', ') : String(value)}`);
+  }
+  if (sample.entityFiles.length > 0) {
+    lines.push('', `entities (${sample.entitiesSample}):`, ...sample.entityFiles.map(file => `  ${file}`));
+  } else if (sample.entitiesSample) {
+    lines.push('', `entities: ${sample.entitiesSample}`);
+  }
+  if (sample.jdlEntityFiles.length > 0) lines.push('', 'jdl entities:', ...sample.jdlEntityFiles.map(file => `  ${file}`));
+  if (sample.jdlSampleFiles.length > 0) lines.push('', 'jdl samples:', ...sample.jdlSampleFiles.map(file => `  ${file}`));
+  if (sample.jdl) lines.push('', 'jdl:', ...sample.jdl.split('\n').map(line => `  ${line}`));
+  return lines.join('\n');
+};

@@ -28,7 +28,7 @@ import {
 } from '../../../lib/ci/index.ts';
 import { githubSamplesGroupFolder, testIntegrationFolder } from '../../constants.ts';
 import { isDaily } from '../../generate-sample/support/get-workflow-samples.ts';
-import { devServerMatrix } from '../samples/dev-server.ts';
+import { devServerMatrix } from '../samples/devserver.ts';
 
 import { type Changes, type GitChangesOptions, getGitChanges } from './git-changes.ts';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from './integration-test-constants.ts';

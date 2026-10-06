@@ -52,3 +52,6 @@ export const devServerMatrix = {
     },
   },
 } satisfies Record<string, GitHubMatrixGroup>;
+
+/** The samples of the devserver workflow, which selects them by the clients a change touches. */
+export default { ...devServerMatrix.angular, ...devServerMatrix.react, ...devServerMatrix.vue } satisfies GitHubMatrixGroup;
