@@ -21,8 +21,8 @@
  *
  * ## What it is for
  *
- * A generated Spring Boot application has a `tls` profile (`application-tls.yml`) that serves HTTPS from
- * `config/tls/keystore.p12`, a PKCS#12 KeyStore with the well-known password `password`, holding a self-signed
+ * A generated Spring Boot application has a `tls-samples` profile (`application-tls-samples.yml`) that serves HTTPS from
+ * `config/tls/keystore-samples.p12`, a PKCS#12 KeyStore with the well-known password `password`, holding a self-signed
  * certificate under the `selfsigned` alias (`server.ssl.key-alias`). It is a development convenience: the file is
  * committed with the application and its password is public, so it gives a working TLS endpoint, not secrecy.
  * Production deployments provide their own KeyStore.

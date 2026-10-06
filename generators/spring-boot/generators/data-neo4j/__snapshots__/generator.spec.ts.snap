@@ -209,6 +209,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -227,7 +230,7 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/main/resources/config/neo4j/migrations/user__user.json": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -562,6 +565,9 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -574,7 +580,7 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -888,6 +894,9 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -900,7 +909,7 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
   "src/main/resources/config/neo4j/migrations/user__user.json": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1160,13 +1169,16 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1444,6 +1456,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1456,7 +1471,7 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1728,6 +1743,9 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1740,7 +1758,7 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2048,6 +2066,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2066,7 +2087,7 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/main/resources/config/neo4j/migrations/user__user.json": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2398,13 +2419,16 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2643,13 +2667,16 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2933,6 +2960,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2945,7 +2975,7 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3268,6 +3298,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3280,7 +3313,7 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/main/resources/config/neo4j/migrations/user__user.json": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3612,6 +3645,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3624,7 +3660,7 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {

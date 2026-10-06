@@ -193,6 +193,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
         }
 
         await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`);
+        await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore-samples.p12`);
 
         // Commit changes
         await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${this.getPackageJsonVersion()}`, ['--no-verify']);
@@ -233,6 +234,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
         await this.runNonInteractive();
 
         await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`);
+        await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore-samples.p12`);
 
         // Commit changes
         await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${packageJson.version}`, ['--no-verify']);

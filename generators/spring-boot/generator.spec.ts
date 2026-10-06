@@ -67,7 +67,7 @@ describe(`generator - ${generator}`, () => {
     });
   });
   describe('KeyStore', () => {
-    const keyStoreFile = 'src/main/resources/config/tls/keystore.p12';
+    const keyStoreFile = 'src/main/resources/config/tls/keystore-samples.p12';
 
     describe('without an existing KeyStore', () => {
       before(async () => {

@@ -630,6 +630,7 @@ ${classProperties
             [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
             `${application.javaPackageSrcDir}config/JacksonConfiguration.java`,
           ],
+          '9.4.1': [`${application.srcMainResources}config/tls/keystore.p12`],
         });
       },
       resetFakeDataSeed() {
@@ -642,7 +643,7 @@ ${classProperties
         });
       },
       generateKeyStore({ application }) {
-        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore-samples.p12`);
         if (this.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
         } else if (this.fs.exists(keyStoreFile)) {
@@ -864,7 +865,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437-2',
           ruleKey: 'java:S6437',
-          resourceKey: `${application.srcMainResources}config/application-tls.yml`,
+          resourceKey: `${application.srcMainResources}config/application-tls-samples.yml`,
           comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({

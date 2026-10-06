@@ -215,6 +215,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -251,7 +254,7 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -601,6 +604,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -625,7 +631,7 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -954,6 +960,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -990,7 +999,7 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1268,6 +1277,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1280,7 +1292,7 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1573,6 +1585,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1591,7 +1606,7 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1881,6 +1896,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1899,7 +1917,7 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2222,6 +2240,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2258,7 +2279,7 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2605,6 +2626,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2623,7 +2647,7 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2880,6 +2904,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2892,7 +2919,7 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3191,6 +3218,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3215,7 +3245,7 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3553,6 +3583,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3583,7 +3616,7 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3930,6 +3963,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3954,7 +3990,7 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
