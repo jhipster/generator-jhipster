@@ -275,6 +275,61 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('.cleanupBlueprintFiles of two blueprints', () => {
+      let removeFiles: ReturnType<typeof esmocha.fn>;
+
+      const createBlueprintGenerator = (rootGeneratorName: string, cleanup: Record<string, string[]>) =>
+        class extends BaseGenerator {
+          rootGeneratorName() {
+            return rootGeneratorName;
+          }
+
+          get [BaseGenerator.POST_WRITING]() {
+            return this.asPostWritingTaskGroup({
+              async cleanup({ control }) {
+                control.removeFiles = removeFiles;
+                await control.cleanupBlueprintFiles(cleanup);
+              },
+            });
+          }
+        };
+
+      before(async () => {
+        removeFiles = esmocha.fn();
+
+        await helpers
+          .run(
+            class extends CustomGenerator {
+              rootGeneratorName() {
+                return 'generator-jhipster';
+              }
+
+              async beforeQueue() {
+                await super.beforeQueue();
+                this.getContextData('oldVersion:generator-jhipster-foo', { replacement: '1.0.0' });
+                this.getContextData('oldVersion:generator-jhipster-bar', { replacement: '2.0.0' });
+                await this.composeWithJHipster('jhipster-foo:blueprint');
+                await this.composeWithJHipster('jhipster-bar:blueprint');
+              }
+            },
+          )
+          .withJHipsterConfig({ jhipsterVersion: '1.0.0' })
+          .commitFiles()
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withGenerators([
+            [createBlueprintGenerator('generator-jhipster-foo', { '1.0.1': ['foo-file.txt'] }), { namespace: 'jhipster-foo:blueprint' }],
+            [createBlueprintGenerator('generator-jhipster-bar', { '2.0.1': ['bar-file.txt'] }), { namespace: 'jhipster-bar:blueprint' }],
+          ])
+          .withTask('initializing', () => {});
+      });
+
+      it('should remove the files of each blueprint with its own old version', () => {
+        expect(removeFiles).toHaveBeenCalledTimes(2);
+        expect(removeFiles).toHaveBeenCalledWith({ oldVersion: '1.0.0', removedInVersion: '1.0.1' }, 'foo-file.txt');
+        expect(removeFiles).toHaveBeenCalledWith({ oldVersion: '2.0.0', removedInVersion: '2.0.1' }, 'bar-file.txt');
+      });
+    });
+
     describe('.removeFiles', () => {
       before(async () => {
         await helpers
