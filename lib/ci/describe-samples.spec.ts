@@ -54,17 +54,17 @@ describe('ci samples groups', () => {
     it('describes the samples of every group', async () => {
       const samples = await describeGithubSamples({ samplesGroupFolder: valid, root: fixtures, cli: './cli/cli.cjs' });
       expect(
-  samples.map(({ name, command, config, generatorOptions, matrix, ...sample }) => ({
-    name,
-    command,
-    config,
-    generatorOptions,
-    os: matrix.os,
-    ...(sample.generator === 'jdl' ?
-    { generator: sample.generator, jdl: sample.jdl, jdlSampleFiles: sample.jdlSampleFiles } :
-    { generator: sample.generator, yoRcFile: sample.yoRcFile })
-  }))
-).toMatchInlineSnapshot(`
+        samples.map(({ name, command, config, generatorOptions, matrix, ...sample }) => ({
+          name,
+          command,
+          config,
+          generatorOptions,
+          os: matrix.os,
+          ...(sample.generator === 'jdl' ?
+            { generator: sample.generator, jdl: sample.jdl, jdlSampleFiles: sample.jdlSampleFiles }
+          : { generator: sample.generator, yoRcFile: sample.yoRcFile }),
+        })),
+      ).toMatchInlineSnapshot(`
 [
   {
     "command": "./cli/cli.cjs generate-sample 'custom-jdl'",
