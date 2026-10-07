@@ -59,6 +59,9 @@ const { WRITING } = PRIORITY_NAMES;
  * Base class that contains blueprints support.
  * Provides built-in state support with control object.
  */
+/** The old version of the blueprint of a generator, read through its view of the shared control. */
+const BLUEPRINT_OLD_VERSION = Symbol('blueprintOldVersion');
+
 export default class BaseGenerator<
   Config extends BaseConfig = BaseConfig,
   Options extends BaseOptions = BaseOptions,
@@ -67,6 +70,7 @@ export default class BaseGenerator<
   Tasks extends BaseTasks<Source> = BaseTasks<Source>,
 > extends CoreGenerator<Config, Options, Features> {
   fromBlueprint!: boolean;
+  #controlView?: Control;
   sbsBlueprint?: boolean;
   delegateToBlueprint = false;
   blueprintConfig?: Record<string, any>;
@@ -182,7 +186,19 @@ export default class BaseGenerator<
     return this.jhipsterConfig?.removeNeedles ? { ...editorMetadata, removeNeedles: true } : editorMetadata;
   }
 
+  /**
+   * The control of the context, shared by its generators, seen by this generator: `cleanupBlueprintFiles` uses the old
+   * version of this generator's blueprint, whichever generator created the control.
+   */
   get #control(): Control {
+    this.#controlView ??= new Proxy(this.#sharedControl, {
+      get: (target, property, receiver) =>
+        property === BLUEPRINT_OLD_VERSION ? this.#getBlueprintOldVersion() : Reflect.get(target, property, receiver),
+    });
+    return this.#controlView;
+  }
+
+  get #sharedControl(): Control {
     const generator = this;
     return this.getContextData<Control>('jhipster:control', {
       factory: () => {
@@ -285,7 +301,8 @@ export default class BaseGenerator<
             );
           },
           async cleanupBlueprintFiles(cleanup: CleanupArgumentType) {
-            const oldVersion = generator.#getBlueprintOldVersion();
+            // The old version of the blueprint of the generator calling it, given by its view of the control.
+            const oldVersion: string | undefined = (this as any)[BLUEPRINT_OLD_VERSION];
             if (!oldVersion) return;
             await Promise.all(
               collectCleanupFiles(cleanup).map(async ({ removedInVersion, files }) =>
