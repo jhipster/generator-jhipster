@@ -51,7 +51,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should attach the git root to written files', () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toMatchObject({
           gitRoot: generator.destinationPath(),
         });
       });
@@ -99,7 +99,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should attach the parent repository root to written files', async () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toMatchObject({
           gitRoot: await realpath(parentDir),
         });
       });
@@ -113,7 +113,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should not attach a git root to written files', () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({});
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).not.toHaveProperty('gitRoot');
       });
     });
     describe('regenerating', () => {

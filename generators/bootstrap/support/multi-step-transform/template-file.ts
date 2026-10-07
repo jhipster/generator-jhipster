@@ -83,6 +83,11 @@ export default class TemplateFile {
     this._fragments.push(templateFile);
   }
 
+  /** The files of the template and of its fragments, in the order they were added. */
+  get mergedFiles(): string[] {
+    return [...(this.filePath ? [this.filePath] : []), ...this._fragments.flatMap(fragment => fragment.mergedFiles)];
+  }
+
   renderFragments(data: any) {
     return this._fragments.map(templateFile => templateFile.render(data));
   }
