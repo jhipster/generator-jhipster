@@ -25,7 +25,6 @@ import { defaults } from 'lodash-es';
 import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
-import { checkDocker } from '../../../docker/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 
@@ -55,7 +54,6 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
           );
         }
       },
-      checkDocker,
     });
   }
 

@@ -22,7 +22,6 @@ import { rm } from 'node:fs/promises';
 import { relative } from 'node:path';
 
 import chalk from 'chalk';
-import { execaSync } from 'execa';
 import { lt as semverLessThan } from 'semver';
 import type { PackageJson } from 'type-fest';
 
@@ -34,6 +33,7 @@ import type { EditorMetadata } from '../base-core/api.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
+import { isDockerComposeAvailable } from '../docker/support/check-docker.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
 import { getBlueprintsResolver } from './internal/index.ts';
@@ -203,7 +203,6 @@ export default class BaseGenerator<
     return this.getContextData<Control>('jhipster:control', {
       factory: () => {
         let jhipsterOldVersion: string | null;
-        let environmentHasDockerCompose: undefined | boolean;
         const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
 
         const collectCleanupFiles = (cleanup: CleanupArgumentType) =>
@@ -240,12 +239,9 @@ export default class BaseGenerator<
               : null;
             return jhipsterOldVersion;
           },
+          /** Whether `docker compose` is installed, see `isDockerComposeAvailable`: detected when read, once for the process. */
           get environmentHasDockerCompose(): boolean {
-            if (environmentHasDockerCompose === undefined) {
-              const commandReturn = execaSync({ reject: false, stdio: 'pipe' })`docker compose version`;
-              environmentHasDockerCompose = !commandReturn?.failed; // TODO looks to be a bug on ARM MaCs and execaSync, does not return anything, assuming mac users are smart and install docker.
-            }
-            return environmentHasDockerCompose;
+            return isDockerComposeAvailable();
           },
           customizeRemoveFiles,
           isJhipsterVersionLessThan(version: string): boolean {
