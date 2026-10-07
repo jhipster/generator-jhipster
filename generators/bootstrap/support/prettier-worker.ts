@@ -19,7 +19,7 @@
 
 import { join } from 'node:path';
 
-import { type Options, format, resolveConfig } from 'prettier';
+import { type Options, clearConfigCache, format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 // @ts-expect-error No types available
@@ -27,7 +27,7 @@ import prettierPluginProperties from 'prettier-plugin-properties';
 
 import { addLineNumbers } from '../internal/transform-utils.ts';
 
-export default async ({
+const formatFile = async ({
   relativeFilePath,
   filePath,
   fileContents,
@@ -78,4 +78,15 @@ At: ${addLineNumbers(fileContents)}`;
     }
     return { errorMessage };
   }
+};
+
+export type PrettierFormatTask = Parameters<typeof formatFile>[0];
+
+/** A task of the transform, or the cleanup of its commit: the config files it read may change before a next one. */
+export default async (task: PrettierFormatTask | { cleanup: true }): Promise<Awaited<ReturnType<typeof formatFile>> | undefined> => {
+  if ('cleanup' in task) {
+    await clearConfigCache();
+    return undefined;
+  }
+  return formatFile(task);
 };

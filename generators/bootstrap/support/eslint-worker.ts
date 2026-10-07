@@ -25,6 +25,8 @@ import ts from 'typescript-eslint';
 import jhipster from '../../../lib/eslint/index.ts';
 
 let eslintInstance: eslint.ESLint;
+/** What the instance was created for: a thread of the pool of the process lints the files of several commits. */
+let eslintInstanceKey: string | undefined;
 
 export default async ({
   cwd,
@@ -43,7 +45,9 @@ export default async ({
   additionalConfig?: eslint.Linter.Config[];
   recreateEslint?: boolean;
 }): Promise<{ result: string } | { error: string }> => {
-  if (recreateEslint || !eslintInstance) {
+  const instanceKey = JSON.stringify({ cwd, extensions, config, additionalConfig });
+  if (recreateEslint || !eslintInstance || instanceKey !== eslintInstanceKey) {
+    eslintInstanceKey = instanceKey;
     eslintInstance = new eslint.ESLint({
       fix: true,
       overrideConfigFile: true,

@@ -31,6 +31,7 @@ import type CoreGenerator from '../../base-core/index.ts';
 import { esmWorkerPoolOptions } from '../internal/worker-pool.ts';
 
 import type prettierWorker from './prettier-worker.ts';
+import type { PrettierFormatTask } from './prettier-worker.ts';
 
 const prettierConfigMatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => prettierConfigMatch.match(filePath);
@@ -69,9 +70,16 @@ export const isGitConfigFilePath = (filePath: string) => gitConfigMatch.match(fi
 
 const useTsFile = !isDistFolder();
 
+/**
+ * The pool of the process, created at the first file to format: its worker imports prettier and its plugins once, not
+ * at each commit, and Piscina unrefs it when idle, so it doesn't keep the process alive. A commit drops what the worker
+ * keeps for it, see the flush.
+ */
+let prettierPool: Piscina<PrettierFormatTask | { cleanup: true }, Awaited<ReturnType<typeof prettierWorker>>> | undefined;
+
 export const createPrettierTransform = async function (
   this: CoreGenerator,
-  options: Omit<Parameters<typeof prettierWorker>[0], 'relativeFilePath' | 'filePath' | 'fileContents' | 'configRoot'> & {
+  options: Omit<PrettierFormatTask, 'relativeFilePath' | 'filePath' | 'fileContents' | 'configRoot'> & {
     ignoreErrors?: boolean;
     extensions?: string;
     /**
@@ -87,11 +95,7 @@ export const createPrettierTransform = async function (
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
 
-  const pool = new Piscina<Parameters<typeof prettierWorker>[0], Awaited<ReturnType<typeof prettierWorker>>>({
-    maxThreads: 1,
-    ...esmWorkerPoolOptions(new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url)),
-    ...options,
-  });
+  let pool: Piscina<Parameters<typeof prettierWorker>[0], Awaited<ReturnType<typeof prettierWorker>>> | undefined;
 
   return passthrough(
     async (file: VinylMemFsEditorFile) => {
@@ -105,6 +109,10 @@ export const createPrettierTransform = async function (
       if (configFromMemFs) {
         configRootPromise ??= writePendingPrettierConfigs(this.env.sharedFs);
       }
+      pool ??= prettierPool ??= new Piscina({
+        maxThreads: 1,
+        ...esmWorkerPoolOptions(new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url)),
+      });
       const result = await pool.run({
         relativeFilePath: file.relative,
         filePath: file.path,
@@ -112,10 +120,10 @@ export const createPrettierTransform = async function (
         configRoot: await configRootPromise,
         ...workerOptions,
       });
-      if ('result' in result) {
+      if (result && 'result' in result) {
         file.contents = Buffer.from(result.result);
       }
-      if ('errorMessage' in result) {
+      if (result && 'errorMessage' in result) {
         if (!ignoreErrors) {
           throw new Error(result.errorMessage);
         }
@@ -123,7 +131,8 @@ export const createPrettierTransform = async function (
       }
     },
     async () => {
-      await pool?.destroy();
+      // The config files read by this commit are forgotten: the next commit of the process may change them.
+      await pool?.run({ cleanup: true });
       const configRoot = await configRootPromise;
       if (configRoot) {
         await rm(configRoot, { recursive: true, force: true });
