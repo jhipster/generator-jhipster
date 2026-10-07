@@ -161,8 +161,9 @@ describe('generator - base-core', () => {
           });
       });
 
-      it('should write the file from its template', () => {
+      it('should write the file from its template, flagged as write once', () => {
         runResult.assertFileContent('once.txt', 'from the template');
+        expect(runResult.memFs.get(runResult.generator.destinationPath('once.txt')).editorMetadata).toMatchObject({ writeOnce: true });
       });
     });
   });
