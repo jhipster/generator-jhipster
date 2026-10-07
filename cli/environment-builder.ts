@@ -22,12 +22,13 @@ import { pathToFileURL } from 'node:url';
 
 import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';
-import { cloneDeep, mergeWith } from 'lodash-es';
+import { mergeWith } from 'lodash-es';
 import Environment, { Store } from 'yeoman-environment';
 
 import BaseGenerator from '../generators/base/index.ts';
 import { type Blueprint, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../lib/index.ts';
+import { loadBlueprintCommands } from '../lib/resolver/blueprint-commands.ts';
 import {
   customizeJHipsterNamespace,
   customizeNestedNamespace,
@@ -458,37 +459,7 @@ export default class EnvironmentBuilder {
   async _getBlueprintCommands(
     blueprintPackagePaths: [string, string | undefined][] | undefined,
   ): Promise<Record<string, CliCommand> | undefined> {
-    if (!blueprintPackagePaths?.length) {
-      return undefined;
-    }
-    let result: Record<string, CliCommand> = {};
-    for (const [blueprint, packagePath] of blueprintPackagePaths) {
-      let blueprintCommand: Record<string, CliCommand>;
-      const blueprintCommandFile = `${packagePath}/cli/commands`;
-      const blueprintCommandExtension = ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'].find(extension =>
-        existsSync(`${blueprintCommandFile}${extension}`),
-      );
-      if (blueprintCommandExtension) {
-        const blueprintCommandsUrl = pathToFileURL(resolve(`${blueprintCommandFile}${blueprintCommandExtension}`));
-        try {
-          blueprintCommand = (await import(blueprintCommandsUrl.href)).default;
-          const blueprintCommands = cloneDeep(blueprintCommand);
-          Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {
-            commandSpec.blueprint ??= blueprint;
-          });
-          result = { ...result, ...blueprintCommands };
-        } catch {
-          const msg = `Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsUrl}`;
-          // eslint-disable-next-line no-console
-          console.info(`${chalk.green.bold('INFO!')} ${msg}`);
-        }
-      } else {
-        const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
-        // eslint-disable-next-line no-console
-        console.info(`${chalk.green.bold('INFO!')} ${msg}`);
-      }
-    }
-    return result;
+    return loadBlueprintCommands(blueprintPackagePaths);
   }
 
   /**

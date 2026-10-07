@@ -17,8 +17,16 @@
  * limitations under the License.
  */
 
-import { type GeneratorsStore, lookupGeneratorCommands, toCommandNamespace } from '../resolver/generator-commands.ts';
-import type { GeneratorDependency } from '../resolver/generator-dependencies.ts';
+import type { StoreGeneratorMeta } from 'yeoman-environment';
+
+import defaultCommands from '../../cli/commands.ts';
+import type { CliCommand } from '../../cli/types.ts';
+import { type BlueprintPackagePath, loadBlueprintCommands } from '../resolver/blueprint-commands.ts';
+import { resolveDefaultCommand } from '../resolver/default-command.ts';
+import { type GeneratorsStore, lookupGeneratorCommands, readUsage, toCommandNamespace } from '../resolver/generator-commands.ts';
+import { type GeneratorDependency, resolveCommandDependencies, resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
+import { JHIPSTER_NAMESPACE_PREFIX, getJHipsterStore } from '../resolver/lookups.ts';
+import { packageNameToNamespace } from '../utils/namespace.ts';
 
 import { convertConfigToCliOption, convertConfigToOption, extractArgumentsFromConfigs, formatOptionFlags } from './converter.ts';
 import { getCommandDerivedPropertyMutations } from './mutations.ts';
@@ -161,4 +169,106 @@ export const findConfigOwners = (name: string, { store }: { store?: GeneratorsSt
     .filter(generator => generator.command?.configs?.[name])
     .map(generator => describeConfig(name, generator.command!.configs![name], generator.namespace));
   return { name, owners };
+};
+
+/**
+ * The blueprints to describe with JHipster: their commands and their generators, which may override JHipster's.
+ */
+export type DescribeBlueprintsOptions = {
+  /** The blueprints, by priority, with the path of their package. */
+  blueprints?: BlueprintPackagePath[];
+  /** The namespaces of the blueprints, by priority; defaults to the ones of `blueprints`. */
+  blueprintNamespaces?: string[];
+  /** The commands of the blueprints; defaults to the ones `blueprints` declare in their `cli/commands`. */
+  blueprintCommands?: Record<string, CliCommand>;
+};
+
+export type CommandSummary = { namespace: string; description: string; default?: true };
+
+/**
+ * The cli commands: JHipster's, and the ones of the blueprints, a blueprint command overriding JHipster's.
+ */
+export const loadCommands = async ({
+  blueprints,
+  blueprintCommands,
+}: Pick<DescribeBlueprintsOptions, 'blueprints' | 'blueprintCommands'> = {}): Promise<Record<string, CliCommand>> => ({
+  ...defaultCommands,
+  ...(blueprintCommands ?? (await loadBlueprintCommands(blueprints))),
+});
+
+/**
+ * List the cli commands, the blueprints' included, the command `jhipster` runs alone marked as `default`.
+ */
+export const listCommands = async ({
+  defaultCommand = resolveDefaultCommand(),
+  ...options
+}: Pick<DescribeBlueprintsOptions, 'blueprints' | 'blueprintCommands'> & { defaultCommand?: string } = {}): Promise<CommandSummary[]> =>
+  Object.entries(await loadCommands(options))
+    .filter(([_name, command]) => !command.removed)
+    // The static `[Default]` prefix of `app` is replaced by the resolved default command.
+    .map(([namespace, command]) => ({
+      namespace,
+      description: command.desc.replace(/^\[Default\] /, ''),
+      default: namespace === defaultCommand || undefined,
+    }));
+
+export type DescribeGeneratorOptions = DescribeBlueprintsOptions & {
+  /**
+   * The generators to describe, JHipster's and the blueprints': an environment or a store. Defaults to JHipster's
+   * generators.
+   */
+  store?: GeneratorsStore;
+  /** Resolves a registered generator; defaults to the one of `store`. */
+  getGeneratorMeta?: (namespace: string) => StoreGeneratorMeta | undefined;
+  /** `false` describes only what the generator declares itself, without the bootstrap and the imported generators. */
+  imports?: boolean;
+  /** The command `default` names; defaults to the command `jhipster` runs alone. */
+  defaultCommand?: string;
+  /** Called for a dependency that is not registered. */
+  onMissing?: (namespace: string) => void;
+};
+
+/**
+ * Describe a command or a generator, with the options the cli registers for it: a generator is given as the cli names
+ * it (`spring-boot`, `spring-boot:cache`, a command of a blueprint), by its namespace (`jhipster:spring-boot:cache`,
+ * `jhipster-foo:app` for the generator of a blueprint), or `default`. Undefined for an unknown generator.
+ */
+export const describeGenerator = async (
+  generator: string,
+  { store, getGeneratorMeta, imports, defaultCommand, onMissing, ...options }: DescribeGeneratorOptions = {},
+): Promise<CommandDescription | undefined> => {
+  const { blueprints, blueprintNamespaces = blueprints?.map(([packageName]) => packageNameToNamespace(packageName)) } = options;
+  getGeneratorMeta ??= (namespace: string) => (store ?? getJHipsterStore()).getGeneratorsMeta()[namespace];
+  if (generator === 'default') {
+    generator = defaultCommand ?? resolveDefaultCommand();
+  }
+  const commands = await loadCommands(options);
+  const command = commands[generator] ?? commands[toCommandNamespace(generator)];
+  const candidates =
+    command?.blueprint ?
+      [`${packageNameToNamespace(command.blueprint)}:${generator}`]
+    : [`${JHIPSTER_NAMESPACE_PREFIX}${generator}`, generator];
+  const registeredNamespace = candidates.find(candidate => getGeneratorMeta(candidate));
+  const meta = registeredNamespace && getGeneratorMeta(registeredNamespace);
+  if (!meta) {
+    return undefined;
+  }
+  // The dependencies are resolved from a generator without the prefix, which the blueprints can override, or from the
+  // namespace of a nested generator.
+  const commandNamespace = toCommandNamespace(registeredNamespace);
+  const namespace = commandNamespace.includes(':') ? registeredNamespace : commandNamespace;
+  const resolveOptions = { getGeneratorMeta, blueprintNamespaces, onMissing };
+  // The generators the cli registers the options of, or the command alone.
+  const dependencies =
+    imports === false ?
+      resolveGeneratorDependencies([namespace], { ...resolveOptions, blueprintNamespaces: [] }).filter(
+        dependency => dependency.namespace === namespace,
+      )
+    : resolveCommandDependencies({ command: commandNamespace, generator: namespace }, resolveOptions);
+  return describeCommand({
+    namespace,
+    description: command?.desc,
+    usage: meta.resolved ? readUsage(meta.resolved) : undefined,
+    dependencies,
+  });
 };
