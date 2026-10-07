@@ -32,11 +32,17 @@ export const customizeNestedNamespace = (ns?: string) => ns?.replaceAll(':genera
 export const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
 
 /**
- * Namespace of a jhipster generator.
- * The lookup derives the namespace prefix from the package folder name, which is not `generator-jhipster` in an
- * aliased install (`generator-jhipster-9@npm:generator-jhipster@9`) or in a git worktree.
+ * Namespace of a generator of a package registered under the namespace of the package.
+ * The lookup derives the namespace prefix from the package folder name, which is not the package name in an aliased
+ * install (`generator-jhipster-9@npm:generator-jhipster@9`) or in a git worktree.
  */
-export const customizeJHipsterNamespace = (ns?: string) => customizeNestedNamespace(ns)?.replace(/^[^:]*:/, JHIPSTER_NAMESPACE_PREFIX);
+export const customizeNamespaceOfPackage =
+  (namespace: string) =>
+  (ns?: string): string | undefined =>
+    customizeNestedNamespace(ns)?.replace(/^[^:]*:/, `${namespace}:`);
+
+/** Namespace of a jhipster generator, see `customizeNamespaceOfPackage`. */
+export const customizeJHipsterNamespace = customizeNamespaceOfPackage('jhipster');
 
 /** The part of a generators store the lookups need. */
 export type GeneratorsStore = Pick<Store, 'getGeneratorsMeta'>;
