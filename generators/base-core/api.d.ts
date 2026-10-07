@@ -22,6 +22,8 @@ export type EditorMetadata = {
   removeNeedles?: boolean;
   /** Format the file with prettier when committing, even if its extension is not one prettier formats by default. */
   prettier?: boolean;
+  /** A write once file (`override` false) that exists: its template is skipped and the file is written back as it is. */
+  writeOnce?: boolean;
 };
 
 export type CascadedEditFileCallback<Generator = CoreGenerator> = (

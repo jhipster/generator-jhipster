@@ -1216,12 +1216,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
 
-            if (
-              fileSpec.override !== undefined &&
-              !resolveCallback(fileSpec.override) &&
-              this.fs.exists(destinationFile.replace(/\.jhi$/, ''))
-            ) {
+            const writeOnce = fileSpec.override !== undefined && !resolveCallback(fileSpec.override);
+            const existingFile = destinationFile.replace(/\.jhi$/, '');
+            if (writeOnce && this.fs.exists(existingFile)) {
               this.log.debug(`skipping file ${destinationFile}`);
+              // Written back as it is: a file a generator keeps is told apart from the files no generator writes.
+              this.writeDestination(existingFile, this.fs.read(existingFile, { raw: true }), { metadata: { writeOnce: true } });
               return undefined;
             }
 
@@ -1233,7 +1233,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               transform: derivedTransform,
               noEjs,
               binary,
-              metadata,
+              // Flagged when written from its template too: the file is the generator's until it exists.
+              metadata: writeOnce ? { ...metadata, writeOnce: true } : metadata,
             };
           });
         })
