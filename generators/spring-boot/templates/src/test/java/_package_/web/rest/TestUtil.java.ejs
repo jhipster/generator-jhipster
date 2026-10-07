@@ -25,11 +25,6 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
-<%_ if (!reactive) { _%>
-import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
-import org.springframework.format.support.DefaultFormattingConversionService;
-import org.springframework.format.support.FormattingConversionService;
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.test.context.TestSecurityContextHolder;
@@ -187,20 +182,6 @@ public final class TestUtil {
         assertThat(domainObject1).hasSameHashCodeAs(domainObject2);
 <%_ } _%>
     }
-<%_ if (!reactive) { _%>
-
-    /**
-     * Create a {@link FormattingConversionService} which use ISO date format, instead of the localized one.
-     * @return the {@link FormattingConversionService}.
-     */
-    public static FormattingConversionService createFormattingConversionService() {
-        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService();
-        var registrar = new DateTimeFormatterRegistrar();
-        registrar.setUseIsoFormat(true);
-        registrar.registerFormatters(dfcs);
-        return dfcs;
-    }
-<%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 
     /**
