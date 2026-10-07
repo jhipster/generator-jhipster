@@ -299,8 +299,10 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
         await expect(jhi.entity.getEntityDeleteDialogHeading('<%- entityInstance %>')).toBeVisible();
         await page.locator(entityConfirmDeleteButtonSelector).click();
         expect((await deleteRequest).status()).toBe(204);
-        const listResponse = await listRequest;
-        expect(listResponse.status()).toBe(200);
+        expect((await listRequest).status()).toBe(200);
+        // The navigation back to the list discards the response body (Network.getResponseBody fails
+        // with "navigated away"), so the entity's absence is checked through a fresh API query.
+        const listResponse = await jhi.authenticatedRequest({ method: 'GET', url: <%- entityInstance %>ApiUrl });
         expect(await listResponse.json()).not.toContainEqual(<%- entityInstance %>);
         await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
   <%_ if (playwrightBootstrapEntities) { _%>

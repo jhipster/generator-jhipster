@@ -35,6 +35,9 @@ import { useAlertService } from '@/shared/alert/alert.service';
 export default defineComponent({
   name: '<%- entityAngularName %>Details',
   setup() {
+<%_ if (enableTranslation) { _%>
+    const { t: t$ } = useI18n();
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
     const dateFormat = useDateFormat();
 <%_ } _%>
