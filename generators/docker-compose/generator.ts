@@ -28,7 +28,6 @@ import { createBase64Secret, stringHashCode } from '../../lib/utils/index.ts';
 import { normalizePath as normalize } from '../../lib/utils/path.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import BaseWorkspacesGenerator, { type Deployment as BaseDeployment, type WorkspacesApplication } from '../base-workspaces/index.ts';
-import { checkDocker } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
@@ -61,7 +60,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkDocker,
       async checkDockerCompose({ control }) {
         if (this.skipChecks) return;
 

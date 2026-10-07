@@ -17,11 +17,29 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import { execaSync } from 'execa';
 
 import type CoreGenerator from '../../base-core/generator.ts';
 
+/** Whether `docker compose` is installed, detected at the first call and kept for the process. */
+let dockerComposeAvailable: boolean | undefined;
+
+/**
+ * Whether `docker compose` is installed: `docker compose version` runs once for the process, which may generate many
+ * times.
+ */
+export const isDockerComposeAvailable = (): boolean => {
+  if (dockerComposeAvailable === undefined) {
+    const commandReturn = execaSync({ reject: false, stdio: 'pipe' })`docker compose version`;
+    dockerComposeAvailable = !commandReturn?.failed; // TODO looks to be a bug on ARM MaCs and execaSync, does not return anything, assuming mac users are smart and install docker.
+  }
+  return dockerComposeAvailable;
+};
+
 /**
  * Check that Docker exists.
+ * @deprecated the generators no longer check it: `docker compose` is checked where it is needed, see
+ * `isDockerComposeAvailable`. To be removed in JHipster v10.
  * @this {import('../../base-core/index.js').default}
  */
 export const checkDocker = async function (this: CoreGenerator) {
