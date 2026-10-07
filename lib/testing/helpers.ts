@@ -47,7 +47,12 @@ import type GeneratorsByNamespace from '../../generators/types.ts';
 import { getPackageRoot, isDistFolder } from '../index.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
-import { customizeJHipsterNamespace, generatorsLookup, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
+import {
+  customizeJHipsterNamespace,
+  customizeNamespaceOfPackage,
+  generatorsLookup,
+  jhipsterGeneratorsLookup,
+} from '../resolver/lookups.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
 import getGenerator, { getGeneratorRelativeFolder } from '../utils/get-generator.ts';
@@ -57,6 +62,7 @@ import {
   lookupGeneratorsWithNamespace,
   normalizePath,
   normalizePathEnd,
+  packageNameToNamespace,
 } from '../utils/index.ts';
 
 type WithJHipsterGenerators = {
@@ -320,6 +326,8 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
     return this.withLookups([
       {
         packagePaths: [blueprintPackagePath],
+        // @ts-expect-error customizeNamespace is not exported by @yeoman/types
+        customizeNamespace: customizeNamespaceOfPackage(packageNameToNamespace(blueprint)),
       },
     ]).withOptions({
       blueprint: [blueprint],
