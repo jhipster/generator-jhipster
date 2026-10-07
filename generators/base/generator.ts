@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
-import fs, { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { rm } from 'node:fs/promises';
-import path, { relative } from 'node:path';
+import { relative } from 'node:path';
 
 import chalk from 'chalk';
 import { execaSync } from 'execa';
-import { union } from 'lodash-es';
-import semver, { lt as semverLessThan } from 'semver';
+import { lt as semverLessThan } from 'semver';
 import type { PackageJson } from 'type-fest';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
@@ -37,9 +36,8 @@ import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
-import { mergeBlueprints, parseBlueprints } from './internal/index.ts';
+import { getBlueprintsResolver } from './internal/index.ts';
 import {
-  CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
   CONTEXT_DATA_EXISTING_PROJECT,
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
@@ -61,6 +59,9 @@ const { WRITING } = PRIORITY_NAMES;
  * Base class that contains blueprints support.
  * Provides built-in state support with control object.
  */
+/** The old version of the blueprint of a generator, read through its view of the shared control. */
+const BLUEPRINT_OLD_VERSION = Symbol('blueprintOldVersion');
+
 export default class BaseGenerator<
   Config extends BaseConfig = BaseConfig,
   Options extends BaseOptions = BaseOptions,
@@ -69,6 +70,7 @@ export default class BaseGenerator<
   Tasks extends BaseTasks<Source> = BaseTasks<Source>,
 > extends CoreGenerator<Config, Options, Features> {
   fromBlueprint!: boolean;
+  #controlView?: Control;
   sbsBlueprint?: boolean;
   delegateToBlueprint = false;
   blueprintConfig?: Record<string, any>;
@@ -184,7 +186,19 @@ export default class BaseGenerator<
     return this.jhipsterConfig?.removeNeedles ? { ...editorMetadata, removeNeedles: true } : editorMetadata;
   }
 
+  /**
+   * The control of the context, shared by its generators, seen by this generator: `cleanupBlueprintFiles` uses the old
+   * version of this generator's blueprint, whichever generator created the control.
+   */
   get #control(): Control {
+    this.#controlView ??= new Proxy(this.#sharedControl, {
+      get: (target, property, receiver) =>
+        property === BLUEPRINT_OLD_VERSION ? this.#getBlueprintOldVersion() : Reflect.get(target, property, receiver),
+    });
+    return this.#controlView;
+  }
+
+  get #sharedControl(): Control {
     const generator = this;
     return this.getContextData<Control>('jhipster:control', {
       factory: () => {
@@ -287,7 +301,8 @@ export default class BaseGenerator<
             );
           },
           async cleanupBlueprintFiles(cleanup: CleanupArgumentType) {
-            const oldVersion = generator.#getBlueprintOldVersion();
+            // The old version of the blueprint of the generator calling it, given by its view of the control.
+            const oldVersion: string | undefined = (this as any)[BLUEPRINT_OLD_VERSION];
             if (!oldVersion) return;
             await Promise.all(
               collectCleanupFiles(cleanup).map(async ({ removedInVersion, files }) =>
@@ -307,44 +322,28 @@ export default class BaseGenerator<
     if (this.features.uniqueGlobally) {
       throw new Error('Timestamp generation is not supported in unique globally generators.');
     }
-    const reproducible = Boolean(this.options.reproducible);
-    // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
-    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
-    let now = new Date();
     // Milliseconds are ignored for changelogDate.
-    now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with reproducible option or a specific timestamp.
-    if (reproducible || creationTimestamp) {
-      now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
-        factory: () => {
-          const newCreationTimestamp: string | number | undefined = creationTimestamp ?? this.config.get('creationTimestamp');
-          const newDate = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
-          newDate.setMilliseconds(0);
-          return newDate;
-        },
+    const toSeconds = (time: number) => Math.floor(time / 1000) * 1000;
+    const { lastLiquibaseTimestamp = 0 } = this.jhipsterConfig;
+    const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
+    let next: number;
+    if (this.options.reproducible || creationTimestamp) {
+      // One minute per changelog from the creation timestamp, after the changelogs of a previous run.
+      const previous = this.getContextData<Date>(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
+        factory: () =>
+          new Date(
+            Math.max(new Date(creationTimestamp ?? this.config.get('creationTimestamp') ?? Date.now()).getTime(), lastLiquibaseTimestamp),
+          ),
       });
-      now.setMinutes(now.getMinutes() + 1);
-      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { replacement: now });
-
-      // Reproducible build can create future timestamp, save it.
-      const { lastLiquibaseTimestamp } = this.jhipsterConfig;
-      if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
-        this.config.set('lastLiquibaseTimestamp', now.getTime());
-      }
+      next = toSeconds(previous.getTime()) + 60_000;
+      this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { replacement: new Date(next) });
     } else {
-      // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      const { lastLiquibaseTimestamp } = this.jhipsterConfig;
-      if (lastLiquibaseTimestamp) {
-        const lastTimestampDate = new Date(lastLiquibaseTimestamp);
-        if (lastTimestampDate >= now) {
-          now = lastTimestampDate;
-          now.setSeconds(now.getSeconds() + 1);
-          now.setMilliseconds(0);
-        }
-      }
-      this.jhipsterConfig.lastLiquibaseTimestamp = now.getTime();
+      // The stored timestamp can be in the future, after a reproducible run.
+      const now = toSeconds(Date.now());
+      next = lastLiquibaseTimestamp >= now ? toSeconds(lastLiquibaseTimestamp) + 1000 : now;
     }
-    return formatDateForChangelog(now);
+    this.jhipsterConfig.lastLiquibaseTimestamp = next;
+    return formatDateForChangelog(new Date(next));
   }
 
   /**
@@ -676,7 +675,7 @@ export default class BaseGenerator<
       return [];
     }
 
-    let blueprints = await this.#configureBlueprints();
+    let blueprints = await getBlueprintsResolver(this).getBlueprints();
     if (this.options.composeWithLocalBlueprint) {
       blueprints = blueprints.concat('@jhipster/local');
     }
@@ -742,63 +741,6 @@ export default class BaseGenerator<
   }
 
   /**
-   * Configure blueprints.
-   * @private
-   */
-  async #configureBlueprints(): Promise<string[]> {
-    try {
-      return this.getContextData(CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE);
-    } catch {
-      // Ignore
-    }
-    let argvBlueprints = this.options.blueprints ?? '';
-    // check for old single blueprint declaration
-    let { blueprint } = this.options;
-    if (blueprint) {
-      if (typeof blueprint === 'string') {
-        blueprint = [blueprint];
-      }
-      this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
-      argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
-    }
-    const blueprints = mergeBlueprints(parseBlueprints(argvBlueprints), this.config.get('blueprints') ?? []);
-
-    // EnvironmentBuilder already looks for blueprint when running from cli, this is required for tests.
-    // Can be removed once the tests uses EnvironmentBuilder.
-    const missingBlueprints = blueprints
-      .filter(blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint.name)))
-      .map(blueprint => blueprint.name);
-    if (missingBlueprints.length > 0) {
-      await this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
-    }
-
-    if (blueprints?.length) {
-      blueprints.forEach(blueprint => {
-        blueprint.version = this.#findBlueprintVersion(blueprint.name) ?? blueprint.version;
-      });
-      this.config.set('blueprints', blueprints);
-    }
-
-    if (!this.skipChecks) {
-      const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
-      // Verify if the blueprints have been registered.
-      const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
-      if (missing?.length) {
-        throw new Error(`Some blueprints were not found ${missing}, you should install them manually`);
-      }
-      blueprints.forEach(blueprint => {
-        this.#checkJHipsterBlueprintVersion(blueprint.name);
-      });
-    }
-    const blueprintNames = blueprints.map(blueprint => blueprint.name);
-    this.getContextData(CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE, {
-      replacement: blueprintNames,
-    });
-
-    return blueprintNames;
-  }
-
-  /**
    * Compose external blueprint module
    */
   async #composeBlueprint(blueprint: string, subGen: string) {
@@ -837,78 +779,12 @@ export default class BaseGenerator<
   }
 
   /**
-   * Try to retrieve the package.json of the blueprint used, as an object.
-   * @private
-   * @param {string} blueprintPkgName - generator name
-   * @return {object} packageJson - retrieved package.json as an object or undefined if not found
-   */
-  #findBlueprintPackageJson(blueprintPkgName: string): PackageJson | undefined {
-    const blueprintGeneratorName = packageNameToNamespace(blueprintPkgName);
-    const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
-    if (!blueprintPackagePath) {
-      this.log.warn(`Could not retrieve packagePath of blueprint '${blueprintPkgName}'`);
-      return undefined;
-    }
-    const packageJsonFile = path.join(blueprintPackagePath, 'package.json');
-    if (!fs.existsSync(packageJsonFile)) {
-      return undefined;
-    }
-    return JSON.parse(fs.readFileSync(packageJsonFile).toString());
-  }
-
-  /**
-   * Try to retrieve the version of the blueprint used.
-   * @private
-   * @param {string} blueprintPkgName - generator name
-   * @return {string} version - retrieved version or empty string if not found
-   */
-  #findBlueprintVersion(blueprintPkgName: string): string | undefined {
-    const blueprintPackageJson = this.#findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson?.version) {
-      this.log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-      return undefined;
-    }
-    return blueprintPackageJson.version;
-  }
-
-  /**
    * Check if the generator specified as blueprint is installed.
    */
   #checkBlueprint(blueprint: string) {
     if (blueprint === 'generator-jhipster') {
       throw new Error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
     }
-  }
-
-  /**
-   * Check if the generator specified as blueprint has a version compatible with current JHipster.
-   */
-  #checkJHipsterBlueprintVersion(blueprintPkgName: string) {
-    const blueprintPackageJson = this.#findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson) {
-      this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
-      return;
-    }
-    const mainGeneratorJhipsterVersion = packageJson.version;
-    const compatibleJhipsterRange =
-      blueprintPackageJson.engines?.['generator-jhipster'] ??
-      blueprintPackageJson.dependencies?.['generator-jhipster'] ??
-      blueprintPackageJson.peerDependencies?.['generator-jhipster'];
-    if (compatibleJhipsterRange) {
-      if (!semver.valid(compatibleJhipsterRange) && !semver.validRange(compatibleJhipsterRange)) {
-        this.log.verboseInfo(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
-        return;
-      }
-      if (semver.satisfies(mainGeneratorJhipsterVersion, compatibleJhipsterRange, { includePrerelease: true })) {
-        return;
-      }
-      throw new Error(
-        `The installed ${chalk.yellow(
-          blueprintPkgName,
-        )} blueprint targets JHipster v${compatibleJhipsterRange} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
-      );
-    }
-    this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
   }
 }
 

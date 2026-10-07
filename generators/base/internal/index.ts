@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export * from './blueprint.ts';
+export * from './blueprints-resolver.ts';

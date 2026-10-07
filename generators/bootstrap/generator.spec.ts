@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
@@ -48,6 +48,22 @@ describe(`generator - ${generator}`, () => {
     it('should reject jhipsterConfigWithDefaults access', () => {
       expect(() => bootstrapGenerator.jhipsterConfigWithDefaults).toThrow(
         'jhipsterConfigWithDefaults is not available in uniqueGlobally generators',
+      );
+    });
+  });
+
+  describe('a multi-step template written after the commit', () => {
+    let debug: ReturnType<typeof esmocha.spyOn>;
+
+    before(async () => {
+      await helpers.runJHipster(generator);
+      debug = esmocha.spyOn(result.generator.log, 'debug');
+      result.memFs.add({ path: result.generator.destinationPath('late.txt.jhi'), contents: Buffer.from('late') });
+    });
+
+    it('is logged, as it will not be merged', () => {
+      expect(debug).toHaveBeenCalledWith(
+        `The template ${result.generator.destinationPath('late.txt.jhi')} was written after the commit, it will not be merged.`,
       );
     });
   });

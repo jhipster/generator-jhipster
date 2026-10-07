@@ -21,9 +21,11 @@ import { before, describe, expect, it } from 'esmocha';
 
 import {
   type DelayedMutation,
+  type DroppedMutation,
   type MutateDataParam,
   type UndefinedMutation,
   createDelayedMutationContext,
+  droppedMutationMessage,
   finalizeMutations,
   mutateData,
   removeFieldsWithNullishValues,
@@ -158,6 +160,26 @@ describe('utils - object', () => {
         expect(mutatedData).toEqual({ prop: 'bar', prop2: 'delayed' });
       });
     });
+    describe('with an auto-delayed mutation whose key another mutation sets first', () => {
+      const dropped: DroppedMutation[] = [];
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({
+        autoDelay: true,
+        onDroppedMutation: mutation => dropped.push(mutation),
+      });
+
+      it('should keep the other value and tell what the dropped mutation waited for', () => {
+        mutateData(mutatedData, { prop2: ctx => (ctx.prop ? 'delayed' : 'not-delayed') });
+        mutateData(mutatedData, { prop2: 'first' });
+        mutateData(mutatedData, { prop: 'bar' });
+        finalizeMutations(mutatedData);
+        expect(mutatedData).toEqual({ prop: 'bar', prop2: 'first' });
+        expect(dropped).toEqual([{ key: 'prop2', waitingFor: 'prop', value: 'first' }]);
+        expect(droppedMutationMessage(dropped[0])).toBe(
+          'The delayed default of prop2 was dropped: it waited for prop, and another mutation set prop2 ("first") first.',
+        );
+      });
+    });
+
     describe('with auto-delayed mutations disabled', () => {
       const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: false });
 
