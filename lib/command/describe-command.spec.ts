@@ -27,7 +27,14 @@ import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 import { customizeJHipsterNamespace, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
 
-import { describeCommand, describeGenerator, findConfigOwners, listCommands } from './describe-command.ts';
+import {
+  type DescribeBlueprints,
+  describeCommand,
+  describeGenerator,
+  findConfigOwners,
+  listCommands,
+  loadDescribeBlueprints,
+} from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
 
 import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
@@ -174,7 +181,7 @@ describe('command - describe command', () => {
 export const createGenerator = async env => env.requireGenerator('jhipster:base');
 `;
     let store: Store;
-    let blueprints: [string, string][];
+    let blueprints: DescribeBlueprints;
 
     before(async () => {
       await helpers
@@ -193,7 +200,7 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
         )
         .commitFiles();
       const packagePath = join(process.cwd(), 'node_modules/generator-jhipster-foo');
-      blueprints = [['generator-jhipster-foo', packagePath]];
+      blueprints = await loadDescribeBlueprints([['generator-jhipster-foo', packagePath]]);
       store = new Store();
       store.lookupSync({
         packagePaths: [getPackageRoot()],
@@ -203,15 +210,22 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
       store.lookupSync({ packagePaths: [packagePath], lookups: ['generators'] });
     });
 
-    it('should list the commands of the blueprints with the ones of JHipster', async () => {
-      const commands = await listCommands({ blueprints });
-      expect(commands).toContainEqual({ namespace: 'foo', description: 'Foo of the blueprint' });
-      expect(commands).toContainEqual(expect.objectContaining({ namespace: 'app', default: true }));
-      expect((await listCommands()).map(({ namespace }) => namespace)).not.toContain('foo');
+    it('should load the namespaces and the commands of the blueprints', () => {
+      expect(blueprints).toEqual({
+        namespaces: ['jhipster-foo'],
+        commands: { foo: { desc: 'Foo of the blueprint', blueprint: 'generator-jhipster-foo' } },
+      });
     });
 
-    it('should describe a command of a blueprint under the namespace of the blueprint', async () => {
-      const description = await describeGenerator('foo', { store, blueprints });
+    it('should list the commands of the blueprints with the ones of JHipster', () => {
+      const commands = listCommands({ blueprints });
+      expect(commands).toContainEqual({ namespace: 'foo', description: 'Foo of the blueprint' });
+      expect(commands).toContainEqual(expect.objectContaining({ namespace: 'app', default: true }));
+      expect(listCommands().map(({ namespace }) => namespace)).not.toContain('foo');
+    });
+
+    it('should describe a command of a blueprint under the namespace of the blueprint', () => {
+      const description = describeGenerator('foo', { store, blueprints });
       expect(description).toMatchObject({ namespace: 'jhipster-foo:foo', description: 'Foo of the blueprint' });
       expect(description!.dependencies).toEqual(['bootstrap', 'jhipster-foo:foo']);
       expect(description!.configs.find(({ name }) => name === 'fooOption')).toMatchObject({
@@ -221,22 +235,22 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
       });
     });
 
-    it('should not find a command of a blueprint without the blueprint', async () => {
-      expect(await describeGenerator('foo', { store })).toBeUndefined();
+    it('should not find a command of a blueprint without the blueprint', () => {
+      expect(describeGenerator('foo', { store })).toBeUndefined();
       // The namespace of the generator is enough.
-      expect((await describeGenerator('jhipster-foo:foo', { store }))?.namespace).toBe('jhipster-foo:foo');
+      expect(describeGenerator('jhipster-foo:foo', { store })?.namespace).toBe('jhipster-foo:foo');
     });
 
-    it('should describe a command of JHipster with the generators of the blueprint overriding it', async () => {
-      const description = await describeGenerator('git', { store, blueprints });
+    it('should describe a command of JHipster with the generators of the blueprint overriding it', () => {
+      const description = describeGenerator('git', { store, blueprints });
       expect(description!.dependencies).toEqual(['bootstrap', 'jhipster-foo:git', 'git']);
       expect(description!.configs.find(({ name }) => name === 'gitOption')).toMatchObject({
         owner: 'jhipster-foo:git',
         blueprint: 'jhipster-foo',
       });
-      expect((await describeGenerator('git', { store }))!.dependencies).toEqual(['bootstrap', 'git']);
+      expect(describeGenerator('git', { store })!.dependencies).toEqual(['bootstrap', 'git']);
       // Only what the command declares itself, without the blueprint.
-      expect((await describeGenerator('git', { store, blueprints, imports: false }))!.dependencies).toEqual(['git']);
+      expect(describeGenerator('git', { store, blueprints, imports: false })!.dependencies).toEqual(['git']);
     });
 
     it('should find the config owners in the blueprints', () => {
@@ -245,12 +259,12 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
   });
 
   describe('describeGenerator', () => {
-    it('should describe the default command given', async () => {
-      expect((await describeGenerator('default', { defaultCommand: 'git', imports: false }))?.namespace).toBe('git');
+    it('should describe the default command given', () => {
+      expect(describeGenerator('default', { defaultCommand: 'git', imports: false })?.namespace).toBe('git');
     });
 
-    it('should not describe an unknown generator', async () => {
-      expect(await describeGenerator('unknown')).toBeUndefined();
+    it('should not describe an unknown generator', () => {
+      expect(describeGenerator('unknown')).toBeUndefined();
     });
   });
 });

@@ -136,7 +136,7 @@ const print = (value: string | object) => {
 const describeCliCommand = async (
   [generator]: [string | undefined],
   options: DescribeOptions,
-  env: Environment,
+  _env: Environment,
   envBuilder?: EnvironmentBuilder,
 ) => {
   if (options.config) {
@@ -146,17 +146,16 @@ const describeCliCommand = async (
     return;
   }
 
-  const blueprintCommands = await envBuilder?.getBlueprintCommands();
+  const blueprints = await envBuilder?.getDescribeBlueprints();
   if (!generator) {
-    const generators = await listCommands({ blueprintCommands });
+    const generators = listCommands({ blueprints });
     print(options.json ? generators : formatGenerators(generators));
     return;
   }
 
-  const description = await describeGenerator(generator, {
-    getGeneratorMeta: (namespace: string) => env.getGeneratorMeta(namespace),
-    blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
-    blueprintCommands,
+  const description = describeGenerator(generator, {
+    store: envBuilder?.getStore(),
+    blueprints,
     imports: options.imports,
     onMissing: (namespace: string) => logger.warn(`Generator ${namespace} not found.`),
   });

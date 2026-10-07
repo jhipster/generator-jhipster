@@ -27,6 +27,7 @@ import Environment, { Store } from 'yeoman-environment';
 
 import BaseGenerator from '../generators/base/index.ts';
 import { type Blueprint, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
+import type { DescribeBlueprints } from '../lib/command/describe-command.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../lib/index.ts';
 import { loadBlueprintCommands } from '../lib/resolver/blueprint-commands.ts';
 import {
@@ -337,6 +338,13 @@ export default class EnvironmentBuilder {
       Object.assign(this.env.sharedOptions, sharedOptions);
     }
     return this;
+  }
+
+  /**
+   * The blueprints of the cli for `describe`: their namespaces and their commands, the dev and local blueprints included.
+   */
+  async getDescribeBlueprints(): Promise<DescribeBlueprints> {
+    return { namespaces: this.getBlueprintsNamespaces(), commands: (await this.getBlueprintCommands()) ?? {} };
   }
 
   /**

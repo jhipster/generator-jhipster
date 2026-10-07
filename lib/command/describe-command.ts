@@ -171,39 +171,35 @@ export const findConfigOwners = (name: string, { store }: { store?: GeneratorsSt
   return { name, owners };
 };
 
-/**
- * The blueprints to describe with JHipster: their commands and their generators, which may override JHipster's.
- */
-export type DescribeBlueprintsOptions = {
-  /** The blueprints, by priority, with the path of their package. */
-  blueprints?: BlueprintPackagePath[];
-  /** The namespaces of the blueprints, by priority; defaults to the ones of `blueprints`. */
-  blueprintNamespaces?: string[];
-  /** The commands of the blueprints; defaults to the ones `blueprints` declare in their `cli/commands`. */
-  blueprintCommands?: Record<string, CliCommand>;
+/** What the description needs of the blueprints, by priority: their namespaces and the commands they add to the cli. */
+export type DescribeBlueprints = {
+  namespaces: string[];
+  commands: Record<string, CliCommand>;
 };
+
+/**
+ * Load the blueprints to describe with JHipster from their packages: the commands they declare in their `cli/commands`,
+ * and their namespaces, the generators of which override JHipster's.
+ */
+export const loadDescribeBlueprints = async (blueprintPackagePaths: BlueprintPackagePath[]): Promise<DescribeBlueprints> => ({
+  namespaces: blueprintPackagePaths.map(([packageName]) => packageNameToNamespace(packageName)),
+  commands: (await loadBlueprintCommands(blueprintPackagePaths)) ?? {},
+});
 
 export type CommandSummary = { namespace: string; description: string; default?: true };
 
-/**
- * The cli commands: JHipster's, and the ones of the blueprints, a blueprint command overriding JHipster's.
- */
-export const loadCommands = async ({
-  blueprints,
-  blueprintCommands,
-}: Pick<DescribeBlueprintsOptions, 'blueprints' | 'blueprintCommands'> = {}): Promise<Record<string, CliCommand>> => ({
-  ...defaultCommands,
-  ...(blueprintCommands ?? (await loadBlueprintCommands(blueprints))),
-});
+type DescribeCommandsOptions = {
+  /** The blueprints, as `loadDescribeBlueprints` loads them. */
+  blueprints?: DescribeBlueprints;
+  /** The command `default` names; defaults to the command `jhipster` runs alone. */
+  defaultCommand?: string;
+};
 
 /**
  * List the cli commands, the blueprints' included, the command `jhipster` runs alone marked as `default`.
  */
-export const listCommands = async ({
-  defaultCommand = resolveDefaultCommand(),
-  ...options
-}: Pick<DescribeBlueprintsOptions, 'blueprints' | 'blueprintCommands'> & { defaultCommand?: string } = {}): Promise<CommandSummary[]> =>
-  Object.entries(await loadCommands(options))
+export const listCommands = ({ blueprints, defaultCommand = resolveDefaultCommand() }: DescribeCommandsOptions = {}): CommandSummary[] =>
+  Object.entries<CliCommand>({ ...defaultCommands, ...blueprints?.commands })
     .filter(([_name, command]) => !command.removed)
     // The static `[Default]` prefix of `app` is replaced by the resolved default command.
     .map(([namespace, command]) => ({
@@ -212,18 +208,11 @@ export const listCommands = async ({
       default: namespace === defaultCommand || undefined,
     }));
 
-export type DescribeGeneratorOptions = DescribeBlueprintsOptions & {
-  /**
-   * The generators to describe, JHipster's and the blueprints': an environment or a store. Defaults to JHipster's
-   * generators.
-   */
+export type DescribeGeneratorOptions = DescribeCommandsOptions & {
+  /** The generators to describe, JHipster's and the blueprints'. Defaults to JHipster's generators. */
   store?: GeneratorsStore;
-  /** Resolves a registered generator; defaults to the one of `store`. */
-  getGeneratorMeta?: (namespace: string) => StoreGeneratorMeta | undefined;
   /** `false` describes only what the generator declares itself, without the bootstrap and the imported generators. */
   imports?: boolean;
-  /** The command `default` names; defaults to the command `jhipster` runs alone. */
-  defaultCommand?: string;
   /** Called for a dependency that is not registered. */
   onMissing?: (namespace: string) => void;
 };
@@ -233,16 +222,16 @@ export type DescribeGeneratorOptions = DescribeBlueprintsOptions & {
  * it (`spring-boot`, `spring-boot:cache`, a command of a blueprint), by its namespace (`jhipster:spring-boot:cache`,
  * `jhipster-foo:app` for the generator of a blueprint), or `default`. Undefined for an unknown generator.
  */
-export const describeGenerator = async (
+export const describeGenerator = (
   generator: string,
-  { store, getGeneratorMeta, imports, defaultCommand, onMissing, ...options }: DescribeGeneratorOptions = {},
-): Promise<CommandDescription | undefined> => {
-  const { blueprints, blueprintNamespaces = blueprints?.map(([packageName]) => packageNameToNamespace(packageName)) } = options;
-  getGeneratorMeta ??= (namespace: string) => (store ?? getJHipsterStore()).getGeneratorsMeta()[namespace];
+  { store = getJHipsterStore(), blueprints, imports, defaultCommand = resolveDefaultCommand(), onMissing }: DescribeGeneratorOptions = {},
+): CommandDescription | undefined => {
+  const generatorsMeta = store.getGeneratorsMeta();
+  const getGeneratorMeta = (namespace: string): StoreGeneratorMeta | undefined => generatorsMeta[namespace];
   if (generator === 'default') {
-    generator = defaultCommand ?? resolveDefaultCommand();
+    generator = defaultCommand;
   }
-  const commands = await loadCommands(options);
+  const commands: Record<string, CliCommand> = { ...defaultCommands, ...blueprints?.commands };
   const command = commands[generator] ?? commands[toCommandNamespace(generator)];
   const candidates =
     command?.blueprint ?
@@ -257,7 +246,7 @@ export const describeGenerator = async (
   // namespace of a nested generator.
   const commandNamespace = toCommandNamespace(registeredNamespace);
   const namespace = commandNamespace.includes(':') ? registeredNamespace : commandNamespace;
-  const resolveOptions = { getGeneratorMeta, blueprintNamespaces, onMissing };
+  const resolveOptions = { getGeneratorMeta, blueprintNamespaces: blueprints?.namespaces, onMissing };
   // The generators the cli registers the options of, or the command alone.
   const dependencies =
     imports === false ?
