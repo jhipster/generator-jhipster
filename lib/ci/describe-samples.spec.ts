@@ -32,7 +32,7 @@ describe('ci samples groups', () => {
       expect(Object.fromEntries(Object.entries(samples).map(([name, { group }]) => [name, group]))).toEqual({
         'custom-jdl': 'custom',
         'custom-yo-rc': 'custom',
-        app: 'files',
+        'app-jdl': 'files',
         'app-yo-rc': 'files',
         'inline-jdl': 'inline',
       });
@@ -77,7 +77,7 @@ describe('ci samples groups', () => {
     },
     "jdl": undefined,
     "jdlSampleFiles": [
-      "valid/files/app.jdl",
+      "valid/files/app-jdl.jdl",
     ],
     "name": "custom-jdl",
     "os": "ubuntu-latest",
@@ -94,6 +94,20 @@ describe('ci samples groups', () => {
     "yoRcFile": "valid/files/app-yo-rc/.yo-rc.json",
   },
   {
+    "command": "./cli/cli.cjs generate-sample 'app-jdl'",
+    "config": {
+      "clientFramework": "vue",
+    },
+    "generator": "jdl",
+    "generatorOptions": undefined,
+    "jdl": undefined,
+    "jdlSampleFiles": [
+      "valid/files/app-jdl.jdl",
+    ],
+    "name": "app-jdl",
+    "os": "ubuntu-latest",
+  },
+  {
     "command": "./cli/cli.cjs generate-sample 'app-yo-rc'",
     "config": {
       "clientFramework": "react",
@@ -103,20 +117,6 @@ describe('ci samples groups', () => {
     "name": "app-yo-rc",
     "os": "ubuntu-latest",
     "yoRcFile": "valid/files/app-yo-rc/.yo-rc.json",
-  },
-  {
-    "command": "./cli/cli.cjs generate-sample 'app'",
-    "config": {
-      "clientFramework": "vue",
-    },
-    "generator": "jdl",
-    "generatorOptions": undefined,
-    "jdl": undefined,
-    "jdlSampleFiles": [
-      "valid/files/app.jdl",
-    ],
-    "name": "app",
-    "os": "ubuntu-latest",
   },
   {
     "command": "./cli/cli.cjs generate-sample 'inline-jdl'",
