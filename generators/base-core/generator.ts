@@ -1220,7 +1220,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             if (fileSpec.override !== undefined && !resolveCallback(fileSpec.override) && this.fs.exists(existingFile)) {
               this.log.debug(`skipping file ${destinationFile}`);
               // Written back as it is: a file a generator keeps is told apart from the files no generator writes.
-              this.writeDestination(existingFile, this.fs.read(existingFile, { raw: true }));
+              this.writeDestination(existingFile, this.fs.read(existingFile, { raw: true }), { metadata: { writeOnce: true } });
               return undefined;
             }
 

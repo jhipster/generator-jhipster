@@ -146,6 +146,7 @@ describe('generator - base-core', () => {
         expect(file.contents?.toString()).toBe('kept');
         // Committed by the run: the state it had is kept as stateCleared.
         expect(file.stateCleared).toBe('modified');
+        expect(file.editorMetadata).toMatchObject({ writeOnce: true });
       });
     });
 
