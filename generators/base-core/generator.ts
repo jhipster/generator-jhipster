@@ -1216,12 +1216,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
 
-            if (
-              fileSpec.override !== undefined &&
-              !resolveCallback(fileSpec.override) &&
-              this.fs.exists(destinationFile.replace(/\.jhi$/, ''))
-            ) {
+            const existingFile = destinationFile.replace(/\.jhi$/, '');
+            if (fileSpec.override !== undefined && !resolveCallback(fileSpec.override) && this.fs.exists(existingFile)) {
               this.log.debug(`skipping file ${destinationFile}`);
+              // Written back as it is: a file a generator keeps is told apart from the files no generator writes.
+              this.writeDestination(existingFile, this.fs.read(existingFile, { raw: true }));
               return undefined;
             }
 
