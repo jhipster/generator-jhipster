@@ -47,11 +47,13 @@ export default defineConfig(
     ignores: [
       // The base classes define the priority API itself: each `as<Priority>TaskGroup` helper is deliberately
       // paired with the priority it types, so their members are not in running order and are not meant to be.
+      // Their plain priority getters are the defaults subclasses override, so they are not registered there either.
       'generators/base/generator.ts',
       'generators/base-*/generator.ts',
     ],
     plugins: { jhipster: jhipsterPlugin },
     rules: {
+      'jhipster/no-unregistered-task-group': 'error',
       'jhipster/task-group-order': 'error',
     },
   },

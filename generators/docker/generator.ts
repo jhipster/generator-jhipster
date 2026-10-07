@@ -321,19 +321,6 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
     return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
   }
 
-  get end() {
-    return this.asEndTaskGroup({
-      async dockerComposeUp({ control }) {
-        if (!control.environmentHasDockerCompose) {
-          this.log('');
-          this.log.warn(
-            'Docker Compose V2 is not installed on your computer. Some features may not work as expected. Read https://docs.docker.com/compose/install/',
-          );
-        }
-      },
-    });
-  }
-
   /**
    * @private
    * Returns the JDBC URL for a databaseType
