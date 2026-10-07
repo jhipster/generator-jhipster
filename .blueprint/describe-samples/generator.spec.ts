@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { after, before, describe, esmocha, expect, it } from 'esmocha';
+import assert from 'node:assert';
 import { basename, join } from 'node:path';
 
 import Generator from './generator.ts';
@@ -78,6 +79,14 @@ describe(`generator - ${generator}`, () => {
       }
     });
 
+    it('should give each sample a name of its own across the workflows', () => {
+      const workflowsByName = Object.groupBy(runResult.generator.samples, sample => sample.name);
+      const duplicated = Object.entries(workflowsByName)
+        .filter(([_name, samples]) => samples!.length > 1)
+        .map(([name, samples]) => `${name} (${samples!.map(sample => sample.workflow).join(', ')})`);
+      expect(duplicated).toEqual([]);
+    });
+
     it('should print json', () => {
       expect(JSON.parse(runResult.generator.format())).toHaveLength(runResult.generator.samples.length);
     });
@@ -112,6 +121,7 @@ describe(`generator - ${generator}`, () => {
       const { samples } = runResult.generator;
       expect(samples.every(sample => sample.workflow === 'angular')).toBe(true);
       const ngDefault = samples.find(sample => sample.name === 'ng-default')!;
+      assert(ngDefault.generator === 'app');
       expect(ngDefault).toMatchObject({
         jobName: expect.stringMatching(/^ng-default \(n.*\/j.*\)$/),
         command: 'jhipster generate-sample ng-default',
@@ -132,6 +142,7 @@ describe(`generator - ${generator}`, () => {
 
     it('should describe the jdl entities of the sample', () => {
       const [sample] = runResult.generator.samples;
+      assert(sample.generator === 'app');
       expect(sample.jdlEntity).toBe('*');
       expect(sample.jdlEntityFiles).toContain('.blueprint/generate-sample/templates/test-integration/samples/jdl-entities/custom-id.jdl');
       expect(sample.generatorOptions).toEqual({ removeNeedles: true, e2eTls: true });

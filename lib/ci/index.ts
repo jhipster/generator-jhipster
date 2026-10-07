@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+export * from './describe-samples.ts';
 export * from './github.ts';
 export * from './github-group.ts';
 export * from './github-matrix.ts';

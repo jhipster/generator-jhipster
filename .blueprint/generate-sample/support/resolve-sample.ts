@@ -21,7 +21,7 @@ import { join } from 'node:path';
 
 import { globSync } from 'tinyglobby';
 
-import { type WorkflowSample, getGithubSamplesGroup, getGithubSamplesGroups } from '../../../lib/ci/index.ts';
+import { type WorkflowSample, getGithubSamples } from '../../../lib/ci/index.ts';
 import {
   dailyBuildsFolder,
   entitiesSamplesDir,
@@ -67,15 +67,12 @@ const resolveEntitiesSample = (entity?: string): string | undefined => {
 };
 
 /**
- * A sample of a group workflow (`github-build-matrix/samples/<group>.ts`) defined by a jdl, which the workflow gives to the
- * jdl generator through JHI_JDL.
+ * A sample of a group workflow (`github-build-matrix/samples/<group>.ts`) defined by a jdl, which `generate-sample` gives
+ * to the jdl generator.
  */
 export const resolveGroupJdlSample = async (sampleName: string): Promise<{ group: string; jdl: string } | undefined> => {
-  for (const group of await getGithubSamplesGroups(githubSamplesGroupFolder)) {
-    const { jdl } = (await getGithubSamplesGroup(githubSamplesGroupFolder, group)).samples[sampleName] ?? {};
-    if (jdl) return { group, jdl };
-  }
-  return undefined;
+  const { group, sample } = (await getGithubSamples(githubSamplesGroupFolder))[sampleName] ?? {};
+  return group && sample?.jdl ? { group, jdl: sample.jdl } : undefined;
 };
 
 const findWorkflowSample = (sampleName: string): WorkflowSample | undefined =>

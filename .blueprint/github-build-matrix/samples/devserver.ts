@@ -39,16 +39,19 @@ export const devServerMatrix = {
     },
   },
   react: {
-    'react-default': {
+    'react-default-devserver': {
       sample: 'samples/react-default',
       args: '--sample-yorc-folder --entities-sample sqllight',
       os: 'macos-latest',
     },
   },
   vue: {
-    'vue-default': {
+    'vue-default-devserver': {
       sample: 'samples/vue-default',
       args: '--sample-yorc-folder --entities-sample sqllight',
     },
   },
 } satisfies Record<string, GitHubMatrixGroup>;
+
+/** The samples of the devserver workflow, which selects them by the clients a change touches. */
+export default { ...devServerMatrix.angular, ...devServerMatrix.react, ...devServerMatrix.vue } satisfies GitHubMatrixGroup;

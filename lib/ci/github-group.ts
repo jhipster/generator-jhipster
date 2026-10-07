@@ -18,7 +18,7 @@
  */
 
 import { readFile, readdir } from 'node:fs/promises';
-import { extname, join } from 'node:path';
+import { extname, isAbsolute, join, relative, resolve } from 'node:path';
 
 import { type GitHubMatrixGroup, getUnknownGitHubMatrixGroupProperties } from './github-matrix.ts';
 
@@ -29,17 +29,26 @@ export const getGithubSamplesGroups = async (samplesGroupFolder: string, keepExt
     .map(sample => (keepExtensions ? sample : sample.split('.')[0]));
 };
 
+/** A samples group is read from inside its folder: a group given by the command line cannot load another module. */
+const assertGroupInFolder = (samplesGroupFolder: string, group: string): void => {
+  const groupPath = relative(samplesGroupFolder, resolve(samplesGroupFolder, group));
+  if (!groupPath || groupPath.startsWith('..') || isAbsolute(groupPath)) {
+    throw new Error(`Samples group ${group} is not inside ${samplesGroupFolder}`);
+  }
+};
+
 export const getGithubSamplesGroup = async (
   samplesGroupFolder: string,
   group: string,
 ): Promise<{ samples: GitHubMatrixGroup; warnings: string[] }> => {
+  assertGroupInFolder(samplesGroupFolder, group);
   const warnings: string[] = [];
   let samples: GitHubMatrixGroup = {};
   const samplesFolderContent = await getGithubSamplesGroups(samplesGroupFolder, true);
   const groupExt = ['js', 'ts', 'json'].find(ext => samplesFolderContent.includes(`${group}.${ext}`));
   if (groupExt === 'js' || groupExt === 'ts') {
     const jsGroup: { default?: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.${groupExt}`));
-    // A module without default export (dev-server.ts, whose matrices are built by the generator) defines no sample.
+    // A module without default export defines no sample.
     samples = Object.fromEntries(
       Object.entries(jsGroup.default ?? {}).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]),
     );
@@ -78,12 +87,28 @@ export const getGithubSamplesGroup = async (
       }
     }
   }
-  if (!samples) {
-    throw new Error();
-  }
   const unknownProperties = getUnknownGitHubMatrixGroupProperties(samples);
   if (unknownProperties.length) {
     warnings.push(`Unknown properties in ${group}: ${unknownProperties.join(', ')}`);
   }
   return { samples, warnings };
+};
+
+export type GithubSample = { group: string; sample: GitHubMatrixGroup[string] };
+
+/**
+ * The samples of every group of a folder, by name: a sample name is unique across the groups, so a sample is generated
+ * by its name alone.
+ */
+export const getGithubSamples = async (samplesGroupFolder: string): Promise<Record<string, GithubSample>> => {
+  const samples: Record<string, GithubSample> = {};
+  for (const group of await getGithubSamplesGroups(samplesGroupFolder)) {
+    for (const [name, sample] of Object.entries((await getGithubSamplesGroup(samplesGroupFolder, group)).samples)) {
+      if (samples[name]) {
+        throw new Error(`Sample ${name} is defined by the ${samples[name].group} and ${group} samples groups`);
+      }
+      samples[name] = { group, sample };
+    }
+  }
+  return samples;
 };

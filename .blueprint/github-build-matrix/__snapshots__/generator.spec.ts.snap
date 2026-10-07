@@ -2814,7 +2814,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "react-default",
+      "job-name": "react-default-devserver",
       "sample": "samples/react-default",
       "os": "macos-latest",
       "node-version": "NODE-VERSION",
@@ -2828,7 +2828,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "vue-default",
+      "job-name": "vue-default-devserver",
       "sample": "samples/vue-default",
       "os": "ubuntu-latest",
       "node-version": "NODE-VERSION",

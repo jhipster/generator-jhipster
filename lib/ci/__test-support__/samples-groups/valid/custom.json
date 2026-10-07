@@ -1,0 +1,4 @@
+{
+  "custom-jdl": { "sample-type": "jdl", "sample-folder": "files", "sample-file": "app-jdl", "generatorOptions": { "skipClient": true } },
+  "custom-yo-rc": { "sample-type": "yo-rc", "sample-folder": "files", "sample-file": "app-yo-rc", "os": "macos-latest" }
+}
