@@ -158,6 +158,49 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('with blueprints option and an application without blueprints', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(['jhipster-foo:other'])
+          .withOptions({ jsonOnly: true, blueprints: 'foo', inline: 'application { config { baseName audited } }' });
+      });
+
+      it('should keep the blueprints of the option in the application config', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': { baseName: 'audited', blueprints: [{ name: 'generator-jhipster-foo' }] },
+        });
+      });
+    });
+
+    describe('with blueprints option and an application with blueprints', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(['jhipster-foo:other', 'jhipster-bar:other'])
+          .withOptions({ jsonOnly: true, blueprints: 'foo', inline: 'application { config { baseName audited blueprints [bar] } }' });
+      });
+
+      it('should store the blueprints of the option and of the jdl', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-foo' }, { name: 'generator-jhipster-bar' }] },
+        });
+      });
+    });
+
+    describe('with an application declaring a blueprint', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(['jhipster-bar:app'])
+          .withOptions({ inline: 'application { config { baseName jhipster blueprints [bar] } }' });
+      });
+
+      it('should compose the application with the blueprint', () => {
+        runResult.assertGeneratorComposedOnce('jhipster-bar:app');
+      });
+    });
+
     describe('with blueprint jdl with blueprint config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withOptions({
