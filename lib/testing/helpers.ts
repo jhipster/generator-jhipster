@@ -44,25 +44,19 @@ import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../gen
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
-import { getPackageRoot, isDistFolder } from '../index.ts';
+import { getPackageRoot } from '../index.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
-import {
-  customizeJHipsterNamespace,
-  customizeNamespaceOfPackage,
-  generatorsLookup,
-  jhipsterGeneratorsLookup,
-} from '../resolver/lookups.ts';
+import { getJHipsterStore } from '../resolver/lookups.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
-import getGenerator, { getGeneratorRelativeFolder } from '../utils/get-generator.ts';
+import getGenerator from '../utils/get-generator.ts';
 import {
   createDelayedMutationContext,
   createJHipsterLogger,
   lookupGeneratorsWithNamespace,
   normalizePath,
   normalizePathEnd,
-  packageNameToNamespace,
 } from '../utils/index.ts';
 
 type WithJHipsterGenerators = {
@@ -326,8 +320,6 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
     return this.withLookups([
       {
         packagePaths: [blueprintPackagePath],
-        // @ts-expect-error customizeNamespace is not exported by @yeoman/types
-        customizeNamespace: customizeNamespaceOfPackage(packageNameToNamespace(blueprint)),
       },
     ]).withOptions({
       blueprint: [blueprint],
@@ -414,16 +406,9 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
   withJHipsterGenerators(options: WithJHipsterGenerators = {}): this {
     const { useDefaultMocks, useMock = useDefaultMocks ? filterBootstrapGenerators : () => false } = options;
     const mockedGenerators = allGenerators.filter(useMock).filter(gen => this.Generator !== gen);
-    const actualGenerators = allGenerators.filter(gen => !mockedGenerators.includes(gen));
-    const prefix = isDistFolder() ? 'dist/' : '';
-    const filePatterns = actualGenerators.map(ns => getGeneratorRelativeFolder(ns)).map(path => `${prefix}${path}/index.{j,t}s`);
-    return this.withMockedGenerators(mockedGenerators).withLookups({
-      packagePaths: [getPackageRoot()],
-      // @ts-expect-error lookups is not exported by @yeoman/types
-      lookups: jhipsterGeneratorsLookup,
-      customizeNamespace: customizeJHipsterNamespace,
-      filePatterns,
-    });
+    // The environment gets the jhipster generators from a clone of the jhipster store, the mocked ones replacing theirs.
+    (this.envOptions as JHipsterEnvironmentOptions).jhipsterStore = true;
+    return this.withMockedGenerators(mockedGenerators);
   }
 
   withGradleBuildTool(): this {
@@ -749,10 +734,16 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
     });
   }
 
-  async createEnv(options: EnvironmentOptions): Promise<Environment> {
-    return EnvironmentBuilder.create(options).getEnvironment();
+  async createEnv({ jhipsterStore, ...options }: JHipsterEnvironmentOptions): Promise<Environment> {
+    // Only the generators of the test, unless it asks for the jhipster ones. The environment works on a clone of the
+    // store: the environment options are passed on to the next run of a run result, the generators a run registers are not.
+    const store = getJHipsterStore({ empty: !jhipsterStore });
+    return EnvironmentBuilder.create({ store, ...options }).getEnvironment();
   }
 }
+
+/** The environment options of a test run: `jhipsterStore` gives the environment the jhipster generators. */
+type JHipsterEnvironmentOptions = EnvironmentOptions & { jhipsterStore?: boolean };
 
 type MergeableHelperOptions = Pick<
   Parameters<typeof createHelpers<YeomanTest>>[0],
@@ -770,10 +761,6 @@ const helpersPresets: Record<Presets | 'jhipster', MergeableHelperOptions> = {
     },
     environmentOptions: {
       dryRun: false,
-      generatorLookupOptions: {
-        // Default to lookup for source generators only inside tests.
-        lookups: generatorsLookup,
-      },
       sharedOptions: {
         useVersionPlaceholders: true,
         reproducible: true,
