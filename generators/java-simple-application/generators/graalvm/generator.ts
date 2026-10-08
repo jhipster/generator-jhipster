@@ -55,13 +55,13 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
         const scripts =
           buildToolGradle ?
             {
-              'native-package': './gradlew nativeCompile -Pnative -Pprod -x test -x integrationTest',
-              'native-package-dev': './gradlew nativeCompile -Pnative -Pdev -x test -x integrationTest',
+              'native-package': 'node gradle/gradlew.mjs nativeCompile -Pnative -Pprod -x test -x integrationTest',
+              'native-package-dev': 'node gradle/gradlew.mjs nativeCompile -Pnative -Pdev -x test -x integrationTest',
               'native-start': './build/native/nativeCompile/native-executable --spring.profiles.active=e2e,secret-samples,prod',
             }
           : {
-              'native-package': './mvnw package -B -ntp -Pnative,prod -DskipTests',
-              'native-package-dev': './mvnw package -B -ntp -Pnative,dev,webapp -DskipTests',
+              'native-package': 'node .mvn/mvnw.mjs package -B -ntp -Pnative,prod -DskipTests',
+              'native-package-dev': 'node .mvn/mvnw.mjs package -B -ntp -Pnative,dev,webapp -DskipTests',
               'native-start': './target/native-executable --spring.profiles.active=e2e,secret-samples,prod',
             };
         Object.assign(packageJsonScripts, {

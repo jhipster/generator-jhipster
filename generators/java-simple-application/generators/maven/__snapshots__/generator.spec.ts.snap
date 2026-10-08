@@ -51,6 +51,9 @@ exports[`generator - java-simple-application:maven with empty configuration shou
   ".mvn/jvm.config": {
     "stateCleared": "modified",
   },
+  ".mvn/mvnw.mjs": {
+    "stateCleared": "modified",
+  },
   ".mvn/wrapper/maven-wrapper.jar": {
     "stateCleared": "modified",
   },
@@ -72,6 +75,9 @@ exports[`generator - java-simple-application:maven with empty configuration shou
 exports[`generator - java-simple-application:maven with valid configuration should generate only maven files 1`] = `
 {
   ".mvn/jvm.config": {
+    "stateCleared": "modified",
+  },
+  ".mvn/mvnw.mjs": {
     "stateCleared": "modified",
   },
   ".mvn/wrapper/maven-wrapper.jar": {

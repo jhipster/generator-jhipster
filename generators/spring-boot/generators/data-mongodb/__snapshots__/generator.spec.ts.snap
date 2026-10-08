@@ -412,6 +412,9 @@ exports[`generator - mongodb gateway-jwt-reactive(true)-gradle-enableTranslation
   "gradle.properties": {
     "stateCleared": "modified",
   },
+  "gradle/gradlew.mjs": {
+    "stateCleared": "modified",
+  },
   "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
@@ -706,6 +709,9 @@ exports[`generator - mongodb gateway-oauth2-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/gradlew.mjs": {
     "stateCleared": "modified",
   },
   "gradle/libs.versions.toml": {
@@ -1288,6 +1294,9 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "gradle.properties": {
     "stateCleared": "modified",
   },
+  "gradle/gradlew.mjs": {
+    "stateCleared": "modified",
+  },
   "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
@@ -1576,6 +1585,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/gradlew.mjs": {
     "stateCleared": "modified",
   },
   "gradle/libs.versions.toml": {
@@ -2245,6 +2257,9 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "gradle.properties": {
     "stateCleared": "modified",
   },
+  "gradle/gradlew.mjs": {
+    "stateCleared": "modified",
+  },
   "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
@@ -2775,6 +2790,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/gradlew.mjs": {
     "stateCleared": "modified",
   },
   "gradle/libs.versions.toml": {
@@ -3454,6 +3472,9 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/gradlew.mjs": {
     "stateCleared": "modified",
   },
   "gradle/libs.versions.toml": {
