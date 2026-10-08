@@ -304,7 +304,7 @@ export default class EnvironmentBuilder {
       blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint)),
     );
 
-    if (missingBlueprints?.length) {
+    if (missingBlueprints.length > 0) {
       // Lookup for blueprints.
       await this.env.lookup({
         ...options,

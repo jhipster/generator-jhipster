@@ -261,7 +261,7 @@ export function createUserManagementEntity(
   }
 
   if (application.enableTranslation) {
-    const langKeyFieldValues = (application.languages as string[])?.map(lang => lang)?.join(',');
+    const langKeyFieldValues = (application.languages as string[])?.join(',');
     mutateFields(userManagement.fields!, [
       {
         fieldName: 'langKey',
