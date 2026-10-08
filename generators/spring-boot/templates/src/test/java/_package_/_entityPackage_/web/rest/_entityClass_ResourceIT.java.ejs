@@ -299,7 +299,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch || searchEngineCouchbase) { _%>
 import static org.awaitility.Awaitility.await;
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.transient)) { _%>
@@ -2119,7 +2119,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         // Search the <%- entityInstance %>
   <%_ if (searchEngineCouchbase) { _%>
         // Search results are eventually consistent and non-monotonic: retry the assertions until the <%- entityInstance %> is indexed
-        TestUtil.retryUntilSuccess(() ->
+        await().atMost(1, TimeUnit.MINUTES).pollInSameThread().ignoreExceptions().untilAsserted(() ->
   <%_ } _%>
   <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
