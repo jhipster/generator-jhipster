@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { existsSync } from 'node:fs';
-import path, { join, resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { QueuedAdapter } from '@yeoman/adapter';
@@ -40,8 +40,7 @@ import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 import type { CliCommand } from './types.d.ts';
 import { logger } from './utils.ts';
 
-const jhipsterDevBlueprintPath =
-  process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
+const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? join(import.meta.dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
 // Local and dev blueprints generators.
@@ -158,7 +157,7 @@ export default class EnvironmentBuilder {
     const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
     this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
-    this.localBlueprintPath = path.join(process.cwd(), '.blueprint');
+    this.localBlueprintPath = join(process.cwd(), '.blueprint');
     // A local `.blueprint` is code from the working directory that is composed and executed without being
     // declared anywhere. `--disable-blueprints` must therefore also disable it, not only declared blueprints.
     this.localBlueprintExists =
