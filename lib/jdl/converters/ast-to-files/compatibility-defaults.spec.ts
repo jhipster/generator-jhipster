@@ -19,8 +19,7 @@
 import { describe, expect, it } from 'esmocha';
 
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
-import { parse } from '../../core/parsing/api.ts';
-import performJDLPostParsingTasks from '../../core/parsing/jdl-post-parsing-tasks.ts';
+import { parse, performJDLPostParsingTasks } from '../../core/parsing/index.ts';
 
 import { astToFiles } from './ast-to-files.ts';
 import { applyCompatibilityDefaults } from './compatibility-defaults.ts';

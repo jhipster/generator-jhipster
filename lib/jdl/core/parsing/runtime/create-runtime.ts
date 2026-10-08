@@ -19,14 +19,15 @@
 
 import type { Lexer, TokenType } from 'chevrotain';
 
-import JDLApplicationDefinition from './jdl-application-definition.ts';
-import JDLParser from './jdl-parser.ts';
-import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from './lexer/lexer.ts';
+import { type JDLTokens, allTokens, buildTokens, createJDLLexer } from '../lexer/lexer.ts';
+import JDLParser from '../parser/parser.ts';
+import { checkTokens } from '../parser/self-checks/system-checker.ts';
+import { semanticRules } from '../semantic/rules.ts';
+import type { JDLDefinitions, JDLValidatorOption } from '../types/parsing.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
+
+import JDLApplicationDefinition from './application-definition.ts';
 import { builtInRelationshipOptions } from './relationship-options.ts';
-import { checkTokens } from './self-checks/parsing-system-checker.ts';
-import { semanticRules } from './semantic/rules.ts';
-import type { JDLDefinitions, JDLValidatorOption } from './types/parsing.ts';
-import type { JDLRuntime } from './types/runtime.ts';
 
 /**
  * Builds a runtime, the lexer, the parser and the definitions the jdl is parsed and validated with, from every definition:

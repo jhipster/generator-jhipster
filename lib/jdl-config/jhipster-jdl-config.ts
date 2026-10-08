@@ -18,7 +18,7 @@
  */
 
 import type { JHipsterConfigs } from '../command/types.ts';
-import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/parsing/index.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
 

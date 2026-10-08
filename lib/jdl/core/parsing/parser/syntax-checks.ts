@@ -18,8 +18,8 @@
  */
 import { type CstElement, type CstNode, type ICstVisitor, type IToken, type TokenType, tokenMatcher as matchesToken } from 'chevrotain';
 
-import type { JDLOptionsDefinition, JDLValidatorOptionType } from './types/parsing.ts';
-import type { JDLRuntime } from './types/runtime.ts';
+import type { JDLOptionsDefinition, JDLValidatorOptionType } from '../types/parsing.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;

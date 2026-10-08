@@ -18,7 +18,7 @@
  */
 import { camelCase, upperFirst } from 'lodash-es';
 
-import type { JDLRelationshipType } from '../parsing/relationship-types.ts';
+import type { JDLRelationshipType } from '../parsing/index.ts';
 
 import { type RelationshipType, relationshipTypes } from './relationships.ts';
 

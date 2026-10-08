@@ -22,20 +22,22 @@ import { capitalize, kebabCase, lowerFirst, upperFirst } from 'lodash-es';
 import { customCamelCase } from '../../../utils/string-utils.ts';
 import { asJdlRelationshipType } from '../../core/basic-types/relationship-types.ts';
 import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
-import { type JDLApplicationStatement, type JDLStatement, getStatements } from '../../core/parsing/statements.ts';
-import type {
-  ParsedJDLAnnotation,
-  ParsedJDLApplication,
-  ParsedJDLApplications,
-  ParsedJDLDeployment,
-  ParsedJDLEntity,
-  ParsedJDLEntityField,
-  ParsedJDLEnum,
-  ParsedJDLOptionConfig,
-  ParsedJDLRelationship,
-  ParsedJDLRelationshipSide,
-} from '../../core/parsing/types/parsed.ts';
-import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
+import {
+  type JDLApplicationStatement,
+  type JDLRuntime,
+  type JDLStatement,
+  type ParsedJDLAnnotation,
+  type ParsedJDLApplication,
+  type ParsedJDLApplications,
+  type ParsedJDLDeployment,
+  type ParsedJDLEntity,
+  type ParsedJDLEntityField,
+  type ParsedJDLEnum,
+  type ParsedJDLOptionConfig,
+  type ParsedJDLRelationship,
+  type ParsedJDLRelationshipSide,
+  getStatements,
+} from '../../core/parsing/index.ts';
 import { formatComment } from '../../core/utils/format-utils.ts';
 
 import { jhipsterCustomizations } from './jhipster-customizations.ts';

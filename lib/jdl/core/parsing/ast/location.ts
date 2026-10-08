@@ -18,7 +18,7 @@
  */
 import type { CstNode, IToken } from 'chevrotain';
 
-import type { JDLLocation } from './types/parsed.ts';
+import type { JDLLocation } from '../types/parsed.ts';
 
 /** The source range of a token. */
 export const tokenLocation = (token: IToken): JDLLocation => ({

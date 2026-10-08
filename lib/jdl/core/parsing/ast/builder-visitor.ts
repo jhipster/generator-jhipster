@@ -18,16 +18,7 @@
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
 
-import { nodeLocation, setKeyLocations, setKeyValues, setLocation, setOtherLocation, tokenLocation } from './location.ts';
-import { setKind } from './nodes.ts';
-import type { JDLRelationshipType } from './relationship-types.ts';
-import {
-  type JDLApplicationStatement,
-  type JDLStatement,
-  groupApplicationStatements,
-  groupStatements,
-  setStatements,
-} from './statements.ts';
+import type { JDLRelationshipType } from '../runtime/relationship-types.ts';
 import type {
   JDLLocation,
   ParsedJDLAnnotation,
@@ -44,9 +35,19 @@ import type {
   ParsedJDLRelationshipSide,
   ParsedJDLUseOption,
   ParsedJDLValidation,
-} from './types/parsed.ts';
-import type { JDLApplicationOptionType } from './types/parsing.ts';
-import type { JDLRuntime } from './types/runtime.ts';
+} from '../types/parsed.ts';
+import type { JDLApplicationOptionType } from '../types/parsing.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
+
+import { nodeLocation, setKeyLocations, setKeyValues, setLocation, setOtherLocation, tokenLocation } from './location.ts';
+import { setKind } from './nodes.ts';
+import {
+  type JDLApplicationStatement,
+  type JDLStatement,
+  groupApplicationStatements,
+  groupStatements,
+  setStatements,
+} from './statements.ts';
 
 /** A statement node holds one declaration. */
 type StatementContext = Partial<
