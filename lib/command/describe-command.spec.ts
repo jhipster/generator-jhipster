@@ -18,12 +18,11 @@
  */
 import { describe, expect, it } from 'esmocha';
 
-import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
+import type { StoreGeneratorMeta } from 'yeoman-environment';
 
-import { getPackageRoot } from '../index.ts';
 import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
-import { customizeJHipsterNamespace, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
+import { getJHipsterStore } from '../resolver/lookups.ts';
 
 import { describeCommand, findConfigOwners } from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
@@ -142,12 +141,7 @@ describe('command - describe command', () => {
     });
 
     it('should find the config owners of a store, blueprints included', () => {
-      const store = new Store();
-      store.lookupSync({
-        packagePaths: [getPackageRoot()],
-        lookups: jhipsterGeneratorsLookup,
-        customizeNamespace: customizeJHipsterNamespace,
-      });
+      const store = getJHipsterStore().clone();
       const blueprintCommand: JHipsterCommandDefinition = {
         configs: { databaseType: { cli: { type: String }, scope: 'storage' }, blueprintOnly: { cli: { type: Boolean }, scope: 'storage' } },
       };

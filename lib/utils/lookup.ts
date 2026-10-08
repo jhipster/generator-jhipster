@@ -19,7 +19,8 @@
 import { relative } from 'node:path';
 
 import { getSourceRoot } from '../index.ts';
-import { JHIPSTER_NAMESPACE_PREFIX, lookupGeneratorsMeta } from '../resolver/lookups.ts';
+import { JHIPSTER_NAMESPACE_PREFIX } from '../resolver/generator-commands.ts';
+import { lookupGeneratorsMeta } from '../resolver/lookups.ts';
 
 type LookupGeneratorsOptions = {
   firstLevelOnly?: boolean;
