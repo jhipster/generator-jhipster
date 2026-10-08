@@ -31,7 +31,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
   commonFiles: [
     clientRootTemplatesBlock({
       templates: ['eslint.config.ts.jhi.docker'],
-    }) as any,
+    }),
   ],
   sqlDatabasesFiles: [
     {

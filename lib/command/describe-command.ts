@@ -68,7 +68,7 @@ const promptGeneratorStub = () => {
 const describePrompt = (config: JHipsterConfig): string | undefined => {
   if (!config.prompt) return undefined;
   try {
-    const prompt = typeof config.prompt === 'function' ? config.prompt(promptGeneratorStub() as any, config) : config.prompt;
+    const prompt = typeof config.prompt === 'function' ? config.prompt(promptGeneratorStub(), config) : config.prompt;
     const message = typeof prompt.message === 'function' ? prompt.message({}) : prompt.message;
     return typeof message === 'string' ? message : '(dynamic)';
   } catch {

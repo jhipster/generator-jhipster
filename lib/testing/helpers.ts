@@ -847,7 +847,7 @@ export function createTestHelpers<JHipsterTestGenerator extends BaseCoreGenerato
       options.defaultGenerator ??= `jhipster:${commandName}`;
       options.generatorOptions ??= {};
       (options.generatorOptions as any).commandName = commandName;
-      (options as any).commandName = commandName;
+      options.commandName = commandName;
     }
   }
   const mergeableOptions = pick(options, 'adapterOptions', 'environmentOptions', 'generatorOptions', 'settings');
