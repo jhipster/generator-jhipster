@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, esmocha, expect, it } from 'esmocha';
 import { join } from 'node:path';
 
 import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
@@ -255,6 +255,24 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
 
     it('should find the config owners in the blueprints', () => {
       expect(findConfigOwners('fooOption', { store }).owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:foo']);
+    });
+  });
+
+  describe('loadDescribeBlueprints', () => {
+    it('should log a blueprint without commands only to the log given', async () => {
+      const info = esmocha.spyOn(console, 'info');
+      try {
+        const log = esmocha.fn<(message: string) => void>();
+        expect(await loadDescribeBlueprints([['generator-jhipster-none', '/none']])).toEqual({
+          namespaces: ['jhipster-none'],
+          commands: {},
+        });
+        await loadDescribeBlueprints([['generator-jhipster-none', '/none']], { log });
+        expect(log.mock.calls).toEqual([['No custom commands found within blueprint: generator-jhipster-none at /none']]);
+        expect(info).not.toHaveBeenCalled();
+      } finally {
+        info.mockRestore();
+      }
     });
   });
 

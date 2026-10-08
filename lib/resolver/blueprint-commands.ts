@@ -20,7 +20,6 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import chalk from 'chalk';
 import { cloneDeep } from 'lodash-es';
 
 import type { CliCommand } from '../../cli/types.ts';
@@ -28,12 +27,18 @@ import type { CliCommand } from '../../cli/types.ts';
 /** A blueprint package: its name and the path of its folder. */
 export type BlueprintPackagePath = [packageName: string, packagePath: string | undefined];
 
+export type LoadBlueprintCommandsOptions = {
+  /** Logs a blueprint without commands, or with commands that cannot be loaded. Silent by default. */
+  log?: (message: string) => void;
+};
+
 /**
  * Load the commands the blueprints add to the cli: the default export of the `cli/commands` module of each blueprint,
  * each command marked with the `blueprint` providing it. A later blueprint overrides a command of a previous one.
  */
 export const loadBlueprintCommands = async (
   blueprintPackagePaths: BlueprintPackagePath[] | undefined,
+  { log }: LoadBlueprintCommandsOptions = {},
 ): Promise<Record<string, CliCommand> | undefined> => {
   if (!blueprintPackagePaths?.length) {
     return undefined;
@@ -53,14 +58,10 @@ export const loadBlueprintCommands = async (
         });
         result = { ...result, ...blueprintCommands };
       } catch {
-        const msg = `Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsUrl}`;
-        // eslint-disable-next-line no-console
-        console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+        log?.(`Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsUrl}`);
       }
     } else {
-      const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
-      // eslint-disable-next-line no-console
-      console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+      log?.(`No custom commands found within blueprint: ${blueprint} at ${packagePath}`);
     }
   }
   return result;

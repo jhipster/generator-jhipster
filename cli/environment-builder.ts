@@ -467,7 +467,10 @@ export default class EnvironmentBuilder {
   async _getBlueprintCommands(
     blueprintPackagePaths: [string, string | undefined][] | undefined,
   ): Promise<Record<string, CliCommand> | undefined> {
-    return loadBlueprintCommands(blueprintPackagePaths);
+    return loadBlueprintCommands(blueprintPackagePaths, {
+      // eslint-disable-next-line no-console
+      log: message => console.info(`${chalk.green.bold('INFO!')} ${message}`),
+    });
   }
 
   /**
