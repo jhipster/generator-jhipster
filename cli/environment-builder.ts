@@ -445,7 +445,6 @@ export default class EnvironmentBuilder {
     }
     let result: Record<string, CliCommand> = {};
     for (const [blueprint, packagePath] of blueprintPackagePaths) {
-      let blueprintCommand: Record<string, CliCommand>;
       const blueprintCommandFile = `${packagePath}/cli/commands`;
       const blueprintCommandExtension = ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'].find(extension =>
         existsSync(`${blueprintCommandFile}${extension}`),
@@ -453,7 +452,7 @@ export default class EnvironmentBuilder {
       if (blueprintCommandExtension) {
         const blueprintCommandsUrl = pathToFileURL(resolve(`${blueprintCommandFile}${blueprintCommandExtension}`));
         try {
-          blueprintCommand = (await import(blueprintCommandsUrl.href)).default;
+          const blueprintCommand: Record<string, CliCommand> = (await import(blueprintCommandsUrl.href)).default;
           const blueprintCommands = cloneDeep(blueprintCommand);
           Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {
             commandSpec.blueprint ??= blueprint;
