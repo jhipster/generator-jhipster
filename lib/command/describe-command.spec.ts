@@ -200,7 +200,6 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
         )
         .commitFiles();
       const packagePath = join(process.cwd(), 'node_modules/generator-jhipster-foo');
-      blueprints = await loadDescribeBlueprints([['generator-jhipster-foo', packagePath]]);
       store = new Store();
       store.lookupSync({
         packagePaths: [getPackageRoot()],
@@ -208,12 +207,13 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
         customizeNamespace: customizeJHipsterNamespace,
       });
       store.lookupSync({ packagePaths: [packagePath], lookups: ['generators'] });
+      blueprints = await loadDescribeBlueprints(store, ['jhipster-foo']);
     });
 
     it('should load the namespaces and the commands of the blueprints', () => {
       expect(blueprints).toEqual({
         namespaces: ['jhipster-foo'],
-        commands: { foo: { desc: 'Foo of the blueprint', blueprint: 'generator-jhipster-foo' } },
+        commands: { foo: { desc: 'Foo of the blueprint', blueprint: 'jhipster-foo' } },
       });
     });
 
@@ -263,12 +263,10 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
       const info = esmocha.spyOn(console, 'info');
       try {
         const log = esmocha.fn<(message: string) => void>();
-        expect(await loadDescribeBlueprints([['generator-jhipster-none', '/none']])).toEqual({
-          namespaces: ['jhipster-none'],
-          commands: {},
-        });
-        await loadDescribeBlueprints([['generator-jhipster-none', '/none']], { log });
-        expect(log.mock.calls).toEqual([['No custom commands found within blueprint: generator-jhipster-none at /none']]);
+        const store = { getPackagesPaths: () => ({ 'jhipster-none': ['/none'] }) };
+        expect(await loadDescribeBlueprints(store, ['jhipster-none'])).toEqual({ namespaces: ['jhipster-none'], commands: {} });
+        await loadDescribeBlueprints(store, ['jhipster-none'], { log });
+        expect(log.mock.calls).toEqual([['No custom commands found within blueprint: jhipster-none at /none']]);
         expect(info).not.toHaveBeenCalled();
       } finally {
         info.mockRestore();

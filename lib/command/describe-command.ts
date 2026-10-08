@@ -21,7 +21,7 @@ import type { StoreGeneratorMeta } from 'yeoman-environment';
 
 import defaultCommands from '../../cli/commands.ts';
 import type { CliCommand } from '../../cli/types.ts';
-import { type BlueprintPackagePath, type LoadBlueprintCommandsOptions, loadBlueprintCommands } from '../resolver/blueprint-commands.ts';
+import { type LoadBlueprintCommandsOptions, type PackagesStore, loadBlueprintCommands } from '../resolver/blueprint-commands.ts';
 import { resolveDefaultCommand } from '../resolver/default-command.ts';
 import { type GeneratorsStore, lookupGeneratorCommands, readUsage, toCommandNamespace } from '../resolver/generator-commands.ts';
 import { type GeneratorDependency, resolveCommandDependencies, resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
@@ -178,15 +178,16 @@ export type DescribeBlueprints = {
 };
 
 /**
- * Load the blueprints to describe with JHipster from their packages: the commands they declare in their `cli/commands`,
- * and their namespaces, the generators of which override JHipster's.
+ * Load the blueprints to describe with JHipster, by namespace, from the store they were looked up in: their namespaces,
+ * the generators of which override JHipster's, and the commands they declare in their `cli/commands`.
  */
 export const loadDescribeBlueprints = async (
-  blueprintPackagePaths: BlueprintPackagePath[],
+  store: PackagesStore,
+  namespaces: string[],
   options?: LoadBlueprintCommandsOptions,
 ): Promise<DescribeBlueprints> => ({
-  namespaces: blueprintPackagePaths.map(([packageName]) => packageNameToNamespace(packageName)),
-  commands: (await loadBlueprintCommands(blueprintPackagePaths, options)) ?? {},
+  namespaces,
+  commands: (await loadBlueprintCommands(store, namespaces, options)) ?? {},
 });
 
 export type CommandSummary = { namespace: string; description: string; default?: true };

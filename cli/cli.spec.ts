@@ -490,7 +490,7 @@ describe('cli', () => {
           expect(() => execaSync`${jhipsterCli} foo --blueprints bar`).toThrow(
             expect.objectContaining({
               exitCode: 1,
-              stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-bar'),
+              stdout: expect.stringContaining('No custom commands found within blueprint: jhipster-bar'),
               stderr: expect.stringContaining('foo is not a known command'),
             }),
           );
@@ -510,7 +510,7 @@ describe('cli', () => {
           expect(() => execaSync`${jhipsterCli} foo --blueprints bar,baz`).toThrow(
             expect.objectContaining({
               exitCode: 1,
-              stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-baz'),
+              stdout: expect.stringContaining('No custom commands found within blueprint: jhipster-baz'),
               stderr: expect.stringContaining('foo is not a known command'),
             }),
           );

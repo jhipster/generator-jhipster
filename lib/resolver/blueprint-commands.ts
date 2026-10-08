@@ -21,11 +21,12 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { cloneDeep } from 'lodash-es';
+import type { Store } from 'yeoman-environment';
 
 import type { CliCommand } from '../../cli/types.ts';
 
-/** A blueprint package: its name and the path of its folder. */
-export type BlueprintPackagePath = [packageName: string, packagePath: string | undefined];
+/** The part of a generators store that gives the folders of the packages, by namespace. */
+export type PackagesStore = Pick<Store, 'getPackagesPaths'>;
 
 export type LoadBlueprintCommandsOptions = {
   /** Logs a blueprint without commands, or with commands that cannot be loaded. Silent by default. */
@@ -33,18 +34,22 @@ export type LoadBlueprintCommandsOptions = {
 };
 
 /**
- * Load the commands the blueprints add to the cli: the default export of the `cli/commands` module of each blueprint,
- * each command marked with the `blueprint` providing it. A later blueprint overrides a command of a previous one.
+ * Load the commands the blueprints add to the cli: the default export of the `cli/commands` module of each blueprint
+ * of the store, by namespace, each command marked with the `blueprint` namespace providing it. A later blueprint
+ * overrides a command of a previous one.
  */
 export const loadBlueprintCommands = async (
-  blueprintPackagePaths: BlueprintPackagePath[] | undefined,
+  store: PackagesStore,
+  namespaces: string[],
   { log }: LoadBlueprintCommandsOptions = {},
 ): Promise<Record<string, CliCommand> | undefined> => {
-  if (!blueprintPackagePaths?.length) {
+  if (namespaces.length === 0) {
     return undefined;
   }
+  const packagesPaths = store.getPackagesPaths();
   let result: Record<string, CliCommand> = {};
-  for (const [blueprint, packagePath] of blueprintPackagePaths) {
+  for (const blueprint of namespaces) {
+    const packagePath = packagesPaths[blueprint]?.[0];
     const blueprintCommandFile = `${packagePath}/cli/commands`;
     const blueprintCommandExtension = ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'].find(extension =>
       existsSync(`${blueprintCommandFile}${extension}`),

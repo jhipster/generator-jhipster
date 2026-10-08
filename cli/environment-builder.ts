@@ -351,15 +351,16 @@ export default class EnvironmentBuilder {
    * Get blueprints commands.
    */
   async getBlueprintCommands() {
-    let blueprintsPackagePath = await this._getBlueprintPackagePaths();
+    // Installs the blueprints that are missing.
+    await this._getBlueprintPackagePaths();
+    const namespaces = Object.keys(this._blueprintsWithVersion).map(packageName => packageNameToNamespace(packageName));
     if (this.devBlueprintPath) {
-      blueprintsPackagePath ??= [];
-      blueprintsPackagePath.push([devBlueprintNamespace, this.devBlueprintPath]);
+      namespaces.push(devBlueprintNamespace);
       if (this.localBlueprintExists) {
-        blueprintsPackagePath.push([localBlueprintNamespace, this.localBlueprintPath]);
+        namespaces.push(localBlueprintNamespace);
       }
     }
-    return this._getBlueprintCommands(blueprintsPackagePath);
+    return this._getBlueprintCommands(namespaces);
   }
 
   /**
@@ -464,10 +465,12 @@ export default class EnvironmentBuilder {
    * @private
    * Get blueprints commands.
    */
-  async _getBlueprintCommands(
-    blueprintPackagePaths: [string, string | undefined][] | undefined,
-  ): Promise<Record<string, CliCommand> | undefined> {
-    return loadBlueprintCommands(blueprintPackagePaths, {
+  async _getBlueprintCommands(namespaces: string[]): Promise<Record<string, CliCommand> | undefined> {
+    // An environment given to the builder without its store gives the packages by namespace.
+    const store = this.store ?? {
+      getPackagesPaths: () => Object.fromEntries(namespaces.map(namespace => [namespace, this.env.getPackagePaths(namespace)])),
+    };
+    return loadBlueprintCommands(store, namespaces, {
       // eslint-disable-next-line no-console
       log: message => console.info(`${chalk.green.bold('INFO!')} ${message}`),
     });
