@@ -22,8 +22,10 @@ export type EditorMetadata = {
   removeNeedles?: boolean;
   /** Format the file with prettier when committing, even if its extension is not one prettier formats by default. */
   prettier?: boolean;
-  /** A write once file (`override` false) that exists: its template is skipped and the file is written back as it is. */
+  /** A write once file (`override` false): written from its template when it does not exist, written back as it is otherwise. */
   writeOnce?: boolean;
+  /** The multi-step template (`.jhi`) and fragment (`.jhi.*`) files merged into the file. */
+  mergedFiles?: string[];
 };
 
 export type CascadedEditFileCallback<Generator = CoreGenerator> = (
