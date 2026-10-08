@@ -123,7 +123,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
       async javaNodeBuildPaths({ application }) {
         const { javaNodeBuildPaths, microfrontend } = application;
 
-        javaNodeBuildPaths?.push('postcss.config.js', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts');
+        javaNodeBuildPaths?.push('postcss.config.ts', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts');
         if (microfrontend) {
           javaNodeBuildPaths?.push('module-federation.config.ts');
         }
