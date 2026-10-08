@@ -227,6 +227,9 @@ export default class EnvironmentBuilder {
       const generators = await this.env.lookup({
         packagePaths: [this.localBlueprintPath!],
         lookups: localBlueprintGeneratorsLookup,
+        // A `.blueprint` folder is named after the local blueprint, even with a package name of its own.
+        // @ts-expect-error usePackageName is not in the lookup options of the environment
+        usePackageName: false,
         customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-local'),
       });
       if (generators.length > 0) {
@@ -242,6 +245,8 @@ export default class EnvironmentBuilder {
       await this.env.lookup({
         packagePaths: [this.devBlueprintPath],
         lookups: localBlueprintGeneratorsLookup,
+        // @ts-expect-error usePackageName is not in the lookup options of the environment
+        usePackageName: false,
         customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-dev'),
       });
     }
