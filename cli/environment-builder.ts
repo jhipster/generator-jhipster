@@ -421,7 +421,7 @@ export default class EnvironmentBuilder {
     );
 
     const blueprintsToInstall = Object.entries(blueprints)
-      .filter(([blueprint, _version]) => {
+      .filter(([blueprint]) => {
         const namespace = packageNameToNamespace(blueprint);
         return !this.env.getPackagePath(namespace);
       })
@@ -437,7 +437,7 @@ export default class EnvironmentBuilder {
       await this.env.installLocalGenerators(blueprintsToInstall);
     }
 
-    return Object.entries(blueprints).map(([blueprint, _version]) => {
+    return Object.entries(blueprints).map(([blueprint]) => {
       const namespace = packageNameToNamespace(blueprint);
       const packagePath = this.env.getPackagePath(namespace);
       if (!packagePath) {
