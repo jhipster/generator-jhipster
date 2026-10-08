@@ -39,7 +39,7 @@ const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ?
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
 // Local and dev blueprints generators.
-const localBlueprintGeneratorsLookup = ['.', './*/generators'];
+const localBlueprintGeneratorsLookup = ['.'];
 
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
 

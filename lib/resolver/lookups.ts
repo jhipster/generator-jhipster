@@ -22,24 +22,22 @@ import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
 
 import { getPackageRoot, isDistFolder } from '../index.ts';
 
-/** Lookups supporting nested generators. */
-const generatorsLookup = ['generators', 'generators/*/generators'];
+/** Lookups of the generators, the nested ones being looked up by `nestedGenerators`. */
+const generatorsLookup = ['generators'];
 /** Lookup for source or built generators depending on the files being used. */
 const jhipsterGeneratorsLookup = isDistFolder() ? generatorsLookup.map(lookup => `dist/${lookup}`) : generatorsLookup;
 /** Lookup for the built and the source generators of a package, like a blueprint. */
 const packagedGeneratorsLookup = generatorsLookup.flatMap(lookup => [`dist/${lookup}`, lookup]);
-/** Namespace of a nested generator: `jhipster:spring-boot:generators:cache` is `jhipster:spring-boot:cache`. */
-const customizeNestedNamespace = (ns?: string) => ns?.replaceAll(':generators:', ':');
 
 /**
- * The lookup options of the stores, shared by their lookups: the generators of a package like a blueprint, and the
- * namespace of a package is its name, not its folder, which differs in an aliased install
- * (`generator-jhipster-9@npm:generator-jhipster@9`) or in a git worktree.
+ * The lookup options of the stores, shared by their lookups: the generators of a package like a blueprint, with the
+ * nested ones (`spring-boot/generators/cache` is `spring-boot:cache`), and the namespace of a package is its name, not
+ * its folder, which differs in an aliased install (`generator-jhipster-9@npm:generator-jhipster@9`) or in a git worktree.
  */
 const storeLookupOptions = Object.freeze({
   lookups: packagedGeneratorsLookup,
   usePackageName: true,
-  customizeNamespace: customizeNestedNamespace,
+  nestedGenerators: true,
 });
 
 /** A generator with a module to import. */
