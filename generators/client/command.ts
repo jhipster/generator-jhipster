@@ -246,7 +246,10 @@ const command = {
       scope: 'storage',
     },
   },
-  import: ['common'],
+  entity: {
+    clientRootFolder: { description: 'Client folder of the entities', jdl: { type: 'binary' } },
+  },
+  import: ['common', 'angular'],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

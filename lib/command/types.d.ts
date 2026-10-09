@@ -200,9 +200,35 @@ export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<
 /** Map of named config specifications for a command, keyed by config property name. */
 export type JHipsterConfigs<ConfigContext = any> = Record<string, JHipsterConfig<ConfigContext>>;
 
+/**
+ * An option of the entities, a property of the `.jhipster/*.json` files named by its key, and the jdl option statement
+ * setting it: `<keyword> <entities>` for a unary one, `<keyword> <entities> with <value>` for a binary one.
+ */
+export type JHipsterEntityConfig = {
+  readonly description?: string;
+  /** The values a binary option accepts; a binary option without choices accepts any name. */
+  readonly choices?: readonly string[];
+  /** The value of the option for the entities the jdl does not set it on. */
+  readonly default?: string;
+  readonly jdl?: {
+    readonly type: 'unary' | 'binary';
+    /** The keyword of the statement, the name of the option by default. */
+    readonly keyword?: string;
+    /** Deprecated keywords still accepted for the option, warned about. */
+    readonly deprecatedKeywords?: readonly string[];
+    /** The value a unary option sets, true by default: `noFluentMethod` sets `fluentMethods` to false. */
+    readonly value?: boolean;
+  };
+};
+
+/** Map of the options of the entities a command declares, keyed by their property in the entity. */
+export type JHipsterEntityConfigs = Record<string, JHipsterEntityConfig>;
+
 export type JHipsterCommandDefinition<ConfigContext = BaseCoreGenerator> = {
   readonly arguments?: JHipsterArguments;
   readonly configs?: JHipsterConfigs<ConfigContext>;
+  /** The options of the entities, written in the entity files and set by the jdl option statements. */
+  readonly entity?: JHipsterEntityConfigs;
   /**
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']

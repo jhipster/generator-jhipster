@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`jdl entity definitions should give the entity options of the generators app reaches 1`] = `
+{
+  "configs": {
+    "angularSuffix": {
+      "description": "Suffix of the entities in the client",
+      "jdl": {
+        "type": "binary",
+      },
+    },
+    "clientRootFolder": {
+      "description": "Client folder of the entities",
+      "jdl": {
+        "type": "binary",
+      },
+    },
+    "dto": {
+      "choices": [
+        "mapstruct",
+        "no",
+      ],
+      "default": "no",
+      "description": "Data transfer objects",
+      "jdl": {
+        "type": "binary",
+      },
+    },
+    "embedded": {
+      "description": "Embedded entities",
+      "jdl": {
+        "type": "unary",
+      },
+    },
+    "filter": {
+      "description": "Filtering of the entities with the JPA metamodel",
+      "jdl": {
+        "type": "unary",
+      },
+    },
+    "microservice": {
+      "description": "Microservice the entities belong to",
+      "jdl": {
+        "type": "binary",
+      },
+    },
+    "noFluentMethod": {
+      "description": "Generate no fluent setters",
+      "jdl": {
+        "type": "unary",
+      },
+    },
+    "pagination": {
+      "choices": [
+        "pagination",
+        "infinite-scroll",
+        "no",
+      ],
+      "default": "no",
+      "description": "Pagination of the entities",
+      "jdl": {
+        "deprecatedKeywords": [
+          "paginate",
+        ],
+        "type": "binary",
+      },
+    },
+    "readOnly": {
+      "description": "Read only entities",
+      "jdl": {
+        "type": "unary",
+      },
+    },
+    "search": {
+      "choices": [
+        "elasticsearch",
+        "couchbase",
+        "no",
+      ],
+      "description": "Search engine of the entities",
+      "jdl": {
+        "type": "binary",
+      },
+    },
+    "service": {
+      "choices": [
+        "serviceClass",
+        "serviceImpl",
+        "no",
+      ],
+      "default": "no",
+      "description": "Service layer",
+      "jdl": {
+        "type": "binary",
+      },
+    },
+    "skipClient": {
+      "description": "Skip the client code of the entities",
+      "jdl": {
+        "type": "unary",
+      },
+    },
+    "skipServer": {
+      "description": "Skip the server code of the entities",
+      "jdl": {
+        "type": "unary",
+      },
+    },
+  },
+}
+`;

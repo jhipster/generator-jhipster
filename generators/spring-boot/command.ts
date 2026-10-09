@@ -400,7 +400,31 @@ const command = {
       scope: 'storage',
     },
   },
-  import: ['java', 'liquibase', 'jhipster:spring-boot:data-relational', 'jhipster:spring-boot:cache', 'jhipster:spring-cloud'],
+  entity: {
+    service: {
+      description: 'Service layer',
+      choices: ['serviceClass', 'serviceImpl', 'no'],
+      default: 'no',
+      jdl: { type: 'binary' },
+    },
+    searchEngine: {
+      description: 'Search engine of the entities',
+      choices: ['elasticsearch', 'couchbase', 'no'],
+      jdl: { type: 'binary', keyword: 'search' },
+    },
+  },
+  import: [
+    'java',
+    'liquibase',
+    'jhipster:spring-boot:data-cassandra',
+    'jhipster:spring-boot:data-couchbase',
+    'jhipster:spring-boot:data-elasticsearch',
+    'jhipster:spring-boot:data-mongodb',
+    'jhipster:spring-boot:data-neo4j',
+    'jhipster:spring-boot:data-relational',
+    'jhipster:spring-boot:cache',
+    'jhipster:spring-cloud',
+  ],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;
