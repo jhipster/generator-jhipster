@@ -122,6 +122,18 @@ const command = {
       scope: 'storage',
     },
   },
+  entity: {
+    skipClient: { description: 'Skip the client code of the entities', jdl: { type: 'unary' } },
+    skipServer: { description: 'Skip the server code of the entities', jdl: { type: 'unary' } },
+    readOnly: { description: 'Read only entities', jdl: { type: 'unary' } },
+    microserviceName: { description: 'Microservice the entities belong to', jdl: { type: 'binary', keyword: 'microservice' } },
+    pagination: {
+      description: 'Pagination of the entities',
+      choices: ['pagination', 'infinite-scroll', 'no'],
+      default: 'no',
+      jdl: { type: 'binary', deprecatedKeywords: ['paginate'] },
+    },
+  },
   import: [
     'jhipster:base-application:bootstrap',
     'jhipster:javascript-simple-application:prettier',

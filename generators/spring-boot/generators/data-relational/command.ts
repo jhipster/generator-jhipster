@@ -20,6 +20,12 @@ import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts
 
 const command = {
   configs: {},
+  entity: {
+    jpaMetamodelFiltering: {
+      description: 'Filtering of the entities with the JPA metamodel',
+      jdl: { type: 'unary', keyword: 'filter' },
+    },
+  },
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

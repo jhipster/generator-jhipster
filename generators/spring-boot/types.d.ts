@@ -1,4 +1,4 @@
-import type { CommandTypeMap } from '../../lib/command/types.ts';
+import type { CommandTypeMap, ExportEntityDerivedPropertiesFromCommand } from '../../lib/command/types.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.ts';
 import type { Config as CommonConfig } from '../common/types.d.ts';
@@ -31,6 +31,7 @@ export type { Features } from '../server/types.d.ts';
 
 type Command = CommandTypeMap<typeof command>;
 type CacheCommand = CommandTypeMap<typeof cacheCommand>;
+type CommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof command>;
 
 export type SpringBootModule = keyof (typeof springBootDependencies)['modules'];
 
@@ -87,7 +88,8 @@ export interface Relationship extends ServerRelationship, SpringBootAddedPropert
   elasticsearchFieldName?: string;
 }
 
-export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ServerEntity<F, R>, SpringEntity {
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
+  extends ServerEntity<F, R>, SpringEntity, CommandEntity {
   skipDbChangelog?: boolean;
   entityJavaFilterableProperties: any[];
   entityJavaCustomFilters: any[];

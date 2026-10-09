@@ -19,11 +19,13 @@
 
 import { upperFirst } from 'lodash-es';
 
+import { getEntityDerivedPropertyMutations } from '../../../../lib/command/mutations.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
+import javaDomainCommand from '../../../java/generators/domain/command.ts';
 import prepareSqlApplicationProperties from '../../../spring-boot/generators/data-relational/support/application-properties.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
 import {
@@ -137,7 +139,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ application, entity }) {
-        mutateData(entity, {
+        mutateData(entity, getEntityDerivedPropertyMutations(javaDomainCommand.entity), {
           __override__: false,
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
@@ -151,8 +153,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           dtoClass: ({ entityClass, dtoSuffix }) => `${entityClass}${dtoSuffix ?? ''}`,
           dtoInstance: ({ entityInstance, dtoSuffix }) => `${entityInstance}${dtoSuffix ?? ''}`,
 
-          dtoMapstruct: ({ dto }) => dto === 'mapstruct' || dto === 'any',
-          dtoAny: ({ dto }) => dto && dto !== 'no',
           restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass),
           restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance),
         });

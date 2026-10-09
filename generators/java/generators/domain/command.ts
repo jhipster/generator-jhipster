@@ -53,6 +53,11 @@ const command = {
       scope: 'generator',
     },
   },
+  entity: {
+    dto: { description: 'Data transfer objects', choices: ['mapstruct', 'no'], default: 'no', jdl: { type: 'binary' } },
+    embedded: { description: 'Embedded entities', jdl: { type: 'unary' } },
+    fluentMethods: { description: 'Generate no fluent setters', jdl: { type: 'unary', keyword: 'noFluentMethod', value: false } },
+  },
   import: [],
 } as const satisfies JHipsterCommandDefinition;
 

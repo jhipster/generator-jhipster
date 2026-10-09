@@ -19,6 +19,7 @@
 import chalk from 'chalk';
 import { lowerFirst, uniqBy } from 'lodash-es';
 
+import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
@@ -39,6 +40,7 @@ import {
 
 import { mutateFilterableField, mutateFilterableRelationship } from './application.ts';
 import cleanupTask from './cleanup.ts';
+import command from './command.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
 import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
@@ -473,7 +475,7 @@ ${classProperties
 
         const hasAnyAuthority = (authorities: string[]): string | undefined =>
           authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
-        mutateData(entity, {
+        mutateData(entity, getEntityDerivedPropertyMutations(command.entity), {
           entityPersistenceLayer: true,
           entityRestLayer: true,
           entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),

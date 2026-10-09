@@ -66,6 +66,8 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseType": "sql",
