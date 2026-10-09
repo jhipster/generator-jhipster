@@ -36,7 +36,7 @@ export default defineConfig({
   use: {
     baseURL,
 <%_ if (locals.e2eTls) { _%>
-    // The certificate of the tls profile is self-signed and names no host.
+    // The certificate of the tls-samples profile is self-signed and names no host.
     ignoreHTTPSErrors: baseURL.startsWith('https://localhost'),
 <%_ } _%>
     viewport: { width: 1200, height: 720 },
