@@ -103,9 +103,9 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    // Simulate relationships api for better performance and reproducibility.
+    // Simulate relationships API for better performance and reproducibility.
   <%_ for (otherEntity of otherEntities) { _%>
-    // A url predicate rather than a glob: a glob's wildcards would close the "Disabled due to
+    // A URL predicate rather than a glob: a glob's wildcards would close the "Disabled due to
     // incompatibility" block comment that wraps this section when the create test is skipped.
     await page.route(
       url => url.pathname === '/<%- baseApi + otherEntity.entityApiUrl %>',

@@ -2279,7 +2279,7 @@ export class UserManagementUpdate implements OnInit {
   }
 
   private onSaveError(): void {
-    // Api for inheritance.
+    // API for inheritance.
   }
 
   private onSaveFinalize(): void {

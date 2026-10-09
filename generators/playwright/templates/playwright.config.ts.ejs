@@ -18,7 +18,7 @@
 -%>
 import { defineConfig, devices } from '@playwright/test';
 
-// `ng e2e` starts the dev server itself and reports its url through PLAYWRIGHT_TEST_BASE_URL; without it the
+// `ng e2e` starts the dev server itself and reports its URL through PLAYWRIGHT_TEST_BASE_URL; without it the
 // suite would target the backend port, which serves no frontend while the dev server is the one hosting it.
 const baseURL = process.env.E2E_BASE_URL ?? process.env.PLAYWRIGHT_TEST_BASE_URL ?? 'http://localhost:<%- gatewayServerPort || serverPort %>/';
 
@@ -36,7 +36,7 @@ export default defineConfig({
   use: {
     baseURL,
 <%_ if (locals.e2eTls) { _%>
-    // The certificate of the tls profile is self-signed and names no host.
+    // The certificate of the TLS profile is self-signed and names no host.
     ignoreHTTPSErrors: baseURL.startsWith('https://localhost'),
 <%_ } _%>
     viewport: { width: 1200, height: 720 },

@@ -1074,7 +1074,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- persistClass %> test<%- entityClass %> = <%- entityInstance %>List.getFirst();
 
   <%_ if (reactive && databaseTypeSql) { _%>
-        // Test fails because reactive api returns an empty object instead of null
+        // Test fails because reactive API returns an empty object instead of null
         // assert<%- persistClass %>AllPropertiesEquals(<%- persistInstance %>, test<%- entityClass %>);
         assert<%- persistClass %>UpdatableFieldsEquals(<%- persistInstance %>, test<%- entityClass %>);
   <%_ } else { _%>
@@ -1644,7 +1644,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- persistClass %> test<%- entityClass %>Search = <%- entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
 
     <%_ if (reactive && databaseTypeSql) { _%>
-            // Test fails because reactive api returns an empty object instead of null
+            // Test fails because reactive API returns an empty object instead of null
             // assert<%- persistClass %>AllPropertiesEquals(test<%- entityClass %>Search, updated<%- persistClass %>);
             assert<%- persistClass %>UpdatableFieldsEquals(test<%- entityClass %>Search, updated<%- persistClass %>);
     <%_ } else { _%>
@@ -1706,7 +1706,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.APPLICATION_JSON)
@@ -1744,7 +1744,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
@@ -1966,7 +1966,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
@@ -2004,7 +2004,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
@@ -2179,7 +2179,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     protected void assertPersisted<%- persistClass %>ToMatchAllProperties(<%- persistClass %> expected<%- persistClass %>) {
 <%_ if (reactive && databaseTypeSql) { _%>
-        // Test fails because reactive api returns an empty object instead of null
+        // Test fails because reactive API returns an empty object instead of null
         // assert<%- persistClass %>AllPropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
         assert<%- persistClass %>UpdatableFieldsEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
 <%_ } else { _%>
@@ -2189,7 +2189,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     protected void assertPersisted<%- persistClass %>ToMatchUpdatableProperties(<%- persistClass %> expected<%- persistClass %>) {
 <%_ if (reactive && databaseTypeSql) { _%>
-        // Test fails because reactive api returns an empty object instead of null
+        // Test fails because reactive API returns an empty object instead of null
         // assert<%- persistClass %>AllUpdatablePropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
         assert<%- persistClass %>UpdatableFieldsEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
 <%_ } else { _%>
