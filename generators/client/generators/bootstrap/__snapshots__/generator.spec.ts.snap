@@ -77,6 +77,8 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,

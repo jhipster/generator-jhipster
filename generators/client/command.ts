@@ -249,7 +249,7 @@ const command = {
   entity: {
     clientRootFolder: { description: 'Client folder of the entities', jdl: { type: 'binary' } },
   },
-  import: ['common', 'angular'],
+  import: ['common', 'angular', 'react', 'vue', 'cypress', 'playwright'],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;
