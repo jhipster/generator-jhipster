@@ -182,7 +182,7 @@ const createFiles = (workspaceFolder: string, configuration: Record<string, unkn
   }
   workspaceFolder = workspaceFolder ? normalizePathEnd(workspaceFolder) : workspaceFolder;
   const entityFiles =
-    entities ? Object.fromEntries(entities?.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity])) : {};
+    entities ? Object.fromEntries(entities.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity])) : {};
   configuration = { entities: entities?.map(e => e.name), ...configuration };
   return {
     [`${workspaceFolder}.yo-rc.json`]: { 'generator-jhipster': configuration },
