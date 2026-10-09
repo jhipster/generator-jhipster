@@ -41,8 +41,10 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('entityDefaults', () => {
+  describe('entityDefaults, fieldDefaults and relationshipDefaults', () => {
     const prepared: Record<string, any> = {};
+    const preparedFields: Record<string, any> = {};
+    const preparedRelationships: Record<string, any> = {};
 
     class CustomGenerator extends Generator {
       async beforeQueue() {
@@ -62,13 +64,51 @@ describe(`generator - ${generator}`, () => {
           },
         });
       }
+
+      get [Generator.PREPARING_EACH_ENTITY_FIELD]() {
+        return this.asPreparingEachEntityFieldTaskGroup({
+          setDefaults({ entity, field, fieldDefaults }) {
+            const defaults: any[] = [{ customFieldLabel: ({ fieldName }: any) => `label-${fieldName}` }];
+            fieldDefaults(...defaults);
+            preparedFields[`${entity.name}.${field.fieldName}`] = field;
+          },
+        });
+      }
+
+      get [Generator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+        return this.asPreparingEachEntityRelationshipTaskGroup({
+          setDefaults({ entity, relationship, relationshipDefaults }) {
+            const defaults: any[] = [{ customRelationshipLabel: ({ relationshipName }: any) => `label-${relationshipName}` }];
+            relationshipDefaults(...defaults);
+            preparedRelationships[`${entity.name}.${relationship.relationshipName}`] = relationship;
+          },
+        });
+      }
     }
 
     before(async () => {
       await helpers
         .run(CustomGenerator)
         .withJHipsterGenerators({ useDefaultMocks: true })
-        .withJHipsterConfig({}, [{ name: 'One' }, { name: 'Two', annotations: { customLabel: 'from annotation' } }]);
+        .withJHipsterConfig({}, [
+          {
+            name: 'One',
+            fields: [
+              { fieldName: 'name', fieldType: 'String' },
+              { fieldName: 'code', fieldType: 'String', options: { customFieldLabel: 'from annotation' } },
+            ],
+            relationships: [
+              { relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' },
+              {
+                relationshipName: 'other',
+                otherEntityName: 'Two',
+                relationshipType: 'many-to-one',
+                options: { customRelationshipLabel: 'from annotation' },
+              },
+            ],
+          },
+          { name: 'Two', annotations: { customLabel: 'from annotation' } },
+        ]);
     });
 
     it('should set the defaults the entity has no value for, in order', () => {
@@ -77,6 +117,16 @@ describe(`generator - ${generator}`, () => {
 
     it('should keep the value an annotation gives', () => {
       expect(prepared.Two).toMatchObject({ customLabel: 'from annotation', customPage: 'from annotation-page' });
+    });
+
+    it('should set the defaults of the fields, keeping the value an annotation gives', () => {
+      expect(preparedFields['One.name']).toMatchObject({ customFieldLabel: 'label-name' });
+      expect(preparedFields['One.code']).toMatchObject({ customFieldLabel: 'from annotation' });
+    });
+
+    it('should set the defaults of the relationships, keeping the value an annotation gives', () => {
+      expect(preparedRelationships['One.two']).toMatchObject({ customRelationshipLabel: 'label-two' });
+      expect(preparedRelationships['One.other']).toMatchObject({ customRelationshipLabel: 'from annotation' });
     });
   });
 
@@ -257,6 +307,7 @@ describe(`generator - ${generator}`, () => {
         ...entityArg,
         fieldName: expect.any(String),
         field: expect.any(Object),
+        fieldDefaults: expect.any(Function),
       };
 
       const relationshipArg = {
@@ -264,6 +315,7 @@ describe(`generator - ${generator}`, () => {
         entityName: expect.any(String),
         relationshipName: expect.any(String),
         relationship: expect.any(Object),
+        relationshipDefaults: expect.any(Function),
       };
 
       const entitiesArg = {
@@ -506,6 +558,7 @@ describe(`generator - ${generator}`, () => {
         ...entityArg,
         fieldName: expect.any(String),
         field: expect.any(Object),
+        fieldDefaults: expect.any(Function),
       };
 
       const relationshipArg = {
@@ -513,6 +566,7 @@ describe(`generator - ${generator}`, () => {
         entityName: expect.any(String),
         relationshipName: expect.any(String),
         relationship: expect.any(Object),
+        relationshipDefaults: expect.any(Function),
       };
 
       const entitiesArg = {

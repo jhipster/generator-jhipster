@@ -88,6 +88,19 @@ export type EntityDefaultsTaskParam<E extends BaseApplicationEntity = BaseApplic
   entityDefaults: (...defaults: MutateDataParam<E>[]) => void;
 };
 
+export type FieldDefaultsTaskParam<F extends object> = {
+  /** Sets the defaults of the field, as `entityDefaults` does for the entity: a value the field already has is kept. */
+  fieldDefaults: (...defaults: MutateDataParam<F>[]) => void;
+};
+
+export type RelationshipDefaultsTaskParam<R extends object> = {
+  /**
+   * Sets the defaults of the relationship, as `entityDefaults` does for the entity: a value the relationship already has
+   * is kept.
+   */
+  relationshipDefaults: (...defaults: MutateDataParam<R>[]) => void;
+};
+
 type PreparingEachEntityFieldTaskParam<
   E extends BaseApplicationEntity,
   A extends BaseApplicationApplication<E>,
@@ -118,8 +131,9 @@ export type TaskTypes<
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
   LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
   PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A> & EntityDefaultsTaskParam<E>;
-  PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A>;
-  PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A>;
+  PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A> & FieldDefaultsTaskParam<GetFieldType<E>>;
+  PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A> &
+    RelationshipDefaultsTaskParam<GetRelationshipType<E>>;
   PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
   DefaultTaskParam: TaskParamWithEntities<E, A>;
   WritingEntitiesTaskParam: TaskParamWithEntities<E, A>;

@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/index.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
@@ -92,8 +91,8 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      preparing({ field }) {
-        mutateData(field, mutateField);
+      preparing({ fieldDefaults }) {
+        fieldDefaults(mutateField);
       },
     });
   }

@@ -109,6 +109,15 @@ const PRIORITY_WITH_APPLICATION = new Set<string>([
   POST_WRITING_ENTITIES,
 ]);
 
+/**
+ * Applies defaults to an entity, a field or a relationship, as `applicationDefaults` does to the application: a value it
+ * already has is kept.
+ */
+const withDefaults =
+  (data: Record<string, any>) =>
+  (...defaults: any[]): void =>
+    mutateData(data, ...defaults.map(defaultsData => ({ __override__: false, ...defaultsData })));
+
 const getFirstArgForPriority = (priorityName: string) => ({
   source: PRIORITY_WITH_SOURCE.has(priorityName),
   application: PRIORITY_WITH_APPLICATION.has(priorityName),
@@ -610,8 +619,7 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
-          const entityDefaults = (...defaults: any[]): void =>
-            mutateData(data.entity, ...defaults.map(defaultsData => ({ __override__: false, ...defaultsData })));
+          const entityDefaults = withDefaults(data.entity);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
@@ -632,10 +640,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
+          const fieldDefaults = withDefaults(data.field);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, fieldDefaults }],
             });
           });
         });
@@ -652,10 +661,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
+          const relationshipDefaults = withDefaults(data.relationship);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, relationshipDefaults }],
             });
           });
         });

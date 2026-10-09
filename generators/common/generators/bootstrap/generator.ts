@@ -89,8 +89,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      preparing({ field }) {
-        mutateData(field, commonMutateField);
+      preparing({ fieldDefaults }) {
+        fieldDefaults(commonMutateField);
       },
     });
   }
