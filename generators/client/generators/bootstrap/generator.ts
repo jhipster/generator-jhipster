@@ -75,9 +75,8 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      preparing({ application, entity }) {
-        mutateData(entity, mutateEntity, {
-          __override__: false,
+      preparing({ application, entityDefaults }) {
+        entityDefaults(mutateEntity, {
           entityPage: ({ microserviceName, entityFileName }) =>
             microserviceName && application.microfrontend && application.applicationTypeMicroservice ?
               `${microserviceName.toLowerCase()}/${entityFileName}`

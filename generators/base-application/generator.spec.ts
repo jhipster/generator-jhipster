@@ -41,6 +41,45 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('entityDefaults', () => {
+    const prepared: Record<string, any> = {};
+
+    class CustomGenerator extends Generator {
+      async beforeQueue() {
+        await this.dependsOnBootstrap('app');
+      }
+
+      get [Generator.PREPARING_EACH_ENTITY]() {
+        return this.asPreparingEachEntityTaskGroup({
+          setDefaults({ entity, entityDefaults }) {
+            // Properties a blueprint adds to the entity, unknown to the base entity type.
+            const defaults: any[] = [
+              { customLabel: ({ name }: any) => `label-${name}`, customFlag: true },
+              { customLabel: 'not applied', customPage: ({ customLabel }: any) => `${customLabel}-page` },
+            ];
+            entityDefaults(...defaults);
+            prepared[entity.name] = entity;
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await helpers
+        .run(CustomGenerator)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withJHipsterConfig({}, [{ name: 'One' }, { name: 'Two', annotations: { customLabel: 'from annotation' } }]);
+    });
+
+    it('should set the defaults the entity has no value for, in order', () => {
+      expect(prepared.One).toMatchObject({ customLabel: 'label-One', customFlag: true, customPage: 'label-One-page' });
+    });
+
+    it('should keep the value an annotation gives', () => {
+      expect(prepared.Two).toMatchObject({ customLabel: 'from annotation', customPage: 'from annotation-page' });
+    });
+  });
+
   describe('custom priorities tasks', () => {
     // no args
     const initializing = esmocha.fn();
@@ -209,6 +248,11 @@ describe(`generator - ${generator}`, () => {
         description: expect.any(String),
       };
 
+      const entityDefaultsArg = {
+        ...entityArg,
+        entityDefaults: expect.any(Function),
+      };
+
       const fieldArg = {
         ...entityArg,
         fieldName: expect.any(String),
@@ -241,12 +285,12 @@ describe(`generator - ${generator}`, () => {
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
       expect(preparingEachEntity).toHaveBeenCalledTimes(6);
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityDefaultsArg, entityName: 'User' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityDefaultsArg, entityName: 'UserManagement' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityDefaultsArg, entityName: 'Authority' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityDefaultsArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityDefaultsArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityDefaultsArg, entityName: 'Three' });
 
       expect(preparingEachEntityField).toHaveBeenCalledTimes(25);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
@@ -453,6 +497,11 @@ describe(`generator - ${generator}`, () => {
         description: expect.any(String),
       };
 
+      const entityDefaultsArg = {
+        ...entityArg,
+        entityDefaults: expect.any(Function),
+      };
+
       const fieldArg = {
         ...entityArg,
         fieldName: expect.any(String),
@@ -493,12 +542,12 @@ describe(`generator - ${generator}`, () => {
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
       expect(preparingEachEntity).toHaveBeenCalledTimes(6);
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityDefaultsArg, entityName: 'User' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityDefaultsArg, entityName: 'UserManagement' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityDefaultsArg, entityName: 'Authority' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityDefaultsArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityDefaultsArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityDefaultsArg, entityName: 'Three' });
 
       expect(preparingEachEntityField).toHaveBeenCalledTimes(25);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });

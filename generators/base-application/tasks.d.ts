@@ -18,6 +18,7 @@
  */
 import type { Storage } from 'yeoman-generator';
 
+import type { MutateDataParam } from '../../lib/utils/object.ts';
 import type { TaskParamWithSource } from '../base/tasks.ts';
 import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.ts';
 
@@ -68,6 +69,25 @@ type EntityTaskParam<E> = {
 type PreparingEachEntityTaskParam<E extends BaseApplicationEntity, A extends BaseApplicationApplication<E>> = TaskParamWithApplication<A> &
   EntityTaskParam<E>;
 
+export type EntityDefaultsTaskParam<E extends BaseApplicationEntity = BaseApplicationEntity> = {
+  /**
+   * Sets the defaults of the entity, as `applicationDefaults` does for the application: a property the entity already has,
+   * from its file, an annotation of the jdl or a previous task, is kept. Parameter properties accepts:
+   * - functions: receives the entity and the return value is set at the entity property.
+   * - non functions: entity property will receive the property in case current value is undefined.
+   *
+   * Applies each object in order.
+   *
+   * @example
+   * // entity = { name: 'Foo', entityUrl: 'custom' }
+   * entityDefaults(
+   *   { entityUrl: ({ name }) => kebabCase(name), entityPage: ({ entityUrl }) => `${entityUrl}-page` },
+   * );
+   * // entity = { name: 'Foo', entityUrl: 'custom', entityPage: 'custom-page' }
+   */
+  entityDefaults: (...defaults: MutateDataParam<E>[]) => void;
+};
+
 type PreparingEachEntityFieldTaskParam<
   E extends BaseApplicationEntity,
   A extends BaseApplicationApplication<E>,
@@ -97,7 +117,7 @@ export type TaskTypes<
 > = SimpleTaskTypes<A, S> & {
   ConfiguringEachEntityTaskParam: ConfiguringEachEntityTaskParam<E, A>;
   LoadingEntitiesTaskParam: LoadingEntitiesTaskParam<E, A>;
-  PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;
+  PreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A> & EntityDefaultsTaskParam<E>;
   PreparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<E, A>;
   PreparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<E, A>;
   PostPreparingEachEntityTaskParam: PreparingEachEntityTaskParam<E, A>;

@@ -20,6 +20,7 @@ import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
+import { mutateData } from '../../lib/utils/object.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
@@ -609,10 +610,12 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
+          const entityDefaults = (...defaults: any[]): void =>
+            mutateData(data.entity, ...defaults.map(defaultsData => ({ __override__: false, ...defaultsData })));
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, entityDefaults }],
             });
           });
         });

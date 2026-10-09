@@ -138,9 +138,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ application, entity }) {
-        mutateData(entity, getEntityDerivedPropertyMutations(javaDomainCommand.entity), {
-          __override__: false,
+      prepareEntity({ application, entity, entityDefaults }) {
+        entityDefaults(getEntityDerivedPropertyMutations(javaDomainCommand.entity), {
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
           entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
