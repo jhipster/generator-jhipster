@@ -20,6 +20,11 @@ import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts
 
 const command = {
   configs: {},
+  field: {
+    types: {
+      'byte[]': { description: 'Bytes, supported by MongoDB', validations: [] },
+    },
+  },
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

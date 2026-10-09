@@ -16,18 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterFieldConfigs } from '../command/types.ts';
 import type { JDLValidationsDefinition } from '../jdl/core/parsing/types/parsing.ts';
 
-const defaultJDLValidationConfig: JDLValidationsDefinition = Object.freeze({
-  configs: {
-    min: { description: 'Minimum value of a number', jdl: { value: 'number' } },
-    max: { description: 'Maximum value of a number', jdl: { value: 'number' } },
-    minlength: { description: 'Minimum length of a string', jdl: { value: 'integer' } },
-    maxlength: { description: 'Maximum length of a string', jdl: { value: 'integer' } },
-    minbytes: { description: 'Minimum size of a blob', jdl: { value: 'integer' } },
-    maxbytes: { description: 'Maximum size of a blob', jdl: { value: 'integer' } },
-    pattern: { description: 'Pattern a string matches', jdl: { value: 'regex' } },
-  },
+import { lookupCommandsPropertyFrom } from './jhipster-jdl-config.ts';
+
+/**
+ * The field validations written with a value, the ones of the fields of commands: the ones without a value, like
+ * `required`, are keywords of the language.
+ */
+export const buildJDLValidationConfig = ({ validations = {} }: JHipsterFieldConfigs): JDLValidationsDefinition => ({
+  configs: Object.fromEntries(
+    Object.entries(validations).flatMap(([name, { description, jdl }]) =>
+      jdl ? [[name, { description, jdl: { value: jdl.value } }]] : [],
+    ),
+  ),
 });
 
-export const getDefaultJDLValidationConfig = (): Readonly<JDLValidationsDefinition> => defaultJDLValidationConfig;
+let defaultJDLValidationConfig: Readonly<JDLValidationsDefinition>;
+/** The field validations of the `app` generator and of everything it imports. */
+export const getDefaultJDLValidationConfig = (): Readonly<JDLValidationsDefinition> => {
+  defaultJDLValidationConfig ??= Object.freeze(buildJDLValidationConfig(lookupCommandsPropertyFrom('app', 'field')));
+  return defaultJDLValidationConfig;
+};

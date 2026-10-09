@@ -57,15 +57,25 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
   };
 };
 
-/** A property of the commands of a generator and of everything it imports, the dependency graph the cli resolves. */
-export const lookupCommandsPropertyFrom = <const Property extends 'configs' | 'entity'>(
+/**
+ * A property of the commands of a generator and of everything it imports, the dependency graph the cli resolves. The
+ * types and the validations of the fields are merged one by one.
+ */
+export const lookupCommandsPropertyFrom = <const Property extends 'configs' | 'entity' | 'field' | 'relationship'>(
   generator: string,
   property: Property,
 ): NonNullable<JHipsterCommandDefinition[Property]> => {
   const store = getJHipsterStore();
   const merged: Record<string, any> = {};
   for (const { command } of resolveGeneratorDependencies([generator], { getGeneratorMeta: namespace => store.getMeta(namespace) })) {
-    Object.assign(merged, command?.[property]);
+    const value: Record<string, any> | undefined = command?.[property];
+    if (property === 'field') {
+      for (const [kind, declared] of Object.entries(value ?? {})) {
+        merged[kind] = { ...merged[kind], ...declared };
+      }
+    } else {
+      Object.assign(merged, value);
+    }
   }
   return merged as NonNullable<JHipsterCommandDefinition[Property]>;
 };

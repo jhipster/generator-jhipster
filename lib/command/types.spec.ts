@@ -21,7 +21,12 @@ import type {
   ExportApplicationPropertiesFromCommand,
   ExportEntityConfigFromCommand,
   ExportEntityPropertiesFromCommand,
+  ExportFieldTypesFromCommand,
+  ExportFieldValidationPropertiesFromCommand,
+  ExportFieldValidationsFromCommand,
   ExportGeneratorOptionsFromCommand,
+  ExportRelationshipConfigFromCommand,
+  ExportRelationshipDerivedPropertiesFromCommand,
   ExportStoragePropertiesFromCommand,
 } from './types.ts';
 
@@ -218,3 +223,50 @@ type EntityConfig = ExportEntityConfigFromCommand<typeof _entityCommand>;
 }) satisfies ExportEntityPropertiesFromCommand<typeof _entityCommand>;
 
 ({}) satisfies ExportEntityPropertiesFromCommand<typeof _dummyCommand>;
+
+const _fieldCommand = {
+  field: {
+    types: { String: { validations: ['required', 'minlength'] }, Instant: {} },
+    validations: {
+      minlength: { jdl: { value: 'integer' } },
+      pattern: { jdl: { value: 'regex' } },
+      required: {},
+    },
+  },
+} as const;
+
+({ a: 'String', b: 'Instant' }) satisfies Record<string, ExportFieldTypesFromCommand<typeof _fieldCommand>>;
+({
+  // @ts-expect-error unknown type
+  a: 'Number',
+}) satisfies Record<string, ExportFieldTypesFromCommand<typeof _fieldCommand>>;
+({ a: 'minlength', b: 'required' }) satisfies Record<string, ExportFieldValidationsFromCommand<typeof _fieldCommand>>;
+
+({ fieldValidateRulesMinlength: 5, fieldValidateRulesPattern: '^a$' }) satisfies ExportFieldValidationPropertiesFromCommand<
+  typeof _fieldCommand
+>;
+({}) satisfies ExportFieldValidationPropertiesFromCommand<typeof _fieldCommand>;
+({
+  // @ts-expect-error a number is expected
+  fieldValidateRulesMinlength: '5',
+}) satisfies ExportFieldValidationPropertiesFromCommand<typeof _fieldCommand>;
+({
+  // @ts-expect-error a validation without a value has no property
+  fieldValidateRulesRequired: true,
+}) satisfies ExportFieldValidationPropertiesFromCommand<typeof _fieldCommand>;
+({}) satisfies ExportFieldValidationPropertiesFromCommand<typeof _dummyCommand>;
+
+const _relationshipCommand = {
+  relationship: {
+    jpaDerivedIdentifier: { jdl: { type: 'unary' } },
+    side: { choices: ['left', 'right'], jdl: { type: 'binary' } },
+  },
+} as const;
+
+({ jpaDerivedIdentifier: true, side: 'left' }) satisfies ExportRelationshipConfigFromCommand<typeof _relationshipCommand>;
+({
+  // @ts-expect-error invalid value
+  side: 'middle',
+}) satisfies ExportRelationshipConfigFromCommand<typeof _relationshipCommand>;
+({ sideLeft: true, sideRight: false, sideAny: true }) satisfies ExportRelationshipDerivedPropertiesFromCommand<typeof _relationshipCommand>;
+({}) satisfies ExportRelationshipConfigFromCommand<typeof _dummyCommand>;

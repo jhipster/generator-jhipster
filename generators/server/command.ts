@@ -134,6 +134,13 @@ const command = {
       scope: 'storage',
     },
   },
+  field: {
+    types: {
+      // The Joda-Time types of old applications, the server generator migrates them to Instant.
+      Date: { validations: ['required', 'unique'], deprecated: 'use Instant, which it is migrated to' },
+      DateTime: { validations: ['required', 'unique'], deprecated: 'use Instant, which it is migrated to' },
+    },
+  },
   import: ['common', 'spring-boot'],
 } as const satisfies JHipsterCommandDefinition<any>;
 

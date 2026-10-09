@@ -20,6 +20,11 @@ import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts
 
 const command = {
   configs: {},
+  field: {
+    types: {
+      ByteBuffer: { description: 'Bytes, supported by Cassandra', validations: [] },
+    },
+  },
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;
