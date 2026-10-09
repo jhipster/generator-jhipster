@@ -30,6 +30,7 @@ let route: Partial<RouteLocation>;
 
 vi.mock('vue-router', () => ({
   useRoute: () => route,
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
 const axiosStub = {

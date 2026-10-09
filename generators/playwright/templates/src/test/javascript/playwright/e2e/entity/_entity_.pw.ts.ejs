@@ -231,7 +231,6 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
   <%_ } _%>
               json: [<%- entityInstance %>],
             }),
-          { times: 1 },
         );
 
         // Cypress waited on the stubbed request (cy.wait('@entitiesRequestInternal')); without it the test
