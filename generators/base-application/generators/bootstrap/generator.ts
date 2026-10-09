@@ -25,7 +25,7 @@ import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
-import { isWin32, mutateData } from '../../../../lib/utils/index.ts';
+import { finalizeMutations, isWin32, mutateData } from '../../../../lib/utils/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { mutateApplication } from '../../application.ts';
@@ -372,6 +372,16 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      finalizeEntityMutations({ entity }) {
+        // The delayed defaults of the entity, its fields and its relationships, as the application ones at post preparing.
+        finalizeMutations(entity);
+        for (const field of entity.fields) {
+          finalizeMutations(field);
+        }
+        for (const relationship of entity.relationships) {
+          finalizeMutations(relationship);
+        }
+      },
       hasRequiredRelationship({ entity }) {
         entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
       },

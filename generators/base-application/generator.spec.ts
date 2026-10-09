@@ -53,13 +53,18 @@ describe(`generator - ${generator}`, () => {
 
       get [Generator.PREPARING_EACH_ENTITY]() {
         return this.asPreparingEachEntityTaskGroup({
-          setDefaults({ entity, entityDefaults }) {
+          setDefaults({ entityDefaults }) {
             // Properties a blueprint adds to the entity, unknown to the base entity type.
             const defaults: any[] = [
               { customLabel: ({ name }: any) => `label-${name}`, customFlag: true },
               { customLabel: 'not applied', customPage: ({ customLabel }: any) => `${customLabel}-page` },
+              // Waits for a property a later task sets, applied once the entities are prepared.
+              { customDelayed: ({ customLater }: any, { delayMarker }: any) => (customLater ? `${customLater}-delayed` : delayMarker) },
             ];
             entityDefaults(...defaults);
+          },
+          setLater({ entity }) {
+            (entity as any).customLater = `later-${entity.name}`;
             prepared[entity.name] = entity;
           },
         });
@@ -68,8 +73,14 @@ describe(`generator - ${generator}`, () => {
       get [Generator.PREPARING_EACH_ENTITY_FIELD]() {
         return this.asPreparingEachEntityFieldTaskGroup({
           setDefaults({ entity, field, fieldDefaults }) {
-            const defaults: any[] = [{ customFieldLabel: ({ fieldName }: any) => `label-${fieldName}` }];
+            const defaults: any[] = [
+              { customFieldLabel: ({ fieldName }: any) => `label-${fieldName}` },
+              {
+                customFieldDelayed: ({ customLater }: any, { delayMarker }: any) => (customLater ? `${customLater}-delayed` : delayMarker),
+              },
+            ];
             fieldDefaults(...defaults);
+            (field as any).customLater = `later-${field.fieldName}`;
             preparedFields[`${entity.name}.${field.fieldName}`] = field;
           },
         });
@@ -78,8 +89,15 @@ describe(`generator - ${generator}`, () => {
       get [Generator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
         return this.asPreparingEachEntityRelationshipTaskGroup({
           setDefaults({ entity, relationship, relationshipDefaults }) {
-            const defaults: any[] = [{ customRelationshipLabel: ({ relationshipName }: any) => `label-${relationshipName}` }];
+            const defaults: any[] = [
+              { customRelationshipLabel: ({ relationshipName }: any) => `label-${relationshipName}` },
+              {
+                customRelationshipDelayed: ({ customLater }: any, { delayMarker }: any) =>
+                  customLater ? `${customLater}-delayed` : delayMarker,
+              },
+            ];
             relationshipDefaults(...defaults);
+            (relationship as any).customLater = `later-${relationship.relationshipName}`;
             preparedRelationships[`${entity.name}.${relationship.relationshipName}`] = relationship;
           },
         });
@@ -117,6 +135,12 @@ describe(`generator - ${generator}`, () => {
 
     it('should keep the value an annotation gives', () => {
       expect(prepared.Two).toMatchObject({ customLabel: 'from annotation', customPage: 'from annotation-page' });
+    });
+
+    it('should apply the delayed defaults once the entities are prepared', () => {
+      expect(prepared.One).toMatchObject({ customDelayed: 'later-One-delayed' });
+      expect(preparedFields['One.name']).toMatchObject({ customFieldDelayed: 'later-name-delayed' });
+      expect(preparedRelationships['One.two']).toMatchObject({ customRelationshipDelayed: 'later-two-delayed' });
     });
 
     it('should set the defaults of the fields, keeping the value an annotation gives', () => {

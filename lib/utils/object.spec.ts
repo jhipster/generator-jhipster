@@ -26,6 +26,7 @@ import {
   type UndefinedMutation,
   createDelayedMutationContext,
   droppedMutationMessage,
+  enableDelayedMutations,
   finalizeMutations,
   mutateData,
   removeFieldsWithNullishValues,
@@ -147,6 +148,28 @@ describe('utils - object', () => {
 
       it('should mutate the data', () => {
         expect(mutatedData).toEqual({ prop: 'bar', prop2: 'bar2' });
+      });
+    });
+    describe('with delayed mutations on an existing object', () => {
+      const original: { name: string; prop?: string; prop2?: string } = { name: 'existing' };
+      let copy: Record<string, any>;
+
+      before(() => {
+        const mutatedData = enableDelayedMutations(original);
+        mutateData(mutatedData, { prop2: (ctx, { delayMarker }) => (ctx.prop === undefined ? delayMarker : ctx.prop + 2) });
+        copy = { ...mutatedData };
+        mutatedData.prop = 'bar';
+        finalizeMutations(mutatedData);
+      });
+
+      it('should apply the delayed mutations to the same object', () => {
+        expect(original).toEqual({ name: 'existing', prop: 'bar', prop2: 'bar2' });
+      });
+
+      it('should not copy the mutation context with the object', () => {
+        expect(Object.keys(copy)).toEqual(['name']);
+        mutateData(copy, { prop: (_ctx: any, { delayMarker }: any) => (delayMarker ? 'context' : 'no context') } as any);
+        expect(copy.prop).toBe('no context');
       });
     });
     describe('with auto-delayed mutations', () => {
