@@ -34,7 +34,7 @@ describe('prepareField', () => {
 
     describe('with dto != mapstruct and @MapstructExpression', () => {
       it('should fail', () => {
-        expect(() => prepareMapstructField({ ...testEntity, dto: 'any' }, { ...mapstructField })).toThrow(
+        expect(() => prepareMapstructField({ ...testEntity, dto: 'no' }, { ...mapstructField })).toThrow(
           /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/,
         );
       });

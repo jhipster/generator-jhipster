@@ -1,4 +1,8 @@
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.ts';
+import type {
+  ExportEntityDerivedPropertiesFromCommand,
+  ExportGeneratorOptionsFromCommand,
+  ExportStoragePropertiesFromCommand,
+} from '../../lib/command/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -24,6 +28,7 @@ import type {
   JavaAddedRelationshipProperties,
   JavaAddedValidatedFieldProperties,
 } from './application.ts';
+import type DomainCommand from './generators/domain/command.ts';
 
 export type {
   ConditionalJavaDefinition,
@@ -61,10 +66,10 @@ export interface Relationship extends BaseApplicationRelationship, JavaAddedRela
   ignoreOtherSideProperty?: boolean;
 }
 
-export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends BaseApplicationEntity<F, R> {
-  dtoMapstruct: boolean;
-  dtoAny: boolean;
+type DomainCommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof DomainCommand>;
 
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
+  extends BaseApplicationEntity<F, R>, DomainCommandEntity {
   entityDomainLayer?: boolean;
 
   propertyJavaFilteredType?: string;

@@ -1,4 +1,14 @@
-import type { IsNever, PascalCase, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
+import type {
+  IsNever,
+  PascalCase,
+  Replace,
+  RequireAtLeastOne,
+  SetOptional,
+  Simplify,
+  TupleToUnion,
+  UnionToIntersection,
+  ValueOf,
+} from 'type-fest';
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 
 import type BaseCoreGenerator from '../../generators/base-core/generator.ts';
@@ -266,7 +276,17 @@ type ParsableConfigs = Record<string, ParsableConfig>;
 /** Minimal command shape accepted by the type-extraction utilities (`Export*FromCommand`, `CommandTypeMap`). */
 export type ParsableCommand = {
   readonly configs?: ParsableConfigs;
+  readonly entity?: ParsableEntityConfigs;
 };
+
+/** Minimal entity option shape used for type-level inference. */
+type ParsableEntityConfig = {
+  readonly choices?: readonly string[];
+  readonly jdl?: { readonly type: 'unary' | 'binary' };
+};
+
+/** Minimal entity options map used for type-level inference. */
+type ParsableEntityConfigs = Record<string, ParsableEntityConfig>;
 
 /** Unwrap constructor return type, e.g. `typeof Boolean` → `boolean` */
 type UnwrapConstructor<T> = T extends new () => infer R ? R : undefined;
@@ -436,12 +456,82 @@ export type ExportGeneratorOptionsFromCommand<C extends ParsableCommand> = Expor
 /** Extracts `generator`-scoped config properties from command `C` as a `Readonly` typed object. */
 export type ExportGeneratorPropertiesFromCommand<C extends ParsableCommand> = Readonly<ExportScopedPropertiesFromCommand<C, 'generator'>>;
 
+/** The entity options of command `C`. */
+type CommandEntityConfigs<C extends ParsableCommand> =
+  C extends { entity: infer E extends ParsableEntityConfigs } ? E : Record<never, never>;
+
 /**
- * Bundles all derived type views for a command into a single record with four keys:
+ * Types each entity option as its value in the entity: one of its choices, a boolean for a unary option, a name for a
+ * binary one without choices.
+ */
+type ResolveEntityConfigTypes<U extends ParsableEntityConfigs> = Simplify<{
+  -readonly [K in keyof U]?: U[K] extends { choices: readonly string[] } ? U[K]['choices'][number]
+  : U[K] extends { jdl: { type: 'unary' } } ? boolean
+  : U[K] extends { jdl: { type: 'binary' } } ? string
+  : unknown;
+}>;
+
+/**
+ * The flags derived from the entity options with choices, as `getEntityDerivedPropertyMutations` sets them: one for each
+ * choice, named as `derivedPropertyName` names it, and one for any choice but `no`.
+ */
+type ExplodeEntityChoicesToDerivedProperties<U extends ParsableEntityConfigs> =
+  ValueOf<{
+    [K in keyof U]: K extends string ?
+      U[K] extends { choices: readonly string[] } ?
+        { [Choice in U[K]['choices'][number] as DerivedProperty<K, Choice>]: boolean } & Record<`${K}Any`, boolean>
+      : never
+    : never;
+  }> extends infer Derived ?
+    // No option with choices derives no flag.
+    [Derived] extends [never] ?
+      Record<never, never>
+    : Simplify<UnionToIntersection<Derived>>
+  : never;
+
+/**
+ * Extracts the entity options of command `C` as their values in the entity files.
+ * @example
+ * ```ts
+ * type Config = ExportEntityConfigFromCommand<{ entity: { dto: { choices: ['mapstruct', 'no'] } } }>; // { dto?: 'mapstruct' | 'no' }
+ * ```
+ */
+export type ExportEntityConfigFromCommand<C extends ParsableCommand> = ResolveEntityConfigTypes<CommandEntityConfigs<C>>;
+
+/**
+ * Extracts the flags derived from the choices of the entity options of command `C`, as the entities have them once
+ * prepared.
+ * @example
+ * ```ts
+ * type Derived = ExportEntityDerivedPropertiesFromCommand<{ entity: { dto: { choices: ['mapstruct', 'no'] } } }>;
+ * // { dtoMapstruct: boolean; dtoNo: boolean; dtoAny: boolean }
+ * ```
+ */
+export type ExportEntityDerivedPropertiesFromCommand<C extends ParsableCommand> = ExplodeEntityChoicesToDerivedProperties<
+  CommandEntityConfigs<C>
+>;
+
+/**
+ * Extracts the entity options of command `C` with the flags derived from their choices, as the entities have them once
+ * prepared.
+ * @example
+ * ```ts
+ * type Entity = ExportEntityPropertiesFromCommand<{ entity: { dto: { choices: ['mapstruct', 'no'] } } }>;
+ * // { dto?: 'mapstruct' | 'no'; dtoMapstruct: boolean; dtoNo: boolean; dtoAny: boolean }
+ * ```
+ */
+export type ExportEntityPropertiesFromCommand<C extends ParsableCommand> = Simplify<
+  ExportEntityConfigFromCommand<C> & ExportEntityDerivedPropertiesFromCommand<C>
+>;
+
+/**
+ * Bundles all derived type views for a command into a single record with six keys:
  * - `Config` — `storage`-scoped config properties
  * - `Options` — all generator option types
  * - `Generator` — `generator`-scoped properties (readonly)
  * - `Application` — combined `storage` + `context` application properties with choice inference
+ * - `EntityConfig` — the entity options, as the entity files hold them
+ * - `Entity` — the entity options with the flags derived from their choices
  *
  * @example
  * ```ts
@@ -453,4 +543,6 @@ export type ExportGeneratorPropertiesFromCommand<C extends ParsableCommand> = Re
 export type CommandTypeMap<C1 extends ParsableCommand> = Record<'Config', ExportStoragePropertiesFromCommand<C1>> &
   Record<'Options', ExportGeneratorOptionsFromCommand<C1>> &
   Record<'Generator', ExportGeneratorPropertiesFromCommand<C1>> &
-  Record<'Application', ExportApplicationPropertiesFromCommand<C1>>;
+  Record<'Application', ExportApplicationPropertiesFromCommand<C1>> &
+  Record<'EntityConfig', ExportEntityConfigFromCommand<C1>> &
+  Record<'Entity', ExportEntityPropertiesFromCommand<C1>>;

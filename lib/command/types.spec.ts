@@ -19,6 +19,8 @@
 
 import type {
   ExportApplicationPropertiesFromCommand,
+  ExportEntityConfigFromCommand,
+  ExportEntityPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
 } from './types.ts';
@@ -175,3 +177,44 @@ const _choiceConfig = {
   stringOptionBar: false,
   stringOptionAny: false,
 }) satisfies ExportApplicationPropertiesFromCommand<typeof _choiceConfig>;
+
+const _entityCommand = {
+  entity: {
+    unaryOption: { jdl: { type: 'unary' } },
+    binaryOption: { jdl: { type: 'binary' } },
+    pagination: { choices: ['pagination', 'infinite-scroll', 'no'], jdl: { type: 'binary' } },
+  },
+} as const;
+
+type EntityConfig = ExportEntityConfigFromCommand<typeof _entityCommand>;
+
+({ unaryOption: true, binaryOption: 'foo', pagination: 'infinite-scroll' }) satisfies EntityConfig;
+({}) satisfies EntityConfig;
+
+({
+  // @ts-expect-error invalid value
+  unaryOption: 'true',
+}) satisfies EntityConfig;
+
+({
+  // @ts-expect-error invalid value
+  pagination: 'paginate',
+}) satisfies EntityConfig;
+
+// @ts-expect-error unknown field
+(() => {})(({} as EntityConfig).nonExisting);
+
+({
+  pagination: 'pagination',
+  paginationPagination: true,
+  paginationInfiniteScroll: false,
+  paginationNo: false,
+  paginationAny: true,
+}) satisfies ExportEntityPropertiesFromCommand<typeof _entityCommand>;
+
+({
+  paginationPagination: true,
+  // @ts-expect-error missing fields
+}) satisfies ExportEntityPropertiesFromCommand<typeof _entityCommand>;
+
+({}) satisfies ExportEntityPropertiesFromCommand<typeof _dummyCommand>;
