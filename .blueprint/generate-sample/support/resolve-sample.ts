@@ -21,7 +21,7 @@ import { join } from 'node:path';
 
 import { globSync } from 'tinyglobby';
 
-import { type WorkflowSample, getGithubSamples } from '../../../lib/ci/index.ts';
+import { type GithubSample, type WorkflowSample, getGithubSamples } from '../../../lib/ci/index.ts';
 import {
   dailyBuildsFolder,
   entitiesSamplesDir,
@@ -66,14 +66,17 @@ const resolveEntitiesSample = (entity?: string): string | undefined => {
   return entity === 'none' ? undefined : entity;
 };
 
+/** A sample of a group workflow (`github-build-matrix/samples/<group>.ts`), by its name. */
+export const resolveGroupSample = async (sampleName: string): Promise<GithubSample | undefined> =>
+  (await getGithubSamples(githubSamplesGroupFolder))[sampleName];
+
 /**
- * A sample of a group workflow (`github-build-matrix/samples/<group>.ts`) defined by a jdl, which `generate-sample` gives
- * to the jdl generator.
+ * A sample of a group workflow generated from a `.yo-rc.json` folder (`app-sample`), as the workflow sample it stands for:
+ * its entities and its generator options given like the ones of a json workflow.
  */
-export const resolveGroupJdlSample = async (sampleName: string): Promise<{ group: string; jdl: string } | undefined> => {
-  const { group, sample } = (await getGithubSamples(githubSamplesGroupFolder))[sampleName] ?? {};
-  return group && sample?.jdl ? { group, jdl: sample.jdl } : undefined;
-};
+export const groupWorkflowSample = (name: string, { sample }: GithubSample): WorkflowSample | undefined =>
+  // A group item is a partial matrix, as the samples of the json workflows are.
+  sample['app-sample'] ? ({ ...sample, name } as WorkflowSample) : undefined;
 
 const findWorkflowSample = (sampleName: string): WorkflowSample | undefined =>
   Object.values(getWorkflowSamples())
@@ -83,8 +86,11 @@ const findWorkflowSample = (sampleName: string): WorkflowSample | undefined =>
 /**
  * Resolve what `generate-sample` copies and runs for a sample, without touching the file system.
  */
-export const resolveSample = (sampleName: string, { entity: passedEntity }: { entity?: string } = {}): ResolvedSample => {
-  const sample = findWorkflowSample(sampleName);
+export const resolveSample = (
+  sampleName: string,
+  { entity: passedEntity, sample: groupSample }: { entity?: string; sample?: WorkflowSample } = {},
+): ResolvedSample => {
+  const sample = groupSample ?? findWorkflowSample(sampleName);
   const jdlEntity = sample?.['jdl-entity'];
   const jdlSamples = sample?.['jdl-samples'];
   const appSample = sample?.['app-sample'] ?? sample?.name ?? sampleName;

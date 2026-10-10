@@ -141,6 +141,25 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with ng-default-module-federation, a group sample generated from a .yo-rc.json folder', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withArguments('ng-default-module-federation')
+        .withMockedGenerators(['jhipster:app', 'jhipster:info']);
+    });
+
+    it('should copy the .yo-rc.json of its folder and its entities', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { clientFramework: 'angular' } });
+      runResult.assertFile('.jhipster/BankAccount.json');
+    });
+
+    it('should give its options to the app generator', () => {
+      const [, options] = runResult.getGeneratorMock('jhipster:app').calls.at(-1)!.arguments;
+      expect(options).toMatchObject({ auth: 'oauth2', microfrontend: true });
+    });
+  });
+
   describe(`with daily-builds/ngx-oauth2 (daily-builds sample)`, () => {
     before(async () => {
       await helpers

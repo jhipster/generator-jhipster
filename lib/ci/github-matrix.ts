@@ -31,6 +31,8 @@ const knownGitHubMatrixProperties = new Set([
   'default-environment',
   'job-name',
   'sample',
+  'app-sample',
+  'entity',
   'samples-group',
   'sample-type',
   'sample-file',
@@ -59,7 +61,14 @@ export type GitHubMatrix = {
   jdl?: string;
 };
 
-export type GitHubMatrixGroupItem = Partial<Omit<GitHubMatrix, 'job-name'>> & { disabled?: boolean; workspaces?: 'true' | 'false' };
+export type GitHubMatrixGroupItem = Partial<Omit<GitHubMatrix, 'job-name'>> & {
+  disabled?: boolean;
+  workspaces?: 'true' | 'false';
+  /** The `.yo-rc.json` folder of `test-integration/samples` the sample is generated from, like a workflow sample. */
+  'app-sample'?: string;
+  /** The entities sample copied to the project, like a workflow sample. */
+  entity?: string;
+};
 export type GitHubMatrixGroup = Record<string, GitHubMatrixGroupItem>;
 
 export type GitHubMatrixOutput = {
