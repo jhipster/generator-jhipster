@@ -1,0 +1,143 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { readdirSync, statSync } from 'node:fs';
+import { basename, dirname, extname, join, relative } from 'node:path';
+
+import { describeGithubSamples, getGithubSamples, getGithubSamplesGroups } from 'generator-jhipster/ci';
+
+/** @typedef {import('generator-jhipster/ci').SampleDescription} SampleDescription */
+/** @typedef {{ samples: string[] }} SampleGroupSummary A samples group with the names of its samples; an object, to grow with more data. */
+/** @typedef {{ file: string } | { content: string }} SampleJDL A jdl of a sample: a file of the blueprint, or the content of an inline jdl. */
+/**
+ * A sample: how to generate it, the files generate-sample copies to the project but the jdl ones (the path in the project
+ * to the file of the blueprint), and the jdl it is generated from, by their name in the project.
+ * @typedef {{ workflow: string; jobName: string; command: string; disabled?: boolean; files: Record<string, string>; jdls: Record<string, SampleJDL> }} SampleSummary
+ */
+/** @typedef {{ samples: Record<string, SampleSummary> }} SampleGroupDescription The samples of a samples group by name; an object, to grow with more data. */
+
+/** The folder of the samples groups, the ones generate-sample generates. */
+export const SAMPLES_GROUP_FOLDER = join(import.meta.dirname, '../../generate-sample/templates/');
+
+/** The root of the blueprint, the paths of the files are relative to. */
+const ROOT = join(import.meta.dirname, '../../../');
+
+/**
+ * The descriptions of the samples of the groups, every group when omitted, as the describe-samples command prints them.
+ * @param {string[]} [groups]
+ * @returns {Promise<SampleDescription[]>}
+ */
+export const describeSamples = groups =>
+  describeGithubSamples({ samplesGroupFolder: SAMPLES_GROUP_FOLDER, groups, root: ROOT, cli: './cli/<%- blueprintCliName %>' });
+
+/**
+ * @param {string} path
+ * @returns {boolean}
+ */
+const isDirectory = path => {
+  try {
+    return statSync(path).isDirectory();
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * The files generate-sample copies to the project for a sample, by destination, the jdl ones included.
+ * @param {SampleDescription} sample
+ * @returns {[string, string][]}
+ */
+const copiedFilesOf = sample => {
+  if (sample.generator === 'jdl') return sample.jdlSampleFiles.map(file => [basename(file), file]);
+  if (sample.generator !== 'app' || !sample.yoRcFile) return [];
+  // A yo-rc sample copies every file of its folder.
+  const folder = join(ROOT, dirname(sample.yoRcFile));
+  if (!isDirectory(folder)) return [];
+  return readdirSync(folder, { recursive: true, withFileTypes: true })
+    .filter(entry => entry.isFile())
+    .map(entry => {
+      const file = join(entry.parentPath, entry.name);
+      return [relative(folder, file), relative(ROOT, file)];
+    });
+};
+
+/**
+ * @param {[string, string]} file
+ * @returns {boolean}
+ */
+const isJDL = ([destination]) => extname(destination) === '.jdl';
+
+/**
+ * @param {SampleDescription} sample
+ * @returns {SampleSummary}
+ */
+const summaryOf = sample => ({
+  workflow: sample.workflow,
+  jobName: sample.jobName,
+  command: sample.command,
+  disabled: sample.disabled,
+  files: Object.fromEntries(copiedFilesOf(sample).filter(file => !isJDL(file))),
+  jdls: Object.fromEntries([
+    ...(sample.generator === 'jdl' && sample.jdl ? [[`${sample.name}.jdl`, { content: sample.jdl }]] : []),
+    ...copiedFilesOf(sample)
+      .filter(isJDL)
+      .map(([destination, file]) => [destination, { file }]),
+  ]),
+});
+
+/**
+ * The samples of a samples group, by name.
+ * @param {string} group
+ * @returns {Promise<SampleGroupDescription>}
+ */
+export const describeSampleGroup = async group => {
+  const groups = await getGithubSamplesGroups(SAMPLES_GROUP_FOLDER);
+  if (!groups.includes(group)) {
+    throw new Error(`Samples group ${group} not found, expected one of ${groups.join(', ')}`);
+  }
+  return { samples: Object.fromEntries((await describeSamples([group])).map(sample => [sample.name, summaryOf(sample)])) };
+};
+
+/**
+ * The samples groups by name, with the names of their samples.
+ * @returns {Promise<Record<string, SampleGroupSummary>>}
+ */
+export const describeSampleGroups = async () => {
+  /** @type {Record<string, SampleGroupSummary>} */
+  const groups = {};
+  for (const name of await getGithubSamplesGroups(SAMPLES_GROUP_FOLDER)) {
+    groups[name] = { samples: Object.keys((await describeSampleGroup(name)).samples) };
+  }
+  return groups;
+};
+
+/**
+ * A sample, by its name or its job name; a sample is generated by its name alone, a name two groups share fails.
+ * @param {string} name
+ * @returns {Promise<SampleSummary>}
+ */
+export const describeSample = async name => {
+  await getGithubSamples(SAMPLES_GROUP_FOLDER);
+  const samples = await describeSamples();
+  const sample = samples.find(description => description.name === name || description.jobName === name);
+  if (!sample) {
+    // The names, so the caller, an AI agent too, can correct the name by itself.
+    throw new Error(`Sample ${name} not found, expected one of ${samples.map(description => description.name).join(', ')}`);
+  }
+  return summaryOf(sample);
+};

@@ -21,17 +21,24 @@
  */
 const command = {
   configs: {
-    samplesFolder: {
-      description: 'Samples folder',
-      cli: {
+    sampleName: {
+      description: 'Sample or job name to describe, lists every sample when omitted',
+      argument: {
         type: String,
       },
       scope: 'generator',
     },
     samplesGroup: {
-      description: 'Samples group, every samples group by default',
-      argument: {
+      description: 'Only the samples of a samples group',
+      cli: {
         type: String,
+      },
+      scope: 'generator',
+    },
+    json: {
+      description: 'Print the description as json',
+      cli: {
+        type: Boolean,
       },
       scope: 'generator',
     },
