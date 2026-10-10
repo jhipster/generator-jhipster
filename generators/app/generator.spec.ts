@@ -18,10 +18,9 @@
  */
 import { before, describe, expect, it } from 'esmocha';
 
-import { testBlueprintSupport } from '../../test/support/tests.ts';
-
 import type Generator from './generator.ts';
 
+import { testBlueprintSupport } from '#test-support';
 import { createTestHelpers, typedResult } from '#testing';
 
 const helpers = createTestHelpers<Generator>({

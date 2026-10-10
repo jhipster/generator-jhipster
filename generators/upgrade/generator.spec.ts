@@ -22,11 +22,11 @@ import { basename } from 'node:path';
 import { simpleGit } from 'simple-git';
 
 import type EnvironmentBuilder from '../../cli/environment-builder.ts';
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 import { UPGRADE_BRANCH } from './support/index.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);

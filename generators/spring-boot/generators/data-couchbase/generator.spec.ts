@@ -20,11 +20,11 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, join, resolve } from 'node:path';
 
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import { filterBasicServerGenerators, shouldComposeWithLiquibase } from '../../../server/__test-support/index.ts';
 
 import Generator from './generator.ts';
 
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
