@@ -125,7 +125,8 @@ describe(`generator - ${generator}`, () => {
       const ngDefault = samples.find(sample => sample.name === 'ng-default')!;
       assert(ngDefault.generator === 'app');
       expect(ngDefault).toMatchObject({
-        jobName: expect.stringMatching(/^ng-default \(n.*\/j.*\)$/),
+        // The job name the sample defines, without the environment of the CI job.
+        jobName: 'ng-default',
         config: expect.objectContaining({ clientFramework: 'angular', databaseType: 'sql' }),
         entitiesSample: 'sqlfull',
         matrix: { os: 'ubuntu-latest', node: expect.any(String), java: expect.any(String) },
