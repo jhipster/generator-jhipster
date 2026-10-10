@@ -46,17 +46,6 @@ export const getCommandHelpOutput = async (command?: string) => {
   return helpers.getCommandHelpOutput(command);
 };
 
-export const testOptions = (data: { generatorPath: string; customOptions: Record<string, unknown> }) => {
-  const { generatorPath, customOptions } = data;
-  before(async () => {
-    await helpers.runJHipster(generatorPath).withOptions({ ...customOptions });
-  });
-
-  it('should write options to .yo-rc.json', () => {
-    runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customOptions });
-  });
-};
-
 const skipWritingPriorities = ['writing', 'writingEntities', 'postWriting', 'postWritingEntities'];
 
 export const basicTests = (data: {

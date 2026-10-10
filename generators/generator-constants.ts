@@ -54,7 +54,6 @@ export const CLIENT_DIST_DIR = 'static/';
 export const JHIPSTER_CONFIG_DIR = '.jhipster';
 export const TEMPLATES_DOCKER_DIR = 'docker/';
 export const JAVA_DOCKER_DIR = `${MAIN_DIR}docker/`;
-export const LINE_LENGTH = 180;
 export const CLIENT_MAIN_SRC_DIR = `${MAIN_DIR}webapp/`;
 export const CLIENT_TEST_SRC_DIR = `${TEST_DIR}javascript/`;
 export const CLIENT_WEBPACK_DIR = 'webpack/';
