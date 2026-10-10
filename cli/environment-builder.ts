@@ -456,12 +456,12 @@ export default class EnvironmentBuilder {
         } catch {
           const msg = `Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsUrl}`;
           // eslint-disable-next-line no-console
-          console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+          console.error(`${chalk.green.bold('INFO!')} ${msg}`);
         }
       } else {
         const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
         // eslint-disable-next-line no-console
-        console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+        console.error(`${chalk.green.bold('INFO!')} ${msg}`);
       }
     }
     return result;
