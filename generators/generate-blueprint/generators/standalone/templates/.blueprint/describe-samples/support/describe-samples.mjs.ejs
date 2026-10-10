@@ -133,9 +133,11 @@ export const describeSampleGroups = async () => {
  */
 export const describeSample = async name => {
   await getGithubSamples(SAMPLES_GROUP_FOLDER);
-  const sample = (await describeSamples()).find(description => description.name === name || description.jobName === name);
+  const samples = await describeSamples();
+  const sample = samples.find(description => description.name === name || description.jobName === name);
   if (!sample) {
-    throw new Error(`Sample ${name} not found in the samples groups`);
+    // The names, so the caller, an AI agent too, can correct the name by itself.
+    throw new Error(`Sample ${name} not found, expected one of ${samples.map(description => description.name).join(', ')}`);
   }
   return summaryOf(sample);
 };
