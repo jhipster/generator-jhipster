@@ -29,6 +29,7 @@ import {
   jdlEntitiesSamplesFolder,
   jdlSamplesFolder,
   samplesFolder,
+  testIntegrationFolder,
 } from '../../constants.ts';
 
 import { entitiesByType } from './copy-entity-samples.ts';
@@ -83,6 +84,14 @@ const findWorkflowSample = (sampleName: string): WorkflowSample | undefined =>
     .map(samples => samples[sampleName])
     .find(Boolean);
 
+/** The `.yo-rc.json` folder of a sample: of the daily builds, a path of test-integration, or a folder of its samples. */
+const yoRcFolderOf = (appSample: string): string => {
+  if (isDaily(appSample)) return join(dailyBuildsFolder, appSample.replace(DAILY_PREFIX, ''));
+  // Like `generate-blueprint-samples/typescript`.
+  if (appSample.includes('/')) return join(testIntegrationFolder, appSample);
+  return join(samplesFolder, appSample);
+};
+
 /**
  * Resolve what `generate-sample` copies and runs for a sample, without touching the file system.
  */
@@ -108,7 +117,7 @@ export const resolveSample = (
     existsSync(join(jdlSamplesFolder, jdlSample)) ? join(jdlSamplesFolder, jdlSample) : jdlEntitySamplePath(jdlSample),
   );
 
-  const yoRcFolder = isDaily(appSample) ? join(dailyBuildsFolder, appSample.replace(DAILY_PREFIX, '')) : join(samplesFolder, appSample);
+  const yoRcFolder = yoRcFolderOf(appSample);
 
   return {
     name: sampleName,

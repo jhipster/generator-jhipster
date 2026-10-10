@@ -20,6 +20,7 @@ import { githubSamplesGroupOf } from '../../../lib/ci/github-group.ts';
 import type { GitHubMatrixGroup } from '../../../lib/ci/index.ts';
 import devserver from '../samples/devserver.ts';
 import dockerComposeIntegration from '../samples/docker-compose-integration.ts';
+import generateBlueprint from '../samples/generate-blueprint.ts';
 import graalvm from '../samples/graalvm.ts';
 
 /**
@@ -30,6 +31,7 @@ export const samplesGroups: Record<string, GitHubMatrixGroup> = Object.fromEntri
   Object.entries({
     devserver,
     'docker-compose-integration': dockerComposeIntegration,
+    'generate-blueprint': generateBlueprint,
     graalvm,
   }).map(([group, samples]) => [group, githubSamplesGroupOf(group, samples)]),
 );
