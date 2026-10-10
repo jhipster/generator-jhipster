@@ -18,6 +18,7 @@
  */
 
 import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
+import pluralize from 'pluralize';
 
 import type { DerivedBooleanPropertiesOf } from '../../lib/command/types.ts';
 import { BlobTypes, type FieldType, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
@@ -27,7 +28,6 @@ import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
 import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { pluralize } from '../../lib/utils/string-utils.ts';
 import { formatDocAsApiDescription } from '../java/support/doc.ts';
 
 import { isFieldEnumType } from './internal/types/field-types.ts';
@@ -222,8 +222,8 @@ export const mutateRelationship = {
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
-  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName, { force: true }),
-  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName, { force: true }),
+  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName),
+  relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName),
   relationshipNameCapitalized: ({ relationshipName }) => upperFirst(relationshipName),
   relationshipNameHumanized: ({ relationshipName }) => startCase(relationshipName),
 
@@ -395,12 +395,12 @@ export const mutateEntity = {
   clientRootFolder: '',
   entityNameCapitalized: ({ name }) => upperFirst(name),
   entityNameKebabCase: ({ name }) => kebabCase(name),
-  entityNamePlural: ({ name }) => pluralize(name, { force: true }),
-  entityNamePluralizedAndSpinalCased: ({ name }) => kebabCase(pluralize(name, { force: false })),
+  entityNamePlural: ({ name }) => pluralize(name),
+  entityNamePluralizedAndSpinalCased: ({ name }) => kebabCase(pluralize(name)),
   entityInstance: ({ name }) => lowerFirst(name),
   entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
   entityAuthority: ({ adminEntity }) => (adminEntity ? 'ROLE_ADMIN' : undefined),
 
   entityNameHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
-  entityNamePluralHumanized: ({ entityNameHumanized }) => pluralize(entityNameHumanized, { force: false }),
+  entityNamePluralHumanized: ({ entityNameHumanized }) => pluralize(entityNameHumanized),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, BaseApplicationAddedEntityProperties>;
