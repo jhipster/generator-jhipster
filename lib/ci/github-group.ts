@@ -18,16 +18,12 @@
  */
 
 import { readFile, readdir } from 'node:fs/promises';
-import { extname, isAbsolute, join, relative, resolve } from 'node:path';
+import { extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import { type GitHubMatrixGroup, getUnknownGitHubMatrixGroupProperties } from './github-matrix.ts';
 
-export const getGithubSamplesGroups = async (samplesGroupFolder: string, keepExtensions = false): Promise<string[]> => {
-  const samplesFolderContent = await readdir(samplesGroupFolder);
-  return samplesFolderContent
-    .filter(sample => !sample.startsWith('_') && ['.json', '.js', '.ts', ''].includes(extname(sample)))
-    .map(sample => (keepExtensions ? sample : sample.split('.')[0]));
-};
+const readGithubSamplesGroupsFolder = async (samplesGroupFolder: string): Promise<string[]> =>
+  (await readdir(samplesGroupFolder)).filter(sample => !sample.startsWith('_') && ['.json', '.js', '.ts', ''].includes(extname(sample)));
 
 /** A samples group is read from inside its folder: a group given by the command line cannot load another module. */
 const assertGroupInFolder = (samplesGroupFolder: string, group: string): void => {
@@ -44,7 +40,7 @@ export const getGithubSamplesGroup = async (
   assertGroupInFolder(samplesGroupFolder, group);
   const warnings: string[] = [];
   let samples: GitHubMatrixGroup = {};
-  const samplesFolderContent = await getGithubSamplesGroups(samplesGroupFolder, true);
+  const samplesFolderContent = await readGithubSamplesGroupsFolder(samplesGroupFolder);
   const groupExt = ['js', 'ts', 'json'].find(ext => samplesFolderContent.includes(`${group}.${ext}`));
   if (groupExt === 'js' || groupExt === 'ts') {
     const jsGroup: { default?: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.${groupExt}`));
@@ -94,6 +90,29 @@ export const getGithubSamplesGroup = async (
   return { samples, warnings };
 };
 
+/**
+ * The samples groups of a folder: a `<group>.js|ts|json` file or a `<group>` folder of samples, a group defined by both
+ * being the file one.
+ * A folder that a group file uses as its `sample-folder` holds that group's files, it is not a group.
+ * With `keepExtensions`, the files and the folders of the groups as they are.
+ */
+export const getGithubSamplesGroups = async (samplesGroupFolder: string, keepExtensions = false): Promise<string[]> => {
+  const entries = await readGithubSamplesGroupsFolder(samplesGroupFolder);
+  if (keepExtensions) {
+    return entries;
+  }
+  const fileGroups = [...new Set(entries.filter(entry => extname(entry)).map(entry => entry.split('.')[0]))];
+  const sampleFolders = new Set<string>();
+  for (const group of fileGroups) {
+    for (const sample of Object.values((await getGithubSamplesGroup(samplesGroupFolder, group)).samples)) {
+      if (sample['sample-folder']) {
+        sampleFolders.add(relative(samplesGroupFolder, resolve(samplesGroupFolder, sample['sample-folder'])).split(sep)[0]);
+      }
+    }
+  }
+  return [...new Set(entries.map(entry => entry.split('.')[0]))].filter(group => fileGroups.includes(group) || !sampleFolders.has(group));
+};
+
 export type GithubSample = { group: string; sample: GitHubMatrixGroup[string] };
 
 /**
@@ -111,4 +130,22 @@ export const getGithubSamples = async (samplesGroupFolder: string): Promise<Reco
     }
   }
   return samples;
+};
+
+/**
+ * A sample by its name, looked up in the given group, or across every group of the folder when no group is given.
+ */
+export const getGithubSample = async (samplesGroupFolder: string, sampleName: string, group?: string): Promise<GithubSample> => {
+  if (group) {
+    const { samples } = await getGithubSamplesGroup(samplesGroupFolder, group);
+    if (!Object.hasOwn(samples, sampleName)) {
+      throw new Error(`Sample ${sampleName} not found in the ${group} samples group, samples: ${Object.keys(samples).join(', ')}`);
+    }
+    return { group, sample: samples[sampleName] };
+  }
+  const samples = await getGithubSamples(samplesGroupFolder);
+  if (!Object.hasOwn(samples, sampleName)) {
+    throw new Error(`Sample ${sampleName} not found in the samples groups, samples: ${Object.keys(samples).join(', ')}`);
+  }
+  return samples[sampleName];
 };
