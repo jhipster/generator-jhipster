@@ -7,6 +7,18 @@ exports[`generator - generate-blueprint:standalone with defaults options should 
   ".blueprint/cli/commands.ts": {
     "stateCleared": "modified",
   },
+  ".blueprint/describe-samples/command.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/generator.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/index.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/support/describe-samples.ts": {
+    "stateCleared": "modified",
+  },
   ".blueprint/generate-sample/command.ts": {
     "stateCleared": "modified",
   },
