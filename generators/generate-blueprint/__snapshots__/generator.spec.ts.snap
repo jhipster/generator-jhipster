@@ -187,6 +187,18 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   ".blueprint/cli/commands.ts": {
     "stateCleared": "modified",
   },
+  ".blueprint/describe-samples/command.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/generator.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/index.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/support/describe-samples.ts": {
+    "stateCleared": "modified",
+  },
   ".blueprint/generate-sample/command.ts": {
     "stateCleared": "modified",
   },
@@ -2010,6 +2022,18 @@ exports[`generator - generate-blueprint with default config should match applica
 exports[`generator - generate-blueprint with default config should write files and match snapshot 1`] = `
 {
   ".blueprint/cli/commands.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/command.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/generator.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/index.ts": {
+    "stateCleared": "modified",
+  },
+  ".blueprint/describe-samples/support/describe-samples.ts": {
     "stateCleared": "modified",
   },
   ".blueprint/generate-sample/command.ts": {

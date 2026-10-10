@@ -16,26 +16,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/**
- * @type {import('generator-jhipster').JHipsterCommandDefinition}
- */
-const command = {
+import type { JHipsterCommandDefinition } from 'generator-jhipster';
+
+import type Generator from './generator.js';
+
+export default {
   configs: {
-    samplesFolder: {
-      description: 'Samples folder',
-      cli: {
-        type: String,
-      },
-      scope: 'generator',
-    },
-    samplesGroup: {
-      description: 'Samples group, every samples group by default',
+    sampleName: {
+      description: 'Sample or job name to describe, lists every sample when omitted',
       argument: {
         type: String,
       },
       scope: 'generator',
     },
+    samplesGroup: {
+      description: 'Only the samples of a samples group',
+      cli: {
+        type: String,
+      },
+      scope: 'generator',
+    },
+    json: {
+      description: 'Print the description as json',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
   },
-};
-
-export default command;
+} as const satisfies JHipsterCommandDefinition<Generator>;

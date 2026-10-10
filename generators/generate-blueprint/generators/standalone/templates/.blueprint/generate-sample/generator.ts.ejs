@@ -20,11 +20,13 @@ import { readdir } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
-import { getGithubSamplesGroup } from 'generator-jhipster/ci';
+import { getGithubSample } from 'generator-jhipster/ci';
+
+const DEFAULT_SAMPLES_GROUP = 'samples';
 
 export default class extends BaseCoreGenerator {
   samplesFolder?: string;
-  samplesGroup!: string;
+  samplesGroup?: string;
   sampleName!: string;
   all?: boolean;
   sampleType?: string;
@@ -34,35 +36,44 @@ export default class extends BaseCoreGenerator {
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async copySample() {
-        const { samplesFolder, samplesGroup, all, sampleName } = this;
-        const samplesPath = samplesFolder ? join(samplesFolder, samplesGroup) : samplesGroup;
-        if (all) {
-          this.copyTemplate(`${samplesPath}/*.jdl`, '');
-          this.sampleType = 'jdl';
-        } else if (extname(sampleName) === '.jdl') {
-          this.copyTemplate(join(samplesPath, sampleName), sampleName, { noGlob: true });
-          this.sampleType = 'jdl';
-        } else {
-          const { samples } = await getGithubSamplesGroup(this.templatePath(), samplesPath);
-          const {
-            'sample-type': sampleType,
-            'sample-file': sampleFile = sampleName,
-            'sample-folder': sampleFolder = samplesPath,
-            generatorOptions,
-          } = samples[sampleName];
-
-          this.generatorOptions = generatorOptions;
-          this.sampleType = sampleType;
-
-          if (sampleType === 'jdl') {
-            const jdlFile = `${sampleFile}.jdl`;
-            this.copyTemplate(join(sampleFolder, jdlFile), jdlFile, { noGlob: true });
-          } else if (sampleType === 'yo-rc') {
-            this.copyTemplate('**', '', {
-              fromBasePath: this.templatePath(sampleFolder, sampleFile),
-              globOptions: { dot: true },
-            });
+        const { samplesFolder = '', samplesGroup, all, sampleName } = this;
+        if (all || extname(sampleName) === '.jdl') {
+          const samplesPath = join(samplesFolder, samplesGroup ?? DEFAULT_SAMPLES_GROUP);
+          if (all) {
+            this.copyTemplate(`${samplesPath}/*.jdl`, '');
+          } else {
+            this.copyTemplate(join(samplesPath, sampleName), sampleName, { noGlob: true });
           }
+          this.sampleType = 'jdl';
+          return;
+        }
+
+        // A sample name is unique across the samples groups: the group only restricts the lookup.
+        const { group, sample } = await getGithubSample(this.templatePath(samplesFolder), sampleName, samplesGroup);
+        const {
+          jdl,
+          'sample-type': sampleType,
+          'sample-file': sampleFile = sampleName,
+          'sample-folder': sampleFolder = group,
+          generatorOptions,
+        } = sample;
+
+        this.generatorOptions = generatorOptions;
+        if (jdl) {
+          this.sampleType = 'jdl';
+          this.writeDestination(`${sampleName}.jdl`, jdl);
+        } else if (sampleType === 'jdl') {
+          this.sampleType = sampleType;
+          const jdlFile = `${sampleFile}.jdl`;
+          this.copyTemplate(join(samplesFolder, sampleFolder, jdlFile), jdlFile, { noGlob: true });
+        } else if (sampleType === 'yo-rc') {
+          this.sampleType = sampleType;
+          this.copyTemplate('**', '', {
+            fromBasePath: this.templatePath(samplesFolder, sampleFolder, sampleFile),
+            globOptions: { dot: true },
+          });
+        } else {
+          throw new Error(`Sample ${sampleName} of the ${group} samples group has no jdl, nor a jdl or yo-rc sample-type`);
         }
       },
     });

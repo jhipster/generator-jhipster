@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from 'generator-jhipster';
-import { getGithubSamplesGroup, getGithubSamplesGroups } from 'generator-jhipster/ci';
+import { getGithubSamples, getGithubSamplesGroup } from 'generator-jhipster/ci';
 
 import type Generator from './generator.js';
-
-const DEFAULT_SAMPLES_GROUP = 'samples';
 
 export default {
   arguments: {
@@ -38,19 +36,9 @@ export default {
       scope: 'generator',
     },
     samplesGroup: {
-      description: 'Samples group to lookup',
+      description: 'Samples group to lookup, a sample is looked up in every group by default',
       cli: {
         type: String,
-      },
-      prompt: gen => ({
-        when: !gen.all && !gen.sampleName,
-        type: 'select',
-        message: 'which sample group do you want to lookup?',
-        choices: async () => getGithubSamplesGroups(gen.templatePath(gen.samplesFolder ?? '')),
-        default: DEFAULT_SAMPLES_GROUP,
-      }),
-      configure: gen => {
-        gen.samplesGroup ??= DEFAULT_SAMPLES_GROUP;
       },
       scope: 'generator',
     },
@@ -59,9 +47,12 @@ export default {
         when: !gen.all,
         type: 'select',
         message: 'which sample do you want to generate?',
-        choices: async (answers: any) => {
-          const samples = await getGithubSamplesGroup(gen.templatePath(), answers.samplesGroup ?? gen.samplesGroup);
-          return Object.keys(samples.samples);
+        choices: async () => {
+          const samplesGroupFolder = gen.templatePath(gen.samplesFolder ?? '');
+          if (gen.samplesGroup) {
+            return Object.keys((await getGithubSamplesGroup(samplesGroupFolder, gen.samplesGroup)).samples);
+          }
+          return Object.keys(await getGithubSamples(samplesGroupFolder));
         },
       }),
       scope: 'generator',

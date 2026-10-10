@@ -18,7 +18,15 @@
 -%>
 import { join } from 'node:path';
 import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
-import { type GitHubMatrixOutput, convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from 'generator-jhipster/ci';
+import {
+  type GitHubMatrixGroup,
+  type GitHubMatrixOutput,
+  convertToGitHubMatrix,
+  getGithubOutputFile,
+  getGithubSamples,
+  getGithubSamplesGroup,
+  setGithubTaskOutput,
+} from 'generator-jhipster/ci';
 
 export default class extends BaseCoreGenerator {
   samplesFolder?: string;
@@ -28,12 +36,19 @@ export default class extends BaseCoreGenerator {
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async buildMatrix() {
-        const { samplesGroup = 'samples' } = this;
+        const { samplesGroup } = this;
         const templatePath = this.templatePath('../../generate-sample/templates/');
         const samplesFolder = this.samplesFolder ? join(templatePath, this.samplesFolder) : templatePath;
-        const { samples, warnings } = await getGithubSamplesGroup(samplesFolder, samplesGroup);
-        if (warnings.length > 0) {
-          this.log.info(warnings.join('\n'));
+        let samples: GitHubMatrixGroup;
+        if (samplesGroup) {
+          const group = await getGithubSamplesGroup(samplesFolder, samplesGroup);
+          if (group.warnings.length > 0) {
+            this.log.info(group.warnings.join('\n'));
+          }
+          samples = group.samples;
+        } else {
+          // Every sample of every group, a sample name is unique across the groups.
+          samples = Object.fromEntries(Object.entries(await getGithubSamples(samplesFolder)).map(([name, { sample }]) => [name, sample]));
         }
         this.matrix = convertToGitHubMatrix(samples);
         const githubOutputFile = getGithubOutputFile();
