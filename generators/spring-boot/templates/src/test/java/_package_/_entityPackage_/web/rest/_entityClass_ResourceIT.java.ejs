@@ -30,9 +30,7 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
-    // Couchbase stores a relationship as an id, and its findById projects the joined document over that same field,
-    // so an entity whose relationship is set cannot be read back: https://github.com/jhipster/generator-jhipster/issues
-    const noCascadeRelationships = readOnly || databaseTypeCouchbase || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
+    const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
       .filter(relationship =>
         relationship.ownerSide
           && !relationship.id
