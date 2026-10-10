@@ -54,31 +54,33 @@ describe('ci samples groups', () => {
     it('describes the samples of every group', async () => {
       const samples = await describeGithubSamples({ samplesGroupFolder: valid, root: fixtures, cli: './cli/cli.cjs' });
       expect(
-        samples.map(({ name, command, config, generatorOptions, matrix, ...sample }) => ({
-          name,
-          command,
-          config,
-          generatorOptions,
-          os: matrix.os,
-          ...(sample.generator === 'jdl' ?
-            { generator: sample.generator, jdl: sample.jdl, jdlSampleFiles: sample.jdlSampleFiles }
-          : { generator: sample.generator, yoRcFile: sample.yoRcFile }),
-        })),
-      ).toMatchInlineSnapshot(`
+  samples.map(({ name, command, config, generatorOptions, matrix, ...sample }) => ({
+    name,
+    command,
+    config,
+    generatorOptions,
+    os: matrix.os,
+    generator: sample.generator,
+    files: sample.files,
+    jdls: sample.jdls
+  }))
+).toMatchInlineSnapshot(`
 [
   {
     "command": "./cli/cli.cjs generate-sample 'custom-jdl'",
     "config": {
       "clientFramework": "vue",
     },
+    "files": {},
     "generator": "jdl",
     "generatorOptions": {
       "skipClient": true,
     },
-    "jdl": undefined,
-    "jdlSampleFiles": [
-      "valid/files/app-jdl.jdl",
-    ],
+    "jdls": {
+      "app-jdl.jdl": {
+        "file": "valid/files/app-jdl.jdl",
+      },
+    },
     "name": "custom-jdl",
     "os": "ubuntu-latest",
   },
@@ -87,23 +89,28 @@ describe('ci samples groups', () => {
     "config": {
       "clientFramework": "react",
     },
+    "files": {
+      ".yo-rc.json": "valid/files/app-yo-rc/.yo-rc.json",
+    },
     "generator": "app",
     "generatorOptions": undefined,
+    "jdls": {},
     "name": "custom-yo-rc",
     "os": "macos-latest",
-    "yoRcFile": "valid/files/app-yo-rc/.yo-rc.json",
   },
   {
     "command": "./cli/cli.cjs generate-sample 'app-jdl'",
     "config": {
       "clientFramework": "vue",
     },
+    "files": {},
     "generator": "jdl",
     "generatorOptions": undefined,
-    "jdl": undefined,
-    "jdlSampleFiles": [
-      "valid/files/app-jdl.jdl",
-    ],
+    "jdls": {
+      "app-jdl.jdl": {
+        "file": "valid/files/app-jdl.jdl",
+      },
+    },
     "name": "app-jdl",
     "os": "ubuntu-latest",
   },
@@ -112,21 +119,28 @@ describe('ci samples groups', () => {
     "config": {
       "clientFramework": "react",
     },
+    "files": {
+      ".yo-rc.json": "valid/files/app-yo-rc/.yo-rc.json",
+    },
     "generator": "app",
     "generatorOptions": undefined,
+    "jdls": {},
     "name": "app-yo-rc",
     "os": "ubuntu-latest",
-    "yoRcFile": "valid/files/app-yo-rc/.yo-rc.json",
   },
   {
     "command": "./cli/cli.cjs generate-sample 'inline-jdl'",
     "config": {
       "buildTool": "gradle",
     },
+    "files": {},
     "generator": "jdl",
     "generatorOptions": undefined,
-    "jdl": "application { config { baseName inline buildTool gradle } }",
-    "jdlSampleFiles": [],
+    "jdls": {
+      "inline-jdl.jdl": {
+        "content": "application { config { baseName inline buildTool gradle } }",
+      },
+    },
     "name": "inline-jdl",
     "os": "ubuntu-latest",
   },
@@ -144,9 +158,8 @@ describe('ci samples groups', () => {
           jobName: `${name}-job`,
           generator: 'app',
           command: 'custom',
-          entityFiles: [],
-          jdlEntityFiles: [],
-          jdlSampleFiles: [],
+          files: {},
+          jdls: {},
           matrix: { os: matrix!.os, node: '', java: '' },
         }),
       });

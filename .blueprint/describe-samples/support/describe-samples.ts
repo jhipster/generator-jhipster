@@ -16,28 +16,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { relative } from 'node:path';
+import { basename, join, relative } from 'node:path';
 
+import { copiedFilesOf, describeGithubSamplesGroup, sampleFilesOf } from '../../../lib/ci/describe-samples.ts';
 import {
-  type BaseSampleDescription,
   type GitHubMatrix,
   type SampleDescription,
   type WorkflowSample,
   convertToGitHubMatrix,
-  describeGithubSamples,
   readSampleConfig,
   sampleMatrixOf,
 } from '../../../lib/ci/index.ts';
 import { getPackageRoot } from '../../../lib/index.ts';
+import { entitiesSamplesDir, githubSamplesGroupFolder } from '../../constants.ts';
+import { entitiesByType } from '../../generate-sample/support/copy-entity-samples.ts';
 import { getWorkflowNames, getWorkflowSamples, isDaily } from '../../generate-sample/support/get-workflow-samples.ts';
 import { type ResolvedSample, resolveSample } from '../../generate-sample/support/resolve-sample.ts';
 import { workflowChoices } from '../../github-build-matrix/command.ts';
+import { samplesGroups } from '../../github-build-matrix/support/samples-groups.ts';
 import { buildDailyWorkflowMatrix, buildWorkflowMatrix } from '../../github-build-matrix/support/workflow-matrix.ts';
 
 export { type SampleDescription, formatSample, formatSamplesList } from '../../../lib/ci/index.ts';
 
 const packageRoot = getPackageRoot();
 const relativeToRoot = (file: string) => relative(packageRoot, file);
+
+/** The files generate-sample copies to the project for a resolved sample, by destination; the entities of a set. */
+const copiedFilesOfResolved = (resolved: ResolvedSample, entityFiles: string[] = resolved.entityFiles): [string, string][] => {
+  if (resolved.generator === 'jdl') {
+    return resolved.jdlSampleFiles.flatMap(file => copiedFilesOf(packageRoot, relativeToRoot(file)));
+  }
+  return [
+    ...(resolved.yoRcFile ? [['.yo-rc.json', relativeToRoot(resolved.yoRcFile)] as [string, string]] : []),
+    ...entityFiles.map(file => [`.jhipster/${basename(file)}`, relativeToRoot(file)] as [string, string]),
+    ...resolved.jdlEntityFiles.flatMap(file => copiedFilesOf(packageRoot, relativeToRoot(file))),
+  ];
+};
 
 const describeResolved = (
   resolved: ResolvedSample,
@@ -46,7 +60,7 @@ const describeResolved = (
   command: string,
 ): SampleDescription => {
   const { sample } = resolved;
-  const base: BaseSampleDescription = {
+  return {
     name: resolved.name,
     workflow,
     jobName: item?.['job-name'] ?? sample?.['job-name'] ?? resolved.name,
@@ -58,24 +72,15 @@ const describeResolved = (
     environment: resolved.profile,
     war: resolved.war || undefined,
     matrix: sampleMatrixOf(item),
-  };
-  if (resolved.generator === 'jdl') {
-    return {
-      ...base,
-      generator: 'jdl',
-      jdlSamples: sample?.['jdl-samples'],
-      jdlSampleFiles: resolved.jdlSampleFiles.map(relativeToRoot),
-    };
-  }
-  return {
-    ...base,
-    generator: 'app',
-    yoRcFile: resolved.yoRcFile ? relativeToRoot(resolved.yoRcFile) : undefined,
-    config: readSampleConfig(resolved.yoRcFile),
-    entitiesSample: resolved.entitiesSample,
-    entityFiles: resolved.entityFiles.map(relativeToRoot),
-    jdlEntity: sample?.['jdl-entity'],
-    jdlEntityFiles: resolved.jdlEntityFiles.map(relativeToRoot),
+    generator: resolved.generator,
+    ...sampleFilesOf(copiedFilesOfResolved(resolved)),
+    ...(resolved.generator === 'jdl' ?
+      { jdlSamples: sample?.['jdl-samples'] }
+    : {
+        config: readSampleConfig(resolved.yoRcFile),
+        entitiesSample: resolved.entitiesSample,
+        jdlEntity: sample?.['jdl-entity'],
+      }),
   };
 };
 
@@ -93,28 +98,32 @@ const describeWorkflowSamples = (workflow: string): SampleDescription[] => {
 };
 
 /** Samples of the group workflows (`github-build-matrix/samples/<workflow>.ts`), a sample folder given with its args. */
-const describeGroupSamples = (workflow: string, samplesFolder: string): Promise<SampleDescription[]> =>
-  describeGithubSamples({
-    samplesGroupFolder: samplesFolder,
-    groups: [workflow],
+const describeGroupSamples = (workflow: string): SampleDescription[] =>
+  describeGithubSamplesGroup({
+    samplesGroupFolder: githubSamplesGroupFolder,
+    group: workflow,
+    samples: samplesGroups[workflow] ?? {},
     root: packageRoot,
     describeSample: ({ name, item, matrix }) => {
       if (item.jdl) return undefined;
       const samplePath = item.sample ?? name;
       const resolved = resolveSample(samplePath.replace(/^samples\//, ''));
       const args = item.args ?? '';
-      const description = describeResolved(resolved, workflow, matrix, `jhipster generate-sample ${samplePath} ${args}`.trim());
-      if (description.generator === 'jdl') return { ...description, name, jobName: name, args: args || undefined };
+      const command = `jhipster generate-sample ${samplePath} ${args}`.trim();
+      if (resolved.generator === 'jdl') {
+        return { ...describeResolved(resolved, workflow, matrix, command), name, jobName: name, args: args || undefined };
+      }
+      // Group samples generate from the `.yo-rc.json` folder and the args: the entity set of the args, no workflow entities.
+      const entitiesSample = /--entities-sample (\S+)/.exec(args)?.[1];
+      const entityFiles = (entitiesByType[entitiesSample ?? ''] ?? []).map(entity => join(entitiesSamplesDir, `${entity}.json`));
       return {
-        ...description,
+        ...describeResolved({ ...resolved, jdlEntityFiles: [] }, workflow, matrix, command),
+        ...sampleFilesOf(copiedFilesOfResolved({ ...resolved, jdlEntityFiles: [] }, entityFiles)),
         name,
         jobName: name,
         args: args || undefined,
-        // Group samples generate from the `.yo-rc.json` folder and the args; the workflow entity sets do not apply.
-        entitiesSample: /--entities-sample (\S+)/.exec(args)?.[1],
-        entityFiles: [],
+        entitiesSample,
         jdlEntity: undefined,
-        jdlEntityFiles: [],
       };
     },
   });
@@ -128,20 +137,12 @@ export const WORKFLOWS = [...workflowChoices.filter(workflow => workflow !== 'ge
 /**
  * Describe the CI samples: what each job generates and the environment it runs on.
  */
-export const describeSamples = async ({
-  workflow,
-  samplesFolder,
-}: {
-  workflow?: string;
-  samplesFolder: string;
-}): Promise<SampleDescription[]> => {
+export const describeSamples = ({ workflow }: { workflow?: string } = {}): SampleDescription[] => {
   const workflows = workflow ? [workflow] : WORKFLOWS;
   const descriptions: SampleDescription[] = [];
   for (const currentWorkflow of workflows) {
     descriptions.push(
-      ...(JSON_WORKFLOWS.has(currentWorkflow) ?
-        describeWorkflowSamples(currentWorkflow)
-      : await describeGroupSamples(currentWorkflow, samplesFolder)),
+      ...(JSON_WORKFLOWS.has(currentWorkflow) ? describeWorkflowSamples(currentWorkflow) : describeGroupSamples(currentWorkflow)),
     );
   }
   return descriptions;

@@ -106,7 +106,9 @@ describe(`generator - ${generator}`, () => {
         workflow: 'daily-neo4j',
         command: 'jhipster generate-sample daily-ngx-neo4j',
         entitiesSample: 'neo4j',
-        yoRcFile: '.blueprint/generate-sample/templates/test-integration/daily-builds/ngx-neo4j/.yo-rc.json',
+        files: expect.objectContaining({
+          '.yo-rc.json': '.blueprint/generate-sample/templates/test-integration/daily-builds/ngx-neo4j/.yo-rc.json',
+        }),
         matrix: { os: 'ubuntu-latest', node: expect.any(String), java: '25' },
       });
     });
@@ -125,12 +127,14 @@ describe(`generator - ${generator}`, () => {
       expect(ngDefault).toMatchObject({
         jobName: expect.stringMatching(/^ng-default \(n.*\/j.*\)$/),
         command: 'jhipster generate-sample ng-default',
-        yoRcFile: '.blueprint/generate-sample/templates/test-integration/samples/ng-default/.yo-rc.json',
         config: expect.objectContaining({ clientFramework: 'angular', databaseType: 'sql' }),
         entitiesSample: 'sqlfull',
         matrix: { os: 'ubuntu-latest', node: expect.any(String), java: expect.any(String) },
       });
-      expect(ngDefault.entityFiles).toContain('.blueprint/generate-sample/templates/test-integration/samples/.jhipster/BankAccount.json');
+      expect(ngDefault.files).toMatchObject({
+        '.yo-rc.json': '.blueprint/generate-sample/templates/test-integration/samples/ng-default/.yo-rc.json',
+        '.jhipster/BankAccount.json': '.blueprint/generate-sample/templates/test-integration/samples/.jhipster/BankAccount.json',
+      });
       expect(runResult.generator.format()).toMatch(/^workflow\s+sample\s+job\s+app sample\s+entities\s+jdl\s+os\s+node\s+java/);
     });
   });
@@ -144,9 +148,11 @@ describe(`generator - ${generator}`, () => {
       const [sample] = runResult.generator.samples;
       assert(sample.generator === 'app');
       expect(sample.jdlEntity).toBe('*');
-      expect(sample.jdlEntityFiles).toContain('.blueprint/generate-sample/templates/test-integration/samples/jdl-entities/custom-id.jdl');
+      expect(sample.jdls['custom-id.jdl']).toEqual({
+        file: '.blueprint/generate-sample/templates/test-integration/samples/jdl-entities/custom-id.jdl',
+      });
       expect(sample.generatorOptions).toEqual({ removeNeedles: true, e2eTls: true });
-      expect(runResult.generator.format()).toContain('jdl entities:');
+      expect(runResult.generator.format()).toMatch(/\njdl:\n(.*\n)* {2}custom-id\.jdl: /);
     });
   });
 
@@ -165,6 +171,11 @@ describe(`generator - ${generator}`, () => {
           'jhipster generate-sample samples/ng-default --auth oauth2 --sample-yorc-folder --entities-sample sqllight --microfrontend',
         entitiesSample: 'sqllight',
         config: expect.objectContaining({ clientFramework: 'angular' }),
+        // The `.yo-rc.json` of the folder and the entity set of the args.
+        files: expect.objectContaining({
+          '.yo-rc.json': expect.stringMatching(/samples\/ng-default\/\.yo-rc\.json$/),
+          '.jhipster/BankAccount.json': expect.stringMatching(/samples\/\.jhipster\/BankAccount\.json$/),
+        }),
       });
     });
   });
@@ -181,7 +192,7 @@ describe(`generator - ${generator}`, () => {
         generator: 'jdl',
         command: "jhipster generate-sample 'gradle-reactive(true)'",
         config: { buildTool: 'gradle', reactive: true, graalvmSupport: true, testFrameworks: ['cypress'] },
-        jdl: expect.stringContaining('graalvmSupport true'),
+        jdls: { [`${sample.name}.jdl`]: { content: expect.stringContaining('graalvmSupport true') } },
       });
     });
   });
