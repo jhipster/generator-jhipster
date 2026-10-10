@@ -16,15 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.ts';
-export { default as command } from './command.ts';
-export {
-  type SampleDescription,
-  type SampleGroupDescription,
-  type SampleGroupSummary,
-  type SampleJDL,
-  type SampleSummary,
-  describeSample,
-  describeSampleGroup,
-  describeSampleGroups,
-} from './support/describe-samples.ts';
+import { describe, expect, it } from 'esmocha';
+
+import { getGithubSamplesGroup, getGithubSamplesGroups } from '../../../lib/ci/index.ts';
+import { githubSamplesGroupFolder } from '../../constants.ts';
+
+import { samplesGroups } from './samples-groups.ts';
+
+describe('samples-groups', () => {
+  it('should list every samples group of the folder', async () => {
+    expect(Object.keys(samplesGroups).sort()).toEqual((await getGithubSamplesGroups(githubSamplesGroupFolder)).sort());
+  });
+
+  it('should give the samples getGithubSamplesGroup reads', async () => {
+    for (const [group, samples] of Object.entries(samplesGroups)) {
+      expect(samples).toEqual((await getGithubSamplesGroup(githubSamplesGroupFolder, group)).samples);
+    }
+  });
+});

@@ -28,9 +28,8 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async describe() {
-        const samplesFolder = this.templatePath('../../github-build-matrix/samples/');
-        const samples = await describeSamples({ workflow: this.workflow, samplesFolder });
+      describe() {
+        const samples = describeSamples({ workflow: this.workflow });
         this.samples =
           this.sampleName ? samples.filter(sample => sample.name === this.sampleName || sample.jobName === this.sampleName) : samples;
         if (this.sampleName && this.samples.length === 0) {
