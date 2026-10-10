@@ -37,6 +37,3 @@ export type YoRcJHipsterContent<Content extends YoRcConfigValue = YoRcConfigValu
 
 export type YoRcJHipsterApplicationContent<Content extends YoRcJHipsterApplicationConfigValue = YoRcJHipsterApplicationConfigValue> =
   YoRcFileContent<Content, typeof GENERATOR_JHIPSTER>;
-
-export type YoRcJHipsterDeploymentContent<Content extends YoRcJHipsterDeploymentConfigValue = YoRcJHipsterDeploymentConfigValue> =
-  YoRcFileContent<Content, typeof GENERATOR_JHIPSTER>;

@@ -135,10 +135,6 @@ export type ParsedJDLOption = Kinded<'Option'> & {
   optionValue?: string;
 } & ParsedJDLOptionConfig;
 
-export type ParsedJDLBinaryOption = {
-  optionValue: string;
-} & ParsedJDLOption;
-
 export type ParsedJDLUseOption = Located &
   Kinded<'UseOption'> & {
     optionValues: string[];
