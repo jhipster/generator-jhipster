@@ -23,19 +23,21 @@ import type { JDLRuntime } from '../jdl/core/parsing/types/runtime.ts';
 
 import { getDefaultJDLEntityConfig } from './jdl-entity-config.ts';
 import { getDefaultJDLFieldTypesConfig } from './jdl-field-types-config.ts';
+import { getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';
 import { jhipsterSemanticRules } from './jdl-semantic-rules.ts';
 import { getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
 /**
- * The JHipster definitions: the application and deployment options of the generators, the entity option statements, the
- * field validations and types, and the semantic rules of JHipster. JHipster adds no relationship option to the ones of the
- * language, and lists no built-in entity for now, so `with builtInEntity` accepts any destination, as it always did.
+ * The JHipster definitions: the application and deployment options of the generators, the entity and relationship option
+ * statements, the field validations and types, and the semantic rules of JHipster. JHipster lists no built-in entity for
+ * now, so `with builtInEntity` accepts any destination, as it always did.
  */
-export const getDefaultJDLDefinitions = (): Required<Omit<JDLDefinitions, 'relationship' | 'builtInEntities'>> => ({
+export const getDefaultJDLDefinitions = (): Required<Omit<JDLDefinitions, 'builtInEntities'>> => ({
   application: getDefaultJDLApplicationConfig(),
   deployment: getDefaultJDLDeploymentConfig(),
   entity: getDefaultJDLEntityConfig(),
+  relationship: getDefaultJDLRelationshipConfig(),
   validation: getDefaultJDLValidationConfig(),
   fieldTypes: getDefaultJDLFieldTypesConfig(),
   rules: jhipsterSemanticRules,
@@ -48,7 +50,7 @@ export const createJDLRuntime = (definitions: Partial<JDLDefinitions> = {}): JDL
     application: definitions.application ?? defaults.application,
     deployment: definitions.deployment ?? defaults.deployment,
     entity: definitions.entity ?? defaults.entity,
-    relationship: definitions.relationship,
+    relationship: definitions.relationship ?? defaults.relationship,
     builtInEntities: definitions.builtInEntities,
     validation: definitions.validation ?? defaults.validation,
     fieldTypes: definitions.fieldTypes ?? defaults.fieldTypes,
