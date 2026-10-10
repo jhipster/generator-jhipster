@@ -23,8 +23,7 @@ import { basename, join, resolve } from 'node:path';
 
 import { simpleGit } from 'simple-git';
 
-import { testBlueprintSupport } from '../../test/support/tests.ts';
-
+import { testBlueprintSupport } from '#test-support';
 import { runResult, skipPrettierHelpers as helpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
