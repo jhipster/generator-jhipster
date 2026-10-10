@@ -18,7 +18,7 @@
  */
 import BaseGenerator from '../../generators/base-core/index.ts';
 
-import { type SampleDescription, WORKFLOWS, describeSamples, formatSample, formatSamplesList } from './support/describe-samples.ts';
+import { type SampleDescription, findSamples, formatSample, formatSamplesList } from './support/describe-samples.ts';
 
 export default class extends BaseGenerator {
   sampleName?: string;
@@ -28,13 +28,8 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async describe() {
-        const samples = describeSamples({ workflow: this.workflow });
-        this.samples =
-          this.sampleName ? samples.filter(sample => sample.name === this.sampleName || sample.jobName === this.sampleName) : samples;
-        if (this.sampleName && this.samples.length === 0) {
-          throw new Error(`Sample ${this.sampleName} not found in the ${this.workflow ?? WORKFLOWS.join(', ')} workflow samples`);
-        }
+      describe() {
+        this.samples = findSamples({ sampleName: this.sampleName, workflow: this.workflow });
         // Print on stdout so `--json` can be piped; `this.log` writes to stderr.
         // eslint-disable-next-line no-console
         console.log(this.format());
