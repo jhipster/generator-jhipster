@@ -1128,6 +1128,63 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   ) { %>.toString()<% } %>))<%- reactive ? '' : ')' %>
 <%_ } _%>;
     }
+<%_ if (databaseTypeCouchbase && !paginationNo) { _%>
+  <%_ const sortField = fieldsToTest.find(field => !field.fieldTypeBinary); _%>
+
+    @Test
+    void getAll<%- entityClassPlural %>SortedByTheirProperties() <%- reactive ? '' : 'throws Exception ' %>{
+        // Initialize the database
+  <%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+    <%_ } _%>
+  <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        for (String sort : new String[] { "<%- primaryKey.name %>,asc"<% if (sortField) { %>, "<%- sortField.fieldName %>,asc", "<%- sortField.fieldName %>,desc"<% } %> }) {
+  <%_ if (reactive) { _%>
+            webTestClient.get().uri(ENTITY_API_URL + "?sort=" + sort)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>));
+  <%_ } else { _%>
+            rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=" + sort))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>)));
+  <%_ } _%>
+        }
+    }
+
+    @Test
+    void getAll<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
+  <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=doesNotExist,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+  <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=doesNotExist,asc"))
+            .andExpect(status().isBadRequest());
+  <%_ } _%>
+    }
+  <%_ if (searchEngineCouchbase) { _%>
+
+    @Test
+    void search<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
+    <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc"))
+            .andExpect(status().isBadRequest());
+    <%_ } _%>
+    }
+  <%_ } _%>
+<%_ } _%>
 <% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
   <%_ const imperativeEagerLoadMockResult = paginationNo ? 'new ArrayList<>()' : 'new PageImpl(new ArrayList<>())'; _%>
   <%_ const eagerLoadMockResult = reactive ? 'Flux.empty()' : imperativeEagerLoadMockResult; _%>
