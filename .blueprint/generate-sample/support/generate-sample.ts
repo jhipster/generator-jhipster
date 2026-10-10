@@ -26,7 +26,7 @@ import { jdlSamplesFolder } from '../../constants.ts';
 
 import copyEntitySamples from './copy-entity-samples.ts';
 import copyJdlEntitySamples from './copy-jdl-entity-samples.ts';
-import { resolveGroupJdlSample, resolveSample } from './resolve-sample.ts';
+import { groupWorkflowSample, resolveGroupSample, resolveSample } from './resolve-sample.ts';
 
 export const generateSample = async (
   sampleName = process.env.JHI_APP,
@@ -44,17 +44,22 @@ export const generateSample = async (
     throw new Error('Sample name is required');
   }
 
-  const resolved = resolveSample(sampleName, { entity: passedEntity });
-  const { sample, profile, war, entitiesSample, jdlEntityNames, jdlSampleNames, yoRcFile } = resolved;
-
-  if (!sample) {
-    const groupSample = await resolveGroupJdlSample(sampleName);
-    if (groupSample) {
-      return { generator: 'jdl', inline: groupSample.jdl };
+  let resolved = resolveSample(sampleName, { entity: passedEntity });
+  if (!resolved.sample) {
+    // A sample of a group workflow: a jdl, or a `.yo-rc.json` folder with its entities and options.
+    const groupSample = await resolveGroupSample(sampleName);
+    if (groupSample?.sample.jdl) {
+      return { generator: 'jdl', inline: groupSample.sample.jdl };
     }
-    // eslint-disable-next-line no-console
-    console.log(`Sample ${sampleName} was not found`);
+    const sample = groupSample && groupWorkflowSample(sampleName, groupSample);
+    if (sample) {
+      resolved = resolveSample(sampleName, { entity: passedEntity, sample });
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`Sample ${sampleName} was not found`);
+    }
   }
+  const { sample, profile, war, entitiesSample, jdlEntityNames, jdlSampleNames, yoRcFile } = resolved;
 
   const generatorOptions = {
     ...(profile ? { defaultEnvironment: profile } : {}),
