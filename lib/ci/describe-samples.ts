@@ -61,8 +61,6 @@ export type SampleDescription = {
   jobName: string;
   disabled?: boolean;
   sonar?: boolean;
-  /** The command that generates the sample. */
-  command: string;
   /** The generator the sample is generated with: the jdl one from its jdl, the app one from its `.yo-rc.json`. */
   generator: 'jdl' | 'app';
   /** The files copied to the project but the jdl ones: the path in the project, relative to it, to the source file. */
@@ -72,7 +70,6 @@ export type SampleDescription = {
   /** The configuration of the application worth showing. */
   config?: Record<string, unknown>;
   generatorOptions?: Record<string, unknown>;
-  args?: string;
   environment?: string;
   war?: boolean;
   /** The entity set of the `.jhipster` files, `jdl-entity` and `jdl-samples` values of a workflow sample. */
@@ -151,8 +148,6 @@ export type DescribeGithubSamplesOptions = {
   groups?: string[];
   /** The folder the described files are relative to. */
   root: string;
-  /** The command line of the generator, `jhipster` for generator-jhipster, the cli of a blueprint otherwise. */
-  cli?: string;
   /** Describes a sample the contract does not define, like a sample folder given with its arguments. */
   describeSample?: (sample: {
     name: string;
@@ -172,7 +167,6 @@ export const describeGithubSamplesGroup = ({
   group,
   samples,
   root,
-  cli = 'jhipster',
   describeSample,
 }: Omit<DescribeGithubSamplesOptions, 'groups'> & { group: string; samples: GitHubMatrixGroup }): SampleDescription[] => {
   const relativeToRoot = (file: string) => relative(root, file);
@@ -190,7 +184,6 @@ export const describeGithubSamplesGroup = ({
       workflow: group,
       jobName: name,
       disabled: item.disabled ? true : undefined,
-      command: `${cli} generate-sample '${name}'`,
       generatorOptions: item.generatorOptions,
       matrix: sampleMatrixOf(entry),
     };
@@ -274,13 +267,11 @@ export const formatSamplesList = (samples: SampleDescription[]): string =>
 
 export const formatSample = (sample: SampleDescription): string => {
   const lines = [`${sample.name} (${sample.workflow} workflow, job ${sample.jobName}${sample.disabled ? ', disabled' : ''})`];
-  lines.push(`command: ${sample.command}`);
   lines.push(`environment: ${sample.matrix.os}, node ${sample.matrix.node}, java ${sample.matrix.java}`);
   if (sample.environment || sample.war) {
     lines.push(`profile: ${sample.environment ?? ''}${sample.war ? ' (war)' : ''}`.trim());
   }
   if (sample.generatorOptions) lines.push(`generator options: ${JSON.stringify(sample.generatorOptions)}`);
-  if (sample.args) lines.push(`args: ${sample.args}`);
   if (sample.config) {
     const configurationFile = sample.files['.yo-rc.json'];
     lines.push('', `configuration${configurationFile ? ` (${configurationFile})` : ''}:`);
