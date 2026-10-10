@@ -58,6 +58,7 @@ export type SampleDescription = {
   name: string;
   /** The workflow, or samples group, of the sample. */
   workflow: string;
+  /** The job name the sample defines, the sample name by default, without the environment its CI job name appends. */
   jobName: string;
   disabled?: boolean;
   sonar?: boolean;
