@@ -23,7 +23,7 @@ import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ if (relationships.length !== 0) { _%>
 import org.springframework.data.couchbase.repository.Query;
 import org.springframework.data.domain.Pageable;
-import static <%- packageName %>.repository.JHipsterCouchbaseRepository.pageableStatement;
+import org.springframework.data.domain.Sort;
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.ScanConsistency;
   <%_ if (reactive) { _%>
@@ -61,7 +61,7 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
 
     String WHERE = " WHERE b.type = '" + TYPE_NAME + "'";
 
-    default <%- pageOrFlux %><<%- persistClass %>> findAll(Pageable pageable) {
+    default <%- pageOrFlux %><<%- persistClass %>> findAll<%- reactive ? 'By' : '' %>(Pageable pageable) {
         return
         <%- reactive ? '' : 'new PageImpl<>(' %>
             findAll(pageableStatement(pageable, "b"))
@@ -69,6 +69,10 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
             pageable,
             count()
         )<% } %>;
+    }
+
+    default <%- listOrFlux %><<%- persistClass %>> findAll(Sort sort) {
+        return findAll(sortStatement(sort, "b"));
     }
 
     @Query(SELECT + JOIN + WHERE + " #{[0]}")
