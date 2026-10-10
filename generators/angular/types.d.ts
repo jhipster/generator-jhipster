@@ -30,7 +30,7 @@ export type AngularFieldClientConstant = {
   angularConstantName: string;
   /** Import path of the constant. */
   angularConstantImportPath: string;
-  /** Typescript type of a single value. */
+  /** TypeScript type of a single value. */
   angularConstantTsType: string;
   /** Expression that evaluates to the list of values. */
   angularConstantValues: string;
@@ -55,7 +55,7 @@ export type Relationship = ClientRelationship & {
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ClientEntity<F, R> {
   /**
    * @experimental to be replaced with a calculated property
-   * Returns the typescript import section of enums referenced by all fields of the entity.
+   * Returns the TypeScript import section of enums referenced by all fields of the entity.
    * @param fields returns the import of enums that are referenced by the fields
    * @returns {typeImports:Map} the fields that potentially contains some enum types
    */
