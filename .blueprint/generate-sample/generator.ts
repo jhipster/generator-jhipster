@@ -159,7 +159,10 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
               generatorOptions: { ...generatorOptions, jsonOnly: true, destinationRoot: this.projectFolder },
             });
           }
-          await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
+          // The command of the `.yo-rc.json` of the sample, like a `.yo-rc.json` folder given with --sample-yorc-folder.
+          const defaultCommand =
+            (this.fs.readJSON(`${this.projectFolder}/.yo-rc.json`) as any)?.['generator-jhipster']?.defaultCommand ?? GENERATOR_APP;
+          await this.composeWithJHipster(defaultCommand, { generatorOptions });
         }
       },
       async generateYoRcSample() {

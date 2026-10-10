@@ -160,6 +160,21 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with generate-blueprint-typescript, a blueprint sample', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withArguments('generate-blueprint-typescript')
+        .withMockedGenerators(['jhipster:generate-blueprint', 'jhipster:info']);
+    });
+
+    it('should generate the .yo-rc.json of its folder by its defaultCommand, with its options', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { defaultCommand: 'generate-blueprint' } });
+      const [, options] = runResult.getGeneratorMock('jhipster:generate-blueprint').calls.at(-1)!.arguments;
+      expect(options).toMatchObject({ linkJhipsterDependency: true });
+    });
+  });
+
   describe(`with daily-builds/ngx-oauth2 (daily-builds sample)`, () => {
     before(async () => {
       await helpers
