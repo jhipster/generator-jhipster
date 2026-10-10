@@ -214,6 +214,15 @@ export class UserManagementDeleteDialog {
       >
         <fa-icon icon="pencil-alt" />&nbsp;<span>Edit</span>
       </button>
+
+      <button
+        type="button"
+        (click)="delete(userManagementRef)"
+        class="btn btn-danger"
+        data-cy="entityDeleteButton"
+      >
+        <fa-icon icon="times" />&nbsp;<span>Delete</span>
+      </button>
     </div>
     }
   </div>
@@ -227,7 +236,14 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter, withComponentInputBinding } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
-import { faArrowLeft, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faPencilAlt,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+
 import { of } from "rxjs";
 
 import { UserManagementDetail } from "./user-management-detail";
@@ -239,6 +255,8 @@ describe("UserManagement Management Detail Component", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        { provide: NgbModal, useValue: { open: vi.fn() } },
+
         provideRouter(
           [
             {
@@ -259,6 +277,8 @@ describe("UserManagement Management Detail Component", () => {
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
+
+    library.addIcons(faTimes);
   });
 
   beforeEach(() => {
@@ -290,7 +310,10 @@ describe("UserManagement Management Detail Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
-    "contents": "import { Component, input } from "@angular/core";
+    "contents": "import { Component, inject, input } from "@angular/core";
+import { Router } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { filter, tap } from "rxjs";
 import { RouterLink } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -301,6 +324,8 @@ import {
   FormatMediumDatePipe,
 } from "app/shared/date";
 import { IUserManagement } from "../user-management.model";
+import { ITEM_DELETED_EVENT } from "app/config";
+import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
   selector: "jhi-user-management-detail",
@@ -315,9 +340,25 @@ import { IUserManagement } from "../user-management.model";
 })
 export class UserManagementDetail {
   readonly userManagement = input<IUserManagement | null>(null);
+  private readonly modalService = inject(NgbModal);
+  private readonly router = inject(Router);
 
   previousState(): void {
     globalThis.history.back();
+  }
+
+  delete(userManagement: IUserManagement): void {
+    const modalRef = this.modalService.open(UserManagementDeleteDialog, {
+      size: "lg",
+      backdrop: "static",
+    });
+    modalRef.componentInstance.userManagement = userManagement;
+    modalRef.closed
+      .pipe(
+        filter((reason) => reason === ITEM_DELETED_EVENT),
+        tap(() => void this.router.navigate(["/user-management"])),
+      )
+      .subscribe();
   }
 }
 ",

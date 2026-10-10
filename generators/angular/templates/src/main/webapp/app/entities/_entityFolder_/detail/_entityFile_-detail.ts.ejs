@@ -16,7 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, <%- anyFieldIsBlobDerived ? 'inject, ' : '' %>input } from '@angular/core';
+import { Component, <%- anyFieldIsBlobDerived || !readOnly ? 'inject, ' : '' %>input } from '@angular/core';
+<%_ if (!readOnly) { _%>
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+import { filter, tap } from 'rxjs';
+<%_ } _%>
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
 import { RouterLink } from '@angular/router';
 <%_ } _%>
@@ -34,6 +39,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+<%_ if (!readOnly) { _%>
+import { ITEM_DELETED_EVENT } from 'app/config';
+import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util';
 import { type BlobType } from 'app/shared/jhipster/data-utils';
@@ -71,6 +80,10 @@ import { type BlobType } from 'app/shared/jhipster/data-utils';
 })
 export class <%- entityAngularName %>Detail {
     readonly <%- entityInstance %> = input<I<%- entityAngularName %> | null>(null);
+<%_ if (!readOnly) { _%>
+    private readonly modalService = inject(NgbModal);
+    private readonly router = inject(Router);
+<%_ } _%>
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     private readonly dataUtils = inject(DataUtils);
@@ -87,5 +100,18 @@ export class <%- entityAngularName %>Detail {
     previousState(): void {
         globalThis.history.back();
     }
+
+<%_ if (!readOnly) { _%>
+    delete(<%- entityInstance %>: I<%- entityAngularName %>): void {
+      const modalRef = this.modalService.open(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.<%- entityInstance %> = <%- entityInstance %>;
+      modalRef.closed
+        .pipe(
+          filter(reason => reason === ITEM_DELETED_EVENT),
+          tap(() => void this.router.navigate(['/<%- entityPage %>'])),
+        )
+        .subscribe();
+    }
+<%_ } _%>
 
 }

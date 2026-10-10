@@ -20,9 +20,10 @@ import { defineComponent, inject, ref, type Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import { useDateFormat } from '@/shared/composables'
+import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 import UserManagementService from './user-management.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
@@ -30,12 +31,14 @@ export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>UserManagementView',
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const { formatDateLong: formatDate } = useDateFormat();
 
     const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const user: Ref = ref(null);
+    const removeId: Ref<<%- user.primaryKey.tsType %>> = ref(null);
 
     async function loadUser(userId: string) {
       try {
@@ -53,9 +56,45 @@ export default defineComponent({
       alertService,
       userManagementService,
       user,
+      removeId,
+      router,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
     };
+  },
+  methods: {
+    deleteUser(): void {
+      this.userManagementService
+        .remove(this.removeId)
+        .then(res => {
+          const message = getMessageFromHeaders(res.headers);
+          this.alertService.showInfo(
+<%_ if (enableTranslation) { _%>
+            message.alertKey ? this.t$(message.alertKey, { param: message.param }) : message.alertMessage,
+<%_ } else { _%>
+            message.alertMessage,
+<%_ } _%>
+            { variant: 'danger' },
+          );
+          this.removeId = null;
+          this.closeDialog();
+          this.router.push({ name: '<%- jhiPrefixCapitalized %>User' });
+        })
+        .catch(error => {
+          this.alertService.showHttpError(error.response);
+        });
+    },
+    prepareRemove(instance): void {
+      this.removeId = instance.login;
+      if (this.$refs.removeUser as any) {
+        (this.$refs.removeUser as any).show();
+      }
+    },
+    closeDialog(): void {
+      if (this.$refs.removeUser as any) {
+        (this.$refs.removeUser as any).hide();
+      }
+    },
   },
 });
