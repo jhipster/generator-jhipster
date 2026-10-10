@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.ts';
-import type JDLJSONEntity from '../basic-types/json-entity.ts';
 
 export type JDLJSONApplicationContent = Record<string, any>;
 
@@ -52,9 +51,4 @@ export type JhipsterJSONJDLApplicationExporter = {
   forSeveralApplications?: boolean;
   name: string;
   type: string;
-};
-
-export type JhipsterJSONJDLExporterWrapper = {
-  entities: JDLJSONEntity[];
-  application: JhipsterJSONJDLApplicationExporter;
 };
