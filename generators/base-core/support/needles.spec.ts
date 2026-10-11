@@ -19,8 +19,6 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import test from 'node:test';
 
-import { defaultHelpers as helpers } from '../../../lib/testing/helpers.ts';
-
 import {
   checkContentIn,
   convertToPrettierExpressions,
@@ -29,6 +27,8 @@ import {
   getNeedlesPositions,
   insertContentBeforeNeedle,
 } from './needles.ts';
+
+import { defaultHelpers as helpers } from '#testing';
 
 describe('needles - support', () => {
   describe('convertToPrettierExpressions', () => {
