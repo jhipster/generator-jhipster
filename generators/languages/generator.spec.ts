@@ -19,10 +19,9 @@
 import { before, describe, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
-
 import Generator from './index.ts';
 
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const GENERATOR_LANGUAGES = 'languages';

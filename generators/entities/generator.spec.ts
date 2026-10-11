@@ -19,11 +19,11 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import Generator from './generator.ts';
 
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);

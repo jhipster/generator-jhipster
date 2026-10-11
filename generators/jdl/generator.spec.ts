@@ -22,11 +22,11 @@ import { basename } from 'node:path';
 import type EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { getDefaultJDLDefinitions } from '../../lib/jdl-config/jdl-runtime.ts';
 import { buildJDLApplicationConfig } from '../../lib/jdl-config/jhipster-jdl-config.ts';
-import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
+import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);

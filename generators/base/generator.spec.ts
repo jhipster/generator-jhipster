@@ -22,10 +22,10 @@ import { basename } from 'node:path';
 import { passthrough } from '@yeoman/transform';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
-import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import BaseGenerator from './index.ts';
 
+import { getCommandHelpOutput, shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
