@@ -25,6 +25,7 @@ const defaultCommands = {
   'describe-samples': {
     desc: 'Describe the CI samples: what each job generates and the environment it runs on',
     blueprint: '@jhipster/jhipster-dev',
+    silentLogo: true,
   },
   'from-issue': {
     desc: 'Generate a sample from issue',
