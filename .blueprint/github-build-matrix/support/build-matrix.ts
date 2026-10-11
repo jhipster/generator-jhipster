@@ -146,13 +146,18 @@ export const buildMatrix = async ({
     }
   }
 
-  Object.values(matrix).forEach(job => {
-    Object.assign(job, {
-      'build-jhipster-bom': BUILD_JHIPSTER_BOM,
-      'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
-      'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
-    });
-  });
+  // New jobs: the ones of a group are the objects of its module, shared by every reader of the group.
+  matrix = Object.fromEntries(
+    Object.entries(matrix).map(([name, job]) => [
+      name,
+      {
+        ...job,
+        'build-jhipster-bom': BUILD_JHIPSTER_BOM,
+        'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
+        'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
+      },
+    ]),
+  );
 
   return convertToGitHubMatrixInclude ? convertToGitHubMatrix(matrix, { randomEnvironment, useVersionPlaceholders }) : matrix;
 };

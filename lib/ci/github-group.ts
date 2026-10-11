@@ -37,6 +37,10 @@ const assertGroupInFolder = (samplesGroupFolder: string, group: string): void =>
   }
 };
 
+/** The samples of a group defined by code (a `.js` or `.ts` module), each tagged with its group. */
+export const githubSamplesGroupOf = (group: string, samples: GitHubMatrixGroup = {}): GitHubMatrixGroup =>
+  Object.fromEntries(Object.entries(samples).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]));
+
 export const getGithubSamplesGroup = async (
   samplesGroupFolder: string,
   group: string,
@@ -49,9 +53,7 @@ export const getGithubSamplesGroup = async (
   if (groupExt === 'js' || groupExt === 'ts') {
     const jsGroup: { default?: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.${groupExt}`));
     // A module without default export defines no sample.
-    samples = Object.fromEntries(
-      Object.entries(jsGroup.default ?? {}).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]),
-    );
+    samples = githubSamplesGroupOf(group, jsGroup.default);
   } else if (groupExt === 'json') {
     const jsonFile = await readFile(join(samplesGroupFolder, `${group}.json`));
     samples = Object.fromEntries(

@@ -17,9 +17,20 @@
  * limitations under the License.
  */
 
-export * from './describe-samples.ts';
+// The helpers the dev blueprint describes its samples with stay internal: copiedFilesOf, sampleFilesOf,
+// describeGithubSamplesGroup and githubSamplesGroupOf.
+export {
+  type DescribeGithubSamplesOptions,
+  type SampleDescription,
+  describeGithubSamples,
+  formatSample,
+  formatSamplesList,
+  readSampleConfig,
+  readSampleJDLConfig,
+  sampleMatrixOf,
+} from './describe-samples.ts';
 export * from './github.ts';
-export * from './github-group.ts';
+export { type GithubSample, getGithubSamples, getGithubSamplesGroup, getGithubSamplesGroups } from './github-group.ts';
 export * from './github-matrix.ts';
 export * from './sample-config.ts';
 
