@@ -124,7 +124,7 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
   }
 
   get postPreparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
+    return this.asPostPreparingEachEntityTaskGroup({
       prepareForTemplates({ entity }) {
         mutateData(entity, {
           generateEntityPlaywright: ({ builtInUserManagement, skipClient }) => !skipClient || builtInUserManagement,

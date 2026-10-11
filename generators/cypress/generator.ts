@@ -140,7 +140,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get postPreparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
+    return this.asPostPreparingEachEntityTaskGroup({
       prepareForTemplates({ entity }) {
         mutateData(entity, {
           generateEntityCypress: ({ builtInUserManagement, skipClient }) => !skipClient || builtInUserManagement,
