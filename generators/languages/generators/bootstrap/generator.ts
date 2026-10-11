@@ -97,9 +97,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareField({ entity, field }) {
-        mutateData(field, {
-          __override__: false,
+      prepareField({ entity, fieldDefaults }) {
+        fieldDefaults({
           propertyTranslationKey: ({ fieldTranslationKey, fieldName }) => fieldTranslationKey ?? `${entity.i18nKeyPrefix}.${fieldName}`,
           fieldTranslationKey: ({ propertyTranslationKey }) => propertyTranslationKey,
         });
@@ -113,9 +112,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ entity, relationship }) {
-        mutateData(relationship, {
-          __override__: false,
+      prepareRelationship({ entity, relationshipDefaults }) {
+        relationshipDefaults({
           propertyTranslationKey: ({ relationshipName }) => `${entity.i18nKeyPrefix}.${relationshipName}`,
         });
       },

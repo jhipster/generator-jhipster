@@ -305,9 +305,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ entity, relationship }) {
-        mutateData(relationship, {
-          __override__: false,
+      prepareRelationship({ entity, relationshipDefaults }) {
+        relationshipDefaults({
           propertyTsType: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
             relationshipSerializePrimaryKeyOnly ? otherEntity.primaryKey!.tsType : `I${otherEntity.entityAngularName}`,
           relationshipShouldUsePick: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
