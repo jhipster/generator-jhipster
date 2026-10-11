@@ -1,0 +1,97 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%- packageName %>.config;
+
+import java.util.Collection;
+import java.util.Objects;
+import org.springframework.beans.BeanUtils;
+import org.springframework.core.CollectionFactory;
+import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter;
+import org.springframework.data.couchbase.core.mapping.CouchbaseDocument;
+import org.springframework.data.couchbase.core.mapping.CouchbaseList;
+import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
+import org.springframework.data.couchbase.core.mapping.CouchbasePersistentProperty;
+import org.springframework.data.mapping.context.MappingContext;
+import org.springframework.data.mapping.model.ConvertingPropertyAccessor;
+
+/**
+ * Stores the entities of the relationships as their keys, and reads the keys as entities with their ids.
+ * A relationship is a property whose type is an entity with an id; an embedded entity has none, and is stored in the document.
+ * The related entities are never written themselves: Spring Data would write each of them, and the entities they refer to, without
+ * end when they refer back. The queries with a join read the related entities, as Spring Data does.
+ */
+public class EntityReferencesMappingCouchbaseConverter extends MappingCouchbaseConverter {
+
+    public EntityReferencesMappingCouchbaseConverter(
+        MappingContext<? extends CouchbasePersistentEntity<?>, CouchbasePersistentProperty> mappingContext,
+        String typeKey,
+        CustomConversions conversions
+    ) {
+        super(mappingContext, typeKey, conversions);
+    }
+
+    @Override
+    protected void writePropertyInternal(
+        Object source,
+        CouchbaseDocument target,
+        CouchbasePersistentProperty prop,
+        ConvertingPropertyAccessor accessor
+    ) {
+        CouchbasePersistentEntity<?> related = source != null ? relatedEntity(prop) : null;
+        if (related == null) {
+            super.writePropertyInternal(source, target, prop, accessor);
+        } else if (source instanceof Collection<?> entities) {
+            CouchbaseList keys = new CouchbaseList();
+            entities.stream().map(entity -> related.getIdentifierAccessor(entity).getIdentifier()).filter(Objects::nonNull).forEach(keys::put);
+            target.put(prop.getFieldName(), keys);
+        } else {
+            Object key = related.getIdentifierAccessor(source).getIdentifier();
+            if (key != null) {
+                target.put(prop.getFieldName(), key);
+            }
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <R> R readValue(Object value, CouchbasePersistentProperty prop, Object parent, boolean noDecrypt) {
+        CouchbasePersistentEntity<?> related = relatedEntity(prop);
+        if (related != null && value instanceof String key) {
+            return (R) reference(related, key);
+        }
+        if (related != null && value instanceof CouchbaseList keys && keys.export().stream().allMatch(String.class::isInstance)) {
+            Collection<Object> references = CollectionFactory.createCollection(prop.getType(), keys.size());
+            keys.export().forEach(key -> references.add(reference(related, key)));
+            return (R) references;
+        }
+        return super.readValue(value, prop, parent, noDecrypt);
+    }
+
+    private CouchbasePersistentEntity<?> relatedEntity(CouchbasePersistentProperty prop) {
+        CouchbasePersistentEntity<?> entity = prop.isEntity() ? getMappingContext().getPersistentEntity(prop) : null;
+        return entity != null && entity.hasIdProperty() ? entity : null;
+    }
+
+    private static Object reference(CouchbasePersistentEntity<?> entity, Object key) {
+        Object reference = BeanUtils.instantiateClass(entity.getType());
+        entity.getPropertyAccessor(reference).setProperty(entity.getRequiredIdProperty(), key);
+        return reference;
+    }
+}

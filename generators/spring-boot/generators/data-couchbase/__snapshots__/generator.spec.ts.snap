@@ -47,6 +47,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/EurekaWorkaroundConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -284,6 +287,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -324,6 +330,9 @@ exports[`generator - couchbase gateway-jwt-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
@@ -493,6 +502,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -637,6 +649,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
   "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -665,6 +680,9 @@ exports[`generator - couchbase gateway-jwt-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
@@ -808,6 +826,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -993,6 +1014,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -1030,6 +1054,9 @@ exports[`generator - couchbase gateway-oauth2-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
@@ -1149,6 +1176,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -1280,6 +1310,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -1308,6 +1341,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
@@ -1436,6 +1472,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/EurekaWorkaroundConfiguration.java": {
@@ -1579,6 +1618,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -1607,6 +1649,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
@@ -1741,6 +1786,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -1878,6 +1926,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -1906,6 +1957,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
@@ -1998,6 +2052,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -2237,6 +2294,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -2277,6 +2337,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
@@ -2446,6 +2509,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2581,6 +2647,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -2609,6 +2678,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
@@ -2710,6 +2782,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -2844,6 +2919,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -2875,6 +2953,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/SecurityUtilsUnitTest.java": {
@@ -3006,6 +3087,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/EurekaWorkaroundConfiguration.java": {
@@ -3155,6 +3239,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -3183,6 +3270,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
@@ -3287,6 +3377,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -3526,6 +3619,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -3566,6 +3662,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/security/DomainUserDetailsServiceIT.java": {
@@ -3732,6 +3831,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverter.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3876,6 +3978,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/config/EntityReferencesMappingCouchbaseConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -3904,6 +4009,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/repository/JHipsterCouchbaseRepositoryTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {

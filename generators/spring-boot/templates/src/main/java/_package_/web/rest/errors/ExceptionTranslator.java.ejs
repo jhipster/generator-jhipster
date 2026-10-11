@@ -34,6 +34,7 @@ import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.core.PropertyReferenceException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -333,6 +334,9 @@ _%>
         if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
 <%_ } _%>
         if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
+<%_ if (!databaseTypeNo) { _%>
+        if (err instanceof PropertyReferenceException) return HttpStatus.BAD_REQUEST;
+<%_ } _%>
         return null;
     }
 

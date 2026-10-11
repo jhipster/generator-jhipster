@@ -19,6 +19,7 @@
 package <%- packageName %>.repository;
 
 import com.couchbase.client.java.query.QueryScanConsistency;
+import org.springframework.data.core.PropertyPath;
 import org.springframework.data.couchbase.repository.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -31,7 +32,8 @@ import java.util.List;
 <%_ } _%>
 
 /**
- * Couchbase specific {@link org.springframework.data.repository.Repository} interface that use KV first approach to optimize requests.
+ * Couchbase specific {@link org.springframework.data.repository.Repository} interface.
+ * The sort of the listings is checked against the properties of the entity, and the queries by ids can use the KV first approach.
  */
 @NoRepositoryBean
 @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
@@ -39,62 +41,80 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <%- reactivePrefix %
 
     String FIND_IDS_QUERY = "SELECT meta().id as __id, 0 as __cas FROM #{#n1ql.bucket}.#{#n1ql.scope}.#{#n1ql.collection} WHERE #{#n1ql.filter}";
 
-    static String pageableStatement(Pageable pageable, String prefix) {
-        Sort sort = Sort.by(
-            pageable.getSort().stream()
+    /**
+     * The sort as N1QL orders by it: the properties of the entity written as the fields of its documents, quoted, and the id as the
+     * key of the document.
+     *
+     * @param prefix the alias of the entity in the query, empty when it has none
+     * @throws org.springframework.data.core.PropertyReferenceException for a property the entity does not have
+     */
+    static Sort sortByProperties(Class<?> domainType, Sort sort, String prefix) {
+        return Sort.by(
+            sort.stream()
                 .map(order -> {
-                    String property = order.getProperty();
-                    if ("id".equals(property)) {
+                    String field = PropertyPath.from(order.getProperty(), domainType).toDotPath().replace(".", "`.`");
+                    if ("id".equals(field)) {
                         return order.withProperty("meta(%s).id".formatted(prefix));
                     }
-                    if (prefix.isEmpty()) {
-                        return order;
-                    }
-                    return order.withProperty("%s.%s".formatted(prefix, property));
+                    return order.withProperty(prefix.isEmpty() ? "`%s`".formatted(field) : "%s.`%s`".formatted(prefix, field));
                 })
                 .toList());
+    }
+
+    default Sort sortByProperties(Sort sort, String prefix) {
+        return sortByProperties(getEntityInformation().getJavaType(), sort, prefix);
+    }
+
+    /**
+     * The pageable with its sort written as {@link #sortByProperties(Sort, String)} does, for the queries given a pageable:
+     * Spring Data writes the properties of its sort to the query as they are.
+     */
+    default Pageable sortedByProperties(Pageable pageable, String prefix) {
+        Sort sort = sortByProperties(pageable.getSort(), prefix);
+        return pageable.isPaged() ? PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort) : Pageable.unpaged(sort);
+    }
+
+    default String sortStatement(Sort sort, String prefix) {
+        return new org.springframework.data.couchbase.core.query.Query().with(sortByProperties(sort, prefix)).export();
+    }
+
+    default String pageableStatement(Pageable pageable, String prefix) {
         return new org.springframework.data.couchbase.core.query.Query()
             .limit(pageable.getPageSize())
             .skip(pageable.getOffset())
-            .with(sort)
+            .with(sortByProperties(pageable.getSort(), prefix))
             .export();
     }
 
-    default <%- listOrFlux %><T> findAll() {
-        return findAllById(toIds(findAllIds()));
+    /**
+     * The entities of the query, one query as Spring Data does it. The sort is checked against the properties of the entity.
+     */
+    private <%- listOrFlux %><T> findAllSorted(Sort sort, Pageable pageable) {
+        var query = new org.springframework.data.couchbase.core.query.Query().with(sortByProperties(sort, ""));
+        return getOperations()
+            .findByQuery(getEntityInformation().getJavaType())
+            .withConsistency(QueryScanConsistency.REQUEST_PLUS)
+            .matching(pageable.isPaged() ? query.limit(pageable.getPageSize()).skip(pageable.getOffset()) : query)
+            .all();
     }
 
-    default <%- pageOrFlux %><T> findAll<%- reactive ? 'By' : '' %>(Pageable pageable) {
 <%_ if (reactive) { _%>
-        return findAllById(toIds(findAllIds(pageable)));
+    default Flux<T> findAllBy(Pageable pageable) {
+        return findAllSorted(pageable.getSort(), pageable);
+    }
+
+    default Flux<T> findAll(Sort sort) {
+        return findAllSorted(sort, Pageable.unpaged());
+    }
 <%_ } else { _%>
-        Page<T> page = findAllIds(pageable);
-        return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
+    default Page<T> findAll(Pageable pageable) {
+        return new PageImpl<>(findAllSorted(pageable.getSort(), pageable), pageable, count());
+    }
+
+    default List<T> findAll(Sort sort) {
+        return findAllSorted(sort, Pageable.unpaged());
+    }
 <%_ } _%>
-    }
-
-    default <%- listOrFlux %><T> findAll(Sort sort) {
-        return findAllById(toIds(findAllIds(sort)));
-    }
-
-    default <%- reactive ? 'Mono<Void>' : 'void' %> deleteAll() {
-<%_ if (reactive) { _%>
-        return toIds(findAllIds())
-            .collectList()
-            .flatMap(this::deleteAllById);
-<%_ } else { _%>
-        deleteAllById(toIds(findAllIds()));
-<%_ } _%>
-    }
-
-    @Query(FIND_IDS_QUERY)
-    <%- listOrFlux %><T> findAllIds();
-
-    @Query(FIND_IDS_QUERY)
-    <%- pageOrFlux %><T> findAllIds(Pageable pageable);
-
-    @Query(FIND_IDS_QUERY)
-    <%- listOrFlux %><T> findAllIds(Sort sort);
 
     @SuppressWarnings("unchecked")
     default <%- listOrFlux %><ID> toIds(<%- listOrFlux %><T> entities) {
