@@ -21,6 +21,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 // For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_ESLINT.md
 import angular from 'angular-eslint';
+import stylistic from '@stylistic/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', 'dist/'] },
@@ -34,6 +35,9 @@ import angular from 'angular-eslint';
   {
     files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
     extends: [...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylistic, ...angular.configs.tsRecommended],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -116,7 +120,7 @@ import angular from 'angular-eslint';
       'no-new-wrappers': 'error',
       'object-shorthand': ['error', 'always', { avoidExplicitReturnArrows: true }],
       radix: 'error',
-      'spaced-comment': ['warn', 'always'],
+      '@stylistic/spaced-comment': ['warn', 'always'],
     },
   },
   {
