@@ -19,7 +19,7 @@
 
 import { readFileSync } from 'node:fs';
 
-import { getCst as apiGetCst, parse as apiParser } from '../parsing/api.ts';
+import { parse as apiParser } from '../parsing/api.ts';
 import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.ts';
 import type { JDLRuntime } from '../parsing/types/runtime.ts';
 import logger from '../utils/objects/logger.ts';
@@ -47,10 +47,6 @@ export function parseFromContent(content: string, runtime: JDLRuntime) {
     throw new Error('A valid JDL content must be passed so as to be parsed.');
   }
   return parse(content, runtime);
-}
-
-export function getCstFromContent(content: string, runtime: JDLRuntime) {
-  return getCst(content, runtime);
 }
 
 function checkFiles(files: string[]) {
@@ -85,20 +81,6 @@ function parse(content: string, runtime: JDLRuntime) {
   try {
     const parsedContent = apiParser(content, runtime, { onWarning: message => logger.warn(message) });
     return performJDLPostParsingTasks(parsedContent);
-  } catch (error) {
-    if (error instanceof SyntaxError) {
-      logger.error(`Syntax error message:\n\t${error.message}`);
-    }
-    throw error;
-  }
-}
-
-function getCst(content: string, runtime: JDLRuntime) {
-  if (!content) {
-    throw new Error('File content must be passed, it is currently empty.');
-  }
-  try {
-    return apiGetCst(content, runtime);
   } catch (error) {
     if (error instanceof SyntaxError) {
       logger.error(`Syntax error message:\n\t${error.message}`);
