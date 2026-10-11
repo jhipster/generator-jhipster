@@ -9,8 +9,6 @@ type ArrayKeys<T extends string[]> = Exclude<keyof T, keyof []>;
 // ArrayToUnion<['foo', 'bar']> = 'foo' | 'bar
 type ArrayToUnion<T extends string[]> = T[number];
 
-type NoUndefined<T extends string | undefined> = T extends undefined ? never : T;
-
 // BoxArrayByName<N, [1, 2]> = { 0: { [N]: 1 }, 1: { [N]: 2 } }
 type DeterministicBoxArrayByName<N extends string, T extends string[], A extends any[]> = {
   [K in ArrayKeys<T>]: Record<N, T[K] | undefined> &
