@@ -19,10 +19,10 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import { join } from 'node:path';
 
-import { createBlueprintFiles, defaultHelpers as helpers } from '../testing/index.ts';
-
 import { GeneratorsResolver, blueprintNamespaceToPackageName } from './blueprints.ts';
 import { getJHipsterStore } from './lookups.ts';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 
 describe('resolver - blueprints', () => {
   describe('blueprintNamespaceToPackageName', () => {

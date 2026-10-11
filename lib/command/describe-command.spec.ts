@@ -25,10 +25,11 @@ import { GeneratorsResolver } from '../resolver/blueprints.ts';
 import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
-import { createBlueprintFiles, defaultHelpers as helpers } from '../testing/index.ts';
 
 import { describeCommand, describeGenerator, findConfigOwners, listCommands } from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 
 /** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
 const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {

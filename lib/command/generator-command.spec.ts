@@ -22,9 +22,10 @@ import { describe, expect, it } from 'esmocha';
 import type { GeneratorMeta } from '@yeoman/types';
 
 import BaseApplicationGenerator from '../../generators/base-application/generator.ts';
-import { defaultHelpers as helpers, runResult } from '../testing/index.ts';
 
 import type { JHipsterCommandDefinition, JHipsterConfig } from './types.ts';
+
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const notImplementedCallback = (methodName: string) => {
   return () => {
