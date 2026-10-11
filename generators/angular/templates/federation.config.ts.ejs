@@ -33,20 +33,20 @@ const shareDayjs = (locales: string[]) =>
     ),
   );
 
-<%_ if (enableTranslation) { _%>
-// Angular locales are loaded dynamically by the translation loader.
-// Unlike shareAngularLocales(), the entry points are inferred by node resolution, so hoisted node_modules (npm workspaces) work.
+// The Angular locale app.ts registers, and the ones the translation loader loads dynamically. Every subpath of the shared
+// @angular/common is external, so a locale must be shared too; app.ts is not an exposed module, the unused dependencies
+// scan starts from, so the locale opts out of it (keepAll), skipping the secondaries of @angular/common it would expand.
+// The entry points are inferred by node resolution, so hoisted node_modules (npm workspaces) work.
 const shareAngularLocales = (locales: string[]) =>
   share(
     Object.fromEntries(
       locales.map(locale => [
         `@angular/common/locales/${locale}`,
-        singleton,
+        { ...singleton, includeSecondaries: { keepAll: true, skip: [`@angular/common/locales/${locale}/*`] } },
       ]),
     ),
   );
 
-<%_ } _%>
 export default withNativeFederation({
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
 
@@ -72,9 +72,7 @@ export default withNativeFederation({
       },
     ),
     ...shareDayjs([<%- [...new Set(languagesDefinition.map(lang => lang.dayjsLocale))].map(locale => `'${locale}'`).join(', ') %>]),
-<%_ if (enableTranslation) { _%>
-    ...shareAngularLocales([<%- languagesDefinition.filter(lang => lang.angularLocale).map(lang => `'${lang.angularLocale}'`).join(', ') %>]),
-<%_ } _%>
+    ...shareAngularLocales([<%- [...new Set([angularLocaleId, ...languagesDefinition.map(lang => lang.angularLocale).filter(Boolean)])].map(locale => `'${locale}'`).join(', ') %>]),
   },
 
   // Application modules shared as singletons across the gateway and the microfrontends, see tsconfig.json paths.
