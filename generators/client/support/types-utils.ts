@@ -77,10 +77,10 @@ export const getEntryIfTypeOrTypeAttribute = (key: FieldType | PrimaryKey): Fiel
 };
 /**
  * @private
- * Find key type for Typescript
+ * Find key type for TypeScript
  *
  * @param {string | object} primaryKey - primary key definition
- * @returns {string} primary key type in Typescript
+ * @returns {string} primary key type in TypeScript
  */
 const getTypescriptKeyType = (primaryKey: FieldType | PrimaryKey) => {
   if (
@@ -93,7 +93,7 @@ const getTypescriptKeyType = (primaryKey: FieldType | PrimaryKey) => {
 
 /**
  * @private
- * Find type for Typescript
+ * Find type for TypeScript
  */
 export const getTypescriptType = (fieldType: keyof typeof tsTypesByFieldType): ValueOf<typeof tsTypesByFieldType> =>
   tsTypesByFieldType[fieldType];
