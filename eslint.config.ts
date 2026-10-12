@@ -1,6 +1,6 @@
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import { type Config, defineConfig } from 'eslint/config';
+import { defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import ejs from 'eslint-plugin-ejs-templates';
 import imports from 'eslint-plugin-import-x';
@@ -105,15 +105,7 @@ export default defineConfig(
   },
   {
     files: jsTsFiles,
-    ...(imports.flatConfigs.recommended as Config),
-    ...(imports.flatConfigs.typescript as Config),
-    languageOptions: {
-      // import plugin does not use ecmaVersion and sourceType from languageOptions object
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: 'module',
-      },
-    },
+    extends: [imports.flatConfigs.recommended, imports.flatConfigs.typescript],
     settings: {
       'import-x/resolver-next': [createTypeScriptImportResolver()],
     },
