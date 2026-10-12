@@ -21,10 +21,11 @@ import { basename } from 'node:path';
 
 import Generator from './index.ts';
 
-import { shouldSupportFeatures } from '#test-support';
+import { checkEnforcements, shouldSupportFeatures } from '#test-support';
 
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
+  checkEnforcements({}, generator);
 });

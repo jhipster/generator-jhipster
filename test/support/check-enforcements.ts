@@ -57,6 +57,7 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
           [
             ['src/main/webapp', '<%= clientSrcDir %>'],
             ['src/test/javascript', '<%= clientTestDir %>'],
+            ['src/main/docker', '<%- dockerServicesDir %>'],
             ...(client ?
               [
                 [' jhiTranslate', ' <%= jhiPrefix %>Translate'],

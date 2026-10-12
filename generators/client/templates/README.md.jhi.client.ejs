@@ -56,7 +56,7 @@ If you are using <%- cacheProvider %> as a cache, you will have to launch a cach
 To start your cache server, run:
 
 ```bash
-docker compose -f src/main/docker/<%- locals.cacheProviderHazelcast ? 'hazelcast-management-center' : cacheProvider %>.yml up -d
+docker compose -f <%- dockerServicesDir %><%- locals.cacheProviderHazelcast ? 'hazelcast-management-center' : cacheProvider %>.yml up -d
 ```
 
   <%_ if (cacheProviderRedis) { _%>

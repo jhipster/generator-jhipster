@@ -50,7 +50,7 @@ Allows to use a specific action when conflicts are found skipping prompts for fi
 - `npmw` - wrapper to use locally installed npm.
 JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
 <%_ } _%>
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+- `/<%- dockerServicesDir %>` - Docker configurations for the application and services that the application depends on
 
 <&_ } -&>
 
@@ -73,7 +73,7 @@ Congratulations! You've selected an excellent way to secure your JHipster applic
 To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
 
 ```bash
-docker compose -f src/main/docker/keycloak.yml up
+docker compose -f <%- dockerServicesDir %>keycloak.yml up
 ```
 
 The security settings in `src/main/resources/config/application.yml` are configured for this image.
@@ -264,7 +264,7 @@ To package your application as a war in order to deploy it to an application ser
 JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
 
 ```bash
-docker compose -f src/main/docker/jhipster-control-center.yml up
+docker compose -f <%- dockerServicesDir %>jhipster-control-center.yml up
 ```
 
 <&_ } -&>
@@ -276,10 +276,10 @@ docker compose -f src/main/docker/jhipster-control-center.yml up
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
 ```bash
-docker compose -f src/main/docker/sonar.yml up -d
+docker compose -f <%- dockerServicesDir %>sonar.yml up -d
 ```
 
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+Note: we have turned off forced authentication redirect for UI in [<%- dockerServicesDir %>sonar.yml](<%- dockerServicesDir %>sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
 
 You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarsource.com/sonarqube-server/latest/analyzing-source-code/scanners/sonarscanner/)<% if (buildTool) { %> or by using the <%- buildTool === 'maven' ? 'maven' : '' %><%- buildTool === 'gradle' ? 'gradle' : '' %> plugin<% } %>.
 
