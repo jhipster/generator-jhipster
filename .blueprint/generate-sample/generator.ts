@@ -25,7 +25,6 @@ import BaseGenerator from '../../generators/base-core/index.ts';
 import type { Config } from '../../generators/base-core/types.ts';
 import { type SampleDescription, defaultGithubEnvironment } from '../../lib/ci/index.ts';
 import { getPackageRoot, packageJson } from '../../lib/index.ts';
-import { entitiesSamplesDir } from '../constants.ts';
 import { findSamples } from '../describe-samples/support/describe-samples.ts';
 import { promptSamplesFolder } from '../support.ts';
 
@@ -111,16 +110,8 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         } else {
           const [sample] = findSamples({ sampleName: this.sampleName });
           this.sample = sample;
-          let files = Object.entries(sample.files);
-          if (this.entitiesSample) {
-            // The entities of a set instead of the ones of the sample.
-            const entities = (entitiesByType[this.entitiesSample] ?? []).map(
-              entity => [`.jhipster/${entity}.json`, join(entitiesSamplesDir, `${entity}.json`)] as [string, string],
-            );
-            files = [...files.filter(([destination]) => !destination.startsWith('.jhipster/')), ...entities];
-          }
           // The files and the jdl the description lists, by their path in the project, relative to the package root.
-          for (const [destination, file] of files) {
+          for (const [destination, file] of Object.entries(sample.files)) {
             this.fs.copy(resolve(packageRoot, file), join(this.projectFolder, destination));
           }
           for (const [destination, jdl] of Object.entries(sample.jdls)) {
