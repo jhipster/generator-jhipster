@@ -21,7 +21,7 @@
 import { defineConfig } from 'vitest/config';
 <%_ if (enableTranslation) { _%>
 
-import { prepareLanguage } from './build-plugins/i18n-esbuild';
+import { prepareLanguage } from './build-plugins/i18n-esbuild.ts';
 
 const i18nPrefix = '\0i18n/';
 <%_ } _%>
