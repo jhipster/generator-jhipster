@@ -19,7 +19,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { basename, join } from 'node:path';
 
-import { getGithubSamplesGroups } from 'generator-jhipster/ci';
+import { getGithubSamples, getGithubSamplesGroups } from 'generator-jhipster/ci';
 import { createTestHelpers, typedResult } from 'generator-jhipster/testing';
 
 import type Generator from './index.js';
@@ -29,9 +29,23 @@ const helpers = createTestHelpers<Generator>({
 });
 const result = typedResult<Generator>();
 const generator = basename(import.meta.dirname);
+const samplesGroupFolder = join(import.meta.dirname, '../generate-sample/templates/');
 
 describe(`generator - ${generator}`, async () => {
-  const groups = await getGithubSamplesGroups(join(import.meta.dirname, '../generate-sample/templates/'));
+  describe('without samples group', () => {
+    beforeAll(async () => {
+      await helpers.runDefault();
+    });
+
+    it('should build a job for every enabled sample of every group', async () => {
+      const samples = await getGithubSamples(samplesGroupFolder);
+      expect(result.generator.matrix!.include.map(job => job.sample)).toEqual(
+        Object.keys(samples).filter(name => !samples[name].sample.disabled),
+      );
+    });
+  });
+
+  const groups = await getGithubSamplesGroups(samplesGroupFolder);
   for (const workflow of groups.map(sample => sample.split('.')[0])) {
     describe(`with ${workflow}`, () => {
       beforeAll(async () => {

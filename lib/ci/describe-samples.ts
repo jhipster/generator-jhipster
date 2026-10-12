@@ -62,8 +62,15 @@ export type SampleDescription = {
   jobName: string;
   disabled?: boolean;
   sonar?: boolean;
-  /** The generator the sample is generated with: the jdl one from its jdl, the app one from its `.yo-rc.json`. */
-  generator: 'jdl' | 'app';
+  /**
+   * The generator the sample is generated with: the jdl one from its jdl, the app one from its `.yo-rc.json`, the
+   * generate-sample generator of its blueprint for a `sample-type` the contract does not define.
+   */
+  generator: 'jdl' | 'app' | 'custom';
+  /** The `sample-type` of a custom sample. */
+  sampleType?: string;
+  /** The file or folder a custom sample is generated from. */
+  sampleFile?: string;
   /** The files copied to the project but the jdl ones: the path in the project, relative to it, to the source file. */
   files: Record<string, string>;
   /** The jdl the sample is generated from, by their name in the project: a source file, or an inline jdl. */
@@ -161,7 +168,7 @@ export type DescribeGithubSamplesOptions = {
 /**
  * Describe the samples of a samples group already loaded: a sample is generated from an inline `jdl`, or from the `jdl`
  * or `yo-rc` (`sample-type`) file `sample-file` (the sample name by default) of the `sample-folder` (the group by
- * default) of the samples groups folder.
+ * default) of the samples groups folder. A sample of another `sample-type` is described by its file only.
  */
 export const describeGithubSamplesGroup = ({
   samplesGroupFolder,
@@ -172,9 +179,11 @@ export const describeGithubSamplesGroup = ({
 }: Omit<DescribeGithubSamplesOptions, 'groups'> & { group: string; samples: GitHubMatrixGroup }): SampleDescription[] => {
   const relativeToRoot = (file: string) => relative(root, file);
   const descriptions: SampleDescription[] = [];
-  const matrix = convertToGitHubMatrix(samples);
+  // The matrix has an entry for each enabled sample, in order; a sample can customize its job-name.
+  const entries = convertToGitHubMatrix(samples).include;
+  const enabledSamples = Object.keys(samples).filter(name => !samples[name].disabled);
   for (const [name, item] of Object.entries(samples)) {
-    const entry = matrix.include.find(candidate => candidate['job-name'] === name);
+    const entry = item.disabled ? undefined : entries[enabledSamples.indexOf(name)];
     const custom = describeSample?.({ name, group, item, matrix: entry });
     if (custom) {
       descriptions.push(custom);
@@ -183,7 +192,7 @@ export const describeGithubSamplesGroup = ({
     const base = {
       name,
       workflow: group,
-      jobName: name,
+      jobName: entry?.['job-name'] ?? name,
       disabled: item.disabled ? true : undefined,
       generatorOptions: item.generatorOptions,
       matrix: sampleMatrixOf(entry),
@@ -213,7 +222,13 @@ export const describeGithubSamplesGroup = ({
         config: readSampleConfig(join(sampleFile, '.yo-rc.json')),
       };
     } else {
-      throw new Error(`Sample ${name} of the ${group} samples group has no jdl, nor a jdl or yo-rc sample-type`);
+      description = {
+        ...base,
+        generator: 'custom',
+        ...sampleFilesOf([]),
+        sampleType: item['sample-type'],
+        sampleFile: relativeToRoot(sampleFile),
+      };
     }
     descriptions.push(description);
   }
@@ -246,9 +261,12 @@ const table = (rows: string[][]): string => {
     .join('\n');
 };
 
-/** The folder of the `.yo-rc.json` file of a sample, its app sample. */
-const appSampleOf = (sample: SampleDescription): string =>
-  sample.files['.yo-rc.json'] ? basename(dirname(sample.files['.yo-rc.json'])) : '';
+/** What a sample is generated from: jdl, the folder of its `.yo-rc.json` file, its app sample, or its `sample-type`. */
+const sampleSourceOf = (sample: SampleDescription): string => {
+  if (sample.generator === 'jdl') return 'jdl';
+  if (sample.generator === 'custom') return sample.sampleType ?? '';
+  return sample.files['.yo-rc.json'] ? basename(dirname(sample.files['.yo-rc.json'])) : '';
+};
 
 export const formatSamplesList = (samples: SampleDescription[]): string =>
   table([
@@ -257,7 +275,7 @@ export const formatSamplesList = (samples: SampleDescription[]): string =>
       sample.workflow,
       sample.name + (sample.disabled ? ' (disabled)' : ''),
       sample.jobName,
-      sample.generator === 'jdl' ? 'jdl' : appSampleOf(sample),
+      sampleSourceOf(sample),
       sample.entitiesSample ?? '',
       (sample.generator === 'app' ? sample.jdlEntity : sample.jdlSamples) ?? '',
       sample.matrix.os,
@@ -280,6 +298,7 @@ export const formatSample = (sample: SampleDescription): string => {
       lines.push(`  ${key}: ${Array.isArray(value) ? value.join(', ') : String(value)}`);
     }
   }
+  if (sample.generator === 'custom') lines.push('', `${sample.sampleType ?? 'custom'} sample: ${sample.sampleFile}`);
   const files = Object.entries(sample.files);
   if (files.length > 0) {
     lines.push('', `files${sample.entitiesSample ? ` (entities ${sample.entitiesSample})` : ''}:`);

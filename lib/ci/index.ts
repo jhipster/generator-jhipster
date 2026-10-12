@@ -30,7 +30,7 @@ export {
   sampleMatrixOf,
 } from './describe-samples.ts';
 export * from './github.ts';
-export { type GithubSample, getGithubSamples, getGithubSamplesGroup, getGithubSamplesGroups } from './github-group.ts';
+export { type GithubSample, getGithubSample, getGithubSamples, getGithubSamplesGroup, getGithubSamplesGroups } from './github-group.ts';
 export * from './github-matrix.ts';
 export * from './sample-config.ts';
 
