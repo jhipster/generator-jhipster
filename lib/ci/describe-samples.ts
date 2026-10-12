@@ -64,6 +64,11 @@ export type SampleDescription = {
   sonar?: boolean;
   /** The generator the sample is generated with: the jdl one from its jdl, the app one from its `.yo-rc.json`. */
   generator: 'jdl' | 'app';
+  /**
+   * The command generating the sample: `jdl` for a jdl sample, with its jdl files as arguments; the `defaultCommand` of
+   * the `.yo-rc.json` of an app sample, `app` by default.
+   */
+  defaultCommand: string;
   /** The files copied to the project but the jdl ones: the path in the project, relative to it, to the source file. */
   files: Record<string, string>;
   /** The jdl the sample is generated from, by their name in the project: a source file, or an inline jdl. */
@@ -119,6 +124,12 @@ export const sampleFilesOf = (
 
 const pickConfig = (config: Record<string, unknown>): Record<string, unknown> =>
   Object.fromEntries(CONFIG_KEYS.filter(key => config[key] !== undefined).map(key => [key, config[key]]));
+
+/** The command of the `.yo-rc.json` file of an app sample: its `defaultCommand`, `app` by default. */
+export const readSampleDefaultCommand = (yoRcFile: string | undefined): string => {
+  if (!yoRcFile || !existsSync(yoRcFile)) return 'app';
+  return JSON.parse(readFileSync(yoRcFile, 'utf8'))['generator-jhipster']?.defaultCommand ?? 'app';
+};
 
 /** The configuration of a `.yo-rc.json` file worth showing. */
 export const readSampleConfig = (yoRcFile: string | undefined): Record<string, unknown> | undefined => {
@@ -194,6 +205,7 @@ export const describeGithubSamplesGroup = ({
       description = {
         ...base,
         generator: 'jdl',
+        defaultCommand: 'jdl',
         ...sampleFilesOf([], { [`${name}.jdl`]: item.jdl }),
         config: readSampleJDLConfig(item.jdl),
       };
@@ -201,6 +213,7 @@ export const describeGithubSamplesGroup = ({
       description = {
         ...base,
         generator: 'jdl',
+        defaultCommand: 'jdl',
         ...sampleFilesOf([[basename(`${sampleFile}.jdl`), relativeToRoot(`${sampleFile}.jdl`)]]),
         config: readSampleJDLConfig(readFileSync(`${sampleFile}.jdl`, 'utf8')),
       };
@@ -209,6 +222,7 @@ export const describeGithubSamplesGroup = ({
       description = {
         ...base,
         generator: 'app',
+        defaultCommand: readSampleDefaultCommand(join(sampleFile, '.yo-rc.json')),
         ...sampleFilesOf(copiedFilesOf(root, relativeToRoot(sampleFile))),
         config: readSampleConfig(join(sampleFile, '.yo-rc.json')),
       };
@@ -272,6 +286,7 @@ export const formatSample = (sample: SampleDescription): string => {
   if (sample.environment || sample.war) {
     lines.push(`profile: ${sample.environment ?? ''}${sample.war ? ' (war)' : ''}`.trim());
   }
+  lines.push(`command: ${sample.defaultCommand}`);
   if (sample.generatorOptions) lines.push(`generator options: ${JSON.stringify(sample.generatorOptions)}`);
   if (sample.config) {
     const configurationFile = sample.files['.yo-rc.json'];

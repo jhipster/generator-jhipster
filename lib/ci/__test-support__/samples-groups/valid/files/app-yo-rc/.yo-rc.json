@@ -1,1 +1,3 @@
-{ "generator-jhipster": { "baseName": "fromYoRc", "clientFramework": "react", "jhipsterVersion": "0.0.0" } }
+{
+  "generator-jhipster": { "baseName": "fromYoRc", "clientFramework": "react", "defaultCommand": "spring-boot", "jhipsterVersion": "0.0.0" }
+}
