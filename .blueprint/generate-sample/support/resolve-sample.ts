@@ -21,11 +21,10 @@ import { join } from 'node:path';
 
 import { globSync } from 'tinyglobby';
 
-import { type GithubSample, type WorkflowSample, getGithubSamples } from '../../../lib/ci/index.ts';
+import type { GithubSample, WorkflowSample } from '../../../lib/ci/index.ts';
 import {
   dailyBuildsFolder,
   entitiesSamplesDir,
-  githubSamplesGroupFolder,
   jdlEntitiesSamplesFolder,
   jdlSamplesFolder,
   samplesFolder,
@@ -47,7 +46,7 @@ export type ResolvedSample = {
   entitiesSample?: string;
   /** `.jhipster/*.json` entity files copied to the project. */
   entityFiles: string[];
-  /** Names passed to `copyJdlEntitySamples`, `*` expanded. */
+  /** Names of the `jdl-entity` samples, `*` expanded. */
   jdlEntityNames: string[];
   /** `jdl-entities` files or folders copied to the project. */
   jdlEntityFiles: string[];
@@ -66,10 +65,6 @@ const resolveEntitiesSample = (entity?: string): string | undefined => {
   if (entity === 'mongodb' || entity === 'couchbase') return 'document';
   return entity === 'none' ? undefined : entity;
 };
-
-/** A sample of a group workflow (`github-build-matrix/samples/<group>.ts`), by its name. */
-export const resolveGroupSample = async (sampleName: string): Promise<GithubSample | undefined> =>
-  (await getGithubSamples(githubSamplesGroupFolder))[sampleName];
 
 /**
  * A sample of a group workflow generated from a `.yo-rc.json` folder (`app-sample`), as the workflow sample it stands for:
