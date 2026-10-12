@@ -21,6 +21,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 // For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_ESLINT.md
 import angular from 'angular-eslint';
+import vitest from '@vitest/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
@@ -125,6 +126,7 @@ import stylistic from '@stylistic/eslint-plugin';
   },
   {
     files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    extends: [vitest.configs.recommended],
     rules: {
       '@typescript-eslint/no-empty-function': 'off',
     },

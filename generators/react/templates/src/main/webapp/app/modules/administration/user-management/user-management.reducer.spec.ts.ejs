@@ -43,7 +43,7 @@ describe('User management reducer tests', () => {
     return Object.keys(element).length === 0;
   }
 
-  function testInitialState(state) {
+  function expectInitialState(state) {
     expect(state).toMatchObject({
       loading: false,
       errorMessage: null,
@@ -64,13 +64,13 @@ describe('User management reducer tests', () => {
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(userManagement(undefined, { type: 'unknown' }));
+      expectInitialState(userManagement(undefined, { type: 'unknown' }));
     });
   });
 
   describe('Requests', () => {
     it('should not modify the current state', () => {
-      testInitialState(userManagement(undefined, { type: getRoles.pending.type }));
+      expectInitialState(userManagement(undefined, { type: getRoles.pending.type }));
     });
 
     it('should set state to loading', () => {
