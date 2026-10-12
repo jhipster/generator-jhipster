@@ -73,6 +73,7 @@ describe(`generator - ${generator}`, () => {
         'daily-vue-gradle-sql',
         'daily-vue-maven-nosql',
         'daily-vue-maven-sql',
+        'daily-windows',
       ]);
       for (const sample of runResult.generator.samples) {
         expect(sample.matrix).toEqual({ os: expect.any(String), node: expect.any(String), java: expect.any(String) });
@@ -111,6 +112,27 @@ describe(`generator - ${generator}`, () => {
           '.yo-rc.json': '.blueprint/generate-sample/templates/test-integration/daily-builds/ngx-neo4j/.yo-rc.json',
         }),
         matrix: { os: 'ubuntu-latest', node: expect.any(String), java: '25' },
+      });
+    });
+  });
+
+  describe('with workflow daily-windows', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withOptions({ workflow: 'daily-windows', json: true });
+    });
+
+    it('should describe the daily samples naming a sample with that sample', () => {
+      const sample = runResult.generator.samples.find(sample => sample.name === 'daily-windows-ng-default');
+      expect(sample).toMatchObject({
+        workflow: 'daily-windows',
+        entitiesSample: 'sql',
+        environment: 'dev',
+        files: expect.objectContaining({
+          '.yo-rc.json': '.blueprint/generate-sample/templates/test-integration/samples/ng-default/.yo-rc.json',
+        }),
+        matrix: { os: 'windows-latest', node: expect.any(String), java: '25' },
       });
     });
   });

@@ -51,7 +51,8 @@ export const getWorkflowSamples = (workflows: string[] = getWorkflowNames()): Re
               {
                 ...sample,
                 name: `${DAILY_PREFIX}${sample.name}`,
-                'app-sample': `${DAILY_PREFIX}${sample['app-sample'] ?? sample.name}`,
+                // A daily sample is a folder of the daily builds unless it names one of the samples.
+                'app-sample': sample['app-sample'] ?? `${DAILY_PREFIX}${sample.name}`,
               }
             : sample,
           )
