@@ -109,7 +109,12 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
         });
         source.addAllowBlockingCallsInside!({
           classPath: 'com.github.couchmove.repository.CouchbaseRepositoryImpl',
-          method: ['lambda$query$2', 'lambda$importFtsIndex$1'],
+          method: 'lambda$query$2',
+        });
+        // The migration imports the search indexes at startup, retrying from a parallel scheduler thread.
+        source.addAllowBlockingCallsInside!({
+          classPath: 'com.couchbase.client.java.manager.search.SearchIndexManager',
+          method: 'upsertIndex',
         });
         // The SDK creates its latency metrics lazily on the first response, contending a lock on an io thread.
         source.addAllowBlockingCallsInside!({

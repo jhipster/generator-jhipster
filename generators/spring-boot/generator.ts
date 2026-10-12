@@ -718,6 +718,27 @@ ${classProperties
           },
         });
       },
+      blockHound({ application, source }) {
+        if (!application.reactive) return;
+
+        source.addAllowBlockingCallsInside!({ classPath: 'java.util.UUID', method: 'randomUUID' });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.validation.beanvalidation.SpringValidatorAdapter',
+          method: 'validate',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: `${application.packageName}.service.MailService`,
+          method: 'sendEmailFromTemplate',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: `${application.packageName}.security.DomainUserDetailsService`,
+          method: 'createSpringSecurityUser',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.web.reactive.result.method.InvocableHandlerMethod',
+          method: 'invoke',
+        });
+      },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
         source.addJavaDependencies?.([
