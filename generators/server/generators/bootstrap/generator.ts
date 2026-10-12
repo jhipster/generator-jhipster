@@ -142,7 +142,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         entityDefaults(getEntityDerivedPropertyMutations(javaDomainCommand.entity), {
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
-          entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
           entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
           entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
 
