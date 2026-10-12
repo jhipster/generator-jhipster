@@ -21,6 +21,7 @@ import eslint from '@eslint/js';
 import react from '@eslint-react/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 import tseslint from 'typescript-eslint';
+import vitest from '@vitest/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
@@ -96,8 +97,10 @@ import tseslint from 'typescript-eslint';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.{ts,tsx}'],
+    extends: [vitest.configs.recommended],
     rules: {
+      'vitest/expect-expect': ['error', { assertFunctionNames: ['expect*'] }],
       '@typescript-eslint/no-empty-function': 'off',
     },
   },

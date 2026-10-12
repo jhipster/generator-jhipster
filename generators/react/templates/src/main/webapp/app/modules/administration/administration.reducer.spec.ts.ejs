@@ -48,7 +48,7 @@ describe('Administration reducer tests', () => {
   }
 <%_ } _%>
 
-  function testInitialState(state) {
+  function expectInitialState(state) {
     expect(state).toMatchObject({
       loading: false,
       errorMessage: null,
@@ -74,7 +74,7 @@ describe('Administration reducer tests', () => {
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(administration(undefined, { type: '' }));
+      expectInitialState(administration(undefined, { type: '' }));
     });
   });
 

@@ -39,6 +39,6 @@ describe('Gateway Component', () => {
   });
 
   it('should be a Vue instance', () => {
-    expect(wrapper.get('#gateway-page-heading'));
+    expect(wrapper.find('#gateway-page-heading').exists()).toBe(true);
   });
 });
