@@ -55,13 +55,13 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
           });
 
           [
-            ['src/main/webapp', '<%= clientSrcDir %>'],
-            ['src/test/javascript', '<%= clientTestDir %>'],
+            ['src/main/webapp', '<%- clientSrcDir %>'],
+            ['src/test/javascript', '<%- clientTestDir %>'],
             ['src/main/docker', '<%- dockerServicesDir %>'],
             ...(client ?
               [
-                [' jhiTranslate', ' <%= jhiPrefix %>Translate'],
-                [' Java ', ' <%= backendType %> '],
+                [' jhiTranslate', ' <%- jhiPrefix %>Translate'],
+                [' Java ', ' <%- backendType %> '],
               ]
             : []),
           ].forEach(([notExpected, replacement]) => {
