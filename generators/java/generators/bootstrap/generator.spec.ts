@@ -52,5 +52,15 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('without client', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withJHipsterConfig({ clientFramework: 'no' });
+    });
+
+    it('should not use the npm wrapper', () => {
+      expect(result.application).toMatchObject({ useNpmWrapper: false, nodePackageManagerCommand: 'npm' });
+    });
+  });
+
   testBootstrapEntities(generator, { skipClient: true });
 });
