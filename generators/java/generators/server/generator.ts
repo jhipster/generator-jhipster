@@ -87,6 +87,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
+          // The image of the application, the command every application has, docker-compose suggests.
+          'docker:build': 'npm run java:docker',
           'ci:backend:test':
             'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
