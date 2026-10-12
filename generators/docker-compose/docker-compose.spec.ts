@@ -18,6 +18,7 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
+import { join } from 'node:path';
 
 import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import monitoringTypes from '../../lib/jhipster/monitoring-types.ts';
@@ -41,6 +42,49 @@ const expectedFiles = {
 };
 
 describe('generator - Docker Compose', () => {
+  describe('with an application whose docker files are not in the default folder', () => {
+    const chosenApps = ['02-mysql'];
+
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+      // The applications are in the in-memory file system the deployment run shares.
+      const appFolder = join(runResult.cwd, chosenApps[0]);
+      runResult.fs.move(join(appFolder, 'src/main/docker/**'), join(appFolder, 'docker'));
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE)
+        .onGenerator(generator => {
+          // A blueprint, like the NodeJS one, may keep the docker files of its applications in another folder.
+          const { preparingWorkspaces } = generator as any;
+          Object.defineProperty(generator, 'preparingWorkspaces', {
+            value: {
+              ...preparingWorkspaces,
+              dockerServicesDir({ applications }: { applications: { dockerServicesDir: string }[] }) {
+                for (const application of applications) {
+                  application.dockerServicesDir = 'docker/';
+                }
+              },
+            },
+          });
+        })
+        .withAnswers({
+          deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
+          directoryPath: '../',
+          appsFolders: chosenApps,
+          clusteredDbApps: [],
+          monitoring: NO_MONITORING,
+        });
+    });
+    it('reads the docker files of the application from its folder', () => {
+      runResult.assertNoFile(`${chosenApps[0]}/src/main/docker/app.yml`);
+      runResult.assertFile(`${chosenApps[0]}/docker/app.yml`);
+      runResult.assertFileContent('docker-compose/docker-compose.yml', /mysql-mysql:/);
+    });
+  });
+
   describe('only gateway', () => {
     const chosenApps = ['01-gateway'];
     before(async () => {
