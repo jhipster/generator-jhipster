@@ -72,7 +72,7 @@ export default withNativeFederation({
       },
     ),
     ...shareDayjs([<%- [...new Set(languagesDefinition.map(lang => lang.dayjsLocale))].map(locale => `'${locale}'`).join(', ') %>]),
-    ...shareAngularLocales([<%- [...new Set([angularLocaleId, ...languagesDefinition.map(lang => lang.angularLocale).filter(Boolean)])].map(locale => `'${locale}'`).join(', ') %>]),
+    ...shareAngularLocales([<%- [angularLocaleId].concat(languagesDefinition.map(lang => lang.angularLocale)).filter((locale, index, locales) => locale && locales.indexOf(locale) === index).map(locale => `'${locale}'`).join(', ') %>]),
   },
 
   // Application modules shared as singletons across the gateway and the microfrontends, see tsconfig.json paths.
