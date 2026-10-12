@@ -19,6 +19,7 @@
 <&_ if (fragment.importsSection) { -&>
 import eslint from '@eslint/js';
 import react from '@eslint-react/eslint-plugin';
+import stylistic from '@stylistic/eslint-plugin';
 import tseslint from 'typescript-eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
@@ -33,6 +34,9 @@ import tseslint from 'typescript-eslint';
   {
     files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,tsx}'],
     extends: [...tseslint.configs.recommendedTypeChecked, react.configs['recommended-type-checked']],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -72,7 +76,7 @@ import tseslint from 'typescript-eslint';
       '@typescript-eslint/array-type': 'error',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-shadow': 'error',
-      'spaced-comment': ['warn', 'always'],
+      '@stylistic/spaced-comment': ['warn', 'always'],
       'guard-for-in': 'error',
       'no-labels': 'error',
       'no-caller': 'error',

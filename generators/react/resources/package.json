@@ -29,6 +29,7 @@
     "@eslint/js": "10.0.1",
     "@module-federation/runtime": "2.9.2",
     "@module-federation/vite": "1.23.2",
+    "@stylistic/eslint-plugin": "5.10.0",
     "@testing-library/react": "16.3.3",
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",
