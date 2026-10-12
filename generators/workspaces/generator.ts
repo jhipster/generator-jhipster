@@ -145,7 +145,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get loadingWorkspaces() {
-    return this.asDefaultTaskGroup({
+    return this.asLoadingWorkspacesTaskGroup({
       configurePackageManager({ applications }) {
         if (this.workspacesConfig.nodePackageManager || !this.generateWorkspaces) return;
 

@@ -106,12 +106,12 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     return this.multistepTransform;
   }
 
-  get preConflicts() {
-    return this.asAnyTaskGroup({
+  get preConflicts(): Record<string, (this: this) => unknown> {
+    return {
       queueCommitPrettierConfig() {
         this.queueCommitPrettierConfig();
       },
-    });
+    };
   }
 
   get [PRE_CONFLICTS_PRIORITY]() {
