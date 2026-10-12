@@ -192,7 +192,7 @@ describe('generator - Docker Compose', () => {
     });
     it('suggests the docker:build script of each application', () => {
       const commands = messages.find(message => message.includes('To generate the missing Docker image(s)'))!;
-      expect(commands).toMatch(/npm run (docker:build|java:docker:arm64) in .*01-gateway/);
+      expect(commands).toMatch(/npm run docker:build in .*01-gateway/);
       expect(commands).toMatch(/npm run docker:build in .*02-mysql/);
       expect(commands).not.toMatch(/mvnw|gradlew/);
     });

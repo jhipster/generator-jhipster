@@ -57,7 +57,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
-            'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline -ntp',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
@@ -73,7 +72,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
-            'java:docker:arm64': 'npm run java:docker -- -PjibArchitecture=arm64',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache':
               'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package -- -x webapp -x webapp_test',
@@ -89,6 +87,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'java:docker:prod': 'npm run java:docker -- -Pprod',
           // The image of the application, the command every application has, docker-compose suggests.
           'docker:build': 'npm run java:docker',
+          // TODO v10: remove, java:docker builds the image of the architecture of the Docker daemon.
+          'java:docker:arm64': 'npm run java:docker',
           'ci:backend:test':
             'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':

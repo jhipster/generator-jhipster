@@ -387,8 +387,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         jibCache = 'target/jib-cache';
       }
       if (jibCache && existsSync(this.workspacePath(application.appFolder!, jibCache))) continue;
-      const runCommand = jibCache && process.arch === 'arm64' ? 'npm run java:docker:arm64' : 'npm run docker:build';
-      missingImages.push(`  ${chalk.cyan(runCommand)} in ${appPath}`);
+      missingImages.push(`  ${chalk.cyan('npm run docker:build')} in ${appPath}`);
     }
     if (missingImages.length > 0) {
       this.log.warn('Docker Compose configuration generated, but the Docker images may be missing');
