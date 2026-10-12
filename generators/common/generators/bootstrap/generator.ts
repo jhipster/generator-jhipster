@@ -29,8 +29,6 @@ import type {
 } from '../../types.ts';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig, CommonOptions> {
-  customLifecycle = true;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
