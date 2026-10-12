@@ -279,7 +279,19 @@ describe(`generator - ${clientFramework}`, () => {
           [{ name: 'UserManagement', skipClient: false }],
         )
         .withMockedSource()
-        .withMockedGenerators(['jhipster:common']);
+        .withMockedGenerators(['jhipster:common'])
+        .onGenerator(generator => {
+          // As the app generator does: the bootstrap of the backend declares which fields can be sorted.
+          const angular = generator as unknown as {
+            beforeQueue: () => Promise<void>;
+            dependsOnBootstrap: (name: string) => Promise<unknown>;
+          };
+          const beforeQueue = angular.beforeQueue.bind(angular);
+          angular.beforeQueue = async () => {
+            await beforeQueue();
+            await angular.dependsOnBootstrap('server');
+          };
+        });
     });
 
     it('should match snapshot for UserManagement files', () => {
