@@ -148,9 +148,6 @@ import <%- mapsIdAssoc.otherEntity.entityAbsolutePackage %>.repository.<%- mapsI
 <%_ if (searchEngineElasticsearch) { _%>
 import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
 <%_ } _%>
-<%_ if (!serviceNo && implementsEagerLoadApis) { _%>
-import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
-<%_ } _%>
 <%_ if (dtoMapstruct) { _%>
 import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
 import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
@@ -181,18 +178,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 <%_ } _%>
-<%_ if (implementsEagerLoadApis || databaseTypeNeo4j) { _%>
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 <%_ } else { _%>
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && !paginationNo || implementsEagerLoadApis) { _%>
+<%_ if (searchEngineElasticsearch && !paginationNo) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -218,7 +210,7 @@ import org.springframework.test.context.transaction.TestTransaction;
 import org.springframework.transaction.annotation.Transactional;
   <%_ } _%>
 <%_ } _%>
-<%_ if (reactive && (implementsEagerLoadApis || searchEngineElasticsearch)) { _%>
+<%_ if (reactive && searchEngineElasticsearch) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -251,9 +243,6 @@ import java.time.LocalTime;
 <%_ } _%>
 <%_ if (fieldsToTest.some(field => field.fieldTypeLocalTime)) { _%>
 import java.time.format.DateTimeFormatter;
-<%_ } _%>
-<%_ if (!reactive && implementsEagerLoadApis) { _%>
-import java.util.ArrayList;
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import java.util.Base64;
@@ -290,7 +279,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ } else if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch || implementsEagerLoadApis) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -311,9 +300,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 @IntegrationTest
 <%_ if (skipJunitTests) { _%>
 @Disabled("<%- skipJunitTests %>")
-<%_ } _%>
-<%_ if (implementsEagerLoadApis) { _%>
-@ExtendWith(MockitoExtension.class)
 <%_ } _%>
 <%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_ENTITY_TIMEOUT)
@@ -539,22 +525,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     @Autowired
     private UserRepository userRepository;
 <%_ } _%>
-<%_ if (implementsEagerLoadApis) { _%>
-
-    @Mock
-    private <%- entityClass %>Repository <%- entityInstance %>RepositoryMock;
-<%_ } _%>
 <%_ if (dtoMapstruct) { _%>
 
     @Autowired
     private <%- entityClass %>Mapper <%- entityInstance %>Mapper;
 <%_ } _%>
 <%_ if (!serviceNo) { _%>
-  <%_ if (implementsEagerLoadApis) { _%>
-
-    @Mock
-    private <%- entityClass %>Service <%- entityInstance %>ServiceMock;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 
@@ -1185,50 +1161,31 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
   <%_ } _%>
 <%_ } _%>
-<% if (implementsEagerLoadApis && !databaseTypeNeo4j) { %>
-  <%_ const imperativeEagerLoadMockResult = paginationNo ? 'new ArrayList<>()' : 'new PageImpl(new ArrayList<>())'; _%>
-  <%_ const eagerLoadMockResult = reactive ? 'Flux.empty()' : imperativeEagerLoadMockResult; _%>
-    @SuppressWarnings({"unchecked"})
-    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <%- reactive ? '' : 'throws Exception ' %>{
-  <%_ if (serviceNo) { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } else { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } _%>
+<%_ if (implementsEagerLoadApis) { _%>
 
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>WithoutEagerRelationships() <%- reactive ? '' : 'throws Exception ' %>{
+        // Initialize the database
+  <%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+    <%_ } _%>
+  <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        // Get all the <%- entityInstance %>List without loading the relationships
   <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=true")
+        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=false&sort=<%- primaryKey.name %>,desc")
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>));
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
-            .andExpect(status().isOk());
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false&sort=<%- primaryKey.name %>,desc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>)));
   <%_ } _%>
-
-  <%_ if (serviceNo) { _%>
-        verify(<%- entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
-  <%_ } else { _%>
-        verify(<%- entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
-  <%_ } _%>
-    }
-
-    @SuppressWarnings({"unchecked"})
-    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <%- reactive ? '' : 'throws Exception ' %>{
-  <%_ if (serviceNo) { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } else { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } _%>
-
-  <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=false")
-            .exchange()
-            .expectStatus().isOk();
-  <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
-            .andExpect(status().isOk());
-  <%_ } _%>
-        verify(<%- entityInstance %>RepositoryMock, times(1)).findAll<%- reactive ? 'WithEagerRelationships(any()' : '(any(Pageable.class)' %>);
     }
 <%_ } _%>
 
