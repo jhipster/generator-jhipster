@@ -630,6 +630,7 @@ ${classProperties
             [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
             `${application.javaPackageSrcDir}config/JacksonConfiguration.java`,
           ],
+          '9.4.1': [`${application.srcMainResources}config/tls/keystore.p12`],
         });
       },
       resetFakeDataSeed() {
@@ -642,15 +643,17 @@ ${classProperties
         });
       },
       generateKeyStore({ application }) {
-        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore-samples.p12`);
         if (this.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
         } else if (this.fs.exists(keyStoreFile)) {
+          // A write once file, written back as it is: the KeyStore is told apart from the files no generator writes.
+          this.writeDestination(keyStoreFile, this.fs.read(keyStoreFile, { raw: true }), { metadata: { writeOnce: true } });
           this.log.info(`KeyStore '${keyStoreFile}' already exists. Leaving unchanged.`);
         } else {
           // Written through the in-memory file system, the KeyStore goes through the commit pipeline like any other
           // generated file, `--export-application` included.
-          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName! }));
+          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName! }), { metadata: { writeOnce: true } });
           this.log.info(`KeyStore '${keyStoreFile}' generated successfully.`);
         }
       },
@@ -864,7 +867,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437-2',
           ruleKey: 'java:S6437',
-          resourceKey: `${application.srcMainResources}config/application-tls.yml`,
+          resourceKey: `${application.srcMainResources}config/application-tls-samples.yml`,
           comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({

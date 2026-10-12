@@ -175,7 +175,8 @@ const command = {
       scope: 'storage',
     },
     e2eTls: {
-      description: 'Run the end-to-end tests of the packaged application over TLS, the server started with its tls profile',
+      description:
+        'Run the end-to-end tests of the packaged application over TLS, the server started with its tls and tls-samples profiles',
       cli: {
         type: Boolean,
         hide: true,
