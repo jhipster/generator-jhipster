@@ -20,8 +20,6 @@
 import { statSync } from 'node:fs';
 import { extname, join } from 'node:path';
 
-import type { MemFsEditor } from 'mem-fs-editor';
-
 import { jdlEntitiesSamplesFolder } from '../../constants.ts';
 
 const isDirectory = (dir: string) => {
@@ -37,16 +35,3 @@ export const jdlEntitySamplePath = (entity: string): string => {
   const samplePath = join(jdlEntitiesSamplesFolder, entity);
   return isDirectory(samplePath) || extname(samplePath) === '.jdl' ? samplePath : `${samplePath}.jdl`;
 };
-
-export default function copyJdlEntitySamples(memFs: MemFsEditor, dest: string, ...entities: string[]) {
-  for (const entity of entities) {
-    const samplePath = jdlEntitySamplePath(entity);
-    if (isDirectory(samplePath)) {
-      memFs.copy(`${samplePath}/**`, dest);
-    } else if (extname(entity) === '.jdl') {
-      memFs.copy(samplePath, join(dest, entity));
-    } else if (!extname(entity)) {
-      memFs.copy(samplePath, join(dest, `${entity}.jdl`));
-    }
-  }
-}

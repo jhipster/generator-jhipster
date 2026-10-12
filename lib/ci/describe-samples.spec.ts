@@ -19,7 +19,7 @@
 import { describe, expect, it } from 'esmocha';
 import { join } from 'node:path';
 
-import { describeGithubSamples } from './describe-samples.ts';
+import { describeGithubSamples, formatSample, readSampleDefaultCommand } from './describe-samples.ts';
 import { getGithubSamples, getGithubSamplesGroup } from './github-group.ts';
 
 const fixtures = join(import.meta.dirname, '__test-support__/samples-groups');
@@ -60,6 +60,7 @@ describe('ci samples groups', () => {
           generatorOptions,
           os: matrix.os,
           generator: sample.generator,
+          defaultCommand: sample.defaultCommand,
           files: sample.files,
           jdls: sample.jdls,
         })),
@@ -69,6 +70,7 @@ describe('ci samples groups', () => {
     "config": {
       "clientFramework": "vue",
     },
+    "defaultCommand": "jdl",
     "files": {},
     "generator": "jdl",
     "generatorOptions": {
@@ -86,6 +88,7 @@ describe('ci samples groups', () => {
     "config": {
       "clientFramework": "react",
     },
+    "defaultCommand": "spring-boot",
     "files": {
       ".yo-rc.json": "valid/files/app-yo-rc/.yo-rc.json",
     },
@@ -99,6 +102,7 @@ describe('ci samples groups', () => {
     "config": {
       "clientFramework": "vue",
     },
+    "defaultCommand": "jdl",
     "files": {},
     "generator": "jdl",
     "generatorOptions": undefined,
@@ -114,6 +118,7 @@ describe('ci samples groups', () => {
     "config": {
       "clientFramework": "react",
     },
+    "defaultCommand": "spring-boot",
     "files": {
       ".yo-rc.json": "valid/files/app-yo-rc/.yo-rc.json",
     },
@@ -127,6 +132,7 @@ describe('ci samples groups', () => {
     "config": {
       "buildTool": "gradle",
     },
+    "defaultCommand": "jdl",
     "files": {},
     "generator": "jdl",
     "generatorOptions": undefined,
@@ -151,12 +157,18 @@ describe('ci samples groups', () => {
           workflow: group,
           jobName: `${name}-job`,
           generator: 'app',
+          defaultCommand: 'app',
           files: {},
           jdls: {},
           matrix: { os: matrix!.os, node: '', java: '' },
         }),
       });
       expect(samples.map(({ name, jobName }) => ({ name, jobName }))).toEqual([{ name: 'inline-jdl', jobName: 'inline-jdl-job' }]);
+    });
+    it('gives the command of an app sample, app without a defaultCommand', async () => {
+      const samples = await describeGithubSamples({ samplesGroupFolder: valid, groups: ['custom'], root: fixtures });
+      expect(formatSample(samples.find(({ name }) => name === 'custom-yo-rc')!)).toContain('command: spring-boot');
+      expect(readSampleDefaultCommand(join(valid, 'files/missing/.yo-rc.json'))).toBe('app');
     });
   });
 });

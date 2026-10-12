@@ -17,12 +17,6 @@
  * limitations under the License.
  */
 
-import { join } from 'node:path';
-
-import type { MemFsEditor } from 'mem-fs-editor';
-
-import { entitiesSamplesDir } from '../../constants.ts';
-
 const sqllight = ['BankAccount', 'Label', 'Operation', 'EntityWithDTO', 'PluralTaskData', 'PluralJobData'];
 
 const sql = [
@@ -121,14 +115,3 @@ export const entitiesByType: Record<string, string[]> = {
     'JpaFilteringOtherSide',
   ],
 };
-
-export default function copyEntitySamples(memFs: MemFsEditor, dest: string, type: string) {
-  if (type === 'mongodb' || type === 'couchbase') {
-    type = 'document';
-  }
-  const entitiesFolder = join(dest, '.jhipster');
-  const entities = entitiesByType[type];
-  for (const entity of entities) {
-    memFs.copy(join(entitiesSamplesDir, `${entity}.json`), join(entitiesFolder, `${entity}.json`));
-  }
-}

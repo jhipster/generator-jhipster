@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { getWorkflowNames, isDaily } from '../generate-sample/support/get-workflow-samples.ts';
-import { workflowChoices } from '../github-build-matrix/command.ts';
+
+import { WORKFLOWS } from './support/describe-samples.ts';
 
 export default {
   configs: {
@@ -30,11 +30,11 @@ export default {
       scope: 'generator',
     },
     workflow: {
-      description: 'Only the samples of a workflow',
+      description: 'Only the samples of a workflow, or of a samples group of the generators workflow',
       cli: {
         type: String,
       },
-      choices: [...workflowChoices, ...getWorkflowNames().filter(isDaily)],
+      choices: WORKFLOWS,
       scope: 'generator',
     },
     json: {

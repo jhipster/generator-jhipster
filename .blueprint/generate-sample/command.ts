@@ -33,7 +33,7 @@ const command = {
     entitiesSample: {
       cli: {
         type: String,
-        description: 'Entities sample to copy',
+        description: 'Entities sample to copy with --sample-yorc-folder, a sample by its name copying its own',
       },
       configure: gen => {
         if (['mongodb', 'couchbase'].includes(gen.entitiesSample)) {
