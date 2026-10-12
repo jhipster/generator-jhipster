@@ -375,27 +375,25 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   checkApplicationsDockerImages({ applications }: { applications: WorkspacesApplication[] }) {
     this.log.log('\nChecking Docker images in applications directories...');
 
-    let imagePath = '';
-    let runCommand = '';
-    let hasWarning = false;
-    let warningMessage = 'To generate the missing Docker image(s), please run:\n';
-    applications.forEach(application => {
+    // An application builds its image with its docker:build script, the jib build for a Java application. Only the jib
+    // cache of a Java build tool tells that the image was built: the other applications are always listed.
+    const missingImages: string[] = [];
+    for (const application of applications) {
+      const appPath = this.workspacePath(application.appFolder!);
+      let jibCache: string | undefined;
       if (application.buildToolGradle) {
-        imagePath = this.workspacePath(application.appFolder!, 'build/jib-cache');
-        runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
+        jibCache = 'build/jib-cache';
       } else if (application.buildToolMaven) {
-        imagePath = this.workspacePath(application.appFolder!, '/target/jib-cache');
-        runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
+        jibCache = 'target/jib-cache';
       }
-      if (!existsSync(imagePath)) {
-        hasWarning = true;
-        warningMessage += `  ${chalk.cyan(runCommand)} in ${this.workspacePath(application.appFolder!)}\n`;
-      }
-    });
-    if (hasWarning) {
-      this.log.warn('Docker Compose configuration generated, but no Jib cache found');
-      this.log.warn('If you forgot to generate the Docker image for this application, please run:');
-      this.log.log(chalk.red(warningMessage));
+      if (jibCache && existsSync(this.workspacePath(application.appFolder!, jibCache))) continue;
+      const runCommand = jibCache && process.arch === 'arm64' ? 'npm run java:docker:arm64' : 'npm run docker:build';
+      missingImages.push(`  ${chalk.cyan(runCommand)} in ${appPath}`);
+    }
+    if (missingImages.length > 0) {
+      this.log.warn('Docker Compose configuration generated, but the Docker images may be missing');
+      this.log.warn('If you forgot to generate the Docker image for these applications, please run:');
+      this.log.log(chalk.red(`To generate the missing Docker image(s), please run:\n${missingImages.join('\n')}\n`));
     } else {
       this.log.verboseInfo(chalk.bold.green('Docker Compose configuration successfully generated!'));
     }
