@@ -18,7 +18,8 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { basename, join } from 'node:path';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join } from 'node:path';
 import { createSecureContext } from 'node:tls';
 
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
@@ -79,6 +80,10 @@ describe(`generator - ${generator}`, () => {
         expect(() => createSecureContext({ pfx, passphrase: 'password' })).not.toThrow();
         expect(() => createSecureContext({ pfx, passphrase: 'wrong' })).toThrow('mac verify failure');
       });
+
+      it('should write it once', () => {
+        expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
+      });
     });
 
     describe('with an existing KeyStore', () => {
@@ -86,12 +91,20 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .runJHipster(generator)
           .withJHipsterConfig({ skipClient: true })
-          .withFiles({ [keyStoreFile]: 'existing' })
+          // On the disk, as in a project: an identical write to a file already modified in memory keeps its metadata.
+          .doInDir(cwd => {
+            mkdirSync(join(cwd, dirname(keyStoreFile)), { recursive: true });
+            writeFileSync(join(cwd, keyStoreFile), 'existing');
+          })
           .withOptions({ fakeKeytool: false });
       });
 
       it('should leave it unchanged', () => {
         runResult.assertFileContent(keyStoreFile, /^existing$/);
+      });
+
+      it('should write it back as a write once file', () => {
+        expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
       });
     });
   });

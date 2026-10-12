@@ -647,11 +647,13 @@ ${classProperties
         if (this.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
         } else if (this.fs.exists(keyStoreFile)) {
+          // A write once file, written back as it is: the KeyStore is told apart from the files no generator writes.
+          this.writeDestination(keyStoreFile, this.fs.read(keyStoreFile, { raw: true }), { metadata: { writeOnce: true } });
           this.log.info(`KeyStore '${keyStoreFile}' already exists. Leaving unchanged.`);
         } else {
           // Written through the in-memory file system, the KeyStore goes through the commit pipeline like any other
           // generated file, `--export-application` included.
-          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName! }));
+          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName! }), { metadata: { writeOnce: true } });
           this.log.info(`KeyStore '${keyStoreFile}' generated successfully.`);
         }
       },
