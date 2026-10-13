@@ -61,7 +61,6 @@ export default defineConfig(
     files: tsFiles,
     extends: [ts.configs.recommended, ts.configs.stylistic],
     languageOptions: {
-      parser: ts.parser,
       parserOptions: {
         project: ['./tsconfig.spec.json'],
       },
