@@ -441,6 +441,17 @@ exports[`describe-samples - support describeSampleGroups should match the sample
       "daily-vue-maven-theme",
     ],
   },
+  "daily-windows": {
+    "samples": [
+      "daily-windows-ng-default",
+      "daily-windows-ng-gradle-fr",
+      "daily-windows-ng-mariadb-oauth2-sass-infinispan",
+      "daily-windows-ms-ngx-gateway-eureka",
+      "daily-windows-ms-micro-eureka",
+      "daily-windows-vue-default",
+      "daily-windows-react-default",
+    ],
+  },
   "devserver": {
     "samples": [
       "ng-default-esbuild",
