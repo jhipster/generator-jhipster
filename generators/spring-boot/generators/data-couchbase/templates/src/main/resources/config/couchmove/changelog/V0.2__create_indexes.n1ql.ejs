@@ -28,7 +28,7 @@ CREATE INDEX authority_type ON `${bucket}`.`${scope}`.`authority`(type)
 <%_ } _%>
 
 <%_ if (authenticationTypeSession) { _%>
-CREATE INDEX token_date ON `${bucket}`.`${scope}`.`persistentToken` %>(tokenDate)
+CREATE INDEX token_date ON `${bucket}`.`${scope}`.`persistentToken`(tokenDate)
     WHERE `type` = "persistentToken"
     WITH { "defer_build" : true };
 <%_ } _%>
