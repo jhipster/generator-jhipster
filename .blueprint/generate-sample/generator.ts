@@ -36,6 +36,12 @@ const SAMPLE_DB_RANDOM_PASSWORD = 'sample-db-password';
 
 const packageRoot = getPackageRoot();
 
+/** The inline jdl of a sample, given to the jdl generator as one: its inline jdls concatenated. */
+export const inlineJDLOf = (sample: Pick<SampleDescription, 'jdls'>): string =>
+  Object.values(sample.jdls)
+    .flatMap(jdl => ('content' in jdl ? [jdl.content] : []))
+    .join('\n');
+
 export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleName!: string;
   global?: boolean;
@@ -44,8 +50,6 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleOnly?: boolean;
   /** The sample of the name, as describe-samples describes it. */
   sample?: SampleDescription;
-  /** The inline jdl of the sample, given to the jdl generator. */
-  inlineJDL?: string;
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asAnyTaskGroup({
@@ -100,8 +104,6 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
           for (const [destination, jdl] of Object.entries(sample.jdls)) {
             if ('file' in jdl) {
               this.fs.copy(resolve(packageRoot, jdl.file), join(this.projectFolder, destination));
-            } else {
-              this.inlineJDL = jdl.content;
             }
           }
         }
@@ -122,11 +124,12 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
       async generateSample() {
         if (extname(this.sampleName) === '.jdl' || this.sampleOnly) return;
 
-        const { sample, inlineJDL } = this;
+        const { sample } = this;
         if (!sample) return;
-        if (inlineJDL) {
+        const inline = inlineJDLOf(sample);
+        if (inline) {
           await this.composeWithJHipster(GENERATOR_JDL, {
-            generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder, inline: inlineJDL },
+            generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder, inline },
           });
           return;
         }

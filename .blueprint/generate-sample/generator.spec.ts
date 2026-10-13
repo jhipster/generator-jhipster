@@ -22,7 +22,7 @@ import { basename, join } from 'node:path';
 
 import { defaultGithubEnvironment } from '../../lib/ci/index.ts';
 
-import Generator from './generator.ts';
+import Generator, { inlineJDLOf } from './generator.ts';
 
 import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, runResult } from '#testing';
@@ -138,6 +138,16 @@ describe(`generator - ${generator}`, () => {
     it('should give the jdl inline to the jdl generator', () => {
       const [, options] = runResult.getGeneratorMock('jhipster:jdl').calls.at(-1)!.arguments;
       expect(options).toMatchObject({ inline: expect.stringContaining('graalvmSupport true') });
+    });
+  });
+
+  describe('inlineJDLOf', () => {
+    it('should concatenate the inline jdls of a sample, leaving its jdl files', () => {
+      expect(
+        inlineJDLOf({
+          jdls: { 'a.jdl': { content: 'application { }' }, 'b.jdl': { file: 'b.jdl' }, 'c.jdl': { content: 'entity C' } },
+        }),
+      ).toBe('application { }\nentity C');
     });
   });
 
