@@ -42,6 +42,10 @@ const localBlueprintNamespace = '@jhipster/jhipster-local';
 // Local and dev blueprints generators.
 const localBlueprintGeneratorsLookup = ['.'];
 
+/** The `cli/commands` file a blueprint declares its commands in, if any. */
+const blueprintCommandsFile = (packagePath: string | undefined): string | undefined =>
+  ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'].map(extension => `${packagePath}/cli/commands${extension}`).find(file => existsSync(file));
+
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
 
 /**
@@ -323,9 +327,11 @@ export default class EnvironmentBuilder {
     if (this.devBlueprintPath) {
       blueprintsPackagePath ??= [];
       blueprintsPackagePath.push([devBlueprintNamespace, this.devBlueprintPath]);
-      if (this.localBlueprintExists) {
-        blueprintsPackagePath.push([localBlueprintNamespace, this.localBlueprintPath]);
-      }
+    }
+    // The commands the local blueprint of the project declares, with or without the dev blueprint.
+    if (this.localBlueprintExists && blueprintCommandsFile(this.localBlueprintPath)) {
+      blueprintsPackagePath ??= [];
+      blueprintsPackagePath.push([localBlueprintNamespace, this.localBlueprintPath]);
     }
     return this._getBlueprintCommands(blueprintsPackagePath);
   }
@@ -440,12 +446,9 @@ export default class EnvironmentBuilder {
     }
     let result: Record<string, CliCommand> = {};
     for (const [blueprint, packagePath] of blueprintPackagePaths) {
-      const blueprintCommandFile = `${packagePath}/cli/commands`;
-      const blueprintCommandExtension = ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'].find(extension =>
-        existsSync(`${blueprintCommandFile}${extension}`),
-      );
-      if (blueprintCommandExtension) {
-        const blueprintCommandsUrl = pathToFileURL(resolve(`${blueprintCommandFile}${blueprintCommandExtension}`));
+      const commandsFile = blueprintCommandsFile(packagePath);
+      if (commandsFile) {
+        const blueprintCommandsUrl = pathToFileURL(resolve(commandsFile));
         try {
           const blueprintCommand: Record<string, CliCommand> = (await import(blueprintCommandsUrl.href)).default;
           const blueprintCommands = cloneDeep(blueprintCommand);
