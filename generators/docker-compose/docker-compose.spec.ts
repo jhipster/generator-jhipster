@@ -85,6 +85,36 @@ describe('generator - Docker Compose', () => {
     });
   });
 
+  describe('with a blueprint of the deployment', () => {
+    const chosenApps = ['02-mysql'];
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      // The cli passes the blueprints of the deployment .yo-rc.json as the blueprints option.
+      await helpers
+        .runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE)
+        .withFakeTestBlueprint('generator-jhipster-deployment-blueprint')
+        .withOptions({ blueprints: 'generator-jhipster-deployment-blueprint' })
+        .withAnswers({
+          deploymentApplicationType: APPLICATION_TYPE_MICROSERVICE,
+          directoryPath: '../',
+          appsFolders: chosenApps,
+          clusteredDbApps: [],
+          monitoring: NO_MONITORING,
+        });
+    });
+    it('stores the blueprint in the deployment only', () => {
+      runResult.assertJsonFileContent('docker-compose/.yo-rc.json', {
+        'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-deployment-blueprint' }] },
+      });
+      const appConfig = runResult.fs.readJSON(`${runResult.cwd}/${chosenApps[0]}/.yo-rc.json`) as any;
+      expect(appConfig['generator-jhipster'].blueprints).toBeUndefined();
+    });
+  });
+
   describe('only gateway', () => {
     const chosenApps = ['01-gateway'];
     before(async () => {

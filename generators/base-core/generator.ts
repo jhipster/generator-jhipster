@@ -18,7 +18,7 @@
  */
 import assert from 'node:assert';
 import { existsSync, rmSync, statSync } from 'node:fs';
-import { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import { basename, extname, isAbsolute, join, join as joinPath, relative, resolve } from 'node:path';
 import { relative as posixRelative } from 'node:path/posix';
 
 import { requireNamespace } from '@yeoman/namespace';
@@ -868,14 +868,25 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       }
     }
 
+    const generatorOptions: Record<string, any> = {
+      ...this.options,
+      positionalArguments: undefined,
+      ...options?.generatorOptions,
+    };
+    // The blueprints belong to the project they are given for: a generator composed in another folder uses the blueprints
+    // of the .yo-rc.json of that folder, unless they are passed to it.
+    const { destinationRoot } = options?.generatorOptions ?? {};
+    if (destinationRoot && resolve(this.destinationRoot(), destinationRoot) !== this.destinationRoot()) {
+      for (const option of ['blueprints', 'blueprint']) {
+        if (!(option in options!.generatorOptions!)) {
+          generatorOptions[option] = undefined;
+        }
+      }
+    }
     return this.composeWith(generator, {
       forwardOptions: false,
       ...options,
-      generatorOptions: {
-        ...this.options,
-        positionalArguments: undefined,
-        ...options?.generatorOptions,
-      },
+      generatorOptions,
     });
   }
 
