@@ -92,6 +92,17 @@ export default class CommonGenerator extends BaseApplicationGenerator<
           prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
         });
       },
+      watchScripts({ application }) {
+        if (application.skipClient || !application.clientFrameworkAny) return;
+        // The client and the server run together from the root package.json: the client from its workspace when it has one.
+        const { clientRootDir, skipServer } = application;
+        const clientScript = (script: string) => `'npm run ${clientRootDir ? `-w ${clientRootDir} ` : ''}${script}'`;
+        const server = skipServer ? '' : ' npm:backend:start';
+        Object.assign(application.packageJsonScripts, {
+          watch: `concurrently ${clientRootDir ? clientScript('start') : 'npm:start'}${server}`,
+          'build-watch': `concurrently ${clientScript('webapp:build:dev -- --watch')}${server}`,
+        });
+      },
       sonarSourceApi({ source }) {
         source.ignoreSonarRule = ({ ruleId, ruleKey, resourceKey, comment }) => {
           this.editFile(

@@ -92,7 +92,6 @@
     "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
     "build": "<%- nodePackageManager %> run webapp:prod --",
-    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<%- skipServer ? '' : ' npm:backend:start' %>",
     "start": "<%- nodePackageManager %> run webapp:dev --",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
@@ -102,7 +101,6 @@
     "test:watch": "<%- nodePackageManager %> run vitest --",
     "vitest": "vitest",
     "vitest-run": "vitest run --coverage",
-    "watch": "concurrently 'npm run start' npm:backend:start",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
     "webapp:build:dev": "vite build",
     "webapp:build:prod": "vite build",
