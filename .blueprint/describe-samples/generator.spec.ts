@@ -53,6 +53,7 @@ describe(`generator - ${generator}`, () => {
         'react',
         'docker-compose-integration',
         'vue',
+        'database-changelog',
         'generate-blueprint',
         'daily-couchbase',
         'daily-elasticsearch',

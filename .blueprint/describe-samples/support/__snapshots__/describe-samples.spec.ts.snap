@@ -452,6 +452,12 @@ exports[`describe-samples - support describeSampleGroups should match the sample
       "daily-windows-react-default",
     ],
   },
+  "database-changelog": {
+    "samples": [
+      "liquibase-jdl-rename-field",
+      "liquibase-jdl-rename-field-post",
+    ],
+  },
   "devserver": {
     "samples": [
       "ng-default-esbuild",
