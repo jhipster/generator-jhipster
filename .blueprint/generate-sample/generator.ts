@@ -29,13 +29,10 @@ import { findSamples } from '../describe-samples/support/describe-samples.ts';
 import { promptSamplesFolder } from '../support.ts';
 
 const GENERATOR_JDL = 'jdl';
-const GENERATOR_APP = 'app';
 const GENERATOR_INFO = 'info';
 
 /** The password of the databases of the deployments of a sample, which a deployment draws otherwise. */
 const SAMPLE_DB_RANDOM_PASSWORD = 'sample-db-password';
-
-import { entitiesByType } from './support/index.ts';
 
 const packageRoot = getPackageRoot();
 
@@ -44,8 +41,6 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
   global?: boolean;
   projectFolder!: string;
   projectVersion?: string;
-  entitiesSample!: string;
-  sampleYorcFolder?: boolean;
   sampleOnly?: boolean;
   /** The sample of the name, as describe-samples describes it. */
   sample?: SampleDescription;
@@ -95,18 +90,6 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
       async copySample() {
         if (extname(this.sampleName) === '.jdl') {
           this.copyTemplate(`samples/${this.sampleName}`, this.sampleName);
-        } else if (this.sampleYorcFolder) {
-          this.copyTemplate(`test-integration/${this.sampleName}/.yo-rc.json`, '.yo-rc.json');
-          const entitiesFiles = entitiesByType[this.entitiesSample];
-          if (entitiesFiles) {
-            this.jhipsterConfig.entities = entitiesFiles;
-            this.log.info(`Copying entities ${this.entitiesSample} (${entitiesFiles})`);
-            this.copyTemplate(
-              entitiesFiles.map(entity => `.jhipster/${entity}.json`),
-              this.projectFolder,
-              { noGlob: true, fromBasePath: this.templatePath('test-integration/samples/') },
-            );
-          }
         } else {
           const [sample] = findSamples({ sampleName: this.sampleName });
           this.sample = sample;
@@ -137,7 +120,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         });
       },
       async generateSample() {
-        if (extname(this.sampleName) === '.jdl' || this.sampleYorcFolder || this.sampleOnly) return;
+        if (extname(this.sampleName) === '.jdl' || this.sampleOnly) return;
 
         const { sample, inlineJDL } = this;
         if (!sample) return;
@@ -168,14 +151,6 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
           });
         }
         await this.composeWithJHipster(sample.defaultCommand, { generatorOptions });
-      },
-      async generateYoRcSample() {
-        if (!this.sampleYorcFolder || this.sampleOnly) return;
-
-        const yoRc = (this.fs.readJSON(`${this.projectFolder}/.yo-rc.json`) as any)?.['generator-jhipster'] as unknown as
-          typeof this.jhipsterConfig | undefined;
-        const defaultCommand = yoRc?.defaultCommand ?? GENERATOR_APP;
-        await this.composeWithJHipster(defaultCommand, { generatorOptions: { destinationRoot: this.projectFolder } });
       },
       async updateVscodeWorkspace() {
         if (this.global) {
