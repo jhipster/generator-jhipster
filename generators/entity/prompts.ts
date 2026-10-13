@@ -871,7 +871,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
 }
 
 /**
- * Show the entity and it's fields and relationships in console
+ * Show the entity and its fields and relationships in console
  */
 function logFieldsAndRelationships(this: EntityGenerator) {
   const context = this.entityData;

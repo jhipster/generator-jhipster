@@ -244,7 +244,7 @@ JSONEntity {
     });
     describe('when passing something', () => {
       before(() => {
-        // @ts-expect-error TODD convert to relationships
+        // @ts-expect-error TODO convert to relationships
         entity.addRelationships([42, 43]);
       });
 
