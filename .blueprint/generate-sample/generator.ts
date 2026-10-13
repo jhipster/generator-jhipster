@@ -120,17 +120,6 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
 
         const { sample } = this;
         if (!sample) return;
-        // The inline jdls of the sample, given to the jdl generator as one.
-        const inline = Object.values(sample.jdls)
-          .flatMap(jdl => ('content' in jdl ? [jdl.content] : []))
-          .join('\n');
-        if (inline) {
-          await this.composeWithJHipster(GENERATOR_JDL, {
-            generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder, inline },
-          });
-          return;
-        }
-
         const generatorOptions: any = {
           projectVersion: this.projectVersion,
           destinationRoot: this.projectFolder,
@@ -138,16 +127,19 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
           ...(sample.war ? { defaultPackaging: 'war' } : {}),
           ...sample.generatorOptions,
         };
-        const jdlFiles = Object.keys(sample.jdls).length > 0 ? globSync('*.jdl', { cwd: this.projectFolder }) : [];
+        // The jdl files copied to the project and the inline jdls, which the jdl generator concatenates.
+        const jdls = Object.values(sample.jdls);
+        const jdlFiles = jdls.some(jdl => 'file' in jdl) ? globSync('*.jdl', { cwd: this.projectFolder }) : [];
+        const inline = jdls.flatMap(jdl => ('content' in jdl ? [jdl.content] : [])).join('\n') || undefined;
         if (sample.defaultCommand === GENERATOR_JDL) {
-          await this.composeWithJHipster(GENERATOR_JDL, { generatorArgs: jdlFiles, generatorOptions });
+          await this.composeWithJHipster(GENERATOR_JDL, { generatorArgs: jdlFiles, generatorOptions: { ...generatorOptions, inline } });
           return;
         }
-        if (jdlFiles.length > 0) {
+        if (jdlFiles.length > 0 || inline) {
           // The entities of an app sample written as jdl.
           await this.composeWithJHipster(GENERATOR_JDL, {
             generatorArgs: jdlFiles,
-            generatorOptions: { ...generatorOptions, jsonOnly: true },
+            generatorOptions: { ...generatorOptions, inline, jsonOnly: true },
           });
         }
         await this.composeWithJHipster(sample.defaultCommand, { generatorOptions });
