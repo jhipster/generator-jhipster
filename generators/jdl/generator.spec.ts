@@ -453,6 +453,38 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('with the global blueprints option', () => {
+      const run = esmocha.fn();
+      const createEnvBuilder = esmocha.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+        async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
+      );
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators([MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE])
+          .onEnvironment(env => {
+            const adapter = env.adapter as typeof env.adapter & { newAdapter: () => typeof env.adapter };
+            adapter.newAdapter = () => adapter;
+          })
+          .withOptions({
+            blueprints: 'foo',
+            globalBlueprints: 'baz',
+            inline:
+              'application { config { blueprints [bar] } entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
+            createEnvBuilder,
+          });
+      });
+
+      it('should generate each application with the global blueprints', () => {
+        expect(run).toHaveBeenCalledTimes(2);
+        for (const [, options] of run.mock.calls) {
+          expect(options).not.toHaveProperty('blueprints');
+          expect(options).toMatchObject({ globalBlueprints: 'baz' });
+        }
+      });
+    });
+
     describe('with --ignore-application option', () => {
       before(async () => {
         await helpers.runJHipster(generator).withMockedGenerators(mockedGenerators).withOptions({
