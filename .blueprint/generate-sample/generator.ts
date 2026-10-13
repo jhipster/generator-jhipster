@@ -36,12 +36,6 @@ const SAMPLE_DB_RANDOM_PASSWORD = 'sample-db-password';
 
 const packageRoot = getPackageRoot();
 
-/** The inline jdl of a sample, given to the jdl generator as one: its inline jdls concatenated. */
-export const inlineJDLOf = (sample: Pick<SampleDescription, 'jdls'>): string =>
-  Object.values(sample.jdls)
-    .flatMap(jdl => ('content' in jdl ? [jdl.content] : []))
-    .join('\n');
-
 export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleName!: string;
   global?: boolean;
@@ -126,7 +120,10 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
 
         const { sample } = this;
         if (!sample) return;
-        const inline = inlineJDLOf(sample);
+        // The inline jdls of the sample, given to the jdl generator as one.
+        const inline = Object.values(sample.jdls)
+          .flatMap(jdl => ('content' in jdl ? [jdl.content] : []))
+          .join('\n');
         if (inline) {
           await this.composeWithJHipster(GENERATOR_JDL, {
             generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder, inline },
