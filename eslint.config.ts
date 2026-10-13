@@ -19,15 +19,13 @@ const jsTsFiles = [...jsFiles, ...tsFiles];
 export default defineConfig(
   {
     files: jsTsFiles,
+    extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
         ...globals.node,
       },
-    },
-    rules: {
-      ...js.configs.recommended.rules,
     },
   },
   { ignores: ['dist', 'docs'] },
