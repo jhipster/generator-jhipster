@@ -85,7 +85,7 @@ export const buildMatrix = async ({
       convertToGitHubMatrixInclude = false;
       matrix = {
         'database-changelog': {
-          disabled: !springBootDefaults,
+          disabled: !springBootDefaults && !devBlueprint && !changes.databaseChangelogWorkflow,
         },
         'generate-blueprint': {
           disabled: !generateBlueprint && !devBlueprint && !base,

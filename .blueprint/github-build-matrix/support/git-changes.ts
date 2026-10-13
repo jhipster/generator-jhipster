@@ -37,6 +37,11 @@ const patterns = {
   ci: ['.github/{actions,workflows}/**', join(testIntegrationRelativeFolder, '{,jdl}samples/**')],
   client: ['generators/{client,init,javascript-simple-application}/**'],
   common: ['generators/{app,common,docker,languages}/**'],
+  databaseChangelogWorkflow: [
+    '.github/workflows/generator-database-changelog-liquibase.yml',
+    '.blueprint/github-build-matrix/samples/database-changelog.ts',
+    '.blueprint/generate-sample/templates/samples/incremental-changelog-samples/**',
+  ],
   devBlueprint: ['.blueprint/generate-sample/**', '.blueprint/github-build-matrix/**'],
   devserverWorkflow: ['.github/workflows/devserver.yml'],
   e2e: ['generators/cypress/**', 'generators/playwright/**'],
