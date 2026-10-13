@@ -121,7 +121,6 @@ export default defineConfig(
       'logical-assignment-operators': 'error',
       'no-use-before-define': ['error', 'nofunc'],
       'no-multi-str': 'error',
-      'no-irregular-whitespace': 'error',
       'no-console': 'error',
       'no-template-curly-in-string': 'error',
       'no-useless-concat': 'error',
