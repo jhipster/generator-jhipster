@@ -93,7 +93,6 @@
   },
   "scripts": {
     "build": "<%- nodePackageManager %> run webapp:prod --",
-    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<%- skipServer ? '' : ' npm:backend:start' %>",
     "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
     "lint": "eslint .",
@@ -105,7 +104,6 @@
     "test:watch": "<%- nodePackageManager %> run vitest",
     "vitest-run": "vitest --run --coverage",
     "vitest": "vitest",
-    "watch": "concurrently npm:start<%- skipServer ? '' : ' npm:backend:start' %>",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
     "webapp:prod": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:prod --",
     "webapp:test": "<%- nodePackageManager %> run test --"
