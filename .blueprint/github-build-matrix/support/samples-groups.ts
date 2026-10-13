@@ -18,6 +18,7 @@
  */
 import { githubSamplesGroupOf } from '../../../lib/ci/github-group.ts';
 import type { GitHubMatrixGroup } from '../../../lib/ci/index.ts';
+import databaseChangelog from '../samples/database-changelog.ts';
 import devserver from '../samples/devserver.ts';
 import dockerComposeIntegration from '../samples/docker-compose-integration.ts';
 import generateBlueprint from '../samples/generate-blueprint.ts';
@@ -29,6 +30,7 @@ import graalvm from '../samples/graalvm.ts';
  */
 export const samplesGroups: Record<string, GitHubMatrixGroup> = Object.fromEntries(
   Object.entries({
+    'database-changelog': databaseChangelog,
     devserver,
     'docker-compose-integration': dockerComposeIntegration,
     'generate-blueprint': generateBlueprint,

@@ -101,7 +101,8 @@ const describeGroupSamples = (workflow: string): SampleDescription[] =>
     samples: samplesGroups[workflow] ?? {},
     root: packageRoot,
     describeSample: ({ name, item, matrix }) => {
-      if (item.jdl) return undefined;
+      // A sample of the contract, a jdl or a sample-type, is described by it.
+      if (item.jdl || item['sample-type']) return undefined;
       // A sample generated from a `.yo-rc.json` folder, by its name only, like generate-sample resolves it.
       const resolved = resolveSample(name, { sample: groupWorkflowSample(name, { group: workflow, sample: item }) });
       return { ...describeResolved(resolved, workflow, matrix), name, jobName: name };
@@ -112,11 +113,12 @@ const describeGroupSamples = (workflow: string): SampleDescription[] =>
 const JSON_WORKFLOWS = new Set(getWorkflowNames());
 
 /**
- * Every described workflow: the group workflows of this repository, the generate-blueprint samples group of the generators
- * workflow, then the `daily-` workflows of jhipster-daily-builds.
+ * Every described workflow: the group workflows of this repository, the database-changelog and generate-blueprint samples
+ * groups of the generators workflow, then the `daily-` workflows of jhipster-daily-builds.
  */
 export const WORKFLOWS = [
   ...workflowChoices.filter(workflow => workflow !== 'generators'),
+  'database-changelog',
   'generate-blueprint',
   ...getWorkflowNames().filter(isDaily),
 ];
