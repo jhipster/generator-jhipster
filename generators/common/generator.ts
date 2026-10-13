@@ -93,14 +93,15 @@ export default class CommonGenerator extends BaseApplicationGenerator<
         });
       },
       watchScripts({ application }) {
-        if (application.skipClient || !application.clientFrameworkAny) return;
-        // The client and the server run together from the root package.json: the client from its workspace when it has one.
+        // The client and the server run together from the root package.json: the client from its workspace when it has one,
+        // the server alone without a client.
         const { clientRootDir, skipServer } = application;
+        const client = !application.skipClient && application.clientFrameworkAny;
         const clientScript = (script: string) => `'npm run ${clientRootDir ? `-w ${clientRootDir} ` : ''}${script}'`;
-        const server = skipServer ? '' : ' npm:backend:start';
+        const server = skipServer ? [] : ['npm:backend:start'];
         Object.assign(application.packageJsonScripts, {
-          watch: `concurrently ${clientRootDir ? clientScript('start') : 'npm:start'}${server}`,
-          'build-watch': `concurrently ${clientScript('webapp:build:dev -- --watch')}${server}`,
+          watch: ['concurrently', ...(client ? [clientRootDir ? clientScript('start') : 'npm:start'] : []), ...server].join(' '),
+          'build-watch': ['concurrently', ...(client ? [clientScript('webapp:build:dev -- --watch')] : []), ...server].join(' '),
         });
       },
       sonarSourceApi({ source }) {
