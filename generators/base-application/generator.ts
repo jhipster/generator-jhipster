@@ -157,13 +157,11 @@ export default class BaseApplicationGenerator<
   static readonly POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, features);
+    super(args, options, { ...features, customPriorities: [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])] } as Features);
 
     if (this.options.help) {
       return;
     }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
 
     /* Add tasks allowing entities priorities to match normal priorities pattern */
     this.on('queueOwnTasks', () => {
