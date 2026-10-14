@@ -27,7 +27,6 @@ _%>
             return <%- entityInstance %><%- searchEngineElasticsearch ? 'Search' : '' %>Repository
                 .search(query)
     <%_ if (dtoMapstruct) { _%>
-
                 .map(<%- entityToDtoReference %>)
     <%_ } _%>
     <%_ if (fromResource) { _%>

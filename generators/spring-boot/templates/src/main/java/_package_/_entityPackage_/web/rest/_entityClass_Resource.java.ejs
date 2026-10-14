@@ -501,7 +501,6 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- idToString %>)).build())
             );
     <%_ } else { _%>
-
             .then(Mono.just(ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- idToString %>)).build())
         );
