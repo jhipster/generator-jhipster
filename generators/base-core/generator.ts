@@ -76,7 +76,15 @@ import type {
 } from './api.ts';
 import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
+import {
+  CUSTOM_PRIORITIES,
+  type CustomObjectPhase,
+  PRIORITY_NAMES,
+  PRIORITY_PREFIX,
+  QUEUES,
+  customObjectPriorities,
+  customObjectPriorityName,
+} from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
@@ -117,6 +125,9 @@ export default class CoreGenerator<
   Features extends CoreFeatures = CoreFeatures,
 > extends YeomanGenerator<Config, Options, Features> {
   static readonly asPriority = asPriority;
+
+  /** The priority of a phase of a custom object (the `customObjects` feature), like `>preparingService`. */
+  static readonly objectPriority = (name: string, phase: CustomObjectPhase): string => asPriority(customObjectPriorityName(name, phase));
 
   static readonly INITIALIZING = asPriority(INITIALIZING);
 
@@ -188,9 +199,16 @@ export default class CoreGenerator<
       allowTemplatesOutsideRoot: true,
       ...features,
       // Registered by yeoman-generator, after the queues they reference: the ones of a class before the ones of its
-      // subclasses, which come in the features, so a subclass priority added before the same queue runs after them.
-      // None for the help.
-      customPriorities: options?.help ? undefined : [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])],
+      // subclasses, which come in the features, so a subclass priority added before the same queue runs after them, and
+      // the ones of the custom objects last, in their declaration order. None for the help.
+      customPriorities:
+        options?.help ? undefined : (
+          [
+            ...CUSTOM_PRIORITIES,
+            ...(features?.customPriorities ?? []),
+            ...(features?.customObjects ?? []).flatMap(({ name, before }) => customObjectPriorities(name, before)),
+          ]
+        ),
     });
 
     if (!this.options.help) {
