@@ -1,4 +1,4 @@
-<%# eslint-disable ejs-templates/experimental-prefer-slurp-multiline, @stylistic/indent-binary-ops, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
+<%# eslint-disable ejs-templates/prefer-slurp-multiline, @stylistic/indent-binary-ops, ejs-templates/no-complex-statements, ejs-templates/no-function-block -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -43,8 +43,8 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
       .map(relationship => ({
         relationship,
         observedField: relationship.otherEntity.fields.find(
-        field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
-      ),
+          field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
+        ),
       }))
       .filter(({ observedField }) => observedField);
     const noCascadeOtherEntities = this._.uniq(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity));
@@ -65,11 +65,11 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
             .map(field => ({
               property: field.propertyConsumerName,
               value: {
-              String: `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`,
-              UUID: `UUID.fromString("${faker.string.uuid()}")`,
-              Long: `${faker.number.int({ min: 1, max: 1000000 })}L`,
-              Integer: `${faker.number.int({ min: 1, max: 1000000 })}`,
-            }[field.javaFieldType],
+                String: `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`,
+                UUID: `UUID.fromString("${faker.string.uuid()}")`,
+                Long: `${faker.number.int({ min: 1, max: 1000000 })}L`,
+                Integer: `${faker.number.int({ min: 1, max: 1000000 })}`,
+              }[field.javaFieldType],
             }))
             .filter(fake => fake.value),
         ];
@@ -384,15 +384,15 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             }
           } catch (error) {
             this.log.warn(`Error generating test value for entity "${entityClass
-          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
-        }", generating default values for this field. Detailed error message: "${error.message}".`);
-        }
-        if (sampleTextString === updatedTextString) {
-          updatedTextString = `${updatedTextString}B`;
-          this.log.warn(`Randomly generated first and second test values for entity "${entityClass
-        }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
-        }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
-        }
+            }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
+            }", generating default values for this field. Detailed error message: "${error.message}".`);
+          }
+          if (sampleTextString === updatedTextString) {
+            updatedTextString = `${updatedTextString}B`;
+            this.log.warn(`Randomly generated first and second test values for entity "${entityClass
+            }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
+            }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
+          }
         }
     _%>
 
@@ -1236,7 +1236,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   ) { %>.toString()<% } %>))
 <%_ } _%>;
     }
-<%_ if (jpaMetamodelFiltering) { %>
+<%_ if (jpaMetamodelFiltering) { _%>
+
 
     @Test<%- transactionalAnnotation %>
     void get<%- entityClassPlural %>ByIdFiltering() <%- reactive ? '' : 'throws Exception ' %>{

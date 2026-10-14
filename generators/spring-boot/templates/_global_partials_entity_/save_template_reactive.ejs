@@ -21,7 +21,8 @@
     const entityToDtoReference = `${mapper}::toDto`;
 _%>
         return <%- entityInstance %>Repository.save(<% if (dtoMapstruct) { %><%- dtoToEntity %>(<% } %><%- restInstance %><%- dtoMapstruct ? ')' : '' %><%- !saveNewEntityOperation && requiresPersistableImplementation ? '.setIsPersisted()' : '' %>)
-<%_ if (searchEngineElasticsearch) { %>
+<%_ if (searchEngineElasticsearch) { _%>
+
             .flatMap(<%- entityInstance %>SearchRepository::index)
 <%_ } -%>
 <%_ if (dtoMapstruct) { _%>

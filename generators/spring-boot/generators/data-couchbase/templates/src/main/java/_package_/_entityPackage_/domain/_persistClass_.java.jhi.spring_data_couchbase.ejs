@@ -70,26 +70,7 @@ import org.springframework.data.couchbase.core.mapping.Field;
 <&_ } -&>
 <%_ } -%>
 
-<%_ /* for (const relationship of relationships) { _%>
-<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-  <%_ if (relationship.relationshipOneToMany) { _%>
-    <%_ if (!relationship.otherEntity.embedded) { _%>
-    @N1qlJoin(on = "lks.<%- relationship.relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-    <%_ } _%>
 
-  <%_ } else if (relationship.relationshipManyToOne) { _%>
-    <%_ if (!relationship.otherEntity.embedded) { _%>
-    @N1qlJoin(on = "lks.<%- relationship.relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-    <%_ } _%>
-  <%_ } else if (relationship.relationshipManyToMany) { _%>
-    @N1qlJoin(on = "lks.<%- relationship.relationshipFieldNamePlural %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-  <%_ } else if (!relationship.otherEntity.embedded) { _%>
-    @N1qlJoin(on = "lks.<%- relationship.relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-  <%_ } _%>
-
-<&_ } -&>
-<%_ } -%>
-<% Commented out until N1qlJoin support is fixed */ %>
 
 
 <%_ for (const relationship of relationships) { _%>

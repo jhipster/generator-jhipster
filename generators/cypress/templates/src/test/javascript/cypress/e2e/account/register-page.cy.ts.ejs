@@ -26,7 +26,7 @@ import {
   classValid,
 } from '../../support/commands';
 
-<% const registerPage = clientFrameworkVue ? '/register' : '/account/register'; _%>
+<%_ const registerPage = clientFrameworkVue ? '/register' : '/account/register'; _%>
 describe('<%- registerPage %>', () => {
   beforeEach(() => {
     cy.visit('<%- registerPage %>');

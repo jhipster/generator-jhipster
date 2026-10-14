@@ -18,7 +18,8 @@
 -%>
 <%_ if (reactive) { _%>
         return <%- entityInstance %><%- viaService ? 'Service.delete' : 'Repository.deleteById' %>(id)
-  <%_ if (!viaService && searchEngineElasticsearch) { %>
+  <%_ if (!viaService && searchEngineElasticsearch) { _%>
+
             .then(<%- entityInstance %>SearchRepository.deleteById(id))
   <%_ } -%>
   <%_ if (!fromResource) { -%>

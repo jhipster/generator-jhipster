@@ -500,7 +500,8 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             .then(Mono.just(ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- idToString %>)).build())
             );
-    <%_ } else { %>
+    <%_ } else { _%>
+
             .then(Mono.just(ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- idToString %>)).build())
         );

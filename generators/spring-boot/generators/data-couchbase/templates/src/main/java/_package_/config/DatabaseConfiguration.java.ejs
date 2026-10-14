@@ -69,7 +69,8 @@ import reactor.core.publisher.Flux;
 @Configuration
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 @Enable<%- reactivePrefix %>CouchbaseRepositories(
-<%_ if (searchEngineElasticsearch) { %>
+<%_ if (searchEngineElasticsearch) { _%>
+
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- reactivePrefix %>CouchbaseRepository.class),
 <%_ } _%>
     basePackages = "<%- packageName %>.repository"

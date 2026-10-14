@@ -64,10 +64,12 @@ import org.hibernate.type.SqlTypes;
     <%_ if (field.fieldTypeBigDecimal) { _%>
       , precision = 21, scale = 2
     <%_ } _%>
-    <%_ if (field.fieldValidationRequired) { %>
+    <%_ if (field.fieldValidationRequired) { _%>
+
       , nullable = false
     <%_ } _%>
-    <%_ if (field.fieldValidationUnique) { %>
+    <%_ if (field.fieldValidationUnique) { _%>
+
       , unique = true
     <%_ } _%>
   )
@@ -126,7 +128,8 @@ import org.hibernate.type.SqlTypes;
       <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
       <%_ } _%>
-      <%_ if (relationship.id) { %>
+      <%_ if (relationship.id) { _%>
+
     @MapsId
     @JoinColumn(name = "<%- relationship.otherEntity.primaryKey.fields[0].columnName %>")
       <%_ } else { _%>

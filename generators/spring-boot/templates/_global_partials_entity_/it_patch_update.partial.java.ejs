@@ -21,14 +21,16 @@ long databaseSizeBeforeUpdate = getRepositoryCount();
 // Update the <%- entityInstance %> using partial update
 <%- persistClass %> partialUpdated<%- persistClass %> = new <%- persistClass %>();
 partialUpdated<%- persistClass %>.<%- primaryKey.propertyConsumerName %>(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>());
-<%_ fieldsToUpdate = fields.filter(field => field.includeField); %>
+<%_ fieldsToUpdate = fields.filter(field => field.includeField); _%>
+
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%- persistClass %><% for (field of fieldsToUpdate) { %>
         .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% if (field.fieldWithContentType) { %>
             .<%- field.fieldName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)<% } %><% } %>;
 <%_ } else { _%>
   <%_ for (field of fieldsToUpdate) { _%>
-    <%_ if (field.includeField) { %>
+    <%_ if (field.includeField) { _%>
+
     partialUpdated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- field.updateWithValue %>);
       <%_ if (field.fieldWithContentType) { _%>
         partialUpdated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- field.updateWithValue %>_CONTENT_TYPE);

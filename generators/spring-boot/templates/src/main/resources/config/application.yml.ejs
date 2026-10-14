@@ -99,9 +99,9 @@ management:
         include:
           - configprops
           - env
-<% if (applicationTypeGateway) { -%>
+<%_ if (applicationTypeGateway) { -%>
           - gateway
-<% } -%>
+<%_ } -%>
           - health
           - info
           - jhimetrics
@@ -110,12 +110,12 @@ management:
           - loggers
           - prometheus
           - threaddump
-<% if (cacheProviderAny) { -%>
+<%_ if (cacheProviderAny) { -%>
           - caches
-<% } -%>
-<% if (databaseMigrationLiquibase) { -%>
+<%_ } -%>
+<%_ if (databaseMigrationLiquibase) { -%>
           - liquibase
-<% } -%>
+<%_ } -%>
   endpoint:
     health:
       show-details: when_authorized

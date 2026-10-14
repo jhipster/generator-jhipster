@@ -497,7 +497,7 @@ public class UserService {
             .flatMap
       <%_ } else { _%>
             .map
-      <%_ } %>(user -> {
+      <%_ } -%>(user -> {
     <%_ } else { _%>
         return userRepository.findById(userDTO.getId())
             .map(user -> {

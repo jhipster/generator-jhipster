@@ -115,7 +115,8 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%_ } else { _%>
     <%- otherEntity.dtoClass %> toDto<%- this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> <%- otherEntity.persistInstance %>);
     <%_ } _%>
-    <%_ if (collection) { %>
+    <%_ if (collection) { _%>
+
       <%_ const collectionMapperName = `${otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName)}Set`; _%>
 
     @Named("<%- collectionMapperName %>")
