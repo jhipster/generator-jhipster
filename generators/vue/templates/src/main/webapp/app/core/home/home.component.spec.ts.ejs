@@ -83,10 +83,8 @@ describe('Home', () => {
     home.login();
     expect(loginService.login).toHaveBeenCalled();
 <%_ } else { _%>
-
     home.showLogin();
     expect(login.showLogin).toHaveBeenCalled();
 <%_ } _%>
-
   });
 });

@@ -1238,7 +1238,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 <%_ if (jpaMetamodelFiltering) { _%>
 
-
     @Test<%- transactionalAnnotation %>
     void get<%- entityClassPlural %>ByIdFiltering() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database

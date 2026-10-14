@@ -124,7 +124,6 @@ describe('<%- entityAngularName %> Management Update Component', () => {
 
   <%_ } _%>
   <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
-
     <%_ const { otherEntity } = relationship; _%>
         it('should call <%- relationship.propertyName %> query and add missing value', () => {
                 const <%- entityInstance %> : I<%- entityAngularName %> = <%- testEntityPrimaryKey1 %>;

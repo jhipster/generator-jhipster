@@ -28,7 +28,6 @@ _%>
         LOG.debug("REST request to get <%- entityClassPlural %> by criteria: {}", criteria);
 
   <%_ if (reactive) { _%>
-
     <%_ if (paginationNo) { _%>
       return <%- entityInstance %>Service.findByCriteria(criteria);
     <%_ } else { _%>

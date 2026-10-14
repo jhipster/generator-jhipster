@@ -26,7 +26,6 @@ import type LoginService from '@/account/login.service';
 <%_ } _%>
 
 <%_ if (generateUserManagement) { _%>
-
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 import type AccountService from '@/account/account.service';
@@ -66,11 +65,9 @@ export default defineComponent({
   <%_ if (authenticationTypeOauth2) { _%>
     const { login } = loginService;
   <%_ } _%>
-
 <%_ } _%>
 
 <%_ if (generateUserManagement) { _%>
-
     const { showLogin } = useLoginModal();
 <%_ } _%>
     const accountService = inject<AccountService>('accountService');

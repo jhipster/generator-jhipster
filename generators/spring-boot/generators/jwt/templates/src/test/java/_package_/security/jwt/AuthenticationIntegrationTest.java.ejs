@@ -19,7 +19,6 @@ import <%- packageName %>.repository.UserRepository;
 import tech.jhipster.config.JHipsterProperties;
 
 <%_ if (reactive) { _%>
-
 import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -33,7 +32,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 <%_ if (reactive) { _%>
-
 @Import(
     {
         JHipsterProperties.class,
@@ -78,7 +76,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 )
 <%_ } _%>
 <%_ if (reactive && generateAuthenticationApi) { _%>
-
 @MockitoBean(types = ReactiveUserDetailsService.class)
 <%_ } _%>
 <%_ if (reactive && generateBuiltInUserEntity) { _%>

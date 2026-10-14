@@ -65,11 +65,9 @@ import org.hibernate.type.SqlTypes;
       , precision = 21, scale = 2
     <%_ } _%>
     <%_ if (field.fieldValidationRequired) { _%>
-
       , nullable = false
     <%_ } _%>
     <%_ if (field.fieldValidationUnique) { _%>
-
       , unique = true
     <%_ } _%>
   )
@@ -129,7 +127,6 @@ import org.hibernate.type.SqlTypes;
     @NotNull
       <%_ } _%>
       <%_ if (relationship.id) { _%>
-
     @MapsId
     @JoinColumn(name = "<%- relationship.otherEntity.primaryKey.fields[0].columnName %>")
       <%_ } else { _%>

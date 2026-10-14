@@ -35,7 +35,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.Nimbus<%- reactivePrefix %>JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 <%_ if (communicationSpringWebsocket) { _%>
-
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 <%_ } _%>
@@ -53,7 +52,6 @@ public class SecurityJwtConfiguration {
         Nimbus<%- reactivePrefix %>JwtDecoder jwtDecoder = Nimbus<%- reactivePrefix %>JwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
 <%_ if (reactive) { _%>
-
             try {
                 return jwtDecoder
                     .decode(token)
@@ -110,7 +108,6 @@ public class SecurityJwtConfiguration {
     }
 
 <%_ if (communicationSpringWebsocket) { _%>
-
     @Bean
     public BearerTokenResolver bearerTokenResolver() {
         var bearerTokenResolver = new DefaultBearerTokenResolver();

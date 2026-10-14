@@ -287,7 +287,6 @@ export class <%- entityAngularName %>Update implements OnInit {
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
 
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
-
     <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0]; _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
         this.<%- otherEntity.entityInstance %>Service
@@ -306,7 +305,6 @@ export class <%- entityAngularName %>Update implements OnInit {
             .subscribe((<%- otherEntity.entityInstancePlural %>: I<%- otherEntity.entityAngularName %>[]) => (this.<%- otherEntity.entityInstancePlural %>SharedCollection.set(<%- otherEntity.entityInstancePlural %>)));
     <%_ } _%>
     <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
-
       <%_ const filter = relationship.otherEntity.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
 
         this.<%- relationship.otherEntityName %>Service
