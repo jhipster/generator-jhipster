@@ -97,7 +97,6 @@ export default defineConfig(
     files: ['**/*.spec.ts'],
     rules: {
       '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
   {
