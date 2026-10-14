@@ -99,7 +99,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -621,7 +621,7 @@ helm upgrade --install mspsql ./mspsql-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -819,7 +819,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: mspsql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -1179,7 +1179,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -1688,7 +1688,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -2035,7 +2035,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -2557,7 +2557,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -2808,7 +2808,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -3084,7 +3084,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -3593,7 +3593,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -3993,7 +3993,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -4554,7 +4554,7 @@ helm upgrade --install msmariadb ./msmariadb-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -4805,7 +4805,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmariadb is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5011,7 +5011,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmongodb is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5206,7 +5206,7 @@ mongodb-replicaset:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5404,7 +5404,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: mspsql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5765,7 +5765,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -8670,7 +8670,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -8957,7 +8957,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -9467,7 +9467,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -9751,7 +9751,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -10261,7 +10261,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace jhipsternamespace
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
