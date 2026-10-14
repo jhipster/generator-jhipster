@@ -187,6 +187,10 @@ export default class CoreGenerator<
       disableInGeneratorOptionsSupport: true,
       allowTemplatesOutsideRoot: true,
       ...features,
+      // Registered by yeoman-generator, after the queues they reference: the ones of a class before the ones of its
+      // subclasses, which come in the features, so a subclass priority added before the same queue runs after them.
+      // None for the help.
+      customPriorities: options?.help ? undefined : [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])],
     });
 
     if (!this.options.help) {
@@ -208,8 +212,6 @@ export default class CoreGenerator<
     if (this.options.help) {
       return;
     }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
 
     const { blueprintSupport = false, queueCommandTasks = true } = this.features;
 
