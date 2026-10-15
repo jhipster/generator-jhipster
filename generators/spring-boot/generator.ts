@@ -853,7 +853,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           ruleId: 'S125',
           ruleKey: 'xml:S125',
           resourceKey: `${application.srcMainResources}logback-spring.xml`,
-          comment: `Rule https://rules.sonarsource.com/xml/RSPEC-125 is ignored, we provide commented examples`,
+          comment: `Rule xml:S125 is ignored, we provide commented examples`,
         });
 
         if (!application.authenticationUsesCsrf && application.generateAuthenticationApi) {
@@ -861,7 +861,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             ruleId: 'S4502',
             ruleKey: 'java:S4502',
             resourceKey: `${application.javaPackageSrcDir}config/SecurityConfiguration.java`,
-            comment: `Rule https://rules.sonarsource.com/java/RSPEC-4502 is ignored, as for JWT tokens we are not subject to CSRF attack`,
+            comment: `Rule java:S4502 is ignored, as for JWT tokens we are not subject to CSRF attack`,
           });
         }
 
@@ -869,27 +869,27 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           ruleId: 'S4684',
           ruleKey: 'java:S4684',
           resourceKey: `${application.javaPackageSrcDir}web/rest/**/*`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-4684`,
+          comment: `Rule java:S4684`,
         });
 
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S5145',
           ruleKey: 'javasecurity:S5145',
           resourceKey: `${application.javaPackageSrcDir}**/*`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-5145 is ignored, as we use log filter to format log messages`,
+          comment: `Rule java:S5145 is ignored, as we use log filter to format log messages`,
         });
 
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437',
           ruleKey: 'java:S6437',
           resourceKey: `${application.srcMainResources}config/application-secret-samples.yml`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
+          comment: `Rule java:S6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437-2',
           ruleKey: 'java:S6437',
           resourceKey: `${application.srcMainResources}config/application-tls-samples.yml`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
+          comment: `Rule java:S6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6418',

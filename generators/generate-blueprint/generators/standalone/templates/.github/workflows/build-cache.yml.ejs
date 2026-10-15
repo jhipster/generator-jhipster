@@ -25,7 +25,7 @@ jobs:
         if: always()
       - run: <%- blueprintCliName %> generate-sample --all
         continue-on-error: true
-      - run: npm run backend:build-cache --workspaces
+      - run: npm run backend:build-cache --workspaces --if-present
         continue-on-error: true
       - uses: <%- githubActions['jhipster/actions/save-cache'] %>
         if: always()

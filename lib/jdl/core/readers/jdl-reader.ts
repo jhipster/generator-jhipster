@@ -24,6 +24,11 @@ import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.ts';
 import type { JDLRuntime } from '../parsing/types/runtime.ts';
 import logger from '../utils/objects/logger.ts';
 
+type ParseOptions = {
+  /** Receives the warnings about what the jdl uses, a deprecated option for instance: logged by default. */
+  onWarning?: (message: string) => void;
+};
+
 /**
  * Parses the given files and returns the resulting intermediate object.
  * If one file is passed, the file will be read and its parsed content returned.
@@ -31,10 +36,10 @@ import logger from '../utils/objects/logger.ts';
  * @param files the files to parse.
  * @returns {Object} the intermediate object.
  */
-export function parseFromFiles(files: string[], runtime: JDLRuntime) {
+export function parseFromFiles(files: string[], runtime: JDLRuntime, options?: ParseOptions) {
   checkFiles(files);
   checkAllTheFilesAreJDLFiles(files);
-  return parse(getFilesContent(files), runtime);
+  return parse(getFilesContent(files), runtime, options);
 }
 
 /**
@@ -42,11 +47,11 @@ export function parseFromFiles(files: string[], runtime: JDLRuntime) {
  * @param content the JDL content to parse.
  * @returns {Object} the intermediate object.
  */
-export function parseFromContent(content: string, runtime: JDLRuntime) {
+export function parseFromContent(content: string, runtime: JDLRuntime, options?: ParseOptions) {
   if (!content) {
     throw new Error('A valid JDL content must be passed so as to be parsed.');
   }
-  return parse(content, runtime);
+  return parse(content, runtime, options);
 }
 
 function checkFiles(files: string[]) {
@@ -74,12 +79,12 @@ function checkAllTheFilesAreJDLFiles(files: string[]) {
  * @param content the JDL content.
  * @returns the intermediate object.
  */
-function parse(content: string, runtime: JDLRuntime) {
+function parse(content: string, runtime: JDLRuntime, { onWarning = message => logger.warn(message) }: ParseOptions = {}) {
   if (!content) {
     throw new Error('File content must be passed, it is currently empty.');
   }
   try {
-    const parsedContent = apiParser(content, runtime, { onWarning: message => logger.warn(message) });
+    const parsedContent = apiParser(content, runtime, { onWarning });
     return performJDLPostParsingTasks(parsedContent);
   } catch (error) {
     if (error instanceof SyntaxError) {

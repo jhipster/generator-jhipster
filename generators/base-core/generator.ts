@@ -18,7 +18,7 @@
  */
 import assert from 'node:assert';
 import { existsSync, rmSync, statSync } from 'node:fs';
-import { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import { basename, extname, isAbsolute, join, join as joinPath, relative, resolve } from 'node:path';
 import { relative as posixRelative } from 'node:path/posix';
 
 import { requireNamespace } from '@yeoman/namespace';
@@ -74,9 +74,17 @@ import type {
   WriteContext,
   WriteFileOptions,
 } from './api.ts';
-import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig, optionsForAnotherProject } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
+import {
+  CUSTOM_PRIORITIES,
+  type CustomObjectPhase,
+  PRIORITY_NAMES,
+  PRIORITY_PREFIX,
+  QUEUES,
+  customObjectPriorities,
+  customObjectPriorityName,
+} from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
@@ -117,6 +125,9 @@ export default class CoreGenerator<
   Features extends CoreFeatures = CoreFeatures,
 > extends YeomanGenerator<Config, Options, Features> {
   static readonly asPriority = asPriority;
+
+  /** The priority of a phase of a custom object (the `customObjects` feature), like `>preparingService`. */
+  static readonly objectPriority = (name: string, phase: CustomObjectPhase): string => asPriority(customObjectPriorityName(name, phase));
 
   static readonly INITIALIZING = asPriority(INITIALIZING);
 
@@ -188,9 +199,16 @@ export default class CoreGenerator<
       allowTemplatesOutsideRoot: true,
       ...features,
       // Registered by yeoman-generator, after the queues they reference: the ones of a class before the ones of its
-      // subclasses, which come in the features, so a subclass priority added before the same queue runs after them.
-      // None for the help.
-      customPriorities: options?.help ? undefined : [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])],
+      // subclasses, which come in the features, so a subclass priority added before the same queue runs after them, and
+      // the ones of the custom objects last, in their declaration order. None for the help.
+      customPriorities:
+        options?.help ? undefined : (
+          [
+            ...CUSTOM_PRIORITIES,
+            ...(features?.customPriorities ?? []),
+            ...(features?.customObjects ?? []).flatMap(({ name, before }) => customObjectPriorities(name, before)),
+          ]
+        ),
     });
 
     if (!this.options.help) {
@@ -868,11 +886,18 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       }
     }
 
+    // The blueprints belong to the project they are given for: a generator composed in another folder uses the blueprints
+    // of the .yo-rc.json of that folder, unless they are passed to it.
+    const { destinationRoot } = options?.generatorOptions ?? {};
+    const inheritedOptions =
+      destinationRoot && resolve(this.destinationRoot(), destinationRoot) !== this.destinationRoot() ?
+        optionsForAnotherProject(this.options)
+      : this.options;
     return this.composeWith(generator, {
       forwardOptions: false,
       ...options,
       generatorOptions: {
-        ...this.options,
+        ...inheritedOptions,
         positionalArguments: undefined,
         ...options?.generatorOptions,
       },

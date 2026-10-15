@@ -19,11 +19,19 @@
 
 import { lookupGeneratorsWithNamespace } from '../../../lib/utils/index.ts';
 
+/**
+ * The generators extending the core generator, which are not blueprinted: a blueprint customizing one provides a generator
+ * of its own, composing it.
+ */
+const NOT_BLUEPRINTABLE_GENERATORS = ['info', 'jdl'];
+
 let generatorNamespaces: string[] | undefined;
 
+/** The generators a blueprint can blueprint. */
 export const lookupGeneratorsNamespaces = (): string[] => {
   generatorNamespaces ??= lookupGeneratorsWithNamespace()
     .map(({ namespace }) => namespace)
+    .filter(namespace => !NOT_BLUEPRINTABLE_GENERATORS.includes(namespace))
     .sort();
 
   return generatorNamespaces;

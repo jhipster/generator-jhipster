@@ -74,7 +74,7 @@ exports[`generator - spring-boot:cache caffeine-gradle should match source calls
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -145,7 +145,7 @@ exports[`generator - spring-boot:cache caffeine-maven should match source calls 
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -208,7 +208,7 @@ exports[`generator - spring-boot:cache ehcache-gradle should match source calls 
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -271,7 +271,7 @@ exports[`generator - spring-boot:cache ehcache-maven should match source calls 1
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -359,7 +359,7 @@ exports[`generator - spring-boot:cache hazelcast-gradle should match source call
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -427,7 +427,7 @@ exports[`generator - spring-boot:cache hazelcast-maven should match source calls
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -517,7 +517,7 @@ exports[`generator - spring-boot:cache infinispan-gradle should match source cal
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -613,7 +613,7 @@ exports[`generator - spring-boot:cache infinispan-maven should match source call
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -692,7 +692,7 @@ exports[`generator - spring-boot:cache memcached-gradle should match source call
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -765,7 +765,7 @@ exports[`generator - spring-boot:cache memcached-maven should match source calls
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -857,7 +857,7 @@ exports[`generator - spring-boot:cache redis-gradle should match source calls 1`
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
@@ -949,7 +949,7 @@ exports[`generator - spring-boot:cache redis-maven should match source calls 1`]
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "comment": "Rule java:S1192, there is no easy way to avoid this issue",
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",

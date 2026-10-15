@@ -192,7 +192,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
           ruleId: 'S7027-domain',
           ruleKey: 'javaarchitecture:S7027',
           resourceKey: `${application.javaPackageSrcDir}domain/**/*`,
-          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities',
+          comment: 'Rule java:S7027 is ignored for entities',
         });
 
         // TODO improve comment
@@ -200,7 +200,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
           ruleId: 'S3437',
           ruleKey: 'squid:S3437',
           resourceKey: `${application.javaPackageSrcDir}**/*`,
-          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored',
+          comment: 'Rule java:S3437 is ignored',
         });
       },
     });

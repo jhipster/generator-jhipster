@@ -31,9 +31,9 @@ import type { YoRcFileContent } from '../../lib/constants/yeoman.ts';
 import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
-import BaseGenerator from '../base/index.ts';
-import { getBlueprintsResolver } from '../base/internal/index.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
+import BaseCoreGenerator from '../base-core/index.ts';
+import { optionsForAnotherProject } from '../base-core/internal/index.ts';
 import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
@@ -53,7 +53,14 @@ const toJdlFile = (file: string): string => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs<MemFsEditorFile> };
 
-export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
+/**
+ * Generates the applications, the entities and the deployments of jdl files.
+ *
+ * It is not blueprinted: a blueprint customizing it provides a jdl generator of its own, composing this one, and registers
+ * it in its cli. The applications it generates in their own folders use the blueprints their jdl declares, not the ones
+ * given to it.
+ */
+export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];
@@ -77,13 +84,13 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   exportedDeployments!: any[];
 
   async beforeQueue() {
-    if (!this.fromBlueprint) {
-      await this.composeWithBlueprints();
-    }
+    // The bootstrap generator commits the files the jdl writes, the configuration files sorted.
+    const bootstrapGenerator = await this.composeWithJHipster('bootstrap');
+    bootstrapGenerator.registerExportPath?.(this.destinationPath());
   }
 
   get initializing() {
-    return this.asInitializingTaskGroup({
+    return this.asAnyTaskGroup({
       loadArguments() {
         if (this.jdlFiles) {
           this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
@@ -107,12 +114,12 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
     });
   }
 
-  get [BaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+  get [BaseCoreGenerator.INITIALIZING]() {
+    return this.initializing;
   }
 
   get configuring() {
-    return this.asConfiguringTaskGroup({
+    return this.asAnyTaskGroup({
       async downloadJdlFiles() {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(
@@ -198,8 +205,6 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           );
         } else {
           this.writeConfig(...this.applications.map(app => (this.ignoreApplication ? { ...app, config: undefined } : app)));
-          // Writing the config resolves the blueprints again for the generators composed next.
-          await getBlueprintsResolver(this).getBlueprints();
         }
 
         if (!this.ignoreDeployments) {
@@ -255,12 +260,12 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
     });
   }
 
-  get [BaseGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseCoreGenerator.CONFIGURING]() {
+    return this.configuring;
   }
 
   get end() {
-    return this.asEndTaskGroup({
+    return this.asAnyTaskGroup({
       async generateDeployments() {
         if (!this.exportedDeployments?.length) {
           this.log.info('No deployment configured');
@@ -289,8 +294,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
     });
   }
 
-  get [BaseGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+  get [BaseCoreGenerator.END]() {
+    return this.end;
   }
 
   async runNonInteractive(applications: ApplicationWithEntitiesAndPath[], options: any) {
@@ -302,7 +307,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const cwd = application.folder ? this.destinationPath(application.folder) : rootCwd;
         const adapter = this.env.adapter.newAdapter();
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
-        const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
+        // Each application uses the blueprints its jdl declares, stored in its own .yo-rc.json, not the ones of the cli.
+        const generatorOptions: any = { ...optionsForAnotherProject(this.options), ...options, skipPriorities: ['prompting'] };
 
         if (deferCommit) {
           generatorOptions.exportApplication = undefined;

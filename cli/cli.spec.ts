@@ -162,6 +162,11 @@ describe('cli', () => {
     expect(coerce(stdout)).toBeTruthy();
   });
 
+  it('--install-path should print the install path alone', () => {
+    const { stdout } = execaSync`${jhipsterCli} --install-path`;
+    expect(stdout).toBe(join(import.meta.dirname, '..'));
+  });
+
   it('should return error on unknown command', () => {
     expect(() => execaSync`${jhipsterCli} junkcmd`).toThrow(
       expect.objectContaining({

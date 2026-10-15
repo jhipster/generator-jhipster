@@ -205,7 +205,7 @@ class AccountResourceIT {
         user.setLastName("doe");
         user.setEmail("john.doe@jhipster.com");
 <%_ if (user.hasImageField) { _%>
-        user.setImageUrl("http://placehold.it/50x50");
+        user.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         user.setLangKey("en");
         user.setAuthorities(authorities);
@@ -223,7 +223,7 @@ class AccountResourceIT {
             .jsonPath("$.lastName").isEqualTo("doe")
             .jsonPath("$.email").isEqualTo("john.doe@jhipster.com")
   <%_ if (user.hasImageField) { _%>
-            .jsonPath("$.imageUrl").isEqualTo("http://placehold.it/50x50")
+            .jsonPath("$.imageUrl").isEqualTo("https://placehold.co/50x50")
   <%_ } _%>
             .jsonPath("$.langKey").isEqualTo("en")
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
@@ -237,7 +237,7 @@ class AccountResourceIT {
             .andExpect(jsonPath("$.lastName").value("doe"))
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
   <%_ if (user.hasImageField) { _%>
-            .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
+            .andExpect(jsonPath("$.imageUrl").value("https://placehold.co/50x50"))
   <%_ } _%>
             .andExpect(jsonPath("$.langKey").value("en"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
@@ -278,7 +278,7 @@ class AccountResourceIT {
         validUser.setLastName("Test");
         validUser.setEmail("test-register-valid@example.com");
 <%_ if (user.hasImageField) { _%>
-        validUser.setImageUrl("http://placehold.it/50x50");
+        validUser.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
@@ -317,7 +317,7 @@ class AccountResourceIT {
         invalidUser.setEmail("funky@example.com");
         invalidUser.setActivated(true);
 <%_ if (user.hasImageField) { _%>
-        invalidUser.setImageUrl("http://placehold.it/50x50");
+        invalidUser.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
@@ -393,7 +393,7 @@ class AccountResourceIT {
         invalidUser.setEmail(email);
         invalidUser.setActivated(activated);
 <%_ if (user.hasImageField) { _%>
-        invalidUser.setImageUrl("http://placehold.it/50x50");
+        invalidUser.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
@@ -413,7 +413,7 @@ class AccountResourceIT {
         firstUser.setLastName("Something");
         firstUser.setEmail("alice@example.com");
 <%_ if (user.hasImageField) { _%>
-        firstUser.setImageUrl("http://placehold.it/50x50");
+        firstUser.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
@@ -509,7 +509,7 @@ class AccountResourceIT {
         firstUser.setLastName("Test");
         firstUser.setEmail("test-register-duplicate-email@example.com");
 <%_ if (user.hasImageField) { _%>
-        firstUser.setImageUrl("http://placehold.it/50x50");
+        firstUser.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
@@ -637,7 +637,7 @@ class AccountResourceIT {
         validUser.setEmail("badguy@example.com");
         validUser.setActivated(true);
 <%_ if (user.hasImageField) { _%>
-        validUser.setImageUrl("http://placehold.it/50x50");
+        validUser.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
@@ -742,7 +742,7 @@ class AccountResourceIT {
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
 <%_ if (user.hasImageField) { _%>
-        userDTO.setImageUrl("http://placehold.it/50x50");
+        userDTO.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
@@ -804,7 +804,7 @@ class AccountResourceIT {
         userDTO.setEmail("invalid email");
         userDTO.setActivated(false);
 <%_ if (user.hasImageField) { _%>
-        userDTO.setImageUrl("http://placehold.it/50x50");
+        userDTO.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
@@ -872,7 +872,7 @@ class AccountResourceIT {
         userDTO.setEmail("save-existing-email2@example.com");
         userDTO.setActivated(false);
 <%_ if (user.hasImageField) { _%>
-        userDTO.setImageUrl("http://placehold.it/50x50");
+        userDTO.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
@@ -925,7 +925,7 @@ class AccountResourceIT {
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
 <%_ if (user.hasImageField) { _%>
-        userDTO.setImageUrl("http://placehold.it/50x50");
+        userDTO.setImageUrl("https://placehold.co/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));

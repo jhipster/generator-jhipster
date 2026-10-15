@@ -246,7 +246,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           ruleId: 'S1192',
           resourceKey: `${application.javaPackageSrcDir}config/CacheConfiguration.java`,
           ruleKey: 'java:S1192',
-          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue',
+          comment: 'Rule java:S1192, there is no easy way to avoid this issue',
         });
       },
     });

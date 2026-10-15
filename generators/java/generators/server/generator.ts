@@ -118,7 +118,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           ruleId: 'S7027-dto',
           ruleKey: 'javaarchitecture:S7027',
           resourceKey: `${application.javaPackageSrcDir}service/dto/**/*`,
-          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for dtos',
+          comment: 'Rule java:S7027 is ignored for dtos',
         });
 
         (source as CommonSource).ignoreSonarRule?.({
@@ -126,7 +126,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           ruleKey: 'squid:UndocumentedApi',
           resourceKey: `${application.javaPackageSrcDir}**/*`,
           comment:
-            'Rule https://rules.sonarsource.com/java/RSPEC-1176 is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory',
+            'Rule java:S1176 is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory',
         });
       },
     });

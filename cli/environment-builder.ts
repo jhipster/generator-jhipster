@@ -353,9 +353,11 @@ export default class EnvironmentBuilder {
     if (indexOfBlueprintArgv > -1) {
       blueprintNames.push(process.argv[indexOfBlueprintArgv + 1]);
     }
-    const indexOfBlueprintsArgv = process.argv.indexOf('--blueprints');
-    if (indexOfBlueprintsArgv > -1) {
-      blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
+    for (const option of ['--blueprints', '--global-blueprints']) {
+      const indexOfBlueprintsArgv = process.argv.indexOf(option);
+      if (indexOfBlueprintsArgv > -1) {
+        blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
+      }
     }
     if (!blueprintNames.length) {
       return [];

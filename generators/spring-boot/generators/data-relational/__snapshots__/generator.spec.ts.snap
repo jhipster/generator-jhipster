@@ -298,13 +298,13 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -590,13 +590,13 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -825,13 +825,13 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -1114,13 +1114,13 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -1345,13 +1345,13 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -1603,13 +1603,13 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -1835,13 +1835,13 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -2121,13 +2121,13 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -2402,13 +2402,13 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -2739,13 +2739,13 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -3020,13 +3020,13 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -3336,13 +3336,13 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -3649,13 +3649,13 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -3931,13 +3931,13 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -4241,13 +4241,13 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -4488,13 +4488,13 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -4714,13 +4714,13 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -4983,13 +4983,13 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -5206,13 +5206,13 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -5448,13 +5448,13 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -5663,13 +5663,13 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -5929,13 +5929,13 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -6149,13 +6149,13 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -6366,13 +6366,13 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -6679,13 +6679,13 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -6896,13 +6896,13 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -7188,13 +7188,13 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -7477,13 +7477,13 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -7735,13 +7735,13 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -8021,13 +8021,13 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -8302,13 +8302,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -8549,13 +8549,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -8830,13 +8830,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -9056,13 +9056,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -9340,13 +9340,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -9563,13 +9563,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -9820,13 +9820,13 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -10035,13 +10035,13 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -10316,13 +10316,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -10536,13 +10536,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -10753,13 +10753,13 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -11066,13 +11066,13 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -11283,13 +11283,13 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -11575,13 +11575,13 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -11795,13 +11795,13 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -12084,13 +12084,13 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -12300,13 +12300,13 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -12558,13 +12558,13 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -12775,13 +12775,13 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -13061,13 +13061,13 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -13342,13 +13342,13 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -13655,13 +13655,13 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -13936,13 +13936,13 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -14228,13 +14228,13 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -14512,13 +14512,13 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -14801,13 +14801,13 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -15058,13 +15058,13 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -15316,13 +15316,13 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -15597,13 +15597,13 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/tech/jhipster/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/tech/jhipster/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
@@ -15883,13 +15883,13 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
   ],
   "ignoreSonarRule": [
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities",
+      "comment": "Rule java:S7027 is ignored for entities",
       "resourceKey": "src/main/java/com/mycompany/domain/**/*",
       "ruleId": "S7027-domain",
       "ruleKey": "javaarchitecture:S7027",
     },
     {
-      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored",
+      "comment": "Rule java:S3437 is ignored",
       "resourceKey": "src/main/java/com/mycompany/**/*",
       "ruleId": "S3437",
       "ruleKey": "squid:S3437",
