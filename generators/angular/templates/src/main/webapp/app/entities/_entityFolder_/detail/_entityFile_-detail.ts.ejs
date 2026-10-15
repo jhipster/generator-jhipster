@@ -83,12 +83,12 @@ import { type BlobType } from 'app/shared/jhipster/data-utils';
 })
 export class <%- entityAngularName %>Detail {
     readonly <%- entityInstance %> = input<I<%- entityAngularName %> | null>(null);
+<%_ if (builtInUserManagement) { _%>
+    readonly currentAccount = inject(AccountService).account;
+<%_ } _%>
 <%_ if (!readOnly) { _%>
     private readonly modalService = inject(NgbModal);
     private readonly router = inject(Router);
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-    readonly currentAccount = inject(AccountService).account;
 <%_ } _%>
 
 <%_ if (anyFieldIsBlobDerived) { _%>

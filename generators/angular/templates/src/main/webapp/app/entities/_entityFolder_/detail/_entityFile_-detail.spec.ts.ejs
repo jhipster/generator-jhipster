@@ -37,7 +37,6 @@ import { DataUtils } from 'app/core/util';
 <%_ if (!readOnly) { _%>
 import { ITEM_DELETED_EVENT } from 'app/config';
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
-import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ } _%>
 
 import { <%- entityAngularName %>Detail } from './<%- entityFileName %>-detail';
@@ -113,7 +112,7 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
       const openSpy = vi.spyOn(modalService, 'open').mockReturnValue(modalRef as unknown as ReturnType<NgbModal['open']>);
       const navigateSpy = vi.spyOn(TestBed.inject(Router), 'navigate');
 
-      comp.delete(<%- testEntity %> as I<%- entityAngularName %>);
+      comp.delete(<%- testEntity %>);
 
       expect(openSpy).toHaveBeenCalledWith(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
       expect(navigateSpy).toHaveBeenCalledWith(['/<%- entityPage %>']);

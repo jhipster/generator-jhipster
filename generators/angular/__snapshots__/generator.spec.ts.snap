@@ -253,7 +253,6 @@ import { of } from "rxjs";
 
 import { ITEM_DELETED_EVENT } from "app/config";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
-import { IUserManagement } from "../user-management.model";
 
 import { UserManagementDetail } from "./user-management-detail";
 
@@ -327,7 +326,7 @@ describe("UserManagement Management Detail Component", () => {
         .mockReturnValue(modalRef as unknown as ReturnType<NgbModal["open"]>);
       const navigateSpy = vi.spyOn(TestBed.inject(Router), "navigate");
 
-      comp.delete({ login: "Ozella.Kertzmann" } as IUserManagement);
+      comp.delete({ login: "Ozella.Kertzmann" });
 
       expect(openSpy).toHaveBeenCalledWith(UserManagementDeleteDialog, {
         size: "lg",
@@ -372,9 +371,9 @@ import { UserManagementDeleteDialog } from "../delete/user-management-delete-dia
 })
 export class UserManagementDetail {
   readonly userManagement = input<IUserManagement | null>(null);
+  readonly currentAccount = inject(AccountService).account;
   private readonly modalService = inject(NgbModal);
   private readonly router = inject(Router);
-  readonly currentAccount = inject(AccountService).account;
 
   previousState(): void {
     globalThis.history.back();
