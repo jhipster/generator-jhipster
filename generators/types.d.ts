@@ -152,6 +152,7 @@ type GeneratorsByNamespace = {
   server: import('./server/generator.ts').default;
   'jhipster:server': import('./server/generator.ts').default;
   'jhipster:server:bootstrap': import('./server/generators/bootstrap/generator.ts').default;
+  'jhipster:server:i18n': import('./server/generators/i18n/generator.ts').default;
   'spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;
