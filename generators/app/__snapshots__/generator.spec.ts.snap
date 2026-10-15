@@ -16,6 +16,7 @@ Options:
   --skip-checks                            Check the status of the required tools
   --experimental                           Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
+  --global-blueprints <value>              A comma separated list of blueprints to use for every project generated, the ones in other folders included (the applications of a jdl or of a workspace, the deployments), stored in each one
   --disable-blueprints                     Disable blueprints support
   -d, --debug                              Enable debugger
   --defaults                               Execute jhipster with default config

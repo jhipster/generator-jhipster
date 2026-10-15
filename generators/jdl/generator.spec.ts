@@ -28,7 +28,7 @@ import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
-import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { getCommandHelpOutput, shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
@@ -47,7 +47,6 @@ describe(`generator - ${generator}`, () => {
       expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
     });
   });
-  describe('blueprint support', () => testBlueprintSupport(generator));
 
   describe('for entities only jdl', () => {
     it('without baseName should reject', async () => {
@@ -419,6 +418,70 @@ describe(`generator - ${generator}`, () => {
       it('should run the application generator in each environment', () => {
         expect(run).toHaveBeenCalledTimes(2);
         expect(run).toHaveBeenCalledWith(['jhipster:app'], expect.objectContaining({ skipPriorities: ['prompting'] }));
+      });
+    });
+
+    describe('with the blueprints option', () => {
+      const run = esmocha.fn();
+      const createEnvBuilder = esmocha.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+        async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
+      );
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators([MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE])
+          .onEnvironment(env => {
+            const adapter = env.adapter as typeof env.adapter & { newAdapter: () => typeof env.adapter };
+            adapter.newAdapter = () => adapter;
+          })
+          .withOptions({
+            // The cli gives the blueprints of the current folder .yo-rc.json as the blueprints option too.
+            blueprints: 'foo',
+            inline:
+              'application { config { blueprints [bar] } entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
+            createEnvBuilder,
+          });
+      });
+
+      it('should generate each application with the blueprints of its jdl only', () => {
+        expect(run).toHaveBeenCalledTimes(2);
+        for (const [, options] of run.mock.calls) {
+          expect(options).not.toHaveProperty('blueprints');
+          expect(options).not.toHaveProperty('blueprint');
+        }
+      });
+    });
+
+    describe('with the global blueprints option', () => {
+      const run = esmocha.fn();
+      const createEnvBuilder = esmocha.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+        async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
+      );
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators([MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE])
+          .onEnvironment(env => {
+            const adapter = env.adapter as typeof env.adapter & { newAdapter: () => typeof env.adapter };
+            adapter.newAdapter = () => adapter;
+          })
+          .withOptions({
+            blueprints: 'foo',
+            globalBlueprints: 'baz',
+            inline:
+              'application { config { blueprints [bar] } entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
+            createEnvBuilder,
+          });
+      });
+
+      it('should generate each application with the global blueprints', () => {
+        expect(run).toHaveBeenCalledTimes(2);
+        for (const [, options] of run.mock.calls) {
+          expect(options).not.toHaveProperty('blueprints');
+          expect(options).toMatchObject({ globalBlueprints: 'baz' });
+        }
       });
     });
 

@@ -342,6 +342,14 @@ More information can be found at:
 [Creating a stand alone Blueprint](https://www.jhipster.tech/modules/creating-a-module/)
 [Creating a blueprint](https://www.jhipster.tech/modules/creating-a-blueprint/)
 
+### Blueprint scope
+
+A blueprint belongs to the project whose `.yo-rc.json` stores it ([RFC-7](rfcs/7-jhipster-rfc-blueprint-scope.md)):
+
+- `--blueprints` applies to the project the command runs in, `--global-blueprints` to every project the run generates, the ones in other folders included.
+- A generator composed in another folder (`composeWithJHipster` with a `destinationRoot`) uses the blueprints of the `.yo-rc.json` of that folder, unless they are passed to it.
+- The `jdl` generator is not blueprinted: the applications of a jdl use the blueprints their jdl declares.
+
 ### Blueprint lifecycle
 
 #### Replacement blueprint

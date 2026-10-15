@@ -85,7 +85,8 @@ export class BlueprintsResolver {
   }
 
   async #mergeBlueprints(): Promise<string[]> {
-    let argvBlueprints = this.#generator.options.blueprints ?? '';
+    // The global blueprints are given to every project generated, the composed ones in other folders included.
+    let argvBlueprints = [this.#generator.options.blueprints, this.#generator.options.globalBlueprints].filter(Boolean).join(',');
     // check for old single blueprint declaration
     let { blueprint } = this.#generator.options;
     if (blueprint) {
