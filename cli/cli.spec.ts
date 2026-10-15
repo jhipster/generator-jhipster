@@ -243,15 +243,14 @@ describe('cli', () => {
         if (namespace === 'jhipster:mocked') {
           return {
             namespace,
-            importModule: async () => ({
-              command,
-            }),
+            importModule: async () => ({ command }),
+            requireModule: () => ({ command }),
             resolved: import.meta.filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
             importGenerator: undefined as any,
             instantiate: <G>() => Promise.resolve(generator as G),
-          };
+          } as GeneratorMeta;
         }
         return originalGetGeneratorMeta(namespace);
       });

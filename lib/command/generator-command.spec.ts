@@ -37,6 +37,7 @@ const dummyMeta = {
   packageNamespace: 'jhipster',
   resolved: 'dummy',
   importModule: () => Promise.resolve({ command: {} }),
+  requireModule: () => ({ command: {} }),
   importGenerator: notImplementedCallback('importGenerator'),
   instantiateHelp: notImplementedCallback('instantiateHelp'),
   instantiate: notImplementedCallback('instantiate'),
@@ -73,10 +74,8 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
       const generatorMeta = {
         ...dummyMeta,
         namespace: 'jhipster:dummy',
-        importModule: () =>
-          Promise.resolve({
-            command: { configs: { testOption: config } } satisfies JHipsterCommandDefinition,
-          }),
+        importModule: () => Promise.resolve({ command: { configs: { testOption: config } } satisfies JHipsterCommandDefinition }),
+        requireModule: () => ({ command: { configs: { testOption: config } } satisfies JHipsterCommandDefinition }),
         importGenerator: () => Promise.resolve(CommandGenerator as any),
       };
       (CommandGenerator as any)._meta = generatorMeta;
