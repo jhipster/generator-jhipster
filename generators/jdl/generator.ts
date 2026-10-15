@@ -33,6 +33,7 @@ import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import BaseCoreGenerator from '../base-core/index.ts';
+import { optionsForAnotherProject } from '../base-core/internal/index.ts';
 import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
@@ -307,8 +308,7 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
         const adapter = this.env.adapter.newAdapter();
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         // Each application uses the blueprints its jdl declares, stored in its own .yo-rc.json, not the ones of the cli.
-        const { blueprints: _blueprints, blueprint: _blueprint, ...forwardedOptions } = this.options as any;
-        const generatorOptions = { ...forwardedOptions, ...options, skipPriorities: ['prompting'] };
+        const generatorOptions: any = { ...optionsForAnotherProject(this.options), ...options, skipPriorities: ['prompting'] };
 
         if (deferCommit) {
           generatorOptions.exportApplication = undefined;

@@ -74,7 +74,7 @@ import type {
   WriteContext,
   WriteFileOptions,
 } from './api.ts';
-import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig, optionsForAnotherProject } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
@@ -871,15 +871,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     // The blueprints belong to the project they are given for: a generator composed in another folder uses the blueprints
     // of the .yo-rc.json of that folder, unless they are passed to it.
     const { destinationRoot } = options?.generatorOptions ?? {};
-    // The blueprints options are declared by the base command.
-    const {
-      blueprints: _blueprints,
-      blueprint: _blueprint,
-      ...optionsOfAnotherFolder
-    } = this.options as Options & { blueprints?: unknown; blueprint?: unknown };
     const inheritedOptions =
       destinationRoot && resolve(this.destinationRoot(), destinationRoot) !== this.destinationRoot() ?
-        optionsOfAnotherFolder
+        optionsForAnotherProject(this.options)
       : this.options;
     return this.composeWith(generator, {
       forwardOptions: false,
