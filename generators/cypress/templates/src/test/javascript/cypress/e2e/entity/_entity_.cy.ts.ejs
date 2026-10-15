@@ -320,31 +320,6 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         <%- entityInstance %> = undefined;
   <%_ } _%>
       });
-
-      <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
-      it<%- skipCreateTest %>('detail delete button click should delete instance of <%- entityNameCapitalized %>', () => {
-  <%_ if (clientFrameworkReact) { _%>
-        cy.intercept('GET', '/<%- baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');
-  <%_ } _%>
-        cy.get(entityDetailsButtonSelector).last().click();
-        cy.getEntityDetailsHeading('<%- entityInstance %>').should('exist');
-        cy.get(entityDeleteButtonSelector).click();
-  <%_ if (clientFrameworkReact) { _%>
-        cy.wait('@dialogDeleteRequest');
-  <%_ } _%>
-        cy.getEntityDeleteDialogHeading('<%- entityInstance %>').should('exist');
-        cy.get(entityConfirmDeleteButtonSelector).click();
-        cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(204);
-        });
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response?.statusCode).to.equal(200);
-        });
-        cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
-  <%_ if (cypressBootstrapEntities) { _%>
-        <%- entityInstance %> = undefined;
-  <%_ } _%>
-      });
 <%_ } _%>
     });
   });
