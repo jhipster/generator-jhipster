@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, inject, ref, type Ref } from 'vue';
+import { type ComputedRef, defineComponent, inject, ref, type Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -36,9 +36,10 @@ export default defineComponent({
 
     const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
+    const username = inject<ComputedRef<string>>('currentUsername');
 
     const user: Ref = ref(null);
-    const removeId: Ref<<%- user.primaryKey.tsType %>> = ref(null);
+    const removeId: Ref<string> = ref(null);
 
     async function loadUser(userId: string) {
       try {
@@ -57,6 +58,7 @@ export default defineComponent({
       userManagementService,
       user,
       removeId,
+      username,
       router,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,

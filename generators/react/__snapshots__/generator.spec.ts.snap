@@ -3743,6 +3743,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/modules/administration/user-management/index.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": {
     "stateCleared": "modified",
   },

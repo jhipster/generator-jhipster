@@ -19,7 +19,7 @@
 <%_ const testEntity = tsPrimaryKeySamples[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft, faPencilAlt<%- readOnly ? '' : ', faTimes' %> } from '@fortawesome/free-solid-svg-icons';
@@ -33,6 +33,11 @@ import { of } from 'rxjs';
 
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util';
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+import { ITEM_DELETED_EVENT } from 'app/config';
+import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ } _%>
 
 import { <%- entityAngularName %>Detail } from './<%- entityFileName %>-detail';
@@ -100,6 +105,22 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
     });
   });
 
+<%_ if (!readOnly) { _%>
+  describe('Delete', () => {
+    it('should open the delete dialog and navigate to the list when the entity is deleted', () => {
+      const modalRef = { componentInstance: {}, closed: of(ITEM_DELETED_EVENT) };
+      const modalService = TestBed.inject(NgbModal);
+      const openSpy = vi.spyOn(modalService, 'open').mockReturnValue(modalRef as unknown as ReturnType<NgbModal['open']>);
+      const navigateSpy = vi.spyOn(TestBed.inject(Router), 'navigate');
+
+      comp.delete(<%- testEntity %> as I<%- entityAngularName %>);
+
+      expect(openSpy).toHaveBeenCalledWith(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
+      expect(navigateSpy).toHaveBeenCalledWith(['/<%- entityPage %>']);
+    });
+  });
+
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
   describe('byteSize', () => {
     it('should call byteSize from DataUtils', () => {

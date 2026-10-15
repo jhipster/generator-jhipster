@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, <%- anyFieldIsBlobDerived || !readOnly ? 'inject, ' : '' %>input } from '@angular/core';
+import { Component, <%- anyFieldIsBlobDerived || !readOnly || builtInUserManagement ? 'inject, ' : '' %>input } from '@angular/core';
 <%_ if (!readOnly) { _%>
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
@@ -24,6 +24,9 @@ import { filter, tap } from 'rxjs';
 <%_ } _%>
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
 import { RouterLink } from '@angular/router';
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+import { AccountService } from 'app/core/auth';
 <%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -83,6 +86,9 @@ export class <%- entityAngularName %>Detail {
 <%_ if (!readOnly) { _%>
     private readonly modalService = inject(NgbModal);
     private readonly router = inject(Router);
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+    readonly currentAccount = inject(AccountService).account;
 <%_ } _%>
 
 <%_ if (anyFieldIsBlobDerived) { _%>

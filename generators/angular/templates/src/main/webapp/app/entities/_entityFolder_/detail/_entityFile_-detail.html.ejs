@@ -143,6 +143,9 @@
       <button type="button"
           (click)="delete(<%- entityInstance %>Ref)"
           class="btn btn-danger"
+  <%_ if (builtInUserManagement) { _%>
+          [disabled]="!currentAccount() || currentAccount()?.login === <%- entityInstance %>Ref.login"
+  <%_ } _%>
           data-cy="entityDeleteButton">
         <fa-icon icon="times" />&nbsp;<span>__jhiTranslateTag__('entity.action.delete')</span>
       </button>

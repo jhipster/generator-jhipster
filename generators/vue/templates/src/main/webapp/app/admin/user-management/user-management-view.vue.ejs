@@ -52,7 +52,7 @@
             <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.back') }}</span>
           </button>
         </router-link>
-        <b-button @click="prepareRemove(user)" variant="danger" class="btn delete" data-cy="entityDeleteButton">
+        <b-button @click="prepareRemove(user)" variant="danger" class="btn delete" :disabled="username === user.login" data-cy="entityDeleteButton">
           <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
         </b-button>
         <b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" data-cy="userManagementDeleteDialogHeading">

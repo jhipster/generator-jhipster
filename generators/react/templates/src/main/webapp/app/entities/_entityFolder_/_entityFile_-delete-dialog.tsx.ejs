@@ -25,7 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntity, deleteEntity } from './<%- entityFileName %>.reducer';
 
-export const <%- entityReactName %>DeleteDialog = () => {
+export const <%- entityReactName %>DeleteDialog = ({ onClose }: { onClose?: () => void }) => {
   const dispatch = useAppDispatch();
 <%_ if (paginationPagination) { _%>
   const pageLocation = useLocation();
@@ -43,13 +43,21 @@ export const <%- entityReactName %>DeleteDialog = () => {
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
 
-  const handleClose = () => {
+  const closeToList = () => {
     navigate('/<%- entityPage %>'<%- paginationPagination ? ' + pageLocation.search' : '' %>);
+  };
+
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      closeToList();
+    }
   };
 
   useEffect(() => {
     if (updateSuccess && loadModal) {
-      handleClose();
+      closeToList();
       setLoadModal(false);
     }
   }, [updateSuccess]);

@@ -231,6 +231,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
   <%_ } _%>
               json: [<%- entityInstance %>],
             }),
+          { times: 1 },
         );
 
         // Cypress waited on the stubbed request (cy.wait('@entitiesRequestInternal')); without it the test
@@ -292,7 +293,25 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
             new URL(response.url()).pathname.startsWith(`${<%- entityInstance %>ApiUrl}/`) && response.request().method() === 'DELETE',
         );
         const listRequest = entitiesRequest(page);
-        await page.locator(entityDetailsButtonSelector).first().click();
+        await page.locator(entityDeleteButtonSelector).last().click();
+        await expect(jhi.entity.getEntityDeleteDialogHeading('<%- entityInstance %>')).toBeVisible();
+        await page.locator(entityConfirmDeleteButtonSelector).click();
+        expect((await deleteRequest).status()).toBe(204);
+        expect((await listRequest).status()).toBe(200);
+        await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+  <%_ if (playwrightBootstrapEntities) { _%>
+        <%- entityInstance %> = undefined;
+  <%_ } _%>
+      });
+
+      <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
+      test<%- skipCreateTest %>('detail delete button click should delete instance of <%- entityNameCapitalized %>', async ({ page, jhi }) => {
+        const deleteRequest = page.waitForResponse(
+          response =>
+            new URL(response.url()).pathname.startsWith(`${<%- entityInstance %>ApiUrl}/`) && response.request().method() === 'DELETE',
+        );
+        const listRequest = entitiesRequest(page);
+        await page.locator(entityDetailsButtonSelector).last().click();
         await expect(jhi.entity.getEntityDetailsHeading('<%- entityInstance %>')).toBeVisible();
         await page.locator(entityDeleteButtonSelector).click();
         await expect(jhi.entity.getEntityDeleteDialogHeading('<%- entityInstance %>')).toBeVisible();

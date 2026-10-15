@@ -219,6 +219,7 @@ export class UserManagementDeleteDialog {
         type="button"
         (click)="delete(userManagementRef)"
         class="btn btn-danger"
+        [disabled]="!currentAccount() || currentAccount()?.login === userManagementRef.login"
         data-cy="entityDeleteButton"
       >
         <fa-icon icon="times" />&nbsp;<span>Delete</span>
@@ -233,7 +234,11 @@ export class UserManagementDeleteDialog {
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.spec.ts": {
     "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { provideRouter, withComponentInputBinding } from "@angular/router";
+import {
+  provideRouter,
+  withComponentInputBinding,
+  Router,
+} from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
@@ -245,6 +250,10 @@ import {
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
 import { of } from "rxjs";
+
+import { ITEM_DELETED_EVENT } from "app/config";
+import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
+import { IUserManagement } from "../user-management.model";
 
 import { UserManagementDetail } from "./user-management-detail";
 
@@ -305,6 +314,28 @@ describe("UserManagement Management Detail Component", () => {
       expect(globalThis.history.back).toHaveBeenCalled();
     });
   });
+
+  describe("Delete", () => {
+    it("should open the delete dialog and navigate to the list when the entity is deleted", () => {
+      const modalRef = {
+        componentInstance: {},
+        closed: of(ITEM_DELETED_EVENT),
+      };
+      const modalService = TestBed.inject(NgbModal);
+      const openSpy = vi
+        .spyOn(modalService, "open")
+        .mockReturnValue(modalRef as unknown as ReturnType<NgbModal["open"]>);
+      const navigateSpy = vi.spyOn(TestBed.inject(Router), "navigate");
+
+      comp.delete({ login: "Ozella.Kertzmann" } as IUserManagement);
+
+      expect(openSpy).toHaveBeenCalledWith(UserManagementDeleteDialog, {
+        size: "lg",
+        backdrop: "static",
+      });
+      expect(navigateSpy).toHaveBeenCalledWith(["/user-management"]);
+    });
+  });
 });
 ",
     "stateCleared": "modified",
@@ -315,6 +346,7 @@ import { Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 import { filter, tap } from "rxjs";
 import { RouterLink } from "@angular/router";
+import { AccountService } from "app/core/auth";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { Alert, AlertError } from "app/shared/alert";
@@ -342,6 +374,7 @@ export class UserManagementDetail {
   readonly userManagement = input<IUserManagement | null>(null);
   private readonly modalService = inject(NgbModal);
   private readonly router = inject(Router);
+  readonly currentAccount = inject(AccountService).account;
 
   previousState(): void {
     globalThis.history.back();

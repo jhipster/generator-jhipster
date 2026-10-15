@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useEffect } from 'react';
+import { useEffect<%_ if (!readOnly) { _%>, useState<%_ } _%> } from 'react';
 import { Link, useParams } from 'react-router';
 import { Button, <%- anyFieldHasDocumentation ? 'OverlayTrigger, Tooltip, ' : '' %>Row, Col } from 'react-bootstrap';
 import {
@@ -42,6 +42,9 @@ import { DurationFormat } from 'app/shared/DurationFormat';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntity } from './<%- entityFileName %>.reducer';
+<%_ if (!readOnly) { _%>
+import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
+<%_ } _%>
 
 export const <%- entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
@@ -52,6 +55,10 @@ export const <%- entityReactName %>Detail = () => {
     dispatch(getEntity(id!));
   }, []);
 
+<%_ if (!readOnly) { _%>
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+<%_ } _%>
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   return (
     <Row>
@@ -162,9 +169,10 @@ export const <%- entityReactName %>Detail = () => {
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Button>
 <%_ if (!readOnly) { _%>
-        <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/delete`} replace variant="danger" data-cy="entityDeleteButton">
+        <Button onClick={() => setShowDeleteDialog(true)} variant="danger" data-cy="entityDeleteButton">
           <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
         </Button>
+        {showDeleteDialog ? <<%- entityReactName %>DeleteDialog onClose={() => setShowDeleteDialog(false)} /> : null}
 <%_ } _%>
       </Col>
     </Row>
