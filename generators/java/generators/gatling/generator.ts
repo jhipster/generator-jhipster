@@ -107,7 +107,7 @@ export default class GatlingGenerator extends JavaApplicationGenerator {
           ruleId: 'S2187',
           ruleKey: 'java:S2187',
           resourceKey: `${application.srcTestJava}gatling/**/*`,
-          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-2187 is ignored, gatling tests are not supported by sonar',
+          comment: 'Rule java:S2187 is ignored, gatling tests are not supported by sonar',
         });
       },
     });
