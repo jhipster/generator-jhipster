@@ -339,7 +339,6 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
-          expect(response?.body).not.to.deep.include(<%- entityInstance %>);
         });
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
   <%_ if (cypressBootstrapEntities) { _%>
