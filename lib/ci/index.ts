@@ -22,7 +22,9 @@
 export {
   type DescribeGithubSamplesOptions,
   type SampleDescription,
+  type SampleFile,
   describeGithubSamples,
+  extractSampleFiles,
   formatSample,
   formatSamplesList,
   readSampleConfig,

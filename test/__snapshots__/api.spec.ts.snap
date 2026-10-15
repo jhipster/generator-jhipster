@@ -19,6 +19,7 @@ exports[`public api generator-jhipster/ci should match snapshot 1`] = `
   "describeGithubSamples",
   "extendFilteredMatrix",
   "extendMatrix",
+  "extractSampleFiles",
   "formatSample",
   "formatSamplesList",
   "fromMatrix",
