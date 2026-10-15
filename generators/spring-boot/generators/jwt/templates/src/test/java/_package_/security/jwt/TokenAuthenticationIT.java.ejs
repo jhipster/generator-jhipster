@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-<%_ if (reactive) { %>
+<%_ if (reactive) { _%>
 import <%- packageName %>.IntegrationTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -54,7 +54,7 @@ class TokenAuthenticationIT {
     void testReturnFalseWhenJWTisExpired() throws Exception {
         expectUnauthorized(createExpiredToken(jwtKey));
     }
-<%_ if (reactive) { %>
+<%_ if (reactive) { _%>
 
     private void expectOk(String token) {
         webTestClient.get().uri("/api/authenticate").headers(headers -> headers.setBearerAuth(token)).exchange().expectStatus().isNoContent();

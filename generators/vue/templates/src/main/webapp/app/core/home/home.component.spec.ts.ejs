@@ -82,9 +82,9 @@ describe('Home', () => {
 <%_ if (authenticationTypeOauth2) { _%>
     home.login();
     expect(loginService.login).toHaveBeenCalled();
-<%_ } else { %>
+<%_ } else { _%>
     home.showLogin();
     expect(login.showLogin).toHaveBeenCalled();
-<%_ } %>
+<%_ } _%>
   });
 });

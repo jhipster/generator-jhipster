@@ -41,15 +41,15 @@ import {
     // We cannot generate a required entity with relationship with required relationships.
     const skipCreateTest
       = !cypressBootstrapEntities
-    // Cannot create a required relationship with itself.
+      // Cannot create a required relationship with itself.
       || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
-    // Required relationships that contain another required relationship are complex to handle.
+      // Required relationships that contain another required relationship are complex to handle.
       || requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired))
-    // Same as above.
+      // Same as above.
       || requiredOtherEntities.some(otherEntity => otherEntity.primaryKey?.derived)
-    // Cannot generate the required data to test.
+      // Cannot generate the required data to test.
       || !entityFakeData
-      ? '.skip' : '';
+        ? '.skip' : '';
 
     const reason = 'cannot create a required entity with relationship with required relationships.';
 

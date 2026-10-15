@@ -25,7 +25,7 @@
     <changeSet id="<%- changelogDate %>-1-add-columns" author="jhipster">
         <addColumn tableName="<%- entity.entityTableName %>">
   <%_ for (field of addedFields) { _%>
-            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
+            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) %><%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
     <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%- field.columnName %>_content_type" type="varchar(255)"/>
     <%_ } _%>

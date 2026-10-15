@@ -42,7 +42,7 @@
     <%_ } _%>
   <%_ } _%>
     </changeSet>
-<% } _%>
+<%_ } _%>
 <%_ if (removedDefaultValueFields && removedDefaultValueFields.length) { _%>
     <!--
         Removed the default value for the fields for entity <%- entityClass %>.
@@ -54,7 +54,7 @@
             columnDataType="<%- field.columnType %>"/>
   <%_ } _%>
     </changeSet>
-<% } _%>
+<%_ } _%>
 <%_ if (addedDefaultValueFields && addedDefaultValueFields.length) { _%>
     <!--
         Added the default value for the fields for entity <%- entityClass %>.
@@ -64,10 +64,10 @@
         <addDefaultValue tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"
-            <%- this.createDefaultValueLiquibaseAttribute(field) -%>/>
+            <%- this.createDefaultValueLiquibaseAttribute(field) %>/>
   <%_ } _%>
     </changeSet>
-<% } _%>
+<%_ } _%>
 <%_ if (hasRelationshipConstraint) { _%>
 
     <!--
@@ -91,7 +91,7 @@
   <%_ } _%>
     </changeSet>
 <%_ } _%>
-<%_ if (addedRelationships && addedRelationships.length) { %>
+<%_ if (addedRelationships && addedRelationships.length) { _%>
 
     <!--
         Added the relationship constraints for entity <%- entityClass %>.

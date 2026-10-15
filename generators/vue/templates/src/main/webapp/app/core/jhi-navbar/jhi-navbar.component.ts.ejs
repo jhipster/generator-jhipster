@@ -23,8 +23,9 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import type LoginService from '@/account/login.service';
-<%_ } %>
-<%_ if (generateUserManagement) { %>
+<%_ } _%>
+
+<%_ if (generateUserManagement) { _%>
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 import type AccountService from '@/account/account.service';
@@ -63,9 +64,10 @@ export default defineComponent({
     const loginService = inject<LoginService>('loginService');
   <%_ if (authenticationTypeOauth2) { _%>
     const { login } = loginService;
-  <%_ } %>
-<%_ } %>
-<%_ if (generateUserManagement) { %>
+  <%_ } _%>
+<%_ } _%>
+
+<%_ if (generateUserManagement) { _%>
     const { showLogin } = useLoginModal();
 <%_ } _%>
     const accountService = inject<AccountService>('accountService');

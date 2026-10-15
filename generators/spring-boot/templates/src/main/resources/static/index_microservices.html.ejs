@@ -75,12 +75,12 @@
   <p>This application is a microservice, which has been generated using <a href="<%- hipsterDocumentationLink %>" rel="noopener noreferrer">JHipster</a>.</p>
 
   <ul>
-<%_ if (microfrontend) { %>
+<%_ if (microfrontend) { _%>
     <li>JHipster's microfrontends implementation doesn't provide a stand-alone UI. Packaged microfrontends should be accessed through a JHipster gateway.</li>
     <li>Stand-alone development server can be started by `npm start`.</li>
-<%_ } else { %>
+<%_ } else { _%>
     <li>It does not have a front-end. The front-end should be generated on a JHipster gateway.</li>
-<%_ } %>
+<%_ } _%>
     <li>It is serving REST APIs, under the '/api' URLs.</li>
 <%_ if (serviceDiscoveryEureka) { _%>
     <li>To manage this microservice, you will probably want to use the <a href="https://www.jhipster.tech/jhipster-registry/">JHipster Registry</a>:
