@@ -230,7 +230,8 @@ export const buildCommands = ({
           return;
         }
 
-        if (!silent && !silentLogo) {
+        // --install-path prints the path alone, read by scripts.
+        if (!silent && !silentLogo && !program.opts().installPath) {
           await printLogo();
           await printBlueprintLogo();
         }
