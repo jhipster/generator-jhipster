@@ -33,9 +33,8 @@ Three mechanisms combine:
 3. `composeWithJHipster` forwards the options of the composing generator, the `blueprints` one included, to the
    generators it composes, in its folder or in another one (`destinationRoot`).
 
-So the blueprints of one project reached every project a generator composed into. The `jdl` generator, blueprinted itself,
-resolved and stored blueprints of its own on top of the ones of the applications it generates, which made the blueprints
-of a jdl hard to follow.
+The `jdl` generator, blueprinted itself, also resolved and stored blueprints of its own on top of the ones of the
+applications it generates.
 
 ## Guide-level explanation
 
@@ -60,14 +59,12 @@ of a jdl hard to follow.
 
 [reference-level-explanation]: #reference-level-explanation
 
-- `BaseCoreGenerator.composeWithJHipster` drops the inherited `blueprints` and `blueprint` options when the composed
-  generator has a `destinationRoot` other than the folder of the composing generator, unless they are given in its
-  `generatorOptions`. It covers the bootstrap of the applications of a workspace (`base-workspaces`), the deployments and
-  the entities of the applications a jdl generates, and any generator composing into another folder.
+- `optionsForAnotherProject` leaves out the `blueprints` and `blueprint` options. `BaseCoreGenerator.composeWithJHipster`
+  forwards the options through it when the composed generator has a `destinationRoot` other than the folder of the
+  composing generator, the `generatorOptions` given to it still applying.
 - `JdlGenerator` extends `BaseCoreGenerator`: no `composeWithBlueprints`, no `delegateTasksToBlueprint`, no blueprints
-  resolver. It composes the `bootstrap` generator itself, which commits the files it writes, the configuration files
-  sorted, like a blueprinted generator does. It generates each application of a multi-application jdl in an environment of
-  its own (`env.run`), without the `blueprints` and `blueprint` options.
+  resolver. It composes the `bootstrap` generator itself, which commits the files it writes. It generates each application
+  of a multi-application jdl in an environment of its own (`env.run`), with the options of `optionsForAnotherProject`.
 - The `globalBlueprints` option (`--global-blueprints`) is forwarded across folders: the blueprints resolver merges it with
   the `blueprints` option and the `blueprints` of the `.yo-rc.json`, storing the result, and the `jdl` generator hands it
   to the applications it generates. The cli reads `--global-blueprints` from the command line, like `--blueprints`, to look
@@ -96,10 +93,8 @@ of a jdl hard to follow.
   each generator from its own configuration: it stops the blueprints of the current folder from leaking, but an explicit
   `--blueprints` still reaches every project composed into. It may still be done, independently.
 - Keeping the `jdl` generator blueprinted: its blueprints resolver mixes the blueprints of the folder it runs in with the
-  ones of the applications it generates, the confusing part this RFC removes. `--global-blueprints` does not bring it
-  back: the blueprints of the applications are only known once the jdl is read, so they could never blueprint the
-  generator reading it, and a blueprint customizing the jdl options declares them in its commands, which the cli already
-  collects for the jdl definitions.
+  ones of the applications it generates, the confusing part this RFC removes. The blueprints of the applications are only
+  known once the jdl is read: they could not blueprint the generator reading it anyway.
 
 ## Prior art
 

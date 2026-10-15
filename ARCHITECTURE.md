@@ -344,13 +344,11 @@ More information can be found at:
 
 ### Blueprint scope
 
-A blueprint belongs to the project it is stored for, in the `blueprints` of its `.yo-rc.json` ([RFC-7](rfcs/7-jhipster-rfc-blueprint-scope.md)):
+A blueprint belongs to the project whose `.yo-rc.json` stores it ([RFC-7](rfcs/7-jhipster-rfc-blueprint-scope.md)):
 
-- `--blueprints` adds blueprints to the project the command runs in, and they are stored there.
-- `--global-blueprints` adds blueprints to every project the run generates, the ones in other folders included (the applications of a jdl or of a workspace, the deployments), each one storing them.
-- A generator composed in another folder (`composeWithJHipster` with a `destinationRoot`) does not inherit the blueprints of the composing generator: it uses the ones of the `.yo-rc.json` of that folder, unless they are passed to it.
-- The applications of a jdl use the blueprints their jdl declares. The `jdl` generator is not blueprinted: a blueprint customizing it provides a `jdl` generator of its own, composing the one of generator-jhipster, and registers it in its cli.
-- A deployment blueprint customizes the deployment generators, not the applications they deploy.
+- `--blueprints` applies to the project the command runs in, `--global-blueprints` to every project the run generates, the ones in other folders included.
+- A generator composed in another folder (`composeWithJHipster` with a `destinationRoot`) uses the blueprints of the `.yo-rc.json` of that folder, unless they are passed to it.
+- The `jdl` generator is not blueprinted: the applications of a jdl use the blueprints their jdl declares.
 
 ### Blueprint lifecycle
 
