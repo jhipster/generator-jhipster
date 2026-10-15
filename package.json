@@ -48,6 +48,7 @@
       "default": "./dist/cli/index.js"
     },
     "./package.json": "./package.json",
+    "./build-info.json": "./dist/build-info.json",
     "./eslint/recommended": {
       "types": "./dist/lib/eslint/recommended.d.ts",
       "default": "./dist/lib/eslint/recommended.js"
@@ -115,7 +116,7 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint",
     "lint-fix": "npm run eslint -- --fix && npm run prettier:format",
-    "prepare": "npm run build",
+    "prepare": "npm run build && node bin/build-info.cjs",
     "prettier:check": "prettier . --check --experimental-cli",
     "prettier:format": "prettier . --write --experimental-cli",
     "pretest": "npm run lint && npm run check-types",
