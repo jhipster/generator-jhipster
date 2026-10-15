@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { randomBytes } from 'node:crypto';
+import { hkdfSync, randomBytes } from 'node:crypto';
 
 /**
  * Get a random hex string
@@ -51,4 +51,25 @@ export function createBase64Secret(len?: number | boolean, reproducible = false)
     return `SECRET--${len}`;
   }
   return Buffer.from(createSecret(len)).toString('base64');
+}
+
+/**
+ * Generates a hex secret, in the format of createSecret, derived from a seed: the same seed and purpose give the same secret.
+ * @param seed the value the secret is derived from, like the creation timestamp of the project
+ * @param purpose distinguishes the secrets derived from the same seed
+ * @param len the number of derived bytes, defaults to 50
+ */
+export function createReproducibleSecret(seed: string | number, purpose: string, len = 50): string {
+  return Buffer.from(hkdfSync('sha512', String(seed), 'jhipster', purpose, len)).toString('hex');
+}
+
+/**
+ * Generates a base64 secret, in the format of createBase64Secret, derived from a seed: the same seed and purpose give the
+ * same secret.
+ * @param seed the value the secret is derived from, like the creation timestamp of the project
+ * @param purpose distinguishes the secrets derived from the same seed
+ * @param len the number of derived bytes, defaults to 50
+ */
+export function createReproducibleBase64Secret(seed: string | number, purpose: string, len = 50): string {
+  return Buffer.from(createReproducibleSecret(seed, purpose, len)).toString('base64');
 }

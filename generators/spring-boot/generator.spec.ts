@@ -22,6 +22,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { createSecureContext } from 'node:tls';
 
+import { createReproducibleBase64Secret, createReproducibleSecret } from '../../lib/utils/secret.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
@@ -153,6 +154,29 @@ describe(`generator - ${generator}`, () => {
         supportedLanguages: expect.any(Array),
       });
     });
+  });
+
+  describe('with reproducibleSecrets', () => {
+    for (const [authenticationType, key, createKey] of [
+      ['jwt', 'jwtSecretKey', (seed: number) => createReproducibleBase64Secret(seed, 'jwtSecretKey', 64)],
+      ['session', 'rememberMeKey', (seed: number) => createReproducibleSecret(seed, 'rememberMeKey')],
+    ] as const) {
+      describe(`with ${authenticationType} authentication`, () => {
+        before(async () => {
+          await helpers
+            .runJHipster(generator)
+            .withJHipsterConfig({ authenticationType })
+            .withOptions({ reproducibleSecrets: true })
+            .withMockedSource({ except: ['addTestSpringFactory'] })
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
+        });
+
+        it(`derives the ${key} from the creation timestamp`, () => {
+          const { creationTimestamp } = runResult.application;
+          expect(runResult.application[key]).toBe(createKey(creationTimestamp));
+        });
+      });
+    }
   });
 
   describe('with oauth2', () => {
