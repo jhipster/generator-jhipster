@@ -35,13 +35,14 @@
  *
  * Every cryptographic operation is done by `node:crypto`, that is, by the OpenSSL node ships:
  *
- * - the RSA 2048 key pair: `generateKeyPairSync`;
+ * - the RSA 2048 key pair: `generateKeyPairSync`; for a reproducible KeyStore, the primality tests of its primes,
+ *   `checkPrimeSync`, and the import of the key, `createPrivateKey`;
  * - the certificate signature, RSASSA-PKCS1-v1_5 with SHA-256: `sign`;
- * - the encryption of the private key: `privateKey.export` with a cipher and a passphrase, which returns a complete
- *   `EncryptedPrivateKeyInfo` (PBES2: PBKDF2 with HMAC-SHA256, a random salt, 2048 iterations, then AES-256-CBC with
- *   a random initialization vector; salt, iterations and vector are chosen by OpenSSL);
+ * - the encryption of the private key: PBKDF2 with HMAC-SHA256 (`pbkdf2Sync`, 10000 iterations), then AES-256-CBC
+ *   (`createCipheriv`);
  * - the hashes and the MAC: `createHash`, `createHmac`;
- * - the random values: `randomBytes`.
+ * - the random values: `randomBytes`, or for a reproducible KeyStore `createReproducibleRandomBytes`
+ *   (`lib/utils/secret.ts`), HMAC-SHA512 in counter mode keyed by HKDF-SHA512 of the creation timestamp.
  *
  * Implemented here, because node has no API for them:
  *
@@ -49,9 +50,13 @@
  *   parses DER, a KeyStore, or any other input. Definite lengths, tags below 31, and positive integers whose first
  *   byte is below 0x80, anything else is refused with an error;
  * - the X.509 certificate structure (RFC 5280) around the public key and the signature node provides;
+ * - the PBES2 structure (RFC 8018) around the encrypted key, see `encryptPrivateKey`;
  * - the PKCS#12 container (RFC 7292) around the certificate and the encrypted key;
- * - the derivation of the MAC key from the password (RFC 7292, appendix B.2), see `pkcs12MacKey`. It is the only
- *   cryptographic algorithm written here, and it is made of SHA-256 calls only.
+ * - for a reproducible KeyStore, the RSA key from its primes (`generateRsaKeyPair`): node generates a key from the
+ *   random source of OpenSSL only. The primes are drawn from the derived bytes, the rest is BigInt arithmetic;
+ * - the derivation of the MAC key from the password (RFC 7292, appendix B.2), see `pkcs12MacKey`. Besides the
+ *   arithmetic of a reproducible RSA key, it is the only cryptographic algorithm written here, and it is made of
+ *   SHA-256 calls only.
  *
  * ## The file, element by element
  *
@@ -68,7 +73,7 @@
  * │     └─ ContentInfo, type data
  * │        └─ SafeContents
  * │           └─ SafeBag, type pkcs8ShroudedKeyBag   attributes: friendlyName, localKeyId
- * │              └─ EncryptedPrivateKeyInfo  RFC 5958, PBES2 of RFC 8018, from node
+ * │              └─ EncryptedPrivateKeyInfo  RFC 5958, PBES2 of RFC 8018: 16 bytes salt and IV, 10000 iterations
  * └─ macData
  *    ├─ mac: DigestInfo                      SHA-256, the HMAC of the AuthenticatedSafe
  *    ├─ macSalt                              20 random bytes
@@ -84,7 +89,7 @@
  * │  ├─ serialNumber                         the byte 01 then 8 random bytes: positive, 64 random bits
  * │  ├─ signature                            sha256WithRSAEncryption
  * │  ├─ issuer                               the same name as the subject: self-signed
- * │  ├─ validity                             now, to now + 99999 days
+ * │  ├─ validity                             now (the creation timestamp), to 99999 days later
  * │  ├─ subject                              O=<packageName>, OU=Development, CN=Java Hipster
  * │  └─ subjectPublicKeyInfo                 from node
  * ├─ signatureAlgorithm                      sha256WithRSAEncryption
@@ -128,7 +133,7 @@
  * | Key                   | RSA, 2048 bits, public exponent 65537                          |
  * | Certificate           | X.509 version 3, self-signed, SHA-256 with RSA                 |
  * | Validity              | 99999 days, to the year 2300                                   |
- * | Key encryption scheme | PBES2: PBKDF2 with HMAC-SHA256, AES-256-CBC                    |
+ * | Key encryption scheme | PBES2: PBKDF2 with HMAC-SHA256, 10000 iterations, AES-256-CBC  |
  * | Integrity             | HMAC-SHA256, 10000 iterations, 20 bytes salt                   |
  * | Host name             | none: no subjectAltName, and the common name is not a host     |
  *
@@ -138,18 +143,12 @@
  *
  * | | keytool | this module | Consequence |
  * | --- | --- | --- | --- |
- * | Key encryption iterations | 10000 | 2048 | A guess of the password costs less work. |
  * | Certificate bag | encrypted | not encrypted | The certificate is readable without the password. |
  * | Subject and issuer | ends with `L=, ST=, C=` | `CN`, `OU`, `O` only | The name prints shorter. |
  * | SubjectKeyIdentifier | present | absent | None for a certificate that issues no other. |
  * | Serial number | 64 random bits | `01`, then 64 random bits | None: positive and unique in both. |
  * | `localKeyId` | the text `Time <milliseconds>` | SHA-1 of the certificate | None: an opaque identifier. |
  *
- * - Key encryption iterations. PBKDF2 is repeated to make each guess of the password slower. 2048 is the default of
- *   OpenSSL, and `privateKey.export` has no option to change it. Here the password is `password` and is written in
- *   `application-tls.yml`, so there is nothing to guess and nothing is lost. It would be a weakness for a KeyStore
- *   with a secret password: do not use this module for one without encrypting the key with more iterations, which
- *   means building the PBES2 structure here from `pbkdf2Sync` and `createCipheriv`.
  * - Certificate bag. keytool encrypts the certificate with the password too, so its subject, which holds the package
  *   name, and its public key cannot be read from the file without it. A certificate is public by purpose: the
  *   server sends it to every client that connects. Leaving the bag in clear exposes nothing more, and keeps one more
@@ -165,32 +164,61 @@
  * Not about the file: keytool needed a JDK when generating and about half a second, wrote to the disk only, and when
  * it was missing the KeyStore was not created, with a warning. This module always creates it.
  *
+ * ## A reproducible KeyStore
+ *
+ * With `--reproducible-secrets`, the generator gives the creation timestamp of the application, and the KeyStore is
+ * derived from it: the key, the serial number, the salts and the initialization vector come from bytes derived from the
+ * timestamp, and the certificate is valid from it. The same application generates the same file, which a comparison of
+ * two generations needs. Anyone knowing the timestamp, stored in `.yo-rc.json`, can derive the key: like the password,
+ * it gives a working TLS endpoint, not secrecy.
+ *
  * ## How it is checked
  *
  * `key-store-node-crypto.spec.ts` reads the result back with a DER reader of its own and asserts the structure, the
  * algorithms (from object identifiers written in the spec, not computed by this encoder), that the key, the serial
- * number, the salts and the initialization vector change at each call, and loads the file with two independent
+ * number, the salts and the initialization vector change at each call unless derived from the same timestamp, and loads
+ * the file with two independent
  * implementations: the OpenSSL of node (`tls.createSecureContext`), and Java through `keytool -list`, where a JDK is
  * installed. Both verify the MAC, so they check `pkcs12MacKey` against their own implementation.
  *
  * ## When changing it
  *
- * - Keep every cryptographic operation in `node:crypto`. Do not implement a cipher, a signature or a random source.
+ * - Keep every cryptographic operation in `node:crypto`. Do not implement a cipher, a signature or a primality test; the
+ *   only random sources are `randomBytes` and the derivation of `createReproducibleRandomBytes`.
  * - DER requires the elements of a SET OF in the order of their encoding: the two bag attributes are written in it.
  * - `integer` only encodes the positive values described on it and throws on the others, `time` only whole seconds.
  * - Run the spec with a JDK: Java is the reader that matters, and the keytool tests are skipped without one.
  */
-import { createHash, createHmac, generateKeyPairSync, randomBytes, sign } from 'node:crypto';
+import {
+  checkPrimeSync,
+  createCipheriv,
+  createHash,
+  createHmac,
+  createPrivateKey,
+  createPublicKey,
+  generateKeyPairSync,
+  pbkdf2Sync,
+  randomBytes,
+  sign,
+} from 'node:crypto';
+
+import { createReproducibleRandomBytes } from '../../../lib/utils/secret.ts';
 
 const KEY_STORE_ALIAS = 'selfsigned';
 const KEY_STORE_PASSWORD = 'password';
 const KEY_STORE_VALIDITY_DAYS = 99_999;
 const MAC_ITERATIONS = 10_000;
+const KEY_ENCRYPTION_ITERATIONS = 10_000;
+const RSA_PUBLIC_EXPONENT = 65_537n;
 
 const OID = {
   data: '1.2.840.113549.1.7.1',
   sha256WithRSAEncryption: '1.2.840.113549.1.1.11',
   sha256: '2.16.840.1.101.3.4.2.1',
+  pbes2: '1.2.840.113549.1.5.13',
+  pbkdf2: '1.2.840.113549.1.5.12',
+  hmacWithSHA256: '1.2.840.113549.2.9',
+  aes256Cbc: '2.16.840.1.101.3.4.1.42',
   organizationName: '2.5.4.10',
   organizationalUnitName: '2.5.4.11',
   commonName: '2.5.4.3',
@@ -288,13 +316,93 @@ const pkcs12MacKey = (password: string, salt: Buffer, iterations: number): Buffe
 };
 
 /**
+ * An EncryptedPrivateKeyInfo (RFC 5958) of a PKCS#8 private key: PBES2 (RFC 8018), PBKDF2 with HMAC-SHA256, then
+ * AES-256-CBC.
+ */
+const encryptPrivateKey = (pkcs8: Buffer, password: string, salt: Buffer, iv: Buffer): Buffer => {
+  const key = pbkdf2Sync(password, salt, KEY_ENCRYPTION_ITERATIONS, 32, 'sha256');
+  const cipher = createCipheriv('aes-256-cbc', key, iv);
+  return sequence(
+    sequence(
+      objectIdentifier(OID.pbes2),
+      sequence(
+        sequence(
+          objectIdentifier(OID.pbkdf2),
+          sequence(octetString(salt), integer(KEY_ENCRYPTION_ITERATIONS), algorithmIdentifier(OID.hmacWithSHA256)),
+        ),
+        sequence(objectIdentifier(OID.aes256Cbc), octetString(iv)),
+      ),
+    ),
+    octetString(Buffer.concat([cipher.update(pkcs8), cipher.final()])),
+  );
+};
+
+const toBigInt = (bytes: Buffer) => BigInt(`0x${bytes.toString('hex')}`);
+const toBase64Url = (value: bigint) => {
+  const hex = value.toString(16);
+  return Buffer.from(hex.length % 2 ? `0${hex}` : hex, 'hex').toString('base64url');
+};
+const modInverse = (value: bigint, modulus: bigint): bigint => {
+  let [oldR, r] = [value % modulus, modulus];
+  let [oldS, s] = [1n, 0n];
+  while (r !== 0n) {
+    const quotient = oldR / r;
+    [oldR, r] = [r, oldR - quotient * r];
+    [oldS, s] = [s, oldS - quotient * s];
+  }
+  return ((oldS % modulus) + modulus) % modulus;
+};
+const gcd = (a: bigint, b: bigint): bigint => (b === 0n ? a : gcd(b, a % b));
+
+/**
+ * A 2048 bits RSA key pair whose primes are drawn from the given bytes, for a KeyStore derived from a seed: OpenSSL
+ * generates a key from its own random source only. Each prime is the first one, as `checkPrimeSync` tests it, from
+ * 1024 random bits with the two high bits set, so that the modulus has 2048 bits, and the low bit set.
+ */
+const generateRsaKeyPair = (random: (len: number) => Buffer) => {
+  const prime = () => {
+    const bytes = random(128);
+    bytes[0] |= 0xc0;
+    bytes[127] |= 1;
+    let candidate = toBigInt(bytes);
+    while (!checkPrimeSync(candidate) || gcd(candidate - 1n, RSA_PUBLIC_EXPONENT) !== 1n) {
+      candidate += 2n;
+    }
+    return candidate;
+  };
+  const p = prime();
+  const q = prime();
+  const lambda = ((p - 1n) * (q - 1n)) / gcd(p - 1n, q - 1n);
+  const d = modInverse(RSA_PUBLIC_EXPONENT, lambda);
+  const privateKey = createPrivateKey({
+    format: 'jwk',
+    key: {
+      kty: 'RSA',
+      n: toBase64Url(p * q),
+      e: toBase64Url(RSA_PUBLIC_EXPONENT),
+      d: toBase64Url(d),
+      p: toBase64Url(p),
+      q: toBase64Url(q),
+      dp: toBase64Url(d % (p - 1n)),
+      dq: toBase64Url(d % (q - 1n)),
+      qi: toBase64Url(modInverse(q, p)),
+    },
+  });
+  return { privateKey, publicKey: createPublicKey(privateKey) };
+};
+
+/**
  * The contents of a PKCS#12 KeyStore holding a 2048 bits RSA key and its self-signed certificate, under the `selfsigned`
  * alias and the `password` password, valid for 99999 days, as `keytool -genkey` created it.
  * Built with node crypto only: the key is encrypted with PBES2 (PBKDF2 with HMAC-SHA256, AES-256-CBC) and the KeyStore
  * is protected by an HMAC-SHA256 MAC.
+ * With a creation timestamp, the KeyStore is derived from it instead of random: the same timestamp and package name
+ * give the same KeyStore, whose certificate is valid from that timestamp.
  */
-export const createKeyStore = ({ packageName }: { packageName: string }): Buffer => {
-  const { privateKey, publicKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+export const createKeyStore = ({ packageName, creationTimestamp }: { packageName: string; creationTimestamp?: number }): Buffer => {
+  const random = creationTimestamp === undefined ? randomBytes : createReproducibleRandomBytes(creationTimestamp, 'keyStore');
+  const { privateKey, publicKey } =
+    creationTimestamp === undefined ? generateKeyPairSync('rsa', { modulusLength: 2048 }) : generateRsaKeyPair(random);
 
   // Most significant first: `CN=Java Hipster, OU=Development, O=<packageName>`.
   const name = sequence(
@@ -304,13 +412,13 @@ export const createKeyStore = ({ packageName }: { packageName: string }): Buffer
       [OID.commonName, 'Java Hipster'],
     ].map(([oid, value]) => set(sequence(objectIdentifier(oid), utf8String(value)))),
   );
-  const notBefore = new Date();
+  const notBefore = new Date(creationTimestamp ?? Date.now());
   const notAfter = new Date(notBefore.getTime() + KEY_STORE_VALIDITY_DAYS * 24 * 60 * 60 * 1000);
   const tbsCertificate = sequence(
     // Version 3.
     explicit(0, integer(2)),
     // A positive serial number.
-    integer(Buffer.concat([Buffer.from([1]), randomBytes(8)])),
+    integer(Buffer.concat([Buffer.from([1]), random(8)])),
     algorithmIdentifier(OID.sha256WithRSAEncryption),
     name,
     sequence(time(notBefore), time(notAfter)),
@@ -336,14 +444,13 @@ export const createKeyStore = ({ packageName }: { packageName: string }): Buffer
     );
   const authenticatedSafe = sequence(
     safeContents(OID.certBag, sequence(objectIdentifier(OID.x509Certificate), explicit(0, octetString(certificate)))),
-    // An EncryptedPrivateKeyInfo: PBES2, PBKDF2 with HMAC-SHA256 and AES-256-CBC.
     safeContents(
       OID.pkcs8ShroudedKeyBag,
-      privateKey.export({ type: 'pkcs8', format: 'der', cipher: 'aes-256-cbc', passphrase: KEY_STORE_PASSWORD }),
+      encryptPrivateKey(privateKey.export({ type: 'pkcs8', format: 'der' }), KEY_STORE_PASSWORD, random(16), random(16)),
     ),
   );
 
-  const macSalt = randomBytes(20);
+  const macSalt = random(20);
   const macKey = pkcs12MacKey(KEY_STORE_PASSWORD, macSalt, MAC_ITERATIONS);
   const mac = createHmac('sha256', macKey).update(authenticatedSafe).digest();
   return sequence(

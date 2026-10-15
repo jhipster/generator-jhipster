@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { hkdfSync, randomBytes } from 'node:crypto';
+import { createHmac, hkdfSync, randomBytes } from 'node:crypto';
 
 /**
  * Get a random hex string
@@ -54,13 +54,35 @@ export function createBase64Secret(len?: number | boolean, reproducible = false)
 }
 
 /**
+ * A source of bytes derived from a seed, standing for `randomBytes`: the same seed and purpose give the same bytes.
+ * HMAC-SHA512 in counter mode, keyed by HKDF-SHA512 of the seed and the purpose.
+ * @param seed the value the bytes are derived from, like the creation timestamp of the project
+ * @param purpose distinguishes the sources derived from the same seed
+ */
+export function createReproducibleRandomBytes(seed: string | number, purpose: string): (len: number) => Buffer {
+  const key = Buffer.from(hkdfSync('sha512', String(seed), 'jhipster', purpose, 64));
+  let counter = 0;
+  let pending = Buffer.alloc(0);
+  return (len: number) => {
+    while (pending.length < len) {
+      const block = Buffer.alloc(4);
+      block.writeUInt32BE(counter++);
+      pending = Buffer.concat([pending, createHmac('sha512', key).update(block).digest()]);
+    }
+    const bytes = pending.subarray(0, len);
+    pending = pending.subarray(len);
+    return bytes;
+  };
+}
+
+/**
  * Generates a hex secret, in the format of createSecret, derived from a seed: the same seed and purpose give the same secret.
  * @param seed the value the secret is derived from, like the creation timestamp of the project
  * @param purpose distinguishes the secrets derived from the same seed
  * @param len the number of derived bytes, defaults to 50
  */
 export function createReproducibleSecret(seed: string | number, purpose: string, len = 50): string {
-  return Buffer.from(hkdfSync('sha512', String(seed), 'jhipster', purpose, len)).toString('hex');
+  return createReproducibleRandomBytes(seed, purpose)(len).toString('hex');
 }
 
 /**
