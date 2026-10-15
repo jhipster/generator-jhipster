@@ -35,6 +35,14 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: routerPushMock }),
 }));
 
+const bModalStub = {
+  render: () => {},
+  methods: {
+    hide: () => {},
+    show: () => {}
+  }
+};
+
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
   delete: vi.spyOn(axios, 'delete'),
@@ -122,7 +130,7 @@ describe('UserManagementView Component', () => {
         global: {
           stubs: {
             'b-badge': true,
-            'b-modal': true,
+            'b-modal': bModalStub as any,
             'router-link': true,
             'font-awesome-icon': true,
           },

@@ -26,6 +26,8 @@ import { deleteUser, getUser } from './user-management.reducer';
 import UserManagementDeleteDialog from './user-management-delete-dialog';
 
 vi.mock('./user-management.reducer', () => ({
+  __esModule: true,
+  default: (state = { user: { login: 'user' } }) => state,
   getUser: vi.fn(() => ({ type: 'userManagement/getUser' })),
   deleteUser: vi.fn(() => ({ type: 'userManagement/deleteUser' })),
 }));
@@ -58,7 +60,7 @@ describe('UserManagementDeleteDialog', () => {
   it('should navigate to the user management list after confirming the deletion', () => {
     renderDialog();
 
-    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
+    fireEvent.click(document.querySelector('[data-cy="entityConfirmDeleteButton"]')!);
 
     expect(deleteUser).toHaveBeenCalledWith('user');
     expect(screen.getByText('user-management-list')).toBeTruthy();
