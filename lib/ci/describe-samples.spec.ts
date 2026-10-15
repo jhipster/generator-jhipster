@@ -16,16 +16,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { describe, esmocha, expect, it } from 'esmocha';
 import { join } from 'node:path';
 
-import { describeGithubSamples, formatSample, readSampleDefaultCommand } from './describe-samples.ts';
+import jdlLogger from '../jdl/core/utils/objects/logger.ts';
+
+import { describeGithubSamples, formatSample, readSampleDefaultCommand, readSampleJDLConfig } from './describe-samples.ts';
 import { getGithubSamples, getGithubSamplesGroup } from './github-group.ts';
 
 const fixtures = join(import.meta.dirname, '__test-support__/samples-groups');
 const valid = join(fixtures, 'valid');
 
 describe('ci samples groups', () => {
+  describe('readSampleJDLConfig', () => {
+    it('reads the config of a jdl without logging its warnings', () => {
+      const warn = esmocha.spyOn(jdlLogger, 'warn');
+      try {
+        expect(
+          readSampleJDLConfig('application { config { baseName foo buildTool gradle } entities A }\nentity A\npaginate A with pagination'),
+        ).toEqual({ buildTool: 'gradle' });
+        expect(warn).not.toHaveBeenCalled();
+      } finally {
+        warn.mockRestore();
+      }
+    });
+  });
+
   describe('getGithubSamples', () => {
     it('gives each sample with its group', async () => {
       const samples = await getGithubSamples(valid);

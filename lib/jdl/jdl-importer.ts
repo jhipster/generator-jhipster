@@ -53,6 +53,8 @@ type JDLApplicationConfiguration = {
    * own file system. Deployment files are written to the disk otherwise.
    */
   skipDeploymentFileGeneration?: boolean;
+  /** Receives the warnings about what the jdl uses, a deprecated option for instance: logged by default. */
+  onWarning?: (message: string) => void;
 };
 
 /**
@@ -81,7 +83,7 @@ export function createImporterFromFiles(
     throw new Error('Files must be passed to create a new JDL importer.');
   }
   const runtime = getRuntime(definitions);
-  const content = parseFromFiles(files, runtime);
+  const content = parseFromFiles(files, runtime, { onWarning: configuration?.onWarning });
   return makeJDLImporter(content, configuration ?? {}, runtime);
 }
 
@@ -100,7 +102,7 @@ export function createImporterFromContent(
     throw new Error('A JDL content must be passed to create a new JDL importer.');
   }
   const runtime = getRuntime(definitions);
-  const content = parseFromContent(jdlString, runtime);
+  const content = parseFromContent(jdlString, runtime, { onWarning: configuration?.onWarning });
   return makeJDLImporter(content, configuration ?? {}, runtime);
 }
 

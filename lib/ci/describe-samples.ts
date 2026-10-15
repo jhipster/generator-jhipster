@@ -140,7 +140,9 @@ export const readSampleConfig = (yoRcFile: string | undefined): Record<string, u
 /** The configuration the first application of a JDL declares, worth showing. */
 export const readSampleJDLConfig = (jdl: string): Record<string, unknown> | undefined => {
   try {
-    return pickConfig(createImporterFromContent(jdl).import().exportedApplications[0]?.['generator-jhipster'] ?? {});
+    // Describing a sample tells nothing about its jdl: its warnings, a deprecated option for instance, are not logged.
+    const importer = createImporterFromContent(jdl, { onWarning: () => {} });
+    return pickConfig(importer.import().exportedApplications[0]?.['generator-jhipster'] ?? {});
   } catch {
     // A template JDL completed by the generator options.
     return undefined;
