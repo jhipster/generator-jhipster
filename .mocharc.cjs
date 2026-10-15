@@ -1,12 +1,3 @@
-const Module = require('node:module');
-const process = require('node:process');
-
-if (!Module.register) {
-  // eslint-disable-next-line no-console
-  console.log('JHipster test requires node >=18.19.0 || >= 20.6.0\n');
-  process.exit(1);
-}
-
 module.exports = {
   recursive: true,
   reporter: 'spec',
