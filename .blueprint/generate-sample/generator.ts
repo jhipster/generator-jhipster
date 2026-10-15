@@ -19,11 +19,9 @@
 
 import { basename, extname, join, resolve } from 'node:path';
 
-import { globSync } from 'tinyglobby';
-
 import BaseGenerator from '../../generators/base-core/index.ts';
 import type { Config } from '../../generators/base-core/types.ts';
-import { type SampleDescription, defaultGithubEnvironment } from '../../lib/ci/index.ts';
+import { type SampleDescription, type SampleFile, defaultGithubEnvironment, extractSampleFiles } from '../../lib/ci/index.ts';
 import { getPackageRoot, packageJson } from '../../lib/index.ts';
 import { findSamples } from '../describe-samples/support/describe-samples.ts';
 import { promptSamplesFolder } from '../support.ts';
@@ -44,6 +42,8 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleOnly?: boolean;
   /** The sample of the name, as describe-samples describes it. */
   sample?: SampleDescription;
+  /** The files of the project of the sample, its inline jdl as files. */
+  sampleFiles: SampleFile[] = [];
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asAnyTaskGroup({
@@ -91,13 +91,13 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         } else {
           const [sample] = findSamples({ sampleName: this.sampleName });
           this.sample = sample;
-          // The files and the jdl the description lists, by their path in the project, relative to the package root.
-          for (const [destination, file] of Object.entries(sample.files)) {
-            this.fs.copy(resolve(packageRoot, file), join(this.projectFolder, destination));
-          }
-          for (const [destination, jdl] of Object.entries(sample.jdls)) {
-            if ('file' in jdl) {
-              this.fs.copy(resolve(packageRoot, jdl.file), join(this.projectFolder, destination));
+          this.sampleFiles = extractSampleFiles(sample, { root: packageRoot });
+          for (const file of this.sampleFiles) {
+            const destination = join(this.projectFolder, file.destination);
+            if ('source' in file) {
+              this.fs.copy(file.source, destination);
+            } else {
+              this.fs.write(destination, file.contents);
             }
           }
         }
@@ -127,22 +127,22 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
           ...(sample.war ? { defaultPackaging: 'war' } : {}),
           ...sample.generatorOptions,
         };
-        // The jdl files copied to the project and the inline jdls, which the jdl generator concatenates.
-        const jdls = Object.values(sample.jdls);
-        const jdlFiles = jdls.some(jdl => 'file' in jdl) ? globSync('*.jdl', { cwd: this.projectFolder }) : [];
-        const inline = jdls.flatMap(jdl => ('content' in jdl ? [jdl.content] : [])).join('\n') || undefined;
-        if (sample.defaultCommand === GENERATOR_JDL) {
-          await this.composeWithJHipster(GENERATOR_JDL, { generatorArgs: jdlFiles, generatorOptions: { ...generatorOptions, inline } });
-          return;
-        }
-        if (jdlFiles.length > 0 || inline) {
-          // The entities of an app sample written as jdl.
+        // The jdl files of the project, the inline ones included, which the jdl generator concatenates.
+        const jdlFiles = this.sampleFiles.map(file => file.destination).filter(destination => extname(destination) === '.jdl');
+        if (jdlFiles.length > 0 && this.sampleFiles.some(file => file.destination === '.yo-rc.json')) {
+          // The entities of an app sample written as jdl: with its .yo-rc.json, the jdl generator would generate the entities
+          // of an existing project alone.
           await this.composeWithJHipster(GENERATOR_JDL, {
             generatorArgs: jdlFiles,
-            generatorOptions: { ...generatorOptions, inline, jsonOnly: true },
+            generatorOptions: { ...generatorOptions, jsonOnly: true },
           });
+          await this.composeWithJHipster(sample.defaultCommand, { generatorOptions });
+          return;
         }
-        await this.composeWithJHipster(sample.defaultCommand, { generatorOptions });
+        await this.composeWithJHipster(jdlFiles.length > 0 ? GENERATOR_JDL : sample.defaultCommand, {
+          generatorArgs: jdlFiles,
+          generatorOptions,
+        });
       },
       async updateVscodeWorkspace() {
         if (this.global) {

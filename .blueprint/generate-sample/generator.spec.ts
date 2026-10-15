@@ -135,9 +135,13 @@ describe(`generator - ${generator}`, () => {
         .withMockedGenerators(['jhipster:jdl', 'jhipster:info']);
     });
 
-    it('should give the jdl inline to the jdl generator', () => {
-      const [, options] = runResult.getGeneratorMock('jhipster:jdl').calls.at(-1)!.arguments;
-      expect(options).toMatchObject({ inline: expect.stringContaining('graalvmSupport true') });
+    it('should write the inline jdl as a file', () => {
+      runResult.assertFileContent('inline-1.jdl', /graalvmSupport true/);
+    });
+
+    it('should give the jdl file to the jdl generator', () => {
+      const [args] = runResult.getGeneratorMock('jhipster:jdl').calls.at(-1)!.arguments;
+      expect(args).toEqual(['inline-1.jdl']);
     });
   });
 

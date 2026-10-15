@@ -19,13 +19,37 @@
 import { describe, expect, it } from 'esmocha';
 import { join } from 'node:path';
 
-import { describeGithubSamples, formatSample, readSampleDefaultCommand } from './describe-samples.ts';
+import { describeGithubSamples, extractSampleFiles, formatSample, readSampleDefaultCommand } from './describe-samples.ts';
 import { getGithubSamples, getGithubSamplesGroup } from './github-group.ts';
 
 const fixtures = join(import.meta.dirname, '__test-support__/samples-groups');
 const valid = join(fixtures, 'valid');
 
 describe('ci samples groups', () => {
+  describe('extractSampleFiles', () => {
+    it('gives the copied files and the jdl files by their source, then each inline jdl as a file', () => {
+      expect(
+        extractSampleFiles(
+          {
+            files: { '.yo-rc.json': 'samples/app/.yo-rc.json', '.jhipster/Foo.json': 'samples/app/.jhipster/Foo.json' },
+            jdls: {
+              'app.jdl': { content: 'application {}' },
+              'entities.jdl': { file: 'samples/entities.jdl' },
+              'other.jdl': { content: 'entity Bar' },
+            },
+          },
+          { root: '/root' },
+        ),
+      ).toEqual([
+        { destination: '.yo-rc.json', source: '/root/samples/app/.yo-rc.json' },
+        { destination: '.jhipster/Foo.json', source: '/root/samples/app/.jhipster/Foo.json' },
+        { destination: 'entities.jdl', source: '/root/samples/entities.jdl' },
+        { destination: 'inline-1.jdl', contents: 'application {}' },
+        { destination: 'inline-2.jdl', contents: 'entity Bar' },
+      ]);
+    });
+  });
+
   describe('getGithubSamples', () => {
     it('gives each sample with its group', async () => {
       const samples = await getGithubSamples(valid);
