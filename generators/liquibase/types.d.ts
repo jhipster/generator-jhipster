@@ -103,7 +103,6 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   anyRelationshipIsOwnerSide: boolean;
   liquibaseFakeData: Record<string, any>[];
   fakeDataCount: number;
-  incremental: boolean;
 }
 
 export type Application<E extends Entity> = JavaApplication<E> & {

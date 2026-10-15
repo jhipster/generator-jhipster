@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, resolve } from 'node:path';
+import { writeFileSync } from 'node:fs';
+import { basename, join, resolve } from 'node:path';
 
 import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
@@ -54,6 +55,24 @@ describe(`generator - ${generator}`, () => {
 
     it('should compose with generators', () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
+    });
+  });
+
+  describe('with an entity written by an older version', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          { name: 'Foo', annotations: { changelogDate: '20200101000100' }, incrementalChangelog: true, fields: [] } as any,
+        ])
+        .doInDir(cwd => writeFileSync(join(cwd, '.yo-rc.json'), JSON.stringify({ 'generator-jhipster': { jhipsterVersion: '9.4.0' } })))
+        .withSkipWritingPriorities();
+    });
+
+    it('should store the incrementalChangelog flag as the incrementalChangelogDate', () => {
+      result.assertJsonFileContent('.jhipster/Foo.json', { annotations: { incrementalChangelogDate: '20200101000100' } });
+      result.assertNoFileContent('.jhipster/Foo.json', '"changelogDate"');
+      result.assertNoFileContent('.jhipster/Foo.json', '"incrementalChangelog"');
     });
   });
 

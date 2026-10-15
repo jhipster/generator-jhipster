@@ -120,9 +120,7 @@ export default abstract class BaseEntityChangesGenerator<
 
     const entitiesByName = Object.fromEntries(paramEntities.map(entity => [entity.name, entity]));
     const entitiesWithExistingChangelog = new Set(
-      entityNames.filter(
-        entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].annotations?.changelogDate as string }),
-      ),
+      entityNames.filter(entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].changelogDate })),
     );
     const previousEntitiesByName = Object.fromEntries(
       entityNames
@@ -164,7 +162,7 @@ export default abstract class BaseEntityChangesGenerator<
       if (!oldConfig || recreateInitialChangelog || !incrementalChangelog || !entitiesWithExistingChangelog.has(entityName)) {
         return {
           ...baseChangelog(),
-          incremental: newConfig.incrementalChangelog!,
+          incremental: Boolean(newConfig.incrementalChangelogDate),
           changelogDate: newConfig.changelogDate,
           newEntity: true,
           entity: newConfig,

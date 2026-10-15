@@ -16,6 +16,8 @@ type MicroserviceEntity = {
 export type Entity<F extends Field = Field, R extends Relationship = Relationship> = MicroserviceEntity & {
   name: string;
   changelogDate?: string;
+  /** The changelog date of an entity created in incremental mode, given instead of changelogDate. */
+  incrementalChangelogDate?: string;
   dto?: 'no' | 'mapstruct' | 'any';
   entitySuffix?: string;
   service?: 'no' | 'serviceClass' | 'serviceImpl';

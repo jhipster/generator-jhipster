@@ -262,9 +262,9 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_constraints_Customer.xml" relativeToChangelogFile="false"/>
@@ -410,9 +410,9 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
@@ -597,10 +597,10 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml" relativeToChangelogFile="false"/>
@@ -781,10 +781,10 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml" relativeToChangelogFile="false"/>
@@ -1410,10 +1410,10 @@ e2e97678-c5d1-4ad6-b91f-1317db255f69;false;29115;2019-12-31T13:39:19
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000200_added_entity_Two.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Two.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
 ",
@@ -2559,10 +2559,10 @@ cf78c672-a35c-40bb-8ecb-909918ac8e4d
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000200_added_entity_Two.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Two.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000200_updated_entity_Two.xml" relativeToChangelogFile="false"/>
@@ -2939,10 +2939,10 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_migrate_One.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000200_updated_entity_Another.xml" relativeToChangelogFile="false"/>
@@ -3021,9 +3021,9 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
@@ -3096,9 +3096,9 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_Customer.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_Customer.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
@@ -3172,11 +3172,11 @@ ROLE_USER
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20200101000100_added_entity_constraints_One.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20200101000100_added_entity_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000100_added_entity_constraints_One.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200101000200_added_entity_Another.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200102000100_updated_entity_One.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
