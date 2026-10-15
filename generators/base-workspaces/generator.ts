@@ -25,6 +25,7 @@ import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromComm
 import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-jdl-config.ts';
 import { createDelayedMutationContext, droppedMutationMessage, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
+import { priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
@@ -83,6 +84,8 @@ export default abstract class BaseWorkspacesGenerator<
       skipLoadCommand: false,
       ...features,
       customPriorities: [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])],
+      // The phases of the custom objects run once the deployment and its applications are prepared.
+      customObjects: features?.customObjects?.map(customObject => ({ before: DEFAULT, ...customObject })),
     } as Features);
   }
 
@@ -177,8 +180,12 @@ export default abstract class BaseWorkspacesGenerator<
   getArgsForPriority(priorityName: string): any {
     const args = super.getArgsForPriority(priorityName);
     if (
-      !(
+      !priorityMatches(
         [
+          // The priorities of the custom objects (`loadingService`), which run after the workspaces priorities.
+          'loading*',
+          'preparing*',
+          'postPreparing*',
           PROMPTING_WORKSPACES,
           CONFIGURING_WORKSPACES,
           LOADING_WORKSPACES,
@@ -189,8 +196,9 @@ export default abstract class BaseWorkspacesGenerator<
           PRE_CONFLICTS,
           INSTALL,
           END,
-        ] as string[]
-      ).includes(priorityName)
+        ],
+        priorityName,
+      )
     ) {
       return args;
     }

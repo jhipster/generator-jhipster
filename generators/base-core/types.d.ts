@@ -57,6 +57,13 @@ export type Options = YeomanOptions & {
 
 export type Features = YeomanFeatures & {
   /**
+   * Custom objects, like `[{ name: 'service' }]`, each with its phases before the `before` priority, the post preparing
+   * one by default: `loadingService`, `preparingService` and `postPreparingService`, with the `service` object. The
+   * generator implements the `service` getter giving the object.
+   */
+  customObjects?: { name: string; before?: string }[];
+
+  /**
    * Wraps write context and shows removed fields and replacements if exists.
    */
   jhipster7Migration?: boolean | 'verbose' | 'silent';

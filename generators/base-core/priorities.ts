@@ -18,6 +18,8 @@
  */
 import type { Priority } from 'yeoman-generator';
 
+import { droppedMutationMessage, enableDelayedMutations, finalizeMutations } from '../../lib/utils/object.ts';
+
 import type CoreGenerator from './generator.ts';
 
 export const PRIORITY_PREFIX = '>';
@@ -239,3 +241,64 @@ export const QUEUES = {
   POST_INSTALL_QUEUE,
   END_QUEUE: END,
 };
+
+/** The phases of a custom object, between the preparing and the post preparing priorities. */
+export type CustomObjectPhase = 'loading' | 'preparing' | 'postPreparing';
+
+/** The priority name of a phase of a custom object: `loadingService`, `preparingService`, `postPreparingService`. */
+export const customObjectPriorityName = (name: string, phase: CustomObjectPhase): string =>
+  `${phase}${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+
+/**
+ * The priorities of a custom object, before the `before` priority: its loading, preparing and post preparing, each with
+ * the object (`service`), given by the getter of its name the generator implements. While it is prepared, a default
+ * (`mutateData`) reading a property not yet set waits for it, applied before the post preparing.
+ */
+export const customObjectPriorities = (name: string, before: string = POST_PREPARING): Priority[] => {
+  const objectOf = (generator: CoreGenerator): Record<string, any> => {
+    const object = (generator as any)[name];
+    if (!object) {
+      throw new Error(`The generator ${generator.options.namespace} declares the custom object ${name} without a ${name} getter`);
+    }
+    return object;
+  };
+  const priority = (phase: CustomObjectPhase, before: string): Priority => {
+    const priorityName = customObjectPriorityName(name, phase);
+    return {
+      priorityName,
+      queueName: `${QUEUE_PREFIX}${priorityName}`,
+      before,
+      args: generator => {
+        const coreGenerator = generator as CoreGenerator;
+        const [firstArg] = coreGenerator.getArgsForPriority(priorityName);
+        const object = objectOf(coreGenerator);
+        if (phase === 'preparing') {
+          // The object loaded, a default reading a property not yet set waits for it, like the application ones.
+          enableDelayedMutations(object, {
+            autoDelay: true,
+            onDroppedMutation: dropped => coreGenerator.log.debug(droppedMutationMessage(dropped)),
+          });
+        } else if (phase === 'postPreparing') {
+          // The object prepared, the delayed defaults are applied before it is used.
+          finalizeMutations(object);
+        }
+        return [{ ...firstArg, [name]: object }];
+      },
+    };
+  };
+  // A priority is added before a registered one: the last one first.
+  return [
+    priority('postPreparing', before),
+    priority('preparing', customObjectPriorityName(name, 'postPreparing')),
+    priority('loading', customObjectPriorityName(name, 'preparing')),
+  ];
+};
+
+/**
+ * Whether a priority is in a list of priority names, an entry ending with `*` matching the longer names it starts:
+ * `preparing*` matches `preparingEachEntity` and `preparingService`, not `preparing`.
+ */
+export const priorityMatches = (priorityNames: Iterable<string>, priorityName: string): boolean =>
+  [...priorityNames].some(name =>
+    name.endsWith('*') ? priorityName.length >= name.length && priorityName.startsWith(name.slice(0, -1)) : name === priorityName,
+  );
