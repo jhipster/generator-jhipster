@@ -184,8 +184,7 @@ describe('jdl - JDLField', () => {
           type: 'String',
           comment: 'comment',
           validations: [
-            // @ts-expect-error
-            new JDLValidation(),
+            new JDLValidation({}),
             new JDLValidation({
               name: 'minlength',
               value: 42,

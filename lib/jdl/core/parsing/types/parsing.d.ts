@@ -61,8 +61,8 @@ export type JDLOptionConfig = {
 };
 
 /**
- * The option statements of a jdl block, entity or relationship, shaped like a generator command so a generator may
- * declare them the same way one day.
+ * The option statements of a jdl block, entity or relationship, shaped like a generator command: the entity ones are
+ * built from the `entity` options of the commands (see `buildJDLEntityConfig`).
  */
 export type JDLOptionsDefinition = {
   configs: Readonly<Record<string, JDLOptionConfig>>;

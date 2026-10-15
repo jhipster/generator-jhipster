@@ -16,38 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterEntityConfigs } from '../command/types.ts';
 import type { JDLOptionsDefinition } from '../jdl/core/parsing/types/parsing.ts';
 
-const defaultJDLEntityConfig: JDLOptionsDefinition = Object.freeze({
-  configs: {
-    skipClient: { description: 'Skip the client code of the entities', jdl: { type: 'unary' } },
-    skipServer: { description: 'Skip the server code of the entities', jdl: { type: 'unary' } },
-    noFluentMethod: { description: 'Generate no fluent setters', jdl: { type: 'unary' } },
-    readOnly: { description: 'Read only entities', jdl: { type: 'unary' } },
-    filter: { description: 'Filtering of the entities with the JPA metamodel', jdl: { type: 'unary' } },
-    embedded: { description: 'Embedded entities', jdl: { type: 'unary' } },
-    dto: { description: 'Data transfer objects', choices: ['mapstruct', 'no'], default: 'no', jdl: { type: 'binary' } },
-    service: {
-      description: 'Service layer',
-      choices: ['serviceClass', 'serviceImpl', 'no'],
-      default: 'no',
-      jdl: { type: 'binary' },
-    },
-    pagination: {
-      description: 'Pagination of the entities',
-      choices: ['pagination', 'infinite-scroll', 'no'],
-      default: 'no',
-      jdl: { type: 'binary', deprecatedKeywords: ['paginate'] },
-    },
-    microservice: { description: 'Microservice the entities belong to', jdl: { type: 'binary' } },
-    search: { description: 'Search engine of the entities', choices: ['elasticsearch', 'couchbase', 'no'], jdl: { type: 'binary' } },
-    angularSuffix: { description: 'Suffix of the entities in the client', jdl: { type: 'binary' } },
-    clientRootFolder: { description: 'Client folder of the entities', jdl: { type: 'binary' } },
-  },
-});
+import { lookupCommandsPropertyFrom } from './jhipster-jdl-config.ts';
 
 /**
- * The entity JDL definitions: the option statements of entities, shaped like a command. Hard coded for now, the lexer
- * and the parser take them from here rather than from their own lists; the generators do not declare entity options.
+ * The option statements of the entity options of commands, named by their keyword as the jdl writes them: an option
+ * without jdl spec has no statement.
  */
-export const getDefaultJDLEntityConfig = (): Readonly<JDLOptionsDefinition> => defaultJDLEntityConfig;
+export const buildJDLEntityConfig = (entityConfigs: JHipsterEntityConfigs): JDLOptionsDefinition => ({
+  configs: Object.fromEntries(
+    Object.entries(entityConfigs).flatMap(([name, { jdl, ...config }]) => {
+      if (!jdl) return [];
+      const { keyword = name, value: _value, ...statement } = jdl;
+      return [[keyword, { ...config, jdl: statement }]];
+    }),
+  ),
+});
+
+let defaultJDLEntityConfig: Readonly<JDLOptionsDefinition>;
+/**
+ * The entity JDL definitions: the entity options of the `app` generator and of everything it imports, so an option
+ * moving into any command `app` reaches is picked up without a list to maintain.
+ */
+export const getDefaultJDLEntityConfig = (): Readonly<JDLOptionsDefinition> => {
+  defaultJDLEntityConfig ??= Object.freeze(buildJDLEntityConfig(lookupCommandsPropertyFrom('app', 'entity')));
+  return defaultJDLEntityConfig;
+};

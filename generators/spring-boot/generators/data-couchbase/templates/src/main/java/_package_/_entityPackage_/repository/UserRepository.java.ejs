@@ -98,9 +98,9 @@ public interface UserRepository extends JHipsterCouchbaseRepository<<%- user.per
 
     default <%- pageOrFlux %><<%- user.persistClass %>> findAllByActivatedIsTrue(Pageable pageable) {
 <%_ if (reactive) { _%>
-        return findAllById(toIds(findAllIdsByActivatedIsTrue(pageable)));
+        return findAllById(toIds(findAllIdsByActivatedIsTrue(sortedByProperties(pageable, ""))));
 <%_ } else { _%>
-        Page<<%- user.persistClass %>> page = findAllIdsByActivatedIsTrue(pageable);
+        Page<<%- user.persistClass %>> page = findAllIdsByActivatedIsTrue(sortedByProperties(pageable, ""));
         return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
 <%_ } _%>
     }

@@ -16,17 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
 
-import { kebabCase } from 'lodash-es';
+const command = {
+  configs: {},
+} as const satisfies JHipsterCommandDefinition;
 
-export const convertToCliArgs = (opts: Record<string, string>): string => {
-  return Object.entries(opts)
-    .map(([key, value]) => {
-      key = kebabCase(key);
-      if (typeof value === 'boolean') {
-        return `--${value ? '' : 'no-'}${key}`;
-      }
-      return `--${key} ${value}`;
-    })
-    .join(' ');
-};
+export default command;

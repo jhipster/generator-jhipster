@@ -110,7 +110,7 @@ It is also possible to debug sub generators by selecting one of the other debug 
 
 #### Debugging with IntelliJ IDEA
 
-When you start intelliJ IDEA on the `generator-jhipster` project, you'll have access to a run configuration letting execute any `.spec.ts` file within any package.
+When you start IntelliJ IDEA on the `generator-jhipster` project, you'll have access to a run configuration letting execute any `.spec.ts` file within any package.
 If you want to test a specific generator, you can create a new Node.js run configuration with the following settings:
 
 ```

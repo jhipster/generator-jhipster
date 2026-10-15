@@ -20,7 +20,7 @@ import type { createModuleFederationConfig } from '@module-federation/sdk';
 
 import packageJson from './package.json' with { type: 'json' };
 
-// Microfrontend api, should match across gateway and microservices.
+// Microfrontend API, should match across gateway and microservices.
 const apiVersion = '0.0.1';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };

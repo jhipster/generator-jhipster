@@ -28,8 +28,6 @@ import type { WorkspacesApplication } from '../types.ts';
 
 const { MAVEN } = buildToolTypes;
 
-export { checkDocker } from '../../docker/support/index.ts';
-
 /**
  * Check Images
  */

@@ -21,7 +21,11 @@ import type BaseGenerator from '../../generators/base/generator.ts';
 import { buildMutateDataForProperty } from '../utils/derived-property.ts';
 import type { MutateDataFunction } from '../utils/object.ts';
 
-import type { JHipsterConfigs } from './index.ts';
+import type { JHipsterConfigs, JHipsterEntityConfigs } from './index.ts';
+
+/** Whether a value is one of the choices but `no`. */
+const isAnyChoice = (value: any, choices: readonly any[]) =>
+  typeof value !== 'string' || value === 'no' ? false : choices.includes(value);
 
 export const getCommandDerivedPropertyMutations = (
   configs: JHipsterConfigs,
@@ -35,8 +39,7 @@ export const getCommandDerivedPropertyMutations = (
   for (const [key, def] of scopeConfigs) {
     if (def.choices) {
       const array = def.internal?.type === Array;
-      const anyCheck =
-        array ? undefined : (value: any, choices: any[]) => (typeof value !== 'string' || value === 'no' ? false : choices.includes(value));
+      const anyCheck = array ? undefined : isAnyChoice;
       const choiceValues = def.choices.map(choice => (typeof choice === 'object' ? choice.value : choice));
       Object.assign(mutations, buildMutateDataForProperty(key, choiceValues, { array, anyCheck }));
       if (def.internal?.alias) {
@@ -46,6 +49,22 @@ export const getCommandDerivedPropertyMutations = (
           buildMutateDataForProperty(key, choiceValues, { array, anyCheck, prefix: def.internal.alias }),
         );
       }
+    }
+  }
+  return mutations;
+};
+
+/**
+ * The properties derived from the entity options with choices, as the ones of the application configs: a flag for each
+ * choice, `paginationInfiniteScroll`, and one for any choice but `no`, `paginationAny`.
+ */
+export const getEntityDerivedPropertyMutations = (entityConfigs: JHipsterEntityConfigs = {}): Record<string, MutateDataFunction> => {
+  const mutations: Record<string, MutateDataFunction> = {
+    __override__: false as any,
+  };
+  for (const [key, def] of Object.entries(entityConfigs)) {
+    if (def.choices) {
+      Object.assign(mutations, buildMutateDataForProperty(key, def.choices, { anyCheck: isAnyChoice }));
     }
   }
   return mutations;

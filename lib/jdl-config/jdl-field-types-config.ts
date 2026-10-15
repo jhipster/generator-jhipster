@@ -16,25 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterFieldConfigs } from '../command/types.ts';
 import type { JDLFieldTypesDefinition } from '../jdl/core/parsing/types/parsing.ts';
-import { CommonDBValidations, RelationalOnlyDBTypes } from '../jhipster/field-types.ts';
 
-const { Enum: enumValidations, ...typeValidations } = CommonDBValidations;
+import { lookupCommandsPropertyFrom } from './jhipster-jdl-config.ts';
 
-const defaultJDLFieldTypesConfig: JDLFieldTypesDefinition = Object.freeze({
-  types: {
-    ...Object.fromEntries(Object.entries(typeValidations).map(([type, validations]) => [type, { validations: [...validations] }])),
-    // Supported by some databases only, they take no validation.
-    ...Object.fromEntries(Object.values(RelationalOnlyDBTypes).map(type => [type, { validations: [] }])),
-    // The Joda-Time types of old applications, the server generator migrates them to Instant.
-    ...Object.fromEntries(
-      ['Date', 'DateTime'].map(type => [
-        type,
-        { validations: [...CommonDBValidations.Instant], deprecated: 'use Instant, which it is migrated to' },
-      ]),
-    ),
-  },
-  enum: { validations: [...enumValidations] },
+/** The type of a field whose type is an enum of the jdl. */
+const ENUM_TYPE = 'Enum';
+
+/** The field types of commands, with the validations they take, and the validations of the fields of an enum type. */
+export const buildJDLFieldTypesConfig = ({ types = {} }: JHipsterFieldConfigs): JDLFieldTypesDefinition => ({
+  types: Object.fromEntries(
+    Object.entries(types)
+      .filter(([type]) => type !== ENUM_TYPE)
+      .map(([type, { validations = [], deprecated }]) => [type, { validations: [...validations], ...(deprecated ? { deprecated } : {}) }]),
+  ),
+  enum: { validations: [...(types[ENUM_TYPE]?.validations ?? [])] },
 });
 
-export const getDefaultJDLFieldTypesConfig = (): Readonly<JDLFieldTypesDefinition> => defaultJDLFieldTypesConfig;
+let defaultJDLFieldTypesConfig: Readonly<JDLFieldTypesDefinition>;
+/** The field types of the `app` generator and of everything it imports. */
+export const getDefaultJDLFieldTypesConfig = (): Readonly<JDLFieldTypesDefinition> => {
+  defaultJDLFieldTypesConfig ??= Object.freeze(buildJDLFieldTypesConfig(lookupCommandsPropertyFrom('app', 'field')));
+  return defaultJDLFieldTypesConfig;
+};

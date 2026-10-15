@@ -19,6 +19,7 @@
 import chalk from 'chalk';
 import { lowerFirst, uniqBy } from 'lodash-es';
 
+import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
@@ -29,7 +30,7 @@ import { editPropertiesFileCallback } from '../base-core/support/properties-file
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
 import type { Source as CommonSource } from '../common/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
-import { addJavaImport, generateKeyStoreContents, javaBeanCase } from '../java/support/index.ts';
+import { addJavaImport, createKeyStore, javaBeanCase } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
   getJavaValueGeneratorForType,
@@ -39,6 +40,7 @@ import {
 
 import { mutateFilterableField, mutateFilterableRelationship } from './application.ts';
 import cleanupTask from './cleanup.ts';
+import command from './command.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
 import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
@@ -473,7 +475,7 @@ ${classProperties
 
         const hasAnyAuthority = (authorities: string[]): string | undefined =>
           authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
-        mutateData(entity, {
+        mutateData(entity, getEntityDerivedPropertyMutations(command.entity), {
           entityPersistenceLayer: true,
           entityRestLayer: true,
           entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),
@@ -628,6 +630,7 @@ ${classProperties
             [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
             `${application.javaPackageSrcDir}config/JacksonConfiguration.java`,
           ],
+          '9.4.1': [`${application.srcMainResources}config/tls/keystore.p12`],
         });
       },
       resetFakeDataSeed() {
@@ -639,20 +642,19 @@ ${classProperties
           context: application,
         });
       },
-      async generateKeyStore({ application }) {
-        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+      generateKeyStore({ application }) {
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore-samples.p12`);
         if (this.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
         } else if (this.fs.exists(keyStoreFile)) {
+          // A write once file, written back as it is: the KeyStore is told apart from the files no generator writes.
+          this.writeDestination(keyStoreFile, this.fs.read(keyStoreFile, { raw: true }), { metadata: { writeOnce: true } });
           this.log.info(`KeyStore '${keyStoreFile}' already exists. Leaving unchanged.`);
         } else {
-          // `keytool` writes to the filesystem, route the KeyStore through the in-memory file system so that it goes
-          // through the commit pipeline like any other generated file, `--export-application` included.
-          const { contents, result } = await generateKeyStoreContents(keyStoreFile, { packageName: application.packageName! });
-          if (contents) {
-            this.writeDestination(keyStoreFile, contents);
-          }
-          this.validateResult(result);
+          // Written through the in-memory file system, the KeyStore goes through the commit pipeline like any other
+          // generated file, `--export-application` included.
+          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName! }), { metadata: { writeOnce: true } });
+          this.log.info(`KeyStore '${keyStoreFile}' generated successfully.`);
         }
       },
     });
@@ -717,6 +719,27 @@ ${classProperties
               },
             ],
           },
+        });
+      },
+      blockHound({ application, source }) {
+        if (!application.reactive) return;
+
+        source.addAllowBlockingCallsInside!({ classPath: 'java.util.UUID', method: 'randomUUID' });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.validation.beanvalidation.SpringValidatorAdapter',
+          method: 'validate',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: `${application.packageName}.service.MailService`,
+          method: 'sendEmailFromTemplate',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: `${application.packageName}.security.DomainUserDetailsService`,
+          method: 'createSpringSecurityUser',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.web.reactive.result.method.InvocableHandlerMethod',
+          method: 'invoke',
         });
       },
       addSpringdoc({ application, source }) {
@@ -865,7 +888,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437-2',
           ruleKey: 'java:S6437',
-          resourceKey: `${application.srcMainResources}config/application-tls.yml`,
+          resourceKey: `${application.srcMainResources}config/application-tls-samples.yml`,
           comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({
@@ -961,7 +984,7 @@ if (os.isMacOsX() && !arch.isAmd64()) {
         const { buildToolExecutable } = application;
         this.log.ok(`Spring Boot ${application.springBootDependencies['spring-boot-dependencies']} application generated successfully.`);
 
-        if (application.dockerServices?.length && !control.environmentHasDockerCompose) {
+        if (application.dockerServices?.length && !this.skipChecks && !control.environmentHasDockerCompose) {
           const dockerComposeCommand = chalk.yellow.bold('docker compose');
           this.log('');
           this.log

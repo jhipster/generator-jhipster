@@ -66,7 +66,7 @@ export const importJDLTransform = ({
       }
     }
 
-    const jdlStoreContents = jdlStoreFileInMemory?.contents ?? (loadFile(jdlStorePath) as any).contents;
+    const jdlStoreContents = jdlStoreFileInMemory?.contents ?? loadFile(jdlStorePath).contents;
     if (!jdlStoreContents) {
       if (yoRcFileInMemory) {
         yield yoRcFileInMemory;

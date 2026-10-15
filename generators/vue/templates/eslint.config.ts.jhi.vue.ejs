@@ -20,6 +20,7 @@
 import js from '@eslint/js';
 import vue from 'eslint-plugin-vue';
 import tseslint from 'typescript-eslint';
+import vitest from '@vitest/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
@@ -67,6 +68,7 @@ import tseslint from 'typescript-eslint';
   },
   {
     files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    extends: [vitest.configs.recommended],
     rules: {
       '@typescript-eslint/no-empty-function': 'off',
     },

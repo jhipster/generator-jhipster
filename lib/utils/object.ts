@@ -155,6 +155,26 @@ export const createDelayedMutationContext = <T extends object>(
 const isMutationContext = <T extends object>(context: T): context is ContextWithMutationOptions<T> =>
   context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context && context[MUTATION_CONTEXT_SYMBOL] !== undefined;
 
+/**
+ * Makes an existing object a mutation context, as `createDelayedMutationContext` creates one: a mutation may then return
+ * the delay marker, and `finalizeMutations` applies the delayed ones. The context is not enumerable, so copies of the
+ * object do not share it. An object already a mutation context is kept as it is.
+ */
+export const enableDelayedMutations = <T extends object>(
+  data: T,
+  options: Omit<MutationContextOptions, 'delayContext' | 'waitingFor'> = {},
+): T => {
+  if (!isMutationContext(data)) {
+    Object.defineProperty(data, MUTATION_CONTEXT_SYMBOL, {
+      value: { ...options, delayContext: {} },
+      enumerable: false,
+      configurable: true,
+      writable: true,
+    });
+  }
+  return data;
+};
+
 const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
   new Proxy(target, {
     get: (obj: any, prop) => {

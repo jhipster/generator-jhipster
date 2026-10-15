@@ -77,6 +77,8 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,

@@ -39,6 +39,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
+import org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter;
+import org.springframework.data.couchbase.core.mapping.CouchbaseMappingContext;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
 <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
@@ -140,6 +142,24 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     @Bean
     public Bucket bucket(Cluster cluster) {
         return cluster.bucket(jHipsterProperties.getDatabase().getCouchbase().getBucketName());
+    }
+
+    /**
+     * The relationships are stored as the keys of their entities, without writing the entities.
+     */
+    @Override
+    @Bean
+    public MappingCouchbaseConverter mappingCouchbaseConverter(
+        CouchbaseMappingContext couchbaseMappingContext,
+        CouchbaseCustomConversions couchbaseCustomConversions
+    ) {
+        MappingCouchbaseConverter converter = new EntityReferencesMappingCouchbaseConverter(
+            couchbaseMappingContext,
+            typeKey(),
+            couchbaseCustomConversions
+        );
+        couchbaseMappingContext.setSimpleTypeHolder(couchbaseCustomConversions.getSimpleTypeHolder());
+        return converter;
     }
 
     @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)

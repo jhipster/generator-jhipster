@@ -1,0 +1,53 @@
+{
+  "include": [
+    {
+      "name": "windows-ng-default",
+      "app-sample": "ng-default",
+      "entity": "sql",
+      "environment": "dev",
+      "os": "windows-latest"
+    },
+    {
+      "name": "windows-ng-gradle-fr",
+      "app-sample": "ng-gradle-fr",
+      "entity": "sql",
+      "environment": "dev",
+      "os": "windows-latest"
+    },
+    {
+      "name": "windows-ng-mariadb-oauth2-sass-infinispan",
+      "app-sample": "ng-mariadb-oauth2-sass-infinispan",
+      "entity": "sql",
+      "environment": "dev",
+      "os": "windows-latest"
+    },
+    {
+      "name": "windows-ms-ngx-gateway-eureka",
+      "app-sample": "ms-ngx-gateway-eureka",
+      "entity": "sqllight",
+      "environment": "dev",
+      "os": "windows-latest"
+    },
+    {
+      "name": "windows-ms-micro-eureka",
+      "app-sample": "ms-micro-eureka",
+      "entity": "micro",
+      "environment": "dev",
+      "os": "windows-latest"
+    },
+    {
+      "name": "windows-vue-default",
+      "app-sample": "vue-default",
+      "entity": "sql",
+      "environment": "dev",
+      "os": "windows-latest"
+    },
+    {
+      "name": "windows-react-default",
+      "app-sample": "react-default",
+      "entity": "sql",
+      "environment": "dev",
+      "os": "windows-latest"
+    }
+  ]
+}

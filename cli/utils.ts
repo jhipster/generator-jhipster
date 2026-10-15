@@ -22,7 +22,6 @@ import chalk from 'chalk';
 import { CLI_LOGGER, type Logger, createJHipsterLogger } from '../lib/utils/index.ts';
 
 export const CLI_NAME = 'jhipster';
-export const GENERATOR_NAME = 'generator-jhipster';
 
 const SUCCESS_MESSAGE = `Congratulations, JHipster execution is complete!
 If you find JHipster useful consider sponsoring the project ${chalk.yellow('https://www.jhipster.tech/sponsors/')}`;

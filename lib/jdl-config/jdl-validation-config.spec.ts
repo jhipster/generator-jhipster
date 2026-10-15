@@ -2,7 +2,7 @@ import { describe, expect, it } from 'esmocha';
 
 import { Validations, validationTypes } from '../jdl/core/built-in-options/index.ts';
 
-import { getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
+import { buildJDLValidationConfig, getDefaultJDLValidationConfig } from './jdl-validation-config.ts';
 
 // The parser takes the validations with a value from the definitions, the code refers to them through the constants of
 // the core table: the two must agree.
@@ -17,5 +17,22 @@ describe('jdl validation definitions', () => {
       .filter(([_name, config]) => config.jdl.value === 'regex')
       .map(([name]) => name);
     expect(regex).toEqual([Validations.PATTERN]);
+  });
+
+  it('should keep the validations with a value of the commands, as the parser takes them', () => {
+    expect(
+      buildJDLValidationConfig({
+        validations: {
+          minlength: { description: 'Minimum length of a string', jdl: { value: 'integer' } },
+          custom: { jdl: { value: 'regex' } },
+          withoutValue: { description: 'A keyword' },
+        },
+      }),
+    ).toEqual({
+      configs: {
+        minlength: { description: 'Minimum length of a string', jdl: { value: 'integer' } },
+        custom: { jdl: { value: 'regex' } },
+      },
+    });
   });
 });

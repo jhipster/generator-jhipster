@@ -20,10 +20,9 @@ import { before, describe, expect, it } from 'esmocha';
 import { writeFileSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 
-import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
-
 import Generator from './generator.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;

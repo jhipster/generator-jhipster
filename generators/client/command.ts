@@ -175,7 +175,8 @@ const command = {
       scope: 'storage',
     },
     e2eTls: {
-      description: 'Run the end-to-end tests of the packaged application over TLS, the server started with its tls profile',
+      description:
+        'Run the end-to-end tests of the packaged application over TLS, the server started with its tls and tls-samples profiles',
       cli: {
         type: Boolean,
         hide: true,
@@ -246,7 +247,10 @@ const command = {
       scope: 'storage',
     },
   },
-  import: ['common'],
+  entity: {
+    clientRootFolder: { description: 'Client folder of the entities', jdl: { type: 'binary' } },
+  },
+  import: ['common', 'angular', 'react', 'vue', 'cypress', 'playwright'],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

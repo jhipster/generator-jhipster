@@ -161,6 +161,8 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "communicationSpringWebsocket": false,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -831,13 +833,16 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1035,6 +1040,8 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "communicationSpringWebsocket": false,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -1641,13 +1648,16 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {

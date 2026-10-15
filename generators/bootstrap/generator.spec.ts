@@ -22,11 +22,11 @@ import { basename, join } from 'node:path';
 
 import { unzipSync } from 'fflate';
 
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
 import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { basicHelpers, defaultHelpers as helpers, result, skipPrettierHelpers } from '#testing';
 
 const generator = basename(import.meta.dirname);

@@ -18,6 +18,5 @@
  */
 
 export * from './copy-entity-samples.ts';
-export * from './generate-sample.ts';
 export * from './get-workflow-samples.ts';
 export * from './resolve-sample.ts';

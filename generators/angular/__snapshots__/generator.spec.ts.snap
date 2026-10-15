@@ -2353,7 +2353,7 @@ export class UserManagementUpdate implements OnInit {
   }
 
   private onSaveError(): void {
-    // Api for inheritance.
+    // API for inheritance.
   }
 
   private onSaveFinalize(): void {
@@ -2585,6 +2585,8 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -3656,6 +3658,8 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -4947,6 +4951,8 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -6025,6 +6031,8 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -7250,6 +7258,8 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -8726,6 +8736,8 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -9765,6 +9777,8 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,

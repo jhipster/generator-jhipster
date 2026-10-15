@@ -1,0 +1,3 @@
+{
+  "inline-jdl": { "jdl": "application { config { baseName inline buildTool gradle } }" }
+}

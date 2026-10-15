@@ -28,7 +28,7 @@ import {
 } from '../../../lib/ci/index.ts';
 import { githubSamplesGroupFolder, testIntegrationFolder } from '../../constants.ts';
 import { isDaily } from '../../generate-sample/support/get-workflow-samples.ts';
-import { devServerMatrix } from '../samples/dev-server.ts';
+import { devServerMatrix } from '../samples/devserver.ts';
 
 import { type Changes, type GitChangesOptions, getGitChanges } from './git-changes.ts';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from './integration-test-constants.ts';
@@ -85,7 +85,7 @@ export const buildMatrix = async ({
       convertToGitHubMatrixInclude = false;
       matrix = {
         'database-changelog': {
-          disabled: !springBootDefaults,
+          disabled: !springBootDefaults && !devBlueprint && !changes.databaseChangelogWorkflow,
         },
         'generate-blueprint': {
           disabled: !generateBlueprint && !devBlueprint && !base,
@@ -146,13 +146,18 @@ export const buildMatrix = async ({
     }
   }
 
-  Object.values(matrix).forEach(job => {
-    Object.assign(job, {
-      'build-jhipster-bom': BUILD_JHIPSTER_BOM,
-      'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
-      'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
-    });
-  });
+  // New jobs: the ones of a group are the objects of its module, shared by every reader of the group.
+  matrix = Object.fromEntries(
+    Object.entries(matrix).map(([name, job]) => [
+      name,
+      {
+        ...job,
+        'build-jhipster-bom': BUILD_JHIPSTER_BOM,
+        'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
+        'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
+      },
+    ]),
+  );
 
   return convertToGitHubMatrixInclude ? convertToGitHubMatrix(matrix, { randomEnvironment, useVersionPlaceholders }) : matrix;
 };

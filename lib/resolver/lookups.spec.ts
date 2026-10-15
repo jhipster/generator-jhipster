@@ -18,21 +18,18 @@
  */
 import { describe, expect, it } from 'esmocha';
 
-import { customizeJHipsterNamespace } from './lookups.ts';
+import { getJHipsterStore } from './lookups.ts';
 
 describe('resolver - lookups', () => {
-  describe('customizeJHipsterNamespace', () => {
-    it('should keep the jhipster prefix', () => {
-      expect(customizeJHipsterNamespace('jhipster:app')).toBe('jhipster:app');
+  describe('getJHipsterStore', () => {
+    it('should name the generators after the package name, not its folder', () => {
+      // The folder of this checkout may be a worktree or an aliased install.
+      const namespaces = getJHipsterStore().namespaces();
+      expect(namespaces.filter(namespace => !namespace.startsWith('jhipster:'))).toEqual([]);
+      expect(namespaces).toContain('jhipster:app');
     });
-    it('should replace the prefix derived from another package folder name', () => {
-      expect(customizeJHipsterNamespace('jhipster-9.4.0:app')).toBe('jhipster:app');
-    });
-    it('should flatten nested generators', () => {
-      expect(customizeJHipsterNamespace('generator-jhipster-worktree:spring-boot:generators:cache')).toBe('jhipster:spring-boot:cache');
-    });
-    it('should keep undefined', () => {
-      expect(customizeJHipsterNamespace(undefined)).toBeUndefined();
+    it('should flatten the nested generators', () => {
+      expect(getJHipsterStore().namespaces()).toContain('jhipster:spring-boot:cache');
     });
   });
 });

@@ -63,6 +63,19 @@ describe('build-matrix', () => {
       });
     });
 
+    it('should run the database-changelog job of the generators workflow for a change of its workflow, samples or the dev blueprint', async () => {
+      for (const file of [
+        '.github/workflows/generator-database-changelog-liquibase.yml',
+        '.blueprint/github-build-matrix/samples/database-changelog.ts',
+        '.blueprint/generate-sample/templates/samples/incremental-changelog-samples/liquibase-jdl-rename-field/app.jdl',
+        '.blueprint/generate-sample/generator.ts',
+      ]) {
+        expect(await buildMatrix({ workflow: 'generators', changes: detectChanges([file]) })).toMatchObject({
+          'database-changelog': { disabled: false },
+        });
+      }
+    });
+
     describe('with revisions', () => {
       let baseDir: string;
       const commit = (file: string) => {

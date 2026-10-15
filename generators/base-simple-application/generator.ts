@@ -78,7 +78,7 @@ export default class BaseSimpleApplicationGenerator<
       skipLoadCommand: false,
       configTransform: (...args) => {
         const configTransform = this.getContextData(CONTEXT_DATA_SANITIZATION_KEY, {
-          factory: () => (config: Record<string, any>, configKey?: string | undefined) => {
+          factory: () => (config: Record<string, any>, configKey?: string) => {
             const cleanups = sanitizeConfigForNodeApplications(config, { depth: -1, keyPath: configKey });
             for (const [key, { oldValue, newValue }] of Object.entries(cleanups)) {
               this.log.warn(

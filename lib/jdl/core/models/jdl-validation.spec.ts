@@ -63,8 +63,7 @@ describe('jdl - JDLValidation', () => {
       let validation: JDLValidation;
 
       before(() => {
-        // @ts-expect-error
-        validation = new JDLValidation();
+        validation = new JDLValidation({});
       });
 
       it('should stringify its content', () => {

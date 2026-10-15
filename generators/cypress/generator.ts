@@ -94,6 +94,11 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         const ngE2e = this.angularSchematic && !application.microfrontend;
         // The Angular dev server listens on localhost only (which may resolve to ::1), Vite listens on every address.
         const devServerHost = this.angularSchematic ? 'localhost' : '127.0.0.1';
+        // The client scripts run at the root from the client workspace when it has one.
+        const { clientRootDir } = application;
+        const clientRun = (script: string) => `npm run ${clientRootDir ? `-w ${clientRootDir} ` : ''}${script}`;
+        const clientStart = clientRootDir ? `"${clientRun('start')}"` : 'npm:start';
+        const ng = clientRootDir ? `npm exec -w ${clientRootDir} -- ng` : 'ng';
         const coverageEnv = application.cypressCoverage ? ' --env CYPRESS_COVERAGE=true' : '';
 
         Object.assign(application.clientPackageJsonScripts, {
@@ -105,7 +110,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'e2e:headless': 'npm run e2e:cypress --',
         });
 
-        // With e2eTls the packaged server is started with its tls profile: wait for it and test it over https, at the port
+        // With e2eTls the packaged server is started with its tls and tls-samples profiles: wait for it and test it over https, at the port
         // of the package.json config, like the other scripts.
         const e2eTlsEnv =
           application.e2eTls ? 'E2E_SERVER_PROTOCOL=https CYPRESS_BASE_URL=https://localhost:$npm_package_config_backend_port/ ' : '';
@@ -117,8 +122,8 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
           'e2e:devserver':
             ngE2e ?
-              `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await --if-present && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
-            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://${devServerHost}:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}${coverageEnv}"`,
+              `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await --if-present && ${ng} e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
+            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start ${clientStart} "wait-on -t ${WAIT_TIMEOUT} http-get://${devServerHost}:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}${coverageEnv}"`,
         });
 
         Object.assign(application.packageJsonScripts, {
@@ -140,7 +145,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   }
 
   get postPreparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
+    return this.asPostPreparingEachEntityTaskGroup({
       prepareForTemplates({ entity }) {
         mutateData(entity, {
           generateEntityCypress: ({ builtInUserManagement, skipClient }) => !skipClient || builtInUserManagement,

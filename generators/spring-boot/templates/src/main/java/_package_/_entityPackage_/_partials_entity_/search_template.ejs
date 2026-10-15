@@ -34,7 +34,9 @@ _%>
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(<%- entityInstance %><%- viaService ? 'Service' : `${searchEngineElasticsearch ? 'Search' : ''}Repository` %>.search(query, pageable)<% if (!viaService && dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>));
   <%_ } else { _%>
+    <%_ if (searchEngineElasticsearch) { _%>
         try {
+    <%_ } _%>
     <%_ if (viaService) { _%>
             Page<<%- restClass %>> page = <%- entityInstance %>Service.search(query, pageable);
     <%_ } else { _%>
@@ -42,13 +44,11 @@ _%>
     <%_ } _%>
             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
             return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dtoMapstruct) { %><%- entityListToDtoListReference %>(<% } %>page.getContent()<%- (!viaService && dtoMapstruct) ? ')' : '' %>);
-        } catch (RuntimeException e) {
     <%_ if (searchEngineElasticsearch) { _%>
+        } catch (RuntimeException e) {
             throw ElasticsearchExceptionMapper.mapException(e);
-    <%_ } else { _%>
-            throw new RuntimeException(e);
-    <%_ } _%>
         }
+    <%_ } _%>
   <%_ } _%>
 <% } -%>
     }

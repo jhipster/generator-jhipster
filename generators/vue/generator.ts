@@ -139,9 +139,13 @@ export default class VueGenerator extends VueApplicationGenerator {
         }
       },
       async javaNodeBuildPaths({ application }) {
-        const { clientBundlerRsbuild, clientBundlerVite, microfrontend, javaNodeBuildPaths } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, microfrontend, enableTranslation, enableI18nRTL, javaNodeBuildPaths } =
+          application;
 
-        javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
+        javaNodeBuildPaths?.push('tsconfig.json', 'tsconfig.app.json');
+        if (enableTranslation && enableI18nRTL) {
+          javaNodeBuildPaths?.push('postcss.config.ts');
+        }
         if (microfrontend) {
           javaNodeBuildPaths?.push('module-federation.config.ts');
         }

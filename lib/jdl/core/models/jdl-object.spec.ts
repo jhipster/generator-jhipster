@@ -1004,8 +1004,7 @@ describe('jdl - JDLObject', () => {
       object.addDeployment(deployment);
       entityA = new JDLEntity({ name: 'EntityA', tableName: 't_entity_a' });
       const field = new JDLField({ name: 'myField', type: 'String' });
-      // @ts-expect-error
-      field.addValidation(new JDLValidation());
+      field.addValidation(new JDLValidation({}));
       entityA.addField(field);
       object.addEntity(entityA);
       entityB = new JDLEntity({ name: 'EntityB', tableName: 't_entity_b' });

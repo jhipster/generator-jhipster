@@ -28,7 +28,6 @@ import { createBase64Secret, stringHashCode } from '../../lib/utils/index.ts';
 import { normalizePath as normalize } from '../../lib/utils/path.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import BaseWorkspacesGenerator, { type Deployment as BaseDeployment, type WorkspacesApplication } from '../base-workspaces/index.ts';
-import { checkDocker } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
@@ -61,7 +60,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkDocker,
       async checkDockerCompose({ control }) {
         if (this.skipChecks) return;
 
@@ -172,8 +170,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration: Record<string, any> = {};
           const path = this.workspacePath(appConfig.appFolder!);
+          // The docker files of the application, in the folder it declares: a blueprint may keep them elsewhere.
+          const dockerServicesDir = pathjs.join(path, appConfig.dockerServicesDir);
           // Add application configuration
-          const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`));
+          const yaml = parseYaml(this.fs.read(`${dockerServicesDir}/app.yml`));
           const yamlConfig = yaml.services.app;
           if (yamlConfig.depends_on) {
             yamlConfig.depends_on = Object.fromEntries(
@@ -253,8 +253,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           // Add database configuration
           if (appConfig.databaseTypeAny && !appConfig.prodDatabaseTypeOracle) {
             const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
-            const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
-            const databaseYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}.yml`));
+            const relativePath = normalize(pathjs.relative(this.destinationRoot(), dockerServicesDir));
+            const databaseYaml = parseYaml(this.fs.read(`${dockerServicesDir}/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
             let databaseYamlConfig = databaseYaml.services[database!];
             // Don't export database ports
@@ -262,7 +262,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
             if (appConfig.databaseTypeCassandra && appConfig.databaseMigrationLoader) {
               // migration service config
-              const cassandraMigrationYaml = parseYaml(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
+              const cassandraMigrationYaml = parseYaml(this.fs.read(`${dockerServicesDir}/cassandra-migration.yml`));
               const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
               cassandraMigrationConfig.build.context = relativePath;
               const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
@@ -276,7 +276,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             }
 
             if (deployment.clusteredDbApps?.includes(appConfig.appFolder!)) {
-              const clusterDbYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`));
+              const clusterDbYaml = parseYaml(this.fs.read(`${dockerServicesDir}/${database}-cluster.yml`));
               const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
               databaseYamlConfig = clusterDbYaml.services[database!];
@@ -295,14 +295,14 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.searchEngineElasticsearch) {
             // Add search engine configuration
             const { searchEngine } = appConfig;
-            const searchEngineYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
+            const searchEngineYaml = parseYaml(this.fs.read(`${dockerServicesDir}/${searchEngine}.yml`));
             const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
           // Add Memcached support
           if (appConfig.cacheProviderMemcached) {
-            const memcachedYaml = parseYaml(this.readDestination(`${path}/src/main/docker/memcached.yml`, { allowOutsideRoot: true }));
+            const memcachedYaml = parseYaml(this.readDestination(`${dockerServicesDir}/memcached.yml`, { allowOutsideRoot: true }));
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
@@ -310,7 +310,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = parseYaml(this.readDestination(`${path}/src/main/docker/redis.yml`, { allowOutsideRoot: true }));
+            const redisYaml = parseYaml(this.readDestination(`${dockerServicesDir}/redis.yml`, { allowOutsideRoot: true }));
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;

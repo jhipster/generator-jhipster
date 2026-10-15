@@ -19,6 +19,8 @@
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { type DuplexWithDebug, transform } from 'p-transform';
 
+import type { EditorMetadata } from '../../../base-core/api.d.ts';
+
 import TemplateFileFs from './template-file-fs.ts';
 import type TemplateFile from './template-file.ts';
 
@@ -47,10 +49,11 @@ export const createMultiStepTransform = ({ log }: { log?: (message: string) => v
         }
       }
       for (const templateFile of templateFiles) {
-        const file = templateFile.file!;
+        const file = templateFile.file! as MemFsEditorFile & { editorMetadata?: EditorMetadata };
+        file.editorMetadata = { ...file.editorMetadata, mergedFiles: templateFile.mergedFiles };
         file.path = templateFile.basePath!;
         file.contents = Buffer.from(templateFile.render().concat('\n'));
-        this.push(templateFile.file!);
+        this.push(file);
       }
     },
   ) as any;

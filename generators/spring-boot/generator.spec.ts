@@ -18,7 +18,9 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join } from 'node:path';
+import { createSecureContext } from 'node:tls';
 
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
@@ -65,6 +67,48 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.getSnapshot('**/spring.factories')).toMatchSnapshot();
     });
   });
+  describe('KeyStore', () => {
+    const keyStoreFile = 'src/main/resources/config/tls/keystore-samples.p12';
+
+    describe('without an existing KeyStore', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }).withOptions({ fakeKeytool: false });
+      });
+
+      it('should write a PKCS#12 KeyStore that loads with the password', () => {
+        const pfx = runResult.fs.read(join(runResult.cwd, keyStoreFile), { raw: true });
+        expect(() => createSecureContext({ pfx, passphrase: 'password' })).not.toThrow();
+        expect(() => createSecureContext({ pfx, passphrase: 'wrong' })).toThrow('mac verify failure');
+      });
+
+      it('should write it once', () => {
+        expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
+      });
+    });
+
+    describe('with an existing KeyStore', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true })
+          // On the disk, as in a project: an identical write to a file already modified in memory keeps its metadata.
+          .doInDir(cwd => {
+            mkdirSync(join(cwd, dirname(keyStoreFile)), { recursive: true });
+            writeFileSync(join(cwd, keyStoreFile), 'existing');
+          })
+          .withOptions({ fakeKeytool: false });
+      });
+
+      it('should leave it unchanged', () => {
+        runResult.assertFileContent(keyStoreFile, /^existing$/);
+      });
+
+      it('should write it back as a write once file', () => {
+        expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
+      });
+    });
+  });
+
   describe('with jwt', () => {
     before(async () => {
       await helpers

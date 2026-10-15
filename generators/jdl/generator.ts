@@ -118,7 +118,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.jdlFiles = await Promise.all(
             this.jdlFiles.map(toJdlFile).map(async filename => {
               try {
-                this.readDestination(filename);
+                // A jdl file is read where it is, outside the destination too.
+                this.readDestination(filename, { allowOutsideRoot: true });
               } catch {
                 this.log.warn(`File not found: ${filename}. Attempting download from jdl-samples repository`);
                 const downloadedFile = await downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
@@ -136,7 +137,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.jdlContents.push(this.inline);
         }
         for (const jdlFile of this.jdlFiles ?? []) {
-          this.jdlContents.push(this.readDestination(jdlFile) ?? '');
+          this.jdlContents.push(this.readDestination(jdlFile, { allowOutsideRoot: true }) ?? '');
         }
       },
       async parseJDL() {

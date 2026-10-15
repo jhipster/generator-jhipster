@@ -19,7 +19,7 @@
 
 import assert from 'node:assert';
 
-import Builder, { type XMLBuilder, type XmlBuilderOptions } from 'fast-xml-builder';
+import FastXmlBuilder, { type XMLBuilder, type XmlBuilderOptions } from 'fast-xml-builder';
 import { type X2jOptions, XMLParser } from 'fast-xml-parser';
 import { merge } from 'lodash-es';
 
@@ -69,7 +69,7 @@ export default class XmlStorage {
     assert(loadFile, 'loadFile callback is required to create a storage');
 
     this.parser = new XMLParser({ ...defaultXmlParserOptions, ...xmlParserOptions });
-    this.builder = new Builder({ ...defaultXmlBuildOptions, ...xmlBuildOptions });
+    this.builder = new FastXmlBuilder({ ...defaultXmlBuildOptions, ...xmlBuildOptions });
 
     this.saveFile = saveFile;
     this.loadFile = loadFile;

@@ -82,13 +82,8 @@ export default abstract class BaseWorkspacesGenerator<
     super(args, options, {
       skipLoadCommand: false,
       ...features,
+      customPriorities: [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])],
     } as Features);
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
   override get jhipsterConfigWithDefaults() {

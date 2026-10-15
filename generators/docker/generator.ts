@@ -324,7 +324,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   get end() {
     return this.asEndTaskGroup({
       async dockerComposeUp({ control }) {
-        if (!control.environmentHasDockerCompose) {
+        if (!this.skipChecks && !control.environmentHasDockerCompose) {
           this.log('');
           this.log.warn(
             'Docker Compose V2 is not installed on your computer. Some features may not work as expected. Read https://docs.docker.com/compose/install/',
@@ -332,6 +332,10 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
         }
       },
     });
+  }
+
+  get [BaseApplicationGenerator.END]() {
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**

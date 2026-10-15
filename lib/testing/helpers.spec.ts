@@ -17,11 +17,14 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import type CoreGenerator from '../../generators/base-core/index.ts';
 
-import { defaultHelpers as helpers, runResult } from './helpers.ts';
+import { defaultHelpers as helpers, defineDefaults, runResult } from './helpers.ts';
 
 const DUMMY_NAMESPACE = 'jhipster:dummy';
 
@@ -74,6 +77,29 @@ describe('helpers', () => {
           .filter(ns => ns !== DUMMY_NAMESPACE)
           .sort(),
       ).toMatchSnapshot();
+    });
+  });
+  describe('withConfiguredBlueprint of a blueprint in a folder not named after it', () => {
+    let blueprintPackagePath: string;
+
+    before(async () => {
+      // Like a git worktree of the blueprint.
+      blueprintPackagePath = join(mkdtempSync(join(tmpdir(), 'jhi-blueprint-')), 'agent-worktree');
+      mkdirSync(join(blueprintPackagePath, 'generators/app'), { recursive: true });
+      writeFileSync(join(blueprintPackagePath, 'package.json'), JSON.stringify({ name: 'generator-jhipster-foo' }));
+      writeFileSync(join(blueprintPackagePath, 'generators/app/index.js'), 'export default class {}\n');
+      await defineDefaults({ blueprint: 'generator-jhipster-foo', blueprintPackagePath });
+      await helpers.run(helpers.createDummyGenerator<typeof CoreGenerator>(), { namespace: DUMMY_NAMESPACE }).withConfiguredBlueprint();
+    });
+
+    after(async () => {
+      await defineDefaults({ blueprint: undefined, blueprintPackagePath: undefined });
+      rmSync(join(blueprintPackagePath, '..'), { recursive: true, force: true });
+    });
+
+    it('should register the blueprint generators under the blueprint namespace', () => {
+      expect(runResult.env.isPackageRegistered('jhipster-foo')).toBe(true);
+      expect(runResult.env.isPackageRegistered('agent-worktree')).toBe(false);
     });
   });
 });

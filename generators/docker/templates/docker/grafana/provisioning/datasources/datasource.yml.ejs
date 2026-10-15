@@ -23,8 +23,8 @@ deleteDatasources:
   - name: Prometheus
     orgId: 1
 
-# list of datasources to insert/update depending
-# whats available in the database
+# list of datasources to insert/update depending on
+# what is available in the database
 datasources:
   # <string, required> name of the datasource. Required
   - name: Prometheus
@@ -53,12 +53,12 @@ datasources:
     withCredentials:
     # <bool> mark as default datasource. Max one per org
     isDefault: true
-    # <map> fields that will be converted to json and stored in json_data
+    # <map> fields that will be converted to JSON and stored in json_data
     jsonData:
       graphiteVersion: '1.1'
       tlsAuth: false
       tlsAuthWithCACert: false
-    # <string> json object of data that will be encrypted.
+    # <string> JSON object of data that will be encrypted.
     secureJsonData:
       tlsCACert: '...'
       tlsClientCert: '...'

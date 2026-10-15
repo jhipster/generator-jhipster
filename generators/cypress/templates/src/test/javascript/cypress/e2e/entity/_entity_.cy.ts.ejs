@@ -112,7 +112,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   /* Disabled due to incompatibility
   <%_ } _%>
   beforeEach(() => {
-    // Simulate relationships api for better performance and reproducibility.
+    // Simulate relationships API for better performance and reproducibility.
   <%_ for (otherEntity of otherEntities) { _%>
     cy.intercept('GET', '/<%- baseApi + otherEntity.entityApiUrl %>', {
       statusCode: 200,

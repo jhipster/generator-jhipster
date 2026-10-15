@@ -1,0 +1,1961 @@
+npm notice run generator-jhipster@9.4.0 npx
+npm notice run esmocha generators/angular/generator.spec.ts --update-snapshot
+
+
+  generator - angular
+    ✔ should support features parameter (2ms)
+    ✔ samples matrix should match snapshot (4ms)
+    blueprint support
+      with blueprint
+        ✔ should compose with jhipster-foo:angular blueprint once (1ms)
+        ✔ should not call any priority (1ms)
+      with sbs blueprint
+        ✔ should compose with jhipster-foo:angular blueprint once (1ms)
+        ✔ should call every priority
+        - should call initializing tasks if implemented
+        - should call prompting tasks if implemented
+        ✔ should call configuring tasks if implemented
+        ✔ should call composing tasks if implemented (1ms)
+        - should call composingComponent tasks if implemented
+        - should call loading tasks if implemented
+        - should call composingBootstrap tasks if implemented
+        ✔ should call preparing tasks if implemented
+        - should call postPreparing tasks if implemented
+        ✔ should call default tasks if implemented
+        ✔ should call writing tasks if implemented
+        ✔ should call postWriting tasks if implemented
+        - should call loadingTranslations tasks if implemented
+        - should call install tasks if implemented
+        - should call postInstall tasks if implemented
+        ✔ should call end tasks if implemented
+        - should call promptingWorkspaces tasks if implemented
+        - should call configuringWorkspaces tasks if implemented
+        - should call loadingWorkspaces tasks if implemented
+        - should call preparingWorkspaces tasks if implemented
+    enforce some developments patterns
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\angular.json.ejs must have referenced with angular.json (17ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\build-plugins\builders.json.ejs must have referenced with builders.json (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\build-plugins\define-esbuild.ts.ejs must have referenced with define-esbuild.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\build-plugins\i18n-esbuild.ts.ejs must have referenced with i18n-esbuild.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\build-plugins\native-federation.schema.json.ejs must have referenced with native-federation.schema.json (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\build-plugins\native-federation.ts.ejs must have referenced with native-federation.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\eslint.config.ts.jhi.angular.ejs must have referenced with eslint.config.ts.jhi.angular (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\federation.config.ts.ejs must have referenced with federation.config.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\ngsw-config.json.ejs must have referenced with ngsw-config.json (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\package.json.ejs must have referenced with package.json (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\postcss.config.json.ejs must have referenced with postcss.config.json (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\proxy.config.mjs.ejs must have referenced with proxy.config.mjs (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\README.md.jhi.client.angular.ejs must have referenced with README.md.jhi.client.angular (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\account.route.ts.ejs must have referenced with account.route.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\activate\activate.html.ejs must have referenced with activate.html (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\activate\activate.route.ts.ejs must have referenced with activate.route.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\activate\activate.service.spec.ts.ejs must have referenced with activate.service.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\activate\activate.service.ts.ejs must have referenced with activate.service.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\activate\activate.spec.ts.ejs must have referenced with activate.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\activate\activate.ts.ejs must have referenced with activate.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password-strength-bar\password-strength-bar.html.ejs must have referenced with password-strength-bar.html (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password-strength-bar\password-strength-bar.scss.ejs must have referenced with password-strength-bar.scss (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password-strength-bar\password-strength-bar.spec.ts.ejs must have referenced with password-strength-bar.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password-strength-bar\password-strength-bar.ts.ejs must have referenced with password-strength-bar.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password.html.ejs must have referenced with password.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password.route.ts.ejs must have referenced with password.route.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password.service.spec.ts.ejs must have referenced with password.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password.service.ts.ejs must have referenced with password.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password.spec.ts.ejs must have referenced with password.spec.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password\password.ts.ejs must have referenced with password.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\finish\password-reset-finish.html.ejs must have referenced with password-reset-finish.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\finish\password-reset-finish.route.ts.ejs must have referenced with password-reset-finish.route.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\finish\password-reset-finish.service.spec.ts.ejs must have referenced with password-reset-finish.service.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\finish\password-reset-finish.service.ts.ejs must have referenced with password-reset-finish.service.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\finish\password-reset-finish.spec.ts.ejs must have referenced with password-reset-finish.spec.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\finish\password-reset-finish.ts.ejs must have referenced with password-reset-finish.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\init\password-reset-init.html.ejs must have referenced with password-reset-init.html (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\init\password-reset-init.route.ts.ejs must have referenced with password-reset-init.route.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\init\password-reset-init.service.spec.ts.ejs must have referenced with password-reset-init.service.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\init\password-reset-init.service.ts.ejs must have referenced with password-reset-init.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\init\password-reset-init.spec.ts.ejs must have referenced with password-reset-init.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\password-reset\init\password-reset-init.ts.ejs must have referenced with password-reset-init.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\register\register.html.ejs must have referenced with register.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\register\register.model.ts.ejs must have referenced with register.model.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\register\register.route.ts.ejs must have referenced with register.route.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\register\register.service.spec.ts.ejs must have referenced with register.service.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\register\register.service.ts.ejs must have referenced with register.service.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\register\register.spec.ts.ejs must have referenced with register.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\register\register.ts.ejs must have referenced with register.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\sessions\session.model.ts.ejs must have referenced with session.model.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\sessions\sessions.html.ejs must have referenced with sessions.html (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\sessions\sessions.route.ts.ejs must have referenced with sessions.route.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\sessions\sessions.service.ts.ejs must have referenced with sessions.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\sessions\sessions.spec.ts.ejs must have referenced with sessions.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\sessions\sessions.ts.ejs must have referenced with sessions.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\settings\settings.html.ejs must have referenced with settings.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\settings\settings.route.ts.ejs must have referenced with settings.route.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\settings\settings.spec.ts.ejs must have referenced with settings.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\account\settings\settings.ts.ejs must have referenced with settings.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\admin.routes.ts.ejs must have referenced with admin.routes.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\configuration\configuration.html.ejs must have referenced with configuration.html (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\configuration\configuration.model.ts.ejs must have referenced with configuration.model.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\configuration\configuration.service.spec.ts.ejs must have referenced with configuration.service.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\configuration\configuration.service.ts.ejs must have referenced with configuration.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\configuration\configuration.spec.ts.ejs must have referenced with configuration.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\configuration\configuration.ts.ejs must have referenced with configuration.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\docs\docs.html.ejs must have referenced with docs.html (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\docs\docs.scss.ejs must have referenced with docs.scss (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\docs\docs.ts.ejs must have referenced with docs.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\gateway\gateway-route.model.ts.ejs must have referenced with gateway-route.model.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\gateway\gateway-routes.service.ts.ejs must have referenced with gateway-routes.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\gateway\gateway.html.ejs must have referenced with gateway.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\gateway\gateway.ts.ejs must have referenced with gateway.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\health.html.ejs must have referenced with health.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\health.model.ts.ejs must have referenced with health.model.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\health.service.spec.ts.ejs must have referenced with health.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\health.service.ts.ejs must have referenced with health.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\health.spec.ts.ejs must have referenced with health.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\health.ts.ejs must have referenced with health.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\modal\health-modal.html.ejs must have referenced with health-modal.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\modal\health-modal.spec.ts.ejs must have referenced with health-modal.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\health\modal\health-modal.ts.ejs must have referenced with health-modal.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\logs\log.model.ts.ejs must have referenced with log.model.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\logs\logs.html.ejs must have referenced with logs.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\logs\logs.service.spec.ts.ejs must have referenced with logs.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\logs\logs.service.ts.ejs must have referenced with logs.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\logs\logs.spec.ts.ejs must have referenced with logs.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\logs\logs.ts.ejs must have referenced with logs.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\jvm-memory\jvm-memory.html.ejs must have referenced with jvm-memory.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\jvm-memory\jvm-memory.ts.ejs must have referenced with jvm-memory.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\jvm-threads\jvm-threads.html.ejs must have referenced with jvm-threads.html (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\jvm-threads\jvm-threads.ts.ejs must have referenced with jvm-threads.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-cache\metrics-cache.html.ejs must have referenced with metrics-cache.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-cache\metrics-cache.ts.ejs must have referenced with metrics-cache.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-datasource\metrics-datasource.html.ejs must have referenced with metrics-datasource.html (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-datasource\metrics-datasource.ts.ejs must have referenced with metrics-datasource.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-endpoints-requests\metrics-endpoints-requests.html.ejs must have referenced with metrics-endpoints-requests.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-endpoints-requests\metrics-endpoints-requests.ts.ejs must have referenced with metrics-endpoints-requests.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-garbagecollector\metrics-garbagecollector.html.ejs must have referenced with metrics-garbagecollector.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-garbagecollector\metrics-garbagecollector.ts.ejs must have referenced with metrics-garbagecollector.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-modal-threads\metrics-modal-threads.html.ejs must have referenced with metrics-modal-threads.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-modal-threads\metrics-modal-threads.spec.ts.ejs must have referenced with metrics-modal-threads.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-modal-threads\metrics-modal-threads.ts.ejs must have referenced with metrics-modal-threads.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-request\metrics-request.html.ejs must have referenced with metrics-request.html (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-request\metrics-request.ts.ejs must have referenced with metrics-request.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-system\metrics-system.html.ejs must have referenced with metrics-system.html (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\blocks\metrics-system\metrics-system.ts.ejs must have referenced with metrics-system.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\metrics.html.ejs must have referenced with metrics.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\metrics.model.ts.ejs must have referenced with metrics.model.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\metrics.service.spec.ts.ejs must have referenced with metrics.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\metrics.service.ts.ejs must have referenced with metrics.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\metrics.spec.ts.ejs must have referenced with metrics.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\metrics\metrics.ts.ejs must have referenced with metrics.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\tracker\tracker.html.ejs must have referenced with tracker.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\admin\tracker\tracker.ts.ejs must have referenced with tracker.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\app-page-title-strategy.ts.ejs must have referenced with app-page-title-strategy.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\app.config.ts.ejs must have referenced with app.config.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\app.routes.ts.ejs must have referenced with app.routes.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\app.ts.ejs must have referenced with app.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\datepicker-adapter.ts.ejs must have referenced with datepicker-adapter.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\dayjs.ts.ejs must have referenced with dayjs.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\endpoint.constants.ts.ejs must have referenced with endpoint.constants.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\font-awesome-icons.ts.ejs must have referenced with font-awesome-icons.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\index.ts.ejs must have referenced with index.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\input.constants.ts.ejs must have referenced with input.constants.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\language.constants.ts.ejs must have referenced with language.constants.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\navigation.constants.ts.ejs must have referenced with navigation.constants.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\pagination.constants.ts.ejs must have referenced with pagination.constants.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\config\translation.config.ts.ejs must have referenced with translation.config.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\account.model.ts.ejs must have referenced with account.model.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\account.service.spec.ts.ejs must have referenced with account.service.spec.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\account.service.ts.ejs must have referenced with account.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\auth-jwt.service.spec.ts.ejs must have referenced with auth-jwt.service.spec.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\auth-jwt.service.ts.ejs must have referenced with auth-jwt.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\auth-session.service.ts.ejs must have referenced with auth-session.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\csrf.service.ts.ejs must have referenced with csrf.service.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\index.ts.ejs must have referenced with index.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\login.model.ts.ejs must have referenced with login.model.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\logout.model.ts.ejs must have referenced with logout.model.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\state-storage.service.ts.ejs must have referenced with state-storage.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\auth\user-route-access.service.ts.ejs must have referenced with user-route-access.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\interceptor\auth-expired.interceptor.ts.ejs must have referenced with auth-expired.interceptor.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\interceptor\auth.interceptor.ts.ejs must have referenced with auth.interceptor.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\interceptor\error-handler.interceptor.ts.ejs must have referenced with error-handler.interceptor.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\interceptor\notification.interceptor.ts.ejs must have referenced with notification.interceptor.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\microfrontend\index.ts.ejs must have referenced with index.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\microfrontend\microfrontend-translation.loader.ts.ejs must have referenced with microfrontend-translation.loader.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\request\index.ts.ejs must have referenced with index.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\request\request-util.ts.ejs must have referenced with request-util.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\request\request.model.ts.ejs must have referenced with request.model.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\tracker\tracker-activity.model.ts.ejs must have referenced with tracker-activity.model.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\tracker\tracker.service.ts.ejs must have referenced with tracker.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\alert.service.spec.ts.ejs must have referenced with alert.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\alert.service.ts.ejs must have referenced with alert.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\data-util.service.spec.ts.ejs must have referenced with data-util.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\data-util.service.ts.ejs must have referenced with data-util.service.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\event-manager.service.spec.ts.ejs must have referenced with event-manager.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\event-manager.service.ts.ejs must have referenced with event-manager.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\index.ts.ejs must have referenced with index.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\operators.spec.ts.ejs must have referenced with operators.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\operators.ts.ejs must have referenced with operators.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\parse-links.service.spec.ts.ejs must have referenced with parse-links.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\core\util\parse-links.service.ts.ejs must have referenced with parse-links.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\entity-navbar-items.ts.ejs must have referenced with entity-navbar-items.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\entity.routes.ts.ejs must have referenced with entity.routes.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\delete\_entityFile_-delete-dialog.html.ejs must have referenced with _entityFile_-delete-dialog.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\delete\_entityFile_-delete-dialog.spec.ts.ejs must have referenced with _entityFile_-delete-dialog.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\delete\_entityFile_-delete-dialog.ts.ejs must have referenced with _entityFile_-delete-dialog.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\detail\_entityFile_-detail.html.ejs must have referenced with _entityFile_-detail.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\detail\_entityFile_-detail.spec.ts.ejs must have referenced with _entityFile_-detail.spec.ts (9ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\detail\_entityFile_-detail.ts.ejs must have referenced with _entityFile_-detail.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\list\_entityFile_.html.ejs must have referenced with _entityFile_.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\list\_entityFile_.spec.ts.ejs must have referenced with _entityFile_.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\list\_entityFile_.ts.ejs must have referenced with _entityFile_.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\route\_entityFile_-routing-resolve.service.spec.ts.ejs must have referenced with _entityFile_-routing-resolve.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\route\_entityFile_-routing-resolve.service.ts.ejs must have referenced with _entityFile_-routing-resolve.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\service\_entityFile_.service.spec.ts.ejs must have referenced with _entityFile_.service.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\service\_entityFile_.service.ts.ejs must have referenced with _entityFile_.service.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\update\_entityFile_-form.service.spec.ts.ejs must have referenced with _entityFile_-form.service.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\update\_entityFile_-form.service.ts.ejs must have referenced with _entityFile_-form.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\update\_entityFile_-update.html.ejs must have referenced with _entityFile_-update.html (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\update\_entityFile_-update.spec.ts.ejs must have referenced with _entityFile_-update.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\update\_entityFile_-update.ts.ejs must have referenced with _entityFile_-update.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\_entityFile_.model.ts.ejs must have referenced with _entityFile_.model.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\_entityFile_.routes.ts.ejs must have referenced with _entityFile_.routes.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\entities\_entityFolder_\_entityFile_.test-samples.ts.ejs must have referenced with _entityFile_.test-samples.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\home\home.html.ejs must have referenced with home.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\home\home.scss.ejs must have referenced with home.scss (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\home\home.spec.ts.ejs must have referenced with home.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\home\home.ts.ejs must have referenced with home.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\error\error.html.ejs must have referenced with error.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\error\error.route.ts.ejs must have referenced with error.route.ts (8ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\error\error.ts.ejs must have referenced with error.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\footer\footer.html.ejs must have referenced with footer.html (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\footer\footer.ts.ejs must have referenced with footer.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\main\main.html.ejs must have referenced with main.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\main\main.spec.ts.ejs must have referenced with main.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\main\main.ts.ejs must have referenced with main.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\navbar\active-menu.directive.ts.ejs must have referenced with active-menu.directive.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\navbar\navbar-item.model.d.ts.ejs must have referenced with navbar-item.model.d.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\navbar\navbar.html.ejs must have referenced with navbar.html (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\navbar\navbar.scss.ejs must have referenced with navbar.scss (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\navbar\navbar.spec.ts.ejs must have referenced with navbar.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\navbar\navbar.ts.ejs must have referenced with navbar.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\profiles\page-ribbon.scss.ejs must have referenced with page-ribbon.scss (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\profiles\page-ribbon.spec.ts.ejs must have referenced with page-ribbon.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\profiles\page-ribbon.ts.ejs must have referenced with page-ribbon.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\profiles\profile-info.model.ts.ejs must have referenced with profile-info.model.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\layouts\profiles\profile.service.ts.ejs must have referenced with profile.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\login\login.html.ejs must have referenced with login.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\login\login.service.ts.ejs must have referenced with login.service.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\login\login.spec.ts.ejs must have referenced with login.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\login\login.ts.ejs must have referenced with login.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\alert-error.html.ejs must have referenced with alert-error.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\alert-error.model.ts.ejs must have referenced with alert-error.model.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\alert-error.spec.ts.ejs must have referenced with alert-error.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\alert-error.ts.ejs must have referenced with alert-error.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\alert.html.ejs must have referenced with alert.html (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\alert.spec.ts.ejs must have referenced with alert.spec.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\alert.ts.ejs must have referenced with alert.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\alert\index.ts.ejs must have referenced with index.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\auth\has-any-authority.directive.spec.ts.ejs must have referenced with has-any-authority.directive.spec.ts (7ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\auth\has-any-authority.directive.ts.ejs must have referenced with has-any-authority.directive.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\auth\index.ts.ejs must have referenced with index.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\date\duration.pipe.ts.ejs must have referenced with duration.pipe.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\date\format-medium-date.pipe.spec.ts.ejs must have referenced with format-medium-date.pipe.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\date\format-medium-date.pipe.ts.ejs must have referenced with format-medium-date.pipe.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\date\format-medium-datetime.pipe.spec.ts.ejs must have referenced with format-medium-datetime.pipe.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\date\format-medium-datetime.pipe.ts.ejs must have referenced with format-medium-datetime.pipe.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\date\index.ts.ejs must have referenced with index.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\filter\filter.html.ejs must have referenced with filter.html (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\filter\filter.model.spec.ts.ejs must have referenced with filter.model.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\filter\filter.model.ts.ejs must have referenced with filter.model.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\filter\filter.ts.ejs must have referenced with filter.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\filter\index.ts.ejs must have referenced with index.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\language\find-language-from-key.pipe.ts.ejs must have referenced with find-language-from-key.pipe.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\language\index.ts.ejs must have referenced with index.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\language\translate.directive.spec.ts.ejs must have referenced with translate.directive.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\language\translate.directive.ts.ejs must have referenced with translate.directive.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\language\translation.provider.ts.ejs must have referenced with translation.provider.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\pagination\index.ts.ejs must have referenced with index.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\pagination\item-count.spec.ts.ejs must have referenced with item-count.spec.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\pagination\item-count.ts.ejs must have referenced with item-count.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\index.ts.ejs must have referenced with index.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\sort-by.directive.spec.ts.ejs must have referenced with sort-by.directive.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\sort-by.directive.ts.ejs must have referenced with sort-by.directive.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\sort-state.ts.ejs must have referenced with sort-state.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\sort.directive.spec.ts.ejs must have referenced with sort.directive.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\sort.directive.ts.ejs must have referenced with sort.directive.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\sort.service.spec.ts.ejs must have referenced with sort.service.spec.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\app\shared\sort\sort.service.ts.ejs must have referenced with sort.service.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\bootstrap.ts.ejs must have referenced with bootstrap.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\content\scss\global.scss.ejs must have referenced with global.scss (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\content\scss\vendor.scss.ejs must have referenced with vendor.scss (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\content\scss\_bootstrap-variables.scss.ejs must have referenced with _bootstrap-variables.scss (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\declarations.d.ts.ejs must have referenced with declarations.d.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\environments\environment.development.ts.ejs must have referenced with environment.development.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\environments\environment.ts.ejs must have referenced with environment.ts (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\i18n\index.ts.ejs must have referenced with index.ts (4ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\main.ts.ejs must have referenced with main.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\src\main\webapp\sockjs-client.polyfill.ts.ejs must have referenced with sockjs-client.polyfill.ts (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\tsconfig.app.json.ejs must have referenced with tsconfig.app.json (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\tsconfig.federation.json.ejs must have referenced with tsconfig.federation.json (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\tsconfig.json.ejs must have referenced with tsconfig.json (5ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\tsconfig.spec.json.ejs must have referenced with tsconfig.spec.json (6ms)
+      ✔ C:\Users\DHAIRYASHEEL\Desktop\generator-jhipster\generators\angular\templates\vitest-base.config.ts.ejs must have referenced with vitest-base.config.ts (5ms)
+      file cleanup.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file command.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file entity-files-angular.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file files-angular.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file generator.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file generator.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file package.json
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file needles.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file reserved-keywords.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file translate-angular.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java  (1ms)
+      file angular.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file builders.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file define-esbuild.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file i18n-esbuild.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript (1ms)
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file native-federation.schema.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file native-federation.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file eslint.config.ts.jhi.angular.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file federation.config.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file ngsw-config.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file package.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file postcss.config.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file proxy.config.mjs.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file README.md.jhi.client.angular.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file account.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file activate.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file activate.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file activate.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file activate.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file activate.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file activate.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-strength-bar.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-strength-bar.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-strength-bar.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-strength-bar.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript (1ms)
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-finish.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-finish.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-finish.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-finish.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-finish.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-finish.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-init.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-init.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-init.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-init.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-init.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file password-reset-init.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file register.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file register.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file register.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file register.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file register.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file register.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file register.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file session.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sessions.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sessions.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sessions.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sessions.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sessions.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file settings.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file settings.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file settings.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file settings.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file admin.routes.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file configuration.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file configuration.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file configuration.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file configuration.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file configuration.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file configuration.ts.ejs
+        ✔ should not contain src/main/webapp (1ms)
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file docs.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file docs.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file docs.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file gateway-route.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file gateway-routes.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file gateway.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file gateway.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health-modal.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health-modal.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file health-modal.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file log.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file logs.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file logs.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file logs.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file logs.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file logs.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file jvm-memory.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file jvm-memory.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file jvm-threads.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file jvm-threads.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-cache.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-cache.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-datasource.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-datasource.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-endpoints-requests.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-endpoints-requests.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-garbagecollector.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-garbagecollector.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-modal-threads.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-modal-threads.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-modal-threads.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-request.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-request.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-system.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics-system.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file metrics.ts.ejs
+        ✔ should not contain src/main/webapp (1ms)
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file tracker.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file tracker.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file app-page-title-strategy.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file app.config.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file app.routes.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file app.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file datepicker-adapter.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file dayjs.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file endpoint.constants.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file font-awesome-icons.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file input.constants.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file language.constants.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file navigation.constants.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file pagination.constants.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file translation.config.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file account.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file account.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file account.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file auth-jwt.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file auth-jwt.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file auth-session.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file csrf.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file login.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file logout.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file state-storage.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file user-route-access.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file auth-expired.interceptor.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file auth.interceptor.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file error-handler.interceptor.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file notification.interceptor.ts.ejs
+        ✔ should not contain src/main/webapp (1ms)
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file microfrontend-translation.loader.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file request-util.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file request.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file tracker-activity.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file tracker.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file data-util.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file data-util.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file event-manager.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file event-manager.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file operators.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file operators.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file parse-links.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file parse-links.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file entity-navbar-items.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file entity.routes.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-delete-dialog.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-delete-dialog.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-delete-dialog.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-detail.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-detail.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-detail.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-routing-resolve.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate (1ms)
+        ✔ should not contain  Java 
+      file _entityFile_-routing-resolve.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-form.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-form.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-update.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-update.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_-update.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.routes.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _entityFile_.test-samples.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file home.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file home.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file home.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file home.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file error.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file error.route.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file error.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file footer.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file footer.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file main.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file main.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file main.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file active-menu.directive.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file navbar-item.model.d.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file navbar.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file navbar.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file navbar.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file navbar.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file page-ribbon.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file page-ribbon.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file page-ribbon.ts.ejs
+        ✔ should not contain src/main/webapp (1ms)
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file profile-info.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file profile.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file login.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file login.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file login.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file login.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert-error.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert-error.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert-error.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert-error.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file alert.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file has-any-authority.directive.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file has-any-authority.directive.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file duration.pipe.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file format-medium-date.pipe.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file format-medium-date.pipe.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file format-medium-datetime.pipe.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file format-medium-datetime.pipe.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file filter.html.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file filter.model.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file filter.model.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file filter.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file find-language-from-key.pipe.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file translate.directive.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file translate.directive.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file translation.provider.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file item-count.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file item-count.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sort-by.directive.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sort-by.directive.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sort-state.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sort.directive.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sort.directive.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sort.service.spec.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sort.service.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file bootstrap.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file global.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file vendor.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file _bootstrap-variables.scss.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file declarations.d.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file environment.development.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file environment.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file index.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file main.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file sockjs-client.polyfill.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file tsconfig.app.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file tsconfig.federation.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java  (1ms)
+      file tsconfig.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file tsconfig.spec.json.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file vitest-base.config.ts.ejs
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java 
+      file types.d.ts
+        ✔ should not contain src/main/webapp
+        ✔ should not contain src/test/javascript
+        ✔ should not contain  jhiTranslate
+        ✔ should not contain  Java  (1ms)
+    gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true)
+      ✔ should match generated files snapshot (8ms)
+      ✔ should match application snapshot (4ms)
+      ✔ should match source calls snapshot (1ms)
+      ✔ contains correct clientFramework (1ms)
+      ✔ should not contain version placeholders at package.json
+      withAdminUi
+        ✔ should not generate admin ui components (10ms)
+        ✔ should not generate admin routing
+    gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true)
+      ✔ should match generated files snapshot (8ms)
+      ✔ should match application snapshot (3ms)
+      ✔ should match source calls snapshot
+      ✔ contains correct clientFramework
+      ✔ should not contain version placeholders at package.json
+      withAdminUi
+        ✔ should generate admin ui components (1ms)
+        1) should generate admin routing
+    microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false)
+      ✔ should match generated files snapshot (8ms)
+      ✔ should match application snapshot (3ms)
+      ✔ should match source calls snapshot (1ms)
+      ✔ contains correct clientFramework
+      ✔ should not contain version placeholders at package.json
+      withAdminUi
+        ✔ should not generate admin ui components (12ms)
+    microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false)
+      ✔ should match generated files snapshot (7ms)
+      ✔ should match application snapshot (3ms)
+      ✔ should match source calls snapshot (1ms)
+      ✔ contains correct clientFramework
+      ✔ should not contain version placeholders at package.json
+      withAdminUi
+        ✔ should generate admin ui components (1ms)
+    monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true)
+      ✔ should match generated files snapshot (9ms)
+      ✔ should match application snapshot (3ms)
+      ✔ should match source calls snapshot (1ms)
+      ✔ contains correct clientFramework
+      ✔ should not contain version placeholders at package.json (1ms)
+      withAdminUi
+        ✔ should generate admin ui components
+        2) should generate admin routing
+    monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false)
+      ✔ should match generated files snapshot (8ms)
+      ✔ should match application snapshot (2ms)
+      ✔ should match source calls snapshot
+      ✔ contains correct clientFramework
+      ✔ should not contain version placeholders at package.json
+      withAdminUi
+        ✔ should not generate admin ui components (11ms)
+        ✔ should not generate admin routing (1ms)
+    monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true)
+      ✔ should match generated files snapshot (6ms)
+      ✔ should match application snapshot (2ms)
+      ✔ should match source calls snapshot (1ms)
+      ✔ contains correct clientFramework
+      ✔ should not contain version placeholders at package.json
+      withAdminUi
+        ✔ should not generate admin ui components (9ms)
+        ✔ should not generate admin routing
+    migration
+      webpack application
+        ✔ should remove clientBundler
+    enableTranslation: false
+      ✔ should add value title in *.routes.ts files
+    clientTheme: bootswatch theme
+      3) should disable bootswatch web-font-path before importing the theme (#33691)
+    builtIn UserManagementEntity
+      ✔ should match snapshot for UserManagement files (13ms)
+    builtIn UserManagementEntity with cassandra
+      ✔ should add authorities to the model as a constants backed collection even though the Authority entity is not generated
+      ✔ should not reference audit fields, which are not available with cassandra
+
+
+  1449 passing (30s)
+  13 pending
+  3 failing
+
+  1) generator - angular
+       gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true)
+         withAdminUi
+           should generate admin routing:
+
+      AssertionError [ERR_ASSERTION]: clientRoot/src/app/admin/admin.routes.ts did not match '
+  {
+    path: 'configuration',
+    loadComponent: () => import('./configuration/configuration'),
+    title: 'configuration.title',
+  },
+  {
+    path: 'health',
+    loadComponent: () => import('./health/health'),
+    title: 'health.title',
+  },
+  {
+    path: 'logs',
+    loadComponent: () => import('./logs/logs'),
+    title: 'logs.title',
+  },
+  {
+    path: 'metrics',
+    loadComponent: () => import('./metrics/metrics'),
+    title: 'metrics.title',
+  },
+'. Contained:
+
+import { Routes } from '@angular/router';
+/* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
+
+const routes: Routes = [
+  {
+    path: 'docs',
+    loadComponent: () => import('./docs/docs'),
+    title: 'global.menu.admin.apidocs',
+  },
+  {
+    path: 'configuration',
+    loadComponent: () => import('./configuration/configuration'),
+    title: 'configuration.title',
+  },
+  {
+    path: 'health',
+    loadComponent: () => import('./health/health'),
+    title: 'health.title',
+  },
+  {
+    path: 'logs',
+    loadComponent: () => import('./logs/logs'),
+    title: 'logs.title',
+  },
+  {
+    path: 'metrics',
+    loadComponent: () => import('./metrics/metrics'),
+    title: 'metrics.title',
+  },
+  {
+    path: 'gateway',
+    loadComponent: () => import('./gateway/gateway'),
+    title: 'gateway.title',
+  },
+  // jhipster-needle-add-admin-route - JHipster will add admin routes here
+];
+
+export default routes;
+
+      + expected - actual
+
+      -false
+      +true
+      
+      at Proxy.assertFileContent (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/node_modules/yeoman-test/dist/run-result.js:187:20)
+      at assertion (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/generators/angular/generator.spec.ts:179:43)
+      at Context.<anonymous> (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/generators/angular/generator.spec.ts:180:13)
+
+  2) generator - angular
+       monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true)
+         withAdminUi
+           should generate admin routing:
+
+      AssertionError [ERR_ASSERTION]: src/main/webapp/app/admin/admin.routes.ts did not match '
+  {
+    path: 'configuration',
+    loadComponent: () => import('./configuration/configuration'),
+    title: 'configuration.title',
+  },
+  {
+    path: 'health',
+    loadComponent: () => import('./health/health'),
+    title: 'health.title',
+  },
+  {
+    path: 'logs',
+    loadComponent: () => import('./logs/logs'),
+    title: 'logs.title',
+  },
+  {
+    path: 'metrics',
+    loadComponent: () => import('./metrics/metrics'),
+    title: 'metrics.title',
+  },
+'. Contained:
+
+import { Routes } from '@angular/router';
+/* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
+
+const routes: Routes = [
+  {
+    path: 'docs',
+    loadComponent: () => import('./docs/docs'),
+    title: 'global.menu.admin.apidocs',
+  },
+  {
+    path: 'configuration',
+    loadComponent: () => import('./configuration/configuration'),
+    title: 'configuration.title',
+  },
+  {
+    path: 'health',
+    loadComponent: () => import('./health/health'),
+    title: 'health.title',
+  },
+  {
+    path: 'logs',
+    loadComponent: () => import('./logs/logs'),
+    title: 'logs.title',
+  },
+  {
+    path: 'metrics',
+    loadComponent: () => import('./metrics/metrics'),
+    title: 'metrics.title',
+  },
+  // jhipster-needle-add-admin-route - JHipster will add admin routes here
+];
+
+export default routes;
+
+      + expected - actual
+
+      -false
+      +true
+      
+      at Proxy.assertFileContent (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/node_modules/yeoman-test/dist/run-result.js:187:20)
+      at assertion (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/generators/angular/generator.spec.ts:179:43)
+      at Context.<anonymous> (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/generators/angular/generator.spec.ts:180:13)
+
+  3) generator - angular
+       clientTheme: bootswatch theme
+         should disable bootswatch web-font-path before importing the theme (#33691):
+
+      AssertionError [ERR_ASSERTION]: src/main/webapp/content/scss/vendor.scss did not match '/\$web-font-path: false;\n@import 'bootswatch\/dist\/flatly\/bootswatch';/'. Contained:
+
+/* after changing this file run 'npm run webapp:build' */
+
+/***************************
+put Sass variables here:
+eg $input-color: red;
+****************************/
+@import 'bootswatch/dist/flatly/variables';
+// Override Bootstrap variables
+@import 'bootstrap-variables';
+// Import Bootstrap source files from node_modules
+@import 'bootstrap/scss/bootstrap';
+// Prevent bootswatch from importing its Google Fonts URL: the interpolated `@import url(...)`
+// it emits is not resolved correctly by the Angular esbuild-based Sass compiler (see #33691).
+$web-font-path: false;
+@import 'bootswatch/dist/flatly/bootswatch';
+
+/* jhipster-needle-scss-add-vendor JHipster will add new css style */
+
+      + expected - actual
+
+      -false
+      +true
+      
+      at Proxy.assertFileContent (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/node_modules/yeoman-test/dist/run-result.js:187:20)
+      at Context.<anonymous> (file:///C:/Users/DHAIRYASHEEL/Desktop/generator-jhipster/generators/angular/generator.spec.ts:263:17)
+
+
+

@@ -365,6 +365,43 @@ describe('cli - EnvironmentBuilder', () => {
         expect(builder.localBlueprintExists).toBe(false);
       });
     });
+
+    describe('when the local .blueprint directory declares commands', () => {
+      before(async () => {
+        await helpers
+          .prepareTemporaryDir()
+          .withFiles({
+            '.blueprint/cli/commands.mjs': "export default { foo: { desc: 'Foo of the local blueprint' } };",
+          })
+          .commitFiles();
+      });
+
+      it('registers them without the dev blueprint, like a JHipster installed from npm', async () => {
+        const builder = await EnvironmentBuilder.createDefaultBuilder(undefined, { devBlueprintPath: 'no-dev-blueprint' });
+        expect(builder.devBlueprintPath).toBeUndefined();
+        expect(await builder.getBlueprintCommands()).toMatchObject({
+          foo: { desc: 'Foo of the local blueprint', blueprint: '@jhipster/jhipster-local' },
+        });
+      });
+    });
+
+    describe('when the local .blueprint directory has a package.json with a name', () => {
+      before(async () => {
+        await helpers
+          .prepareTemporaryDir()
+          .withFiles({
+            '.blueprint/package.json': { name: 'my-blueprint-dev', type: 'module' },
+            '.blueprint/foo/index.js': 'export default class {}',
+          })
+          .commitFiles();
+      });
+
+      it('registers its generators under the local blueprint namespace, not the package name', async () => {
+        const builder = await EnvironmentBuilder.createDefaultBuilder();
+        expect(builder.getStore().getMeta('@jhipster/jhipster-local:foo')).toBeDefined();
+        expect(builder.getEnvironment().sharedOptions.composeWithLocalBlueprint).toBe(true);
+      });
+    });
   });
 
   describe('_lookupBlueprints', () => {

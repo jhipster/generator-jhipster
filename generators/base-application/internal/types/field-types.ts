@@ -19,7 +19,7 @@
 
 import type { SetFieldType, SetRequired } from 'type-fest';
 
-import { type FieldBinaryType, type FieldBlobType, type FieldType, blobFieldTypesValues } from '../../../../lib/jhipster/field-types.ts';
+import { type FieldBinaryType, type FieldBlobType, blobFieldTypesValues } from '../../../../lib/jhipster/field-types.ts';
 import type { Field as BaseApplicationField } from '../../types.ts';
 
 export const isBlobType = (fieldType: string): fieldType is FieldBlobType =>
@@ -50,9 +50,6 @@ export const isFieldBinaryType = (field: BaseApplicationField): field is SetFiel
 
 export const isFieldEnumType = (field: BaseApplicationField): field is SetRequired<BaseApplicationField, 'enumFileName' | 'enumValues'> =>
   Boolean(field.fieldValues);
-
-export const isFieldNotEnumType = (field: BaseApplicationField): field is SetFieldType<BaseApplicationField, 'fieldType', FieldType> =>
-  !field.fieldValues;
 
 export function convertFieldBlobType<const F extends BaseApplicationField = BaseApplicationField>(field: F): F {
   // Convert fieldTypes to correct fieldTypes

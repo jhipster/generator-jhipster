@@ -50,6 +50,33 @@ describe('generator - bootstrap - multi-step transform', () => {
     ).resolves.toEqual({ '/p/.editorconfig': 'root = true\n[*.java]\nindent_size = 4\n' });
   });
 
+  it('lists the merged files in the editor metadata of the file', async () => {
+    const stream: AsyncIterable<MemFsEditorFile & { editorMetadata?: Record<string, unknown> }> = Readable.from(
+      Object.entries({
+        '/p/.editorconfig.jhi': root,
+        '/p/.editorconfig.jhi.client': '<&- fragments.render() &>',
+        '/p/.editorconfig.jhi.client.vue': '[*.vue]\nindent_size = 2',
+        '/p/.editorconfig.jhi.java': '[*.java]\nindent_size = 4',
+      }).map(([path, contents]) => ({ path, contents: Buffer.from(contents), editorMetadata: { gitRoot: '/p' } })),
+    ).pipe(createMultiStepTransform());
+    const files = [];
+    for await (const file of stream) files.push(file);
+    expect(files.map(({ path, editorMetadata }) => ({ path, editorMetadata }))).toEqual([
+      {
+        path: '/p/.editorconfig',
+        editorMetadata: {
+          gitRoot: '/p',
+          mergedFiles: [
+            '/p/.editorconfig.jhi',
+            '/p/.editorconfig.jhi.client',
+            '/p/.editorconfig.jhi.client.vue',
+            '/p/.editorconfig.jhi.java',
+          ],
+        },
+      },
+    ]);
+  });
+
   it('logs a fragment dropped without its template', async () => {
     const log: string[] = [];
     await expect(

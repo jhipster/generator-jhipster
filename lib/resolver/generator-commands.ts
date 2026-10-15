@@ -19,11 +19,16 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
+import type { Store } from 'yeoman-environment';
+
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
-import { type GeneratorsStore, JHIPSTER_NAMESPACE_PREFIX, lookupGeneratorsMeta } from './lookups.ts';
+import { lookupGeneratorsMeta } from './lookups.ts';
 
-export type { GeneratorsStore } from './lookups.ts';
+export const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
+
+/** The part of a generators store the lookups need. */
+export type GeneratorsStore = Pick<Store, 'getGeneratorsMeta'>;
 
 export type GeneratorCommand = {
   namespace: string;

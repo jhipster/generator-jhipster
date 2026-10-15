@@ -92,7 +92,7 @@ gatling {
     ahc {
       #keepAlive = true                                # Allow pooling HTTP connections (keep-alive header automatically added)
       #connectTimeout = 10000                          # Timeout when establishing a connection
-      #handshakeTimeout = 10000                        # Timeout when performing TLS hashshake
+      #handshakeTimeout = 10000                        # Timeout when performing TLS handshake
       #pooledConnectionIdleTimeout = 60000             # Timeout when a connection stays unused in the pool
       #readTimeout = 60000                             # Timeout when a used connection stays idle
       #maxRetry = 2                                    # Number of times that a request should be tried again
@@ -294,7 +294,7 @@ gatling {
     ahc {
       #keepAlive = true                                # Allow pooling HTTP connections (keep-alive header automatically added)
       #connectTimeout = 10000                          # Timeout when establishing a connection
-      #handshakeTimeout = 10000                        # Timeout when performing TLS hashshake
+      #handshakeTimeout = 10000                        # Timeout when performing TLS handshake
       #pooledConnectionIdleTimeout = 60000             # Timeout when a connection stays unused in the pool
       #readTimeout = 60000                             # Timeout when a used connection stays idle
       #maxRetry = 2                                    # Number of times that a request should be tried again

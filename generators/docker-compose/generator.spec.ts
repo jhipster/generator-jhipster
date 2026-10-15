@@ -19,12 +19,13 @@
 import { describe } from 'esmocha';
 import { basename } from 'node:path';
 
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
-
 import Generator from './index.ts';
+
+import { checkEnforcements, shouldSupportFeatures } from '#test-support';
 
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
+  checkEnforcements({}, generator);
 });

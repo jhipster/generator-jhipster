@@ -61,9 +61,10 @@
     "@eslint/js": null,
     "@pinia/testing": "<%- nodeDependencies['@pinia/testing'] %>",
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
-    "@tsconfig/node18": null,
+    "@tsconfig/node24": null,
     "@vitejs/plugin-vue": "<%- nodeDependencies['@vitejs/plugin-vue'] %>",
     "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
+    "@vitest/eslint-plugin": "<%- nodeDependencies['@vitest/eslint-plugin'] %>",
     "@vue/test-utils": "<%- nodeDependencies['@vue/test-utils'] %>",
     "@vue/tsconfig": null,
     "axios-mock-adapter": "<%- nodeDependencies['axios-mock-adapter'] %>",
@@ -92,7 +93,6 @@
   },
   "scripts": {
     "build": "<%- nodePackageManager %> run webapp:prod --",
-    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<%- skipServer ? '' : ' npm:backend:start' %>",
     "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
     "lint": "eslint .",
@@ -104,7 +104,6 @@
     "test:watch": "<%- nodePackageManager %> run vitest",
     "vitest-run": "vitest --run --coverage",
     "vitest": "vitest",
-    "watch": "concurrently npm:start<%- skipServer ? '' : ' npm:backend:start' %>",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
     "webapp:prod": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:prod --",
     "webapp:test": "<%- nodePackageManager %> run test --"

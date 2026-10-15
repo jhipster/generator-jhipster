@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { parse } from '@iarna/toml';
+import { parse } from 'smol-toml';
 
 type LibsToml = {
   versions?: Record<string, string>;

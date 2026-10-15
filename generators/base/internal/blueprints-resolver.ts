@@ -106,7 +106,7 @@ export class BlueprintsResolver {
       await this.#env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
     }
 
-    if (blueprints?.length) {
+    if (blueprints.length > 0) {
       blueprints.forEach(blueprint => {
         blueprint.version = this.#findBlueprintVersion(blueprint.name) ?? blueprint.version;
       });
@@ -117,7 +117,7 @@ export class BlueprintsResolver {
       const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
       // Verify if the blueprints have been registered.
       const missing = namespaces.filter(namespace => !this.#env.isPackageRegistered(namespace));
-      if (missing?.length) {
+      if (missing.length > 0) {
         throw new Error(`Some blueprints were not found ${missing}, you should install them manually`);
       }
       blueprints.forEach(blueprint => {

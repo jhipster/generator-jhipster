@@ -100,7 +100,7 @@ export const buildMutateDataForProperty = <
     suffix = '' as S,
     array,
     anyCheck,
-    valCheck = array ? (data, value) => (data[property] as any)?.includes(value) ?? false : (data, value) => data[property] === value,
+    valCheck = array ? (data, value) => data[property]?.includes(value) ?? false : (data, value) => data[property] === value,
   }: {
     prefix?: Prefix;
     suffix?: S;

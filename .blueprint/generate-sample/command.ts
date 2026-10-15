@@ -30,19 +30,6 @@ const command = {
       },
       scope: 'generator',
     },
-    entitiesSample: {
-      cli: {
-        type: String,
-        description: 'Entities sample to copy',
-      },
-      configure: gen => {
-        if (['mongodb', 'couchbase'].includes(gen.entitiesSample)) {
-          gen.entitiesSample = 'document';
-        }
-      },
-      choices: ['sql', 'sqllight', 'micro', 'sqlfull', 'none', 'neo4j', 'mongodb', 'document', 'cassandra', 'couchbase'],
-      scope: 'generator',
-    },
     global: {
       cli: {
         type: Boolean,
@@ -66,13 +53,6 @@ const command = {
           gen.projectFolder = process.cwd();
         }
       },
-      scope: 'generator',
-    },
-    sampleYorcFolder: {
-      cli: {
-        type: Boolean,
-      },
-      description: 'Treat sample arg as .yo-rc.json folder path',
       scope: 'generator',
     },
     sampleOnly: {

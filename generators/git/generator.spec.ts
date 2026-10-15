@@ -23,8 +23,7 @@ import { basename, join, resolve } from 'node:path';
 
 import { simpleGit } from 'simple-git';
 
-import { testBlueprintSupport } from '../../test/support/tests.ts';
-
+import { testBlueprintSupport } from '#test-support';
 import { runResult, skipPrettierHelpers as helpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
@@ -51,7 +50,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should attach the git root to written files', () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toMatchObject({
           gitRoot: generator.destinationPath(),
         });
       });
@@ -99,7 +98,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should attach the parent repository root to written files', async () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toMatchObject({
           gitRoot: await realpath(parentDir),
         });
       });
@@ -113,7 +112,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should not attach a git root to written files', () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({});
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).not.toHaveProperty('gitRoot');
       });
     });
     describe('regenerating', () => {

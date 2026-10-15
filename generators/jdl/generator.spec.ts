@@ -17,16 +17,18 @@
  * limitations under the License.
  */
 import { before, describe, esmocha, expect, it } from 'esmocha';
-import { basename } from 'node:path';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, join } from 'node:path';
 
 import type EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { getDefaultJDLDefinitions } from '../../lib/jdl-config/jdl-runtime.ts';
 import { buildJDLApplicationConfig } from '../../lib/jdl-config/jhipster-jdl-config.ts';
-import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
+import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
@@ -155,6 +157,23 @@ describe(`generator - ${generator}`, () => {
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+
+    describe('with a jdl file outside the destination', () => {
+      before(async () => {
+        const jdlFile = join(mkdtempSync(join(tmpdir(), 'jhipster-jdl-')), 'app.jdl');
+        writeFileSync(jdlFile, 'application { config { baseName outside } }');
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(mockedGenerators)
+          .withArguments([jdlFile])
+          .withOptions({ skipSampleRepository: true });
+      });
+
+      it('should read it where it is', () => {
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'outside' } });
       });
     });
 

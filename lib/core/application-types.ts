@@ -18,8 +18,6 @@
  */
 import type { JHipsterNamedChoice } from './types.ts';
 
-export const APPLICATION_TYPE_KEY = 'applicationType';
-
 export const APPLICATION_TYPE_MONOLITH = 'monolith' as const;
 export const APPLICATION_TYPE_MICROSERVICE = 'microservice' as const;
 export const APPLICATION_TYPE_GATEWAY = 'gateway' as const;

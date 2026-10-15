@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
+import type { ExportEntityDerivedPropertiesFromCommand } from '../../lib/command/types.ts';
 import { CommonDBTypes, RelationalOnlyDBTypes } from '../../lib/jhipster/field-types.ts';
-import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import type {
   Entity as BaseApplicationEntity,
@@ -25,6 +26,8 @@ import type {
   Relationship as BaseApplicationRelationship,
 } from '../base-application/types.ts';
 import type { Entity as LanguagesEntity } from '../languages/types.ts';
+
+import command from './command.ts';
 
 const { BIG_DECIMAL, DOUBLE, FLOAT, INSTANT, INTEGER, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME, TEXT_BLOB } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -57,21 +60,19 @@ export type { BaseApplicationRelationship as Relationship };
 type CommonAddedEntityProperties = {
   entityApiUrl: string;
   entityApi: string;
-
-  paginationPagination: boolean;
-  paginationInfiniteScroll: boolean;
-  paginationNo: boolean;
 };
+
+type CommonCommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof command>;
 
 export const mutateEntity = {
   __override__: false,
   entityApi: ({ microserviceName }) => (microserviceName ? `services/${microserviceName.toLowerCase()}/` : ''),
   entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
-  ...buildMutateDataForProperty('pagination', ['pagination', 'infinite-scroll', 'no']),
+  ...getEntityDerivedPropertyMutations(command.entity),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, CommonAddedEntityProperties>;
 
 export interface Entity<F extends Field = Field, R extends BaseApplicationRelationship = BaseApplicationRelationship>
-  extends LanguagesEntity<F, R>, BaseApplicationEntity<F, R>, CommonAddedEntityProperties {
+  extends LanguagesEntity<F, R>, BaseApplicationEntity<F, R>, CommonAddedEntityProperties, CommonCommandEntity {
   restProperties?: (F | R)[];
 
   uniqueEnums?: F[];

@@ -18,6 +18,8 @@
  */
 
 import { before, beforeEach, describe, expect, it } from 'esmocha';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { createJHipsterLogger } from '../../lib/utils/index.ts';
 
@@ -117,6 +119,55 @@ describe('generator - base-core', () => {
       expect(base.jdlFiles[0]).toBe('foo');
     });
   });
+  describe('writeFiles with override false', () => {
+    const OverrideGenerator = helpers.createDummyGenerator(Base, {
+      async [Base.WRITING]() {
+        await this.writeFiles({
+          blocks: [{ templates: [{ file: 'once.txt', override: false }] }],
+          rootTemplatesPath: this.destinationPath('templates'),
+        });
+      },
+    });
+
+    describe('with an existing file', () => {
+      before(async () => {
+        await helpers
+          .run('dummy')
+          .withGenerators([[OverrideGenerator, { namespace: 'dummy' }]])
+          .doInDir(cwd => {
+            mkdirSync(join(cwd, 'templates'));
+            writeFileSync(join(cwd, 'templates/once.txt.ejs'), 'from the template');
+            writeFileSync(join(cwd, 'once.txt'), 'kept');
+          });
+      });
+
+      it('should keep the file, marked as written', () => {
+        const file = runResult.memFs.get(runResult.generator.destinationPath('once.txt'));
+        expect(file.contents?.toString()).toBe('kept');
+        // Committed by the run: the state it had is kept as stateCleared.
+        expect(file.stateCleared).toBe('modified');
+        expect(file.editorMetadata).toMatchObject({ writeOnce: true });
+      });
+    });
+
+    describe('without an existing file', () => {
+      before(async () => {
+        await helpers
+          .run('dummy')
+          .withGenerators([[OverrideGenerator, { namespace: 'dummy' }]])
+          .doInDir(cwd => {
+            mkdirSync(join(cwd, 'templates'));
+            writeFileSync(join(cwd, 'templates/once.txt.ejs'), 'from the template');
+          });
+      });
+
+      it('should write the file from its template, flagged as write once', () => {
+        runResult.assertFileContent('once.txt', 'from the template');
+        expect(runResult.memFs.get(runResult.generator.destinationPath('once.txt')).editorMetadata).toMatchObject({ writeOnce: true });
+      });
+    });
+  });
+
   describe('editPropertiesFile', () => {
     it('supports callbacks', async () => {
       await helpers.run('dummy').withGenerators([

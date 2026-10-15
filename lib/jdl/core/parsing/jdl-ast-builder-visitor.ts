@@ -501,7 +501,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (messa
     applicationSubNamespaceConfig(context: Record<'namespace', IToken[]> & Record<'applicationNamespaceConfigDeclaration', CstNode[]>) {
       const namespace = context.namespace[0].image;
       const configProps = (context.applicationNamespaceConfigDeclaration ?? []).map(element => this.visit(element));
-      return { namespace, config: setLocation(setKeyValues(setKind({}, 'NamespaceConfig') as any, configProps), this.location) };
+      return { namespace, config: setLocation(setKeyValues(setKind({}, 'NamespaceConfig'), configProps), this.location) };
     }
 
     applicationNamespaceConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'namespaceConfigValue', CstNode[]>) {

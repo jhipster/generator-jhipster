@@ -20,6 +20,7 @@ import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
+import { type DroppedMutation, droppedMutationMessage, enableDelayedMutations, mutateData } from '../../lib/utils/object.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
@@ -108,6 +109,16 @@ const PRIORITY_WITH_APPLICATION = new Set<string>([
   POST_WRITING_ENTITIES,
 ]);
 
+/**
+ * Applies defaults to an entity, a field or a relationship, as `applicationDefaults` does to the application: a value it
+ * already has is kept.
+ */
+const withDefaults = (data: Record<string, any>, onDroppedMutation: (dropped: DroppedMutation) => void) => {
+  // A default may return the delay marker, it is applied once the entities are prepared (`finalizeMutations`).
+  enableDelayedMutations(data, { onDroppedMutation });
+  return (...defaults: any[]): void => mutateData(data, ...defaults.map(defaultsData => ({ __override__: false, ...defaultsData })));
+};
+
 const getFirstArgForPriority = (priorityName: string) => ({
   source: PRIORITY_WITH_SOURCE.has(priorityName),
   application: PRIORITY_WITH_APPLICATION.has(priorityName),
@@ -146,13 +157,11 @@ export default class BaseApplicationGenerator<
   static readonly POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, features);
+    super(args, options, { ...features, customPriorities: [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])] } as Features);
 
     if (this.options.help) {
       return;
     }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
 
     /* Add tasks allowing entities priorities to match normal priorities pattern */
     this.on('queueOwnTasks', () => {
@@ -400,6 +409,8 @@ export default class BaseApplicationGenerator<
     }
   }
 
+  readonly #logDroppedMutation = (dropped: DroppedMutation): void => this.log.debug(droppedMutationMessage(dropped));
+
   getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {
     const args = super.getArgsForPriority(priorityName as any);
     let firstArg = this.getTaskFirstArgForPriority(priorityName);
@@ -609,10 +620,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
+          const entityDefaults = withDefaults(data.entity, this.#logDroppedMutation);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, entityDefaults }],
             });
           });
         });
@@ -629,10 +641,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
+          const fieldDefaults = withDefaults(data.field, this.#logDroppedMutation);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, fieldDefaults }],
             });
           });
         });
@@ -649,10 +662,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
+          const relationshipDefaults = withDefaults(data.relationship, this.#logDroppedMutation);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, relationshipDefaults }],
             });
           });
         });

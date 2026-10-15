@@ -4,6 +4,7 @@ exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 {
   "entityApi": "services/microservicename/",
   "entityApiUrl": "entityNamePluralizedAndSpinalCased",
+  "paginationAny": true,
   "paginationInfiniteScroll": false,
   "paginationNo": false,
   "paginationPagination": true,

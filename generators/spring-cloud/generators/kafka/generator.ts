@@ -111,7 +111,7 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
         source.addTestLog?.({ name: 'kafka', level: 'WARN' });
         source.addTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
       },
-      addDependencies({ source }) {
+      addDependencies({ application, source }) {
         source.addJavaDependencies?.([
           {
             groupId: 'org.springframework.cloud',
@@ -142,6 +142,9 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
             scope: 'test',
           },
         ]);
+        if (!application.reactive) {
+          source.addJavaDependencies?.([{ scope: 'test', groupId: 'org.awaitility', artifactId: 'awaitility' }]);
+        }
       },
     });
   }

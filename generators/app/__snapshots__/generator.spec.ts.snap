@@ -68,11 +68,11 @@ Options:
   --client-test-framework <value>          undefined (default: vitest) (choices: "vitest")
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
+  --cypress-coverage                       Enable Cypress code coverage report generation
+  --cypress-audit                          Enable cypress-audit/lighthouse report generation
   --skip-git                               Skip git repository initialization
   --force-git                              Force commit to git repository
   --commit-msg <value>                     Commit changes (implies forceGit)
-  --cypress-coverage                       Enable Cypress code coverage report generation
-  --cypress-audit                          Enable cypress-audit/lighthouse report generation
   --enable-translation                     Enable translation
   -l, --language <value...>                Language to be added to application (existing languages are not removed)
   -n, --native-language [value]            Set application native language

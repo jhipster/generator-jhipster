@@ -32,6 +32,13 @@ type PoolOptions = Exclude<ConstructorParameters<typeof Piscina>[0], undefined>;
 
 const useTsFile = !isDistFolder();
 
+/**
+ * The pool of the process, created at the first file to lint: its workers import eslint and its configs once, not at
+ * each commit, and Piscina unrefs them when idle, so they don't keep the process alive. A worker keys its ESLint
+ * instance by the destination, extensions and config of the commit.
+ */
+let eslintPool: Piscina<Parameters<typeof eslintWorker>[0], ReturnType<typeof eslintWorker>> | undefined;
+
 export const createESLintTransform = async function (
   this: BaseGenerator | void,
   transformOptions: { ignoreErrors?: boolean; poolOptions?: PoolOptions } & Partial<Parameters<typeof eslintWorker>[0]> = {},
@@ -39,12 +46,9 @@ export const createESLintTransform = async function (
   const { extensions = 'js,cjs,mjs,ts,cts,mts,jsx,tsx,java', ignoreErrors, cwd, poolOptions, recreateEslint } = transformOptions;
   const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
 
-  const pool = new Piscina<Parameters<typeof eslintWorker>[0], ReturnType<typeof eslintWorker>>({
-    maxThreads: 2,
-    idleTimeout: 100,
-    ...esmWorkerPoolOptions(new URL(`./eslint-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url)),
-    ...poolOptions,
-  });
+  const workerModule = new URL(`./eslint-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url);
+  // Custom pool options get a pool of the commit.
+  let pool: Piscina<Parameters<typeof eslintWorker>[0], ReturnType<typeof eslintWorker>> | undefined;
 
   return passthrough(
     async file => {
@@ -52,6 +56,10 @@ export const createESLintTransform = async function (
         return;
       }
       const fileContents = file.contents.toString();
+      pool ??=
+        poolOptions ?
+          new Piscina({ maxThreads: 2, idleTimeout: 100, ...esmWorkerPoolOptions(workerModule), ...poolOptions })
+        : (eslintPool ??= new Piscina({ maxThreads: 2, ...esmWorkerPoolOptions(workerModule) }));
       const result = await pool.run({
         cwd,
         filePath: file.path,
@@ -72,7 +80,9 @@ export const createESLintTransform = async function (
       }
     },
     async () => {
-      await pool?.destroy();
+      if (poolOptions) {
+        await pool?.destroy();
+      }
     },
   );
 };

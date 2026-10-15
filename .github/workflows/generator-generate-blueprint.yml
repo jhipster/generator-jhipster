@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sample: ['javascript', 'typescript']
+        sample: ['generate-blueprint-javascript', 'generate-blueprint-typescript']
     if: >-
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
@@ -67,7 +67,7 @@ jobs:
         working-directory: ${{ github.workspace }}
       - name: 'GENERATION: generate blueprint'
         run: |
-          jhipster.cjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --generate-snapshots
+          jhipster.cjs generate-sample ${{ matrix.sample }} --generate-snapshots
           npm link
           cat package.json
         working-directory: ${{ github.workspace }}/generator-jhipster-foo
@@ -82,7 +82,7 @@ jobs:
           generator-path: generator-jhipster
           application-folder: generator-jhipster-foo
           compare-folder: generator-jhipster-foo
-          cmd: jhipster.cjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --skip-checks --skip-install --no-insight
+          cmd: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-checks --skip-install --no-insight
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/generator-jhipster-foo
