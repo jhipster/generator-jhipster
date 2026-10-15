@@ -97,9 +97,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should derive the KeyStore from the creation timestamp', () => {
-        const { packageName, creationTimestamp } = runResult.application;
+        const { packageName, creationTimestamp } = runResult.application!;
         const pfx = runResult.fs.read(join(runResult.cwd, keyStoreFile), { raw: true });
-        expect(pfx.equals(createKeyStore({ packageName, creationTimestamp }))).toBe(true);
+        expect(pfx.equals(createKeyStore({ packageName: packageName!, creationTimestamp }))).toBe(true);
       });
     });
 
@@ -188,8 +188,8 @@ describe(`generator - ${generator}`, () => {
         });
 
         it(`derives the ${key} from the creation timestamp`, () => {
-          const { creationTimestamp } = runResult.application;
-          expect(runResult.application[key]).toBe(createKey(creationTimestamp));
+          const { creationTimestamp } = runResult.application!;
+          expect(runResult.application![key]).toBe(createKey(creationTimestamp));
         });
       });
     }
