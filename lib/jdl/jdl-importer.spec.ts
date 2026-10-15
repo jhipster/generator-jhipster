@@ -48,6 +48,13 @@ describe('jdl - JDLImporter', () => {
         expect(() => createImporterFromContent()).toThrow(/^A JDL content must be passed to create a new JDL importer\.$/);
       });
     });
+    describe('with onWarning', () => {
+      it('gives it the warnings of the jdl', () => {
+        const warnings: string[] = [];
+        createImporterFromContent('entity A\npaginate A with pagination', { onWarning: (message: string) => warnings.push(message) });
+        expect(warnings).toEqual(['The paginate option is deprecated, please use pagination instead.']);
+      });
+    });
   });
   describe('import', () => {
     describe('parsing a relationship with builtInEntity', () => {
