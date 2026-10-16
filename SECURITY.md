@@ -83,6 +83,22 @@ and the same holds for Maven and Gradle builds. `.yo-rc.json` belongs to that sa
   and shell profiles.
 - **Do not run the generator as root**, and do not run it from your home directory.
 
+## Checking an application you downloaded
+
+Downloading an application from a repository and running it means running its code: the build, the tests and the application itself. Before you
+do, you can tell what JHipster generated from what was changed afterwards:
+
+1. **Keep only the JHipster configuration.** In a copy of the repository, remove every file except `.yo-rc.json`, the `.jhipster/` folder,
+   the `.blueprint/` folder and `.git/`.
+2. **Check that the generator and the blueprints are the real JHipster ones.** Each blueprint named in `.yo-rc.json` must be a package you
+   know, installed from the original npm registry (no `registry` override in an `.npmrc`), and `generator-jhipster` must come from npm or from
+   [the main repository](https://github.com/jhipster/generator-jhipster). Read `.blueprint/` and `.jhipster/sharedOptions.*`: they run at the
+   next step.
+3. **Regenerate the application** with that generator, in a sandbox and without installing the dependencies (`jhipster --skip-install`).
+4. **Compare the regenerated application with the downloaded one** (`git diff`). The comparison shows what was written by hand after the
+   generation: the customizations of the project, and any unexpected or malicious change. Review those before building or running the
+   application.
+
 ## Recommendations for CI and hosted generation
 
 **Running JHipster as a hosted service — exposing the generator to configurations supplied by other people — is not an officially supported
