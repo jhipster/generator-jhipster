@@ -85,7 +85,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
-          // The image of the application, the command every application has, docker-compose suggests.
+          // Builds the Docker image of the application: docker-compose suggests it to the applications whose package.json has it.
           'docker:build': 'npm run java:docker',
           // TODO v10: remove, java:docker builds the image of the architecture of the Docker daemon.
           'java:docker:arm64': 'npm run java:docker',
