@@ -19,7 +19,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
   @if (<%- entityInstance %>(); as <%- entityInstance %>Ref) {
-    <div>
+    <div class="row">
       <h2 data-cy="<%- entityInstance %>DetailsHeading"><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.detail.title')</span></h2>
 
       <hr>
@@ -84,7 +84,7 @@
         <dt><span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span></dt>
         <dd>
             <ul class="list-unstyled">
-            @for (<%- relationshipFieldName %> of <%- entityInstance %>Ref.<%- relationship.propertyName %>; track $index) {
+            @for (<%- relationshipFieldName %> of <%- entityInstance %>Ref.<%- relationshipFieldNamePlural %>; track $index) {
                 <li>
                     <span class="badge bg-info">{{ <%- relationshipFieldName %> }}</span>
                 </li>
@@ -132,6 +132,11 @@
       </button>
 <%_ if (!readOnly && updatableEntity) { _%>
 
+      <button type="button"
+          (click)="delete()"
+          class="btn btn-danger">
+        <fa-icon icon="trash-alt" />&nbsp;<span>__jhiTranslateTag__('entity.action.delete')</span>
+      </button>
       <button type="button"
           [routerLink]="['/<%- entityPage %>', <%- entityInstance %>Ref.<%- primaryKey.name %>, 'edit']"
           class="btn btn-primary">
