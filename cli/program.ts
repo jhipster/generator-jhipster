@@ -28,7 +28,7 @@ import type Environment from 'yeoman-environment';
 import baseCommand from '../generators/base/command.ts';
 import { type JHipsterCommandDefinition, type JHipsterConfigs, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
-import type { JDLDefinitions } from '../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLDefinitions } from '../lib/jdl/core/parsing/index.ts';
 import { getDefaultJDLDefinitions } from '../lib/jdl-config/jdl-runtime.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
 import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';

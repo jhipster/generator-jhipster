@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLOptionConfig } from './types/parsing.ts';
+import type { JDLOptionConfig } from '../types/parsing.ts';
 
 /** The relationship option relating to a built-in entity, which the jdl does not declare: `A to User with builtInEntity`. */
 export const JDL_RELATIONSHIP_BUILT_IN_ENTITY = 'builtInEntity';

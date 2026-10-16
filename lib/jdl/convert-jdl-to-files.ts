@@ -21,10 +21,7 @@ import type { ApplicationType } from '../core/application-types.ts';
 import { getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 
 import { type JDLFiles, astToFiles } from './converters/ast-to-files/ast-to-files.ts';
-import { errorLocation } from './core/parsing/location.ts';
-import { checkSemantics } from './core/parsing/semantic/index.ts';
-import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
-import type { JDLRuntime } from './core/parsing/types/runtime.ts';
+import { type JDLRuntime, type ParsedJDLApplications, checkSemantics, errorLocation } from './core/parsing/index.ts';
 import { parseFromContent } from './core/readers/jdl-reader.ts';
 import logger from './core/utils/objects/logger.ts';
 

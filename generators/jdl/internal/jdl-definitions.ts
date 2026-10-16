@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/index.ts';
 
 /**
  * The definitions of the jdl, from `jdlDefinitions`, and from the deprecated `jdlDefinition`, the application definitions

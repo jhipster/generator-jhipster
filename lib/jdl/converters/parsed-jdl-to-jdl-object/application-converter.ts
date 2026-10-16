@@ -20,8 +20,7 @@
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.ts';
 import { createJDLApplication } from '../../core/models/jdl-application-factory.ts';
 import type JDLApplication from '../../core/models/jdl-application.ts';
-import type { ParsedJDLApplication } from '../../core/parsing/types/parsed.ts';
-import type { JDLRuntime } from '../../core/parsing/types/runtime.ts';
+import type { JDLRuntime, ParsedJDLApplication } from '../../core/parsing/index.ts';
 
 import { convertOptions } from './option-converter.ts';
 
