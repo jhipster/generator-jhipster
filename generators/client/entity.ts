@@ -92,6 +92,8 @@ type ClientAddedEntityProperties = {
   tsPrimaryKeySamples?: string[];
 
   entityAngularJSSuffix: string;
+  /** The first field of each enum type the client imports, the enums the entity forms list the values of. */
+  enumTypeFields?: Field[];
 };
 
 export const mutateEntity = {

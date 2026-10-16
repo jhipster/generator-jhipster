@@ -18,7 +18,6 @@
 -%>
 package <%- entityAbsolutePackage %>.service.mapper;
 
-<%_ const upperFirst = text => text.charAt(0).toUpperCase() + text.slice(1); _%>
 <%_ const getOriginalField = field => field.originalField || field;
     const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
     const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
@@ -67,7 +66,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
   <%_ let renMapAnotEnt = false; /* Render Mapping Annotation during Entity to DTO conversion? */ _%>
   <%_ for (relationship of dtoRelationships) { _%>
     <%_ renMapAnotEnt = true;
-        const qualifiedByName = relationship.otherEntity.entityInstance + upperFirst(relationship.otherEntityField) + (relationship.collection ? 'Set' : '');
+        const qualifiedByName = relationship.otherEntity.entityInstance + relationship.relatedField.propertyNameCapitalized + (relationship.collection ? 'Set' : '');
     _%>
     @Mapping(target = "<%- relationship.propertyName %>", source = "<%- relationship.propertyName %>", qualifiedByName="<%- qualifiedByName %>")
   <%_ } _%>
@@ -100,7 +99,9 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%- persistClass %> toEntity(<%- dtoClass %> <%- dtoInstance %>);
   <%_ } _%>
   <%_ for (const { otherEntity, relatedField, collection } of otherEntitiesFields) { _%>
-    <%_ const mapperName = otherEntity.entityInstance + upperFirst(relatedField.propertyName); _%>
+    <%_ const mapperName = otherEntity.entityInstance + relatedField.propertyNameCapitalized;
+        const dtoMapperName = otherEntity.entityNameCapitalized + relatedField.propertyNameCapitalized;
+    _%>
 
     @Named("<%- mapperName %>")
     @BeanMapping(ignoreByDefault = true)
@@ -113,16 +114,16 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     @Mapping(target = "<%- relatedField.propertyName %>", source = "<%- relatedField.propertyName %>")
     <%_ } _%>
     <%_ if (relatedField.mapstructExpression) { _%>
-    <%- otherEntity.dtoClass %> toDto<%- upperFirst(mapperName) %>(<%- otherEntity.persistClass %> s);
+    <%- otherEntity.dtoClass %> toDto<%- dtoMapperName %>(<%- otherEntity.persistClass %> s);
     <%_ } else { _%>
-    <%- otherEntity.dtoClass %> toDto<%- upperFirst(mapperName) %>(<%- otherEntity.persistClass %> <%- otherEntity.persistInstance %>);
+    <%- otherEntity.dtoClass %> toDto<%- dtoMapperName %>(<%- otherEntity.persistClass %> <%- otherEntity.persistInstance %>);
     <%_ } _%>
     <%_ if (collection) { _%>
-      <%_ const collectionMapperName = `${otherEntity.entityInstance + upperFirst(relatedField.propertyName)}Set`; _%>
+      <%_ const collectionMapperName = `${mapperName}Set`; _%>
 
     @Named("<%- collectionMapperName %>")
-    default Set<<%- otherEntity.dtoClass %>> toDto<%- upperFirst(mapperName) %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {
-        return <%- otherEntity.persistInstance %>.stream().map(this::toDto<%- upperFirst(mapperName) %>).collect(Collectors.toSet());
+    default Set<<%- otherEntity.dtoClass %>> toDto<%- dtoMapperName %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {
+        return <%- otherEntity.persistInstance %>.stream().map(this::toDto<%- dtoMapperName %>).collect(Collectors.toSet());
     }
     <%_ } _%>
   <%_ } _%>

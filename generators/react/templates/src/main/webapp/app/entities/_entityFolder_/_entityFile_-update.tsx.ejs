@@ -86,8 +86,8 @@ export const <%- entityReactName %>Update = () => {
   const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
   const updating = useAppSelector(state => state.<%- entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
-<%_ for (const [importedType] of enumImports) { _%>
-  const <%- importedType.charAt(0).toLowerCase() + importedType.slice(1) %>Values = Object.keys(<%- importedType %>);
+<%_ for (const enumField of enumTypeFields) { _%>
+  const <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
 
   const handleClose = () => {
@@ -243,15 +243,13 @@ export const <%- entityReactName %>Update = () => {
   <%_ } else if (field.fieldIsEnum) { _%>
             type="select"
           >
-    <%_ const enumPrefix = `${frontendAppName}.${fieldType}`;
-        const enumInstance = fieldType.charAt(0).toLowerCase() + fieldType.slice(1);
-    _%>
-          {<%- enumInstance %>Values.map(<%- enumInstance %> => (
-              <option value={<%- enumInstance %>} key={<%- enumInstance %>}>
+    <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
+          {<%- field.enumInstance %>Values.map(<%- field.enumInstance %> => (
+              <option value={<%- field.enumInstance %>} key={<%- field.enumInstance %>}>
     <%_ if (enableTranslation) { _%>
-                {translate("<%- enumPrefix %>."+<%- enumInstance %>)}
+                {translate("<%- enumPrefix %>."+<%- field.enumInstance %>)}
     <%_ } else { _%>
-                {<%- enumInstance %>}
+                {<%- field.enumInstance %>}
     <%_ } _%>
               </option>))}
           </ValidatedField>
