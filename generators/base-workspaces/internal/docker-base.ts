@@ -28,8 +28,8 @@ import type { WorkspacesApplication } from '../types.ts';
 
 /**
  * Lists the applications whose Docker image may be missing, with the command that builds it: an application builds its
- * image with its docker:build script, the jib build for a Java application. Only the jib cache of a Java build tool
- * tells that the image was built: the other applications are always listed.
+ * image with the docker:build script of its package.json, the jib build for a Java application. Only the jib cache of a
+ * Java build tool tells that the image was built: the other applications are always listed.
  */
 export const checkImages = function checkImages(
   this: Pick<BaseWorkspacesGenerator<any, any, any, any, any, any, any>, 'log' | 'workspacePath' | 'fs'>,
@@ -42,12 +42,17 @@ export const checkImages = function checkImages(
     const appPath = this.workspacePath(app.appFolder!);
     if (app.buildToolGradle && existsSync(join(appPath, 'build/jib-cache'))) continue;
     if (app.buildToolMaven && existsSync(join(appPath, 'target/jib-cache'))) continue;
-    missingImages.push(`  ${chalk.cyan('npm run docker:build')} in ${appPath}`);
+    const { scripts } = this.fs.readJSON(join(appPath, 'package.json'), {}) as { scripts?: Record<string, string> };
+    missingImages.push(
+      scripts?.['docker:build'] ?
+        `  ${chalk.cyan('npm run docker:build')} in ${appPath}`
+      : `  build the Docker image of ${appPath}, which has no docker:build script`,
+    );
   }
 
   return {
     hasWarning: missingImages.length > 0,
-    warningMessage: `To generate the missing Docker image(s), please run:\n${missingImages.join('\n')}\n`,
+    warningMessage: `To generate the missing Docker image(s):\n${missingImages.join('\n')}\n`,
   };
 };
 
