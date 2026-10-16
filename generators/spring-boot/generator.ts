@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { lowerFirst, uniqBy } from 'lodash-es';
+import { camelCase, lowerFirst, uniqBy } from 'lodash-es';
 
 import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
@@ -478,6 +478,8 @@ ${classProperties
         mutateData(entity, getEntityDerivedPropertyMutations(command.entity), {
           entityPersistenceLayer: true,
           entityRestLayer: true,
+          entityAlertName: ({ clientRootFolder, skipUiGrouping, entityClass, entityInstance }) =>
+            clientRootFolder && !skipUiGrouping ? camelCase(`${clientRootFolder}${entityClass}`) : entityInstance,
           entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),
           entitySpringReadPreAuthorize: hasAnyAuthority([
             ...(entity.entityAuthority?.split(',') ?? []),

@@ -72,7 +72,7 @@ export default defineComponent({
   <%_ } _%>
 <%_ } _%>
 <%_ for (const [importedType] of enumImports) { _%>
-    const <%- this._.lowerFirst(importedType) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
+    const <%- importedType.charAt(0).toLowerCase() + importedType.slice(1) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
 <%_ } _%>
     const isSaving = ref(false);
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
@@ -169,7 +169,7 @@ export default defineComponent({
       <%- entityInstance %>,
       previousState,
 <%_ for (const [importedType] of enumImports) { _%>
-      <%- this._.lowerFirst(importedType) %>Values,
+      <%- importedType.charAt(0).toLowerCase() + importedType.slice(1) %>Values,
 <%_ } _%>
       isSaving,
       currentLanguage,

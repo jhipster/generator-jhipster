@@ -86,11 +86,15 @@ export interface Relationship extends ServerRelationship, SpringBootAddedPropert
    * Defaults to the java property name; set it to keep an existing mapping when the property is renamed.
    */
   elasticsearchFieldName?: string;
+  /** The relationship name in upper snake case, naming the Neo4j relationship type. */
+  relationshipNameUpperSnakeCase?: string;
 }
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends ServerEntity<F, R>, SpringEntity, CommandEntity {
   skipDbChangelog?: boolean;
+  /** The name of the entity in the alerts of its REST resource, the key of its client translations. */
+  entityAlertName?: string;
   entityJavaFilterableProperties: any[];
   entityJavaCustomFilters: any[];
 

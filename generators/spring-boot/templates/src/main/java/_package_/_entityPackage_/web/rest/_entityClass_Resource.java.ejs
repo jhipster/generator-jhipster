@@ -156,7 +156,7 @@ public class <%- entityClass %>Resource {
     private static final Logger LOG = LoggerFactory.getLogger(<%- entityClass %>Resource.class);
 <%_ if (!readOnly) { _%>
 
-    private static final String ENTITY_NAME = "<%- clientRootFolder && !skipUiGrouping ? this._.camelCase(`${clientRootFolder}${entityClass}`) : entityInstance %>";
+    private static final String ENTITY_NAME = "<%- entityAlertName %>";
 
     @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
     private String applicationName;

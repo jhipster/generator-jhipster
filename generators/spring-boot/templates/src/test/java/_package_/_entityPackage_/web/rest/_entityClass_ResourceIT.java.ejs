@@ -47,7 +47,7 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
         ),
       }))
       .filter(({ observedField }) => observedField);
-    const noCascadeOtherEntities = this._.uniq(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity));
+    const noCascadeOtherEntities = [...new Set(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity))];
     // A related entity is created for each relationship, and createEntity may already have persisted one of the same
     // class: the unique fields of the created ones are randomized so that none of them collide. The id is randomized
     // too when it is not generated and the same entity is related more than once.
