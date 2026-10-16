@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'esmocha';
 
-import { checkSemantics } from '../jdl/core/parsing/semantic/index.ts';
+import { checkSemantics } from '../jdl/core/parsing/index.ts';
 import { parseFromContent } from '../jdl/core/readers/jdl-reader.ts';
 
 import { getDefaultRuntime } from './jdl-runtime.ts';

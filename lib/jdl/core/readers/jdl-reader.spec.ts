@@ -23,7 +23,7 @@ import fs from 'node:fs';
 import helpers from 'yeoman-test';
 
 import { getTestFile, parseFromContent, parseFromFiles } from '../__test-support__/index.ts';
-import type { ParsedJDLApplications } from '../parsing/types/parsed.ts';
+import type { ParsedJDLApplications } from '../parsing/index.ts';
 
 describe('jdl - JDLReader', () => {
   beforeEach(async () => {

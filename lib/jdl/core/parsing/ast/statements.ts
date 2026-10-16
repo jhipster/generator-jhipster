@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { mergeKeyLocations, setKeyLocations, setLocation } from './location.ts';
-import { setKind } from './nodes.ts';
-import type { JDLRelationshipType } from './relationship-types.ts';
+import type { JDLRelationshipType } from '../runtime/relationship-types.ts';
 import type {
   JDLLocation,
   ParsedJDLApplicationConfig,
@@ -32,7 +30,10 @@ import type {
   ParsedJDLOptionConfig,
   ParsedJDLRelationship,
   ParsedJDLUseOption,
-} from './types/parsed.ts';
+} from '../types/parsed.ts';
+
+import { mergeKeyLocations, setKeyLocations, setLocation } from './location.ts';
+import { setKind } from './nodes.ts';
 
 type Statement<T extends string, P> = { type: T; location?: JDLLocation } & P;
 

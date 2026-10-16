@@ -22,7 +22,7 @@ import { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '.
 import { createImporterFromContent } from '../../__test-support__/index.ts';
 import { parseFromContent } from '../../readers/jdl-reader.ts';
 import logger from '../../utils/objects/logger.ts';
-import { createRuntime } from '../runtime.ts';
+import { createRuntime } from '../runtime/create-runtime.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
 
 import { checkSemantics } from './index.ts';

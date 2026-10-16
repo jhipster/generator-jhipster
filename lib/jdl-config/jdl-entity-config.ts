@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { JHipsterEntityConfigs } from '../command/types.ts';
-import type { JDLOptionsDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLOptionsDefinition } from '../jdl/core/parsing/index.ts';
 
 import { lookupCommandsPropertyFrom } from './jhipster-jdl-config.ts';
 
