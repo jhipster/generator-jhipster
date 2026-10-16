@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../../../generator-constants.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
+/** The messages of the server of a Java application, written by the server i18n generator to its resources. */
 export default class I18NGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -28,63 +28,15 @@ export default class I18NGenerator extends JavaApplicationGenerator {
     await this.dependsOnBootstrap('java');
   }
 
-  get writing() {
-    return this.asWritingTaskGroup({
-      async requiredLanguageFiles({ application }) {
-        await this.writeFiles({
-          sections: {
-            serverI18nFiles: [
-              {
-                path: SERVER_MAIN_RES_DIR,
-                renameTo: data => `${data.srcMainResources}i18n/messages.properties`,
-                templates: [`i18n/messages_en.properties`],
-              },
-            ],
-            serverI18nTestFiles: [
-              {
-                path: SERVER_TEST_RES_DIR,
-                renameTo: (data, filePath) => `${data.srcTestResources}${filePath}`,
-                templates: [`i18n/messages_en.properties`],
-              },
-            ],
-          },
-          context: application,
-        });
-      },
-      async writeI18nFiles({ application }) {
-        if (!application.enableTranslation) return;
-        const { languagesToGenerateDefinition = [application.nativeLanguageDefinition] } = application;
-        await Promise.all(
-          languagesToGenerateDefinition.map(async language => {
-            if (language.javaLocaleMessageSourceSuffix) {
-              await this.writeFiles({
-                sections: {
-                  serverI18nFiles: [
-                    {
-                      path: SERVER_MAIN_RES_DIR,
-                      renameTo: (data, filePath) => `${data.srcMainResources}${filePath}`,
-                      templates: [`i18n/messages_${language.javaLocaleMessageSourceSuffix}.properties`],
-                    },
-                  ],
-                  serverI18nTestFiles: [
-                    {
-                      path: SERVER_TEST_RES_DIR,
-                      renameTo: (data, filePath) => `${data.srcTestResources}${filePath}`,
-                      condition: data => !data.skipUserManagement,
-                      templates: [`i18n/messages_${language.javaLocaleMessageSourceSuffix}.properties`],
-                    },
-                  ],
-                },
-                context: application,
-              });
-            }
-          }),
-        );
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composeServerI18n() {
+        await this.composeWithJHipster('jhipster:server:i18n');
       },
     });
   }
 
-  get [JavaApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+  get [JavaApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 }
