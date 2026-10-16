@@ -192,7 +192,7 @@
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-plugin-ejs-templates": "0.6.1",
     "eslint-plugin-n": "18.4.1",
-    "eslint-plugin-prettier": "5.5.6",
+    "eslint-plugin-prettier": "5.5.7",
     "esmocha": "5.0.0",
     "jiti": "2.7.0",
     "jsdoc": "4.0.5",
