@@ -17,21 +17,21 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../../../client/types.ts';
+import type { Application as E2eApplication, Entity as E2eEntity } from '../../types.ts';
 
 /**
  * What the e2e test frameworks, cypress and playwright, have in common: the scripts of the root package.json running the
  * application and the e2e tests together, and their dependencies. The scripts of a framework, `e2e` and `e2e:headless`
  * among them, are its own.
  */
-export default class E2eCommonGenerator extends BaseApplicationGenerator<ClientEntity, ClientApplication> {
+export default class E2eCommonGenerator extends BaseApplicationGenerator<E2eEntity, E2eApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('client');
+      await this.dependsOnBootstrap('e2e');
       await this.dependsOnJHipster('javascript-simple-application');
     }
   }
@@ -51,16 +51,27 @@ export default class E2eCommonGenerator extends BaseApplicationGenerator<ClientE
           'e2e:dev': 'concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e',
           'pree2e:headless': 'npm run ci:server:await --if-present',
         });
-        if (application.clientRootDir) {
-          // The e2e tests run from the client workspace.
-          application.packageJsonScripts['e2e:headless'] = `npm run -w ${application.clientRootDir} e2e:headless`;
-        }
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      clientWorkspaceScripts({ application }) {
+        if (application.clientRootDir) {
+          // The e2e tests run from the client workspace.
+          application.packageJsonScripts['e2e:headless'] = `${application.clientNpmRun} e2e:headless`;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get postWriting() {

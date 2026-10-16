@@ -21,7 +21,6 @@ import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import { generateTestEntity } from '../client/support/index.ts';
-import { WAIT_TIMEOUT, e2eScriptsContext } from '../e2e/generators/common/internal/index.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
 import { playwrightEntityFiles, playwrightFiles } from './files.ts';
@@ -47,7 +46,7 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('client');
+      await this.dependsOnBootstrap('e2e');
       await this.dependsOnJHipster('javascript-simple-application');
       await this.dependsOnJHipster('jhipster:e2e:common');
     }
@@ -68,9 +67,28 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
           playwrightBootstrapEntities: true,
         });
       },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      // The e2e properties of the application are final once it is prepared.
       npmScripts({ application }) {
         this.angularSchematic = Boolean(application.clientFrameworkAngular);
-        const { devServerPortE2e, ngE2e, devServerHost, clientRun, clientStart, ng } = e2eScriptsContext(application);
+        const {
+          clientRootDir,
+          clientNpmRun,
+          clientNgCommand: ng,
+          e2eNgBuilder,
+          e2eDevServerHost,
+          e2eDevServerPort,
+          e2eWaitTimeout,
+        } = application;
+        const clientStart = clientRootDir ? `"${clientNpmRun} start"` : 'npm:start';
 
         Object.assign(application.clientPackageJsonScripts, {
           // Cypress downloads its binary from its own npm postinstall; playwright needs the browsers to be
@@ -93,16 +111,16 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
         Object.assign(application.packageJsonScripts, {
           'ci:e2e:run': `${e2eTlsEnv}concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless`,
           'e2e:devserver':
-            ngE2e ?
-              `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "${clientRun('playwright:install')} && npm run ci:server:await --if-present && ${ng} e2e --configuration run"`
-            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start ${clientStart} "wait-on -t ${WAIT_TIMEOUT} http-get://${devServerHost}:${devServerPortE2e} && E2E_BASE_URL=http://localhost:${devServerPortE2e} npm run e2e:headless"`,
+            e2eNgBuilder ?
+              `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "${clientNpmRun} playwright:install && npm run ci:server:await --if-present && ${ng} e2e --configuration run"`
+            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start ${clientStart} "wait-on -t ${e2eWaitTimeout} http-get://${e2eDevServerHost}:${e2eDevServerPort} && E2E_BASE_URL=http://localhost:${e2eDevServerPort} npm run e2e:headless"`,
         });
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get postPreparingEachEntity() {
