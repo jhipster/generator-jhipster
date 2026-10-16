@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2026 the original author or authors from the JHipster project.
+ Copyright 2013-2026 the original author or authors by the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,6 +47,11 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
+    const deleteModalOpen = ref(false);
+<%_ if (enableTranslation) { _%>
+    const t$ = useI18n().t;
+<%_ } _%>
+
     const previousState = () => router.go(-1);
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref({});
 
@@ -63,7 +68,23 @@ export default defineComponent({
       retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id);
     }
 
-    return {
+    const handleDelete = async () => {
+      try {
+        await <%- entityInstance %>Service().delete(route.params.<%- entityInstance %>Id);
+<%_ if (enableTranslation) { _%>
+        const message = t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: route.params.<%- entityInstance %>Id }).toString();
+<%_ } else { _%>
+        const message = `A <%- entityAngularName %> is deleted with identifier ${route.params.<%- entityInstance %>Id}`;
+<%_ } _%>
+        alertService.showInfo(message, { variant: 'danger' });
+        router.push({ name: '<%- entityAngularName %>Home' });
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      } finally {
+        deleteModalOpen.value = false;
+      }
+    };
+ return {
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>
@@ -72,8 +93,10 @@ export default defineComponent({
       ...dataUtils,
 <% } %>
       previousState,
+      deleteModalOpen,
+      handleDelete,
 <%_ if (enableTranslation) { _%>
-      t$: useI18n().t,
+      t$,
 <%_ } _%>
     };
   },
