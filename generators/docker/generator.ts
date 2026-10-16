@@ -26,9 +26,9 @@ import type { Application as SpringDataRelationalApplication } from '../spring-b
 import { getJdbcUrl, getR2dbcUrl } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringBootApplication } from '../spring-boot/index.ts';
 
-import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
+import { SERVICE_HEALTHY } from './constants.ts';
 import { dockerFiles } from './files.ts';
-import { createDockerComposeFile, createDockerExtendedServices } from './support/index.ts';
+import { createDockerComposeFile, createDockerExtendedServices, dockerComposeFileContent } from './support/index.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
@@ -175,6 +175,11 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           context: application,
         });
       },
+      writeDockerComposeFiles({ application }) {
+        for (const [fileName, file] of Object.entries(application.dockerComposeFiles)) {
+          this.writeDestination(`${application.dockerServicesDir}${fileName}.yml`, dockerComposeFileContent(file));
+        }
+      },
     });
   }
 
@@ -192,13 +197,8 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
               { serviceName },
               { serviceFile: './cassandra.yml', serviceName: 'cassandra-migration' },
             );
-            source.addDockerDependencyToApplication!(
-              { serviceName, condition: SERVICE_HEALTHY },
-              { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY },
-            );
           } else {
             source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
-            source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
           }
         }
 
@@ -207,7 +207,6 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           const profiles = application.prodDatabaseType === application.devDatabaseType ? undefined : ['', 'prod'];
           source.addDockerExtendedServiceToApplication!({ serviceName });
           source.addDockerExtendedServiceToServices!({ serviceName, additionalConfig: { profiles } });
-          source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
         }
 
         for (const serviceName of intersection(
@@ -215,7 +214,6 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           application.dockerServices,
         )) {
           source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
-          source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
         }
 
         for (const serviceName of application.dockerServices.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
@@ -237,8 +235,6 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
               depends_on,
             },
           });
-
-          source.addDockerDependencyToApplication!({ serviceName: 'jhipster-registry', condition: SERVICE_HEALTHY });
         }
         if (application.dockerServices.includes('consul')) {
           source.addDockerExtendedServiceToApplicationAndServices!(

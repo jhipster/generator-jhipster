@@ -120,6 +120,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "devServerPort": 4200,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": Any<Object>,
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": Any<Array>,
   "dockerServicesDir": "src/main/docker/",

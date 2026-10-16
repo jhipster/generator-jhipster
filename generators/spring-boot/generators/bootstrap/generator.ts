@@ -23,6 +23,8 @@ import { mutateApplicationLoading, mutateApplicationPreparing } from '../../appl
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
 
+import { addApplicationDockerComposeFile } from './internal/docker-compose.ts';
+
 export default class BootstrapGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -169,6 +171,36 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
             JHIPSTER_SLEEP: '10', // Let migration complete
           });
         }
+
+        if (application.cacheProviderMemcached) {
+          mutateData(dockerApplicationEnvironment as any, { JHIPSTER_CACHE_MEMCACHED_SERVERS: 'memcached:11211' });
+        }
+        if (application.cacheProviderRedis) {
+          mutateData(dockerApplicationEnvironment as any, {
+            JHIPSTER_CACHE_REDIS_SERVER: 'redis://redis:6379',
+            JHIPSTER_CACHE_REDIS_CLUSTER: 'false',
+          });
+        }
+        if (application.searchEngineElasticsearch) {
+          mutateData(dockerApplicationEnvironment as any, { SPRING_ELASTICSEARCH_URIS: 'http://elasticsearch:9200' });
+        }
+        if (application.messageBrokerKafka) {
+          mutateData(dockerApplicationEnvironment as any, { SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: 'kafka:9092' });
+        }
+        if (application.messageBrokerPulsar) {
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_PULSAR_CLIENT_SERVICE_URL: 'pulsar://pulsar:6650',
+            SPRING_PULSAR_ADMINISTRATION_SERVICE_URL: 'http://pulsar:8080',
+          });
+        }
+        if (application.cacheProviderInfinispan) {
+          mutateData(dockerApplicationEnvironment as any, {
+            JAVA_OPTS: '-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true',
+          });
+        }
+      },
+      dockerComposeApplication({ application }) {
+        addApplicationDockerComposeFile(application);
       },
     });
   }

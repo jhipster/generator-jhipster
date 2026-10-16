@@ -35,15 +35,6 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
   ],
   sqlDatabasesFiles: [
     {
-      condition: ctx => ctx.dockerServices.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
-      templates: [
-        {
-          sourceFile: ctx => `${TEMPLATES_DOCKER_DIR}${ctx.prodDatabaseType}.yml`,
-          destinationFile: ctx => `${ctx.dockerServicesDir}${ctx.prodDatabaseType}.yml`,
-        },
-      ],
-    },
-    {
       condition: ctx => ctx.dockerServices.includes('mysql'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
@@ -63,7 +54,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
       condition: ctx => ctx.dockerServices.includes('couchbase'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
-      templates: ['couchbase.yml', 'couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
+      templates: ['couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
     },
   ],
   mongodbFiles: [
@@ -71,38 +62,22 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
       condition: ctx => ctx.dockerServices.includes('mongodb'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
-      templates: ['mongodb.yml', 'mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
+      templates: ['mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
     },
   ],
   cassandraFiles: [
-    {
-      condition: ctx => ctx.dockerServices.includes('cassandra'),
-      path: TEMPLATES_DOCKER_DIR,
-      renameTo,
-      templates: ['cassandra.yml', 'cassandra-cluster.yml'],
-    },
     {
       // The cql loader migration creates the keyspace and applies the cql scripts, liquibase applications do it at startup
       condition: ctx => ctx.dockerServices.includes('cassandra') && ctx.databaseMigrationLoader,
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: [
-        // docker-compose files
-        'cassandra-migration.yml',
         // dockerfiles
         'cassandra/Cassandra-Migration.Dockerfile',
         // scripts
         'cassandra/scripts/autoMigrate.sh',
         'cassandra/scripts/execute-cql.sh',
       ],
-    },
-  ],
-  neo4jFiles: [
-    {
-      condition: ctx => ctx.dockerServices.includes('neo4j'),
-      path: TEMPLATES_DOCKER_DIR,
-      renameTo,
-      templates: ['neo4j.yml'],
     },
   ],
   cacheProvideFiles: [
@@ -113,16 +88,10 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
       templates: ['hazelcast-management-center.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices.includes('memcached'),
-      path: TEMPLATES_DOCKER_DIR,
-      renameTo,
-      templates: ['memcached.yml'],
-    },
-    {
       condition: ctx => ctx.dockerServices.includes('redis'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
-      templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
+      templates: ['redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
     },
   ],
   searchDiscoveryFiles: [
@@ -152,12 +121,6 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
   applicationFiles: [
     {
       path: TEMPLATES_DOCKER_DIR,
-      condition: ctx => ctx.dockerServices.includes('app') || ctx.backendTypeSpringBoot,
-      renameTo,
-      templates: ['app.yml'],
-    },
-    {
-      path: TEMPLATES_DOCKER_DIR,
       condition: ctx => ctx.backendTypeJavaAny,
       renameTo,
       templates: [
@@ -172,12 +135,6 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['sonar.yml', 'prometheus/prometheus.yml'],
-    },
-    {
-      condition: ctx => ctx.dockerServices.includes('elasticsearch'),
-      path: TEMPLATES_DOCKER_DIR,
-      renameTo,
-      templates: ['elasticsearch.yml'],
     },
     {
       condition: ctx => ctx.dockerServices.includes('kafka'),

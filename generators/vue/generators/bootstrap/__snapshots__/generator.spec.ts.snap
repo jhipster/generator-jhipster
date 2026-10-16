@@ -86,6 +86,7 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": Any<Object>,
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": Any<Array>,
   "dockerServicesDir": "src/main/docker/",

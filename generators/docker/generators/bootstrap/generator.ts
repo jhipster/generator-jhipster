@@ -25,6 +25,18 @@ import type {
   Source as DockerSource,
 } from '../../types.ts';
 
+import {
+  type DockerComposeApplication,
+  addCacheDockerComposeFiles,
+  addCassandraDockerComposeFiles,
+  addCouchbaseDockerComposeFiles,
+  addElasticsearchDockerComposeFiles,
+  addMongodbDockerComposeFiles,
+  addNeo4jDockerComposeFiles,
+  addPlatformDockerComposeDependencies,
+  addSqlDatabaseDockerComposeFiles,
+} from './internal/compose-services.ts';
+
 export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
   DockerApplication,
   DockerConfig,
@@ -61,5 +73,39 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
 
   get [BaseSimpleApplicationGenerator.PREPARING]() {
     return this.preparing;
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      // The services are added once every generator prepared the application, the backend having added its `app` file.
+      sqlDatabase({ application }) {
+        addSqlDatabaseDockerComposeFiles(application as DockerComposeApplication);
+      },
+      mongodb({ application }) {
+        addMongodbDockerComposeFiles(application as DockerComposeApplication);
+      },
+      cassandra({ application }) {
+        addCassandraDockerComposeFiles(application as DockerComposeApplication);
+      },
+      couchbase({ application }) {
+        addCouchbaseDockerComposeFiles(application as DockerComposeApplication);
+      },
+      neo4j({ application }) {
+        addNeo4jDockerComposeFiles(application as DockerComposeApplication);
+      },
+      elasticsearch({ application }) {
+        addElasticsearchDockerComposeFiles(application as DockerComposeApplication);
+      },
+      cache({ application }) {
+        addCacheDockerComposeFiles(application as DockerComposeApplication);
+      },
+      platform({ application }) {
+        addPlatformDockerComposeDependencies(application as DockerComposeApplication);
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 }

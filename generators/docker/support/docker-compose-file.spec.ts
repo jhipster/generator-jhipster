@@ -19,7 +19,7 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import { createDockerComposeFile } from './docker-compose-file.ts';
+import { createDockerComposeFile, dockerComposeFileContent } from './docker-compose-file.ts';
 
 describe('generator - docker - docker-compose-file', () => {
   describe('createDockerComposeFile', () => {
@@ -35,6 +35,47 @@ name: jhipster
       expect(createDockerComposeFile('customService')).toMatchInlineSnapshot(`
 "# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: customService
+"
+`);
+    });
+  });
+
+  describe('dockerComposeFileContent', () => {
+    const file = {
+      comments: ['A comment of the file'],
+      name: 'jhipster',
+      services: { db: { environment: ['A=b'], healthcheck: { test: ['CMD', 'check'], retries: 10 } } },
+    };
+
+    it('should write the comments and the healthcheck command on one line', () => {
+      expect(dockerComposeFileContent(file)).toMatchInlineSnapshot(`
+"# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# A comment of the file
+name: jhipster
+services:
+  db:
+    environment:
+      - A=b
+    healthcheck:
+      test: [ 'CMD', 'check' ]
+      retries: 10
+"
+`);
+    });
+
+    it('should write the lists of the flowKeys on one line', () => {
+      expect(dockerComposeFileContent(file, { flowKeys: ['environment'] })).toMatchInlineSnapshot(`
+"# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# A comment of the file
+name: jhipster
+services:
+  db:
+    environment: [ 'A=b' ]
+    healthcheck:
+      test:
+        - CMD
+        - check
+      retries: 10
 "
 `);
     });

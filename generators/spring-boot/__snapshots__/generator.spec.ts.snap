@@ -225,6 +225,66 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
+  "dockerComposeFiles": {
+    "app": {
+      "name": "jhipster",
+      "services": {
+        "app": {
+          "depends_on": {
+            "postgresql": {
+              "condition": "service_healthy",
+            },
+          },
+          "environment": [
+            "_JAVA_OPTIONS=-Xmx512m -Xms256m",
+            "SPRING_PROFILES_ACTIVE=prod,api-docs,secret-samples",
+            "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true",
+            "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/jhipster",
+            "SPRING_DATASOURCE_USERNAME=jhipster",
+            "SPRING_DATASOURCE_PASSWORD=",
+            "SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 40,
+            "test": [
+              "CMD-SHELL",
+              "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3'",
+            ],
+            "timeout": "5s",
+          },
+          "image": "jhipster",
+          "ports": [
+            "127.0.0.1:8080:8080",
+          ],
+        },
+      },
+    },
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": "postgresql-placeholder",
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",
@@ -1108,6 +1168,72 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID": "web_app",
     "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET": "web_app",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
+  },
+  "dockerComposeFiles": {
+    "app": {
+      "name": "jhipster",
+      "services": {
+        "app": {
+          "depends_on": {
+            "keycloak": {
+              "condition": "service_healthy",
+            },
+            "postgresql": {
+              "condition": "service_healthy",
+            },
+          },
+          "environment": [
+            "_JAVA_OPTIONS=-Xmx512m -Xms256m",
+            "SPRING_PROFILES_ACTIVE=prod,api-docs,secret-samples",
+            "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true",
+            "SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster",
+            "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app",
+            "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app",
+            "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/jhipster",
+            "SPRING_DATASOURCE_USERNAME=jhipster",
+            "SPRING_DATASOURCE_PASSWORD=",
+            "SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 40,
+            "test": [
+              "CMD-SHELL",
+              "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3'",
+            ],
+            "timeout": "5s",
+          },
+          "image": "jhipster",
+          "ports": [
+            "127.0.0.1:8080:8080",
+          ],
+        },
+      },
+    },
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": "postgresql-placeholder",
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
   },
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",

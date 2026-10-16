@@ -125,6 +125,32 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
+  "dockerComposeFiles": {
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": undefined,
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -961,6 +987,32 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
+  "dockerComposeFiles": {
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": undefined,
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -1858,6 +1910,32 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "devServerPort": 3000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
+  "dockerComposeFiles": {
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": undefined,
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -2707,6 +2785,32 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "devServerPort": 3000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
+  "dockerComposeFiles": {
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": undefined,
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -3613,6 +3717,32 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
+  "dockerComposeFiles": {
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": undefined,
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -4595,6 +4725,32 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
+  "dockerComposeFiles": {
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": undefined,
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -5407,6 +5563,32 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
+  "dockerComposeFiles": {
+    "postgresql": {
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": undefined,
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
