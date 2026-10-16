@@ -38,7 +38,7 @@ import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 
-import { allNewApplications, resolveJDLDefinitions } from './internal/index.ts';
+import { allNewApplications, resolveJDLDefinitions, resolveJDLDefinitionsOf } from './internal/index.ts';
 import type { Config as JdlConfig, Options as JdlOptions } from './types.ts';
 
 /**
@@ -148,6 +148,8 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
         }
       },
       async parseJDL() {
+        // The blueprints option, which the base command declares.
+        const { blueprints } = this.options as { blueprints?: string };
         const importer = createImporterFromContent(
           this.jdlContents.join('\n'),
           {
@@ -156,7 +158,15 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
             // Deployment configuration is written through the in-memory file system, like the application one.
             skipDeploymentFileGeneration: true,
           },
-          resolveJDLDefinitions(this.options),
+          // The cli passes the definitions; run through the environment with blueprints, they are built as the cli does.
+          resolveJDLDefinitions(this.options) ??
+            (blueprints ?
+              resolveJDLDefinitionsOf({
+                blueprints,
+                entrypointGenerator: this.entrypointGenerator,
+                getGeneratorMeta: namespace => this.env.getGeneratorMeta(namespace),
+              })
+            : undefined),
         );
 
         const importState = importer.import();

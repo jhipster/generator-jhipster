@@ -31,8 +31,8 @@ import {
 import type { CliCommandOptions } from './types.ts';
 
 export default class JHipsterCommand extends Command {
-  configs: JHipsterConfigs = {};
-  blueprintConfigs: JHipsterConfigs = {};
+  /** The configs of the generators of the command, the blueprint ones last, as resolved by resolveCommand. */
+  commandsConfigs: JHipsterConfigs = {};
   generatorNamespaces: string[] = [];
   _lazyBuildCommandCallBack?: (this: JHipsterCommand, args?: string | string[]) => Promise<void>;
   private _excessArgumentsCallback?: (this: JHipsterCommand, receivedArgs: string[]) => void;
@@ -152,7 +152,6 @@ export default class JHipsterCommand extends Command {
   }
 
   addJHipsterConfigs(configs: JHipsterConfigs = {}, blueprintOptionDescription?: string): this {
-    Object.assign(blueprintOptionDescription ? this.blueprintConfigs : this.configs, configs);
     Object.entries(configs).forEach(([name, config]) => {
       const cliOption = convertConfigToCliOption(name, config);
       if (cliOption) {

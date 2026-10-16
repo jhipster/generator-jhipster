@@ -29,7 +29,7 @@ import BaseGenerator from '../base/index.ts';
 import Generator from './index.ts';
 
 import { getCommandHelpOutput, shouldSupportFeatures } from '#test-support';
-import { defaultHelpers as helpers, result as runResult } from '#testing';
+import { createBlueprintFiles, defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -193,6 +193,41 @@ describe(`generator - ${generator}`, () => {
       it('should read it where it is', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_APP);
         runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'outside' } });
+      });
+    });
+
+    describe('run through the environment, with a blueprint declaring an application option', () => {
+      // A blueprint app generator declaring an option of the jdl, which only the configs of its command know.
+      const blueprintFiles = createBlueprintFiles('generator-jhipster-foo', {
+        generator: 'app',
+        generatorContent: `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {};
+};
+export const command = { configs: { fooOption: { jdl: { type: 'string', tokenType: 'NAME' }, scope: 'storage' } } };
+`,
+      });
+      const inline = 'application { config { baseName foo fooOption bar } }';
+
+      it('should accept the option of the blueprint', async () => {
+        await helpers
+          .runJHipster(generator)
+          .withFiles(blueprintFiles)
+          .withLookups({ localOnly: true })
+          .commitFiles()
+          .withOptions({ jsonOnly: true, blueprints: 'foo', inline });
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { fooOption: 'bar' } });
+      });
+
+      it('should refuse the option without the blueprint', async () => {
+        await expect(
+          helpers
+            .runJHipster(generator)
+            .withFiles(blueprintFiles)
+            .withLookups({ localOnly: true })
+            .commitFiles()
+            .withOptions({ jsonOnly: true, inline }),
+        ).rejects.toThrow(/Unknown application option: fooOption/);
       });
     });
 
@@ -456,8 +491,10 @@ describe(`generator - ${generator}`, () => {
             adapter.newAdapter = () => adapter;
           })
           .withOptions({
-            // The cli gives the blueprints of the current folder .yo-rc.json as the blueprints option too.
+            // The cli gives the blueprints of the current folder .yo-rc.json as the blueprints option too, and the jdl
+            // definitions.
             blueprints: 'foo',
+            jdlDefinitions: getDefaultJDLDefinitions(),
             inline:
               'application { config { blueprints [bar] } entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
             createEnvBuilder,
@@ -490,6 +527,7 @@ describe(`generator - ${generator}`, () => {
           .withOptions({
             blueprints: 'foo',
             globalBlueprints: 'baz',
+            jdlDefinitions: getDefaultJDLDefinitions(),
             inline:
               'application { config { blueprints [bar] } entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
             createEnvBuilder,

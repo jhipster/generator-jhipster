@@ -19,6 +19,7 @@
 
 import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
+import { createRequire } from 'node:module';
 import { isAbsolute, join, relative } from 'node:path';
 import { mock } from 'node:test';
 import { pathToFileURL } from 'node:url';
@@ -371,12 +372,13 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
     });
   }
 
-  // Register importModule to have actual command for command lookups.
+  // Register importModule and requireModule to have actual command for command lookups.
   override withMockedGenerators(generators: string[]): this {
     return super.withMockedGenerators(generators).onEnvironment(env => {
       for (const gen of generators.filter(gen => gen.startsWith('jhipster:'))) {
         const meta = (env as any).store.getMeta(gen);
         meta!.importModule = () => import(pathToFileURL(getGenerator(gen)).href);
+        meta!.requireModule = () => createRequire(import.meta.url)(getGenerator(gen));
       }
     });
   }
