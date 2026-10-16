@@ -40,7 +40,7 @@ export type DockerComposeServiceConfig = {
   [key: string]: unknown;
 };
 
-/** A docker compose file of an application: the comments written at its beginning, its project name and its services. */
+/** A docker compose file of an application: its comments, written at its beginning after the one of every file, its project name and its services. */
 export type DockerComposeFile = {
   comments?: string[];
   name: string;

@@ -2562,9 +2562,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -3663,9 +3660,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -4985,9 +4979,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -6094,9 +6085,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -7350,9 +7338,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -8857,9 +8842,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -9928,9 +9910,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {

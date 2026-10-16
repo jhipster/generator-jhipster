@@ -20,15 +20,17 @@ import { stringify } from 'yaml';
 
 import type { DockerComposeFile, DockerComposeService } from '../types.ts';
 
+/** The comment every docker compose file of an application starts with. */
+export const DOCKER_COMPOSE_FILE_COMMENT =
+  "This configuration is intended for development purpose, it's **your** responsibility to harden it for production";
+
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.
  *
  * @param {string} name Docker compose v2 project name
  * @returns {import('../../generators/generator-base.js').EditFileCallback}
  */
-export const createDockerComposeFile = (
-  name = 'jhipster',
-) => `# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+export const createDockerComposeFile = (name = 'jhipster') => `# ${DOCKER_COMPOSE_FILE_COMMENT}
 name: ${name}
 `;
 
@@ -47,28 +49,19 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
   ),
 });
 
-/** The comment of the docker compose files of an application. */
-export const DOCKER_COMPOSE_FILE_COMMENT =
-  "This configuration is intended for development purpose, it's **your** responsibility to harden it for production";
-
-/** The content of a docker compose file: its comments, then its project name and its services. */
+/** The content of a docker compose file: the comment of every file and its own comments, then its project name and its services. */
 export const dockerComposeFileContent = ({ comments = [], name, services }: DockerComposeFile): string =>
-  `${comments.map(comment => `# ${comment}\n`).join('')}${stringify({ name, services }, { lineWidth: 0, aliasDuplicateObjects: false })}`;
+  `${[DOCKER_COMPOSE_FILE_COMMENT, ...comments].map(comment => `# ${comment}\n`).join('')}${stringify({ name, services }, { lineWidth: 0, aliasDuplicateObjects: false })}`;
 
 /** The ports of a service published on the loopback address only. */
 export const dockerComposeLocalPorts = (...ports: number[]): string[] => ports.map(port => `127.0.0.1:${port}:${port}`);
 
-/** Adds a docker compose file of the application, named after its base name, with the comment of the files. */
+/** Adds a docker compose file of the application, named after its base name. */
 export const addDockerComposeFile = (
   application: { baseName: string; dockerComposeFiles: Record<string, DockerComposeFile> },
   fileName: string,
   services: DockerComposeFile['services'],
-): DockerComposeFile =>
-  (application.dockerComposeFiles[fileName] = {
-    comments: [DOCKER_COMPOSE_FILE_COMMENT],
-    name: application.baseName.toLowerCase(),
-    services,
-  });
+): DockerComposeFile => (application.dockerComposeFiles[fileName] = { name: application.baseName.toLowerCase(), services });
 
 /** Makes the application service of the `app` file wait for a service, healthy or completed. */
 export const addDockerComposeApplicationDependency = (

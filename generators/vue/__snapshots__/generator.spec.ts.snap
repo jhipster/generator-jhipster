@@ -127,9 +127,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -992,9 +989,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -1918,9 +1912,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -2796,9 +2787,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -3731,9 +3719,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -4742,9 +4727,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -5583,9 +5565,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {

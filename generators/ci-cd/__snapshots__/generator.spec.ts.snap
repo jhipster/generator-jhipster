@@ -169,9 +169,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   },
   "dockerComposeFiles": {
     "app": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "app": {
@@ -206,9 +203,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
       },
     },
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {

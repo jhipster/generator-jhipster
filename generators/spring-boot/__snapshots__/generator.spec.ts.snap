@@ -227,9 +227,6 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   },
   "dockerComposeFiles": {
     "app": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "app": {
@@ -264,9 +261,6 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
       },
     },
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
@@ -1177,9 +1171,6 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   },
   "dockerComposeFiles": {
     "app": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "app": {
@@ -1220,9 +1211,6 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
       },
     },
     "postgresql": {
-      "comments": [
-        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
-      ],
       "name": "jhipster",
       "services": {
         "postgresql": {
