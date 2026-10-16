@@ -24,6 +24,9 @@ import type { Application as ServerApplication, Entity as ServerEntity } from '.
  * Writes the messages of the server, the e-mails of the accounts among them, to the `serverI18nDir` of the application:
  * `messages.properties`, and a file by language with the translation enabled. The test copies go to `serverI18nTestDir`
  * when the application has one.
+ *
+ * The languages are the `languagesToGenerate` of the application, the native one only unless the languages generator is
+ * composed: a backend without a client composes it when the translation is enabled, like spring-boot does.
  */
 export default class ServerI18NGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication> {
   async beforeQueue() {
