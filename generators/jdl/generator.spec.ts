@@ -510,6 +510,54 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('over the configuration written before, in memory', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withFiles({
+          '.yo-rc.json': {
+            'generator-jhipster': {
+              baseName: 'jhipster',
+              creationTimestamp: 1577836800000,
+              lastLiquibaseTimestamp: 1577836860000,
+              languages: ['en', 'fr'],
+              testFrameworks: ['cypress'],
+            },
+          },
+          '.jhipster/Foo.json': {
+            name: 'Foo',
+            annotations: { changelogDate: '20200101000100', custom: 'kept' },
+            fields: [{ fieldName: 'removed', fieldType: 'String' }],
+            pagination: 'pagination',
+          },
+        })
+        .withOptions({
+          jsonOnly: true,
+          inline: 'application { config { baseName jhipster languages [pt] } entities Foo }\nentity Foo { name String }',
+        });
+    });
+
+    it('should change what the jdl states and keep the rest of the configuration', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', {
+        'generator-jhipster': {
+          creationTimestamp: 1577836800000,
+          lastLiquibaseTimestamp: 1577836860000,
+          languages: ['pt'],
+          testFrameworks: ['cypress'],
+        },
+      });
+    });
+
+    it('should change what the jdl states and keep the rest of the entity, its changelog date included', () => {
+      const entity = JSON.parse(runResult.getSnapshot()['.jhipster/Foo.json'].contents!);
+      expect(entity).toMatchObject({
+        annotations: { changelogDate: '20200101000100', custom: 'kept' },
+        pagination: 'pagination',
+      });
+      expect(entity.fields.map(({ fieldName }: { fieldName: string }) => fieldName)).toEqual(['name']);
+    });
+  });
+
   describe('--json-only option', () => {
     describe('for entities only jdl', () => {
       describe('with valid parameters', () => {

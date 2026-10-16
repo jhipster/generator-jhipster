@@ -30,7 +30,7 @@ import { CLI_NAME } from '../../cli/utils.ts';
 import type { YoRcFileContent } from '../../lib/constants/yeoman.ts';
 import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
-import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
+import { mergeConfigContent, mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import BaseCoreGenerator from '../base-core/index.ts';
 import { optionsForAnotherProject } from '../base-core/internal/index.ts';
@@ -363,7 +363,8 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
       const fs: MemFsEditor = sharedFs ? createMemFsEditor(sharedFs) : this.fs;
       if (config) {
         const configFile = this.destinationPath(`${appPath}.yo-rc.json`);
-        const oldConfig: YoRcFileContent = fs.readJSON(configFile, {}) as YoRcFileContent;
+        // The configuration written before, in memory or on the disk, is read from the file system of the generation.
+        const oldConfig: YoRcFileContent = this.fs.readJSON(configFile, {}) as YoRcFileContent;
         if (Array.isArray(config.blueprints)) {
           config = {
             ...config,
@@ -380,8 +381,9 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
       }
       for (const entity of entities) {
         const configFile = this.destinationPath(`${appPath}${JHIPSTER_CONFIG_DIR}/${upperFirst(entity.name)}.json`);
-        const oldConfig: any = fs.readJSON(configFile, {});
-        fs.writeJSON(configFile, { ...oldConfig, ...entity });
+        // An entity written before keeps what the jdl does not state, like its changelog date.
+        const oldConfig: any = this.fs.readJSON(configFile, {});
+        fs.writeJSON(configFile, mergeConfigContent(oldConfig, entity));
       }
     }
   }
