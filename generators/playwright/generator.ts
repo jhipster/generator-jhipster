@@ -21,6 +21,7 @@ import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import { generateTestEntity } from '../client/support/index.ts';
+import { WAIT_TIMEOUT, e2eScriptsContext } from '../e2e/generators/common/internal/index.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
 import { playwrightEntityFiles, playwrightFiles } from './files.ts';
@@ -32,8 +33,6 @@ import type {
   Field as PlaywrightField,
   Options as PlaywrightOptions,
 } from './types.ts';
-
-const WAIT_TIMEOUT = 3 * 60000;
 
 export default class PlaywrightGenerator extends BaseApplicationGenerator<PlaywrightEntity, PlaywrightApplication, PlaywrightConfig> {
   angularSchematic = false;
@@ -50,6 +49,7 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('client');
       await this.dependsOnJHipster('javascript-simple-application');
+      await this.dependsOnJHipster('jhipster:e2e:common');
     }
   }
 
@@ -69,18 +69,8 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
         });
       },
       npmScripts({ application }) {
-        const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
         this.angularSchematic = Boolean(application.clientFrameworkAngular);
-        // The native federation dev server never reports its url to `ng e2e` (the builder only yields on rebuilds),
-        // so microfrontend applications start the dev server concurrently and wait for its port instead.
-        const ngE2e = this.angularSchematic && !application.microfrontend;
-        // The Angular dev server listens on localhost only (which may resolve to ::1), Vite listens on every address.
-        const devServerHost = this.angularSchematic ? 'localhost' : '127.0.0.1';
-        // The client scripts run at the root from the client workspace when it has one.
-        const { clientRootDir } = application;
-        const clientRun = (script: string) => `npm run ${clientRootDir ? `-w ${clientRootDir} ` : ''}${script}`;
-        const clientStart = clientRootDir ? `"${clientRun('start')}"` : 'npm:start';
-        const ng = clientRootDir ? `npm exec -w ${clientRootDir} -- ng` : 'ng';
+        const { devServerPortE2e, ngE2e, devServerHost, clientRun, clientStart, ng } = e2eScriptsContext(application);
 
         Object.assign(application.clientPackageJsonScripts, {
           // Cypress downloads its binary from its own npm postinstall; playwright needs the browsers to be
@@ -102,24 +92,11 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
         // Scripts that handle server and client concurrently should be added to the root package.json
         Object.assign(application.packageJsonScripts, {
           'ci:e2e:run': `${e2eTlsEnv}concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless`,
-          'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
-          'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
           'e2e:devserver':
             ngE2e ?
               `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "${clientRun('playwright:install')} && npm run ci:server:await --if-present && ${ng} e2e --configuration run"`
             : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start ${clientStart} "wait-on -t ${WAIT_TIMEOUT} http-get://${devServerHost}:${devServerPortE2e} && E2E_BASE_URL=http://localhost:${devServerPortE2e} npm run e2e:headless"`,
         });
-
-        Object.assign(application.packageJsonScripts, {
-          'pree2e:headless': 'npm run ci:server:await --if-present',
-        });
-
-        if (application.clientRootDir) {
-          // Add scripts forwarding to client package.json
-          for (const script of ['e2e:headless'].filter(script => application.clientPackageJsonScripts[script])) {
-            application.packageJsonScripts[script] = `npm run -w ${application.clientRootDir} ${script}`;
-          }
-        }
       },
     });
   }

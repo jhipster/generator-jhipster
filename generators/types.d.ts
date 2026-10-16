@@ -83,6 +83,7 @@ type GeneratorsByNamespace = {
   'docker-compose': import('./docker-compose/generator.ts').default;
   'jhipster:docker-compose': import('./docker-compose/generator.ts').default;
   'jhipster:docker:bootstrap': import('./docker/generators/bootstrap/generator.ts').default;
+  'jhipster:e2e:common': import('./e2e/generators/common/generator.ts').default;
   entities: import('./entities/generator.ts').default;
   'jhipster:entities': import('./entities/generator.ts').default;
   entity: import('./entity/generator.ts').default;

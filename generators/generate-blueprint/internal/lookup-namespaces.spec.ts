@@ -59,6 +59,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "docker",
   "docker-compose",
   "docker:bootstrap",
+  "e2e:common",
   "entities",
   "entity",
   "export-jdl",
