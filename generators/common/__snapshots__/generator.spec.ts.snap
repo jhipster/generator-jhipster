@@ -156,6 +156,8 @@ This application was generated using JHipster JHIPSTER_VERSION, you can find doc
   "type": "module",
   "dependencies": {},
   "devDependencies": {
+    "concurrently": "CONCURRENTLY_VERSION",
+    "wait-on": "WAIT_ON_VERSION",
     "generator-jhipster": "JHIPSTER_VERSION",
     "prettier": "PRETTIER_VERSION",
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",

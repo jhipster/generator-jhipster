@@ -221,6 +221,15 @@ export default class CommonGenerator extends BaseApplicationGenerator<
           packageJsonConfigStorage.default_environment = application.defaultEnvironment;
         }
       },
+      scriptsDependencies({ application }) {
+        // The scripts of the root package.json run the client, the server and the e2e tests together, and wait for the server.
+        this.packageJson.merge({
+          devDependencies: {
+            concurrently: application.nodeDependencies.concurrently,
+            'wait-on': application.nodeDependencies['wait-on'],
+          },
+        });
+      },
       addJHipsterDependencies({ application }) {
         if (application.skipJhipsterDependencies) return;
 
