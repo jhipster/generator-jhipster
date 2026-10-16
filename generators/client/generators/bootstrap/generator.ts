@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { fieldIsEnum } from '../../../base-application/support/field-utils.ts';
 import { mutateApplication } from '../../application.ts';
 import clientCommand from '../../command.ts';
 import { mutateEntity, mutateField } from '../../entity.ts';
@@ -80,6 +81,10 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
             microserviceName && application.microfrontend && application.applicationTypeMicroservice ?
               `${microserviceName.toLowerCase()}/${entityFileName}`
             : entityFileName,
+          enumTypeFields: ({ fields }) => {
+            const enumFields = fields.filter(field => fieldIsEnum(field.fieldType) && !field.clientConstantsAsValues);
+            return enumFields.filter((field, index) => enumFields.findIndex(({ fieldType }) => fieldType === field.fieldType) === index);
+          },
         });
       },
     });

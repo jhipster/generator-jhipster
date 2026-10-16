@@ -2857,6 +2857,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
         "defaultValue": "en",
         "entity": Any<Object>,
         "enumFileName": "languages",
+        "enumInstance": "languages",
         "enumValues": Any<Array>,
         "fieldApiDescription": undefined,
         "fieldInJavaBeanMethod": "LangKey",

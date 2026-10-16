@@ -19,7 +19,7 @@
 import { inspect } from 'node:util';
 
 import { transform } from '@yeoman/transform';
-import { defaultsDeep, get, merge, template } from 'lodash-es';
+import { defaultsDeep, get, has, merge } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
@@ -116,7 +116,13 @@ export default class TranslationData {
     if (translatedValue.includes('{{ login }}') && !data.login) {
       data.login = data.id;
     }
-    const compiledTemplate = template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
-    return compiledTemplate(data);
+    // Replaces each {{ name }} by its value, the translation itself is never evaluated.
+    return translatedValue.replace(/{{\s*([\w.]+)\s*}}/g, (_placeholder: string, name: string) => {
+      if (!has(data, name)) {
+        throw new Error(`Missing the value of ${name} for the translation ${translationKey}`);
+      }
+      const value = get(data, name);
+      return value === null || value === undefined ? '' : String(value);
+    });
   }
 }

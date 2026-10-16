@@ -2857,6 +2857,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
         "defaultValue": "en",
         "entity": Any<Object>,
         "enumFileName": "languages",
+        "enumInstance": "languages",
         "enumValues": Any<Array>,
         "fieldApiDescription": undefined,
         "fieldInJavaBeanMethod": "LangKey",

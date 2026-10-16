@@ -2168,6 +2168,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "defaultValue": "en",
         "entity": Any<Object>,
         "enumFileName": "languages",
+        "enumInstance": "languages",
         "enumValues": Any<Array>,
         "fieldApiDescription": undefined,
         "fieldIsEnum": true,
