@@ -363,8 +363,7 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
       const fs: MemFsEditor = sharedFs ? createMemFsEditor(sharedFs) : this.fs;
       if (config) {
         const configFile = this.destinationPath(`${appPath}.yo-rc.json`);
-        // The configuration written before, in memory or on the disk, is read from the file system of the generation.
-        const oldConfig: YoRcFileContent = this.fs.readJSON(configFile, {}) as YoRcFileContent;
+        const oldConfig: YoRcFileContent = fs.readJSON(configFile, {}) as YoRcFileContent;
         if (Array.isArray(config.blueprints)) {
           config = {
             ...config,
@@ -381,8 +380,8 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
       }
       for (const entity of entities) {
         const configFile = this.destinationPath(`${appPath}${JHIPSTER_CONFIG_DIR}/${upperFirst(entity.name)}.json`);
-        // An entity written before keeps what the jdl does not state, like its changelog date.
-        const oldConfig: any = this.fs.readJSON(configFile, {});
+        // An entity written before, in memory or on the disk, keeps what the jdl does not state, like its changelog date.
+        const oldConfig: any = fs.readJSON(configFile, {});
         fs.writeJSON(configFile, mergeConfigContent(oldConfig, entity));
       }
     }
