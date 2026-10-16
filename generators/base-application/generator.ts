@@ -27,6 +27,7 @@ import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
+import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.ts';
 import type {
@@ -256,13 +257,18 @@ export default class BaseApplicationGenerator<
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntities(): { name: string; definition: Entity }[] {
-    function isBefore(
-      e1: { definition: { annotations?: { changelogDate?: number; incrementalChangelogDate?: number } } },
-      e2: { definition: { annotations?: { changelogDate?: number; incrementalChangelogDate?: number } } },
-    ): number {
-      const date = ({ definition: { annotations } }: typeof e1) => annotations?.incrementalChangelogDate ?? annotations?.changelogDate ?? 0;
-      return date(e1) - date(e2);
-    }
+    // An entity without changelog date is ordered by the one it gets: a built-in entity the one of the creation timestamp,
+    // another one the next timestamp, after the others. So the order is the same at each generation.
+    const builtInDates: Record<string, string> = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp);
+    const date = ({
+      name,
+      definition: { annotations },
+    }: {
+      name: string;
+      definition: { annotations?: { changelogDate?: number | string; incrementalChangelogDate?: number | string } };
+    }): number => Number(annotations?.incrementalChangelogDate ?? annotations?.changelogDate ?? builtInDates[name] ?? Infinity);
+    // Two entities without date, both after the others, compare as equal (Infinity - Infinity is NaN).
+    const isBefore = (e1: Parameters<typeof date>[0], e2: Parameters<typeof date>[0]): number => date(e1) - date(e2) || 0;
 
     const configDir = this.getEntitiesConfigPath();
 

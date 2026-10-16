@@ -24,7 +24,7 @@ import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import Generator from './index.ts';
 
 import { shouldSupportFeatures } from '#test-support';
-import { defaultHelpers as helpers } from '#testing';
+import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -404,6 +404,35 @@ describe(`generator - ${generator}`, () => {
 
       expect(preparing).toHaveBeenCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
       expect(postWriting).toHaveBeenCalledWith(applicationSourceArg);
+    });
+  });
+
+  describe('entities order', () => {
+    class OrderGenerator extends Generator {
+      async beforeQueue() {
+        await this.dependsOnBootstrap('app');
+      }
+
+      get [Generator.END]() {
+        return { end() {} };
+      }
+    }
+
+    before(async () => {
+      await helpers
+        .run(OrderGenerator)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        // UserManagement gets the changelog date of the creation timestamp plus one minute: 20200804035352.
+        .withJHipsterConfig({ creationTimestamp: 1596513172471 }, [
+          { name: 'Bar' },
+          { name: 'Foo', annotations: { changelogDate: '20200804035352' } },
+          { name: 'UserManagement' },
+        ]);
+    });
+
+    it('orders an entity without changelog date by the date it gets, so that a regeneration keeps the order', () => {
+      const yoRc = runResult.fs.readJSON(`${runResult.cwd}/.yo-rc.json`) as { 'generator-jhipster': { entities: string[] } };
+      expect(yoRc['generator-jhipster'].entities).toEqual(['Foo', 'UserManagement', 'Bar']);
     });
   });
 
