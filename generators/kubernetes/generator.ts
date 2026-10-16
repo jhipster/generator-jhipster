@@ -127,13 +127,9 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
           for (const app of applications) {
             let runCommand;
             if (app.buildTool === MAVEN) {
-              runCommand = `./mvnw -ntp -Pprod verify jib:build${
-                process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''
-              } -Djib.to.image=${app.targetImageName}`;
+              runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${app.targetImageName}`;
             } else {
-              runCommand = `./gradlew bootJar -Pprod jib${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''} -Djib.to.image=${
-                app.targetImageName
-              }`;
+              runCommand = `./gradlew bootJar -Pprod jib -Djib.to.image=${app.targetImageName}`;
             }
             this.log.verboseInfo(`  ${chalk.cyan(runCommand)} in ${this.workspacePath(app.appFolder!)}`);
           }
