@@ -25,6 +25,9 @@ import type { Application as ServerApplication, Entity as ServerEntity } from '.
  * `messages.properties`, and a file by language with the translation enabled. The test copies go to `serverI18nTestDir`
  * when the application has one.
  *
+ * The file of each language is named by the locale suffix of Java (`messages_pt_BR.properties`), or by the language tag
+ * (`messages_pt-br.properties`) with the `serverI18nFileNaming` of the application set to `languageTag`.
+ *
  * The languages are the `languagesToGenerate` of the application, the native one only unless the languages generator is
  * composed: a backend without a client composes it when the translation is enabled, like spring-boot does.
  */
@@ -41,13 +44,27 @@ export default class ServerI18NGenerator extends BaseApplicationGenerator<Server
   get writing() {
     return this.asWritingTaskGroup({
       async writeMessages({ application }) {
-        const { serverI18nDir, serverI18nTestDir, enableTranslation, skipUserManagement } = application;
+        const {
+          serverI18nDir,
+          serverI18nTestDir,
+          serverI18nFileNaming = 'javaLocale',
+          enableTranslation,
+          skipUserManagement,
+        } = application;
         if (!serverI18nDir) return;
         const { languagesToGenerateDefinition = [application.nativeLanguageDefinition] } = application;
-        const suffixes =
+        // The templates are named by the locale suffix of Java, the files by the naming of the application.
+        const languages =
           enableTranslation ?
             languagesToGenerateDefinition.flatMap(language =>
-              language?.javaLocaleMessageSourceSuffix ? [language.javaLocaleMessageSourceSuffix] : [],
+              language?.javaLocaleMessageSourceSuffix ?
+                [
+                  {
+                    suffix: language.javaLocaleMessageSourceSuffix,
+                    name: serverI18nFileNaming === 'languageTag' ? language.languageTag : language.javaLocaleMessageSourceSuffix,
+                  },
+                ]
+              : [],
             )
           : [];
         // The test copies have templates of their own.
@@ -56,12 +73,14 @@ export default class ServerI18NGenerator extends BaseApplicationGenerator<Server
           renameTo: () => `${test ? serverI18nTestDir : serverI18nDir}${destination}`,
           templates: [`i18n/messages_${suffix}.properties`],
         });
+        const languageFile = ({ suffix, name }: { suffix: string; name: string }, test = false) =>
+          file(suffix, { test, destination: `messages_${name}.properties` });
         await this.writeFiles({
           blocks: [
             file('en', { destination: 'messages.properties' }),
-            ...suffixes.map(suffix => file(suffix)),
+            ...languages.map(language => languageFile(language)),
             ...(serverI18nTestDir ?
-              [file('en', { test: true }), ...(skipUserManagement ? [] : suffixes.map(suffix => file(suffix, { test: true })))]
+              [file('en', { test: true }), ...(skipUserManagement ? [] : languages.map(language => languageFile(language, true)))]
             : []),
           ],
           context: application,

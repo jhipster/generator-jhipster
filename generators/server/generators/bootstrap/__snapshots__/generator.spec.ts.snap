@@ -227,6 +227,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "searchEngineElasticsearch": false,
   "searchEngineNo": true,
   "serverI18nDir": "src/main/resources/i18n/",
+  "serverI18nFileNaming": "javaLocale",
   "serverI18nTestDir": "src/test/resources/i18n/",
   "serverPort": 8080,
   "serverTestFrameworks": undefined,

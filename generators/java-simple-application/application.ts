@@ -73,6 +73,11 @@ export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
   /** The folder of the messages of the server, and of their test copies. */
   serverI18nDir: string;
   serverI18nTestDir: string;
+  /**
+   * How the file of the messages of each language is named: by the locale suffix of Java (`messages_pt_BR.properties`), which
+   * its message source resolves, or by the language tag (`messages_pt-br.properties`), the one of the client.
+   */
+  serverI18nFileNaming: 'javaLocale' | 'languageTag';
 
   javaPackageSrcDir: string;
   javaPackageTestDir: string;
@@ -141,6 +146,7 @@ export const mutateApplicationPreparing = {
   srcTestJavascript: CLIENT_TEST_SRC_DIR,
   serverI18nDir: ({ srcMainResources }) => `${srcMainResources}i18n/`,
   serverI18nTestDir: ({ srcTestResources }) => `${srcTestResources}i18n/`,
+  serverI18nFileNaming: 'javaLocale',
 
   javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
   javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
