@@ -43,4 +43,27 @@ describe(`generator - ${generator}`, () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('with the files named by the language tag', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withSharedApplication({
+          serverI18nDir: 'server/src/i18n/',
+          serverI18nFileNaming: 'languageTag',
+          languagesToGenerate: ['en', 'pt-br', 'zh-cn'],
+        })
+        .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'en', languages: ['en', 'pt-br', 'zh-cn'] });
+    });
+
+    it('should name the file of each language by its language tag', () => {
+      result.assertFile([
+        'server/src/i18n/messages.properties',
+        'server/src/i18n/messages_pt-br.properties',
+        'server/src/i18n/messages_zh-cn.properties',
+      ]);
+      result.assertNoFile(['server/src/i18n/messages_pt_BR.properties', 'server/src/i18n/messages_zh_CN.properties']);
+    });
+  });
 });
