@@ -95,6 +95,13 @@ const command = {
       },
       scope: 'none',
     },
+    reproducibleSecrets: {
+      description: 'Derive the generated secrets (jwtSecretKey, rememberMeKey, development KeyStore) from the creation timestamp',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'none',
+    },
     ignoreNeedlesError: {
       description: 'Ignore needles failures',
       cli: {
