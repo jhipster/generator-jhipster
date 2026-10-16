@@ -278,10 +278,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
-        const devDependencies = packageJsonStorage.createStorage('devDependencies');
-        devDependencies.set('wait-on', application.nodeDependencies['wait-on']);
-        devDependencies.set('concurrently', application.nodeDependencies.concurrently);
-
         if (application.clientFrameworkReact) {
           scriptsStorage.set('ci:frontend:test', 'npm run webapp:build:$npm_package_config_default_environment && npm run test');
         } else {
