@@ -125,6 +125,35 @@ describe(`generator - ${generator}`, () => {
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
       });
     });
+    describe('regenerating the entities with --force-git', () => {
+      before(async () => {
+        await helpers.runJHipster('app').withOptions({ skipGit: false });
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false, forceGit: true });
+      });
+      it('should commit to the existing repository', async () => {
+        const git = runResult.generator.createSimpleGit();
+        await expect(git.log()).resolves.toMatchObject({ total: 2 });
+      });
+    });
+    describe('regenerating the entities without --force-git', () => {
+      before(async () => {
+        await helpers.runJHipster('app').withOptions({ skipGit: false });
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false });
+      });
+      it('should not commit', async () => {
+        const git = runResult.generator.createSimpleGit();
+        await expect(git.log()).resolves.toMatchObject({ total: 1 });
+      });
+    });
+    describe('regenerating the entities outside a repository', () => {
+      before(async () => {
+        await helpers.runJHipster('app');
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false });
+      });
+      it('should not create .git', async () => {
+        await expect(access(resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
+      });
+    });
     describe('regenerating with --force-git', () => {
       before(async () => {
         await helpers.runJHipster(generator).withOptions({ skipGit: false });
