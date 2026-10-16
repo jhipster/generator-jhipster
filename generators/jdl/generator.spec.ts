@@ -89,6 +89,26 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('with ignoreApplication false over an application', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ baseName: 'jhipster' })
+          .withMockedGenerators(mockedGenerators)
+          .withOptions({ inline: 'entity Foo {}', ignoreApplication: false });
+      });
+
+      it('should compose with app instead of entities', () => {
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
+      });
+
+      it('should merge the entities into the application', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'jhipster', entities: ['Foo'] } });
+        runResult.assertFile('.jhipster/Foo.json');
+      });
+    });
+
     describe('with valid config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig().withMockedGenerators(mockedGenerators).withOptions({

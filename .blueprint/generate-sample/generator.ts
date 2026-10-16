@@ -129,19 +129,15 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         };
         // The jdl files of the project, the inline ones included, which the jdl generator concatenates.
         const jdlFiles = this.sampleFiles.map(file => file.destination).filter(destination => extname(destination) === '.jdl');
-        if (jdlFiles.length > 0 && this.sampleFiles.some(file => file.destination === '.yo-rc.json')) {
-          // The entities of an app sample written as jdl: with its .yo-rc.json, the jdl generator would generate the entities
-          // of an existing project alone.
-          await this.composeWithJHipster(GENERATOR_JDL, {
-            generatorArgs: jdlFiles,
-            generatorOptions: { ...generatorOptions, jsonOnly: true },
-          });
-          await this.composeWithJHipster(sample.defaultCommand, { generatorOptions });
-          return;
-        }
+        // The entities of an app sample written as jdl: the jdl generator merges them into the .yo-rc.json and generates the
+        // application with them, not the entities of an existing project alone.
+        const appWithJdlEntities = jdlFiles.length > 0 && sample.defaultCommand !== GENERATOR_JDL;
         await this.composeWithJHipster(jdlFiles.length > 0 ? GENERATOR_JDL : sample.defaultCommand, {
           generatorArgs: jdlFiles,
-          generatorOptions,
+          generatorOptions:
+            appWithJdlEntities ?
+              { ...generatorOptions, ignoreApplication: false, entrypointGenerator: sample.defaultCommand }
+            : generatorOptions,
         });
       },
       async updateVscodeWorkspace() {
