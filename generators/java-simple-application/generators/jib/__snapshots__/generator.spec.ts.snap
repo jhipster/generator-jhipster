@@ -35,9 +35,14 @@ exports[`generator - java-simple-application:jib with defaults options should ma
           "additionalContent": "<configuration>
     <from>
         <image>\${jib-maven-plugin.image}</image>
+        <!-- jib:dockerBuild builds the platform of the Docker daemon, jib:build pushes an image of both. -->
         <platforms>
             <platform>
-                <architecture>\${jib-maven-plugin.architecture}</architecture>
+                <architecture>amd64</architecture>
+                <os>linux</os>
+            </platform>
+            <platform>
+                <architecture>arm64</architecture>
                 <os>linux</os>
             </platform>
         </platforms>
@@ -105,10 +110,6 @@ exports[`generator - java-simple-application:jib with defaults options should ma
         {
           "property": "jib-maven-plugin.image",
           "value": "java-jre-placeholder",
-        },
-        {
-          "property": "jib-maven-plugin.architecture",
-          "value": "amd64",
         },
       ],
     },

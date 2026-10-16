@@ -55,6 +55,24 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with applications', () => {
+    it('builds the Docker images of the applications with their docker:build scripts', async () => {
+      await helpers
+        .runJHipster(generator)
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
+        .withJHipsterConfig({ baseName: 'workspaces' })
+        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
+        .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' });
+
+      result.assertJsonFileContent('package.json', {
+        scripts: {
+          'docker:build': 'concurrently npm:docker:build:gateway npm:docker:build:micro1',
+          'docker:build:gateway': 'npm run docker:build --workspace gateway --if-present',
+        },
+      });
+    });
+  });
+
   it('bootstrap migration', async () => {
     await helpers
       .runJHipster('jhipster:bootstrap-application-base')
