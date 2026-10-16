@@ -47,13 +47,6 @@ const command = {
       },
       scope: 'generator',
     },
-    reproducibleSecrets: {
-      description: 'Derive the generated secrets (jwtSecretKey, rememberMeKey, development KeyStore) from the creation timestamp',
-      cli: {
-        type: Boolean,
-      },
-      scope: 'generator',
-    },
     reactive: {
       cli: {
         description: 'Generate a reactive backend',
