@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { stringify } from 'yaml';
+import { Document, isScalar, isSeq, visit } from 'yaml';
 
 import type { DockerComposeFile, DockerComposeService } from '../types.ts';
 
@@ -49,9 +49,24 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
   ),
 });
 
-/** The content of a docker compose file: the comment of every file and its own comments, then its project name and its services. */
-export const dockerComposeFileContent = ({ comments = [], name, services }: DockerComposeFile): string =>
-  `${[DOCKER_COMPOSE_FILE_COMMENT, ...comments].map(comment => `# ${comment}\n`).join('')}${stringify({ name, services }, { lineWidth: 0, aliasDuplicateObjects: false })}`;
+/**
+ * The content of a docker compose file: the comment of every file and its own comments, then its project name and its
+ * services. The lists of the `flowKeys` are written on one line, the command of a healthcheck (`test`) by default.
+ */
+export const dockerComposeFileContent = (
+  { comments = [], name, services }: DockerComposeFile,
+  { flowKeys = ['test'] }: { flowKeys?: string[] } = {},
+): string => {
+  const document = new Document({ name, services }, { aliasDuplicateObjects: false });
+  visit(document, {
+    Pair(_, pair) {
+      if (isScalar(pair.key) && flowKeys.includes(String(pair.key.value)) && isSeq(pair.value)) {
+        pair.value.flow = true;
+      }
+    },
+  });
+  return `${[DOCKER_COMPOSE_FILE_COMMENT, ...comments].map(comment => `# ${comment}\n`).join('')}${document.toString({ lineWidth: 0 })}`;
+};
 
 /** The ports of a service published on the loopback address only. */
 export const dockerComposeLocalPorts = (...ports: number[]): string[] => ports.map(port => `127.0.0.1:${port}:${port}`);
