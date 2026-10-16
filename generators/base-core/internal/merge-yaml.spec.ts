@@ -35,13 +35,13 @@ services:
 
   it('should add the keys and keep the rest as written', () => {
     expect(
-  mergeYamlContent(content, {
-    services: {
-      app: { depends_on: { db: { condition: 'service_healthy' } }, environment: ['C=d'] },
-      db: { extends: { file: './db.yml', service: 'db' } }
-    }
-  })
-).toMatchInlineSnapshot(`
+      mergeYamlContent(content, {
+        services: {
+          app: { depends_on: { db: { condition: 'service_healthy' } }, environment: ['C=d'] },
+          db: { extends: { file: './db.yml', service: 'db' } },
+        },
+      }),
+    ).toMatchInlineSnapshot(`
 "# A comment of the file
 name: jhipster
 services:
