@@ -76,7 +76,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "serverI18nDir": "src/main/resources/i18n/",
-  "serverI18nFileNaming": "javaLocale",
   "serverI18nTestDir": "src/test/resources/i18n/",
   "srcMainJava": "src/main/java/",
   "srcMainResources": "src/main/resources/",

@@ -44,37 +44,23 @@ export default class ServerI18NGenerator extends BaseApplicationGenerator<Server
   get writing() {
     return this.asWritingTaskGroup({
       async writeMessages({ application }) {
-        const {
-          serverI18nDir,
-          serverI18nTestDir,
-          serverI18nFileNaming = 'javaLocale',
-          enableTranslation,
-          skipUserManagement,
-        } = application;
+        const { serverI18nDir, serverI18nTestDir, serverI18nFileNaming, enableTranslation, skipUserManagement } = application;
         if (!serverI18nDir) return;
         const { languagesToGenerateDefinition = [application.nativeLanguageDefinition] } = application;
-        // The templates are named by the locale suffix of Java, the files by the naming of the application.
         const languages =
-          enableTranslation ?
-            languagesToGenerateDefinition.flatMap(language =>
-              language?.javaLocaleMessageSourceSuffix ?
-                [
-                  {
-                    suffix: language.javaLocaleMessageSourceSuffix,
-                    name: serverI18nFileNaming === 'languageTag' ? language.languageTag : language.javaLocaleMessageSourceSuffix,
-                  },
-                ]
-              : [],
-            )
-          : [];
+          enableTranslation ? languagesToGenerateDefinition.filter(language => language?.javaLocaleMessageSourceSuffix) : [];
         // The test copies have templates of their own.
         const file = (suffix: string, { test = false, destination = `messages_${suffix}.properties` } = {}) => ({
           path: test ? SERVER_TEST_RES_DIR : SERVER_MAIN_RES_DIR,
           renameTo: () => `${test ? serverI18nTestDir : serverI18nDir}${destination}`,
           templates: [`i18n/messages_${suffix}.properties`],
         });
-        const languageFile = ({ suffix, name }: { suffix: string; name: string }, test = false) =>
-          file(suffix, { test, destination: `messages_${name}.properties` });
+        // The templates are named by the locale suffix of Java, the files too unless they are named by the language tag.
+        const languageFile = ({ javaLocaleMessageSourceSuffix, languageTag }: (typeof languages)[number], test = false) =>
+          file(javaLocaleMessageSourceSuffix!, {
+            test,
+            destination: `messages_${serverI18nFileNaming === 'languageTag' ? languageTag : javaLocaleMessageSourceSuffix}.properties`,
+          });
         await this.writeFiles({
           blocks: [
             file('en', { destination: 'messages.properties' }),
