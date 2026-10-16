@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
-import { existsSync } from 'node:fs';
 import pathjs from 'node:path';
 
 import chalk from 'chalk';
@@ -28,6 +27,7 @@ import { createBase64Secret, stringHashCode } from '../../lib/utils/index.ts';
 import { normalizePath as normalize } from '../../lib/utils/path.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import BaseWorkspacesGenerator, { type Deployment as BaseDeployment, type WorkspacesApplication } from '../base-workspaces/index.ts';
+import { checkImages } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
@@ -373,26 +373,11 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   checkApplicationsDockerImages({ applications }: { applications: WorkspacesApplication[] }) {
-    this.log.log('\nChecking Docker images in applications directories...');
-
-    // An application builds its image with its docker:build script, the jib build for a Java application. Only the jib
-    // cache of a Java build tool tells that the image was built: the other applications are always listed.
-    const missingImages: string[] = [];
-    for (const application of applications) {
-      const appPath = this.workspacePath(application.appFolder!);
-      let jibCache: string | undefined;
-      if (application.buildToolGradle) {
-        jibCache = 'build/jib-cache';
-      } else if (application.buildToolMaven) {
-        jibCache = 'target/jib-cache';
-      }
-      if (jibCache && existsSync(this.workspacePath(application.appFolder!, jibCache))) continue;
-      missingImages.push(`  ${chalk.cyan('npm run docker:build')} in ${appPath}`);
-    }
-    if (missingImages.length > 0) {
+    const check = checkImages.call(this, { applications });
+    if (check.hasWarning) {
       this.log.warn('Docker Compose configuration generated, but the Docker images may be missing');
       this.log.warn('If you forgot to generate the Docker image for these applications, please run:');
-      this.log.log(chalk.red(`To generate the missing Docker image(s), please run:\n${missingImages.join('\n')}\n`));
+      this.log.log(chalk.red(check.warningMessage));
     } else {
       this.log.verboseInfo(chalk.bold.green('Docker Compose configuration successfully generated!'));
     }
