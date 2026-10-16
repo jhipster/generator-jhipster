@@ -24,7 +24,7 @@ import { ALPHABETIC_LOWER_PATTERN, ALPHANUMERIC_PATTERN, NON_WHITESPACE_PATTERN 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
 import { cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { createBase64Secret, createSecret } from '../../lib/utils/secret.ts';
+import { createBase64Secret, createReproducibleBase64Secret, createReproducibleSecret, createSecret } from '../../lib/utils/secret.ts';
 import commonCommand from '../common/command.ts';
 import serverCommand from '../server/command.ts';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
@@ -44,6 +44,13 @@ const command = {
         type: Boolean,
         env: 'FAKE_KEYTOOL',
         hide: true,
+      },
+      scope: 'generator',
+    },
+    reproducibleSecrets: {
+      description: 'Derive the generated secrets (jwtSecretKey, rememberMeKey, development KeyStore) from the creation timestamp',
+      cli: {
+        type: Boolean,
       },
       scope: 'generator',
     },
@@ -143,13 +150,20 @@ const command = {
       }),
       configure: gen => {
         const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
+        // The secrets derived from the creation timestamp are the same at each generation of the project.
+        const { creationTimestamp } = gen.jhipsterConfig;
+        const reproducibleSecrets = gen.options.reproducibleSecrets && creationTimestamp;
         if (authenticationType === SESSION && !rememberMeKey) {
-          gen.jhipsterConfig.rememberMeKey = createSecret();
+          gen.jhipsterConfig.rememberMeKey =
+            reproducibleSecrets ? createReproducibleSecret(creationTimestamp, 'rememberMeKey') : createSecret();
         } else if (
           jwtSecretKey === undefined &&
           (authenticationType === JWT || applicationType === APPLICATION_TYPE_MICROSERVICE || applicationType === APPLICATION_TYPE_GATEWAY)
         ) {
-          gen.jhipsterConfig.jwtSecretKey = createBase64Secret(64, gen.options.reproducibleTests);
+          gen.jhipsterConfig.jwtSecretKey =
+            reproducibleSecrets ?
+              createReproducibleBase64Secret(creationTimestamp, 'jwtSecretKey', 64)
+            : createBase64Secret(64, gen.options.reproducibleTests);
         }
       },
       scope: 'storage',

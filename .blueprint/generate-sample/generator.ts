@@ -29,6 +29,17 @@ import { promptSamplesFolder } from '../support.ts';
 const GENERATOR_JDL = 'jdl';
 const GENERATOR_INFO = 'info';
 
+/** The jwt secret key of the applications and the deployments of a jdl sample, which a deployment draws otherwise. */
+const SAMPLE_JWT_SECRET_KEY = defaultGithubEnvironment['jwt-secret-key'];
+/**
+ * The secrets of a sample, which generates the same code each time: the secrets an application draws when it has none
+ * are derived from its creation timestamp. A jdl sample may declare deployments, which have no creation timestamp: its
+ * jwt secret key is fixed.
+ */
+const sampleSecrets = ({ jdl }: { jdl: boolean }) => ({
+  reproducibleSecrets: true,
+  ...(jdl ? { jwtSecretKey: SAMPLE_JWT_SECRET_KEY } : {}),
+});
 /** The password of the databases of the deployments of a sample, which a deployment draws otherwise. */
 const SAMPLE_DB_RANDOM_PASSWORD = 'sample-db-password';
 
@@ -51,10 +62,9 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         this.projectVersion = `${packageJson.version}-git`;
       },
       sampleSecrets() {
-        // A sample generates the same code each time: the secrets a generator draws when it is given none are fixed, for
-        // every generator of the sample, the deployments of a workspace included. The ci workflows give the jwt secret key.
+        // A sample generates the same code each time: the database password a deployment draws is fixed, for every
+        // generator of the sample, the deployments of a workspace included.
         Object.assign(this.env.sharedOptions, {
-          jwtSecretKey: process.env.JHI_JWT_SECRET_KEY ?? defaultGithubEnvironment['jwt-secret-key'],
           dbRandomPassword: SAMPLE_DB_RANDOM_PASSWORD,
         });
       },
@@ -112,7 +122,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
 
         await this.composeWithJHipster(GENERATOR_JDL, {
           generatorArgs: [this.sampleName],
-          generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder },
+          generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder, ...sampleSecrets({ jdl: true }) },
         });
       },
       async generateSample() {
@@ -123,6 +133,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         const generatorOptions: any = {
           projectVersion: this.projectVersion,
           destinationRoot: this.projectFolder,
+          ...sampleSecrets({ jdl: sample.defaultCommand === GENERATOR_JDL }),
           ...(sample.environment ? { defaultEnvironment: sample.environment } : {}),
           ...(sample.war ? { defaultPackaging: 'war' } : {}),
           ...sample.generatorOptions,

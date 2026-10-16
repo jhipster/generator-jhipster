@@ -73,6 +73,7 @@ export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
 
 export default class SpringBootGenerator extends SpringBootApplicationGenerator {
   fakeKeytool!: boolean;
+  reproducibleSecrets!: boolean;
 
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, { ...features, loadCommand: ['jhipster:client'] });
@@ -653,7 +654,10 @@ ${classProperties
         } else {
           // Written through the in-memory file system, the KeyStore goes through the commit pipeline like any other
           // generated file, `--export-application` included.
-          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName! }), { metadata: { writeOnce: true } });
+          const creationTimestamp = this.reproducibleSecrets ? this.jhipsterConfig.creationTimestamp : undefined;
+          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName!, creationTimestamp }), {
+            metadata: { writeOnce: true },
+          });
           this.log.info(`KeyStore '${keyStoreFile}' generated successfully.`);
         }
       },
