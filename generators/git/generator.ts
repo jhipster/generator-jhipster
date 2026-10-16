@@ -29,8 +29,7 @@ import { files } from './files.ts';
 import type { Config as GitConfig, GeneratorProperties as GitGeneratorProperties, Options as GitOptions } from './types.ts';
 
 export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
-  /** `undefined` while the repository initialization did not run, `false` when it failed */
-  gitInitialized?: boolean;
+  gitInitialized!: boolean;
   /** @deprecated the repository is inspected internally */
   existingRepository!: boolean;
   #repository?: { insideRepository: boolean; repositoryRoot: boolean };
@@ -136,18 +135,10 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
       /** Initial commit to git repository after package manager install for package-lock.json */
       async gitCommit() {
         if (this.skipGit) return;
-        if (this.gitInitialized === undefined) {
-          // `initGitRepo` is skipped with the postWriting priority, like when only the entities are generated:
-          // commit to an existing repository, but don't create one.
-          const { insideRepository } = await this.inspectRepository();
-          if (!insideRepository) {
-            this.log.verboseInfo('Git repository was not initialized, skipping commit.');
-            return;
-          }
-          this.gitInitialized = true;
-        }
-        if (!this.gitInitialized) {
-          this.log.warn('The generated application could not be committed to Git, as a Git repository could not be initialized.');
+        // `initGitRepo` is skipped with the postWriting priority, like when only the entities are generated:
+        // commit to an existing repository, but don't create one.
+        if (!this.gitInitialized && !(await this.inspectRepository()).insideRepository) {
+          this.log.warn('The generated application was not committed to Git, as it is not inside a Git repository.');
           return;
         }
 
@@ -213,7 +204,6 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
       }
       this.gitInitialized = true;
     } catch (error) {
-      this.gitInitialized = false;
       this.log.warn(`Failed to initialize Git repository.\n ${error}`);
     }
   }

@@ -125,21 +125,30 @@ describe(`generator - ${generator}`, () => {
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
       });
     });
-    describe('regenerating with the postWriting priority skipped, like the entities command', () => {
+    describe('regenerating the entities with --force-git', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withOptions({ skipGit: false });
-        await helpers
-          .runJHipsterInApplication(generator)
-          .withOptions({ skipGit: false, forceGit: true, skipPriorities: ['writing', 'postWriting'] });
+        await helpers.runJHipster('app').withOptions({ skipGit: false });
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false, forceGit: true });
       });
       it('should commit to the existing repository', async () => {
         const git = runResult.generator.createSimpleGit();
         await expect(git.log()).resolves.toMatchObject({ total: 2 });
       });
     });
-    describe('with the postWriting priority skipped outside a repository', () => {
+    describe('regenerating the entities without --force-git', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withOptions({ skipGit: false, skipPriorities: ['writing', 'postWriting'] });
+        await helpers.runJHipster('app').withOptions({ skipGit: false });
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false });
+      });
+      it('should not commit', async () => {
+        const git = runResult.generator.createSimpleGit();
+        await expect(git.log()).resolves.toMatchObject({ total: 1 });
+      });
+    });
+    describe('regenerating the entities outside a repository', () => {
+      before(async () => {
+        await helpers.runJHipster('app');
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false });
       });
       it('should not create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
