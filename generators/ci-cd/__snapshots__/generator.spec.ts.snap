@@ -167,6 +167,72 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
+  "dockerComposeFiles": {
+    "app": {
+      "comments": [
+        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
+      ],
+      "name": "jhipster",
+      "services": {
+        "app": {
+          "depends_on": {
+            "postgresql": {
+              "condition": "service_healthy",
+            },
+          },
+          "environment": [
+            "_JAVA_OPTIONS=-Xmx512m -Xms256m",
+            "SPRING_PROFILES_ACTIVE=prod,api-docs,secret-samples",
+            "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true",
+            "SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/jhipster",
+            "SPRING_DATASOURCE_USERNAME=jhipster",
+            "SPRING_DATASOURCE_PASSWORD=",
+            "SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 40,
+            "test": [
+              "CMD-SHELL",
+              "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3'",
+            ],
+            "timeout": "5s",
+          },
+          "image": "jhipster",
+          "ports": [
+            "127.0.0.1:8080:8080",
+          ],
+        },
+      },
+    },
+    "postgresql": {
+      "comments": [
+        "This configuration is intended for development purpose, it's **your** responsibility to harden it for production",
+      ],
+      "name": "jhipster",
+      "services": {
+        "postgresql": {
+          "environment": [
+            "POSTGRES_USER=jhipster",
+            "POSTGRES_HOST_AUTH_METHOD=trust",
+          ],
+          "healthcheck": {
+            "interval": "5s",
+            "retries": 10,
+            "test": [
+              "CMD-SHELL",
+              "pg_isready -U $\${POSTGRES_USER}",
+            ],
+            "timeout": "5s",
+          },
+          "image": "postgresql-placeholder",
+          "ports": [
+            "127.0.0.1:5432:5432",
+          ],
+        },
+      },
+    },
+  },
   "dockerContainers": Any<Object>,
   "dockerImage": undefined,
   "dockerServices": [],

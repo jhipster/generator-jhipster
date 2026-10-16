@@ -54,6 +54,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "devDatabaseTypeH2Any": undefined,
   "devServerPort": 9060,
   "dockerApplicationEnvironment": Any<Object>,
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": Any<Array>,
   "dockerServicesDir": "src/main/docker/",

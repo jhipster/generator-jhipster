@@ -98,6 +98,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "devR2dbcUrl": "r2dbc:postgresql://localhost:5432/jhipster",
   "devServerPort": 9060,
   "dockerApplicationEnvironment": Any<Object>,
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": Any<Array>,
   "dockerServicesDir": "src/main/docker/",
