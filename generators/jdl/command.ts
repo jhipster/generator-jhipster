@@ -51,7 +51,8 @@ const command = {
       scope: 'generator',
     },
     ignoreApplication: {
-      description: 'Ignores application generation',
+      description:
+        'Ignores application generation; false generates the application of the current folder with the entities of a jdl without application',
       cli: {
         type: Boolean,
       },

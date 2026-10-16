@@ -162,7 +162,7 @@ Options:
   --export-application                     Serialize the generated application instead of writing it to disk
   --interactive                            Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders
   --json-only                              Generate only the JSON files and skip entity regeneration
-  --ignore-application                     Ignores application generation
+  --ignore-application                     Ignores application generation; false generates the application of the current folder with the entities of a jdl without application
   --ignore-deployments                     Ignores deployments generation
   --skip-sample-repository                 Disable fetching sample files when the file is not a URL
   --inline <value>                         Pass JDL content inline. Argument can be skipped when passing this (env: JHI_JDL)
