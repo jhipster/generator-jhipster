@@ -19,11 +19,9 @@
 
 import { basename, extname, join, resolve } from 'node:path';
 
-import { globSync } from 'tinyglobby';
-
 import BaseGenerator from '../../generators/base-core/index.ts';
 import type { Config } from '../../generators/base-core/types.ts';
-import { type SampleDescription, defaultGithubEnvironment } from '../../lib/ci/index.ts';
+import { type SampleDescription, type SampleFile, defaultGithubEnvironment, extractSampleFiles } from '../../lib/ci/index.ts';
 import { getPackageRoot, packageJson } from '../../lib/index.ts';
 import { findSamples } from '../describe-samples/support/describe-samples.ts';
 import { promptSamplesFolder } from '../support.ts';
@@ -31,6 +29,17 @@ import { promptSamplesFolder } from '../support.ts';
 const GENERATOR_JDL = 'jdl';
 const GENERATOR_INFO = 'info';
 
+/** The jwt secret key of the applications and the deployments of a jdl sample, which a deployment draws otherwise. */
+const SAMPLE_JWT_SECRET_KEY = defaultGithubEnvironment['jwt-secret-key'];
+/**
+ * The secrets of a sample, which generates the same code each time: the secrets an application draws when it has none
+ * are derived from its creation timestamp. A jdl sample may declare deployments, which have no creation timestamp: its
+ * jwt secret key is fixed.
+ */
+const sampleSecrets = ({ jdl }: { jdl: boolean }) => ({
+  reproducibleSecrets: true,
+  ...(jdl ? { jwtSecretKey: SAMPLE_JWT_SECRET_KEY } : {}),
+});
 /** The password of the databases of the deployments of a sample, which a deployment draws otherwise. */
 const SAMPLE_DB_RANDOM_PASSWORD = 'sample-db-password';
 
@@ -44,6 +53,8 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleOnly?: boolean;
   /** The sample of the name, as describe-samples describes it. */
   sample?: SampleDescription;
+  /** The files of the project of the sample, its inline jdl as files. */
+  sampleFiles: SampleFile[] = [];
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asAnyTaskGroup({
@@ -51,10 +62,9 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         this.projectVersion = `${packageJson.version}-git`;
       },
       sampleSecrets() {
-        // A sample generates the same code each time: the secrets a generator draws when it is given none are fixed, for
-        // every generator of the sample, the deployments of a workspace included. The ci workflows give the jwt secret key.
+        // A sample generates the same code each time: the database password a deployment draws is fixed, for every
+        // generator of the sample, the deployments of a workspace included.
         Object.assign(this.env.sharedOptions, {
-          jwtSecretKey: process.env.JHI_JWT_SECRET_KEY ?? defaultGithubEnvironment['jwt-secret-key'],
           dbRandomPassword: SAMPLE_DB_RANDOM_PASSWORD,
         });
       },
@@ -91,13 +101,13 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         } else {
           const [sample] = findSamples({ sampleName: this.sampleName });
           this.sample = sample;
-          // The files and the jdl the description lists, by their path in the project, relative to the package root.
-          for (const [destination, file] of Object.entries(sample.files)) {
-            this.fs.copy(resolve(packageRoot, file), join(this.projectFolder, destination));
-          }
-          for (const [destination, jdl] of Object.entries(sample.jdls)) {
-            if ('file' in jdl) {
-              this.fs.copy(resolve(packageRoot, jdl.file), join(this.projectFolder, destination));
+          this.sampleFiles = extractSampleFiles(sample, { root: packageRoot });
+          for (const file of this.sampleFiles) {
+            const destination = join(this.projectFolder, file.destination);
+            if ('source' in file) {
+              this.fs.copy(file.source, destination);
+            } else {
+              this.fs.write(destination, file.contents);
             }
           }
         }
@@ -112,7 +122,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
 
         await this.composeWithJHipster(GENERATOR_JDL, {
           generatorArgs: [this.sampleName],
-          generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder },
+          generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder, ...sampleSecrets({ jdl: true }) },
         });
       },
       async generateSample() {
@@ -123,26 +133,23 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         const generatorOptions: any = {
           projectVersion: this.projectVersion,
           destinationRoot: this.projectFolder,
+          ...sampleSecrets({ jdl: sample.defaultCommand === GENERATOR_JDL }),
           ...(sample.environment ? { defaultEnvironment: sample.environment } : {}),
           ...(sample.war ? { defaultPackaging: 'war' } : {}),
           ...sample.generatorOptions,
         };
-        // The jdl files copied to the project and the inline jdls, which the jdl generator concatenates.
-        const jdls = Object.values(sample.jdls);
-        const jdlFiles = jdls.some(jdl => 'file' in jdl) ? globSync('*.jdl', { cwd: this.projectFolder }) : [];
-        const inline = jdls.flatMap(jdl => ('content' in jdl ? [jdl.content] : [])).join('\n') || undefined;
-        if (sample.defaultCommand === GENERATOR_JDL) {
-          await this.composeWithJHipster(GENERATOR_JDL, { generatorArgs: jdlFiles, generatorOptions: { ...generatorOptions, inline } });
-          return;
-        }
-        if (jdlFiles.length > 0 || inline) {
-          // The entities of an app sample written as jdl.
-          await this.composeWithJHipster(GENERATOR_JDL, {
-            generatorArgs: jdlFiles,
-            generatorOptions: { ...generatorOptions, inline, jsonOnly: true },
-          });
-        }
-        await this.composeWithJHipster(sample.defaultCommand, { generatorOptions });
+        // The jdl files of the project, the inline ones included, which the jdl generator concatenates.
+        const jdlFiles = this.sampleFiles.map(file => file.destination).filter(destination => extname(destination) === '.jdl');
+        // The entities of an app sample written as jdl: the jdl generator merges them into the .yo-rc.json and generates the
+        // application with them, not the entities of an existing project alone.
+        const appWithJdlEntities = jdlFiles.length > 0 && sample.defaultCommand !== GENERATOR_JDL;
+        await this.composeWithJHipster(jdlFiles.length > 0 ? GENERATOR_JDL : sample.defaultCommand, {
+          generatorArgs: jdlFiles,
+          generatorOptions:
+            appWithJdlEntities ?
+              { ...generatorOptions, ignoreApplication: false, entrypointGenerator: sample.defaultCommand }
+            : generatorOptions,
+        });
       },
       async updateVscodeWorkspace() {
         if (this.global) {

@@ -198,7 +198,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
             'ci:e2e:run': 'npm run e2e:headless --workspaces --if-present',
             ...this.getOtherScripts(),
-            ...this.createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'java:docker:arm64'),
+            ...this.createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'docker:build'),
             ...this.createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });

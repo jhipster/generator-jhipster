@@ -107,6 +107,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "react:bootstrap",
   "server",
   "server:bootstrap",
+  "server:i18n",
   "spring-boot",
   "spring-boot:bootstrap",
   "spring-boot:cache",

@@ -17,45 +17,43 @@
  * limitations under the License.
  */
 import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 import chalk from 'chalk';
 
-import { buildToolTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/index.ts';
-import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
+import type BaseWorkspacesGenerator from '../generator.ts';
 import { asPreparingWorkspacesTask } from '../support/task-type-inference.ts';
 import type { WorkspacesApplication } from '../types.ts';
 
-const { MAVEN } = buildToolTypes;
-
 /**
- * Check Images
+ * Lists the applications whose Docker image may be missing, with the command that builds it: an application builds its
+ * image with the docker:build script of its package.json, the jib build for a Java application. Only the jib cache of a
+ * Java build tool tells that the image was built: the other applications are always listed.
  */
 export const checkImages = function checkImages(
-  this: BaseKubernetesGenerator,
+  this: Pick<BaseWorkspacesGenerator<any, any, any, any, any, any, any>, 'log' | 'workspacePath' | 'fs'>,
   { applications }: { applications: WorkspacesApplication[] },
 ) {
   this.log.log('\nChecking Docker images in applications directories...');
 
-  let hasWarning = false;
-  let warningMessage = 'To generate the missing Docker image(s), please run:\n';
+  const missingImages: string[] = [];
   for (const app of applications) {
-    let imagePath;
-    let runCommand;
-    if (app.buildTool === MAVEN) {
-      imagePath = this.workspacePath(app.appFolder!, '/target/jib-cache');
-      runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;
-    } else {
-      imagePath = this.workspacePath(app.appFolder!, '/build/jib-cache');
-      runCommand = `./gradlew bootJar -Pprod jibDockerBuild${process.arch === 'arm64' ? ' -PjibArchitecture=arm64' : ''}`;
-    }
-    if (!existsSync(imagePath)) {
-      hasWarning = true;
-      warningMessage += `  ${chalk.cyan(runCommand)} in ${this.workspacePath(app.appFolder!)}\n`;
-    }
+    const appPath = this.workspacePath(app.appFolder!);
+    if (app.buildToolGradle && existsSync(join(appPath, 'build/jib-cache'))) continue;
+    if (app.buildToolMaven && existsSync(join(appPath, 'target/jib-cache'))) continue;
+    const { scripts } = this.fs.readJSON(join(appPath, 'package.json'), {}) as { scripts?: Record<string, string> };
+    missingImages.push(
+      scripts?.['docker:build'] ?
+        `  ${chalk.cyan('npm run docker:build')} in ${appPath}`
+      : `  build the Docker image of ${appPath}, which has no docker:build script`,
+    );
   }
 
-  return { hasWarning, warningMessage };
+  return {
+    hasWarning: missingImages.length > 0,
+    warningMessage: `To generate the missing Docker image(s):\n${missingImages.join('\n')}\n`,
+  };
 };
 
 /**

@@ -31,7 +31,7 @@ FROM cassandra:6.0
 FROM mcr.microsoft.com/mssql/server:2025-latest
 LABEL ALIAS=mssql
 
-FROM neo4j:5.26.31
+FROM neo4j:5.26.32
 
 FROM hazelcast/management-center:5.12.1
 LABEL ALIAS=hazelcast
@@ -46,7 +46,7 @@ LABEL ALIAS=kafka
 FROM apachepulsar/pulsar:4.2.4
 LABEL ALIAS=pulsar
 
-FROM sonarqube:26.9.0.129388-community
+FROM sonarqube:26.10.0.133078-community
 LABEL ALIAS=sonar
 
 FROM hashicorp/consul:2.0.4

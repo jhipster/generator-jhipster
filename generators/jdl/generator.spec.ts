@@ -89,6 +89,26 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('with ignoreApplication false over an application', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ baseName: 'jhipster' })
+          .withMockedGenerators(mockedGenerators)
+          .withOptions({ inline: 'entity Foo {}', ignoreApplication: false });
+      });
+
+      it('should compose with app instead of entities', () => {
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
+      });
+
+      it('should merge the entities into the application', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'jhipster', entities: ['Foo'] } });
+        runResult.assertFile('.jhipster/Foo.json');
+      });
+    });
+
     describe('with valid config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig().withMockedGenerators(mockedGenerators).withOptions({
@@ -545,6 +565,54 @@ export const command = { configs: { fooOption: { jdl: { type: 'string', tokenTyp
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
+    });
+  });
+
+  describe('over the configuration written before, in memory', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withFiles({
+          '.yo-rc.json': {
+            'generator-jhipster': {
+              baseName: 'jhipster',
+              creationTimestamp: 1577836800000,
+              lastLiquibaseTimestamp: 1577836860000,
+              languages: ['en', 'fr'],
+              testFrameworks: ['cypress'],
+            },
+          },
+          '.jhipster/Foo.json': {
+            name: 'Foo',
+            annotations: { changelogDate: '20200101000100', custom: 'kept' },
+            fields: [{ fieldName: 'removed', fieldType: 'String' }],
+            pagination: 'pagination',
+          },
+        })
+        .withOptions({
+          jsonOnly: true,
+          inline: 'application { config { baseName jhipster languages [pt] } entities Foo }\nentity Foo { name String }',
+        });
+    });
+
+    it('should change what the jdl states and keep the rest of the configuration', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', {
+        'generator-jhipster': {
+          creationTimestamp: 1577836800000,
+          lastLiquibaseTimestamp: 1577836860000,
+          languages: ['pt'],
+          testFrameworks: ['cypress'],
+        },
+      });
+    });
+
+    it('should change what the jdl states and keep the rest of the entity, its changelog date included', () => {
+      const entity = JSON.parse(runResult.getSnapshot()['.jhipster/Foo.json'].contents!);
+      expect(entity).toMatchObject({
+        annotations: { changelogDate: '20200101000100', custom: 'kept' },
+        pagination: 'pagination',
+      });
+      expect(entity.fields.map(({ fieldName }: { fieldName: string }) => fieldName)).toEqual(['name']);
     });
   });
 

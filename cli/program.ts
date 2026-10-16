@@ -29,7 +29,7 @@ import baseCommand from '../generators/base/command.ts';
 import { type JHipsterConfigs, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { type ResolvedCommand, resolveCommand } from '../lib/command/resolve-command.ts';
 import { packageJson } from '../lib/index.ts';
-import type { JDLDefinitions } from '../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLDefinitions } from '../lib/jdl/core/parsing/index.ts';
 import { getDefaultJDLDefinitions } from '../lib/jdl-config/jdl-runtime.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
 import { resolveDefaultCommand } from '../lib/resolver/default-command.ts';

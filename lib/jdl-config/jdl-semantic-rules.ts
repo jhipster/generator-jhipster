@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { APPLICATION_TYPE_MICROSERVICE } from '../core/application-types.ts';
-import type { JDLSemanticRule } from '../jdl/core/parsing/semantic/types.ts';
-import { type JDLApplicationStatement, type JDLStatement, getStatements } from '../jdl/core/parsing/statements.ts';
+import { type JDLApplicationStatement, type JDLSemanticRule, type JDLStatement, getStatements } from '../jdl/core/parsing/index.ts';
 
 export const deploymentType: JDLSemanticRule = {
   id: 'deployment-type',

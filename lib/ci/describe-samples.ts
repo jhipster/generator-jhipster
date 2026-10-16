@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { basename, dirname, extname, join, relative } from 'node:path';
+import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 
 import { createImporterFromContent } from '../jdl/jdl-importer.ts';
 
@@ -83,6 +83,24 @@ export type SampleDescription = {
   jdlEntity?: string;
   jdlSamples?: string;
   matrix: { os: string; node: string; java: string };
+};
+
+/** A file of the project of a sample: its destination in the project, and the file it is copied from or its contents. */
+export type SampleFile = { destination: string } & ({ source: string } | { contents: string });
+
+/**
+ * The files of the project of a sample: the files it copies, like its `.yo-rc.json` and its `.jhipster` entities, and its
+ * jdl files, from their source in the root; then each inline jdl as a file of its own, `inline-<n>.jdl`, with its contents.
+ */
+export const extractSampleFiles = (sample: Pick<SampleDescription, 'files' | 'jdls'>, { root }: { root: string }): SampleFile[] => {
+  const jdls = Object.entries(sample.jdls);
+  return [
+    ...Object.entries(sample.files).map(([destination, source]) => ({ destination, source: resolve(root, source) })),
+    ...jdls.flatMap(([destination, jdl]) => ('file' in jdl ? [{ destination, source: resolve(root, jdl.file) }] : [])),
+    ...jdls
+      .flatMap(([, jdl]) => ('content' in jdl ? [jdl.content] : []))
+      .map((contents, index) => ({ destination: `inline-${index + 1}.jdl`, contents })),
+  ];
 };
 
 const isDirectory = (path: string): boolean => {

@@ -19,9 +19,9 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
+import { getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
+import { parse } from '../api.ts';
 
-import { parse } from './api.ts';
 import { type JDLApplicationStatement, type JDLStatement, getStatements } from './statements.ts';
 
 const runtime = getDefaultRuntime();

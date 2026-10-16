@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLRelationshipType } from '../relationship-types.ts';
+import type { JDLRelationshipType } from '../runtime/relationship-types.ts';
 
 /** Where a node was written, from its first token to its last one. Lines and columns start at 1, `endOffset` is inclusive. */
 export type JDLLocation = {

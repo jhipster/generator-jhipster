@@ -20,7 +20,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { upperFirst } from 'lodash-es';
+import { mergeWith, upperFirst } from 'lodash-es';
 import type { Merge } from 'type-fest';
 
 import { YO_RC_FILE, type YoRcConfigValue, type YoRcFileContent } from '../constants/yeoman.ts';
@@ -33,14 +33,21 @@ type ConfigWithCreationTimestamp = {
   creationTimestamp?: number;
 };
 
+/**
+ * Merges a new configuration over an old one: objects are merged deeply, an array replaces the old one. The new
+ * configuration changes what it states and keeps the rest; an array stated in it is its whole new value.
+ */
+export const mergeConfigContent = (
+  oldContent: Record<string, any> | undefined,
+  newContent: Record<string, any> | undefined,
+): Record<string, any> =>
+  mergeWith({}, oldContent, newContent, (_oldValue: unknown, newValue: unknown) => (Array.isArray(newValue) ? newValue : undefined));
+
 export const mergeYoRcContent = <const OldConfig extends YoRcFileContent, const NewConfig extends YoRcFileContent>(
   oldConfig: OldConfig,
   newConfig: NewConfig,
 ): Merge<OldConfig, NewConfig> => {
-  const merged: YoRcFileContent = { [YO_RC_CONFIG_KEY]: {} };
-  for (const ns of new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])) {
-    merged[ns] = { ...oldConfig[ns], ...newConfig[ns] };
-  }
+  const merged: YoRcFileContent = { [YO_RC_CONFIG_KEY]: {}, ...mergeConfigContent(oldConfig, newConfig) };
   if ((oldConfig[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp)?.creationTimestamp) {
     (merged[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp).creationTimestamp = (
       oldConfig[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp

@@ -59,13 +59,36 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should be fixed for every generator of the sample, so it generates the same code each time', () => {
-      expect(runResult.env.sharedOptions).toMatchObject({
-        jwtSecretKey: process.env.JHI_JWT_SECRET_KEY ?? defaultGithubEnvironment['jwt-secret-key'],
-        dbRandomPassword: 'sample-db-password',
-      });
+    it('should fix the database password of the deployments for every generator of the sample', () => {
+      expect(runResult.env.sharedOptions).toMatchObject({ dbRandomPassword: 'sample-db-password' });
     });
   });
+
+  for (const [sampleName, jdl] of [
+    ['ng-default', false],
+    ['mf-ng-eureka-jwt-psql-ehcache', true],
+  ] as const) {
+    describe(`the secrets given to the generator of ${sampleName}`, () => {
+      before(async () => {
+        await helpers
+          .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+          .withArguments(sampleName)
+          .withMockedJHipsterGenerators({ except: ['jhipster:info'] });
+      });
+
+      it(jdl ? 'should derive them and fix the jwt secret key, for the deployments' : 'should derive them', () => {
+        const generator = jdl ? 'jhipster:jdl' : 'jhipster:app';
+        expect(runResult.getComposedGenerators()).toContain(generator);
+        const [options] = (runResult.mockedGenerators[generator] as any).mock.calls.map((call: { arguments: any[] }) => call.arguments[1]);
+        expect(options).toMatchObject({ reproducibleSecrets: true });
+        if (jdl) {
+          expect(options).toMatchObject({ jwtSecretKey: defaultGithubEnvironment['jwt-secret-key'] });
+        } else {
+          expect(options).not.toHaveProperty('jwtSecretKey');
+        }
+      });
+    });
+  }
 
   describe(`with ng-default-additional (star jdl-entity)`, () => {
     before(async () => {
@@ -135,9 +158,13 @@ describe(`generator - ${generator}`, () => {
         .withMockedGenerators(['jhipster:jdl', 'jhipster:info']);
     });
 
-    it('should give the jdl inline to the jdl generator', () => {
-      const [, options] = runResult.getGeneratorMock('jhipster:jdl').calls.at(-1)!.arguments;
-      expect(options).toMatchObject({ inline: expect.stringContaining('graalvmSupport true') });
+    it('should write the inline jdl as a file', () => {
+      runResult.assertFileContent('inline-1.jdl', /graalvmSupport true/);
+    });
+
+    it('should give the jdl file to the jdl generator', () => {
+      const [args] = runResult.getGeneratorMock('jhipster:jdl').calls.at(-1)!.arguments;
+      expect(args).toEqual(['inline-1.jdl']);
     });
   });
 

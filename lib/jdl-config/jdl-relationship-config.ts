@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLOptionsDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JDLOptionsDefinition } from '../jdl/core/parsing/index.ts';
 
 import { buildJDLEntityConfig } from './jdl-entity-config.ts';
 import { lookupCommandsPropertyFrom } from './jhipster-jdl-config.ts';

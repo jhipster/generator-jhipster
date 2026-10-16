@@ -18,7 +18,7 @@
  */
 
 import { resolveCommand } from '../../../lib/command/resolve-command.ts';
-import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/index.ts';
 import { buildJDLApplicationConfig } from '../../../lib/jdl-config/jhipster-jdl-config.ts';
 import type { ResolveGeneratorDependenciesOptions } from '../../../lib/resolver/generator-dependencies.ts';
 import { packageNameToNamespace } from '../../../lib/utils/namespace.ts';

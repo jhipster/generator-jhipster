@@ -26,9 +26,14 @@ jib {
 <%_ } _%>
     from {
         image = "<%- dockerContainers.javaJre %>"
+        // jibDockerBuild builds the platform of the Docker daemon, jib pushes an image of both.
         platforms {
             platform {
-                architecture = "${findProperty('jibArchitecture') ?: 'amd64'}"
+                architecture = "amd64"
+                os = "linux"
+            }
+            platform {
+                architecture = "arm64"
                 os = "linux"
             }
         }

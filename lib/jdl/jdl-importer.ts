@@ -21,16 +21,14 @@ import { join } from 'node:path';
 import type { ApplicationType } from '../core/application-types.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
 import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.ts';
-import { readCurrentPathYoRcFile, readEntityFile } from '../utils/yo-rc.ts';
+import { readCurrentPathYoRcFile } from '../utils/yo-rc.ts';
 
 import { type ImportTarget, type JDLFiles, checkSemanticErrors } from './convert-jdl-to-files.ts';
 import { astToFiles } from './converters/ast-to-files/ast-to-files.ts';
 import { applyCompatibilityDefaults } from './converters/ast-to-files/compatibility-defaults.ts';
 import { applyStackConfig } from './converters/ast-to-files/stack-config.ts';
 import { writeConfigFile } from './converters/exporters/export-utils.ts';
-import type { ParsedJDLApplications } from './core/parsing/types/parsed.ts';
-import type { JDLApplicationConfig, JDLDefinitions } from './core/parsing/types/parsing.ts';
-import type { JDLRuntime } from './core/parsing/types/runtime.ts';
+import type { JDLApplicationConfig, JDLDefinitions, JDLRuntime, ParsedJDLApplications } from './core/parsing/index.ts';
 import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
 import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
 import type { JSONEntity } from './core/types/json-config.ts';
@@ -135,7 +133,7 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
       checkSemanticErrors(content, runtime);
       const target = importTarget(content, configuration);
       const { files } = applyStackConfig(applyCompatibilityDefaults(astToFiles(content, runtime), target));
-      return toImportState(files, content.applications.length > 1, configuration);
+      return toImportState(files, configuration);
     },
   };
 }
@@ -154,29 +152,10 @@ function importTarget(content: ParsedJDLApplications, configuration: JDLApplicat
   return { applicationName, applicationType: configuration.applicationType ?? application?.applicationType };
 }
 
-/** An entity written before keeps its changelog date. */
-function withExistingEntity(folder: string, entity: JSONEntity): JSONEntity {
-  try {
-    const fileOnDisk = readEntityFile<JSONEntity>(folder, entity.name);
-    const { changelogDate, incrementalChangelogDate } = fileOnDisk?.annotations ?? {};
-    if (
-      !entity.annotations?.changelogDate &&
-      !entity.annotations?.incrementalChangelogDate &&
-      (changelogDate || incrementalChangelogDate)
-    ) {
-      return { ...fileOnDisk, ...entity, annotations: { ...entity.annotations, changelogDate, incrementalChangelogDate } };
-    }
-  } catch {
-    // A new entity.
-  }
-  return entity;
-}
-
 /**
  * The state of the importer from the json files of the jdl; the deployment files are written, unless skipped.
- * @param severalApplications - whether the jdl declares several applications, whose entities are then in their folders.
  */
-function toImportState(files: JDLFiles['files'], severalApplications: boolean, configuration: JDLApplicationConfiguration): ImportState {
+function toImportState(files: JDLFiles['files'], configuration: JDLApplicationConfiguration): ImportState {
   const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
@@ -197,7 +176,7 @@ function toImportState(files: JDLFiles['files'], severalApplications: boolean, c
       importState.exportedApplications.push({ [GENERATOR_JHIPSTER]: config, ...namespaces });
       importState.exportedApplicationsWithEntities[config.baseName] = { config, ...namespaces, entities: [] };
     } else {
-      const entity = withExistingEntity(severalApplications ? folder : '', content as JSONEntity);
+      const entity = content as JSONEntity;
       importState.exportedApplicationsWithEntities[folder].entities.push(entity);
       if (!importState.exportedEntities.some(({ name }) => name === entity.name)) {
         importState.exportedEntities.push(entity);
@@ -205,7 +184,7 @@ function toImportState(files: JDLFiles['files'], severalApplications: boolean, c
     }
   }
   for (const entity of entitiesWithoutApplication) {
-    importState.exportedEntities.push(withExistingEntity('', entity));
+    importState.exportedEntities.push(entity);
   }
   // The applications listing entities come first, as the importer listed them.
   const applicationsWithEntities = Object.entries(importState.exportedApplicationsWithEntities);

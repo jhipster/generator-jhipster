@@ -30,7 +30,7 @@ import { CLI_NAME } from '../../cli/utils.ts';
 import type { YoRcFileContent } from '../../lib/constants/yeoman.ts';
 import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
-import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
+import { mergeConfigContent, mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import BaseCoreGenerator from '../base-core/index.ts';
 import { optionsForAnotherProject } from '../base-core/internal/index.ts';
@@ -390,8 +390,9 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
       }
       for (const entity of entities) {
         const configFile = this.destinationPath(`${appPath}${JHIPSTER_CONFIG_DIR}/${upperFirst(entity.name)}.json`);
+        // An entity written before, in memory or on the disk, keeps what the jdl does not state, like its changelog date.
         const oldConfig: any = fs.readJSON(configFile, {});
-        fs.writeJSON(configFile, { ...oldConfig, ...entity });
+        fs.writeJSON(configFile, mergeConfigContent(oldConfig, entity));
       }
     }
   }

@@ -202,6 +202,38 @@ describe('generator - java - support - key-store-node-crypto', () => {
       }
     });
 
+    describe('with a creation timestamp', () => {
+      const creationTimestamp = Date.parse('2023-12-24T20:51:53.582Z');
+      const reproducible = createKeyStore({ packageName: 'com.mycompany.myapp', creationTimestamp });
+      const reproducibleKeyStore = readKeyStore(reproducible);
+
+      it('should derive the same KeyStore from the same timestamp', () => {
+        expect(createKeyStore({ packageName: 'com.mycompany.myapp', creationTimestamp }).equals(reproducible)).toBe(true);
+      });
+
+      it('should derive another key from another timestamp', () => {
+        const other = readKeyStore(createKeyStore({ packageName: 'com.mycompany.myapp', creationTimestamp: creationTimestamp + 1 }));
+        expect(other.certificate.publicKey.equals(reproducibleKeyStore.certificate.publicKey)).toBe(false);
+      });
+
+      it('should derive a 2048 bits RSA key with the public exponent 65537, encrypted with the password', () => {
+        const key = createPrivateKey({ key: reproducibleKeyStore.encryptedKey, format: 'der', type: 'pkcs8', passphrase: 'password' });
+        expect(key.asymmetricKeyDetails).toMatchObject({ modulusLength: 2048, publicExponent: 65537n });
+        expect(reproducibleKeyStore.certificate.checkPrivateKey(key)).toBe(true);
+      });
+
+      it('should generate a certificate valid from the timestamp', () => {
+        const { certificate } = reproducibleKeyStore;
+        expect(certificate.validFromDate.toISOString()).toBe('2023-12-24T20:51:53.000Z');
+        expect(certificate.verify(certificate.publicKey)).toBe(true);
+      });
+
+      it('should be loaded by the OpenSSL of node, which verifies its integrity with the password', () => {
+        expect(() => createSecureContext({ pfx: reproducible, passphrase: 'password' })).not.toThrow();
+        expect(() => createSecureContext({ pfx: reproducible, passphrase: 'wrong' })).toThrow('mac verify failure');
+      });
+    });
+
     describe('with keytool', () => {
       const keytool = process.env.JAVA_HOME ? join(process.env.JAVA_HOME, 'bin', 'keytool') : 'keytool';
       // English output, whatever the locale.
@@ -242,6 +274,19 @@ describe('generator - java - support - key-store-node-crypto', () => {
 
       it('should be refused by Java with another password', () => {
         expect(list(file, 'wrong').status).not.toBe(0);
+      });
+
+      it('should load the KeyStore derived from a timestamp in Java', () => {
+        const reproducibleFile = join(folder!, 'reproducible.p12');
+        writeFileSync(
+          reproducibleFile,
+          createKeyStore({ packageName: 'com.mycompany.myapp', creationTimestamp: Date.parse('2023-12-24') }),
+        );
+        const { status, stdout } = list(reproducibleFile, 'password');
+        expect(status).toBe(0);
+        expect(stdout).toContain('Entry type: PrivateKeyEntry');
+        expect(stdout).toContain('Subject Public Key Algorithm: 2048-bit RSA key');
+        expect(list(reproducibleFile, 'wrong').status).not.toBe(0);
       });
     });
   });
