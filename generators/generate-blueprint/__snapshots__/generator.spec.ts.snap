@@ -742,6 +742,36 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/docker/templates/template-file-docker.ejs": {
     "stateCleared": "modified",
   },
+  "generators/e2e/generators/bootstrap/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/templates/template-file-e2e:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/templates/template-file-e2e:common.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/entities/command.ts": {
     "stateCleared": "modified",
   },

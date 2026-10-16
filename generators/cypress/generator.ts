@@ -34,8 +34,6 @@ import type {
   Options as CypressOptions,
 } from './types.ts';
 
-const WAIT_TIMEOUT = 3 * 60000;
-
 export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication, CypressConfig> {
   angularSchematic = false;
 
@@ -49,8 +47,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('client');
+      await this.dependsOnBootstrap('e2e');
       await this.dependsOnJHipster('javascript-simple-application');
+      await this.dependsOnJHipster('jhipster:e2e:common');
     }
   }
 
@@ -86,19 +85,28 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           cypressBootstrapEntities: true,
         });
       },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      // The e2e properties of the application are final once it is prepared.
       npmScripts({ application }) {
-        const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
         this.angularSchematic = Boolean(application.clientFrameworkAngular);
-        // The native federation dev server never reports its url to `ng e2e` (the builder only yields on rebuilds),
-        // so microfrontend applications start the dev server concurrently and wait for its port instead.
-        const ngE2e = this.angularSchematic && !application.microfrontend;
-        // The Angular dev server listens on localhost only (which may resolve to ::1), Vite listens on every address.
-        const devServerHost = this.angularSchematic ? 'localhost' : '127.0.0.1';
-        // The client scripts run at the root from the client workspace when it has one.
-        const { clientRootDir } = application;
-        const clientRun = (script: string) => `npm run ${clientRootDir ? `-w ${clientRootDir} ` : ''}${script}`;
-        const clientStart = clientRootDir ? `"${clientRun('start')}"` : 'npm:start';
-        const ng = clientRootDir ? `npm exec -w ${clientRootDir} -- ng` : 'ng';
+        const {
+          clientRootDir,
+          clientNpmRun,
+          clientNgCommand: ng,
+          e2eNgBuilder,
+          e2eDevServerHost,
+          e2eDevServerPort,
+          e2eWaitTimeout,
+        } = application;
+        const clientStart = clientRootDir ? `"${clientNpmRun} start"` : 'npm:start';
         const coverageEnv = application.cypressCoverage ? ' --env CYPRESS_COVERAGE=true' : '';
 
         Object.assign(application.clientPackageJsonScripts, {
@@ -118,30 +126,17 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         // Scripts that handle server and client concurrently should be added to the root package.json
         Object.assign(application.packageJsonScripts, {
           'ci:e2e:run': `${e2eTlsEnv}concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless`,
-          'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
-          'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
           'e2e:devserver':
-            ngE2e ?
+            e2eNgBuilder ?
               `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await --if-present && ${ng} e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
-            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start ${clientStart} "wait-on -t ${WAIT_TIMEOUT} http-get://${devServerHost}:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}${coverageEnv}"`,
+            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start ${clientStart} "wait-on -t ${e2eWaitTimeout} http-get://${e2eDevServerHost}:${e2eDevServerPort} && npm run e2e:headless -- -c baseUrl=http://localhost:${e2eDevServerPort}${coverageEnv}"`,
         });
-
-        Object.assign(application.packageJsonScripts, {
-          'pree2e:headless': 'npm run ci:server:await --if-present',
-        });
-
-        if (application.clientRootDir) {
-          // Add scripts forwarding to client package.json
-          for (const script of ['e2e:headless'].filter(script => application.clientPackageJsonScripts[script])) {
-            application.packageJsonScripts[script] = `npm run -w ${application.clientRootDir} ${script}`;
-          }
-        }
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get postPreparingEachEntity() {
