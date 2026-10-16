@@ -75,6 +75,35 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with an entity with blob fields stored as byte[]', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Foo',
+            fields: [
+              { fieldName: 'attachment', fieldType: 'byte[]', fieldTypeBlobContent: 'any' },
+              { fieldName: 'picture', fieldType: 'byte[]', fieldTypeBlobContent: 'image' },
+              { fieldName: 'description', fieldType: 'byte[]', fieldTypeBlobContent: 'text' },
+            ],
+          } as any,
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    it('should store every blob field with its blob type', () => {
+      result.assertJsonFileContent('.jhipster/Foo.json', {
+        fields: [
+          { fieldName: 'attachment', fieldType: 'AnyBlob' },
+          { fieldName: 'picture', fieldType: 'ImageBlob' },
+          { fieldName: 'description', fieldType: 'TextBlob' },
+        ],
+      });
+      result.assertNoFileContent('.jhipster/Foo.json', 'fieldTypeBlobContent');
+    });
+  });
+
   describe('security hardening', () => {
     before(async () => {
       await helpers

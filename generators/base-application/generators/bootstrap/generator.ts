@@ -127,8 +127,10 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       configureEntity({ application, control, entityName, entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
-        for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
-          convertFieldBlobType(field);
+        // Saved once: saving writes the file, which gives the storage a new store, the fields left would be converted in the old one.
+        const blobFields = entityConfig.fields!.filter(field => field.fieldType === 'byte[]');
+        if (blobFields.length > 0) {
+          blobFields.forEach(field => convertFieldBlobType(field));
           entityStorage.save();
         }
 
