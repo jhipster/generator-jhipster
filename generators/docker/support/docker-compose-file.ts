@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Document, isScalar, isSeq, visit } from 'yaml';
+import { Document, Scalar, isScalar, isSeq, visit } from 'yaml';
 
 import type { DockerComposeFile, DockerComposeService } from '../types.ts';
 
@@ -62,6 +62,12 @@ export const dockerComposeFileContent = (
     Pair(_, pair) {
       if (isScalar(pair.key) && flowKeys.includes(String(pair.key.value)) && isSeq(pair.value)) {
         pair.value.flow = true;
+        // Quoted, like the templates wrote them: a plain text in a flow list is not read by every yaml parser.
+        for (const item of pair.value.items) {
+          if (isScalar(item) && typeof item.value === 'string') {
+            item.type = Scalar.QUOTE_SINGLE;
+          }
+        }
       }
     },
   });

@@ -57,7 +57,7 @@ services:
     environment:
       - A=b
     healthcheck:
-      test: [ CMD, check ]
+      test: [ 'CMD', 'check' ]
       retries: 10
 "
 `);
@@ -70,7 +70,7 @@ services:
 name: jhipster
 services:
   db:
-    environment: [ A=b ]
+    environment: [ 'A=b' ]
     healthcheck:
       test:
         - CMD
