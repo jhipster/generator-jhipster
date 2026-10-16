@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import type { Application as ClientApplication } from '../client/types.ts';
+
+import type { Application as E2eApplication } from './types.ts';
 
 export type E2eAddedApplicationProperties = {
   /** The port the e2e tests reach the client at: the proxy port of a microfrontend, the dev server port otherwise. */
@@ -46,7 +47,4 @@ export const mutateApplication = {
   e2eWaitTimeout: 3 * 60000,
   clientNpmRun: ({ clientRootDir }) => (clientRootDir ? `npm run -w ${clientRootDir}` : 'npm run'),
   clientNgCommand: ({ clientRootDir }) => (clientRootDir ? `npm exec -w ${clientRootDir} -- ng` : 'ng'),
-} as const satisfies MutateDataPropertiesWithRequiredProperties<
-  MutateDataParam<ClientApplication & E2eAddedApplicationProperties>,
-  E2eAddedApplicationProperties
->;
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<E2eApplication>, E2eAddedApplicationProperties>;
