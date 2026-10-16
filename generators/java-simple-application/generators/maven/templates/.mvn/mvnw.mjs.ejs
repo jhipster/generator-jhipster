@@ -1,0 +1,37 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+// Runs the Maven wrapper from npm scripts on every OS.
+// npm runs scripts with cmd.exe on Windows, which cannot run `./mvnw`.
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const isWindows = process.platform === 'win32';
+const wrapper = fileURLToPath(new URL(isWindows ? '../mvnw.cmd' : '../mvnw', import.meta.url));
+const args = process.argv.slice(2);
+
+// Batch files only run through cmd.exe, so quote every argument for it.
+const quote = arg => `"${arg.replaceAll('"', '""')}"`;
+const { status, signal, error } =
+  isWindows ?
+    spawnSync([wrapper, ...args].map(quote).join(' '), { stdio: 'inherit', shell: true })
+  : spawnSync(wrapper, args, { stdio: 'inherit' });
+
+if (error) throw error;
+if (signal) process.kill(process.pid, signal);
+process.exitCode = status ?? 1;

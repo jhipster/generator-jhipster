@@ -26,6 +26,7 @@ export default {
         'buildSrc/build.gradle',
         'buildSrc/gradle/libs.versions.toml',
         'gradle/libs.versions.toml',
+        'gradle/gradlew.mjs',
       ],
     },
     {

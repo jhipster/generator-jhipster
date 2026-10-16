@@ -49,32 +49,33 @@ export default class ServerGenerator extends JavaApplicationGenerator {
         if (buildTool === 'maven') {
           const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
-            'app:start': './mvnw -ntp --batch-mode',
-            'backend:info': './mvnw --version',
-            'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
-            'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
-            'backend:start': `./mvnw${excludeWebapp} -ntp --batch-mode`,
-            'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
-            'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
-            'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
+            'app:start': 'node .mvn/mvnw.mjs -ntp --batch-mode',
+            'backend:info': 'node .mvn/mvnw.mjs --version',
+            'backend:doc:test': 'node .mvn/mvnw.mjs -ntp javadoc:javadoc --batch-mode',
+            'backend:nohttp:test': 'node .mvn/mvnw.mjs -ntp checkstyle:check --batch-mode',
+            'backend:start': `node .mvn/mvnw.mjs${excludeWebapp} -ntp --batch-mode`,
+            'java:jar': 'node .mvn/mvnw.mjs -ntp verify -DskipTests --batch-mode',
+            'java:war': 'node .mvn/mvnw.mjs -ntp verify -DskipTests --batch-mode -Pwar',
+            'java:docker': 'node .mvn/mvnw.mjs -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
-            'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
-            'backend:build-cache': './mvnw dependency:go-offline -ntp',
-            'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
+            'backend:unit:test': `node .mvn/mvnw.mjs -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
+            'backend:build-cache': 'node .mvn/mvnw.mjs dependency:go-offline -ntp',
+            'backend:debug':
+              'node .mvn/mvnw.mjs -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === 'gradle') {
           const excludeWebapp = application.skipClient ? '' : '-x webapp -x webapp_test';
           scriptsStorage.set({
-            'app:start': './gradlew',
-            'backend:info': './gradlew -v',
-            'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
-            'backend:nohttp:test': `./gradlew checkstyleNohttp checkstyleMain spotlessCheck ${excludeWebapp}`,
-            'backend:start': `./gradlew ${excludeWebapp}`,
-            'java:jar': './gradlew bootJar -x test -x integrationTest',
-            'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
-            'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
+            'app:start': 'node gradle/gradlew.mjs',
+            'backend:info': 'node gradle/gradlew.mjs -v',
+            'backend:doc:test': `node gradle/gradlew.mjs javadoc ${excludeWebapp}`,
+            'backend:nohttp:test': `node gradle/gradlew.mjs checkstyleNohttp checkstyleMain spotlessCheck ${excludeWebapp}`,
+            'backend:start': `node gradle/gradlew.mjs ${excludeWebapp}`,
+            'java:jar': 'node gradle/gradlew.mjs bootJar -x test -x integrationTest',
+            'java:war': 'node gradle/gradlew.mjs bootWar -Pwar -x test -x integrationTest',
+            'java:docker': 'node gradle/gradlew.mjs bootJar -Pprod jibDockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -PjibArchitecture=arm64',
-            'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
+            'backend:unit:test': `node gradle/gradlew.mjs test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache':
               'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package -- -x webapp -x webapp_test',
           });
