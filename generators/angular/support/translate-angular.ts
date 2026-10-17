@@ -257,7 +257,7 @@ const pipeEnumTranslation = (
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
   if (!parsedInterpolate?.value) {
-    throw new Error(`Value is required for TagEnum ${key}.`);
+    throw new Error(`Value is required for PipeEnum ${key}.`);
   }
   const { value, fallback } = parsedInterpolate;
   if (enableTranslation) {
