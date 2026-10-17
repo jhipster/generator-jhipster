@@ -19,7 +19,7 @@
 import { glob } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { merge, startCase } from 'lodash-es';
+import { startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
@@ -32,8 +32,6 @@ import { ClientApplicationGenerator } from '../../generator.ts';
 export default class I18NGenerator extends ClientApplicationGenerator {
   translationData!: TranslationData;
   languagesToGenerate!: readonly Language[];
-  /** The entity translation keys of each file, merged at once while the entities are added. */
-  #pendingEntityTranslationKeys?: Record<string, Record<string, any>>;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -81,21 +79,14 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
-        source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
-          const filePath = `${application.clientI18nDir}${language}/global.json`;
-          const value = {
-            global: {
-              menu: {
-                entities: {
-                  [translationKey]: translationValue,
-                },
-              },
-            },
-          };
-          if (this.#pendingEntityTranslationKeys) {
-            merge((this.#pendingEntityTranslationKeys[filePath] ??= {}), value);
-          } else {
-            this.mergeDestinationJson(filePath, value);
+        source.addEntityTranslationKey = keys => {
+          // Each translation file is merged once, with all of its keys.
+          const entitiesByLanguage: Record<string, Record<string, string>> = {};
+          for (const { translationKey, translationValue, language } of [keys].flat()) {
+            (entitiesByLanguage[language] ??= {})[translationKey] = translationValue;
+          }
+          for (const [language, entities] of Object.entries(entitiesByLanguage)) {
+            this.mergeDestinationJson(`${application.clientI18nDir}${language}/global.json`, { global: { menu: { entities } } });
           }
         };
       },
@@ -323,26 +314,17 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       addEntities({ entities, source }) {
-        // Each translation file is read and written once, with the keys of every entity.
-        const pending: Record<string, Record<string, any>> = {};
-        this.#pendingEntityTranslationKeys = pending;
-        try {
-          for (const entity of entities.filter(
-            entity => !entity.skipClient && !entity.builtInUser && entity.entityTranslationKeyMenuPath.startsWith('global'),
-          )) {
-            for (const { languageTag } of this.languagesToGenerate) {
-              source.addEntityTranslationKey?.({
-                language: languageTag,
-                translationKey: entity.entityTranslationKeyMenu,
-                translationValue: entity.entityNameHumanized ?? startCase(entity.entityNameCapitalized),
-              });
-            }
-          }
-        } finally {
-          this.#pendingEntityTranslationKeys = undefined;
-        }
-        for (const [filePath, value] of Object.entries(pending)) {
-          this.mergeDestinationJson(filePath, value);
+        const translationKeys = entities
+          .filter(entity => !entity.skipClient && !entity.builtInUser && entity.entityTranslationKeyMenuPath.startsWith('global'))
+          .flatMap(entity =>
+            this.languagesToGenerate.map(({ languageTag }) => ({
+              language: languageTag,
+              translationKey: entity.entityTranslationKeyMenu,
+              translationValue: entity.entityNameHumanized ?? startCase(entity.entityNameCapitalized),
+            })),
+          );
+        if (translationKeys.length > 0) {
+          source.addEntityTranslationKey?.(translationKeys);
         }
       },
     });
