@@ -47,6 +47,9 @@ export default class XmlStorage {
   sortFile: boolean;
   protected readonly saveFile: (content: string) => void;
   protected readonly loadFile: () => string;
+  /** The current contents of the file, compared by identity: other contents make the cached store outdated. */
+  protected readonly fileContents?: () => unknown;
+  protected _cachedContents: unknown;
 
   protected readonly parser: XMLParser;
   protected readonly builder: XMLBuilder;
@@ -55,12 +58,14 @@ export default class XmlStorage {
   constructor({
     saveFile,
     loadFile,
+    fileContents,
     xmlParserOptions,
     xmlBuildOptions,
     sortFile,
   }: {
     saveFile: (content: string) => void;
     loadFile: () => string;
+    fileContents?: () => unknown;
     xmlParserOptions?: Partial<X2jOptions>;
     xmlBuildOptions?: Partial<XmlBuilderOptions>;
     sortFile?: boolean;
@@ -73,6 +78,7 @@ export default class XmlStorage {
 
     this.saveFile = saveFile;
     this.loadFile = loadFile;
+    this.fileContents = fileContents;
     this.sortFile = sortFile ?? true;
   }
 
@@ -101,6 +107,7 @@ export default class XmlStorage {
       }
 
       this.saveFile(this.builder.build(this._cachedStore));
+      this._cachedContents = this.fileContents?.();
     }
   }
 
@@ -110,7 +117,13 @@ export default class XmlStorage {
   }
 
   protected load() {
-    this._cachedStore ??= this.parser.parse(this.loadFile());
+    if (this.fileContents && this._cachedStore && this.fileContents() !== this._cachedContents) {
+      this.clearCache();
+    }
+    if (!this._cachedStore) {
+      this._cachedStore = this.parser.parse(this.loadFile());
+      this._cachedContents = this.fileContents?.();
+    }
   }
 
   protected mergeContent<T>(existing: T, newContent?: string): T {

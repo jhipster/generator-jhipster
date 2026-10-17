@@ -120,8 +120,18 @@ const reorderDependency = <Dependency extends MavenDependency = MavenDependency>
 }: Dependency): Dependency => ({ inProfile, groupId, artifactId, version, type, scope, classifier, ...rest }) as Dependency;
 
 export default class PomStorage extends XmlStorage {
-  constructor({ saveFile, loadFile, sortFile }: { saveFile: (content: string) => void; loadFile: () => string; sortFile?: boolean }) {
-    super({ saveFile, loadFile, sortFile });
+  constructor({
+    saveFile,
+    loadFile,
+    fileContents,
+    sortFile,
+  }: {
+    saveFile: (content: string) => void;
+    loadFile: () => string;
+    fileContents?: () => unknown;
+    sortFile?: boolean;
+  }) {
+    super({ saveFile, loadFile, fileContents, sortFile });
   }
 
   addProperty({ inProfile, property, value = null }: MavenProperty) {
@@ -251,24 +261,12 @@ const emptyPomFile = `<?xml version="1.0" encoding="UTF-8"?>
 
 export const createPomStorage = (generator: CoreGenerator, { sortFile }: { sortFile?: boolean } = {}) => {
   const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile });
-  // The storage keeps the pom it writes: only a change by someone else is parsed again.
-  let saving = false;
-  const pomStorage = new PomStorage({
+  // mem-fs-editor gives the file new contents at every write: the pom is parsed again only after a write of other contents.
+  const pomPath = generator.destinationPath('pom.xml');
+  return new PomStorage({
     loadFile,
-    saveFile: content => {
-      saving = true;
-      try {
-        generator.writeDestination('pom.xml', formatPomFirstLevel(content));
-      } finally {
-        saving = false;
-      }
-    },
+    saveFile: content => generator.writeDestination('pom.xml', formatPomFirstLevel(content)),
+    fileContents: () => generator.fs.store.get(pomPath).contents,
     sortFile,
   });
-  generator.fs.store.on('change', filename => {
-    if (!saving && filename === generator.destinationPath('pom.xml')) {
-      pomStorage.clearCache();
-    }
-  });
-  return pomStorage;
 };
