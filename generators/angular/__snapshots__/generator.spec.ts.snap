@@ -5855,6 +5855,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
         "@angular/build": null,
         "tinyglobby": null,
       },
+      "overrides": {
+        "@softarc/native-federation-orchestrator": "4.7.0",
+      },
     },
     {
       "devDependencies": {
@@ -7080,6 +7083,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
         "deepmerge": null,
         "folder-hash": null,
         "tinyglobby": null,
+      },
+      "overrides": {
+        "@softarc/native-federation-orchestrator": "4.7.0",
       },
     },
     {
