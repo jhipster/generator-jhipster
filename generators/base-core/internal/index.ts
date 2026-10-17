@@ -19,3 +19,4 @@
 export * from './config-def.ts';
 export * from './project-options.ts';
 export * from './write-files.ts';
+export * from './merge-yaml.ts';
