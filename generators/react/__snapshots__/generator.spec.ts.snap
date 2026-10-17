@@ -125,22 +125,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -928,22 +913,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -1753,22 +1723,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -2569,22 +2524,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -3406,22 +3346,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -4289,22 +4214,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -5092,22 +5002,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",

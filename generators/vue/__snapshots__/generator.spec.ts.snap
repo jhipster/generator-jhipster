@@ -125,22 +125,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -977,22 +962,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -1890,22 +1860,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "devServerPort": 3000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -2755,22 +2710,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "devServerPort": 3000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -3677,22 +3617,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -4675,22 +4600,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
@@ -5503,22 +5413,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": undefined,
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",

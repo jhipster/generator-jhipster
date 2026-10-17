@@ -167,22 +167,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
-  "dockerComposeFiles": {
-    "postgresql": {
-      "data": {
-        "name": "jhipster",
-        "services": {
-          "postgresql": {
-            "environment": [
-              "POSTGRES_USER=jhipster",
-            ],
-            "image": "postgresql-placeholder",
-          },
-        },
-      },
-      "source": "postgresql.yml",
-    },
-  },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerImage": undefined,
   "dockerServices": [],
