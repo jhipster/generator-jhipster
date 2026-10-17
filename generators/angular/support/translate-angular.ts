@@ -314,8 +314,6 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
     if (/(:?\.html|.ts)$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
-    }
-    if (/(:?\.html|.ts)$/.test(filePath)) {
       content = translationReplacer ? translationReplacer(content, filePath) : content;
     }
     if (!enableTranslation) {
