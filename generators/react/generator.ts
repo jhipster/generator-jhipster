@@ -20,7 +20,6 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
-import { upperFirstCamelCase } from '../../lib/utils/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
@@ -120,7 +119,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
       },
-      async javaNodeBuildPaths({ application }) {
+      javaNodeBuildPaths({ application }) {
         const { javaNodeBuildPaths, microfrontend } = application;
 
         javaNodeBuildPaths?.push('postcss.config.ts', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts');
@@ -417,13 +416,5 @@ ${comment}
 
   generateEntityClientEnumImports(fields: ClientField[]) {
     return getClientEnumImportsFormat(fields, REACT);
-  }
-
-  /**
-   * get the upperFirst camelCase value.
-   * @param {string} value string to convert
-   */
-  upperFirstCamelCase(value: string): string {
-    return upperFirstCamelCase(value);
   }
 }
