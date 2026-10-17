@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { isDeepStrictEqual } from 'node:util';
+
 import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
@@ -29,7 +31,11 @@ import type GeneratorsByNamespace from '../types.ts';
 
 import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
-import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.ts';
+import {
+  CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
+  CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY,
+  getEntitiesFromDir,
+} from './support/index.ts';
 import type {
   ConfiguringEachEntityTaskParam,
   EntityToLoad,
@@ -243,44 +249,64 @@ export default class BaseApplicationGenerator<
   getEntityConfig(entityName: string, create = false): Storage | undefined {
     const entityPath = this.getEntityConfigPath(entityName);
     if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { transform: this.features.configTransform });
+    // The storage of each entity file is shared by the generators of the application: it keeps the config it read.
+    const storages = this.getContextData<Map<string, Storage>>(CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY, {
+      factory: () => new Map(),
+    });
+    let storage = storages.get(entityPath);
+    if (!storage) {
+      storage = this.createStorage(entityPath, { transform: this.features.configTransform });
+      storages.set(entityPath, storage);
+    }
+    return storage;
   }
 
   /**
    * get sorted list of entity names according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntityNames(): string[] {
-    return this.getExistingEntities().map(entity => entity.name);
+    return this.#getExistingEntityStorages().map(({ name }) => name);
   }
 
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntities(): { name: string; definition: Entity }[] {
+    return this.#getExistingEntityStorages().map(({ name, storage }) => ({ name, definition: storage.getAll() as unknown as Entity }));
+  }
+
+  /**
+   * The storages of the existing entities, sorted according to changelog date.
+   * Only the annotations of each entity are read, as stored.
+   */
+  #getExistingEntityStorages(): { name: string; storage: Storage }[] {
     // An entity without changelog date is ordered by the one it gets: a built-in entity the one of the creation timestamp,
     // another one the next timestamp, after the others. So the order is the same at each generation.
     const builtInDates: Record<string, string> = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp);
-    const date = ({
-      name,
-      definition: { annotations },
-    }: {
+    type ExistingEntity = {
       name: string;
-      definition: { annotations?: { changelogDate?: number | string; incrementalChangelogDate?: number | string } };
-    }): number => Number(annotations?.incrementalChangelogDate ?? annotations?.changelogDate ?? builtInDates[name] ?? Infinity);
+      storage: Storage;
+      annotations?: { changelogDate?: number | string; incrementalChangelogDate?: number | string };
+    };
+    const date = ({ name, annotations }: ExistingEntity): number =>
+      Number(annotations?.incrementalChangelogDate ?? annotations?.changelogDate ?? builtInDates[name] ?? Infinity);
     // Two entities without date, both after the others, compare as equal (Infinity - Infinity is NaN).
-    const isBefore = (e1: Parameters<typeof date>[0], e2: Parameters<typeof date>[0]): number => date(e1) - date(e2) || 0;
+    const isBefore = (e1: ExistingEntity, e2: ExistingEntity): number => date(e1) - date(e2) || 0;
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: Entity }[] = [];
+    const entities: ExistingEntity[] = [];
     for (const entityName of new Set([...((this.jhipsterConfig.entities as string[]) || []), ...getEntitiesFromDir(configDir)])) {
-      const definition: Entity = this.getEntityConfig(entityName)?.getAll() as unknown as Entity;
-      if (definition) {
-        entities.push({ name: entityName, definition });
+      const storage = this.getEntityConfig(entityName);
+      if (storage) {
+        entities.push({ name: entityName, storage, annotations: storage.get('annotations', { raw: true }) });
       }
     }
     entities.sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
+    const names = entities.map(({ name }) => name);
+    if (!isDeepStrictEqual(this.jhipsterConfig.entities, names)) {
+      this.jhipsterConfig.entities = names;
+    }
     return entities;
   }
 
