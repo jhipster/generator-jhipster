@@ -263,6 +263,49 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
         await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
       });
 
+<%_ if (!readOnly && clientFrameworkReact) { _%>
+      test('detail delete button should delete the entity and return to the list', async ({ page, jhi }) => {
+        await page.locator(entityDetailsButtonSelector).first().click();
+        await expect(jhi.entity.getEntityDetailsHeading('<%- entityInstance %>')).toBeVisible();
+        await page.locator(entityDeleteButtonSelector).click();
+        await expect(jhi.entity.getEntityDeleteDialogHeading('<%- entityInstance %>')).toBeVisible();
+
+        const deleteRequest = page.waitForResponse(
+          response => new URL(response.url()).pathname.startsWith(`${<%- entityInstance %>ApiUrl}/`) && response.request().method() === 'DELETE',
+        );
+        const listRequest = entitiesRequest(page);
+        await page.locator(entityConfirmDeleteButtonSelector).click();
+        expect((await deleteRequest).status()).toBe(204);
+        expect((await listRequest).status()).toBe(200);
+        await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
+  <%_ if (playwrightBootstrapEntities) { _%>
+        <%- entityInstance %> = undefined;
+  <%_ } _%>
+      });
+
+      test('failed detail delete should return to details and show an error', async ({ page, jhi }) => {
+        await page.locator(entityDetailsButtonSelector).first().click();
+        await expect(jhi.entity.getEntityDetailsHeading('<%- entityInstance %>')).toBeVisible();
+        const detailUrl = new URL(page.url());
+        const deleteUrl = `${<%- entityInstance %>ApiUrl}/${<%- entityInstance %>.<%- primaryKey.name %>}`;
+        await page.route(url => url.pathname === deleteUrl, route =>
+          route.fulfill({
+            status: 500,
+            contentType: 'application/problem+json',
+            body: JSON.stringify({ title: 'Internal Server Error', detail: 'Delete failed' }),
+          }),
+        );
+
+        await page.locator(entityDeleteButtonSelector).click();
+        await expect(jhi.entity.getEntityDeleteDialogHeading('<%- entityInstance %>')).toBeVisible();
+        await page.locator(entityConfirmDeleteButtonSelector).click();
+
+        await expect(page).toHaveURL(url => url.pathname === detailUrl.pathname);
+        await expect(jhi.entity.getEntityDetailsHeading('<%- entityInstance %>')).toBeVisible();
+        await expect(page.locator('.Toastify__toast--error')).toBeVisible();
+      });
+<%_ } _%>
+
 <%_ if (!readOnly && updatableEntity) { _%>
       test('edit button click should load edit <%- entityNameCapitalized %> page and go back', async ({ page, jhi }) => {
         await page.locator(entityEditButtonSelector).first().click();

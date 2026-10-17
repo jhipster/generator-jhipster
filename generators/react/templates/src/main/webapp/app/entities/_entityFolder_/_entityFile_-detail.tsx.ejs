@@ -161,6 +161,12 @@ export const <%- entityReactName %>Detail = () => {
         <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/edit`} replace variant="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Button>
+<%_ if (!readOnly) { _%>
+        &nbsp;
+        <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/delete`} state={{ fromDetails: true }} variant="danger" data-cy="entityDeleteButton">
+          <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
+        </Button>
+<%_ } _%>
       </Col>
     </Row>
   );
