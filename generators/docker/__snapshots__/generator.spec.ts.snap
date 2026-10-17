@@ -17,14 +17,12 @@ services:
       - SPRING_MONGODB_URI=mongodb://mongodb:27017/jhipster
       - JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -152,14 +150,12 @@ services:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -278,14 +274,12 @@ services:
       - SPRING_NEO4J_URI=bolt://neo4j:7687
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -396,14 +390,12 @@ services:
       - SPRING_R2DBC_PASSWORD=
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -529,11 +521,7 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle:1521:jhipster
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8081; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -615,11 +603,7 @@ services:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8081; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -737,11 +721,7 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:sqlserver://mssql:1433;database=jhipster;encrypt=false
       - JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8081; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -850,11 +830,7 @@ services:
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8081; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -986,14 +962,12 @@ services:
       - SPRING_DATASOURCE_PASSWORD=
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1084,14 +1058,12 @@ services:
       - SPRING_MONGODB_URI=mongodb://mongodb:27017/jhipster
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1219,14 +1191,12 @@ services:
       - SPRING_DATASOURCE_USERNAME=jhipster
       - SPRING_DATASOURCE_PASSWORD=
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1320,14 +1290,12 @@ services:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1463,14 +1431,12 @@ services:
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1578,14 +1544,12 @@ services:
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=jhipster
       - JHIPSTER_SLEEP=20
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET
-          /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3;
-          grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
+      test: [ 'CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3''' ]
       interval: 5s
       timeout: 5s
       retries: 40

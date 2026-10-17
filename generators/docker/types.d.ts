@@ -25,6 +25,30 @@ export type DockerComposeService = {
   extendedServiceName?: string;
 };
 
+/** A service of a docker compose file. */
+export type DockerComposeServiceConfig = {
+  image?: string;
+  build?: { context: string; dockerfile: string };
+  container_name?: string;
+  command?: string;
+  environment?: string[];
+  ports?: string[];
+  volumes?: string[];
+  depends_on?: Record<string, { condition: string }>;
+  healthcheck?: Record<string, unknown>;
+  labels?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+/**
+ * A docker compose file of an application: the yaml file with its static parts, by its name in the resources of the docker
+ * bootstrap, and the data the application merges into it, like its project name, its images and its variables.
+ */
+export type DockerComposeFile = {
+  source: string;
+  data: { name?: string; services?: Record<string, DockerComposeServiceConfig> };
+};
+
 export type Application = BaseSimpleApplicationApplication &
   DockerAddedApplicationLoadingProperties &
   DockerAddedApplicationPreparingProperties;
