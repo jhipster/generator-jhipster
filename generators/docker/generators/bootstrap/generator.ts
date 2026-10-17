@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
+import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/index.ts';
+import type { Application as SpringBootApplication } from '../../../spring-boot/index.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import type {
   Application as DockerApplication,
@@ -25,7 +27,8 @@ import type {
   Source as DockerSource,
 } from '../../types.ts';
 
-import { type DockerComposeApplication, addPostgresqlDockerComposeFile, addRedisDockerComposeFile } from './internal/compose-services.ts';
+/** An application with docker compose files: its docker data and the backend choices its services depend on. */
+type DockerComposeApplication = DockerApplication & SpringDataRelationalApplication<any> & SpringBootApplication<any>;
 
 export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
   DockerApplication,
@@ -67,12 +70,30 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
 
   get default() {
     return this.asDefaultTaskGroup({
-      // The services are added once every generator prepared the application.
+      // The services are added once every generator prepared the application: their static parts are in the resources.
       postgresql({ application }) {
-        addPostgresqlDockerComposeFile(application as DockerComposeApplication);
+        const { baseName, databaseTypeSql, prodDatabaseTypePostgresql, prodDatabasePassword, dockerContainers } =
+          application as DockerComposeApplication;
+        if (!databaseTypeSql || !prodDatabaseTypePostgresql) return;
+        application.dockerComposeFiles.postgresql = {
+          source: 'postgresql.yml',
+          data: {
+            name: baseName.toLowerCase(),
+            services: {
+              postgresql: {
+                image: dockerContainers.postgresql,
+                environment: [`POSTGRES_USER=${baseName}`, ...(prodDatabasePassword ? [`POSTGRES_PASSWORD=${prodDatabasePassword}`] : [])],
+              },
+            },
+          },
+        };
       },
       redis({ application }) {
-        addRedisDockerComposeFile(application as DockerComposeApplication);
+        if (!(application as DockerComposeApplication).cacheProviderRedis) return;
+        application.dockerComposeFiles.redis = {
+          source: 'redis.yml',
+          data: { name: application.baseName.toLowerCase(), services: { redis: { image: application.dockerContainers.redis } } },
+        };
       },
     });
   }

@@ -40,11 +40,13 @@ export type DockerComposeServiceConfig = {
   [key: string]: unknown;
 };
 
-/** A docker compose file of an application: its comments, written at its beginning after the one of every file, its project name and its services. */
+/**
+ * A docker compose file of an application: the yaml file with its static parts, by its name in the resources of the docker
+ * bootstrap, and the data the application merges into it, like its project name, its images and its variables.
+ */
 export type DockerComposeFile = {
-  comments?: string[];
-  name: string;
-  services: Record<string, DockerComposeServiceConfig>;
+  source: string;
+  data: { name?: string; services?: Record<string, DockerComposeServiceConfig> };
 };
 
 export type Application = BaseSimpleApplicationApplication &

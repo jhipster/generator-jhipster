@@ -26,9 +26,9 @@ import type { Application as SpringDataRelationalApplication } from '../spring-b
 import { getJdbcUrl, getR2dbcUrl } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringBootApplication } from '../spring-boot/index.ts';
 
-import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
+import { DOCKER_COMPOSE_SOURCES_DIR, SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
 import { dockerFiles } from './files.ts';
-import { createDockerComposeFile, createDockerExtendedServices, dockerComposeFileContent } from './support/index.ts';
+import { createDockerComposeFile, createDockerExtendedServices } from './support/index.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
@@ -176,8 +176,10 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
         });
       },
       writeDockerComposeFiles({ application }) {
-        for (const [fileName, file] of Object.entries(application.dockerComposeFiles)) {
-          this.writeDestination(`${application.dockerServicesDir}${fileName}.yml`, dockerComposeFileContent(file));
+        for (const [fileName, { source, data }] of Object.entries(application.dockerComposeFiles)) {
+          const destination = `${application.dockerServicesDir}${fileName}.yml`;
+          this.writeDestination(destination, this.fs.read(this.fetchFromInstalledJHipster(DOCKER_COMPOSE_SOURCES_DIR, source)));
+          this.mergeDestinationYaml(destination, data);
         }
       },
     });

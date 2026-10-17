@@ -35,6 +35,8 @@ import {
 } from '../base-workspaces/internal/docker-prompts.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../base-workspaces/internal/index.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
+import { DOCKER_COMPOSE_SOURCES_DIR } from '../docker/constants.ts';
+import { mergeDockerComposeFile } from '../docker/support/index.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { writeFiles } from './files.ts';
@@ -173,11 +175,13 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           const path = this.workspacePath(appConfig.appFolder!);
           // The docker files of the application, in the folder it declares: a blueprint may keep them elsewhere.
           const dockerServicesDir = pathjs.join(path, appConfig.dockerServicesDir);
-          // A docker compose file of the application: its data, a copy changed for the deployment, or the file it wrote.
-          const composeFile = (fileName: string): { services: Record<string, any> } =>
-            appConfig.dockerComposeFiles?.[fileName] ?
-              structuredClone(appConfig.dockerComposeFiles[fileName])
-            : parseYaml(this.fs.read(`${dockerServicesDir}/${fileName}.yml`));
+          // A docker compose file of the application: its source merged with its data, or the file it wrote.
+          const composeFile = (fileName: string): { services: Record<string, any> } => {
+            const file = appConfig.dockerComposeFiles?.[fileName];
+            return file ?
+                mergeDockerComposeFile(file, this.fs.read(this.fetchFromInstalledJHipster(DOCKER_COMPOSE_SOURCES_DIR, file.source)))
+              : parseYaml(this.fs.read(`${dockerServicesDir}/${fileName}.yml`));
+          };
           // Add application configuration
           const yaml = composeFile('app');
           const yamlConfig = yaml.services.app;

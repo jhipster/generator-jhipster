@@ -26,8 +26,8 @@ export type DockerAddedApplicationLoadingProperties = {
   dockerApplicationEnvironment: Record<string, string>;
   dockerServices: string[];
   /**
-   * The docker compose files of the application a deployment uses, by name, as data: the docker generator writes them to
-   * `dockerServicesDir`, and the deployments read them instead of the files.
+   * The docker compose files of the application a deployment uses, by name: the docker generator writes them to
+   * `dockerServicesDir`, the deployments read them from their source merged with their data.
    */
   dockerComposeFiles: Record<string, DockerComposeFile>;
   keycloakSecrets?: string[];

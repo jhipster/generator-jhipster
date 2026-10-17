@@ -127,28 +127,18 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -989,28 +979,18 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -1912,28 +1892,18 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -2787,28 +2757,18 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -3719,28 +3679,18 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -4727,28 +4677,18 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -5565,28 +5505,18 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,

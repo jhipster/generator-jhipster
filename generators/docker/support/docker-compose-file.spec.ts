@@ -19,7 +19,7 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import { createDockerComposeFile, dockerComposeFileContent } from './docker-compose-file.ts';
+import { createDockerComposeFile, mergeDockerComposeFile } from './docker-compose-file.ts';
 
 describe('generator - docker - docker-compose-file', () => {
   describe('createDockerComposeFile', () => {
@@ -40,44 +40,27 @@ name: customService
     });
   });
 
-  describe('dockerComposeFileContent', () => {
-    const file = {
-      comments: ['A comment of the file'],
-      name: 'jhipster',
-      services: { db: { environment: ['A=b'], healthcheck: { test: ['CMD', 'check'], retries: 10 } } },
-    };
-
-    it('should write the comments and the healthcheck command on one line', () => {
-      expect(dockerComposeFileContent(file)).toMatchInlineSnapshot(`
-"# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-# A comment of the file
-name: jhipster
+  describe('mergeDockerComposeFile', () => {
+    it('should merge the data into the source, adding the items of its lists', () => {
+      const source = `name: jhipster
 services:
-  db:
+  postgresql:
+    image: postgres
     environment:
-      - A=b
-    healthcheck:
-      test: [ 'CMD', 'check' ]
-      retries: 10
-"
-`);
-    });
-
-    it('should write the lists of the flowKeys on one line', () => {
-      expect(dockerComposeFileContent(file, { flowKeys: ['environment'] })).toMatchInlineSnapshot(`
-"# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-# A comment of the file
-name: jhipster
-services:
-  db:
-    environment: [ 'A=b' ]
-    healthcheck:
-      test:
-        - CMD
-        - check
-      retries: 10
-"
-`);
+      - POSTGRES_HOST_AUTH_METHOD=trust
+`;
+      expect(
+        mergeDockerComposeFile(
+          {
+            source: 'postgresql.yml',
+            data: { name: 'app', services: { postgresql: { image: 'postgres:18', environment: ['POSTGRES_USER=app'] } } },
+          },
+          source,
+        ),
+      ).toEqual({
+        name: 'app',
+        services: { postgresql: { image: 'postgres:18', environment: ['POSTGRES_HOST_AUTH_METHOD=trust', 'POSTGRES_USER=app'] } },
+      });
     });
   });
 });

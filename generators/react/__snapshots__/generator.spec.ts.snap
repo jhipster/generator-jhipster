@@ -127,28 +127,18 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -940,28 +930,18 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -1775,28 +1755,18 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -2601,28 +2571,18 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -3448,28 +3408,18 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -4341,28 +4291,18 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,
@@ -5154,28 +5094,18 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "dockerApplicationEnvironment": {},
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": undefined,
           },
-          "image": undefined,
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": Any<Object>,

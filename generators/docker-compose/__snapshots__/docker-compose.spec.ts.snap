@@ -623,8 +623,8 @@ jhipster:
   mspsql-postgresql:
     image: postgresql-placeholder
     environment:
-      - POSTGRES_USER=mspsql
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=mspsql
     healthcheck:
       test:
         - CMD-SHELL
@@ -1008,8 +1008,8 @@ jhipster:
   mspsql-postgresql:
     image: postgresql-placeholder
     environment:
-      - POSTGRES_USER=mspsql
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=mspsql
     healthcheck:
       test:
         - CMD-SHELL
@@ -1417,8 +1417,8 @@ jhipster:
   mspsql-postgresql:
     image: postgresql-placeholder
     environment:
-      - POSTGRES_USER=mspsql
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=mspsql
     healthcheck:
       test:
         - CMD-SHELL
@@ -1743,8 +1743,8 @@ jhipster:
   mspsql-postgresql:
     image: postgresql-placeholder
     environment:
-      - POSTGRES_USER=mspsql
       - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=mspsql
     healthcheck:
       test:
         - CMD-SHELL

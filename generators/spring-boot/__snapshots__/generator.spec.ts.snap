@@ -227,28 +227,18 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   },
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": "postgresql-placeholder",
           },
-          "image": "postgresql-placeholder",
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": {
@@ -1137,28 +1127,18 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   },
   "dockerComposeFiles": {
     "postgresql": {
-      "name": "jhipster",
-      "services": {
-        "postgresql": {
-          "environment": [
-            "POSTGRES_USER=jhipster",
-            "POSTGRES_HOST_AUTH_METHOD=trust",
-          ],
-          "healthcheck": {
-            "interval": "5s",
-            "retries": 10,
-            "test": [
-              "CMD-SHELL",
-              "pg_isready -U $\${POSTGRES_USER}",
+      "data": {
+        "name": "jhipster",
+        "services": {
+          "postgresql": {
+            "environment": [
+              "POSTGRES_USER=jhipster",
             ],
-            "timeout": "5s",
+            "image": "postgresql-placeholder",
           },
-          "image": "postgresql-placeholder",
-          "ports": [
-            "127.0.0.1:5432:5432",
-          ],
         },
       },
+      "source": "postgresql.yml",
     },
   },
   "dockerContainers": {
