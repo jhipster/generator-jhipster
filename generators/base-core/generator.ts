@@ -113,6 +113,11 @@ const relativeDir = (from: string, to: string) => {
   return rel ? `${rel}/` : '';
 };
 
+/**
+ * The utilities given to the templates in their data.
+ */
+const templateUtilities = { relativeDir };
+
 const deepMerge = (source1: any, source2: any) =>
   mergeWith({}, source1, source2, (a, b) => (Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined));
 
@@ -970,7 +975,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
 
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
     // Without data, the generator is the data of the template.
-    const templateData = data === undefined ? (this as any) : { relativeDir, ...(data as object) };
+    const templateData = data === undefined ? (this as any) : { ...templateUtilities, ...(data as object) };
     try {
       return this.renderTemplate(source, destination, templateData, {
         noGlob: true,
@@ -993,7 +998,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
     // The templates get the utilities they call in their data.
-    let templateData: DataType = { relativeDir, ...(options.context as object | undefined) } as DataType;
+    let templateData: DataType = { ...templateUtilities, ...(options.context as object | undefined) } as DataType;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
