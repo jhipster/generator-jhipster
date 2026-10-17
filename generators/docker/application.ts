@@ -19,12 +19,17 @@
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import { JAVA_DOCKER_DIR } from '../generator-constants.ts';
 
-import type { Application as DockerApplication } from './types.ts';
+import type { Application as DockerApplication, DockerComposeFile } from './types.ts';
 
 export type DockerAddedApplicationLoadingProperties = {
   dockerContainers: Record<string, string>;
   dockerApplicationEnvironment: Record<string, string>;
   dockerServices: string[];
+  /**
+   * The docker compose files of the application a deployment uses, by name, as data: the docker generator writes them to
+   * `dockerServicesDir`, and the deployments read them instead of the files.
+   */
+  dockerComposeFiles: Record<string, DockerComposeFile>;
   keycloakSecrets?: string[];
 };
 
@@ -37,6 +42,7 @@ export const mutateApplicationLoading = {
   dockerContainers: () => ({}),
   dockerApplicationEnvironment: () => ({}),
   dockerServices: () => [],
+  dockerComposeFiles: () => ({}),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<DockerApplication>,
   DockerAddedApplicationLoadingProperties

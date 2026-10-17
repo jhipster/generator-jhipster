@@ -16,7 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { DockerComposeService } from '../types.ts';
+import { Document, Scalar, isScalar, isSeq, visit } from 'yaml';
+
+import type { DockerComposeFile, DockerComposeService } from '../types.ts';
+
+/** The comment every docker compose file of an application starts with. */
+export const DOCKER_COMPOSE_FILE_COMMENT =
+  "This configuration is intended for development purpose, it's **your** responsibility to harden it for production";
 
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.
@@ -24,9 +30,7 @@ import type { DockerComposeService } from '../types.ts';
  * @param {string} name Docker compose v2 project name
  * @returns {import('../../generators/generator-base.js').EditFileCallback}
  */
-export const createDockerComposeFile = (
-  name = 'jhipster',
-) => `# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+export const createDockerComposeFile = (name = 'jhipster') => `# ${DOCKER_COMPOSE_FILE_COMMENT}
 name: ${name}
 `;
 
@@ -44,3 +48,38 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
     ]),
   ),
 });
+
+/**
+ * The content of a docker compose file: the comment of every file and its own comments, then its project name and its
+ * services. The lists of the `flowKeys` are written on one line, the command of a healthcheck (`test`) by default.
+ */
+export const dockerComposeFileContent = (
+  { comments = [], name, services }: DockerComposeFile,
+  { flowKeys = ['test'] }: { flowKeys?: string[] } = {},
+): string => {
+  const document = new Document({ name, services }, { aliasDuplicateObjects: false });
+  visit(document, {
+    Pair(_, pair) {
+      if (isScalar(pair.key) && flowKeys.includes(String(pair.key.value)) && isSeq(pair.value)) {
+        pair.value.flow = true;
+        // Quoted, like the templates wrote them: a plain text in a flow list is not read by every yaml parser.
+        for (const item of pair.value.items) {
+          if (isScalar(item) && typeof item.value === 'string') {
+            item.type = Scalar.QUOTE_SINGLE;
+          }
+        }
+      }
+    },
+  });
+  return `${[DOCKER_COMPOSE_FILE_COMMENT, ...comments].map(comment => `# ${comment}\n`).join('')}${document.toString({ lineWidth: 0 })}`;
+};
+
+/** The ports of a service published on the loopback address only. */
+export const dockerComposeLocalPorts = (...ports: number[]): string[] => ports.map(port => `127.0.0.1:${port}:${port}`);
+
+/** Adds a docker compose file of the application, named after its base name. */
+export const addDockerComposeFile = (
+  application: { baseName: string; dockerComposeFiles: Record<string, DockerComposeFile> },
+  fileName: string,
+  services: DockerComposeFile['services'],
+): DockerComposeFile => (application.dockerComposeFiles[fileName] = { name: application.baseName.toLowerCase(), services });

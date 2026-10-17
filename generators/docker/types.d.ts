@@ -25,6 +25,28 @@ export type DockerComposeService = {
   extendedServiceName?: string;
 };
 
+/** A service of a docker compose file. */
+export type DockerComposeServiceConfig = {
+  image?: string;
+  build?: { context: string; dockerfile: string };
+  container_name?: string;
+  command?: string;
+  environment?: string[];
+  ports?: string[];
+  volumes?: string[];
+  depends_on?: Record<string, { condition: string }>;
+  healthcheck?: Record<string, unknown>;
+  labels?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+/** A docker compose file of an application: its comments, written at its beginning after the one of every file, its project name and its services. */
+export type DockerComposeFile = {
+  comments?: string[];
+  name: string;
+  services: Record<string, DockerComposeServiceConfig>;
+};
+
 export type Application = BaseSimpleApplicationApplication &
   DockerAddedApplicationLoadingProperties &
   DockerAddedApplicationPreparingProperties;

@@ -28,7 +28,7 @@ import type { Application as SpringBootApplication } from '../spring-boot/index.
 
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
 import { dockerFiles } from './files.ts';
-import { createDockerComposeFile, createDockerExtendedServices } from './support/index.ts';
+import { createDockerComposeFile, createDockerExtendedServices, dockerComposeFileContent } from './support/index.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
@@ -174,6 +174,11 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           sections: dockerFiles,
           context: application,
         });
+      },
+      writeDockerComposeFiles({ application }) {
+        for (const [fileName, file] of Object.entries(application.dockerComposeFiles)) {
+          this.writeDestination(`${application.dockerServicesDir}${fileName}.yml`, dockerComposeFileContent(file));
+        }
       },
     });
   }

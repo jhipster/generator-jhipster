@@ -25,6 +25,8 @@ import type {
   Source as DockerSource,
 } from '../../types.ts';
 
+import { type DockerComposeApplication, addPostgresqlDockerComposeFile, addRedisDockerComposeFile } from './internal/compose-services.ts';
+
 export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
   DockerApplication,
   DockerConfig,
@@ -61,5 +63,21 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
 
   get [BaseSimpleApplicationGenerator.PREPARING]() {
     return this.preparing;
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      // The services are added once every generator prepared the application.
+      postgresql({ application }) {
+        addPostgresqlDockerComposeFile(application as DockerComposeApplication);
+      },
+      redis({ application }) {
+        addRedisDockerComposeFile(application as DockerComposeApplication);
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 }

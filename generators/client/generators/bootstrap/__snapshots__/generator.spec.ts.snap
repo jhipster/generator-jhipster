@@ -120,6 +120,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "devServerPort": 4200,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": Any<Object>,
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
   "dockerServices": Any<Array>,
   "dockerServicesDir": "src/main/docker/",
