@@ -19,7 +19,7 @@
 import { glob } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { startCase } from 'lodash-es';
+import { merge, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
@@ -32,6 +32,8 @@ import { ClientApplicationGenerator } from '../../generator.ts';
 export default class I18NGenerator extends ClientApplicationGenerator {
   translationData!: TranslationData;
   languagesToGenerate!: readonly Language[];
+  /** The entity translation keys of each file, merged at once while the entities are added. */
+  #pendingEntityTranslationKeys?: Record<string, Record<string, any>>;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -80,7 +82,8 @@ export default class I18NGenerator extends ClientApplicationGenerator {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
         source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
-          this.mergeDestinationJson(`${application.clientI18nDir}${language}/global.json`, {
+          const filePath = `${application.clientI18nDir}${language}/global.json`;
+          const value = {
             global: {
               menu: {
                 entities: {
@@ -88,7 +91,12 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                 },
               },
             },
-          });
+          };
+          if (this.#pendingEntityTranslationKeys) {
+            merge((this.#pendingEntityTranslationKeys[filePath] ??= {}), value);
+          } else {
+            this.mergeDestinationJson(filePath, value);
+          }
         };
       },
     });
@@ -315,16 +323,26 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       addEntities({ entities, source }) {
-        for (const entity of entities.filter(
-          entity => !entity.skipClient && !entity.builtInUser && entity.entityTranslationKeyMenuPath.startsWith('global'),
-        )) {
-          for (const { languageTag } of this.languagesToGenerate) {
-            source.addEntityTranslationKey?.({
-              language: languageTag,
-              translationKey: entity.entityTranslationKeyMenu,
-              translationValue: entity.entityNameHumanized ?? startCase(entity.entityNameCapitalized),
-            });
+        // Each translation file is read and written once, with the keys of every entity.
+        const pending: Record<string, Record<string, any>> = {};
+        this.#pendingEntityTranslationKeys = pending;
+        try {
+          for (const entity of entities.filter(
+            entity => !entity.skipClient && !entity.builtInUser && entity.entityTranslationKeyMenuPath.startsWith('global'),
+          )) {
+            for (const { languageTag } of this.languagesToGenerate) {
+              source.addEntityTranslationKey?.({
+                language: languageTag,
+                translationKey: entity.entityTranslationKeyMenu,
+                translationValue: entity.entityNameHumanized ?? startCase(entity.entityNameCapitalized),
+              });
+            }
           }
+        } finally {
+          this.#pendingEntityTranslationKeys = undefined;
+        }
+        for (const [filePath, value] of Object.entries(pending)) {
+          this.mergeDestinationJson(filePath, value);
         }
       },
     });
