@@ -30,7 +30,7 @@ import federationConfig from './module-federation.config.ts';
 
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
-const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url));
+const webappDir = fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url));
 
 const config = defineConfig({
   plugins: [
@@ -42,7 +42,7 @@ const config = defineConfig({
             `${normalizePath(swaggerUiPath)}/*.{js,css,html,png}`,
             `!${normalizePath(swaggerUiPath)}/**/index.html`,
             normalizePath(fileURLToPath(new URL('./dist/axios.min.js', import.meta.resolve('axios/package.json')))),
-            normalizePath(fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url))),
+            normalizePath(fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url))),
           ],
           dest: 'swagger-ui',
           rename: (name, ext, srcPath) => {
@@ -56,17 +56,17 @@ const config = defineConfig({
     federation(federationConfig),
 <%_ } _%>
   ],
-  root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
-  publicDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>public', import.meta.url)),
-  cacheDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, temporaryDir) %>.vite-cache', import.meta.url)),
+  root: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
+  publicDir: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientDistDir) %>public', import.meta.url)),
+  cacheDir: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>.vite-cache', import.meta.url)),
   optimizeDeps: {
     // Discover dependencies of lazily loaded modules (translations, ...) at startup,
     // a dependency discovered at runtime triggers a re-optimization and a page reload.
-    entries: [fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,vue,js}', import.meta.url))],
+    entries: [fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,vue,js}', import.meta.url))],
   },
   build: {
     emptyOutDir: true,
-    outDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>', import.meta.url)),
+    outDir: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientDistDir) %>', import.meta.url)),
 <%_ if (microfrontend && clientBundlerVite) { _%>
     modulePreload: false,
     // Allow topLevelAwait by default, Use 'vite-plugin-top-level-await' plugin for lower target
@@ -76,7 +76,7 @@ const config = defineConfig({
 <%_ } _%>
     rolldownOptions: {
       input: {
-        app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),
+        app: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),
       },
     },
   },

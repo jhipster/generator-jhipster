@@ -36,7 +36,7 @@ import packageJson from './package.json' with { type: 'json' };
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
-const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url));
+const webappDir = fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url));
 
 <%_ } _%>
 const development = process.env.NODE_ENV !== 'production';
@@ -52,7 +52,7 @@ const config = defineConfig({
             `${normalizePath(swaggerUiPath)}/*.{js,css,html,png}`,
             `!${normalizePath(swaggerUiPath)}/**/index.html`,
             normalizePath(fileURLToPath(new URL('./dist/axios.min.js', import.meta.resolve('axios/package.json')))),
-            normalizePath(fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url))),
+            normalizePath(fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url))),
           ],
           dest: 'swagger-ui',
           rename: (name, ext, srcPath) => {
@@ -67,12 +67,12 @@ const config = defineConfig({
     federation(federationConfig),
 <%_ } _%>
   ],
-  root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
-  publicDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>public', import.meta.url)),
-  cacheDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, temporaryDir) %>.vite-cache', import.meta.url)),
+  root: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
+  publicDir: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientDistDir) %>public', import.meta.url)),
+  cacheDir: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>.vite-cache', import.meta.url)),
   build: {
     emptyOutDir: true,
-    outDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>', import.meta.url)),
+    outDir: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientDistDir) %>', import.meta.url)),
 <%_ if (microfrontend) { _%>
     modulePreload: false,
     // Allow topLevelAwait by default, Use 'vite-plugin-top-level-await' plugin for lower target
@@ -81,7 +81,7 @@ const config = defineConfig({
 <%_ } _%>
     rolldownOptions: {
       input: {
-        app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),
+        app: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),
       },
       output: {
         // Split the vendor code into cacheable chunks instead of one oversized bundle.

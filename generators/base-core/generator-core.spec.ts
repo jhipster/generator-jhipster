@@ -119,6 +119,32 @@ describe('generator - base-core', () => {
       expect(base.jdlFiles[0]).toBe('foo');
     });
   });
+  describe('writeFiles template data', () => {
+    const RelativeDirGenerator = helpers.createDummyGenerator(Base, {
+      async [Base.WRITING]() {
+        await this.writeFiles({
+          blocks: [{ templates: ['relative.txt'] }],
+          context: { from: 'a', to: 'a/b' },
+          rootTemplatesPath: this.destinationPath('templates'),
+        });
+      },
+    });
+
+    before(async () => {
+      await helpers
+        .run('dummy')
+        .withGenerators([[RelativeDirGenerator, { namespace: 'dummy' }]])
+        .doInDir(cwd => {
+          mkdirSync(join(cwd, 'templates'));
+          writeFileSync(join(cwd, 'templates/relative.txt.ejs'), '<%- relativeDir(from, to) %>');
+        });
+    });
+
+    it('should give relativeDir to the templates', () => {
+      expect(runResult.memFs.get(runResult.generator.destinationPath('relative.txt')).contents?.toString()).toBe('b/');
+    });
+  });
+
   describe('writeFiles with override false', () => {
     const OverrideGenerator = helpers.createDummyGenerator(Base, {
       async [Base.WRITING]() {

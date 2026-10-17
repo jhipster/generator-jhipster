@@ -30,7 +30,7 @@ const shareMappings = (...mappings: string[]) =>
   Object.fromEntries(
     mappings.map(map => [
       map,
-      { ...sharedDefaults, version: apiVersion, import: `./<%- this.relativeDir(clientRootDir, clientSrcDir) %>${map.replace('@/', 'app/')}` },
+      { ...sharedDefaults, version: apiVersion, import: `./<%- relativeDir(clientRootDir, clientSrcDir) %>${map.replace('@/', 'app/')}` },
     ]),
   );
 <%_ } else { _%>

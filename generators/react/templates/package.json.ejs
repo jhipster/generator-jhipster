@@ -89,8 +89,8 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
-    "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
+    "cleanup": "rimraf <%- relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%- relativeDir(clientRootDir, clientDistDir) %>",
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "start": "<%- nodePackageManager %> run webapp:dev --",
 <%_ if (skipServer) { _%>

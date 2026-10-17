@@ -52,10 +52,10 @@ export default withNativeFederation({
 
 <%_ if (applicationTypeMicroservice || exposeMicrofrontend) { _%>
   exposes: {
-    './entity-navbar-items': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts',
-    './entity-routes': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts',
+    './entity-navbar-items': './<%- relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts',
+    './entity-routes': './<%- relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts',
   <%_ if (enableTranslation) { _%>
-    './i18n': './<%- this.relativeDir(clientRootDir, clientI18nDir) %>index.ts',
+    './i18n': './<%- relativeDir(clientRootDir, clientI18nDir) %>index.ts',
   <%_ } _%>
     // jhipster-needle-expose
   },

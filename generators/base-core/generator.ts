@@ -963,14 +963,16 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   writeFile(
     source: string,
     destination: string,
-    data: Parameters<CoreGenerator['renderTemplate']>[2] = this,
+    data?: Parameters<CoreGenerator['renderTemplate']>[2],
     copyOptions: Parameters<CoreGenerator['renderTemplate']>[3] = {},
   ) {
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
 
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
+    // Without data, the generator is the data of the template.
+    const templateData = data === undefined ? (this as any) : { relativeDir, ...(data as object) };
     try {
-      return this.renderTemplate(source, destination, data, {
+      return this.renderTemplate(source, destination, templateData, {
         noGlob: true,
         ...copyOptions,
         transformOptions: { root, ...copyOptions.transformOptions },
@@ -990,7 +992,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    let templateData: DataType = options.context ?? ({} as DataType);
+    // The templates get the utilities they call in their data.
+    let templateData: DataType = { relativeDir, ...(options.context as object | undefined) } as DataType;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;

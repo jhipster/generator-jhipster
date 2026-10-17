@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 {
-  "extends": "<%- this.relativeDir(playwrightDir, clientRootDir) %>tsconfig.json",
+  "extends": "<%- relativeDir(playwrightDir, clientRootDir) %>tsconfig.json",
   "compilerOptions": {
     "sourceMap": false,
     "outDir": null,
@@ -27,5 +27,5 @@
     "target": "es2020",
     "types": ["node"]
   },
-  "include": ["./<%- this.relativeDir(playwrightDir, clientRootDir) %>playwright.config.ts", "./**/*.ts"]
+  "include": ["./<%- relativeDir(playwrightDir, clientRootDir) %>playwright.config.ts", "./**/*.ts"]
 }
