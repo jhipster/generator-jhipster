@@ -121,6 +121,23 @@ describe(`generator - ${helpers.commandName}`, () => {
       });
     });
   });
+  describe('generated README', () => {
+    describe('with default jwt and sql application', () => {
+      before(async () => {
+        await helpers.runJHipster().withJHipsterConfig({ skipClient: true });
+      });
+
+      it('should document running the production jar with the secret-samples profile', () => {
+        result.assertFileContent('README.md', /java -jar target\/\*\.jar --spring\.profiles\.active=prod,secret-samples/);
+      });
+
+      it('should document the secrets required in a real deployment', () => {
+        result.assertFileContent('README.md', /SPRING_DATASOURCE_USERNAME/);
+        result.assertFileContent('README.md', /SPRING_DATASOURCE_PASSWORD/);
+        result.assertFileContent('README.md', /JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET/);
+      });
+    });
+  });
   describe('questions', () => {
     describe('without answers', () => {
       before(async () => {

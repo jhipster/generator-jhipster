@@ -235,13 +235,32 @@ To ensure everything worked, run:
 
 ```bash
 <%_ if (buildToolMaven) { _%>
-java -jar target/*.jar
+java -jar target/*.jar --spring.profiles.active=prod,secret-samples
 <%_ } _%>
 <%_ if (buildToolGradle) { _%>
-java -jar build/libs/*.jar
+java -jar build/libs/*.jar --spring.profiles.active=prod,secret-samples
 <%_ } _%>
 ```
 
+<%_ if (databaseTypeSql || databaseTypeCouchbase || authenticationTypeJwt || (authenticationTypeSession && !reactive)) { _%>
+The `secret-samples` profile provides sample values for the secrets that are not included in the production configuration. For a real deployment, provide your own values through environment variables:
+
+  <%_ if (databaseTypeSql && !reactive) { _%>
+- `SPRING_DATASOURCE_USERNAME` and `SPRING_DATASOURCE_PASSWORD` for the datasource credentials
+  <%_ } _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+- `SPRING_R2DBC_USERNAME` and `SPRING_R2DBC_PASSWORD` for the datasource credentials
+  <%_ } _%>
+  <%_ if (databaseTypeCouchbase) { _%>
+- `SPRING_COUCHBASE_USERNAME` and `SPRING_COUCHBASE_PASSWORD` for the Couchbase credentials
+  <%_ } _%>
+  <%_ if (authenticationTypeJwt) { _%>
+- `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` for the JWT secret
+  <%_ } _%>
+  <%_ if (authenticationTypeSession && !reactive) { _%>
+- `SPRING_SECURITY_REMEMBER_ME_KEY` for the remember-me key
+  <%_ } _%>
+<%_ } _%>
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%- serverPort %>](http://localhost:<%- serverPort %>) in your browser.
 <% } %>
 Refer to [Using JHipster in production][] for more details.
