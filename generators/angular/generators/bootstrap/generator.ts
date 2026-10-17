@@ -76,7 +76,7 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
             createNeedleCallback({
               needle: 'i18n-language-loader',
               contentToAdd: allLanguages.map(
-                lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json').catch(),`,
+                lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
               ),
             }),
             createNeedleCallback({
