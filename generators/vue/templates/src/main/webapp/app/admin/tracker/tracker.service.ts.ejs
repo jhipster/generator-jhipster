@@ -113,11 +113,7 @@ export default class TrackerService {
 
   private getAuthToken() {
     const authToken = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) || sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
-  <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-    return JSON.parse(authToken);
-  <%_ } else { _%>
     return authToken;
-  <%_ } _%>
   }
 <%_ } _%>
 
