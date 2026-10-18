@@ -28,9 +28,9 @@
         Added the entity <%- entity.entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-1" author="jhipster">
-        <createTable tableName="<%- entity.entityTableName %>"<%- this.formatAsLiquibaseRemarks(entity.documentation, true) %>>
+        <createTable tableName="<%- entity.entityTableName %>"<%- entity.liquibaseRemarksAttribute %>>
 <%_ for (field of fields) { _%>
-            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) %><%- this.formatAsLiquibaseRemarks(field.documentation, true) %><%- field.id && field.liquibaseAutoIncrement ? ' autoIncrement="true" startWith="1500"' : '' %>>
+            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- field.liquibaseColumnAttributes %><%- field.id && field.liquibaseAutoIncrement ? ' autoIncrement="true" startWith="1500"' : '' %>>
   <%_ if (field.id) { _%>
                 <constraints primaryKey="true" nullable="false"/>
   <%_ } else if (field.unique) { _%>
@@ -48,7 +48,7 @@
 <%_ for (relationship of relationships) { _%>
   <%_ if ((relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one' && relationship.ownerSide) && !relationship.id) { _%>
     <%_ for (const idField of relationship.otherEntity.primaryKey.fields) { _%>
-      <%_ const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null; _%>
+      <%_ const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? relationship.liquibaseUniqueConstraintNames[idField.columnName] : null; _%>
             <column name="<%- relationship.columnName %>_<%- idField.columnName %>" type="<%- idField.columnType %>">
                 <constraints nullable="<%- !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%- uniqueConstraintName %>"<% } %> />
             </column>

@@ -20,6 +20,8 @@ import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import { asPostPreparingEachEntityTask } from '../../base-application/support/task-type-inference.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity } from '../types.ts';
 
+import formatAsLiquibaseRemarks from './formatting.ts';
+
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;
 
@@ -44,4 +46,5 @@ export default asPostPreparingEachEntityTask<LiquibaseEntity, LiquibaseApplicati
   }
 
   entity.anyRelationshipIsOwnerSide = relationships.some(relationship => relationship.ownerSide);
+  entity.liquibaseRemarksAttribute = formatAsLiquibaseRemarks(entity.documentation, true);
 });

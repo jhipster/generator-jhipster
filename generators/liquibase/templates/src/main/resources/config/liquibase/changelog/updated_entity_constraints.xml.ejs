@@ -64,7 +64,7 @@
         <addDefaultValue tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"
-            <%- this.createDefaultValueLiquibaseAttribute(field) %>/>
+            <%- field.liquibaseDefaultValueAttribute %>/>
   <%_ } _%>
     </changeSet>
 <%_ } _%>
@@ -77,7 +77,7 @@
   <%_ for (const relationshipData of addedRelationships) { _%>
     <%_ if (relationshipData.unique) { _%>
       <%_ const idField = relationshipData.otherEntity.primaryKey.ownFields[0];
-          const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationshipData.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
+          const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? relationshipData.liquibaseUniqueConstraintNames[idField.columnName] : null;
       _%>
         <addUniqueConstraint tableName="<%- entityTableName %>"
             columnNames="<%- relationshipData.columnName %>_id"
