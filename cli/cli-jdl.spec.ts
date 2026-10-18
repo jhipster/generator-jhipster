@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
+import { describe, it } from 'expect-node';
 import { join } from 'node:path';
 
 import { execa } from 'execa';

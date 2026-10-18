@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import type BaseCoreGenerator from '../generators/base-core/index.ts';
 import type { JHipsterCommandDefinition } from '../generators/index.ts';

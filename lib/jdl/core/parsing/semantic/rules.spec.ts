@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, esmocha, expect, it } from 'esmocha';
+import { describe, exnode, expect, it } from 'expect-node';
 
 import { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '../../../../jdl-config/jdl-runtime.ts';
 import { createImporterFromContent } from '../../__test-support__/index.ts';
@@ -543,7 +543,7 @@ entity A`),
 
   describe('when importing', () => {
     it('logs the warnings, with their position, and imports', () => {
-      const warn = esmocha.spyOn(logger, 'warn');
+      const warn = exnode.spyOn(logger, 'warn');
       try {
         const { exportedEntities } = createImporterFromContent('entity A {\n  start Date\n}', {
           applicationName: 'foo',

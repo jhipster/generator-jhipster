@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { type Mock, mock } from 'node:test';
 
 import { packageJson } from '../../lib/index.ts';

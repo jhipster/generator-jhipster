@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { join } from 'node:path';
 
 import { GeneratorsResolver, blueprintNamespaceToPackageName } from './blueprints.ts';
@@ -115,7 +115,7 @@ describe('resolver - blueprints', () => {
     it('should load the commands of the blueprints, marked with their namespace', async () => {
       const resolver = new GeneratorsResolver();
       resolver.lookupBlueprints(['jhipster-foo', 'jhipster-bar'], { npmPaths, localOnly: true });
-      const log = esmocha.fn<(message: string) => void>();
+      const log = exnode.fn<(message: string) => void>();
       expect(await resolver.loadCommands({ log })).toEqual({ bar: { desc: 'Bar of the blueprint', blueprint: 'jhipster-bar' } });
       expect(log.mock.calls.map(([message]) => message)).toEqual([
         expect.stringContaining('No custom commands found within blueprint: jhipster-foo'),

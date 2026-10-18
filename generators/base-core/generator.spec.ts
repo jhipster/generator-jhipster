@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, beforeEach, describe, expect, it } from 'esmocha';
+import { before, beforeEach, describe, expect, it } from 'expect-node';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 

@@ -129,19 +129,19 @@ Run every test with lint/prettier
 `npm test`
 
 Run every test without lint/prettier
-`npx esmocha`
+`npx exnode`
 
 Update every test snapshot
 `npm run update-snapshots`
 
-Run specific tests
-`npx esmocha <path>`
+Run specific test files
+`npx exnode <file>...`
 
-Run specific tests in series (improved error reporting)
-`npx esmocha <path> --no-parallel`
+Run specific test files each in a process of its own
+`npx exnode --workers 0 <file>...`
 
 Update specific test snapshot
-`npm run update-snapshot -- <path>` or `npx esmocha <path> --no-parallel --update-snapshot`
+`npm run update-snapshot -- <file>...` or `npx exnode --update-snapshot <file>...`
 
 Fixing lint and prettier errors
 `npm run lint-fix`

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import { binaryOptions, unaryOptions } from '../jdl/core/built-in-options/index.ts';
 

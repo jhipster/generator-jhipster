@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, fn, it } from 'esmocha';
+import { before, describe, expect, fn, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { simpleGit } from 'simple-git';

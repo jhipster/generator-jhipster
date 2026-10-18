@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { beforeEach, describe, exnode, expect, it } from 'expect-node';
 import { inspect } from 'node:util';
 
 import type { GetWebappTranslationCallback } from '../../client/translation.ts';
@@ -32,11 +32,11 @@ describe('generator - angular - transform', () => {
       let value = 0;
       const testImpl: GetWebappTranslationCallback = (key, data) =>
         key === 'blank' ? '' : `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`;
-      replaceAngularTranslations = createTranslationReplacer(esmocha.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
+      replaceAngularTranslations = createTranslationReplacer(exnode.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: false,
       });
-      enabledAngularTranslations = createTranslationReplacer(esmocha.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
+      enabledAngularTranslations = createTranslationReplacer(exnode.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: true,
       });

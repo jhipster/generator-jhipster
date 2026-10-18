@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, beforeEach, describe, expect, it } from 'esmocha';
+import { after, beforeEach, describe, expect, it } from 'expect-node';
 import fs from 'node:fs';
 
 import helpers from 'yeoman-test';
