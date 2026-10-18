@@ -69,7 +69,7 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
       applicationTypeOfBlueprint() {
         const { applicationType } = this.jhipsterConfig;
         if (!isOfficialApplicationType(applicationType)) {
-          this.log.info(`${chalk.yellow(applicationType)} is not an official application type, its blueprint generates the application.`);
+          this.log.debug(`${applicationType} is not an official application type, its blueprint generates the application.`);
           this.cancelCancellableTasks();
         }
       },
