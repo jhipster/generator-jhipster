@@ -231,11 +231,13 @@ To build the final jar and optimize the <%- baseName %> application for producti
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 <%_ } _%>
-To ensure everything worked, run it with the `prod` profile and the sample secrets of the `secret-samples` profile:
+To ensure everything worked, run:
 
 ```bash
-<%- packageJsonScripts['java:jar:start'] %>
+npm run java:jar:start
 ```
+
+It runs `<%- packageJsonScripts['java:jar:start'] %>`: the jar with the `prod` profile and the sample secrets of the `secret-samples` profile.
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%- serverPort %>](http://localhost:<%- serverPort %>) in your browser.
 <% } %>
