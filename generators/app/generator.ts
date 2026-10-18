@@ -29,6 +29,12 @@ import { checkNode } from './support/index.ts';
 
 export default class AppGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
   async beforeQueue() {
+    const { applicationType } = this.jhipsterConfig;
+    if (!isOfficialApplicationType(applicationType)) {
+      this.log.debug(`${applicationType} is not an official application type, its blueprint generates the application.`);
+      this.cancelCancellableTasks();
+    }
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
@@ -66,13 +72,6 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      applicationTypeOfBlueprint() {
-        const { applicationType } = this.jhipsterConfig;
-        if (!isOfficialApplicationType(applicationType)) {
-          this.log.debug(`${applicationType} is not an official application type, its blueprint generates the application.`);
-          this.cancelCancellableTasks();
-        }
-      },
       fixConfig() {
         if (this.jhipsterConfig.jhiPrefix) {
           this.jhipsterConfig.jhiPrefix = camelCase(this.jhipsterConfig.jhiPrefix);
