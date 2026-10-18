@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { ApplicationAll } from '../../lib/types/application-all.ts';
-import type { Config as BaseConfig, Options as BaseOptions } from '../base/types.d.ts';
+import type { Config as BaseConfig, Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 
 export type { Source } from '../base/types.ts';
@@ -47,7 +47,13 @@ type DeploymentConfig = {
 
 export type Config = BaseConfig & DeploymentConfig;
 
-export type { Features } from '../base/types.ts';
+export type Features = BaseFeatures & {
+  /**
+   * Gives the tasks the applications of the official types only (monolith, gateway, microservice), the ones a deployment of JHipster deploys: an
+   * application of a type a blueprint declares is left to that blueprint.
+   */
+  officialApplicationTypesOnly?: boolean;
+};
 
 export type Options = BaseOptions & DeploymentConfig;
 

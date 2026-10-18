@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
+import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../common/types.ts';
 
@@ -65,6 +66,13 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      applicationTypeOfBlueprint() {
+        const { applicationType } = this.jhipsterConfig;
+        if (!isOfficialApplicationType(applicationType)) {
+          this.log.info(`${chalk.yellow(applicationType)} is not an official application type, its blueprint generates the application.`);
+          this.cancelCancellableTasks();
+        }
+      },
       fixConfig() {
         if (this.jhipsterConfig.jhiPrefix) {
           this.jhipsterConfig.jhiPrefix = camelCase(this.jhipsterConfig.jhiPrefix);

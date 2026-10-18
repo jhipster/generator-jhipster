@@ -22,6 +22,7 @@ import { join } from 'node:path';
 import { defaults } from 'lodash-es';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
+import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
 import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-jdl-config.ts';
 import { createDelayedMutationContext, droppedMutationMessage, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
@@ -35,6 +36,7 @@ import {
   CONTEXT_DATA_DEPLOYMENT_KEY,
   CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY,
   CONTEXT_DATA_WORKSPACES_ROOT_KEY,
+  CONTEXT_DATA_WORKSPACES_SKIPPED_APPLICATIONS_KEY,
 } from './support/index.ts';
 import type { Tasks as WorkspacesTasks } from './tasks.ts';
 import type {
@@ -119,18 +121,38 @@ export default abstract class BaseWorkspacesGenerator<
 
   get #applications() {
     return this.getContextData(CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY, {
-      factory: () =>
-        Object.entries(this.resolveApplicationFolders()).map(([appFolder, resolvedFolder], index) => {
+      factory: () => {
+        // The ports of the applications a deployment of JHipster deploys.
+        let composePort = 8080;
+        return Object.entries(this.resolveApplicationFolders()).map(([appFolder, resolvedFolder]) => {
           const contextMap = this.env.getContextMap(resolvedFolder) as Map<string, WorkspacesApplication>;
           const application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
           if (!application) {
             throw new Error(`No application found in ${resolvedFolder}`);
           }
           application.appFolder = appFolder;
-          application.composePort = 8080 + index;
+          if (isOfficialApplicationType(application.applicationType)) {
+            application.composePort = composePort++;
+          }
           return application;
-        }),
+        });
+      },
     });
+  }
+
+  get #officialApplications() {
+    const applications = this.#applications.filter(application => isOfficialApplicationType(application.applicationType));
+    if (applications.length < this.#applications.length) {
+      this.getContextData(CONTEXT_DATA_WORKSPACES_SKIPPED_APPLICATIONS_KEY, {
+        factory: () => {
+          for (const { appFolder, applicationType } of this.#applications.filter(app => !applications.includes(app))) {
+            this.log.warn(`Skipping ${appFolder}: ${applicationType} is not an official application type.`);
+          }
+          return true;
+        },
+      });
+    }
+    return applications;
   }
 
   get workspacesRoot(): string {
@@ -211,7 +233,7 @@ export default abstract class BaseWorkspacesGenerator<
       {
         ...first,
         ...deployment,
-        applications: this.#applications,
+        applications: this.features.officialApplicationTypesOnly ? this.#officialApplications : this.#applications,
       },
       ...others,
     ];
