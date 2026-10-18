@@ -33,28 +33,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
     }
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      packageJsonScripts({ application }) {
-        // Set in the application for the README, which tells them.
-        const { buildTool, packageJsonScripts } = application;
-        if (buildTool === 'maven') {
-          packageJsonScripts['java:jar'] = './mvnw -ntp verify -DskipTests --batch-mode';
-          packageJsonScripts['java:war'] = './mvnw -ntp verify -DskipTests --batch-mode -Pwar';
-        } else if (buildTool === 'gradle') {
-          packageJsonScripts['java:jar'] = './gradlew bootJar -x test -x integrationTest';
-          packageJsonScripts['java:war'] = './gradlew bootWar -Pwar -x test -x integrationTest';
-        }
-        packageJsonScripts['java:jar:prod'] = 'npm run java:jar -- -Pprod';
-        packageJsonScripts['java:war:prod'] = 'npm run java:war -- -Pprod';
-      },
-    });
-  }
-
-  get [JavaApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {

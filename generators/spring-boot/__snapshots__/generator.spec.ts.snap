@@ -572,7 +572,11 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   ],
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {
+    "java:jar": "./mvnw -ntp verify -DskipTests --batch-mode",
+    "java:jar:prod": "npm run java:jar -- -Pprod",
     "java:jar:start": "java -jar target/*.jar --spring.profiles.active=prod,secret-samples",
+    "java:war": "./mvnw -ntp verify -DskipTests --batch-mode -Pwar",
+    "java:war:prod": "npm run java:war -- -Pprod",
   },
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
@@ -1458,7 +1462,11 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   ],
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {
+    "java:jar": "./mvnw -ntp verify -DskipTests --batch-mode",
+    "java:jar:prod": "npm run java:jar -- -Pprod",
     "java:jar:start": "java -jar target/*.jar --spring.profiles.active=prod,secret-samples",
+    "java:war": "./mvnw -ntp verify -DskipTests --batch-mode -Pwar",
+    "java:war:prod": "npm run java:war -- -Pprod",
   },
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
