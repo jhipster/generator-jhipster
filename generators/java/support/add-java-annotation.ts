@@ -16,15 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { escapeRegExp } from 'lodash-es';
-
 export type JavaImportType = { staticImport?: boolean };
 
 const addJavaImportToContent = (content: string, identifier: string, { staticImport }: JavaImportType = {}) => {
   const importStatement = `import ${staticImport ? 'static ' : ''}${identifier};`;
-  return new RegExp(escapeRegExp(importStatement)).test(content) ?
-      content
-    : content.replace(/(package [\w.]+;\n\n?)/, `$1${importStatement}\n`);
+  return content.includes(importStatement) ? content : content.replace(/(package [\w.]+;\n\n?)/, `$1${importStatement}\n`);
 };
 
 export function addJavaImport(identifier: string, type?: JavaImportType): (content: string) => string;
@@ -161,7 +157,7 @@ const addJavaAnnotationToContent = (content: string, annotationDef: JavaAnnotati
   }
   if (annotationWithParametersMatches) {
     content = content.replace(new RegExp(String.raw`@${annotation}\((?<oldParameters>[^)]*)\)`), `@${annotationToAdd}`);
-  } else if (!new RegExp(escapeRegExp(`\n@${annotationToAdd}\n`)).test(content)) {
+  } else if (!content.includes(`\n@${annotationToAdd}\n`)) {
     // add the annotation before class or interface
     content = content.replace(/\n([a-w ]*(class|@?interface|enum) )/, `\n@${annotationToAdd}\n$1`);
   }

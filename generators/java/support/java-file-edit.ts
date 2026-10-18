@@ -18,8 +18,6 @@
  */
 import assert from 'node:assert';
 
-import { escapeRegExp } from 'lodash-es';
-
 export type JavaClassName = { className: string };
 export type JavaConstructorParam = JavaClassName & { param: string | string[] };
 export type JavaField = JavaClassName & { field: string | string[] };
@@ -77,9 +75,7 @@ export function injectJavaField(paramOrOptions: string | JavaField, options?: Ja
     let fieldsToAdd = Array.isArray(opts.field) ? opts.field : [opts.field];
 
     const { newLineIndex, ident } = findJavaConstructor(content, className);
-    fieldsToAdd = fieldsToAdd
-      .map(field => (field.trim() === field ? `${ident}${field}` : field))
-      .filter(field => !new RegExp(escapeRegExp(field)).test(content));
+    fieldsToAdd = fieldsToAdd.map(field => (field.trim() === field ? `${ident}${field}` : field)).filter(field => !content.includes(field));
     if (fieldsToAdd.length === 0) {
       return content;
     }
@@ -107,7 +103,7 @@ export function injectJavaConstructorSetter(
     const { ident, blockStartIndex } = findJavaConstructor(content, className);
     setterSpec = setterSpec
       .map(setter => (setter.trim() === setter ? `${ident.repeat(2)}${setter}` : setter))
-      .filter(setter => !new RegExp(escapeRegExp(setter)).test(content));
+      .filter(setter => !content.includes(setter));
     if (setterSpec.length === 0) {
       return content;
     }
