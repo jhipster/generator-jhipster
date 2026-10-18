@@ -17,5 +17,3 @@
  * limitations under the License.
  */
 export const BASE_NAME_DESCRIPTION = 'Application base name';
-
-export const JHIPSTER_VERSION = 'jhipsterVersion';
