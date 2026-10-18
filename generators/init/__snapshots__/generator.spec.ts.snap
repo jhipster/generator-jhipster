@@ -24,12 +24,6 @@ exports[`generator - init with default config should write files and match snaps
   ".editorconfig": {
     "stateCleared": "modified",
   },
-  ".gitattributes": {
-    "stateCleared": "modified",
-  },
-  ".gitignore": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
