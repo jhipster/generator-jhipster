@@ -248,13 +248,10 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```bash
-<%_ if (buildToolMaven) { _%>
-./mvnw -Pprod,war clean verify
-<%_ } _%>
-<%_ if (buildToolGradle) { _%>
-./gradlew -Pprod -Pwar clean bootWar
-<%_ } _%>
+npm run java:war:prod
 ```
+
+It runs `<%- packageJsonScripts['java:war'] %>` with the `prod` profile (`-Pprod`).
 
 ### JHipster Control Center
 
