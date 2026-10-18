@@ -132,7 +132,7 @@ export const mavenDefinition = ({
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <configuration>
                         <image>
-                            <builder>paketobuildpacks/builder:tiny</builder>
+                            <builder>paketobuildpacks/builder-noble-java-tiny</builder>
                             <env>
                                 <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
                             </env>
