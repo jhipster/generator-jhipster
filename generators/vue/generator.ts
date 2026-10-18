@@ -139,7 +139,7 @@ export default class VueGenerator extends VueApplicationGenerator {
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
-      async javaNodeBuildPaths({ application }) {
+      javaNodeBuildPaths({ application }) {
         const { clientBundlerRsbuild, clientBundlerVite, microfrontend, enableTranslation, enableI18nRTL, javaNodeBuildPaths } =
           application;
 

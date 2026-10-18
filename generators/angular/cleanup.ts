@@ -58,7 +58,6 @@ export default asWritingTask<AngularEntity, AngularApplication>(function cleanup
     this.removeFile(`${application.clientSrcDir}app/shared/user/user.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-management-dialog.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-modal.service.ts`);
-    this.removeFile(`${application.clientSrcDir}app/admin/user-management/user-modal.service.ts`);
 
     this.removeFile(`${application.clientTestDir}spec/app/shared/user/user.service.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/admin/user-management/user-management-dialog.component.spec.ts`);

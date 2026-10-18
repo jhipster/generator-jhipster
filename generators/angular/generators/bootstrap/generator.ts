@@ -71,25 +71,21 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
 
           this.editFile(`${clientSrcDir}app/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, false));
 
-          {
-            this.editFile(
-              `${application.clientI18nDir}index.ts`,
-              createNeedleCallback({
-                needle: 'i18n-language-loader',
-                contentToAdd: allLanguages.map(
-                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json').catch(),`,
-                ),
-              }),
-              createNeedleCallback({
-                needle: 'i18n-language-angular-loader',
-                contentToAdd: allLanguages
-                  .filter(lang => lang.angularLocale)
-                  .map(
-                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
-                  ),
-              }),
-            );
-          }
+          this.editFile(
+            `${application.clientI18nDir}index.ts`,
+            createNeedleCallback({
+              needle: 'i18n-language-loader',
+              contentToAdd: allLanguages.map(
+                lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json').catch(),`,
+              ),
+            }),
+            createNeedleCallback({
+              needle: 'i18n-language-angular-loader',
+              contentToAdd: allLanguages
+                .filter(lang => lang.angularLocale)
+                .map(lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`),
+            }),
+          );
         });
       },
     });

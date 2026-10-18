@@ -149,7 +149,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
-      async javaNodeBuildPaths({ application }) {
+      javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json', 'build-plugins/');
         if (application.microfrontend) {
           application.javaNodeBuildPaths?.push('federation.config.ts', 'tsconfig.federation.json');
@@ -494,6 +494,15 @@ export default class AngularGenerator extends AngularApplicationGenerator {
                 '@angular-builders/custom-esbuild': null,
               }),
           },
+          ...(microfrontend ?
+            {
+              overrides: {
+                // 4.8.0 requires @softarc/native-federation ^4.8.0 as peer, but @angular-architects/native-federation pins ~4.7.1.
+                // npm then drops the peer when installing from a workspace folder, and the build fails to resolve its types.
+                '@softarc/native-federation-orchestrator': '4.7.0',
+              },
+            }
+          : {}),
         });
       },
       addWebsocketDependencies({ application, source }) {
