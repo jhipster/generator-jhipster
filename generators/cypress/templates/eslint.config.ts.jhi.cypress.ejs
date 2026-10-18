@@ -26,7 +26,7 @@ import tseslint from 'typescript-eslint';
     extends: [...tseslint.configs.recommendedTypeChecked, cypress.configs.recommended],
     languageOptions: {
       parserOptions: {
-        "project": ["./<%- relativeDir(clientRootDir, cypressDir) %>tsconfig.json"],
+        project: ["./<%- relativeDir(clientRootDir, cypressDir) %>tsconfig.json"],
       },
     },
     rules: {

@@ -25,7 +25,7 @@
     <changeSet id="<%- changelogDate %>-1-add-columns" author="jhipster">
         <addColumn tableName="<%- entity.entityTableName %>">
   <%_ for (field of addedFields) { _%>
-            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) %><%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
+            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- field.liquibaseColumnAttributes %>/>
     <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%- field.columnName %>_content_type" type="varchar(255)"/>
     <%_ } _%>
@@ -142,7 +142,7 @@
       <%_ /* ======== Start dropForeignKeyConstraint ======== */ _%>
       <%_ for (relationship of removedRelationships) { _%>
         <%_ if (relationship.shouldWriteRelationship) { _%>
-        <dropForeignKeyConstraint baseTableName="<%- entity.entityTableName %>" constraintName="<%- this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
+        <dropForeignKeyConstraint baseTableName="<%- entity.entityTableName %>" constraintName="<%- relationship.liquibaseForeignKeyName %>"/>
         <%_ } _%>
       <%_ } _%>
       <%_ if (hasRelationshipWithFieldUpdates) { _%>

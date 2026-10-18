@@ -5853,10 +5853,8 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
         "@angular-architects/native-federation": null,
         "@angular-devkit/architect": null,
         "@angular/build": null,
+        "@softarc/native-federation-orchestrator": null,
         "tinyglobby": null,
-      },
-      "overrides": {
-        "@softarc/native-federation-orchestrator": "4.7.0",
       },
     },
     {
@@ -7079,13 +7077,11 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
         "@angular-architects/native-federation": null,
         "@angular-devkit/architect": null,
         "@angular/build": null,
+        "@softarc/native-federation-orchestrator": null,
         "@types/folder-hash": null,
         "deepmerge": null,
         "folder-hash": null,
         "tinyglobby": null,
-      },
-      "overrides": {
-        "@softarc/native-federation-orchestrator": "4.7.0",
       },
     },
     {

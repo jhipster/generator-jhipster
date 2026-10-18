@@ -22,9 +22,11 @@ import { randomBytes } from 'node:crypto';
 import chalk from 'chalk';
 import { defaults } from 'lodash-es';
 
+import { mutateData } from '../../../../lib/utils/index.ts';
 import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../../../spring-boot/generators/data-relational/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 
@@ -136,6 +138,20 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.adminPasswordBase64 ??= convertSecretToBase64(deployment.adminPassword);
 
         applications.forEach(appConfig => {
+          if (appConfig.prodDatabaseTypeMysql || appConfig.prodDatabaseTypeMariadb || appConfig.prodDatabaseTypePostgresql) {
+            const { prodDatabaseType } = appConfig;
+            const hostname = `${appConfig.baseName.toLowerCase()}-${prodDatabaseType}.${deployment.kubernetesNamespace}.svc.cluster.local`;
+            const databaseName = appConfig.baseName.toLowerCase();
+            mutateData(appConfig, {
+              __override__: false,
+              kubernetesJdbcUrl: () => getJdbcUrl(prodDatabaseType, { hostname, databaseName }),
+              kubernetesDatasourceJdbcUrl: ({ kubernetesJdbcUrl }) =>
+                appConfig.prodDatabaseTypePostgresql ?
+                  getJdbcUrl(prodDatabaseType, { hostname, databaseName: appConfig.baseName })
+                : kubernetesJdbcUrl,
+              kubernetesR2dbcUrl: () => getR2dbcUrl(prodDatabaseType, { hostname, databaseName }),
+            });
+          }
           // Add application configuration
           if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
             deployment.entryPort = appConfig.composePort!;

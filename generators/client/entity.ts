@@ -85,6 +85,16 @@ type ClientAddedEntityProperties = {
   entityPage?: string;
 
   tsKeyType?: string;
+  /** The fields of the entity model, with their TypeScript types. */
+  entityClientFields?: string[];
+  /** The types the entity model imports, by name. */
+  entityClientImports?: Map<string, string>;
+  /** The default values of the fields of the entity model. */
+  entityClientFieldDefaultValues?: Record<string, string>;
+  /** The enums the entity model imports, by name. */
+  entityModelEnumImports?: Map<string, string>;
+  /** The enums the entity update form imports, by name. */
+  entityClientEnumImports?: Map<string, string>;
   tsSampleWithPartialData?: string;
   tsSampleWithRequiredData?: string;
   tsSampleWithFullData?: string;

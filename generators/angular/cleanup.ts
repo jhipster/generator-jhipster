@@ -23,7 +23,7 @@ import { CLIENT_WEBPACK_DIR } from '../generator-constants.ts';
 import type { Application as AngularApplication, Entity as AngularEntity } from './types.d.ts';
 
 /**
- * Removes files that where generated in previous JHipster versions and therefore
+ * Removes files that were generated in previous JHipster versions and therefore
  * need to be removed.
  */
 
@@ -40,7 +40,7 @@ export default asWritingTask<AngularEntity, AngularApplication>(function cleanup
     this.removeFile(`${application.clientSrcDir}app/app.main-aot.ts`);
   }
   if (control.isJhipsterVersionLessThan('5.0.0')) {
-    this.removeFile(`${application.clientSrcDir}app//app.route.ts`);
+    this.removeFile(`${application.clientSrcDir}app/app.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/auth/account.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/auth/auth-jwt.service.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/auth/auth-session.service.ts`);
