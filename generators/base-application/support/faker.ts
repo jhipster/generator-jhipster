@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Faker, type LocaleDefinition, base, en } from '@faker-js/faker';
+import { Faker, type LocaleDefinition, type Randomizer, base, en, generateMersenne53Randomizer } from '@faker-js/faker';
 import Randexp from 'randexp';
 
 import { languageToFakerLanguage } from '../../languages/support/languages.ts';
@@ -43,6 +43,27 @@ export class FakerWithRandexp extends Faker {
 }
 
 /**
+ * Create a randomizer that applies a seed only when the next random value is requested.
+ * Reseeding the Mersenne Twister is costly and seeds are reset before every entity template, used or not.
+ */
+const createLazySeedRandomizer = (): Randomizer => {
+  const randomizer = generateMersenne53Randomizer();
+  let pendingSeed: number | number[] | undefined;
+  return {
+    next: () => {
+      if (pendingSeed !== undefined) {
+        randomizer.seed(pendingSeed);
+        pendingSeed = undefined;
+      }
+      return randomizer.next();
+    },
+    seed: (seed: number | number[]) => {
+      pendingSeed = seed;
+    },
+  };
+};
+
+/**
  * Create a faker instance.
  * @param nativeLanguage - native language
  * @returns Faker instance
@@ -56,6 +77,7 @@ export async function createFaker(nativeLanguage = 'en') {
 
   const faker = new FakerWithRandexp({
     locale: [locale, base, en],
+    randomizer: createLazySeedRandomizer(),
   });
   faker.createRandexp = (pattern, m) => new RandexpWithFaker(pattern, m, faker);
   return faker;
