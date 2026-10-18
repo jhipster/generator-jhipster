@@ -620,8 +620,8 @@ ${classProperties
               );
             }
           }
-          field.javaTestSampleText = sampleTextString;
-          field.javaTestUpdatedText = updatedTextString;
+          field.sbTestSampleText = sampleTextString;
+          field.sbTestUpdatedText = updatedTextString;
         }
       },
       prepareFilters({ application, entity }) {

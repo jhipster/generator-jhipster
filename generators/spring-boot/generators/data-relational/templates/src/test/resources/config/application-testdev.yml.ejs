@@ -35,17 +35,17 @@ spring:
 <%_ if (reactive) { _%>
   <%_ if (devDatabaseTypeH2Any) { _%>
   r2dbc:
-    url: <%- itestsR2dbcUrl %>
+    url: <%- sbItestsR2dbcUrl %>
     username: <%- lowercaseBaseName %>
     password:
   liquibase:
-    url: <%- itestsJdbcUrl %>
+    url: <%- sbItestsJdbcUrl %>
   <%_ } _%>
 <%_ } else { _%>
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (devDatabaseTypeH2Any) { _%>
-    url: <%- itestsJdbcUrl %>
+    url: <%- sbItestsJdbcUrl %>
     username: <%- baseName %>
     password:
   <%_ } _%>

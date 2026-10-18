@@ -356,8 +356,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   _%>
   <%_ if (field.fieldTypeString || field.blobContentTypeText) { _%>
 
-    private static final String <%- defaultValueName %> = "<%- field.javaTestSampleText %>";
-    private static final String <%- updatedValueName %> = "<%- field.javaTestUpdatedText %>";
+    private static final String <%- defaultValueName %> = "<%- field.sbTestSampleText %>";
+    private static final String <%- updatedValueName %> = "<%- field.sbTestUpdatedText %>";
   <%_ } else if (field.fieldTypeInteger) { _%>
 
     private static final Integer <%- defaultValueName %> = <%- defaultValue %>;
