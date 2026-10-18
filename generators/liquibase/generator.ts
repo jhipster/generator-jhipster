@@ -812,12 +812,10 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   ) {
     const { entityTableName, prodDatabaseType } = entity as LiquibaseEntity & { prodDatabaseType: string };
     if (relationship.shouldWriteRelationship) {
-      relationship.liquibaseForeignKeyName ??= this.getFKConstraintName(
-        entityTableName,
-        relationship.relationshipName,
-        prodDatabaseType,
-        false,
-      );
+      mutateData(relationship, {
+        __override__: false,
+        liquibaseForeignKeyName: () => this.getFKConstraintName(entityTableName, relationship.relationshipName, prodDatabaseType, false),
+      });
     }
     if (
       relationship.unique &&
@@ -826,12 +824,16 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       relationship.otherEntity?.primaryKey
     ) {
       const { fields, ownFields } = relationship.otherEntity.primaryKey;
-      relationship.liquibaseUniqueConstraintNames ??= Object.fromEntries(
-        [...new Set([...fields, ...(ownFields ?? [])])].map(idField => [
-          idField.columnName,
-          this.getUXConstraintName(entityTableName, `${relationship.columnName}_${idField.columnName}`, prodDatabaseType, false),
-        ]),
-      );
+      mutateData(relationship, {
+        __override__: false,
+        liquibaseUniqueConstraintNames: () =>
+          Object.fromEntries(
+            [...new Set([...fields, ...(ownFields ?? [])])].map(idField => [
+              idField.columnName,
+              this.getUXConstraintName(entityTableName, `${relationship.columnName}_${idField.columnName}`, prodDatabaseType, false),
+            ]),
+          ),
+      });
     }
   }
 
