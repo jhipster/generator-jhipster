@@ -11,11 +11,11 @@ JHipster is a Yeoman-based code generator (TypeScript, ESM, Node — see `engine
 - Type-check tests: `npm run check-types` (`tsc -p tsconfig.spec.json`).
 - Lint: `npm run lint` (eslint, `--max-warnings 5`). Auto-fix: `npm run lint-fix` (runs eslint `--fix` then `prettier --write`).
 - Prettier check/format: `npm run prettier:check` / `npm run prettier:format`.
-- Full test (lint + type-check + tests): `npm test`. Runs expect-node (`exnode`) over the spec files of `expect-node.config.ts` (`test generators cli .blueprint lib`).
+- Full test (lint + type-check + tests): `npm test`. Runs expect-node (`exnode`) over the spec files of `expect-node.config.ts` (`test generators cli .blueprint lib`) with `--forbid-only`.
 - Fast test (skip lint/type-check): `npx exnode`.
-- Single test files: `npx exnode <file>...` (add `--workers 0` to run each file in a process of its own).
-- Update snapshots: `npm run update-snapshot -- <file>...` or `npm run update-snapshots` (all). Equivalent: `npx exnode --update-snapshot <file>...`.
-- JDL-only tests: `npm run jdl:test`.
+- Single test files / directories: `npx exnode <path>...` (add `--workers 0` to run each file in a process of its own).
+- Update snapshots: `npm run update-snapshot -- <path>...` or `npm run update-snapshots` (all). Equivalent: `npx exnode --update-snapshot <path>...`.
+- JDL-only tests: `npm run jdl:test` (watch: `npm run jdl:test-watch`).
 
 Snapshots live next to specs as `*.snap` and are committed. Never hand-edit them — regenerate.
 

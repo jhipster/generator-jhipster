@@ -127,7 +127,7 @@ describe('cli', () => {
   let argv: string[];
 
   before(async () => {
-    await exnode.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} });
+    await exnode.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} }, { reimport: true });
     const { buildJHipster } = await import('./program.ts');
 
     mockCli = async (argv: string[], opts = {}) => {

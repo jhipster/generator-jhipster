@@ -23,7 +23,7 @@ import type * as Execa from 'execa';
 
 import type checkJava from './check-java.ts';
 
-const { execaSync } = await exnode.mock<typeof Execa>('execa');
+const { execaSync } = await exnode.mock<typeof Execa>('execa', undefined, { reimport: true });
 
 const baseResult = {
   cwd: '',

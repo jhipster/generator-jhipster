@@ -6,6 +6,4 @@ export default defineConfig({
   timeout: 50000,
   // The test files by processes reused, as many as the cores.
   workers: true,
-  // A module mocked after the test file imported a module of the project importing it.
-  reimport: true,
 });

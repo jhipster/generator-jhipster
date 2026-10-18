@@ -134,14 +134,14 @@ Run every test without lint/prettier
 Update every test snapshot
 `npm run update-snapshots`
 
-Run specific test files
-`npx exnode <file>...`
+Run specific tests
+`npx exnode <path>...`
 
-Run specific test files each in a process of its own
-`npx exnode --workers 0 <file>...`
+Run specific tests each file in a process of its own
+`npx exnode --workers 0 <path>...`
 
 Update specific test snapshot
-`npm run update-snapshot -- <file>...` or `npx exnode --update-snapshot <file>...`
+`npm run update-snapshot -- <path>...` or `npx exnode --update-snapshot <path>...`
 
 Fixing lint and prettier errors
 `npm run lint-fix`
