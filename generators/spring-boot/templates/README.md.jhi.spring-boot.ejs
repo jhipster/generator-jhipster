@@ -220,13 +220,10 @@ To launch your application's tests, run:
 To build the final jar and optimize the <%- baseName %> application for production, run:
 
 ```bash
-<%_ if (buildToolMaven) { _%>
-./mvnw -Pprod clean verify
-<%_ } _%>
-<%_ if (buildToolGradle) { _%>
-./gradlew -Pprod clean bootJar
-<%_ } _%>
+npm run java:jar:prod
 ```
+
+It runs `<%- packageJsonScripts['java:jar'] %>` with the `prod` profile (`-Pprod`).
 
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
@@ -238,6 +235,9 @@ npm run java:jar:start
 ```
 
 It runs `<%- packageJsonScripts['java:jar:start'] %>`: the jar with the `prod` profile and the sample secrets of the `secret-samples` profile.
+
+The `secret-samples` profile, in `<%- srcMainResources %>config/application-secret-samples.yml`, holds sample passwords and secrets, for development and tests only.
+To run the application in production, do not activate it: provide your own passwords and secrets to the `prod` profile instead, for example with environment variables.
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%- serverPort %>](http://localhost:<%- serverPort %>) in your browser.
 <% } %>
