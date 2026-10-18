@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 
-import assert from 'node:assert';
-
-import FastXmlBuilder, { type XMLBuilder, type XmlBuilderOptions } from 'fast-xml-builder';
+import FastXmlBuilder, { type XmlBuilderOptions } from 'fast-xml-builder';
 import { type X2jOptions, XMLParser } from 'fast-xml-parser';
-import { merge } from 'lodash-es';
+import type { MemFsEditor } from 'mem-fs-editor';
+import { Storage } from 'yeoman-generator';
 
 const defaultXmlCommonOptions: Partial<X2jOptions & XmlBuilderOptions> = {
   ignoreAttributes: false,
@@ -43,77 +42,57 @@ export const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
   indentBy: '    ',
 };
 
-export default class XmlStorage {
+// Created before the fields of a storage: Storage reads its file in its constructor.
+const parser = new XMLParser(defaultXmlParserOptions);
+const builder = new FastXmlBuilder(defaultXmlBuildOptions);
+
+/**
+ * A storage of a xml file: yeoman-generator's Storage, parsing and building xml.
+ */
+export default class XmlStorage extends Storage {
   sortFile: boolean;
-  protected readonly saveFile: (content: string) => void;
-  protected readonly loadFile: () => string;
+  /** Whether a change was made through this storage: only then save writes the file. */
+  protected changed = false;
 
-  protected readonly parser: XMLParser;
-  protected readonly builder: XMLBuilder;
-  protected _cachedStore: any;
-
-  constructor({
-    saveFile,
-    loadFile,
-    xmlParserOptions,
-    xmlBuildOptions,
-    sortFile,
-  }: {
-    saveFile: (content: string) => void;
-    loadFile: () => string;
-    xmlParserOptions?: Partial<X2jOptions>;
-    xmlBuildOptions?: Partial<XmlBuilderOptions>;
-    sortFile?: boolean;
-  }) {
-    assert(saveFile, 'saveFile callback is required to create a storage');
-    assert(loadFile, 'loadFile callback is required to create a storage');
-
-    this.parser = new XMLParser({ ...defaultXmlParserOptions, ...xmlParserOptions });
-    this.builder = new FastXmlBuilder({ ...defaultXmlBuildOptions, ...xmlBuildOptions });
-
-    this.saveFile = saveFile;
-    this.loadFile = loadFile;
+  constructor(fs: MemFsEditor, filePath: string, { sortFile }: { sortFile?: boolean } = {}) {
+    super(undefined, fs, filePath);
     this.sortFile = sortFile ?? true;
   }
 
-  public clearCache() {
-    delete this._cachedStore;
+  override parseContent(contents: string): Record<string, any> {
+    return parser.parse(contents);
   }
 
-  public save(sort = this.sortFile) {
-    if (sort) {
-      this.sort();
+  override serializeContent(fullStore: Record<string, any>): string {
+    return builder.build(fullStore);
+  }
+
+  override save(sort = this.sortFile) {
+    if (this.changed) {
+      this.persist(sort);
     }
-    this.persist(false);
   }
 
-  public merge(source: any) {
-    assert(typeof source === 'object', 'Storage `merge` method only accept objects');
-    this._cachedStore = merge({}, this.store, source);
+  override merge(source: Record<string, any>): Record<string, any> {
+    this.changed = true;
+    return super.merge(source);
   }
 
   protected sort() {}
 
   protected persist(sort = this.sortFile) {
-    if (this._cachedStore) {
-      if (sort) {
-        this.sort();
-      }
-
-      this.saveFile(this.builder.build(this._cachedStore));
+    if (sort) {
+      this.sort();
     }
+    this.changed = true;
+    super.save();
   }
 
   protected get store() {
-    this.load();
-    return this._cachedStore;
-  }
-
-  protected load() {
-    this._cachedStore ??= this.parser.parse(this.loadFile());
+    return this._store;
   }
 
   protected mergeContent<T>(existing: T, newContent?: string): T {
-    return newContent ? { ...existing, ...this.parser.parse(newContent) } : existing;
+    return newContent ? { ...existing, ...parser.parse(newContent) } : existing;
   }
 }
