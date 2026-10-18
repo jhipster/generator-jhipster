@@ -78,6 +78,10 @@ export type Field = ServerField &
 
     requiresPersistableImplementation?: boolean;
     fieldNameAsDatabaseColumn?: string;
+    /** The first text value of a text field in the resource integration test, escaped for a Java string. */
+    sbTestSampleText?: string;
+    /** The second text value of a text field in the resource integration test, escaped for a Java string. */
+    sbTestUpdatedText?: string;
   };
 
 export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {

@@ -20,6 +20,7 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import { mutateData } from '../../lib/utils/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
@@ -235,6 +236,34 @@ ${comment}
 
   get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareEntityModel({ entity }) {
+        const fieldsWithoutId = entity.fields.filter(field => !field.id);
+        mutateData(entity, {
+          __override__: false,
+          entityClientFields: () =>
+            this.generateEntityClientFields(
+              entity.primaryKey,
+              entity.fields,
+              entity.relationships,
+              entity.dto,
+              'dayjs.Dayjs',
+              entity.embedded,
+            ),
+          entityClientImports: () => this.generateEntityClientImports(entity.relationships, entity.dto),
+          entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
+          entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
+          entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
+        });
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {

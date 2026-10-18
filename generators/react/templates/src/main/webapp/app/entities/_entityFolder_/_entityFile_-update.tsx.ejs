@@ -60,7 +60,7 @@ import { getUsers } from 'app/modules/administration/user-management/user-manage
 import { getEntities as get<%- otherEntity.entityNamePlural %> } from 'app/entities/<%- otherEntity.entityFolderName %>/<%- otherEntity.entityFileName %>.reducer';
   <%_ } _%>
 <%_ } _%>
-<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = entityClientEnumImports; _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
