@@ -21,7 +21,7 @@ import { asWritingTask } from '../base-application/support/task-type-inference.t
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 /**
- * Removes files that where generated in previous JHipster versions and therefore
+ * Removes files that were generated in previous JHipster versions and therefore
  * need to be removed.
  */
 export default asWritingTask<ClientEntity, ClientApplication>(async function cleanupOldFilesTask({ application, control }) {
@@ -81,7 +81,6 @@ export default asWritingTask<ClientEntity, ClientApplication>(async function cle
     this.removeFile(`${application.clientTestDir}spec/app/account/login.service.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/account/login-form/login-form.component.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/account/sessions/sessions.component.spec.ts`);
-    this.removeFile(`${application.clientTestDir}spec/app/account/login.service.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/account/change-password/change-password.component.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/account/register/register.component.spec.ts`);
     this.removeFile(`${application.clientTestDir}spec/app/account/reset-password/init/reset-password-init.component.spec.ts`);

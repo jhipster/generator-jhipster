@@ -26,7 +26,7 @@ import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from 
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
-import router<%- microfrontend ? ', { lazyRoutes }' : '' %> from './router';
+import router from './router';
 import { START_LOCATION } from 'vue-router';
 import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
 import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
