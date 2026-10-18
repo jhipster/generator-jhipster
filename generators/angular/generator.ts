@@ -489,8 +489,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               {
                 '@angular-architects/native-federation': null,
                 '@angular-devkit/architect': null,
-                // The orchestrator @angular-architects/native-federation works with: a later one requires a later
-                // @softarc/native-federation than it pins.
                 '@softarc/native-federation-orchestrator': null,
               }
             : {
