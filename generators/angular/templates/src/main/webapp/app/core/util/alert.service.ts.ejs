@@ -72,7 +72,7 @@ export class AlertService {
    * Adds alert to alerts array and returns added alert.
    * @param alertToAdd Alert to add. If `timeout`, `toast` or `position` is missing then applying default value.
 <%_ if (enableTranslation) { _%>
-   *                   If `translateKey` is available then its translation else `message` is used for showing.
+   *                   If `translationKey` is available then its translation else `message` is used for showing.
 <%_ } _%>
    * @param extAlerts  If missing then adding `alert` to `AlertService` internal signal and alerts can be retrieved by `get()`.
    *                   Else adding `alert` to `extAlerts`.
