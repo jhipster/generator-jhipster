@@ -18,12 +18,15 @@
  * limitations under the License.
  */
 
+import { escape } from 'lodash-es';
 import type { ValueOf } from 'type-fest';
 
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Field as LiquibaseField } from '../types.d.ts';
+
+import formatAsLiquibaseRemarks from './formatting.ts';
 
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
@@ -115,6 +118,12 @@ export default function prepareField(application: LiquibaseApplication<Liquibase
       if (field.fieldTypeBoolean) return 'defaultValueBoolean';
       return 'defaultValue';
     },
+    liquibaseDefaultValueAttribute: ({ liquibaseDefaultValueAttributeName, liquibaseDefaultValueAttributeValue }) =>
+      liquibaseDefaultValueAttributeValue === undefined ? '' : (
+        `${liquibaseDefaultValueAttributeName}="${escape(liquibaseDefaultValueAttributeValue)}"`
+      ),
+    liquibaseColumnAttributes: ({ liquibaseDefaultValueAttribute, documentation }) =>
+      `${liquibaseDefaultValueAttribute ? ` ${liquibaseDefaultValueAttribute}` : ''}${formatAsLiquibaseRemarks(documentation!, true)}`,
     shouldDropDefaultValue: data =>
       !data.liquibaseDefaultValueAttributeValue && (data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT),
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,

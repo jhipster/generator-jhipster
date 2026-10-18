@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const { relationshipType, relationshipName, ownerSide, onDelete, onUpdate } = relationship; _%>
+<%_ const { relationshipType, ownerSide, onDelete, onUpdate } = relationship; _%>
 <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) { _%>
-  <%_ const constraintName = this.getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
+  <%_ const constraintName = relationship.liquibaseForeignKeyName;
       let baseColumnNames;
       let referencedColumnNames;
       if (relationshipType === 'one-to-one' && ownerSide && relationship.id) {

@@ -69,6 +69,7 @@ import type {
   Entity as LiquibaseEntity,
   Field as LiquibaseField,
   Options as LiquibaseOptions,
+  Relationship as LiquibaseRelationship,
   Source as LiquibaseSource,
 } from './types.ts';
 
@@ -215,6 +216,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareEntityRelationship({ application, entity, relationship }) {
         prepareRelationshipForLiquibase({ application, entity, relationship });
+        this.#prepareConstraintNames(entity, relationship);
         relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.onDelete, this);
         relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.onUpdate, this);
       },
@@ -273,6 +275,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
               mutateData(relationship, mutateBaseApplicationRelationship, mutateBaseApplicationRelationshipWithEntity);
               prepareRelationship.call(this, entity, relationship, true);
               prepareRelationshipForLiquibase({ application, entity, relationship });
+              // The constraints of a removed relationship are dropped from the table of the entity as it is now.
+              this.#prepareConstraintNames(databaseChangelog.entity, relationship);
             }
             postPrepareEntity.call(this, { application, entity } as any);
           }
@@ -797,6 +801,42 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    * @param {boolean} addRemarksTag - add remarks tag
    * @returns formatted liquibase remarks
    */
+  /**
+   * The names of the foreign key and unique constraints of a relationship written in the table of the entity, the ones too
+   * long told. The unique constraint of a relationship that is the id is named only when it is added to an existing table.
+   */
+  #prepareConstraintNames(
+    entity: LiquibaseEntity,
+    relationship: LiquibaseRelationship & { otherEntity?: LiquibaseEntity },
+    { idRelationship = false }: { idRelationship?: boolean } = {},
+  ) {
+    const { entityTableName, prodDatabaseType } = entity as LiquibaseEntity & { prodDatabaseType: string };
+    if (relationship.shouldWriteRelationship) {
+      mutateData(relationship, {
+        __override__: false,
+        liquibaseForeignKeyName: () => this.getFKConstraintName(entityTableName, relationship.relationshipName, prodDatabaseType, false),
+      });
+    }
+    if (
+      relationship.unique &&
+      relationship.relationshipType === 'one-to-one' &&
+      Boolean(relationship.id) === idRelationship &&
+      relationship.otherEntity?.primaryKey
+    ) {
+      const { fields, ownFields } = relationship.otherEntity.primaryKey;
+      mutateData(relationship, {
+        __override__: false,
+        liquibaseUniqueConstraintNames: () =>
+          Object.fromEntries(
+            [...new Set([...fields, ...(ownFields ?? [])])].map(idField => [
+              idField.columnName,
+              this.getUXConstraintName(entityTableName, `${relationship.columnName}_${idField.columnName}`, prodDatabaseType, false),
+            ]),
+          ),
+      });
+    }
+  }
+
   formatAsLiquibaseRemarks(text: string, addRemarksTag = false) {
     return liquibaseComment(text, addRemarksTag);
   }
@@ -893,6 +933,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       entityChanges.relationships = entity.relationships;
     } else {
       entityChanges.addedRelationships = databaseChangelog.addedRelationships;
+      for (const relationship of entityChanges.addedRelationships) {
+        this.#prepareConstraintNames(entity, relationship, { idRelationship: true });
+      }
       entityChanges.removedRelationships = databaseChangelog.removedRelationships;
       entityChanges.relationshipsToRecreateForeignKeysOnly = databaseChangelog.relationshipsToRecreateForeignKeysOnly;
       entityChanges.removedDefaultValueFields = databaseChangelog.removedDefaultValueFields;
