@@ -168,7 +168,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
       } else {
         cy.get(entityTableSelector).should('exist');
       }
-    });;
+    });
     cy.getEntityHeading('<%- entityNameCapitalized %>').should('exist');
     cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
   });
@@ -285,7 +285,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
-      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship missbehavior' : '' %>
+      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship misbehavior' : '' %>
       it<%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '.skip' : '' %>('edit button click should load edit <%- entityNameCapitalized %> page and save', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
@@ -366,7 +366,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     <%_ } _%>
   <%_ } _%>
   <%_ for (const relationship of requiredRelationships) { _%>
-       cy.get(`[data-cy="<%- relationship.relationshipFieldName %>"]`).select(<%- relationship.collection ? '[0]' : '1' %>);
+      cy.get(`[data-cy="<%- relationship.relationshipFieldName %>"]`).select(<%- relationship.collection ? '[0]' : '1' %>);
   <%_ } _%>
 
   <%_ if (anyFieldHasFileBasedContentType) { _%>
