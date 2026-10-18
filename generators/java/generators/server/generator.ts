@@ -19,13 +19,9 @@
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
-const WAIT_TIMEOUT = 3 * 60000;
+import { javaJarStartCommand } from './internal/java-jar-start-command.ts';
 
-/**
- * Command that starts a packaged archive of the application with the given Spring profiles.
- */
-const javaJarStartCommand = ({ destDir, jarName, profiles }: { destDir: string; jarName: string; profiles: string }) =>
-  `java -jar ${destDir}${jarName} --spring.profiles.active=${profiles}`;
+const WAIT_TIMEOUT = 3 * 60000;
 
 export default class ServerGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
