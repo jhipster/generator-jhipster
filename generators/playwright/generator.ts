@@ -130,6 +130,15 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
           generateEntityPlaywright: ({ builtInUserManagement, skipClient }) => !skipClient || builtInUserManagement,
         });
       },
+      prepareTestEntities({ entity }) {
+        if (entity.e2eTestEntity === undefined) {
+          entity.resetFakerSeed?.('e2e');
+          entity.e2eTestEntitySample = generateTestEntity(
+            entity.fields.filter(field => !field.autoGenerate && !(field as { nullable?: boolean }).nullable),
+          );
+          entity.e2eTestEntity = generateTestEntity(entity.fields.filter(field => !field.autoGenerate));
+        }
+      },
     });
   }
 

@@ -42,7 +42,16 @@ export type Config = Command['Config'] & BootstrapCommand['Config'] & BaseWorksp
 
 export type Options = Command['Options'] & BootstrapCommand['Options'] & BaseWorkspacesOptions;
 
-export { BaseWorkspacesSource as Source, BaseWorkspacesWorkspacesApplication as WorkspacesApplication };
+export { BaseWorkspacesSource as Source };
+
+export type WorkspacesApplication = BaseWorkspacesWorkspacesApplication & {
+  /** The JDBC URL of the database of the application in the cluster. */
+  kubernetesJdbcUrl?: string;
+  /** The JDBC URL of the datasource of the application in the cluster: the database named after the base name for PostgreSQL. */
+  kubernetesDatasourceJdbcUrl?: string;
+  /** The R2DBC URL of the database of the application in the cluster. */
+  kubernetesR2dbcUrl?: string;
+};
 
 type KNativeGeneratorType = OptionWithDerivedProperties<'generatorType', ['k8s', 'helm']>;
 

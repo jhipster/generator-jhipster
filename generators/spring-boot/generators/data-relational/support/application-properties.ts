@@ -114,6 +114,20 @@ export default function prepareSqlApplicationProperties({ application }: { appli
               buildDirectory: `./${data.temporaryDir}`,
               prodDatabaseType: data.prodDatabaseType,
             }),
+          itestsJdbcUrl: data =>
+            getJdbcUrl(data.devDatabaseType, {
+              databaseName: data.lowercaseBaseName,
+              itests: true,
+              buildDirectory: `./${data.temporaryDir}`,
+              prodDatabaseType: data.prodDatabaseType,
+            }),
+          itestsR2dbcUrl: data =>
+            getR2dbcUrl(data.devDatabaseType, {
+              databaseName: data.lowercaseBaseName,
+              itests: true,
+              buildDirectory: `./${data.temporaryDir}`,
+              prodDatabaseType: data.prodDatabaseType,
+            }),
         };
       }
       return {

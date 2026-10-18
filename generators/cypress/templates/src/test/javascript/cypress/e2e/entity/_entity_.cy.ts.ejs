@@ -42,7 +42,7 @@ import {
     const skipCreateTest
       = !cypressBootstrapEntities
       // Cannot create a required relationship with itself.
-      || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
+      || requiredRelationships.some(rel => rel.otherEntity.builtInUser)
       // Required relationships that contain another required relationship are complex to handle.
       || requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired))
       // Same as above.
@@ -52,8 +52,6 @@ import {
         ? '.skip' : '';
 
     const reason = 'cannot create a required entity with relationship with required relationships.';
-
-    const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 _%>
 
 describe('<%- entityNameCapitalized %> e2e test', () => {
@@ -62,7 +60,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   let username: string;
   let password: string;
 <%_ if (!readOnly) { _%>
-  <%- skipCreateTest ? '// ' : '' %>const <%- entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
+  <%- skipCreateTest ? '// ' : '' %>const <%- entityInstance %>Sample = <%- JSON.stringify(e2eTestEntitySample) %>;
 <%_ } _%>
 
   let <%- entityInstance %>;
@@ -90,7 +88,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/<%- baseApi + otherEntity.entityApiUrl %>',
-      body: <%- JSON.stringify(this.generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate))) %>,
+      body: <%- JSON.stringify(otherEntity.e2eTestEntity) %>,
     }).then(({ body }) => {
       <%- otherEntity.entityInstance %> = body;
     });
