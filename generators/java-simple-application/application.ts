@@ -170,7 +170,8 @@ export const mutateApplicationPreparing = {
       case 'gradle':
         return `${temporaryDir}libs/`;
       default:
-        return delayMarker!;
+        // Delayed for a build tool a blueprint adds, which may set it, else the folder of maven.
+        return delayMarker ?? temporaryDir;
     }
   },
   clientRootDir: '',
