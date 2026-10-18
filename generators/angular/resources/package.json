@@ -22,6 +22,7 @@
     "@angular/build": "22.2.2",
     "@angular/cli": "22.2.2",
     "@eslint/js": "10.0.1",
+    "@softarc/native-federation-orchestrator": "4.7.0",
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/folder-hash": "4.0.4",
     "@types/node": "22.20.5",

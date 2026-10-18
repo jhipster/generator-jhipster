@@ -489,20 +489,12 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               {
                 '@angular-architects/native-federation': null,
                 '@angular-devkit/architect': null,
+                '@softarc/native-federation-orchestrator': null,
               }
             : {
                 '@angular-builders/custom-esbuild': null,
               }),
           },
-          ...(microfrontend ?
-            {
-              overrides: {
-                // 4.8.0 requires @softarc/native-federation ^4.8.0 as peer, but @angular-architects/native-federation pins ~4.7.1.
-                // npm then drops the peer when installing from a workspace folder, and the build fails to resolve its types.
-                '@softarc/native-federation-orchestrator': '4.7.0',
-              },
-            }
-          : {}),
         });
       },
       addWebsocketDependencies({ application, source }) {
