@@ -32,6 +32,20 @@ export default class ServerGenerator extends JavaApplicationGenerator {
     }
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      packageJsonScripts({ application }) {
+        // Starts the packaged jar of the production profile with the sample secrets, as the README tells.
+        application.packageJsonScripts['java:jar:start'] =
+          `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.active=prod,secret-samples`;
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {

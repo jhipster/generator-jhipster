@@ -231,15 +231,10 @@ To build the final jar and optimize the <%- baseName %> application for producti
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 <%_ } _%>
-To ensure everything worked, run:
+To ensure everything worked, run it with the `prod` profile and the sample secrets of the `secret-samples` profile:
 
 ```bash
-<%_ if (buildToolMaven) { _%>
-java -jar target/*.jar
-<%_ } _%>
-<%_ if (buildToolGradle) { _%>
-java -jar build/libs/*.jar
-<%_ } _%>
+<%- packageJsonScripts['java:jar:start'] %>
 ```
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%- serverPort %>](http://localhost:<%- serverPort %>) in your browser.
