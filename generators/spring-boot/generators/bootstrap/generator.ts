@@ -57,7 +57,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
       packageJsonScripts({ application }) {
         // Set in the application for the README, which tells them.
         const { buildTool, javaPackagingDestDir } = application;
-        const scripts: Record<string, string> = {
+        mutateData(application.packageJsonScripts as any, {
           ...(buildTool === 'maven' ?
             {
               'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
@@ -74,8 +74,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           'java:war:prod': 'npm run java:war -- -Pprod',
           // Starts the packaged jar of the production profile with the sample secrets.
           'java:jar:start': javaJarStartCommand({ destDir: javaPackagingDestDir, jarName: '*.jar', profiles: 'prod,secret-samples' }),
-        };
-        mutateData(application.packageJsonScripts, scripts);
+        });
       },
       hibernate({ application, applicationDefaults }) {
         if (application.databaseTypeSql && !application.reactive) {

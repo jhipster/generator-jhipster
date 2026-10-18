@@ -163,7 +163,16 @@ export const mutateApplicationPreparing = {
         throw new Error(`Unknown build tool: ${buildTool}`);
     }
   },
-  javaPackagingDestDir: ({ buildTool, temporaryDir }) => (buildTool === 'gradle' ? `${temporaryDir}libs/` : temporaryDir),
+  javaPackagingDestDir: ({ buildTool, temporaryDir }, { delayMarker }) => {
+    switch (buildTool) {
+      case 'maven':
+        return temporaryDir;
+      case 'gradle':
+        return `${temporaryDir}libs/`;
+      default:
+        return delayMarker!;
+    }
+  },
   clientRootDir: '',
   clientSrcDir: ({ srcMainWebapp }) => srcMainWebapp,
   clientTestDir: ({ srcTestJavascript }) => srcTestJavascript,

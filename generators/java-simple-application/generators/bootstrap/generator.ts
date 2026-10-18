@@ -144,10 +144,10 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
         // The scripts exist with the javascript application only.
         const { packageJsonScripts } = application as Partial<typeof application>;
         if (packageJsonScripts) {
-          const scripts: Record<string, string> = {
+          mutateData(packageJsonScripts as any, {
+            __override__: false,
             'java:jar:start': javaJarStartCommand({ destDir: application.javaPackagingDestDir, jarName: '*.jar' }),
-          };
-          mutateData(packageJsonScripts, { __override__: false, ...scripts });
+          });
         }
       },
     });
