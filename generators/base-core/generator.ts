@@ -24,10 +24,10 @@ import { relative as posixRelative } from 'node:path/posix';
 import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
 import latestVersion from 'latest-version';
-import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
+import { get, kebabCase, merge, set, snakeCase } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson, SetRequired } from 'type-fest';
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import { stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage, type Task } from 'yeoman-generator';
 
@@ -74,7 +74,7 @@ import type {
   WriteContext,
   WriteFileOptions,
 } from './api.ts';
-import { convertWriteFileSectionsToBlocks, loadConfig, optionsForAnotherProject } from './internal/index.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig, mergeYamlContent, optionsForAnotherProject } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import {
   CUSTOM_PRIORITIES,
@@ -112,9 +112,6 @@ const relativeDir = (from: string, to: string) => {
   const rel = posixRelative(from, to);
   return rel ? `${rel}/` : '';
 };
-
-const deepMerge = (source1: any, source2: any) =>
-  mergeWith({}, source1, source2, (a, b) => (Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined));
 
 /**
  * This is the base class for a generator for every generator.
@@ -1379,25 +1376,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Merge value to an existing yaml and write to destination
-   * Removes every comment (due to parsing/merging process) except the at the top of the file.
+   * Merge value to an existing yaml and write to destination, keeping the rest of the yaml as written, its comments and
+   * its style included.
    */
   mergeDestinationYaml(filepath: string, value: Record<string | number, any>) {
-    this.editFile(filepath, content => {
-      const lines = content.split('\n');
-      const headerComments: string[] = [];
-      lines.find(line => {
-        if (line.startsWith('#')) {
-          headerComments.push(line);
-          return false;
-        }
-        return true;
-      });
-
-      const mergedContent = stringifyYaml(deepMerge(parseYaml(content), value));
-      const header = headerComments.length > 0 ? headerComments.join('\n').concat('\n') : '';
-      return `${header}${mergedContent}`;
-    });
+    this.editFile(filepath, content => mergeYamlContent(content, value));
   }
 
   /**
