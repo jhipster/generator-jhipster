@@ -22,6 +22,7 @@ import { randomBytes } from 'node:crypto';
 import chalk from 'chalk';
 import { defaults } from 'lodash-es';
 
+import { mutateData } from '../../../../lib/utils/index.ts';
 import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';
 import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
@@ -141,12 +142,15 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
             const { prodDatabaseType } = appConfig;
             const hostname = `${appConfig.baseName.toLowerCase()}-${prodDatabaseType}.${deployment.kubernetesNamespace}.svc.cluster.local`;
             const databaseName = appConfig.baseName.toLowerCase();
-            appConfig.kubernetesJdbcUrl = getJdbcUrl(prodDatabaseType, { hostname, databaseName });
-            appConfig.kubernetesDatasourceJdbcUrl =
-              appConfig.prodDatabaseTypePostgresql ?
-                getJdbcUrl(prodDatabaseType, { hostname, databaseName: appConfig.baseName })
-              : appConfig.kubernetesJdbcUrl;
-            appConfig.kubernetesR2dbcUrl = getR2dbcUrl(prodDatabaseType, { hostname, databaseName });
+            mutateData(appConfig, {
+              __override__: false,
+              kubernetesJdbcUrl: () => getJdbcUrl(prodDatabaseType, { hostname, databaseName }),
+              kubernetesDatasourceJdbcUrl: ({ kubernetesJdbcUrl }) =>
+                appConfig.prodDatabaseTypePostgresql ?
+                  getJdbcUrl(prodDatabaseType, { hostname, databaseName: appConfig.baseName })
+                : kubernetesJdbcUrl,
+              kubernetesR2dbcUrl: () => getR2dbcUrl(prodDatabaseType, { hostname, databaseName }),
+            });
           }
           // Add application configuration
           if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {

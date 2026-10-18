@@ -22,6 +22,7 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/generator.ts';
 import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
@@ -261,18 +262,15 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.asPostPreparingEachEntityTaskGroup({
       prepareEntityModel({ entity }) {
         const fieldsWithoutId = entity.fields.filter(field => !field.id);
-        entity.entityClientFields = this.generateEntityClientFields(
-          entity.primaryKey,
-          entity.fields.filter(field => !field.id),
-          entity.relationships,
-          entity.dto,
-          'Date',
-          entity.embedded,
-        );
-        entity.entityClientImports = this.generateEntityClientImports(entity.relationships, entity.dto);
-        entity.entityClientFieldDefaultValues = this.generateEntityClientFieldDefaultValues(fieldsWithoutId);
-        entity.entityModelEnumImports = this.generateEntityClientEnumImports(fieldsWithoutId);
-        entity.entityClientEnumImports = this.generateEntityClientEnumImports(entity.fields);
+        mutateData(entity, {
+          __override__: false,
+          entityClientFields: () =>
+            this.generateEntityClientFields(entity.primaryKey, fieldsWithoutId, entity.relationships, entity.dto, 'Date', entity.embedded),
+          entityClientImports: () => this.generateEntityClientImports(entity.relationships, entity.dto),
+          entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
+          entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
+          entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
+        });
       },
     });
   }

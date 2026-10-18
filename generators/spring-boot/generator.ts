@@ -620,8 +620,7 @@ ${classProperties
               );
             }
           }
-          field.sbTestSampleText = sampleTextString;
-          field.sbTestUpdatedText = updatedTextString;
+          mutateData(field, { __override__: false, sbTestSampleText: sampleTextString, sbTestUpdatedText: updatedTextString });
         }
       },
       prepareFilters({ application, entity }) {
