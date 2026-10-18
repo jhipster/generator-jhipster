@@ -18,7 +18,7 @@
  */
 
 /**
- * Command that starts a packaged archive of the application with the given Spring profiles.
+ * Command that starts a packaged archive of the application, with the given Spring profiles if any.
  */
-export const javaJarStartCommand = ({ destDir, jarName, profiles }: { destDir: string; jarName: string; profiles: string }) =>
-  `java -jar ${destDir}${jarName} --spring.profiles.active=${profiles}`;
+export const javaJarStartCommand = ({ destDir, jarName, profiles }: { destDir: string; jarName: string; profiles?: string }) =>
+  `java -jar ${destDir}${jarName}${profiles ? ` --spring.profiles.active=${profiles}` : ''}`;

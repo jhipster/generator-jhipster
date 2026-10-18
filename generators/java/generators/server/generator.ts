@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 import type { Source as CommonSource } from '../../../common/types.d.ts';
+import { javaJarStartCommand } from '../../../java-simple-application/internal/java-jar-start-command.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
-
-import { javaJarStartCommand } from './internal/java-jar-start-command.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
@@ -37,12 +36,14 @@ export default class ServerGenerator extends JavaApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       packageJsonScripts({ application }) {
-        // Starts the packaged jar of the production profile with the sample secrets, as the README tells.
-        application.packageJsonScripts['java:jar:start'] = javaJarStartCommand({
-          destDir: application.javaPackagingDestDir,
-          jarName: '*.jar',
-          profiles: 'prod,secret-samples',
-        });
+        // Set in the application for the README, which tells them.
+        const { buildTool, packageJsonScripts } = application;
+        if (buildTool === 'maven') {
+          packageJsonScripts['java:jar'] = './mvnw -ntp verify -DskipTests --batch-mode';
+        } else if (buildTool === 'gradle') {
+          packageJsonScripts['java:jar'] = './gradlew bootJar -x test -x integrationTest';
+        }
+        packageJsonScripts['java:jar:prod'] = 'npm run java:jar -- -Pprod';
       },
     });
   }
@@ -73,7 +74,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
             'backend:start': `./mvnw${excludeWebapp} -ntp --batch-mode`,
-            'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
@@ -88,7 +88,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
             'backend:nohttp:test': `./gradlew checkstyleNohttp checkstyleMain spotlessCheck ${excludeWebapp}`,
             'backend:start': `./gradlew ${excludeWebapp}`,
-            'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
@@ -99,7 +98,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
 
         scriptsStorage.set({
           'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
-          'java:jar:prod': 'npm run java:jar -- -Pprod',
           'java:war:dev': 'npm run java:war -- -Pdev,webapp',
           'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',

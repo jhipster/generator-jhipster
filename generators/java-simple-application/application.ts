@@ -83,6 +83,8 @@ export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
   javaPackageTestDir: string;
 
   temporaryDir?: string;
+  /** The folder the build tool packages the jar or the war into. */
+  javaPackagingDestDir: string;
 
   reactive: boolean;
   buildToolUnknown?: boolean;
@@ -161,6 +163,7 @@ export const mutateApplicationPreparing = {
         throw new Error(`Unknown build tool: ${buildTool}`);
     }
   },
+  javaPackagingDestDir: ({ buildTool, temporaryDir }) => (buildTool === 'gradle' ? `${temporaryDir}libs/` : temporaryDir),
   clientRootDir: '',
   clientSrcDir: ({ srcMainWebapp }) => srcMainWebapp,
   clientTestDir: ({ srcTestJavascript }) => srcTestJavascript,

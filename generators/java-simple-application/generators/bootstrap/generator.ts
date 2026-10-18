@@ -26,6 +26,7 @@ import { injectJavaConstructorParam, injectJavaConstructorSetter, injectJavaFiel
 import type { Application as JavascriptApplication } from '../../../javascript-simple-application/types.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
+import { javaJarStartCommand } from '../../internal/java-jar-start-command.ts';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
 import { getPomVersionProperties } from '../maven/support/dependabot-maven.ts';
 
@@ -134,5 +135,25 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
 
   get [JavaSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      packageJsonScripts({ application }) {
+        // Fallback for the applications that do not set it: starts the packaged jar, without Spring profiles.
+        // The scripts exist with the javascript application only.
+        const { packageJsonScripts } = application as Partial<typeof application>;
+        if (packageJsonScripts) {
+          packageJsonScripts['java:jar:start'] ??= javaJarStartCommand({
+            destDir: application.javaPackagingDestDir,
+            jarName: '*.jar',
+          });
+        }
+      },
+    });
+  }
+
+  get [JavaSimpleApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 }
