@@ -289,7 +289,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
    */
   _validateTableName(entityTableName: string, prodDatabaseType: string, entity: ServerEntity): true | string {
     const { jhiTablePrefix } = entity as any;
-    const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
+    const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}'.`;
 
     if (!/^(\w*)$/.test(entityTableName)) {
       return `The table name cannot contain special characters.
@@ -307,7 +307,7 @@ ${instructions}`,
         entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
       } else {
         this.log.warn(
-          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.
+          `The table name contains the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work.
 ${instructions}`,
         );
       }

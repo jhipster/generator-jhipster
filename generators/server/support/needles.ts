@@ -32,9 +32,9 @@ export type ApplicationPropertiesNeedles = {
  * Insert content into ApplicationProperties class
  * @example
  * insertContentIntoApplicationProperties.call(generator, application, {
- *   property: 'private final bar = new Bar();',
+ *   property: 'private final Bar bar = new Bar();',
  *   propertyGetter: `
- * public getBar() {
+ * public Bar getBar() {
  *     return bar;
  * }`,
  *   propertyClass: `
@@ -46,16 +46,16 @@ export type ApplicationPropertiesNeedles = {
  * generator.editFile(
  *   'ApplicationProperties.java',
  *   insertContentIntoApplicationProperties({
- *     property: 'private final bar = new Bar();',
+ *     property: 'private final Bar bar = new Bar();',
  *     propertyGetter: `
- * public getBar() {
+ * public Bar getBar() {
  *     return bar;
  * }`,
  *     propertyClass: `
  * public static class Async {
  *     private String foo = "default";
  * }`,
- *   });
+ *   }),
  * );
  */
 export function insertContentIntoApplicationProperties(needles: ApplicationPropertiesNeedles): NeedleCallback;
