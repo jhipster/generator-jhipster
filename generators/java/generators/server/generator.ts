@@ -21,6 +21,12 @@ import { JavaApplicationGenerator } from '../../generator.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
+/**
+ * Command that starts a packaged archive of the application with the given Spring profiles.
+ */
+const javaJarStartCommand = ({ destDir, jarName, profiles }: { destDir: string; jarName: string; profiles: string }) =>
+  `java -jar ${destDir}${jarName} --spring.profiles.active=${profiles}`;
+
 export default class ServerGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -36,8 +42,11 @@ export default class ServerGenerator extends JavaApplicationGenerator {
     return this.asPreparingTaskGroup({
       packageJsonScripts({ application }) {
         // Starts the packaged jar of the production profile with the sample secrets, as the README tells.
-        application.packageJsonScripts['java:jar:start'] =
-          `java -jar ${application.javaPackagingDestDir}*.jar --spring.profiles.active=prod,secret-samples`;
+        application.packageJsonScripts['java:jar:start'] = javaJarStartCommand({
+          destDir: application.javaPackagingDestDir,
+          jarName: '*.jar',
+          profiles: 'prod,secret-samples',
+        });
       },
     });
   }
@@ -108,7 +117,11 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${application.javaPackagingDestDir}e2e.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment${application.e2eTls ? ',tls,tls-samples' : ''} ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+          'ci:e2e:server:start': `${javaJarStartCommand({
+            destDir: application.javaPackagingDestDir,
+            jarName: 'e2e.$npm_package_config_packaging',
+            profiles: `e2e,secret-samples,$npm_package_config_default_environment${application.e2eTls ? ',tls,tls-samples' : ''}`,
+          })} ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
       packageJsonE2eScripts({ application }) {
