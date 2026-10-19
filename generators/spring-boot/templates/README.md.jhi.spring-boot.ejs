@@ -242,6 +242,12 @@ java -jar build/libs/*.jar --spring.profiles.active=prod,secret-samples
 <%_ } _%>
 ```
 
+The `try-it` script runs the same command, `<%- packageJsonScripts['try-it'] %>`, once the jar is built:
+
+```bash
+<%- nodePackageManagerCommand %> run try-it
+```
+
 The `secret-samples` profile, in `<%- srcMainResources %>config/application-secret-samples.yml`, holds sample passwords and secrets, for development and tests only.
 To run the application in production, do not activate it: provide your own passwords and secrets to the `prod` profile instead, for example with environment variables.
 
