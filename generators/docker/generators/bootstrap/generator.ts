@@ -203,8 +203,10 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
             image: lowercaseBaseName,
             environment: [
               ...Object.entries(dockerApplicationEnvironment).map(([key, value]) => `${key}=${value ?? ''}`),
-              ...(app.cacheProviderMemcached ? ['JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211'] : []),
-              ...(app.cacheProviderRedis ? ['JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379', 'JHIPSTER_CACHE_REDIS_CLUSTER=false'] : []),
+              ...(backendTypeSpringBoot && app.cacheProviderMemcached ? ['JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211'] : []),
+              ...(backendTypeSpringBoot && app.cacheProviderRedis ?
+                ['JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379', 'JHIPSTER_CACHE_REDIS_CLUSTER=false']
+              : []),
               ...(backendTypeSpringBoot && app.searchEngineElasticsearch ? ['SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200'] : []),
               ...(backendTypeSpringBoot && app.messageBrokerKafka ? ['SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092'] : []),
               ...(backendTypeSpringBoot && app.messageBrokerPulsar ?
