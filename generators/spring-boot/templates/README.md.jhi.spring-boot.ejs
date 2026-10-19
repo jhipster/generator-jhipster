@@ -220,7 +220,7 @@ To launch your application's tests, run:
 To build the final jar and optimize the <%- baseName %> application for production, run:
 
 ```bash
-npm run java:jar:prod
+<%- nodePackageManagerCommand %> run java:jar:prod
 ```
 
 It runs `<%- packageJsonScripts['java:jar'] %>` with the `prod` profile (`-Pprod`).
@@ -231,7 +231,7 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```bash
-npm run java:jar:start
+<%- nodePackageManagerCommand %> run java:jar:start
 ```
 
 It runs `<%- packageJsonScripts['java:jar:start'] %>`: the jar with the `prod` profile and the sample secrets of the `secret-samples` profile.
@@ -248,7 +248,7 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```bash
-npm run java:war:prod
+<%- nodePackageManagerCommand %> run java:war:prod
 ```
 
 It runs `<%- packageJsonScripts['java:war'] %>` with the `prod` profile (`-Pprod`).
