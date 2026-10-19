@@ -175,7 +175,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       prepareForTemplates({ application }) {
-        if (application.enableTranslation) {
+        // The defaults of the configuration reach the application at preparing, after loading.
+        if (application.enableTranslation ?? this.jhipsterConfigWithDefaults.enableTranslation) {
           if (!this.languageCommand || this.regenerateLanguages) {
             this.languagesToApply = application.languages;
           } else {
