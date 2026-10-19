@@ -199,6 +199,11 @@ export default class CoreGenerator<
       unique: 'namespace',
       disableInGeneratorOptionsSupport: true,
       allowTemplatesOutsideRoot: true,
+      // The templates of JHipster read only their data, the generator is not their context: reading it throws in the
+      // tests. Blueprints keep the generator as the context of their templates.
+      ...(options?.namespace?.startsWith('jhipster:') ?
+        { templateContext: (options as { reproducibleTests?: boolean }).reproducibleTests ? 'throw' : 'none' }
+      : {}),
       ...features,
       // Registered by yeoman-generator, after the queues they reference: the ones of a class before the ones of its
       // subclasses, which come in the features, so a subclass priority added before the same queue runs after them, and
