@@ -161,6 +161,8 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "communicationSpringWebsocket": false,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -223,6 +225,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",
@@ -351,6 +354,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     "com.mycompany.myapp",
   ],
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "emptyOrReactive": "",
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
@@ -618,6 +622,8 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "searchEngineCouchbase": false,
   "searchEngineElasticsearch": false,
   "searchEngineNo": true,
+  "serverI18nDir": "src/main/resources/i18n/",
+  "serverI18nTestDir": "src/test/resources/i18n/",
   "serverPort": 8080,
   "serverTestFrameworks": undefined,
   "serverTestFrameworksAny": false,
@@ -830,13 +836,16 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1034,6 +1043,8 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "communicationSpringWebsocket": false,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": [],
+  "cypressAudit": undefined,
+  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -1099,6 +1110,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET": "web_app",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
+  "dockerComposeFiles": Any<Object>,
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",
@@ -1227,6 +1239,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     "com.mycompany.myapp",
   ],
   "dtoSuffix": "DTO",
+  "e2eTls": undefined,
   "emptyOrReactive": "",
   "enableGradleDevelocity": false,
   "enableHibernateCache": true,
@@ -1494,6 +1507,8 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "searchEngineCouchbase": false,
   "searchEngineElasticsearch": false,
   "searchEngineNo": true,
+  "serverI18nDir": "src/main/resources/i18n/",
+  "serverI18nTestDir": "src/test/resources/i18n/",
   "serverPort": 8080,
   "serverTestFrameworks": undefined,
   "serverTestFrameworksAny": false,
@@ -1639,13 +1654,16 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {

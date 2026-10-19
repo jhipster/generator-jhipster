@@ -17,11 +17,13 @@
  * limitations under the License.
  */
 
-import { after, afterEach, before, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
+import { after, afterEach, before, describe, exnode, expect, it, resetAllMocks } from 'expect-node';
+
+import type * as Execa from 'execa';
 
 import type checkJava from './check-java.ts';
 
-const { execaSync } = await esmocha.mock('execa', import('execa'));
+const { execaSync } = await exnode.mock<typeof Execa>('execa', undefined, { reimport: true });
 
 const baseResult = {
   cwd: '',
@@ -36,7 +38,7 @@ const baseResult = {
 
 describe('generator - server - checkJava', () => {
   after(() => {
-    esmocha.reset();
+    exnode.resetModules();
   });
   afterEach(() => {
     resetAllMocks();

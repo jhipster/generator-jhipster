@@ -184,7 +184,7 @@ export default class extends GenerateBlueprintBaseGenerator {
           const generatorContext: TemplateData = { ...application } as TemplateData;
           const subGeneratorStorage = this.getSubGeneratorStorage(generator);
           const subGeneratorConfig = subGeneratorStorage.getAll();
-          const priorities: { name: string; asTaskGroup: string; constant: string }[] = (subGeneratorConfig[PRIORITIES] || []).map(
+          const priorities: { name: string; asTaskGroup: string; constant: string }[] = (subGeneratorConfig[PRIORITIES] ?? []).map(
             (priority: string) => ({
               name: priority,
               asTaskGroup: `as${upperFirst(priority)}TaskGroup`,

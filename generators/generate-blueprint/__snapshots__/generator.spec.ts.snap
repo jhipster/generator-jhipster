@@ -742,6 +742,36 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/docker/templates/template-file-docker.ejs": {
     "stateCleared": "modified",
   },
+  "generators/e2e/generators/bootstrap/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/bootstrap/templates/template-file-e2e:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/e2e/generators/common/templates/template-file-e2e:common.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/entities/command.ts": {
     "stateCleared": "modified",
   },
@@ -872,21 +902,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/heroku/templates/template-file-heroku.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/info/command.ts": {
-    "stateCleared": "modified",
-  },
-  "generators/info/generator.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "generators/info/generator.ts": {
-    "stateCleared": "modified",
-  },
-  "generators/info/index.ts": {
-    "stateCleared": "modified",
-  },
-  "generators/info/templates/template-file-info.ejs": {
     "stateCleared": "modified",
   },
   "generators/init/command.ts": {
@@ -1234,15 +1249,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/javascript-simple-application/templates/template-file-javascript-simple-application.ejs": {
     "stateCleared": "modified",
   },
-  "generators/jdl/command.ts": {
-    "stateCleared": "modified",
-  },
-  "generators/jdl/generator.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "generators/jdl/generator.ts": {
-    "stateCleared": "modified",
-  },
   "generators/jdl/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
@@ -1256,12 +1262,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/jdl/generators/bootstrap/templates/template-file-jdl:bootstrap.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/jdl/index.ts": {
-    "stateCleared": "modified",
-  },
-  "generators/jdl/templates/template-file-jdl.ejs": {
     "stateCleared": "modified",
   },
   "generators/kubernetes/command.ts": {
@@ -1481,6 +1481,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/server/generators/bootstrap/templates/template-file-server:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/i18n/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/i18n/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/i18n/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/i18n/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/server/generators/i18n/templates/template-file-server:i18n.ejs": {
     "stateCleared": "modified",
   },
   "generators/server/index.ts": {

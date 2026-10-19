@@ -149,7 +149,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
-      async javaNodeBuildPaths({ application }) {
+      javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json', 'build-plugins/');
         if (application.microfrontend) {
           application.javaNodeBuildPaths?.push('federation.config.ts', 'tsconfig.federation.json');
@@ -305,9 +305,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ entity, relationship }) {
-        mutateData(relationship, {
-          __override__: false,
+      prepareRelationship({ entity, relationshipDefaults }) {
+        relationshipDefaults({
           propertyTsType: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
             relationshipSerializePrimaryKeyOnly ? otherEntity.primaryKey!.tsType : `I${otherEntity.entityAngularName}`,
           relationshipShouldUsePick: ({ otherEntity, relationshipSerializePrimaryKeyOnly }) =>
@@ -490,6 +489,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               {
                 '@angular-architects/native-federation': null,
                 '@angular-devkit/architect': null,
+                '@softarc/native-federation-orchestrator': null,
               }
             : {
                 '@angular-builders/custom-esbuild': null,

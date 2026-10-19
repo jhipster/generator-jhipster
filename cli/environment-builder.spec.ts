@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, afterEach, before, beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { after, afterEach, before, beforeEach, describe, exnode, expect, it } from 'expect-node';
 import assert from 'node:assert';
 import fs from 'node:fs';
 
@@ -131,17 +131,17 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('createDefaultBuilder', () => {
-    let createSpy: ReturnType<typeof esmocha.spyOn>;
-    let _lookupJHipsterSpy: ReturnType<typeof esmocha.spyOn>;
-    let _loadBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
-    let _lookupBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
+    let createSpy: ReturnType<typeof exnode.spyOn>;
+    let _lookupJHipsterSpy: ReturnType<typeof exnode.spyOn>;
+    let _loadBlueprintsSpy: ReturnType<typeof exnode.spyOn>;
+    let _lookupBlueprintsSpy: ReturnType<typeof exnode.spyOn>;
 
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      createSpy = esmocha.spyOn(EnvironmentBuilder, 'create');
-      _lookupJHipsterSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupJHipster');
-      _loadBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_loadBlueprints');
-      _lookupBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupBlueprints');
+      createSpy = exnode.spyOn(EnvironmentBuilder, 'create');
+      _lookupJHipsterSpy = exnode.spyOn(EnvironmentBuilder.prototype, '_lookupJHipster');
+      _loadBlueprintsSpy = exnode.spyOn(EnvironmentBuilder.prototype, '_loadBlueprints');
+      _lookupBlueprintsSpy = exnode.spyOn(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       await EnvironmentBuilder.createDefaultBuilder();
     });
@@ -363,6 +363,43 @@ describe('cli - EnvironmentBuilder', () => {
       it('is disabled by disableBlueprints', async () => {
         const builder = await EnvironmentBuilder.createDefaultBuilder(undefined, { disableBlueprints: true });
         expect(builder.localBlueprintExists).toBe(false);
+      });
+    });
+
+    describe('when the local .blueprint directory declares commands', () => {
+      before(async () => {
+        await helpers
+          .prepareTemporaryDir()
+          .withFiles({
+            '.blueprint/cli/commands.mjs': "export default { foo: { desc: 'Foo of the local blueprint' } };",
+          })
+          .commitFiles();
+      });
+
+      it('registers them without the dev blueprint, like a JHipster installed from npm', async () => {
+        const builder = await EnvironmentBuilder.createDefaultBuilder(undefined, { devBlueprintPath: 'no-dev-blueprint' });
+        expect(builder.devBlueprintPath).toBeUndefined();
+        expect(await builder.getBlueprintCommands()).toMatchObject({
+          foo: { desc: 'Foo of the local blueprint', blueprint: '@jhipster/jhipster-local' },
+        });
+      });
+    });
+
+    describe('when the local .blueprint directory has a package.json with a name', () => {
+      before(async () => {
+        await helpers
+          .prepareTemporaryDir()
+          .withFiles({
+            '.blueprint/package.json': { name: 'my-blueprint-dev', type: 'module' },
+            '.blueprint/foo/index.js': 'export default class {}',
+          })
+          .commitFiles();
+      });
+
+      it('registers its generators under the local blueprint namespace, not the package name', async () => {
+        const builder = await EnvironmentBuilder.createDefaultBuilder();
+        expect(builder.getStore().getMeta('@jhipster/jhipster-local:foo')).toBeDefined();
+        expect(builder.getEnvironment().sharedOptions.composeWithLocalBlueprint).toBe(true);
       });
     });
   });

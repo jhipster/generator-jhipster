@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 import { inspect } from 'node:util';
 
 import type { GetWebappTranslationCallback } from '../../client/translation.ts';

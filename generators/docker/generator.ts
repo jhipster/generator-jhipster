@@ -26,7 +26,7 @@ import type { Application as SpringDataRelationalApplication } from '../spring-b
 import { getJdbcUrl, getR2dbcUrl } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringBootApplication } from '../spring-boot/index.ts';
 
-import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
+import { DOCKER_COMPOSE_SOURCES_DIR, SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
 import { dockerFiles } from './files.ts';
 import { createDockerComposeFile, createDockerExtendedServices } from './support/index.ts';
 import type {
@@ -174,6 +174,13 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           sections: dockerFiles,
           context: application,
         });
+      },
+      writeDockerComposeFiles({ application }) {
+        for (const [fileName, { source, data }] of Object.entries(application.dockerComposeFiles)) {
+          const destination = `${application.dockerServicesDir}${fileName}.yml`;
+          this.writeDestination(destination, this.fs.read(this.fetchFromInstalledJHipster(DOCKER_COMPOSE_SOURCES_DIR, source)));
+          this.mergeDestinationYaml(destination, data);
+        }
       },
     });
   }
@@ -324,7 +331,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   get end() {
     return this.asEndTaskGroup({
       async dockerComposeUp({ control }) {
-        if (!control.environmentHasDockerCompose) {
+        if (!this.skipChecks && !control.environmentHasDockerCompose) {
           this.log('');
           this.log.warn(
             'Docker Compose V2 is not installed on your computer. Some features may not work as expected. Read https://docs.docker.com/compose/install/',
@@ -332,6 +339,10 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
         }
       },
     });
+  }
+
+  get [BaseApplicationGenerator.END]() {
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**

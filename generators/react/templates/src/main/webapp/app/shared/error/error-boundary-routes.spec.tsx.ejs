@@ -16,18 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
+import type { JSX } from 'react';
 import { MemoryRouter, Route } from 'react-router';
 import { render } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ErrorBoundaryRoutes from './error-boundary-routes';
 
-const ErrorComp = (): React.JSX.Element => {
+const ErrorComp = (): JSX.Element => {
   throw new Error('test');
 };
 
-const NoErrorComp = (): React.JSX.Element => {
+const NoErrorComp = (): JSX.Element => {
   return <div>No error</div>;
 };
 

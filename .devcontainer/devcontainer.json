@@ -25,16 +25,11 @@
     "vscode": {
       // Set *default* container specific settings.json values on container create.
       "settings": {
-        "java.jdt.ls.java.home": "/docker-java-home",
-        "mochaExplorer.files": "**/*.spec.*(j|t)s",
-        "mochaExplorer.require": "@node-loaders/esbuildx",
-        "mochaExplorer.parallel": true,
-        "mochaExplorer.timeout": 50000,
-        "mochaExplorer.configFile": ".mocharc.cjs"
+        "java.jdt.ls.java.home": "/docker-java-home"
       },
 
       // Add the IDs of extensions you want installed when the container is created.
-      "extensions": ["eamodio.gitlens", "esbenp.prettier-vscode", "github.vscode-github-actions", "hbenl.vscode-mocha-test-adapter"]
+      "extensions": ["eamodio.gitlens", "esbenp.prettier-vscode", "github.vscode-github-actions"]
     }
   },
 

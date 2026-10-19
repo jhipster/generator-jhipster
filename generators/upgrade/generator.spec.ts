@@ -16,19 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, fn, it } from 'esmocha';
+import { before, describe, expect, fn, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { simpleGit } from 'simple-git';
 
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
+import type EnvironmentBuilder from '../../cli/environment-builder.ts';
 
 import Generator from './index.ts';
 import { UPGRADE_BRANCH } from './support/index.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
+
+/** A builder whose environment runs nothing. */
+const fakeCreateEnvBuilder = (async () => ({
+  getEnvironment: () => ({ run: () => {} }),
+})) as unknown as typeof EnvironmentBuilder.createDefaultBuilder;
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
@@ -141,7 +147,7 @@ describe(`generator - ${generator}`, () => {
         .commitFiles()
         .withOptions({
           programName: 'customProgramName',
-          createEnvBuilder: () => ({ getEnvironment: () => ({ run: () => {} }) }),
+          createEnvBuilder: fakeCreateEnvBuilder,
         });
     });
     it('should execute programName', async () => {
@@ -170,7 +176,7 @@ describe(`generator - ${generator}`, () => {
         .withOptions({
           programName: 'customProgramName',
           executable: 'customExecutable',
-          createEnvBuilder: () => ({ getEnvironment: () => ({ run: () => {} }) }),
+          createEnvBuilder: fakeCreateEnvBuilder,
         });
     });
     it('should execute executable', async () => {

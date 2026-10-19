@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 
@@ -82,6 +82,13 @@ describe('jdl - parseJDL', () => {
     ]);
     // The undeclared D is not reported: a jdl with parsing errors is not checked.
     expect(ast?.entities.map(entity => entity.name)).toEqual(['A', 'B', 'C']);
+  });
+
+  it('locates a node the parser recovered from an error where it is written', () => {
+    const content = 'entity A\nentity B {\n  x\n}';
+    const { ast } = parseJDL(content, getDefaultRuntime());
+    const { location } = ast!.entities[1];
+    expect(content.slice(location!.startOffset, location!.endOffset + 1)).toBe('entity B {\n  x\n}');
   });
 
   it('reports a parsing error at the end of the input without a location', () => {

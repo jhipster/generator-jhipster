@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename, resolve } from 'node:path';
 
 import { buildToolTypes, cacheTypes } from '../../../../lib/jhipster/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, fromMatrix, result } from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;

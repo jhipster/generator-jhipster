@@ -32,18 +32,32 @@ export type InfoData = {
   yoRcBlank: boolean;
   yoRcValid?: boolean;
   files: InfoFile[];
+  /** The files of the issue that are not reproduction files, which are not written. */
+  ignoredFiles?: string[];
   workspacesFolders?: string[];
 };
 
+/** A `.yo-rc.json` or a `.jhipster/<Entity>.json`, at the root or in the folder of an application. */
+const REPRODUCTION_FILE = /^(?:[^/]+\/)*(?:\.yo-rc\.json|\.jhipster\/\w+\.json)$/;
+
+/** Whether the file, joined to a folder as it is when written, stays inside that folder. */
+const isInsideProject = (filename: string): boolean => path.join('project', filename).startsWith(`project${path.sep}`);
+
+const isReproductionFile = ({ filename, type }: InfoFile): boolean => {
+  // The jdl files are named here, their content is passed to the generator.
+  if (type === 'jdl' || type === 'entity-jdl') return true;
+  return (
+    // Forbid any package.json file for security reasons.
+    path.posix.basename(filename).toLowerCase() !== 'package.json' && isInsideProject(filename) && REPRODUCTION_FILE.test(filename)
+  );
+};
+
 export const filterData = ({ files, ...data }: InfoData): InfoData => {
+  const ignoredFiles = files.filter(file => !isReproductionFile(file)).map(file => file.filename);
   return {
     ...data,
-    files: files.filter(
-      file =>
-        // Forbid any package.json file for security reasons.
-        path.basename(file.filename).toLowerCase() !== 'package.json' &&
-        (file.filename === '.yo-rc.json' || file.filename.endsWith('.jdl') || /\.jhipster\/\w+\.json$/.test(file.filename)),
-    ),
+    files: files.filter(isReproductionFile),
+    ...(ignoredFiles.length > 0 ? { ignoredFiles } : {}),
   };
 };
 

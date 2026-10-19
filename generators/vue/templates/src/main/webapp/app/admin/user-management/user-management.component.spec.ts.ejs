@@ -40,7 +40,6 @@ describe('UserManagement Component', () => {
 
   beforeEach(() => {
     axiosStub.put.mockReset();
-    axiosStub.get.mockReset();
     axiosStub.get.mockResolvedValue({ headers: {} });
 
     alertService = new AlertService({

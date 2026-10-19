@@ -42,7 +42,7 @@
     <%_ } _%>
   <%_ } _%>
     </changeSet>
-<% } _%>
+<%_ } _%>
 <%_ if (removedDefaultValueFields && removedDefaultValueFields.length) { _%>
     <!--
         Removed the default value for the fields for entity <%- entityClass %>.
@@ -54,7 +54,7 @@
             columnDataType="<%- field.columnType %>"/>
   <%_ } _%>
     </changeSet>
-<% } _%>
+<%_ } _%>
 <%_ if (addedDefaultValueFields && addedDefaultValueFields.length) { _%>
     <!--
         Added the default value for the fields for entity <%- entityClass %>.
@@ -64,10 +64,10 @@
         <addDefaultValue tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"
-            <%- this.createDefaultValueLiquibaseAttribute(field) -%>/>
+            <%- field.liquibaseDefaultValueAttribute %>/>
   <%_ } _%>
     </changeSet>
-<% } _%>
+<%_ } _%>
 <%_ if (hasRelationshipConstraint) { _%>
 
     <!--
@@ -77,7 +77,7 @@
   <%_ for (const relationshipData of addedRelationships) { _%>
     <%_ if (relationshipData.unique) { _%>
       <%_ const idField = relationshipData.otherEntity.primaryKey.ownFields[0];
-          const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationshipData.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
+          const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? relationshipData.liquibaseUniqueConstraintNames[idField.columnName] : null;
       _%>
         <addUniqueConstraint tableName="<%- entityTableName %>"
             columnNames="<%- relationshipData.columnName %>_id"
@@ -91,7 +91,7 @@
   <%_ } _%>
     </changeSet>
 <%_ } _%>
-<%_ if (addedRelationships && addedRelationships.length) { %>
+<%_ if (addedRelationships && addedRelationships.length) { _%>
 
     <!--
         Added the relationship constraints for entity <%- entityClass %>.

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import path from 'node:path';
 
 import helpers from 'yeoman-test';
@@ -46,6 +46,13 @@ describe('jdl - JDLImporter', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createImporterFromContent()).toThrow(/^A JDL content must be passed to create a new JDL importer\.$/);
+      });
+    });
+    describe('with onWarning', () => {
+      it('gives it the warnings of the jdl', () => {
+        const warnings: string[] = [];
+        createImporterFromContent('entity A\npaginate A with pagination', { onWarning: (message: string) => warnings.push(message) });
+        expect(warnings).toEqual(['The paginate option is deprecated, please use pagination instead.']);
       });
     });
   });
@@ -82,7 +89,7 @@ relationship OneToMany {
             return 1;
           })
           .map((exportedEntity: any) => {
-            exportedEntity.documentation ||= '';
+            exportedEntity.documentation ??= '';
             return exportedEntity;
           });
       });
@@ -128,7 +135,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -160,7 +167,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -200,7 +207,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -226,7 +233,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -263,7 +270,7 @@ relationship OneToOne {
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         importState.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
-          const entityNames = applicationConfig.entities || [];
+          const entityNames = applicationConfig.entities ?? [];
           const applicationWithEntities = importState.exportedApplicationsWithEntities[applicationConfig.baseName];
           expect(applicationConfig).toEqual(applicationWithEntities.config);
           expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
@@ -459,7 +466,7 @@ ${entities}`,
         it('should return the corresponding exportedApplicationsWithEntities', () => {
           returned.exportedApplications.forEach((application: any) => {
             const applicationConfig = application['generator-jhipster'];
-            const entityNames = applicationConfig.entities || [];
+            const entityNames = applicationConfig.entities ?? [];
             const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
             expect(applicationConfig).toEqual(applicationWithEntities.config);
             expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);

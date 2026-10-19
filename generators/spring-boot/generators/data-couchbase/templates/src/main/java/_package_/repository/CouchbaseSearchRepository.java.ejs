@@ -70,9 +70,9 @@ public interface CouchbaseSearchRepository<T, ID> extends JHipsterCouchbaseRepos
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
     default <%- pageOrFlux %><T> search(String queryString, Pageable pageable) {
 <%_ if (reactive) { _%>
-        return findAllById(toIds(searchIds(queryString, pageable)));
+        return findAllById(toIds(searchIds(queryString, sortedByProperties(pageable, ""))));
 <%_ } else { _%>
-        Page<T> page = searchIds(queryString, pageable);
+        Page<T> page = searchIds(queryString, sortedByProperties(pageable, ""));
         return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
 <%_ } _%>
     }

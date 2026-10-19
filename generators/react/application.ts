@@ -32,7 +32,7 @@ export const mutateApplication = {
    */
   reactBootstrapBsTheme: ({ clientThemeNone, clientThemeVariantLight }) => (clientThemeNone || !clientThemeVariantLight ? 'dark' : 'light'),
   /**
-   * https://react-bootstrap.github.io/components/navbar/#navbar-props
+   * https://react-bootstrap.github.io/docs/components/navbar#api
    */
   reactBootstrapVariant: ({ clientThemeVariant }) => clientThemeVariant ?? 'dark',
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<ReactApplication>, ReactAddedApplicationProperties>;

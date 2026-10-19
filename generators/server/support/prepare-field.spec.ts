@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'expect-node';
 
 import type { Entity as SpringBootEntity, Field as SpringBootField } from '../types.d.ts';
 
@@ -34,7 +34,7 @@ describe('prepareField', () => {
 
     describe('with dto != mapstruct and @MapstructExpression', () => {
       it('should fail', () => {
-        expect(() => prepareMapstructField({ ...testEntity, dto: 'any' }, { ...mapstructField })).toThrow(
+        expect(() => prepareMapstructField({ ...testEntity, dto: 'no' }, { ...mapstructField })).toThrow(
           /^@MapstructExpression requires an Entity with mapstruct dto \[Entity.name\].$/,
         );
       });

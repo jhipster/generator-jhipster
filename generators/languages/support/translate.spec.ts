@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { beforeEach, describe, exnode, expect, it } from 'expect-node';
 
 import {
   createJhiTransformTranslateReplacer,
@@ -25,11 +25,11 @@ import {
 } from './translate.ts';
 
 describe('generator - languages - translate', () => {
-  let getWebappTranslation: ReturnType<ReturnType<typeof esmocha.fn>['mockImplementation']>;
+  let getWebappTranslation: ReturnType<ReturnType<typeof exnode.fn>['mockImplementation']>;
 
   beforeEach(() => {
     let value = 0;
-    getWebappTranslation = esmocha.fn().mockImplementation((key, interpolation = '') => {
+    getWebappTranslation = exnode.fn().mockImplementation((key, interpolation = '') => {
       if (interpolation) {
         interpolation = `-${JSON.stringify(interpolation)}`;
       }

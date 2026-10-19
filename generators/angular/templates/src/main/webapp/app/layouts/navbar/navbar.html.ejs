@@ -182,7 +182,7 @@
           </span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
-        @for (language of languages; track $index) {
+        @for (language of languages; track language) {
           <li>
             <a class="dropdown-item" [<%- jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
           </li>

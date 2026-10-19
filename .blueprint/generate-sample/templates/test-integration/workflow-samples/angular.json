@@ -13,7 +13,8 @@
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
-        "removeNeedles": true
+        "removeNeedles": true,
+        "e2eTls": true
       }
     },
     {
@@ -25,6 +26,17 @@
       "generatorOptions": {
         "removeNeedles": true,
         "testFrameworks": ["playwright"]
+      }
+    },
+    {
+      "name": "ng-default-playwright-tls",
+      "job-name": "ng-default-playwright-tls",
+      "entity": "none",
+      "app-sample": "ng-default-playwright",
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "testFrameworks": ["playwright"],
+        "e2eTls": true
       }
     },
     {

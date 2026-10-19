@@ -16,19 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% const mapper = `${entityInstance}Mapper`;
-   const entityToDtoReference = `${mapper}::toDto`;
-   const reactiveSql = databaseTypeSql && reactive;
-   let toResponseEntityPrefix = '';
-   let toResponseEntityPostfix = '';
-   if (!paginationNo) {
-     if (reactiveSql) {
-       toResponseEntityPostfix = '.map(ResponseEntity::ok)';
-     } else {
-       toResponseEntityPrefix = 'new ResponseEntity<>(';
-       toResponseEntityPostfix = ', HttpStatus.OK)';
-     }
-   }
+<%_ const mapper = `${entityInstance}Mapper`;
+    const entityToDtoReference = `${mapper}::toDto`;
+    const reactiveSql = databaseTypeSql && reactive;
+    let toResponseEntityPrefix = '';
+    let toResponseEntityPostfix = '';
+    if (!paginationNo) {
+      if (reactiveSql) {
+        toResponseEntityPostfix = '.map(ResponseEntity::ok)';
+      } else {
+        toResponseEntityPrefix = 'new ResponseEntity<>(';
+        toResponseEntityPostfix = ', HttpStatus.OK)';
+      }
+    }
 _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>

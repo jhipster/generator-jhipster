@@ -24,8 +24,6 @@ import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.ts';
 import { mergeYoRcContent, readYoRcFile } from '../../../utils/yo-rc.ts';
 import { doesFileExist } from '../../core/utils/file-utils.ts';
 
-export const GENERATOR_NAME = 'generator-jhipster';
-
 /**
  * This function writes a Yeoman config file in the current folder.
  * @param config the configuration.

@@ -19,10 +19,12 @@
 <&_ if (fragment.importsSection) { -&>
 import eslint from '@eslint/js';
 import react from '@eslint-react/eslint-plugin';
+import stylistic from '@stylistic/eslint-plugin';
 import tseslint from 'typescript-eslint';
+import vitest from '@vitest/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
+  { ignores: ['<%- relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
   eslint.configs.recommended,
   {
     files: ['**/*.{js,cjs,mjs}'],
@@ -31,14 +33,17 @@ import tseslint from 'typescript-eslint';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,tsx}'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,tsx}'],
     extends: [...tseslint.configs.recommendedTypeChecked, react.configs['recommended-type-checked']],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
       },
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.vitest.json'],
+        projectService: true,
       },
     },
     rules: {
@@ -72,7 +77,7 @@ import tseslint from 'typescript-eslint';
       '@typescript-eslint/array-type': 'error',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-shadow': 'error',
-      'spaced-comment': ['warn', 'always'],
+      '@stylistic/spaced-comment': ['warn', 'always'],
       'guard-for-in': 'error',
       'no-labels': 'error',
       'no-caller': 'error',
@@ -92,8 +97,10 @@ import tseslint from 'typescript-eslint';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.{ts,tsx}'],
+    extends: [vitest.configs.recommended],
     rules: {
+      'vitest/expect-expect': ['error', { assertFunctionNames: ['expect*'] }],
       '@typescript-eslint/no-empty-function': 'off',
     },
   },

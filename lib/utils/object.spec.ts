@@ -17,13 +17,16 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import {
   type DelayedMutation,
+  type DroppedMutation,
   type MutateDataParam,
   type UndefinedMutation,
   createDelayedMutationContext,
+  droppedMutationMessage,
+  enableDelayedMutations,
   finalizeMutations,
   mutateData,
   removeFieldsWithNullishValues,
@@ -147,6 +150,28 @@ describe('utils - object', () => {
         expect(mutatedData).toEqual({ prop: 'bar', prop2: 'bar2' });
       });
     });
+    describe('with delayed mutations on an existing object', () => {
+      const original: { name: string; prop?: string; prop2?: string } = { name: 'existing' };
+      let copy: Record<string, any>;
+
+      before(() => {
+        const mutatedData = enableDelayedMutations(original);
+        mutateData(mutatedData, { prop2: (ctx, { delayMarker }) => (ctx.prop === undefined ? delayMarker : ctx.prop + 2) });
+        copy = { ...mutatedData };
+        mutatedData.prop = 'bar';
+        finalizeMutations(mutatedData);
+      });
+
+      it('should apply the delayed mutations to the same object', () => {
+        expect(original).toEqual({ name: 'existing', prop: 'bar', prop2: 'bar2' });
+      });
+
+      it('should not copy the mutation context with the object', () => {
+        expect(Object.keys(copy)).toEqual(['name']);
+        mutateData(copy, { prop: (_ctx: any, { delayMarker }: any) => (delayMarker ? 'context' : 'no context') } as any);
+        expect(copy.prop).toBe('no context');
+      });
+    });
     describe('with auto-delayed mutations', () => {
       const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: true });
 
@@ -158,6 +183,26 @@ describe('utils - object', () => {
         expect(mutatedData).toEqual({ prop: 'bar', prop2: 'delayed' });
       });
     });
+    describe('with an auto-delayed mutation whose key another mutation sets first', () => {
+      const dropped: DroppedMutation[] = [];
+      const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({
+        autoDelay: true,
+        onDroppedMutation: mutation => dropped.push(mutation),
+      });
+
+      it('should keep the other value and tell what the dropped mutation waited for', () => {
+        mutateData(mutatedData, { prop2: ctx => (ctx.prop ? 'delayed' : 'not-delayed') });
+        mutateData(mutatedData, { prop2: 'first' });
+        mutateData(mutatedData, { prop: 'bar' });
+        finalizeMutations(mutatedData);
+        expect(mutatedData).toEqual({ prop: 'bar', prop2: 'first' });
+        expect(dropped).toEqual([{ key: 'prop2', waitingFor: 'prop', value: 'first' }]);
+        expect(droppedMutationMessage(dropped[0])).toBe(
+          'The delayed default of prop2 was dropped: it waited for prop, and another mutation set prop2 ("first") first.',
+        );
+      });
+    });
+
     describe('with auto-delayed mutations disabled', () => {
       const mutatedData: { prop?: string; prop2?: string } = createDelayedMutationContext({ autoDelay: false });
 

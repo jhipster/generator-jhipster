@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import { existsSync } from 'node:fs';
-
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.ts';
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.ts';
@@ -127,6 +125,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
           entityConfig.jpaMetamodelFiltering &&
           (!databaseTypeSql || entityConfig.service === NO_SERVICE)
         ) {
+          // TODO v10: throw instead, filtering needs a sql database and a service.
           this.log.warn('Not compatible with jpaMetamodelFiltering, disabling');
           entityConfig.jpaMetamodelFiltering = false;
         }
@@ -164,17 +163,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
           : entityTableName;
         if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
-        }
-
-        if (entityConfig.incrementalChangelog === undefined) {
-          // Keep entity's original incrementalChangelog option.
-          entityConfig.incrementalChangelog =
-            application.incrementalChangelog &&
-            !existsSync(
-              this.destinationPath(
-                `src/main/resources/config/liquibase/changelog/${entityConfig.annotations?.changelogDate}_added_entity_${entityConfig.name}.xml`,
-              ),
-            );
         }
       },
 
@@ -301,7 +289,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
    */
   _validateTableName(entityTableName: string, prodDatabaseType: string, entity: ServerEntity): true | string {
     const { jhiTablePrefix } = entity as any;
-    const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
+    const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}'.`;
 
     if (!/^(\w*)$/.test(entityTableName)) {
       return `The table name cannot contain special characters.
@@ -319,7 +307,7 @@ ${instructions}`,
         entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
       } else {
         this.log.warn(
-          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.
+          `The table name contains the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work.
 ${instructions}`,
         );
       }

@@ -16,17 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
+import { join } from 'node:path';
 
-import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
+import type { StoreGeneratorMeta } from 'yeoman-environment';
 
-import { getPackageRoot } from '../index.ts';
+import { GeneratorsResolver } from '../resolver/blueprints.ts';
 import { lookupGeneratorCommands } from '../resolver/generator-commands.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
-import { customizeNestedNamespace, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
+import { getJHipsterStore } from '../resolver/lookups.ts';
 
-import { describeCommand, findConfigOwners } from './describe-command.ts';
+import { describeCommand, describeGenerator, findConfigOwners, listCommands } from './describe-command.ts';
 import type { JHipsterCommandDefinition } from './types.ts';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 
 /** getGeneratorMeta backed by the generators of this repository plus fake blueprint generators. */
 const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) => {
@@ -58,7 +61,54 @@ describe('command - describe command', () => {
         derivedProperties: ['messageBrokerKafka', 'messageBrokerPulsar', 'messageBrokerNo', 'messageBrokerAny'],
         jdl: true,
       });
-      expect(command.configs.find(({ name }) => name === 'buildTool')?.owner).toBe('jhipster:java-simple-application:build-tool');
+      expect(command.configs.find(({ name }) => name === 'buildTool')?.owner).toBe('java-simple-application:build-tool');
+    });
+
+    it('should give the flags the cli registers, and none for a config that is not an option', () => {
+      const { configs } = describeCommand({ namespace: 'app', dependencies: resolve(['bootstrap', 'app']) });
+      const cliOption = (config: string) => configs.find(({ name }) => name === config)?.cliOption;
+      expect(cliOption('baseName')).toBe('--base-name <value>');
+      expect(cliOption('skipClient')).toBe('--skip-client');
+      // A list of values.
+      expect(cliOption('testFrameworks')).toBe('--test-frameworks <value...>');
+      // Internal, and only set by the jdl: the cli registers no option.
+      expect(configs.find(({ name }) => name === 'validateBaseName')).toMatchObject({ type: 'Function', cliOption: undefined });
+      expect(configs.find(({ name }) => name === 'jhipsterVersion')).toMatchObject({ cliOption: undefined });
+    });
+
+    it('should name the generators as the cli does, without the jhipster prefix', () => {
+      // A nested generator is imported by its namespace, `jhipster:spring-boot:cache`.
+      const dependencies = resolve(['bootstrap', 'spring-boot']);
+      expect(dependencies.map(({ namespace }) => namespace)).toContain('jhipster:spring-boot:cache');
+
+      const command = describeCommand({ namespace: 'spring-boot', dependencies });
+      expect(command.dependencies).toEqual(expect.arrayContaining(['spring-boot', 'java', 'spring-boot:cache', 'java:domain']));
+      const names = [...command.dependencies, ...command.configs.map(({ owner }) => owner)];
+      expect(names.filter(name => name.startsWith('jhipster:'))).toEqual([]);
+    });
+
+    it('should describe a generator given by its namespace under its cli name', () => {
+      const command = describeCommand({ namespace: 'jhipster:spring-boot:cache', dependencies: resolve(['jhipster:spring-boot:cache']) });
+      expect(command.namespace).toBe('spring-boot:cache');
+      expect(command.dependencies[0]).toBe('spring-boot:cache');
+      // The arguments and configs of the command itself are found.
+      expect(command.configs.find(({ name }) => name === 'cacheProvider')?.owner).toBe('spring-boot:cache');
+    });
+
+    it('should keep the namespace of the generators of a blueprint', () => {
+      const blueprint = {
+        configs: { fooOption: { cli: { type: Boolean }, scope: 'storage' } },
+        import: [],
+      } as const satisfies JHipsterCommandDefinition;
+      const command = describeCommand({
+        namespace: 'git',
+        dependencies: resolve(['git'], { 'jhipster-foo:git': blueprint }, ['jhipster-foo']),
+      });
+      expect(command.dependencies).toEqual(['jhipster-foo:git', 'git']);
+      expect(command.configs.find(({ name }) => name === 'fooOption')).toMatchObject({
+        owner: 'jhipster-foo:git',
+        blueprint: 'jhipster-foo',
+      });
     });
 
     it('should describe the application configuration through the imports', () => {
@@ -95,12 +145,7 @@ describe('command - describe command', () => {
     });
 
     it('should find the config owners of a store, blueprints included', () => {
-      const store = new Store();
-      store.lookupSync({
-        packagePaths: [getPackageRoot()],
-        lookups: jhipsterGeneratorsLookup,
-        customizeNamespace: customizeNestedNamespace,
-      });
+      const store = getJHipsterStore().clone();
       const blueprintCommand: JHipsterCommandDefinition = {
         configs: { databaseType: { cli: { type: String }, scope: 'storage' }, blueprintOnly: { cli: { type: Boolean }, scope: 'storage' } },
       };
@@ -115,6 +160,84 @@ describe('command - describe command', () => {
       expect(findConfigOwners('blueprintOnly', { store }).owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server']);
       // Without a store, only the jhipster generators.
       expect(findConfigOwners('blueprintOnly').owners).toEqual([]);
+    });
+  });
+
+  describe('with a blueprint', () => {
+    const blueprintGenerator = (configs: string) => `export const command = { configs: ${configs} };
+export const createGenerator = async env => env.requireGenerator('jhipster:base');
+`;
+    let resolver: GeneratorsResolver;
+    let blueprintCommands: Awaited<ReturnType<GeneratorsResolver['loadCommands']>>;
+
+    before(async () => {
+      await helpers
+        .prepareTemporaryDir()
+        .withFiles(
+          createBlueprintFiles('generator-jhipster-foo', {
+            generator: [],
+            files: {
+              'cli/commands.js': "export default { foo: { desc: 'Foo of the blueprint' } };\n",
+              'generators/foo/index.js': blueprintGenerator(
+                "{ fooOption: { description: 'Foo option', cli: { type: Boolean }, scope: 'storage' } }",
+              ),
+              'generators/git/index.js': blueprintGenerator("{ gitOption: { cli: { type: Boolean }, scope: 'storage' } }"),
+            },
+          }),
+        )
+        .commitFiles();
+      resolver = new GeneratorsResolver();
+      resolver.lookupBlueprints(['jhipster-foo'], { npmPaths: [join(process.cwd(), 'node_modules')], localOnly: true });
+      blueprintCommands = await resolver.loadCommands();
+    });
+
+    it('should list the commands of the blueprints with the ones of JHipster', () => {
+      const commands = listCommands({ blueprintCommands });
+      expect(commands).toContainEqual({ namespace: 'foo', description: 'Foo of the blueprint' });
+      expect(commands).toContainEqual(expect.objectContaining({ namespace: 'app', default: true }));
+      expect(listCommands().map(({ namespace }) => namespace)).not.toContain('foo');
+    });
+
+    it('should describe a command of a blueprint under the namespace of the blueprint', () => {
+      const description = describeGenerator('foo', { resolver, blueprintCommands });
+      expect(description).toMatchObject({ namespace: 'jhipster-foo:foo', description: 'Foo of the blueprint' });
+      expect(description!.dependencies).toEqual(['bootstrap', 'jhipster-foo:foo']);
+      expect(description!.configs.find(({ name }) => name === 'fooOption')).toMatchObject({
+        owner: 'jhipster-foo:foo',
+        description: 'Foo option',
+        cliOption: '--foo-option',
+      });
+    });
+
+    it('should describe a generator of a blueprint by its namespace without its commands', () => {
+      expect(describeGenerator('foo', { resolver })).toBeUndefined();
+      expect(describeGenerator('jhipster-foo:foo', { resolver })?.namespace).toBe('jhipster-foo:foo');
+    });
+
+    it('should describe a command of JHipster with the generators of the blueprint overriding it', () => {
+      const description = describeGenerator('git', { resolver, blueprintCommands });
+      expect(description!.dependencies).toEqual(['bootstrap', 'jhipster-foo:git', 'git']);
+      expect(description!.configs.find(({ name }) => name === 'gitOption')).toMatchObject({
+        owner: 'jhipster-foo:git',
+        blueprint: 'jhipster-foo',
+      });
+      expect(describeGenerator('git')!.dependencies).toEqual(['bootstrap', 'git']);
+      // Only what the command declares itself, without the blueprint.
+      expect(describeGenerator('git', { resolver, imports: false })!.dependencies).toEqual(['git']);
+    });
+
+    it('should find the config owners in the blueprints', () => {
+      expect(findConfigOwners('fooOption', { store: resolver }).owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:foo']);
+    });
+  });
+
+  describe('describeGenerator', () => {
+    it('should describe the default command given', () => {
+      expect(describeGenerator('default', { defaultCommand: 'git', imports: false })?.namespace).toBe('git');
+    });
+
+    it('should not describe an unknown generator', () => {
+      expect(describeGenerator('unknown')).toBeUndefined();
     });
   });
 });

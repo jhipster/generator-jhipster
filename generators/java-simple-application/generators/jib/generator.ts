@@ -67,7 +67,6 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
           properties: [
             { property: 'jib-maven-plugin.version', value: javaDependencies['jib-maven-plugin'] },
             { property: 'jib-maven-plugin.image', value: dockerContainers.javaJre },
-            { property: 'jib-maven-plugin.architecture', value: 'amd64' },
           ],
           plugins: [{ groupId: 'com.google.cloud.tools', artifactId: 'jib-maven-plugin' }],
           pluginManagement: [
@@ -79,9 +78,14 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
               additionalContent: `<configuration>
     <from>
         <image>\${jib-maven-plugin.image}</image>
+        <!-- jib:dockerBuild builds the platform of the Docker daemon, jib:build pushes an image of both. -->
         <platforms>
             <platform>
-                <architecture>\${jib-maven-plugin.architecture}</architecture>
+                <architecture>amd64</architecture>
+                <os>linux</os>
+            </platform>
+            <platform>
+                <architecture>arm64</architecture>
                 <os>linux</os>
             </platform>
         </platforms>

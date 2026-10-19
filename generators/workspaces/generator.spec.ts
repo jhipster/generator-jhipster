@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
-
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './generator.ts';
 
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
@@ -51,6 +50,24 @@ describe(`generator - ${generator}`, () => {
         scripts: {
           'ci:e2e:prepare': 'npm run docker-compose',
           'ci:e2e:teardown': 'docker compose -f docker-compose/docker-compose.yml down -v',
+        },
+      });
+    });
+  });
+
+  describe('with applications', () => {
+    it('builds the Docker images of the applications with their docker:build scripts', async () => {
+      await helpers
+        .runJHipster(generator)
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
+        .withJHipsterConfig({ baseName: 'workspaces' })
+        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
+        .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' });
+
+      result.assertJsonFileContent('package.json', {
+        scripts: {
+          'docker:build': 'concurrently npm:docker:build:gateway npm:docker:build:micro1',
+          'docker:build:gateway': 'npm run docker:build --workspace gateway --if-present',
         },
       });
     });

@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React<%- microfrontend ? ', { Suspense }' : '' %> from 'react';
+<%_ if (microfrontend) { _%>
+import { Suspense, lazy } from 'react';
+<%_ } _%>
 import { translate } from 'react-jhipster';
 import { NavDropdown } from './menu-components';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
@@ -24,11 +26,11 @@ import { loadRemote } from '@module-federation/runtime';
 <%_ } _%>
 <%_ if (microfrontend) { _%>
 
-const EntitiesMenuItems = React.lazy(() => import('app/entities/menu').catch(() => import('app/shared/error/error-loading')));
+const EntitiesMenuItems = lazy(() => import('app/entities/menu').catch(() => import('app/shared/error/error-loading')));
 
   <%_ if (applicationTypeGateway) { _%>
     <%_ for (const remote of microfrontends) { _%>
-const <%- remote.capitalizedBaseName %>EntitiesMenuItems = React.lazy(async () => loadRemote<any>('<%- remote.moduleFederationName %>/entities-menu')
+const <%- remote.capitalizedBaseName %>EntitiesMenuItems = lazy(async () => loadRemote<any>('<%- remote.moduleFederationName %>/entities-menu')
   .catch(() => import('app/shared/error/error-loading')));
 
     <%_ } _%>

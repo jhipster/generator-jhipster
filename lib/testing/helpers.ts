@@ -19,6 +19,7 @@
 
 import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
+import { createRequire } from 'node:module';
 import { isAbsolute, join, relative } from 'node:path';
 import { mock } from 'node:test';
 import { pathToFileURL } from 'node:url';
@@ -44,13 +45,13 @@ import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../gen
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
-import { getPackageRoot, isDistFolder } from '../index.ts';
+import { getPackageRoot } from '../index.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
-import { generatorsLookup, jhipsterGeneratorsLookup } from '../resolver/lookups.ts';
+import { getJHipsterStore } from '../resolver/lookups.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
-import getGenerator, { getGeneratorRelativeFolder } from '../utils/get-generator.ts';
+import getGenerator from '../utils/get-generator.ts';
 import {
   createDelayedMutationContext,
   createJHipsterLogger,
@@ -182,7 +183,7 @@ const createFiles = (workspaceFolder: string, configuration: Record<string, unkn
   }
   workspaceFolder = workspaceFolder ? normalizePathEnd(workspaceFolder) : workspaceFolder;
   const entityFiles =
-    entities ? Object.fromEntries(entities?.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity])) : {};
+    entities ? Object.fromEntries(entities.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity])) : {};
   configuration = { entities: entities?.map(e => e.name), ...configuration };
   return {
     [`${workspaceFolder}.yo-rc.json`]: { 'generator-jhipster': configuration },
@@ -338,9 +339,7 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
       {},
       {
         get(target: any, name: string) {
-          if (!target[name]) {
-            target[name] = defaultMockFactory();
-          }
+          target[name] ??= defaultMockFactory();
           return target[name];
         },
         set(target: any, property: string, value: any) {
@@ -373,12 +372,13 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
     });
   }
 
-  // Register importModule to have actual command for command lookups.
+  // Register importModule and requireModule to have actual command for command lookups.
   override withMockedGenerators(generators: string[]): this {
     return super.withMockedGenerators(generators).onEnvironment(env => {
       for (const gen of generators.filter(gen => gen.startsWith('jhipster:'))) {
         const meta = (env as any).store.getMeta(gen);
         meta!.importModule = () => import(pathToFileURL(getGenerator(gen)).href);
+        meta!.requireModule = () => createRequire(import.meta.url)(getGenerator(gen));
       }
     });
   }
@@ -408,15 +408,9 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
   withJHipsterGenerators(options: WithJHipsterGenerators = {}): this {
     const { useDefaultMocks, useMock = useDefaultMocks ? filterBootstrapGenerators : () => false } = options;
     const mockedGenerators = allGenerators.filter(useMock).filter(gen => this.Generator !== gen);
-    const actualGenerators = allGenerators.filter(gen => !mockedGenerators.includes(gen));
-    const prefix = isDistFolder() ? 'dist/' : '';
-    const filePatterns = actualGenerators.map(ns => getGeneratorRelativeFolder(ns)).map(path => `${prefix}${path}/index.{j,t}s`);
-    return this.withMockedGenerators(mockedGenerators).withLookups({
-      packagePaths: [getPackageRoot()],
-      // @ts-expect-error lookups is not exported by @yeoman/types
-      lookups: jhipsterGeneratorsLookup,
-      filePatterns,
-    });
+    // The environment gets the jhipster generators from a clone of the jhipster store, the mocked ones replacing theirs.
+    (this.envOptions as JHipsterEnvironmentOptions).jhipsterStore = true;
+    return this.withMockedGenerators(mockedGenerators);
   }
 
   withGradleBuildTool(): this {
@@ -608,15 +602,19 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
         jhipsterSettings,
       );
     }
-    const generatorSpec =
-      !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
+    const jhipsterNamespace =
+      !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : undefined;
+    const generatorSpec = jhipsterNamespace ?? jhipsterGenerator;
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
       envOptions === undefined && (opt === undefined || 'useMock' in opt || 'useDefaultMocks' in opt || 'prepareEnvironment' in opt);
     if (isRunJHipster(settings)) {
       return this.run<Generator>(generatorSpec).withJHipsterContextOptions(settings);
     }
 
-    return this.run<Generator>(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators().withCommandName();
+    // Register the generator under its jhipster namespace, yeoman would derive it from the path, which depends on the folder name.
+    return this.run<Generator>(getGenerator(generatorSpec), { namespace: jhipsterNamespace, ...settings }, envOptions)
+      .withJHipsterGenerators()
+      .withCommandName();
   }
 
   runCli<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
@@ -660,7 +658,12 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions,
   ): JHipsterRunContext<Generator> {
-    const context = runResult.create(getGenerator(jhipsterGenerator), settings, envOptions) as JHipsterRunContext<Generator>;
+    // Register the generator under its jhipster namespace, yeoman would derive it from the path, which depends on the folder name.
+    const context = runResult.create(
+      getGenerator(jhipsterGenerator),
+      { namespace: toJHipsterNamespace(jhipsterGenerator), ...settings },
+      envOptions,
+    ) as JHipsterRunContext<Generator>;
     return context.withJHipsterGenerators();
   }
 
@@ -733,10 +736,16 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
     });
   }
 
-  async createEnv(options: EnvironmentOptions): Promise<Environment> {
-    return EnvironmentBuilder.create(options).getEnvironment();
+  async createEnv({ jhipsterStore, ...options }: JHipsterEnvironmentOptions): Promise<Environment> {
+    // Only the generators of the test, unless it asks for the jhipster ones. The environment works on a clone of the
+    // store: the environment options are passed on to the next run of a run result, the generators a run registers are not.
+    const store = getJHipsterStore({ empty: !jhipsterStore });
+    return EnvironmentBuilder.create({ store, ...options }).getEnvironment();
   }
 }
+
+/** The environment options of a test run: `jhipsterStore` gives the environment the jhipster generators. */
+type JHipsterEnvironmentOptions = EnvironmentOptions & { jhipsterStore?: boolean };
 
 type MergeableHelperOptions = Pick<
   Parameters<typeof createHelpers<YeomanTest>>[0],
@@ -754,10 +763,6 @@ const helpersPresets: Record<Presets | 'jhipster', MergeableHelperOptions> = {
     },
     environmentOptions: {
       dryRun: false,
-      generatorLookupOptions: {
-        // Default to lookup for source generators only inside tests.
-        lookups: generatorsLookup,
-      },
       sharedOptions: {
         useVersionPlaceholders: true,
         reproducible: true,
@@ -831,7 +836,7 @@ export function createTestHelpers<JHipsterTestGenerator extends BaseCoreGenerato
       options.defaultGenerator ??= `jhipster:${commandName}`;
       options.generatorOptions ??= {};
       (options.generatorOptions as any).commandName = commandName;
-      (options as any).commandName = commandName;
+      options.commandName = commandName;
     }
   }
   const mergeableOptions = pick(options, 'adapterOptions', 'environmentOptions', 'generatorOptions', 'settings');

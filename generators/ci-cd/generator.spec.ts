@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
-
 import Generator from './index.ts';
+
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -64,6 +64,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           javaDependencies: expect.any(Object),
+          dockerComposeFiles: expect.any(Object),
           dockerContainers: expect.any(Object),
           addLanguageCallbacks: expect.any(Array),
           supportedLanguages: expect.any(Array),

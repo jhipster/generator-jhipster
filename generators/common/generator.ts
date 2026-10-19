@@ -17,13 +17,10 @@
  * limitations under the License.
  */
 
-import { isFileStateModified } from 'mem-fs-editor/state';
-
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { type PropertiesFileLines, editPropertiesFileCallback } from '../base-core/support/index.ts';
-import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
 
-import { writeFiles } from './files.ts';
+import { SONAR_PROPERTIES_METADATA, writeFiles } from './files.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
@@ -95,10 +92,23 @@ export default class CommonGenerator extends BaseApplicationGenerator<
           prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
         });
       },
+      watchScripts({ application }) {
+        // The client and the server run together from the root package.json: the client from its workspace when it has one,
+        // the server alone without a client.
+        const { clientRootDir, skipServer } = application;
+        const client = !application.skipClient && application.clientFrameworkAny;
+        const clientScript = (script: string) => `'npm run ${clientRootDir ? `-w ${clientRootDir} ` : ''}${script}'`;
+        const server = skipServer ? [] : ['npm:backend:start'];
+        Object.assign(application.packageJsonScripts, {
+          watch: ['concurrently', ...(client ? [clientRootDir ? clientScript('start') : 'npm:start'] : []), ...server].join(' '),
+          'build-watch': ['concurrently', ...(client ? [clientScript('webapp:build:dev -- --watch')] : []), ...server].join(' '),
+        });
+      },
       sonarSourceApi({ source }) {
         source.ignoreSonarRule = ({ ruleId, ruleKey, resourceKey, comment }) => {
           this.editFile(
             'sonar-project.properties',
+            { metadata: SONAR_PROPERTIES_METADATA },
             editPropertiesFileCallback([
               {
                 key: 'sonar.issue.ignore.multicriteria',
@@ -121,6 +131,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
           // Adds new properties before the sonar.issue.ignore.multicriteria key
           this.editFile(
             'sonar-project.properties',
+            { metadata: SONAR_PROPERTIES_METADATA },
             editPropertiesFileCallback((lines, newValueCallback) => {
               let multicriteriaIndex = lines.findIndex(line => Array.isArray(line) && line[0] === 'sonar.issue.ignore.multicriteria');
               if (lines[multicriteriaIndex - 1] === '') {
@@ -184,26 +195,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
-  get default() {
-    return this.asDefaultTaskGroup({
-      async formatSonarProperties() {
-        this.queueTransformStream(
-          {
-            name: 'prettifying sonar-project.properties',
-            filter: file =>
-              isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && file.path.endsWith('sonar-project.properties'),
-            refresh: false,
-          },
-          await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }),
-        );
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
@@ -229,6 +220,15 @@ export default class CommonGenerator extends BaseApplicationGenerator<
         if (application.defaultEnvironment) {
           packageJsonConfigStorage.default_environment = application.defaultEnvironment;
         }
+      },
+      scriptsDependencies({ application }) {
+        // The scripts of the root package.json run the client, the server and the e2e tests together, and wait for the server.
+        this.packageJson.merge({
+          devDependencies: {
+            concurrently: application.nodeDependencies.concurrently,
+            'wait-on': application.nodeDependencies['wait-on'],
+          },
+        });
       },
       addJHipsterDependencies({ application }) {
         if (application.skipJhipsterDependencies) return;

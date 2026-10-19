@@ -41,19 +41,17 @@ import {
     // We cannot generate a required entity with relationship with required relationships.
     const skipCreateTest
       = !cypressBootstrapEntities
-    // Cannot create a required relationship with itself.
-      || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
-    // Required relationships that contain another required relationship are complex to handle.
+      // Cannot create a required relationship with itself.
+      || requiredRelationships.some(rel => rel.otherEntity.builtInUser)
+      // Required relationships that contain another required relationship are complex to handle.
       || requiredOtherEntities.some(otherEntity => otherEntity.relationships.some(rel => rel.relationshipRequired))
-    // Same as above.
+      // Same as above.
       || requiredOtherEntities.some(otherEntity => otherEntity.primaryKey?.derived)
-    // Cannot generate the required data to test.
+      // Cannot generate the required data to test.
       || !entityFakeData
-      ? '.skip' : '';
+        ? '.skip' : '';
 
     const reason = 'cannot create a required entity with relationship with required relationships.';
-
-    const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 _%>
 
 describe('<%- entityNameCapitalized %> e2e test', () => {
@@ -62,7 +60,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   let username: string;
   let password: string;
 <%_ if (!readOnly) { _%>
-  <%- skipCreateTest ? '// ' : '' %>const <%- entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
+  <%- skipCreateTest ? '// ' : '' %>const <%- entityInstance %>Sample = <%- JSON.stringify(e2eTestEntitySample) %>;
 <%_ } _%>
 
   let <%- entityInstance %>;
@@ -90,7 +88,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/<%- baseApi + otherEntity.entityApiUrl %>',
-      body: <%- JSON.stringify(this.generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate))) %>,
+      body: <%- JSON.stringify(otherEntity.e2eTestEntity) %>,
     }).then(({ body }) => {
       <%- otherEntity.entityInstance %> = body;
     });
@@ -112,7 +110,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   /* Disabled due to incompatibility
   <%_ } _%>
   beforeEach(() => {
-    // Simulate relationships api for better performance and reproducibility.
+    // Simulate relationships API for better performance and reproducibility.
   <%_ for (otherEntity of otherEntities) { _%>
     cy.intercept('GET', '/<%- baseApi + otherEntity.entityApiUrl %>', {
       statusCode: 200,
@@ -168,7 +166,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
       } else {
         cy.get(entityTableSelector).should('exist');
       }
-    });;
+    });
     cy.getEntityHeading('<%- entityNameCapitalized %>').should('exist');
     cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
   });
@@ -285,7 +283,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
-      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship missbehavior' : '' %>
+      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship misbehavior' : '' %>
       it<%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '.skip' : '' %>('edit button click should load edit <%- entityNameCapitalized %> page and save', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
@@ -366,7 +364,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     <%_ } _%>
   <%_ } _%>
   <%_ for (const relationship of requiredRelationships) { _%>
-       cy.get(`[data-cy="<%- relationship.relationshipFieldName %>"]`).select(<%- relationship.collection ? '[0]' : '1' %>);
+      cy.get(`[data-cy="<%- relationship.relationshipFieldName %>"]`).select(<%- relationship.collection ? '[0]' : '1' %>);
   <%_ } _%>
 
   <%_ if (anyFieldHasFileBasedContentType) { _%>

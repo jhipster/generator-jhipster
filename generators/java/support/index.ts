@@ -25,6 +25,7 @@ export { default as generatedAnnotationTransform } from './generated-annotation-
 export * from './java-enum.ts';
 export * from './java-file-edit.ts';
 export * from './java-formatting.ts';
+export * from './key-store-node-crypto.ts';
 export * from './key-store.ts';
 export { default as packageInfoTransform } from './package-info-transform.ts';
 export * from './package-info-transform.ts';

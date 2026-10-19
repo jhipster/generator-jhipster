@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename, resolve } from 'node:path';
-
-import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;

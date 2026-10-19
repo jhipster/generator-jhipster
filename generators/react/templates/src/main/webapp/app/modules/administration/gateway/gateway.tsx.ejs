@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useEffect } from 'react';
+import { type JSX, useEffect } from 'react';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Badge, Table, Button } from 'react-bootstrap';
@@ -34,7 +34,7 @@ export const GatewayPage = () => {
   }, []);
 
   const metadata = instance => {
-    const spans: React.JSX.Element[] = [];
+    const spans: JSX.Element[] = [];
     Object.keys(instance).map((key) => {
       spans.push((
         <span key={key.toString() + 'value'}>

@@ -27,47 +27,50 @@ package <%- entityAbsolutePackage %>.service.mapper;
     const displayFieldOfCollections = new Set(
       dtoRelationships.filter(relationship => relationship.collection).map(relationship => relationship.relatedField.originalField ?? relationship.relatedField),
     );
-    const toDtoMappings = this._.uniqWith(
-      dtoRelationships.map(relationship => ({ otherEntity: relationship.otherEntity, displayField: relationship.relatedField })),
-      (a, b) =>
-        a.otherEntity === b.otherEntity && (a.displayField.originalField ?? a.displayField) === (b.displayField.originalField ?? b.displayField),
-      ).map(mapping => ({
+    const sameDtoMapping = (a, b) =>
+      a.otherEntity === b.otherEntity && (a.displayField.originalField ?? a.displayField) === (b.displayField.originalField ?? b.displayField);
+    const toDtoMappings = dtoRelationships
+      .map(relationship => ({ otherEntity: relationship.otherEntity, displayField: relationship.relatedField }))
+      .filter((mapping, index, mappings) => mappings.findIndex(other => sameDtoMapping(mapping, other)) === index)
+      .map(mapping => ({
         ...mapping,
-        name: `${mapping.otherEntity.entityInstance}${this._.upperFirst(mapping.displayField.propertyName)}`,
+        name: `${mapping.otherEntity.entityInstance}${mapping.displayField.propertyNameCapitalized}`,
+        methodName: `${mapping.otherEntity.entityNameCapitalized}${mapping.displayField.propertyNameCapitalized}`,
         // A Set variant is needed when any relationship using this mapping is a collection.
         collection: displayFieldOfCollections.has(mapping.displayField.originalField ?? mapping.displayField),
       }));
 
-      // DTO -> entity: one mapping per related entity copying only the id. A relationship is persisted by the id of the
-      // related entity, so nothing else may flow from the DTO into it.
-      const toEntityMappings = this._.uniq(ownerSideRelationships.map(relationship => relationship.otherEntity)).map(otherEntity => ({
-        otherEntity,
-        name: `${otherEntity.entityInstance}FromId`,
-        collection: ownerSideRelationships.some(relationship => relationship.otherEntity === otherEntity && relationship.collection),
-      }));
+    // DTO -> entity: one mapping per related entity copying only the id. A relationship is persisted by the id of the
+    // related entity, so nothing else may flow from the DTO into it.
+    const toEntityMappings = [...new Set(ownerSideRelationships.map(relationship => relationship.otherEntity))].map(otherEntity => ({
+      otherEntity,
+      name: `${otherEntity.entityInstance}FromId`,
+      methodName: `${otherEntity.entityNameCapitalized}FromId`,
+      collection: ownerSideRelationships.some(relationship => relationship.otherEntity === otherEntity && relationship.collection),
+    }));
 
-      // The named mapping each relationship is mapped with, by relationship.
-      const qualifiedBy = new Map(
-        dtoRelationships.map(relationship => [
-          relationship,
-          {
-            toDto: `${relationship.otherEntity.entityInstance}${this._.upperFirst(relationship.relatedField.propertyName)}${relationship.collection ? 'Set' : ''}`,
-            toEntity: `${relationship.otherEntity.entityInstance}FromId${relationship.collection ? 'Set' : ''}`,
-          },
-        ]),
-      );
+    // The named mapping each relationship is mapped with, by relationship.
+    const qualifiedBy = new Map(
+      dtoRelationships.map(relationship => [
+        relationship,
+        {
+          toDto: `${relationship.otherEntity.entityInstance}${relationship.relatedField.propertyNameCapitalized}${relationship.collection ? 'Set' : ''}`,
+          toEntity: `${relationship.otherEntity.entityInstance}FromId${relationship.collection ? 'Set' : ''}`,
+        },
+      ]),
+    );
 
-      const expressionFields = fields.filter(field => field.mapstructExpression);
-      const hasUuidDisplayField = restProperties.some(property => property.relatedField?.fieldTypeUUID);
-      const hasBytesDisplayField = restProperties.some(property => property.relatedField?.fieldTypeBytes);
-      const hasCollectionMapping = toDtoMappings.some(mapping => mapping.collection) || toEntityMappings.some(mapping => mapping.collection);
-      const overridesToDto = dtoRelationships.length > 0 || expressionFields.length > 0;
-      const overridesToEntity = dtoRelationships.length > 0 || primaryKey.ids.length > 1;
-      // With every nested bean covered by a named mapping, a relationship a mapping forgets must be a compile error
-      // instead of a mapping forged by MapStruct. Embedded entities are copied whole and still need forged mappings;
-      // nested targets such as `id.<name>` of a composite id are generated regardless of this flag.
-      const disableSubMappingMethodsGeneration
-        = !embedded && !restProperties.some(property => property.relationshipName && property.otherEntity.embedded);
+    const expressionFields = fields.filter(field => field.mapstructExpression);
+    const hasUuidDisplayField = restProperties.some(property => property.relatedField?.fieldTypeUUID);
+    const hasBytesDisplayField = restProperties.some(property => property.relatedField?.fieldTypeBytes);
+    const hasCollectionMapping = toDtoMappings.some(mapping => mapping.collection) || toEntityMappings.some(mapping => mapping.collection);
+    const overridesToDto = dtoRelationships.length > 0 || expressionFields.length > 0;
+    const overridesToEntity = dtoRelationships.length > 0 || primaryKey.ids.length > 1;
+    // With every nested bean covered by a named mapping, a relationship a mapping forgets must be a compile error
+    // instead of a mapping forged by MapStruct. Embedded entities are copied whole and still need forged mappings;
+    // nested targets such as `id.<name>` of a composite id are generated regardless of this flag.
+    const disableSubMappingMethodsGeneration
+      = !embedded && !restProperties.some(property => property.relationshipName && property.otherEntity.embedded);
 _%>
 <%_ if (hasCollectionMapping) { _%>
 import java.util.Set;
@@ -83,7 +86,7 @@ import java.util.UUID;
 import <%- entityAbsoluteClass %>;
 import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
 
-<%_ for (const otherEntity of this._.uniq(dtoRelationships.map(relationship => relationship.otherEntity).filter(otherEntity => otherEntity.entityClass !== entityClass))) { _%>
+<%_ for (const otherEntity of [...new Set(dtoRelationships.map(relationship => relationship.otherEntity).filter(otherEntity => otherEntity.entityClass !== entityClass))]) { _%>
 import <%- otherEntity.entityAbsoluteClass %>;
 import <%- otherEntity.entityAbsolutePackage %>.service.dto.<%- otherEntity.dtoClass %>;
 <%_ } _%>
@@ -124,7 +127,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%_ } _%>
     <%- persistClass %> toEntity(<%- dtoClass %> <%- dtoInstance %>);
   <%_ } _%>
-  <%_ for (const { otherEntity, displayField, collection, name: mappingName } of toDtoMappings) { _%>
+  <%_ for (const { otherEntity, displayField, collection, name: mappingName, methodName } of toDtoMappings) { _%>
 
     @Named("<%- mappingName %>")
     @BeanMapping(ignoreByDefault = true)
@@ -136,16 +139,16 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%_ } else if (!displayField.id) { _%>
     @Mapping(target = "<%- displayField.propertyName %>", source = "<%- displayField.propertyName %>")
     <%_ } _%>
-    <%- otherEntity.dtoClass %> toDto<%- this._.upperFirst(mappingName) %>(<%- otherEntity.persistClass %> <%- displayField.mapstructExpression ? 's' : otherEntity.persistInstance %>);
+    <%- otherEntity.dtoClass %> toDto<%- methodName %>(<%- otherEntity.persistClass %> <%- displayField.mapstructExpression ? 's' : otherEntity.persistInstance %>);
     <%_ if (collection) { _%>
 
     @Named("<%- mappingName %>Set")
-    default Set<<%- otherEntity.dtoClass %>> toDto<%- this._.upperFirst(mappingName) %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {
-        return <%- otherEntity.persistInstance %>.stream().map(this::toDto<%- this._.upperFirst(mappingName) %>).collect(Collectors.toSet());
+    default Set<<%- otherEntity.dtoClass %>> toDto<%- methodName %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {
+        return <%- otherEntity.persistInstance %>.stream().map(this::toDto<%- methodName %>).collect(Collectors.toSet());
     }
     <%_ } _%>
   <%_ } _%>
-  <%_ for (const { otherEntity, collection, name: mappingName } of toEntityMappings) { _%>
+  <%_ for (const { otherEntity, collection, name: mappingName, methodName } of toEntityMappings) { _%>
 
     @Named("<%- mappingName %>")
     @BeanMapping(ignoreByDefault = true)
@@ -158,12 +161,12 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     @Mapping(target = "<%- field.propertyName %>", source = "<%- field.propertyName %>")
       <%_ } _%>
     <%_ } _%>
-    <%- otherEntity.persistClass %> toEntity<%- this._.upperFirst(mappingName) %>(<%- otherEntity.dtoClass %> <%- otherEntity.dtoInstance %>);
+    <%- otherEntity.persistClass %> toEntity<%- methodName %>(<%- otherEntity.dtoClass %> <%- otherEntity.dtoInstance %>);
     <%_ if (collection) { _%>
 
     @Named("<%- mappingName %>Set")
-    default Set<<%- otherEntity.persistClass %>> toEntity<%- this._.upperFirst(mappingName) %>Set(Set<<%- otherEntity.dtoClass %>> dtos) {
-        return dtos == null ? null : dtos.stream().filter(Objects::nonNull).map(this::toEntity<%- this._.upperFirst(mappingName) %>).collect(Collectors.toSet());
+    default Set<<%- otherEntity.persistClass %>> toEntity<%- methodName %>Set(Set<<%- otherEntity.dtoClass %>> dtos) {
+        return dtos == null ? null : dtos.stream().filter(Objects::nonNull).map(this::toEntity<%- methodName %>).collect(Collectors.toSet());
     }
     <%_ } _%>
   <%_ } _%>

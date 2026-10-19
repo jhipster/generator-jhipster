@@ -98,7 +98,7 @@ export class JHipster {
 <%_ } else { _%>
     await this.page.goto('/');
     // Cypress warms the cookie jar with a GET and then posts through its authenticatedRequest command, which
-    // carries the csrf header. Posting directly is rejected by a session application.
+    // carries the CSRF header. Posting directly is rejected by a session application.
     await this.request.get('/api/account');
     const response = await this.authenticatedRequest({
       method: 'POST',

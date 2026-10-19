@@ -163,7 +163,7 @@ describe('Login', () => {
 
     it('should stay on login form and show error message on login error', () => {
       // GIVEN
-      mockLoginService.login = vi.fn(() => throwError(Error));
+      mockLoginService.login = vi.fn(() => throwError(() => new Error()));
 
       // WHEN
       comp.login();

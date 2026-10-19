@@ -70,7 +70,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
           '9.0.0-alpha.0': [
             [
               this.fromInit!,
-              // Try to remove possibles old eslint config files
+              // Try to remove possible old eslint config files
               'eslint.config.js',
               'eslint.config.mjs',
             ],

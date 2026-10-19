@@ -57,6 +57,14 @@ const command = {
       jdl: { type: 'list', tokenType: 'list', tokenValuePattern: NPM_PACKAGE_NAME_PATTERN },
       scope: 'none',
     },
+    globalBlueprints: {
+      description:
+        'A comma separated list of blueprints to use for every project generated, the ones in other folders included (the applications of a jdl or of a workspace, the deployments), stored in each one',
+      cli: {
+        type: String,
+      },
+      scope: 'none',
+    },
     disableBlueprints: {
       description: 'Disable blueprints support',
       cli: {
@@ -82,6 +90,13 @@ const command = {
     },
     reproducible: {
       description: 'Try to reproduce changelog',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+    reproducibleSecrets: {
+      description: 'Derive the generated secrets (jwtSecretKey, rememberMeKey, development KeyStore) from the creation timestamp',
       cli: {
         type: Boolean,
       },

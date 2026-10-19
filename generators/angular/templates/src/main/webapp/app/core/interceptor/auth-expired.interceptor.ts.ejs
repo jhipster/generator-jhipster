@@ -50,7 +50,7 @@ export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
         stateStorageService.storeUrl(router.routerState.snapshot.url);
 <%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
         loginService.logout();
-        router.navigate(['/login']);
+        void router.navigate(['/login']);
 <%_ } else { _%>
         authServerProvider.login();
 <%_ } _%>

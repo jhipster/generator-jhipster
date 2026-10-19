@@ -137,6 +137,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -236,6 +239,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -248,7 +254,7 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -625,6 +631,9 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -637,7 +646,7 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -987,13 +996,16 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1247,6 +1259,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
@@ -1301,13 +1316,16 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1639,6 +1657,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1651,7 +1672,7 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -1974,6 +1995,9 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1986,7 +2010,7 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2339,6 +2363,9 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2351,7 +2378,7 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2728,13 +2755,16 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -2982,6 +3012,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
     "stateCleared": "modified",
   },
@@ -3042,13 +3075,16 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3395,6 +3431,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -3407,7 +3446,7 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -3694,6 +3733,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/service/SimpleService.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/service/UserService.java": {
     "stateCleared": "modified",
   },
@@ -3796,13 +3838,16 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {
@@ -4197,6 +4242,9 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-tls-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -4209,7 +4257,7 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
+  "src/main/resources/config/tls/keystore-samples.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/logback-spring.xml": {

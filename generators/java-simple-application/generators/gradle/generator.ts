@@ -114,7 +114,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
             this.queueTask({
               method: () => {
                 this.editFile(gradleFile, addGradleDependenciesCallback((source as any)._gradleDependencies.sort(sortDependencies)));
-                (source as any)._gradleDependencies = [];
+                source._gradleDependencies = [];
               },
               taskName: '_persiteGradleDependencies',
               once: true,

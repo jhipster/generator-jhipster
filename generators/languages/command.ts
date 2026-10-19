@@ -92,9 +92,7 @@ const command = {
           } else if (typeof value === 'string') {
             gen.jhipsterConfig.nativeLanguage = value;
           }
-          if (!gen.jhipsterConfig.languages) {
-            gen.jhipsterConfig.languages = [gen.jhipsterConfig.nativeLanguage];
-          }
+          gen.jhipsterConfig.languages ??= [gen.jhipsterConfig.nativeLanguage];
         }
       },
       scope: 'storage',

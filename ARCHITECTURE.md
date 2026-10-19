@@ -142,6 +142,52 @@ get [Generator.PREPARING]() {
 }
 ```
 
+#### Custom objects (base-core)
+
+A generator declares its own objects with the `customObjects` feature, a list of objects (`{ name, before }`), and
+implements a getter of each name giving the object. Each object gets three priorities before its `before` priority (the
+post preparing one by default, so after the preparing priority), in the order the objects are declared, each with the
+object (`service`):
+
+- `loading<Name>`: its tasks load the object;
+- `preparing<Name>`: its tasks prepare it;
+- `postPreparing<Name>`: its tasks use the prepared object.
+
+To share the object with the other generators declaring it, the getter reads it from the context (`getContextData`), and
+each phase runs for every generator before the next one. While the object is prepared, a default (`mutateData`) reading
+a property not yet set waits for it, and is applied before the post preparing, like the application ones. An application
+generator gives the phases the `application`, and they run before its entity priorities. A workspaces generator runs
+them after its workspaces priorities, before the default priority, and gives them the `deployment` and its
+`applications`. `Generator.objectPriority(name, phase)` gives the priority of a phase:
+
+```ts
+export default class extends Generator {
+  constructor(args, options, features) {
+    super(args, options, { ...features, customObjects: [{ name: 'service' }] });
+  }
+
+  get service() {
+    return this.getContextData('my-blueprint:service', { factory: () => ({}) });
+  }
+
+  get [Generator.objectPriority('service', 'loading')]() {
+    return {
+      loading({ service }) {
+        service.name = 'Book';
+      },
+    };
+  }
+
+  get [Generator.objectPriority('service', 'preparing')]() {
+    return {
+      preparing({ service }) {
+        service.className = `${service.name}Service`;
+      },
+    };
+  }
+}
+```
+
 #### Configuring each entity (base-application)
 
 Configure and check entity's configuration:
@@ -341,6 +387,14 @@ More information can be found at:
 [Extending and customizing](https://www.jhipster.tech/modules/extending-and-customizing/)
 [Creating a stand alone Blueprint](https://www.jhipster.tech/modules/creating-a-module/)
 [Creating a blueprint](https://www.jhipster.tech/modules/creating-a-blueprint/)
+
+### Blueprint scope
+
+A blueprint belongs to the project whose `.yo-rc.json` stores it ([RFC-7](rfcs/7-jhipster-rfc-blueprint-scope.md)):
+
+- `--blueprints` applies to the project the command runs in, `--global-blueprints` to every project the run generates, the ones in other folders included.
+- A generator composed in another folder (`composeWithJHipster` with a `destinationRoot`) uses the blueprints of the `.yo-rc.json` of that folder, unless they are passed to it.
+- The `jdl` generator is not blueprinted: the applications of a jdl use the blueprints their jdl declares.
 
 ### Blueprint lifecycle
 

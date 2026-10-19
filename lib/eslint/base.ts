@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 
+import { dirname, resolve } from 'node:path';
+
 import type { Config } from 'eslint/config';
-import imports from 'eslint-plugin-import-x';
+import imports, { createNodeResolver } from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
 
 export const jsRules: Record<string, string | [string, ...any[]]> = {
@@ -42,6 +44,19 @@ export const jsRules: Record<string, string | [string, ...any[]]> = {
  * Rules must be compatible with auto fix to be applied.
  */
 const baseConfig: Config = {
+  settings: {
+    // The files are linted in memory, while they are written: a relative import is resolved by its path alone, not by
+    // the file on disk, so that a rule like no-useless-path-segments gives the same result whether it was written or not.
+    'import-x/resolver-next': [
+      {
+        interfaceVersion: 3,
+        name: 'jhipster-relative-path',
+        resolve: (modulePath: string, sourceFile: string) =>
+          modulePath.startsWith('.') ? { found: true, path: resolve(dirname(sourceFile), modulePath) } : { found: false },
+      },
+      createNodeResolver(),
+    ],
+  },
   plugins: {
     'unused-imports': unusedImports,
     ...imports.flatConfigs.recommended.plugins,
@@ -62,7 +77,7 @@ const baseConfig: Config = {
         named: true,
         'newlines-between': 'always',
         pathGroups: [
-          { pattern: '{esmocha,vitest,jest}', group: 'builtin', position: 'before' },
+          { pattern: '{expect-node,esmocha,vitest,jest}', group: 'builtin', position: 'before' },
           { pattern: '{react,react-bootstrap,react-jhipster,react-router,vue,vue-i18n,vue-router}', group: 'builtin', position: 'after' },
           { pattern: '@angular/**', group: 'builtin', position: 'after' },
           { pattern: '{app,@}/**', group: 'parent', position: 'before' },

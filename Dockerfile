@@ -65,10 +65,10 @@ RUN \
     /tmp/* \
     /var/tmp/*
 
-# expose the working directory, the Tomcat port, the BrowserSync ports
+# expose the working directory, the Tomcat port, the React/Vue dev server port
 USER jhipster
 ENV PATH=$PATH:/usr/bin
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]
-EXPOSE 8080 9000 3001
+EXPOSE 8080 9000
 CMD ["tail", "-f", "/home/jhipster/generator-jhipster/generators/spring-boot/templates/src/main/resources/banner-no-color.txt"]

@@ -132,6 +132,13 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
+      prepareE2eTls({ application }) {
+        // Only for an application whose e2e tests run against its own packaged server: a microservice is tested through its gateway.
+        application.e2eTls &&=
+          !application.applicationTypeMicroservice &&
+          !application.skipServer &&
+          Boolean(application.testFrameworks?.includes(CYPRESS) || application.testFrameworks?.includes(PLAYWRIGHT));
+      },
       addExternalResource({ application, source }) {
         if (!application.clientFrameworkBuiltIn) {
           return;
@@ -270,10 +277,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         }
         const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
-
-        const devDependencies = packageJsonStorage.createStorage('devDependencies');
-        devDependencies.set('wait-on', application.nodeDependencies['wait-on']);
-        devDependencies.set('concurrently', application.nodeDependencies.concurrently);
 
         if (application.clientFrameworkReact) {
           scriptsStorage.set('ci:frontend:test', 'npm run webapp:build:$npm_package_config_default_environment && npm run test');

@@ -16,18 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, beforeEach, describe, exnode, expect, it } from 'expect-node';
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
 import { unzipSync } from 'fflate';
 
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
 import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
-import { defaultHelpers as helpers, result, skipPrettierHelpers } from '#testing';
+import { shouldSupportFeatures } from '#test-support';
+import { basicHelpers, defaultHelpers as helpers, result, skipPrettierHelpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -48,6 +48,22 @@ describe(`generator - ${generator}`, () => {
     it('should reject jhipsterConfigWithDefaults access', () => {
       expect(() => bootstrapGenerator.jhipsterConfigWithDefaults).toThrow(
         'jhipsterConfigWithDefaults is not available in uniqueGlobally generators',
+      );
+    });
+  });
+
+  describe('a multi-step template written after the commit', () => {
+    let debug: ReturnType<typeof exnode.spyOn>;
+
+    before(async () => {
+      await helpers.runJHipster(generator);
+      debug = exnode.spyOn(result.generator.log, 'debug');
+      result.memFs.add({ path: result.generator.destinationPath('late.txt.jhi'), contents: Buffer.from('late') });
+    });
+
+    it('is logged, as it will not be merged', () => {
+      expect(debug).toHaveBeenCalledWith(
+        `The template ${result.generator.destinationPath('late.txt.jhi')} was written after the commit, it will not be merged.`,
       );
     });
   });
@@ -83,6 +99,34 @@ describe(`generator - ${generator}`, () => {
       it('should keep needles', () => {
         result.assertEqualsFileContent('file.txt', content);
       });
+    });
+  });
+
+  describe('prettier editor metadata', () => {
+    const unformatted = 'key=value\nother.key   =   other value\n';
+    const formatted = 'key = value\nother.key = other value\n';
+
+    class PropertiesGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('flagged.properties', unformatted, { metadata: { prettier: true } });
+            this.writeDestination('not-flagged.properties', unformatted);
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await basicHelpers.run(PropertiesGenerator).withJHipsterGenerators();
+    });
+
+    it('formats files written with the prettier metadata, even if prettier does not format their extension', () => {
+      result.assertEqualsFileContent('flagged.properties', formatted);
+    });
+
+    it('does not format the other files with that extension', () => {
+      result.assertEqualsFileContent('not-flagged.properties', unformatted);
     });
   });
 
@@ -142,6 +186,61 @@ describe(`generator - ${generator}`, () => {
 
     it('leaves the file in the shared mem-fs', () => {
       expect(result.getStateSnapshot()).toMatchObject({ 'deferred.txt': { state: 'modified' } });
+    });
+  });
+
+  describe('prettier config generated in the same run', () => {
+    const unformatted = 'function answer() {\nreturn 42;\n}\n';
+    const formattedWithTabWidth2 = 'function answer() {\n  return 42;\n}\n';
+    const formattedWithTabWidth4 = 'function answer() {\n    return 42;\n}\n';
+    // tabWidth 4 only applies to ts files, through an override.
+    const prettierConfig = "tabWidth: 2\noverrides:\n  - files: '*.ts'\n    options:\n      tabWidth: 4\n";
+
+    class PrettierConfigGenerator extends BaseGenerator {
+      get [BaseGenerator.WRITING]() {
+        return this.asWritingTaskGroup({
+          write() {
+            this.writeDestination('.prettierrc', prettierConfig);
+            this.writeDestination('src/file.ts', unformatted);
+            this.writeDestination('src/file.js', unformatted);
+          },
+        });
+      }
+    }
+
+    describe('with exportApplication', () => {
+      before(async () => {
+        await basicHelpers.run(PrettierConfigGenerator).withOptions({ exportApplication: true }).withJHipsterGenerators();
+      });
+
+      it('formats with the generated prettier config and its overrides, which are not on disk', () => {
+        const archive = unzipSync(readFileSync(join(result.cwd, 'export-application.zip')));
+        expect(Buffer.from(archive['src/file.ts']).toString('utf8')).toBe(formattedWithTabWidth4);
+        expect(Buffer.from(archive['src/file.js']).toString('utf8')).toBe(formattedWithTabWidth2);
+      });
+    });
+
+    describe('with deferCommit', () => {
+      before(async () => {
+        await basicHelpers.run(PrettierConfigGenerator).withOptions({ deferCommit: true }).withJHipsterGenerators();
+      });
+
+      it('formats with the generated prettier config and its overrides, which are not on disk', () => {
+        const snapshot = result.getSnapshot(file => file.path.includes('file.'));
+        expect(snapshot['src/file.ts'].contents).toBe(formattedWithTabWidth4);
+        expect(snapshot['src/file.js'].contents).toBe(formattedWithTabWidth2);
+      });
+    });
+
+    describe('committing to disk', () => {
+      before(async () => {
+        await basicHelpers.run(PrettierConfigGenerator).withJHipsterGenerators();
+      });
+
+      it('formats with the generated prettier config and its overrides', () => {
+        result.assertEqualsFileContent('src/file.ts', formattedWithTabWidth4);
+        result.assertEqualsFileContent('src/file.js', formattedWithTabWidth2);
+      });
     });
   });
 

@@ -25,7 +25,7 @@ import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
-import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from '../../../lib/jdl/core/parsing/index.ts';
 import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../../lib/utils/yo-rc.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
@@ -66,7 +66,7 @@ export const importJDLTransform = ({
       }
     }
 
-    const jdlStoreContents = jdlStoreFileInMemory?.contents ?? (loadFile(jdlStorePath) as any).contents;
+    const jdlStoreContents = jdlStoreFileInMemory?.contents ?? loadFile(jdlStorePath).contents;
     if (!jdlStoreContents) {
       if (yoRcFileInMemory) {
         yield yoRcFileInMemory;

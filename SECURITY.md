@@ -18,9 +18,9 @@ The practical consequence is:
 > privileges.**
 
 The same applies to every other file the generator reads as configuration: `.jhipster/*.json` entity files, `.yo-resolve`, JDL files, and any
-blueprint referenced from them. The `.jhipster/*.json` entity configurations are less dangerous than `.yo-rc.json` — they only feed the entity
-templates and do not reach the more sensitive build files such as `pom.xml`, `build.gradle` or `package.json` — but they are still generator
-input and must be checked as well. `.yo-resolve` does not participate in generation itself, but it controls conflict resolution and can
+blueprint referenced from them. The `.jhipster/*.json` entity configurations are less dangerous than `.yo-rc.json` — they cannot declare a
+blueprint — but their path values (entity folder, file and translation key) choose the project files their templates write, so they are
+generator input and must be checked as well. `.yo-resolve` does not participate in generation itself, but it controls conflict resolution and can
 force the generator to overwrite existing files without prompting, so it too must be trusted.
 
 ### Why the configuration is trust-sensitive
@@ -77,10 +77,27 @@ and the same holds for Maven and Gradle builds. `.yo-rc.json` belongs to that sa
 - **Read `.yo-rc.json` before the first run**, especially the `blueprints` and `generators` entries, and look up any blueprint you do not
   recognize.
 - **Check for a `.blueprint` directory and a `.jhipster/sharedOptions.*` file**, which are executed without being declared in `.yo-rc.json`.
+- **Skim the `.jhipster/*.json` files for path values with `..` segments**, which redirect entity files to other files of the project.
 - **Review configuration files in pull requests** with the same scrutiny as source code.
 - **Use a sandbox for untrusted projects**: a container, a disposable VM, or a user account without access to your SSH keys, cloud credentials
   and shell profiles.
 - **Do not run the generator as root**, and do not run it from your home directory.
+
+## Checking an application you downloaded
+
+Downloading an application from a repository and running it means running its code: the build, the tests and the application itself. Before you
+do, you can tell what JHipster generated from what was changed afterwards:
+
+1. **Keep only the JHipster configuration.** In a copy of the repository, remove every file except `.yo-rc.json`, the `.jhipster/` folder,
+   the `.blueprint/` folder and `.git/`.
+2. **Check that the generator and the blueprints are the real JHipster ones.** Each blueprint named in `.yo-rc.json` must be a package you
+   know, installed from the original npm registry (no `registry` override in an `.npmrc`), and `generator-jhipster` must come from npm or from
+   [the main repository](https://github.com/jhipster/generator-jhipster). Read `.blueprint/` and `.jhipster/sharedOptions.*`: they run at the
+   next step.
+3. **Regenerate the application** with that generator, in a sandbox and without installing the dependencies (`jhipster --skip-install`).
+4. **Compare the regenerated application with the downloaded one** (`git diff`). The comparison shows what was written by hand after the
+   generation: the customizations of the project, and any unexpected or malicious change. Review those before building or running the
+   application.
 
 ## Recommendations for CI and hosted generation
 

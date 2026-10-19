@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
@@ -86,6 +86,7 @@ describe(`generator - ${clientFramework}`, () => {
         expect(application).toMatchSnapshot({
           addLanguageCallbacks: expect.any(Array),
           customizeTemplatePaths: expect.any(Array),
+          dockerComposeFiles: expect.any(Object),
           dockerContainers: expect.any(Object),
           entities: expect.any(Array),
           languages: expect.any(Array),

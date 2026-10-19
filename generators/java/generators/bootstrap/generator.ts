@@ -44,7 +44,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
         applicationDefaults(
           {
             __override__: false,
-            useNpmWrapper: application => Boolean(application.clientFramework ?? 'no' !== 'no'),
+            useNpmWrapper: ({ clientFramework }) => (clientFramework ?? 'no') !== 'no',
           },
           {
             __override__: true,

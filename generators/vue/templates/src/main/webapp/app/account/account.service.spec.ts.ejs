@@ -49,7 +49,8 @@ describe('Account Service test suite', () => {
     localStorage.clear();
 <%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'token');
-<%_ } %>
+<%_ } _%>
+
     axiosStub.get.mockReset();
     resetStore(store);
   });

@@ -16,17 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { isDeepStrictEqual } from 'node:util';
+
 import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
+import { type DroppedMutation, droppedMutationMessage, enableDelayedMutations, mutateData } from '../../lib/utils/object.ts';
+import { priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
+import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
-import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.ts';
+import {
+  CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
+  CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY,
+  getEntitiesFromDir,
+} from './support/index.ts';
 import type {
   ConfiguringEachEntityTaskParam,
   EntityToLoad,
@@ -84,7 +93,11 @@ const PRIORITY_WITH_FILTERED_ENTITIES = new Set<string>([WRITING_ENTITIES, POST_
 
 const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES]);
 const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
+// A `*` matches the priorities a name starts, the ones of the custom objects (`loadingService`) included.
 const PRIORITY_WITH_APPLICATION = new Set<string>([
+  'loading*',
+  'preparing*',
+  'postPreparing*',
   LOADING,
   COMPOSING_BOOTSTRAP,
   PREPARING,
@@ -108,9 +121,19 @@ const PRIORITY_WITH_APPLICATION = new Set<string>([
   POST_WRITING_ENTITIES,
 ]);
 
+/**
+ * Applies defaults to an entity, a field or a relationship, as `applicationDefaults` does to the application: a value it
+ * already has is kept.
+ */
+const withDefaults = (data: Record<string, any>, onDroppedMutation: (dropped: DroppedMutation) => void) => {
+  // A default may return the delay marker, it is applied once the entities are prepared (`finalizeMutations`).
+  enableDelayedMutations(data, { onDroppedMutation });
+  return (...defaults: any[]): void => mutateData(data, ...defaults.map(defaultsData => ({ __override__: false, ...defaultsData })));
+};
+
 const getFirstArgForPriority = (priorityName: string) => ({
   source: PRIORITY_WITH_SOURCE.has(priorityName),
-  application: PRIORITY_WITH_APPLICATION.has(priorityName),
+  application: priorityMatches(PRIORITY_WITH_APPLICATION, priorityName),
   applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.has(priorityName),
   entitiesToLoad: PRIORITY_WITH_ENTITIES_TO_LOAD.has(priorityName),
   entities: PRIORITY_WITH_ENTITIES.has(priorityName),
@@ -146,13 +169,11 @@ export default class BaseApplicationGenerator<
   static readonly POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, features);
+    super(args, options, { ...features, customPriorities: [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])] } as Features);
 
     if (this.options.help) {
       return;
     }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
 
     /* Add tasks allowing entities priorities to match normal priorities pattern */
     this.on('queueOwnTasks', () => {
@@ -228,38 +249,64 @@ export default class BaseApplicationGenerator<
   getEntityConfig(entityName: string, create = false): Storage | undefined {
     const entityPath = this.getEntityConfigPath(entityName);
     if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath, { transform: this.features.configTransform });
+    // The storage of each entity file is shared by the generators of the application: it keeps the config it read.
+    const storages = this.getContextData<Map<string, Storage>>(CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY, {
+      factory: () => new Map(),
+    });
+    let storage = storages.get(entityPath);
+    if (!storage) {
+      storage = this.createStorage(entityPath, { transform: this.features.configTransform });
+      storages.set(entityPath, storage);
+    }
+    return storage;
   }
 
   /**
    * get sorted list of entity names according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntityNames(): string[] {
-    return this.getExistingEntities().map(entity => entity.name);
+    return this.#getExistingEntityStorages().map(({ name }) => name);
   }
 
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntities(): { name: string; definition: Entity }[] {
-    function isBefore(
-      e1: { definition: { annotations?: { changelogDate?: number } } },
-      e2: { definition: { annotations?: { changelogDate?: number } } },
-    ): number {
-      return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
-    }
+    return this.#getExistingEntityStorages().map(({ name, storage }) => ({ name, definition: storage.getAll() as unknown as Entity }));
+  }
+
+  /**
+   * The storages of the existing entities, sorted according to changelog date.
+   * Only the annotations of each entity are read, as stored.
+   */
+  #getExistingEntityStorages(): { name: string; storage: Storage }[] {
+    // An entity without changelog date is ordered by the one it gets: a built-in entity the one of the creation timestamp,
+    // another one the next timestamp, after the others. So the order is the same at each generation.
+    const builtInDates: Record<string, string> = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp);
+    type ExistingEntity = {
+      name: string;
+      storage: Storage;
+      annotations?: { changelogDate?: number | string; incrementalChangelogDate?: number | string };
+    };
+    const date = ({ name, annotations }: ExistingEntity): number =>
+      Number(annotations?.incrementalChangelogDate ?? annotations?.changelogDate ?? builtInDates[name] ?? Infinity);
+    // Two entities without date, both after the others, compare as equal (Infinity - Infinity is NaN).
+    const isBefore = (e1: ExistingEntity, e2: ExistingEntity): number => date(e1) - date(e2) || 0;
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: Entity }[] = [];
+    const entities: ExistingEntity[] = [];
     for (const entityName of new Set([...((this.jhipsterConfig.entities as string[]) || []), ...getEntitiesFromDir(configDir)])) {
-      const definition: Entity = this.getEntityConfig(entityName)?.getAll() as unknown as Entity;
-      if (definition) {
-        entities.push({ name: entityName, definition });
+      const storage = this.getEntityConfig(entityName);
+      if (storage) {
+        entities.push({ name: entityName, storage, annotations: storage.get('annotations', { raw: true }) });
       }
     }
     entities.sort(isBefore);
-    this.jhipsterConfig.entities = entities.map(({ name }) => name);
+    const names = entities.map(({ name }) => name);
+    if (!isDeepStrictEqual(this.jhipsterConfig.entities, names)) {
+      this.jhipsterConfig.entities = names;
+    }
     return entities;
   }
 
@@ -398,6 +445,8 @@ export default class BaseApplicationGenerator<
       (entity as Entity).resetFakerSeed?.(seed);
     }
   }
+
+  readonly #logDroppedMutation = (dropped: DroppedMutation): void => this.log.debug(droppedMutationMessage(dropped));
 
   getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {
     const args = super.getArgsForPriority(priorityName as any);
@@ -608,10 +657,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY);
+          const entityDefaults = withDefaults(data.entity, this.#logDroppedMutation);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, entityDefaults }],
             });
           });
         });
@@ -628,10 +678,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_FIELD);
+          const fieldDefaults = withDefaults(data.field, this.#logDroppedMutation);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, fieldDefaults }],
             });
           });
         });
@@ -648,10 +699,11 @@ export default class BaseApplicationGenerator<
         this.#getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
           const args = this.getArgsForPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
+          const relationshipDefaults = withDefaults(data.relationship, this.#logDroppedMutation);
           tasks.forEach(task => {
             this.queueTask({
               ...task,
-              args: [{ ...args[0], description, ...data }],
+              args: [{ ...args[0], description, ...data, relationshipDefaults }],
             });
           });
         });

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { validations } from '../built-in-options/index.ts';
 
@@ -184,8 +184,7 @@ describe('jdl - JDLField', () => {
           type: 'String',
           comment: 'comment',
           validations: [
-            // @ts-expect-error
-            new JDLValidation(),
+            new JDLValidation({}),
             new JDLValidation({
               name: 'minlength',
               value: 42,

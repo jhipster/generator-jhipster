@@ -16,15 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { after, before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'expect-node';
 import { access, mkdir, mkdtemp, realpath, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { basename, join, resolve } from 'node:path';
 
 import { simpleGit } from 'simple-git';
 
-import { testBlueprintSupport } from '../../test/support/tests.ts';
-
+import { testBlueprintSupport } from '#test-support';
 import { runResult, skipPrettierHelpers as helpers } from '#testing';
 
 const generator = basename(import.meta.dirname);
@@ -51,7 +50,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should attach the git root to written files', () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toMatchObject({
           gitRoot: generator.destinationPath(),
         });
       });
@@ -99,7 +98,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should attach the parent repository root to written files', async () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toMatchObject({
           gitRoot: await realpath(parentDir),
         });
       });
@@ -113,7 +112,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should not attach a git root to written files', () => {
         const { generator } = runResult;
-        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).toEqual({});
+        expect(runResult.memFs.get(generator.destinationPath('.gitignore')).editorMetadata).not.toHaveProperty('gitRoot');
       });
     });
     describe('regenerating', () => {
@@ -124,6 +123,35 @@ describe(`generator - ${generator}`, () => {
       it('should create a single commit', async () => {
         const git = runResult.generator.createSimpleGit();
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
+      });
+    });
+    describe('regenerating the entities with --force-git', () => {
+      before(async () => {
+        await helpers.runJHipster('app').withOptions({ skipGit: false });
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false, forceGit: true });
+      });
+      it('should commit to the existing repository', async () => {
+        const git = runResult.generator.createSimpleGit();
+        await expect(git.log()).resolves.toMatchObject({ total: 2 });
+      });
+    });
+    describe('regenerating the entities without --force-git', () => {
+      before(async () => {
+        await helpers.runJHipster('app').withOptions({ skipGit: false });
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false });
+      });
+      it('should not commit', async () => {
+        const git = runResult.generator.createSimpleGit();
+        await expect(git.log()).resolves.toMatchObject({ total: 1 });
+      });
+    });
+    describe('regenerating the entities outside a repository', () => {
+      before(async () => {
+        await helpers.runJHipster('app');
+        await helpers.runJHipsterInApplication('entities').withOptions({ skipGit: false });
+      });
+      it('should not create .git', async () => {
+        await expect(access(resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
       });
     });
     describe('regenerating with --force-git', () => {

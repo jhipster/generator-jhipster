@@ -1,0 +1,661 @@
+/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
+
+import type { JDLRelationshipType } from '../runtime/relationship-types.ts';
+import type {
+  JDLLocation,
+  ParsedJDLAnnotation,
+  ParsedJDLApplicationConfig,
+  ParsedJDLApplicationDeclaration,
+  ParsedJDLApplications,
+  ParsedJDLDeployment,
+  ParsedJDLEntity,
+  ParsedJDLEntityField,
+  ParsedJDLEnum,
+  ParsedJDLEnumValue,
+  ParsedJDLOption,
+  ParsedJDLRelationship,
+  ParsedJDLRelationshipSide,
+  ParsedJDLUseOption,
+  ParsedJDLValidation,
+} from '../types/parsed.ts';
+import type { JDLApplicationOptionType } from '../types/parsing.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
+
+import { nodeLocation, setKeyLocations, setKeyValues, setLocation, setOtherLocation, tokenLocation } from './location.ts';
+import { setKind } from './nodes.ts';
+import {
+  type JDLApplicationStatement,
+  type JDLStatement,
+  groupApplicationStatements,
+  groupStatements,
+  setStatements,
+} from './statements.ts';
+
+/** A statement node holds one declaration. */
+type StatementContext = Partial<
+  Record<
+    | 'applicationDeclaration'
+    | 'entityDeclaration'
+    | 'constantDeclaration'
+    | 'deploymentDeclaration'
+    | 'relationDeclaration'
+    | 'enumDeclaration'
+    | 'optionDeclaration'
+    | 'useOptionDeclaration',
+    CstNode[]
+  >
+> &
+  Partial<Record<'JAVADOC', IToken[]>>;
+
+/** An application statement node holds one declaration. */
+type ApplicationStatementContext = Partial<
+  Record<
+    'applicationSubConfig' | 'applicationSubNamespaceConfig' | 'applicationSubEntities' | 'optionDeclaration' | 'useOptionDeclaration',
+    CstNode[]
+  >
+>;
+
+/**
+ * Drop the quotes of a STRING token. The content is kept as written, an escaped quote stays `\"`: a
+ * `@MapstructExpression` is copied into a java string literal.
+ */
+const parseStringLiteral = (image: string): string => image.slice(1, -1);
+
+const deduplicate = <T>(array: T[]): T[] => [...new Set(array)];
+
+/**
+ * @param onWarning - receives the warnings about what the jdl uses, a deprecated option for instance, with where it is written.
+ */
+export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime, onWarning: (message: string, location?: JDLLocation) => void) => {
+  const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
+
+  const warnIfDeprecated = (
+    key: string,
+    optionType: JDLApplicationOptionType | undefined,
+    grammar: 'application' | 'deployment',
+    location: JDLLocation | undefined,
+  ) => {
+    if (optionType?.deprecated) {
+      onWarning(`The ${key} ${grammar} option is deprecated: ${optionType.deprecated}`, location);
+    }
+  };
+
+  /** The binary option a statement keyword names, warning about a deprecated keyword. */
+  const binaryOptionName = (keyword: string, location: JDLLocation | undefined): string => {
+    for (const [name, { jdl }] of Object.entries(runtime.entityDefinition.configs)) {
+      if ((jdl.keyword ?? name) === keyword) {
+        return name;
+      }
+      if (jdl.deprecatedKeywords?.includes(keyword)) {
+        onWarning(`The ${keyword} option is deprecated, please use ${name} instead.`, location);
+        return name;
+      }
+    }
+    return keyword;
+  };
+
+  class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
+    /** Where the node being visited is written. */
+    location: JDLLocation | undefined;
+
+    constructor() {
+      super();
+      this.validateVisitor();
+    }
+
+    visit(node: CstNode | CstNode[], param?: unknown) {
+      const outer = this.location;
+      this.location = nodeLocation(Array.isArray(node) ? node[0] : node);
+      try {
+        return super.visit(node, param);
+      } finally {
+        this.location = outer;
+      }
+    }
+
+    prog(context: Record<'statement', CstNode[]>): ParsedJDLApplications {
+      const statements: JDLStatement[] = (context.statement ?? []).map(node => this.visit(node)).filter(Boolean);
+      return setStatements(groupStatements(statements, binaryOptionName), statements);
+    }
+
+    /** The statement a node holds, located where it is written; none for a javadoc that documents nothing. */
+    statement(context: StatementContext): JDLStatement | undefined {
+      const { location } = this;
+      if (context.constantDeclaration) {
+        const { name, value } = this.visit(context.constantDeclaration);
+        return { type: 'constant', name, value, location };
+      }
+      if (context.applicationDeclaration) return { type: 'application', application: this.visit(context.applicationDeclaration), location };
+      if (context.deploymentDeclaration) return { type: 'deployment', deployment: this.visit(context.deploymentDeclaration), location };
+      if (context.entityDeclaration) return { type: 'entity', entity: this.visit(context.entityDeclaration), location };
+      if (context.enumDeclaration) return { type: 'enum', enum: this.visit(context.enumDeclaration), location };
+      if (context.relationDeclaration) {
+        const relationships: ParsedJDLRelationship[] = this.visit(context.relationDeclaration);
+        return { type: 'relationships', cardinality: relationships[0]?.cardinality, relationships, location };
+      }
+      if (context.optionDeclaration) return { type: 'option', option: this.visit(context.optionDeclaration), location };
+      if (context.useOptionDeclaration) return { type: 'use', use: this.visit(context.useOptionDeclaration), location };
+      return undefined;
+    }
+
+    constantDeclaration(context: Record<'INTEGER' | 'NAME' | 'DECIMAL', IToken[]>) {
+      return {
+        name: context.NAME[0].image,
+        value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL?.[0].image,
+        location: this.location,
+      };
+    }
+
+    entityDeclaration(
+      context: Record<'ENTITY' | 'NAME' | 'JAVADOC', IToken[]> &
+        Record<'annotationDeclaration' | 'entityTableNameDeclaration' | 'entityBody', CstNode[]>,
+    ): ParsedJDLEntity {
+      const annotations: ParsedJDLAnnotation[] = [];
+      if (context.annotationDeclaration) {
+        context.annotationDeclaration.forEach(contextObject => {
+          annotations.push(this.visit(contextObject));
+        });
+      }
+
+      let documentation: string | null = null;
+      if (context.JAVADOC) {
+        documentation = trimComment(context.JAVADOC[0].image);
+      }
+
+      const name = context.NAME[0].image;
+
+      let tableName: string | undefined;
+      if (context.entityTableNameDeclaration) {
+        tableName = this.visit(context.entityTableNameDeclaration);
+      }
+
+      let body: ParsedJDLEntityField[] = [];
+      if (context.entityBody) {
+        body = this.visit(context.entityBody);
+      }
+
+      const entity = setLocation(setKind({ annotations, name, tableName, body, documentation }, 'Entity'), this.location);
+      // An entity without fields may be declared with or without braces.
+      return context.entityBody ? setOtherLocation(entity, 'bodyLocation', nodeLocation(context.entityBody[0])) : entity;
+    }
+
+    annotationDeclaration(context: Record<'AT' | 'value' | 'option', IToken[]>): ParsedJDLAnnotation {
+      const optionName = context.option[0].image;
+      if (!context.value) {
+        return setLocation(setKind({ optionName, type: 'UNARY' }, 'Annotation'), this.location);
+      }
+      const { image: valueImage } = context.value[0];
+      const { tokenType } = context.value[0];
+      let optionValue: ParsedJDLAnnotation['optionValue'];
+      switch (tokenType.name) {
+        case 'INTEGER':
+          optionValue = Number.parseInt(valueImage, 10);
+          break;
+        case 'DECIMAL':
+          optionValue = Number.parseFloat(valueImage);
+          break;
+        case 'TRUE':
+          optionValue = true;
+          break;
+        case 'FALSE':
+          optionValue = false;
+          break;
+        case 'STRING':
+          optionValue = parseStringLiteral(valueImage);
+          break;
+        default:
+          optionValue = valueImage;
+      }
+      return setLocation(setKind({ optionName, optionValue, type: 'BINARY' }, 'Annotation'), this.location);
+    }
+
+    entityTableNameDeclaration(context: Record<'NAME', IToken[]>): string {
+      return context.NAME[0].image;
+    }
+
+    entityBody(context: Record<'fieldDeclaration', CstNode[]>): ParsedJDLEntityField[] {
+      if (!context.fieldDeclaration) {
+        return [];
+      }
+      return context.fieldDeclaration.map(element => this.visit(element));
+    }
+
+    fieldDeclaration(
+      context: Record<'JAVADOC' | 'NAME', IToken[]> & Record<'annotationDeclaration' | 'validation' | 'type', CstNode[]>,
+    ): ParsedJDLEntityField {
+      const annotations: any[] = [];
+      if (context.annotationDeclaration) {
+        context.annotationDeclaration.forEach(contextObject => {
+          annotations.push(this.visit(contextObject));
+        });
+      }
+
+      // filter actual comment as the comment rule may be empty
+      const comment = context.JAVADOC ? trimComment(context.JAVADOC[0].image) : null;
+
+      let validations: ParsedJDLValidation[] = [];
+      if (context.validation) {
+        validations = context.validation.map(element => this.visit(element));
+      }
+
+      return setLocation(
+        setKind(
+          {
+            name: context.NAME[0].image,
+            // context.type is an array with a single item.
+            // in that case:
+            // this.visit(context.type) is equivalent to this.visit(context.type[0])
+            type: this.visit(context.type),
+            validations,
+            documentation: comment,
+            annotations,
+          },
+          'Field',
+        ),
+        this.location,
+      );
+    }
+
+    type(context: Record<'NAME', IToken[]>): string {
+      return context.NAME[0].image;
+    }
+
+    validation(context: Record<'REQUIRED' | 'UNIQUE', IToken[]> & Record<'valuedValidation', CstNode[]>): ParsedJDLValidation {
+      // only one of these alternatives can exist at the same time; a validation is keyed by its keyword, as written.
+      const keyword = context.REQUIRED ?? context.UNIQUE;
+      const validation: ParsedJDLValidation = keyword ? { key: keyword[0].image, value: '' } : this.visit(context.valuedValidation);
+      return setLocation(setKind(validation, 'Validation'), this.location);
+    }
+
+    valuedValidation(context: Record<'validationName' | 'NAME' | 'INTEGER' | 'DECIMAL' | 'REGEX', IToken[]>): ParsedJDLValidation {
+      const key = context.validationName[0].image;
+      if (context.NAME) {
+        return { key, value: context.NAME[0].image, constant: true };
+      }
+      if (context.REGEX) {
+        const patternImage = context.REGEX[0].image;
+        return { key, value: patternImage.substring(1, patternImage.length - 1) };
+      }
+      return { key, value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image };
+    }
+
+    relationDeclaration(context: Record<'relationshipType' | 'relationshipBody', CstNode[]>): ParsedJDLRelationship[] {
+      const cardinality = this.visit(context.relationshipType);
+      const relationshipBodies = context.relationshipBody.map(element => this.visit(element));
+
+      const declarationLocation = this.location;
+      relationshipBodies.forEach(relationshipBody => {
+        relationshipBody.cardinality = cardinality;
+        setOtherLocation(relationshipBody, 'declarationLocation', declarationLocation);
+      });
+
+      return relationshipBodies;
+    }
+
+    relationshipType(context: Record<'RELATIONSHIP_TYPE', IToken[]>): JDLRelationshipType {
+      // The token only matches the relationship types.
+      return context.RELATIONSHIP_TYPE[0].image as JDLRelationshipType;
+    }
+
+    relationshipBody(
+      context: Record<'from' | 'to' | 'annotationOnSourceSide' | 'annotationOnDestinationSide' | 'relationshipOptions', CstNode[]>,
+    ): Omit<ParsedJDLRelationship, 'cardinality'> {
+      const optionsForTheSourceSide = context.annotationOnSourceSide?.map(element => this.visit(element)) ?? [];
+      const optionsForTheDestinationSide = context.annotationOnDestinationSide?.map(element => this.visit(element)) ?? [];
+
+      const from = this.visit(context.from);
+      const to = this.visit(context.to);
+
+      const relationshipOptions: ParsedJDLAnnotation[] = [];
+      if (context.relationshipOptions) {
+        this.visit(context.relationshipOptions).forEach((option: ParsedJDLAnnotation) => relationshipOptions.push(option));
+      }
+
+      return setLocation(
+        setKind(
+          {
+            from,
+            to,
+            options: setKind(
+              {
+                global: relationshipOptions,
+                source: optionsForTheSourceSide,
+                destination: optionsForTheDestinationSide,
+              },
+              'RelationshipOptions',
+            ),
+          },
+          'Relationship',
+        ),
+        this.location,
+      );
+    }
+
+    relationshipSide(
+      context: Record<'NAME' | 'injectedField' | 'injectedFieldParam' | 'REQUIRED', IToken[]> & Record<'comment', CstNode[]>,
+    ): ParsedJDLRelationshipSide {
+      const documentation = this.visit(context.comment);
+      const name = context.NAME[0].image;
+
+      const required = !!context.REQUIRED;
+      let injectedField: string | null = null;
+
+      if (context.injectedField) {
+        injectedField = context.injectedField[0].image;
+
+        if (context.injectedFieldParam) {
+          injectedField += `(${context.injectedFieldParam[0].image})`;
+        }
+      }
+
+      const ast: any = {
+        name,
+        injectedField,
+        documentation,
+        required,
+      };
+
+      if (!injectedField) {
+        delete ast.required;
+      }
+      return setLocation(setKind(ast, 'RelationshipSide'), this.location);
+    }
+
+    relationshipOptions(context: Record<'relationshipOption', CstNode[]>): ParsedJDLAnnotation[] {
+      return context.relationshipOption.map(element => this.visit(element)).reduce((final, current) => [...final, current], []);
+    }
+
+    relationshipOption(context: Record<'NAME', IToken[]>): ParsedJDLAnnotation {
+      return setLocation(setKind({ optionName: context.NAME[0].image, type: 'UNARY' }, 'Annotation'), this.location);
+    }
+
+    enumDeclaration(context: Record<'NAME' | 'JAVADOC', IToken[]> & Record<'enumPropList', CstNode[]>): ParsedJDLEnum {
+      const name = context.NAME[0].image;
+      const values = this.visit(context.enumPropList);
+      let documentation: string | null = null;
+      if (context.JAVADOC) {
+        documentation = trimComment(context.JAVADOC[0].image);
+      }
+
+      return setLocation(setKind({ name, values, documentation }, 'Enum'), this.location);
+    }
+
+    enumPropList(context: Record<'enumProp', CstNode[]>): ParsedJDLEnumValue[] {
+      return context.enumProp.map(element => this.visit(element));
+    }
+
+    enumProp(context: Record<'enumPropKey' | 'enumPropValue' | 'enumPropValueWithQuotes' | 'JAVADOC', IToken[]>): ParsedJDLEnumValue {
+      const prop: any = {
+        key: context.enumPropKey[0].image,
+      };
+
+      if (context.JAVADOC) {
+        prop.comment = trimComment(context.JAVADOC[0].image);
+      }
+      if (context.enumPropValue) {
+        prop.value = context.enumPropValue[0].image;
+      }
+      if (context.enumPropValueWithQuotes) {
+        prop.value = context.enumPropValueWithQuotes[0].image.replace(/"/g, '');
+      }
+      return setLocation(setKind(prop, 'EnumValue'), this.location);
+    }
+
+    exclusion(context: Record<'NAME', IToken[]>): string[] {
+      return context.NAME.map(nameToken => nameToken.image);
+    }
+
+    optionDeclaration(
+      context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
+    ): ParsedJDLOption {
+      return setLocation(setKind(getOptionFromContext(context, this), 'Option'), this.location);
+    }
+
+    useOptionDeclaration(context: Record<'NAME', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>): ParsedJDLUseOption {
+      return setLocation(setKind(getSpecialUnaryOptionDeclaration(context, this), 'UseOption'), this.location);
+    }
+
+    filterDef(context: Record<'NAME' | 'STAR', IToken[]>): string[] {
+      let entityList: any[] = [];
+      if (context.NAME) {
+        entityList = context.NAME.map(nameToken => nameToken.image);
+      }
+
+      const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
+
+      if (context.STAR || entityOnlyListContainsAll) {
+        entityList = ['*'];
+      }
+
+      return deduplicate(entityList);
+    }
+
+    comment(context: Record<'JAVADOC', IToken[]>) {
+      if (context.JAVADOC) {
+        return trimComment(context.JAVADOC[0].image);
+      }
+
+      return null;
+    }
+
+    deploymentDeclaration(context: Record<'deploymentConfigDeclaration', CstNode[]>): ParsedJDLDeployment {
+      const configProps = (context.deploymentConfigDeclaration ?? []).map(element => this.visit(element));
+      return setLocation(setKeyValues(setKind({}, 'Deployment') as ParsedJDLDeployment, configProps), this.location);
+    }
+
+    deploymentConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'deploymentConfigValue', CstNode[]>) {
+      const key = context.NAME[0].image;
+      const value = this.visit(context.deploymentConfigValue);
+
+      warnIfDeprecated(key, runtime.deploymentDefinition.optionTypes[key], 'deployment', this.location);
+
+      return { key, value, location: this.location };
+    }
+
+    deploymentConfigValue(
+      context: Record<'INTEGER' | 'STRING' | 'BOOLEAN', IToken[]> & Record<'qualifiedName' | 'list' | 'quotedList', CstNode[]>,
+    ) {
+      return this.configValue(context);
+    }
+
+    applicationDeclaration(context: Record<'applicationSubDeclaration', CstNode[]>): ParsedJDLApplicationDeclaration {
+      return setLocation(this.visit(context.applicationSubDeclaration), this.location);
+    }
+
+    applicationSubDeclaration(context: Record<'applicationStatement', CstNode[]>): ParsedJDLApplicationDeclaration {
+      const statements: JDLApplicationStatement[] = (context.applicationStatement ?? []).map(node => this.visit(node)).filter(Boolean);
+      return setStatements(groupApplicationStatements(statements, binaryOptionName), statements);
+    }
+
+    /** The statement of an application block a node holds, located where it is written. */
+    applicationStatement(context: ApplicationStatementContext): JDLApplicationStatement | undefined {
+      const { location } = this;
+      if (context.applicationSubConfig) return { type: 'config', config: this.visit(context.applicationSubConfig), location };
+      if (context.applicationSubNamespaceConfig) {
+        const { namespace, config } = this.visit(context.applicationSubNamespaceConfig);
+        return { type: 'namespaceConfig', namespace, config, location };
+      }
+      if (context.applicationSubEntities) return { type: 'entities', entities: this.visit(context.applicationSubEntities), location };
+      if (context.optionDeclaration) return { type: 'option', option: this.visit(context.optionDeclaration), location };
+      if (context.useOptionDeclaration) return { type: 'use', use: this.visit(context.useOptionDeclaration), location };
+      return undefined;
+    }
+
+    applicationSubNamespaceConfig(context: Record<'namespace', IToken[]> & Record<'applicationNamespaceConfigDeclaration', CstNode[]>) {
+      const namespace = context.namespace[0].image;
+      const configProps = (context.applicationNamespaceConfigDeclaration ?? []).map(element => this.visit(element));
+      return { namespace, config: setLocation(setKeyValues(setKind({}, 'NamespaceConfig'), configProps), this.location) };
+    }
+
+    applicationNamespaceConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'namespaceConfigValue', CstNode[]>) {
+      const key = context.NAME[0].image;
+      const value = this.visit(context.namespaceConfigValue);
+
+      return { key, value, location: this.location };
+    }
+
+    namespaceConfigValue(
+      context: Record<'INTEGER' | 'STRING' | 'BOOLEAN', IToken[]> & Record<'qualifiedName' | 'list' | 'quotedList', CstNode[]>,
+    ) {
+      if (context.qualifiedName) {
+        return this.visit(context.qualifiedName);
+      }
+      if (context.list) {
+        return this.visit(context.list);
+      }
+      if (context.quotedList) {
+        return this.visit(context.quotedList);
+      }
+      if (context.INTEGER) {
+        return context.INTEGER[0].image;
+      }
+      if (context.STRING) {
+        return parseStringLiteral(context.STRING[0].image);
+      }
+      if (context.BOOLEAN) {
+        return context.BOOLEAN[0].image === 'true';
+      }
+
+      /* istanbul ignore next */
+      throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
+    }
+
+    applicationSubConfig(context: Record<'applicationConfigDeclaration', CstNode[]>): ParsedJDLApplicationConfig {
+      const configProps = (context.applicationConfigDeclaration ?? []).map(element => this.visit(element));
+      return setKeyValues(setKind({}, 'ApplicationConfig') as ParsedJDLApplicationConfig, configProps);
+    }
+
+    applicationSubEntities(context: Record<'filterDef' | 'exclusion', CstNode[]>) {
+      return setKind(getEntityListFromContext(context, this), 'ApplicationEntities');
+    }
+
+    applicationConfigDeclaration(context: Record<'NAME', IToken[]> & Record<'configValue', CstNode[]>) {
+      const key = context.NAME[0].image;
+      const value = this.visit(context.configValue);
+
+      warnIfDeprecated(key, runtime.applicationDefinition.optionTypes[key], 'application', this.location);
+
+      return { key, value, location: this.location };
+    }
+
+    configValue(context: Record<'INTEGER' | 'STRING' | 'BOOLEAN', IToken[]> & Record<'qualifiedName' | 'list' | 'quotedList', CstNode[]>) {
+      if (context.qualifiedName) {
+        return this.visit(context.qualifiedName);
+      }
+      if (context.list) {
+        return this.visit(context.list);
+      }
+      if (context.quotedList) {
+        return this.visit(context.quotedList);
+      }
+      if (context.INTEGER) {
+        return context.INTEGER[0].image;
+      }
+      if (context.STRING) {
+        return parseStringLiteral(context.STRING[0].image);
+      }
+      if (context.BOOLEAN) {
+        return context.BOOLEAN[0].image === 'true';
+      }
+
+      /* istanbul ignore next */
+      throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
+    }
+
+    qualifiedName(context: Record<'NAME', IToken[]>): string {
+      return context.NAME.map(namePart => namePart.image).join('.');
+    }
+
+    list(context: Record<'NAME', IToken[]>): string[] {
+      if (!context.NAME) {
+        return [];
+      }
+      return context.NAME.map(namePart => namePart.image);
+    }
+
+    quotedList(context: Record<'STRING', IToken[]>): string[] {
+      if (!context.STRING) {
+        return [];
+      }
+      return context.STRING.map(namePart => parseStringLiteral(namePart.image));
+    }
+  }
+
+  return new JDLAstBuilderVisitor();
+};
+
+/** Where each entity name of a list, and of its exclusion, is written: the first occurrence of a name. */
+function getEntityNameLocations(context: Record<'filterDef' | 'exclusion', CstNode[]>): Record<string, JDLLocation> {
+  const nameTokens = [context.filterDef?.[0], context.exclusion?.[0]].flatMap(node => (node?.children.NAME ?? []) as IToken[]);
+  const keyLocations: Record<string, JDLLocation> = {};
+  for (const token of nameTokens) {
+    keyLocations[token.image] ??= tokenLocation(token);
+  }
+  return keyLocations;
+}
+
+function getEntityListFromContext(context: Record<'filterDef' | 'exclusion', CstNode[]>, visitor: ICstVisitor<any, any>) {
+  const entityList = visitor.visit(context.filterDef);
+
+  let excluded = [];
+  if (context.exclusion) {
+    excluded = visitor.visit(context.exclusion);
+  }
+
+  return setKeyLocations({ entityList, excluded }, getEntityNameLocations(context));
+}
+
+/** An option statement: unary without a value, binary with the `with` value. */
+function getOptionFromContext(
+  context: Record<'option' | 'method' | 'methodPath', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
+  visitor: ICstVisitor<any, any>,
+) {
+  const { entityList, excluded } = getEntityListFromContext(context, visitor);
+  const value = context.method?.[0] ?? context.methodPath?.[0];
+  return setKeyLocations(
+    {
+      optionName: context.option[0].image,
+      ...(value ? { optionValue: value.image } : {}),
+      list: entityList,
+      excluded,
+    },
+    getEntityNameLocations(context),
+  );
+}
+
+function getSpecialUnaryOptionDeclaration(
+  context: Record<'NAME', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>,
+  visitor: ICstVisitor<any, any>,
+) {
+  const optionValues = context.NAME.map(name => name.image);
+  const list = visitor.visit(context.filterDef);
+
+  let excluded = [];
+  if (context.exclusion) {
+    excluded = visitor.visit(context.exclusion);
+  }
+
+  return setKeyLocations({ optionValues, list, excluded }, getEntityNameLocations(context));
+}
+
+function trimComment(comment: string): string {
+  return comment.replace(/^\/\*+ */, '').replace(/ *\*+\/$/, '');
+}

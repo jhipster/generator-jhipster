@@ -16,15 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe } from 'esmocha';
+import { describe } from 'expect-node';
 import { basename } from 'node:path';
 
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
-
 import Generator from './index.ts';
+
+import { checkEnforcements, shouldSupportFeatures } from '#test-support';
 
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
+  checkEnforcements({}, generator);
 });

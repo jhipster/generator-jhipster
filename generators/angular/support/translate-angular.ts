@@ -257,7 +257,7 @@ const pipeEnumTranslation = (
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
   if (!parsedInterpolate?.value) {
-    throw new Error(`Value is required for TagEnum ${key}.`);
+    throw new Error(`Value is required for PipeEnum ${key}.`);
   }
   const { value, fallback } = parsedInterpolate;
   if (enableTranslation) {
@@ -314,9 +314,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
     if (/(:?\.html|.ts)$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
-    }
-    if (/(:?\.html|.ts)$/.test(filePath)) {
-      content = translationReplacer ? translationReplacer?.(content, filePath) : content;
+      content = translationReplacer ? translationReplacer(content, filePath) : content;
     }
     if (!enableTranslation) {
       if (/(:?routes?|module)\.ts$/.test(filePath)) {

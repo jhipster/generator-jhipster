@@ -101,23 +101,6 @@
         ],
         "sbs": false
       },
-      "jdl": {
-        "command": true,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "default",
-          "postWriting",
-          "install",
-          "postInstall",
-          "end"
-        ],
-        "sbs": false
-      },
       "languages": {
         "command": true,
         "priorities": [
@@ -222,6 +205,6 @@
     "localBlueprint": false,
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",
-    "subGenerators": ["client", "common", "cypress", "playwright", "server", "jdl", "spring-data-relational", "languages", "angular"]
+    "subGenerators": ["client", "common", "cypress", "playwright", "server", "spring-data-relational", "languages", "angular"]
   }
 }

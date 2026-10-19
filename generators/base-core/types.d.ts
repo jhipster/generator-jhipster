@@ -19,7 +19,7 @@
 import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
 
 import type { JHipsterCommandDefinition, JHipsterConfigs } from '../../lib/command/types.ts';
-import type { JDLApplicationConfig, JDLDefinitions } from '../../lib/jdl/core/parsing/types/parsing.ts';
+import type { JDLApplicationConfig, JDLDefinitions } from '../../lib/jdl/core/parsing/index.ts';
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
@@ -56,6 +56,13 @@ export type Options = YeomanOptions & {
 };
 
 export type Features = YeomanFeatures & {
+  /**
+   * Custom objects, like `[{ name: 'service' }]`, each with its phases before the `before` priority, the post preparing
+   * one by default: `loadingService`, `preparingService` and `postPreparingService`, with the `service` object. The
+   * generator implements the `service` getter giving the object.
+   */
+  customObjects?: { name: string; before?: string }[];
+
   /**
    * Wraps write context and shows removed fields and replacements if exists.
    */

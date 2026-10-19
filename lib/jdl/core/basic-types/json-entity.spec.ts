@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import JSONEntity from './json-entity.ts';
 
@@ -244,7 +244,7 @@ JSONEntity {
     });
     describe('when passing something', () => {
       before(() => {
-        // @ts-expect-error TODD convert to relationships
+        // @ts-expect-error TODO convert to relationships
         entity.addRelationships([42, 43]);
       });
 

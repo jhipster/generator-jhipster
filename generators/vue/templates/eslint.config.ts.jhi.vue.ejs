@@ -20,9 +20,10 @@
 import js from '@eslint/js';
 import vue from 'eslint-plugin-vue';
 import tseslint from 'typescript-eslint';
+import vitest from '@vitest/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
+  { ignores: ['<%- relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
   js.configs.recommended,
   ...tseslint.configs.recommended.map(config =>
     config.name === 'typescript-eslint/base' ? config : { ...config, files: [ '**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts' ] },
@@ -42,7 +43,7 @@ import tseslint from 'typescript-eslint';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.vue', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.vue', '<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
     languageOptions: {
       globals: { ...globals.browser },
     },
@@ -66,7 +67,8 @@ import tseslint from 'typescript-eslint';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    extends: [vitest.configs.recommended],
     rules: {
       '@typescript-eslint/no-empty-function': 'off',
     },

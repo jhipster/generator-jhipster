@@ -2,36 +2,6 @@
 
 exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 {
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -99,7 +69,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -621,7 +591,7 @@ helm upgrade --install mspsql ./mspsql-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -819,7 +789,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: mspsql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -1101,20 +1071,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway and ingress should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -1179,7 +1135,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -1688,7 +1644,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -1939,35 +1895,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway and mysql microservice should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -2035,7 +1962,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -2557,7 +2484,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -2808,7 +2735,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -3006,20 +2933,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway with istio routing files should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -3084,7 +2997,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -3593,7 +3506,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -3844,78 +3757,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mongodb, mariadb microservices should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "04-mongo/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmongodb",
-    "databaseType": "mongodb",
-    "entities": [],
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "07-mariadb/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmariadb",
-    "entities": [],
-    "prodDatabaseType": "mariadb",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -3993,7 +3834,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -4554,7 +4395,7 @@ helm upgrade --install msmariadb ./msmariadb-\${suffix} --namespace default
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -4805,7 +4646,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmariadb is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5011,7 +4852,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmongodb is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5206,7 +5047,7 @@ mongodb-replicaset:
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5404,7 +5245,7 @@ spec:
 version: 1.0.0
 appVersion: 1.0.0
 description: mspsql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -5686,21 +5527,6 @@ spec:
 
 exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -5765,7 +5591,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -8670,7 +8496,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -8878,21 +8704,6 @@ metadata:
 
 exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace should match files snapshot 1`] = `
 {
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -8957,7 +8768,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -9467,7 +9278,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 version: 1.0.0
 appVersion: 1.0.0
 description: msmysql is a JHipster based microservice application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -9673,20 +9484,6 @@ metadata:
 
 exports[`generator - Knative Using Helm generator type only gateway should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -9751,7 +9548,7 @@ For Kubernetes specific more information, refer to the \`kubernetes\` sub-genera
 version: 1.0.0
 appVersion: 1.0.0
 description: JHipster common cross cutting services
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - search
 - messaging
@@ -10261,7 +10058,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace jhipsternamespace
 version: 1.0.0
 appVersion: 1.0.0
 description: jhgate is a JHipster based gateway application
-icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.png
 keywords:
 - spring
 - angular
@@ -10520,36 +10317,6 @@ metadata:
 
 exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 {
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -11542,20 +11309,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway and ingress should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -12310,35 +12063,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway and mysql microservice should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -13292,20 +13016,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway with istio routing files should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -14060,93 +13770,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "03-psql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mspsql",
-    "entities": [],
-    "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "04-mongo/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmongodb",
-    "databaseType": "mongodb",
-    "entities": [],
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "07-mariadb/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmariadb",
-    "entities": [],
-    "prodDatabaseType": "mariadb",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "11-mssql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmssqldb",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mssql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -16289,21 +15912,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -19704,21 +19312,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type mysql microservice with custom namespace should match files snapshot 1`] = `
 {
-  "02-mysql/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "msmysql",
-    "databaseType": "sql",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8081,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -20428,20 +20021,6 @@ spec:
 
 exports[`generator - Knative Using K8s generator type only gateway should match files snapshot 1`] = `
 {
-  "01-gateway/.yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "jhgate",
-    "entities": [],
-    "prodDatabaseType": "mysql",
-    "serverPort": 8080,
-    "serviceDiscoveryType": "consul"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
   "knative/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {

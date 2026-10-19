@@ -14,6 +14,7 @@ export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]
 export type Control = {
   readonly existingProject: boolean;
   readonly jhipsterOldVersion: string | null;
+  /** Whether `docker compose` is installed: detected when read, once for the process. */
   readonly environmentHasDockerCompose?: boolean;
   readonly customizeRemoveFiles: ((file: string) => string | undefined)[];
   /**
@@ -53,7 +54,7 @@ export type Options = CoreOptions &
     reproducibleTests?: boolean;
     entities?: string[];
 
-    jhipsterContext?: BaseGenerator;
+    jhipsterContext?: BaseGenerator<Config, Options, Source, Features, any>;
     composeWithLocalBlueprint?: boolean;
   };
 

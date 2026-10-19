@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import type { JHipsterConfigs } from '../command/types.ts';
-import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JHipsterCommandDefinition, JHipsterConfigs } from '../command/types.ts';
+import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/parsing/index.ts';
 import { resolveGeneratorDependencies } from '../resolver/generator-dependencies.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
 
@@ -57,14 +57,27 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
   };
 };
 
-/** The configs of a generator and of everything it imports, the dependency graph the cli resolves. */
-const lookupConfigsFrom = (generator: string): JHipsterConfigs => {
+/**
+ * A property of the commands of a generator and of everything it imports, the dependency graph the cli resolves. The
+ * types and the validations of the fields are merged one by one.
+ */
+export const lookupCommandsPropertyFrom = <const Property extends 'configs' | 'entity' | 'field' | 'relationship'>(
+  generator: string,
+  property: Property,
+): NonNullable<JHipsterCommandDefinition[Property]> => {
   const store = getJHipsterStore();
-  const configs: JHipsterConfigs = {};
+  const merged: Record<string, any> = {};
   for (const { command } of resolveGeneratorDependencies([generator], { getGeneratorMeta: namespace => store.getMeta(namespace) })) {
-    Object.assign(configs, command?.configs);
+    const value: Record<string, any> | undefined = command?.[property];
+    if (property === 'field') {
+      for (const [kind, declared] of Object.entries(value ?? {})) {
+        merged[kind] = { ...merged[kind], ...declared };
+      }
+    } else {
+      Object.assign(merged, value);
+    }
   }
-  return configs;
+  return merged as NonNullable<JHipsterCommandDefinition[Property]>;
 };
 
 let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
@@ -73,7 +86,7 @@ let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
  * moving into any command `app` reaches is picked up without a list to maintain.
  */
 export const getDefaultJDLApplicationConfig = (): Readonly<JDLApplicationConfig> => {
-  defaultJDLApplicationConfig ??= Object.freeze(buildJDLApplicationConfig(lookupConfigsFrom('app')));
+  defaultJDLApplicationConfig ??= Object.freeze(buildJDLApplicationConfig(lookupCommandsPropertyFrom('app', 'configs')));
   return defaultJDLApplicationConfig;
 };
 
@@ -109,6 +122,6 @@ let defaultJDLDeploymentConfig: Readonly<JDLApplicationConfig>;
  * types it imports, `docker-compose` and `kubernetes`.
  */
 export const getDefaultJDLDeploymentConfig = (): Readonly<JDLApplicationConfig> => {
-  defaultJDLDeploymentConfig ??= Object.freeze(buildJDLApplicationConfig(lookupConfigsFrom('deployment')));
+  defaultJDLDeploymentConfig ??= Object.freeze(buildJDLApplicationConfig(lookupCommandsPropertyFrom('deployment', 'configs')));
   return defaultJDLDeploymentConfig;
 };

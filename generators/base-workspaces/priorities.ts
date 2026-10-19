@@ -20,7 +20,7 @@
 import type { Priority } from 'yeoman-generator';
 
 import type CoreGenerator from '../base-core/generator.ts';
-import { PRIORITY_NAMES as PRIORITY_NAMES_BASE, QUEUES as QUEUES_BASE, QUEUE_PREFIX } from '../base-core/priorities.ts';
+import { PRIORITY_NAMES as PRIORITY_NAMES_BASE, QUEUE_PREFIX } from '../base-core/priorities.ts';
 
 const { DEFAULT } = PRIORITY_NAMES_BASE;
 
@@ -69,13 +69,6 @@ export const CUSTOM_PRIORITIES = (
   ] satisfies Priority[]
 ).reverse();
 
-const WORKSPACES_QUEUES = {
-  PROMPTING_WORKSPACES_QUEUE,
-  CONFIGURING_WORKSPACES_QUEUE,
-  LOADING_WORKSPACES_QUEUE,
-  PREPARING_WORKSPACES_QUEUE,
-};
-
 export const WORKSPACES_PRIORITY_NAMES = {
   PROMPTING_WORKSPACES,
   CONFIGURING_WORKSPACES,
@@ -87,11 +80,6 @@ export const PRIORITY_NAMES = {
   ...PRIORITY_NAMES_BASE,
   ...WORKSPACES_PRIORITY_NAMES,
 } as const;
-
-export const QUEUES = {
-  ...QUEUES_BASE,
-  ...WORKSPACES_QUEUES,
-};
 
 export const PRIORITY_NAMES_LIST = [
   PRIORITY_NAMES.INITIALIZING,

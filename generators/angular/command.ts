@@ -20,6 +20,9 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   configs: {},
+  entity: {
+    angularJSSuffix: { description: 'Suffix of the entities in the client', jdl: { type: 'binary', keyword: 'angularSuffix' } },
+  },
   import: [],
 } as const satisfies JHipsterCommandDefinition;
 

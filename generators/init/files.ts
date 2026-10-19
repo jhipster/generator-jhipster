@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 export const files = {
-  git: [{ templates: ['.gitignore.jhi', '.gitattributes.jhi'] }],
   global: [{ templates: ['.editorconfig.jhi'] }],
 };
 

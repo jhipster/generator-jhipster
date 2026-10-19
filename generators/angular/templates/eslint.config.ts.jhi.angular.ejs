@@ -21,9 +21,11 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 // For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_ESLINT.md
 import angular from 'angular-eslint';
+import vitest from '@vitest/eslint-plugin';
+import stylistic from '@stylistic/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', 'dist/'] },
+  { ignores: ['<%- relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', 'dist/'] },
   eslint.configs.recommended,
   {
     files: ['**/*.{js,cjs,mjs}'],
@@ -32,8 +34,11 @@ import angular from 'angular-eslint';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
     extends: [...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylistic, ...angular.configs.tsRecommended],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -116,17 +121,18 @@ import angular from 'angular-eslint';
       'no-new-wrappers': 'error',
       'object-shorthand': ['error', 'always', { avoidExplicitReturnArrows: true }],
       radix: 'error',
-      'spaced-comment': ['warn', 'always'],
+      '@stylistic/spaced-comment': ['warn', 'always'],
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    extends: [vitest.configs.recommended],
     rules: {
       '@typescript-eslint/no-empty-function': 'off',
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.html'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       '@angular-eslint/template/click-events-have-key-events': 'off',

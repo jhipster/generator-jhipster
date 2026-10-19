@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
+import { before, describe, it } from 'expect-node';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import {

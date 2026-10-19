@@ -16,16 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
 import { matchElasticSearchDocker } from '../spring-boot/generators/data-elasticsearch/__test-support/elastic-search-matcher.ts';
 
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.ts';
 import Generator from './index.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,

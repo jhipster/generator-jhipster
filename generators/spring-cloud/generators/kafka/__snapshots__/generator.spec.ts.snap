@@ -50,6 +50,13 @@ exports[`generator - spring-cloud:kafka with defaults options should call source
         "scope": "test",
       },
     ],
+    [
+      {
+        "artifactId": "awaitility",
+        "groupId": "org.awaitility",
+        "scope": "test",
+      },
+    ],
   ],
   "addMainLog": [
     {

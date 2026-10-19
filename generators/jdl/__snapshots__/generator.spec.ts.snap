@@ -162,7 +162,7 @@ Options:
   --export-application                     Serialize the generated application instead of writing it to disk
   --interactive                            Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders
   --json-only                              Generate only the JSON files and skip entity regeneration
-  --ignore-application                     Ignores application generation
+  --ignore-application                     Ignores application generation; false generates the application of the current folder with the entities of a jdl without application
   --ignore-deployments                     Ignores deployments generation
   --skip-sample-repository                 Disable fetching sample files when the file is not a URL
   --inline <value>                         Pass JDL content inline. Argument can be skipped when passing this (env: JHI_JDL)
@@ -181,10 +181,12 @@ Options:
   --skip-checks                            Check the status of the required tools
   --experimental                           Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
+  --global-blueprints <value>              A comma separated list of blueprints to use for every project generated, the ones in other folders included (the applications of a jdl or of a workspace, the deployments), stored in each one
   --disable-blueprints                     Disable blueprints support
   -d, --debug                              Enable debugger
   --defaults                               Execute jhipster with default config
   --reproducible                           Try to reproduce changelog
+  --reproducible-secrets                   Derive the generated secrets (jwtSecretKey, rememberMeKey, development KeyStore) from the creation timestamp
   --node-package-manager <value>           Force an unsupported client package manager
   --ignore-errors                          Don't fail on prettier errors.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
@@ -201,7 +203,7 @@ Options:
   --skip-commit-hook                       Skip adding husky commit hooks
   --enable-swagger-codegen                 API first development using OpenAPI-generator
   --search-engine <value>                  Provide search engine for the application when skipping server side generation (choices: "no", "elasticsearch", "couchbase")
-  --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
+  --skip-check-length-of-identifier        Skip checking the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Builder, { type XmlBuilderOptions } from 'fast-xml-builder';
+import FastXmlBuilder, { type XmlBuilderOptions } from 'fast-xml-builder';
 import { type X2jOptions, XMLParser } from 'fast-xml-parser';
 
 import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.ts';
@@ -29,6 +29,6 @@ export const sortPomFile = (pomFile: string, { xmlParserOptions, xmlBuildOptions
   const pomObject = parser.parse(pomFile);
   pomObject.project = sortPomProject(pomObject.project);
 
-  const builder = new Builder({ ...defaultXmlBuildOptions, ...xmlBuildOptions });
+  const builder = new FastXmlBuilder({ ...defaultXmlBuildOptions, ...xmlBuildOptions });
   return formatPomFirstLevel(builder.build(pomObject));
 };

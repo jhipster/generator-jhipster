@@ -1,6 +1,6 @@
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
-import { type Config, defineConfig } from 'eslint/config';
+import { defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import ejs from 'eslint-plugin-ejs-templates';
 import imports from 'eslint-plugin-import-x';
@@ -19,15 +19,13 @@ const jsTsFiles = [...jsFiles, ...tsFiles];
 export default defineConfig(
   {
     files: jsTsFiles,
+    extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
         ...globals.node,
       },
-    },
-    rules: {
-      ...js.configs.recommended.rules,
     },
   },
   { ignores: ['dist', 'docs'] },
@@ -47,11 +45,13 @@ export default defineConfig(
     ignores: [
       // The base classes define the priority API itself: each `as<Priority>TaskGroup` helper is deliberately
       // paired with the priority it types, so their members are not in running order and are not meant to be.
+      // Their plain priority getters are the defaults subclasses override, so they are not registered there either.
       'generators/base/generator.ts',
       'generators/base-*/generator.ts',
     ],
     plugins: { jhipster: jhipsterPlugin },
     rules: {
+      'jhipster/no-unregistered-task-group': 'error',
       'jhipster/task-group-order': 'error',
     },
   },
@@ -59,7 +59,6 @@ export default defineConfig(
     files: tsFiles,
     extends: [ts.configs.recommended, ts.configs.stylistic],
     languageOptions: {
-      parser: ts.parser,
       parserOptions: {
         project: ['./tsconfig.spec.json'],
       },
@@ -98,20 +97,11 @@ export default defineConfig(
     files: ['**/*.spec.ts'],
     rules: {
       '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
   {
     files: jsTsFiles,
-    ...(imports.flatConfigs.recommended as Config),
-    ...(imports.flatConfigs.typescript as Config),
-    languageOptions: {
-      // import plugin does not use ecmaVersion and sourceType from languageOptions object
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: 'module',
-      },
-    },
+    extends: [imports.flatConfigs.recommended, imports.flatConfigs.typescript],
     settings: {
       'import-x/resolver-next': [createTypeScriptImportResolver()],
     },
@@ -127,7 +117,6 @@ export default defineConfig(
       'logical-assignment-operators': 'error',
       'no-use-before-define': ['error', 'nofunc'],
       'no-multi-str': 'error',
-      'no-irregular-whitespace': 'error',
       'no-console': 'error',
       'no-template-curly-in-string': 'error',
       'no-useless-concat': 'error',
@@ -157,7 +146,7 @@ export default defineConfig(
       prettierBlocklist: true,
       stylisticBlocklist: true,
       experimental: true,
-      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData'],
+      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData', 'relativeDir'],
     },
     js.configs.recommended,
     stylistic.configs.customize({

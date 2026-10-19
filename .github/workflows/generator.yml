@@ -57,8 +57,6 @@ jobs:
       - run: npx -y --package generator-jhipster-$(./bin/jhipster.cjs --version).tgz jhipster --version
       - run: npm test
         if: >-
-          !contains(github.event.head_commit.message, '[ci skip]') &&
-          !contains(github.event.head_commit.message, '[skip ci]') &&
           !contains(github.event.pull_request.title, '[skip ci]') &&
           !contains(github.event.pull_request.title, '[ci skip]') &&
           (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))

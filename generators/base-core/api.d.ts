@@ -2,7 +2,14 @@ import type CoreGenerator from './index.ts';
 
 export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
 
-export type EditFileOptions = { create?: boolean; ignoreNonExisting?: boolean | string; assertModified?: boolean; autoCrlf?: boolean };
+export type EditFileOptions = {
+  create?: boolean;
+  ignoreNonExisting?: boolean | string;
+  assertModified?: boolean;
+  autoCrlf?: boolean;
+  /** Metadata attached to the file, merged over the generator's `editorMetadata`. */
+  metadata?: EditorMetadata;
+};
 
 /**
  * Metadata attached to the files written through the generator write helpers.
@@ -13,6 +20,12 @@ export type EditorMetadata = {
   gitRoot?: string;
   /** Remove the `jhipster-needle-` lines from the file when committing. */
   removeNeedles?: boolean;
+  /** Format the file with prettier when committing, even if its extension is not one prettier formats by default. */
+  prettier?: boolean;
+  /** A write once file (`override` false): written from its template when it does not exist, written back as it is otherwise. */
+  writeOnce?: boolean;
+  /** The multi-step template (`.jhi`) and fragment (`.jhi.*`) files merged into the file. */
+  mergedFiles?: string[];
 };
 
 export type CascadedEditFileCallback<Generator = CoreGenerator> = (
@@ -40,6 +53,8 @@ export type WriteFileTemplate<DataType, Generator = CoreGenerator> =
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
       options?: Record<string, object>;
+      /** Metadata attached to the file, merged over the generator's `editorMetadata`. */
+      metadata?: EditorMetadata;
       override?: DataCallback<boolean, DataType, Generator>;
     };
 

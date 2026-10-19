@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { lowerFirst, sortedUniqBy } from 'lodash-es';
+import { camelCase, lowerFirst, uniqBy } from 'lodash-es';
 
+import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
@@ -29,7 +30,7 @@ import { editPropertiesFileCallback } from '../base-core/support/properties-file
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
 import type { Source as CommonSource } from '../common/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
-import { addJavaImport, generateKeyStoreContents, javaBeanCase } from '../java/support/index.ts';
+import { addJavaImport, createKeyStore, javaBeanCase } from '../java/support/index.ts';
 import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
   getJavaValueGeneratorForType,
@@ -39,6 +40,7 @@ import {
 
 import { mutateFilterableField, mutateFilterableRelationship } from './application.ts';
 import cleanupTask from './cleanup.ts';
+import command from './command.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
 import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
@@ -473,9 +475,11 @@ ${classProperties
 
         const hasAnyAuthority = (authorities: string[]): string | undefined =>
           authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
-        mutateData(entity, {
+        mutateData(entity, getEntityDerivedPropertyMutations(command.entity), {
           entityPersistenceLayer: true,
           entityRestLayer: true,
+          entityAlertName: ({ clientRootFolder, skipUiGrouping, entityClass, entityInstance }) =>
+            clientRootFolder && !skipUiGrouping ? camelCase(`${clientRootFolder}${entityClass}`) : entityInstance,
           entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),
           entitySpringReadPreAuthorize: hasAnyAuthority([
             ...(entity.entityAuthority?.split(',') ?? []),
@@ -581,13 +585,51 @@ ${classProperties
           }
         }
       },
+      prepareTestTextValues({ entity }) {
+        // The text values of the resource integration test: the minimum and maximum lengths respected, matching the pattern.
+        entity.resetFakerSeed?.('resource-it');
+        for (const field of entity.fields) {
+          if (!field.fieldTypeString && !field.blobContentTypeText) continue;
+          let sampleTextLength = 10;
+          if (field.fieldValidateRulesMinlength! > sampleTextLength) {
+            sampleTextLength = field.fieldValidateRulesMinlength!;
+          }
+          if (field.fieldValidateRulesMaxlength! < sampleTextLength) {
+            sampleTextLength = field.fieldValidateRulesMaxlength!;
+          }
+          let sampleTextString = 'A'.repeat(sampleTextLength);
+          let updatedTextString = 'B'.repeat(sampleTextLength);
+          if (field.fieldValidateRulesPattern !== undefined) {
+            try {
+              const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
+              if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+                sampleTextString = field.generateFakeDataFromPattern!()!.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+              }
+              if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+                updatedTextString = field.generateFakeDataFromPattern!()!.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+              }
+            } catch (error) {
+              this.log.warn(
+                `Error generating test value for entity "${entity.entityClass}" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern}", generating default values for this field. Detailed error message: "${(error as Error).message}".`,
+              );
+            }
+            if (sampleTextString === updatedTextString) {
+              updatedTextString = `${updatedTextString}B`;
+              this.log.warn(
+                `Randomly generated first and second test values for entity "${entity.entityClass}" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern}" in file "${entity.entityClass}ResourceIT" where equal, added symbol "B" to second value.`,
+              );
+            }
+          }
+          mutateData(field, { __override__: false, sbTestSampleText: sampleTextString, sbTestUpdatedText: updatedTextString });
+        }
+      },
       prepareFilters({ application, entity }) {
         mutateData(entity, {
           entityJavaFilterableProperties: [
             ...entity.fields.filter(field => field.filterableField),
             ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
           ],
-          entityJavaCustomFilters: sortedUniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
+          entityJavaCustomFilters: uniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
         });
       },
     });
@@ -628,6 +670,7 @@ ${classProperties
             [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
             `${application.javaPackageSrcDir}config/JacksonConfiguration.java`,
           ],
+          '9.4.1': [`${application.srcMainResources}config/tls/keystore.p12`],
         });
       },
       resetFakeDataSeed() {
@@ -639,20 +682,22 @@ ${classProperties
           context: application,
         });
       },
-      async generateKeyStore({ application }) {
-        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+      generateKeyStore({ application }) {
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore-samples.p12`);
         if (this.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
         } else if (this.fs.exists(keyStoreFile)) {
+          // A write once file, written back as it is: the KeyStore is told apart from the files no generator writes.
+          this.writeDestination(keyStoreFile, this.fs.read(keyStoreFile, { raw: true }), { metadata: { writeOnce: true } });
           this.log.info(`KeyStore '${keyStoreFile}' already exists. Leaving unchanged.`);
         } else {
-          // `keytool` writes to the filesystem, route the KeyStore through the in-memory file system so that it goes
-          // through the commit pipeline like any other generated file, `--export-application` included.
-          const { contents, result } = await generateKeyStoreContents(keyStoreFile, { packageName: application.packageName! });
-          if (contents) {
-            this.writeDestination(keyStoreFile, contents);
-          }
-          this.validateResult(result);
+          // Written through the in-memory file system, the KeyStore goes through the commit pipeline like any other
+          // generated file, `--export-application` included.
+          const creationTimestamp = this.options.reproducibleSecrets ? this.jhipsterConfig.creationTimestamp : undefined;
+          this.writeDestination(keyStoreFile, createKeyStore({ packageName: application.packageName!, creationTimestamp }), {
+            metadata: { writeOnce: true },
+          });
+          this.log.info(`KeyStore '${keyStoreFile}' generated successfully.`);
         }
       },
     });
@@ -717,6 +762,27 @@ ${classProperties
               },
             ],
           },
+        });
+      },
+      blockHound({ application, source }) {
+        if (!application.reactive) return;
+
+        source.addAllowBlockingCallsInside!({ classPath: 'java.util.UUID', method: 'randomUUID' });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.validation.beanvalidation.SpringValidatorAdapter',
+          method: 'validate',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: `${application.packageName}.service.MailService`,
+          method: 'sendEmailFromTemplate',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: `${application.packageName}.security.DomainUserDetailsService`,
+          method: 'createSpringSecurityUser',
+        });
+        source.addAllowBlockingCallsInside!({
+          classPath: 'org.springframework.web.reactive.result.method.InvocableHandlerMethod',
+          method: 'invoke',
         });
       },
       addSpringdoc({ application, source }) {
@@ -830,7 +896,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           ruleId: 'S125',
           ruleKey: 'xml:S125',
           resourceKey: `${application.srcMainResources}logback-spring.xml`,
-          comment: `Rule https://rules.sonarsource.com/xml/RSPEC-125 is ignored, we provide commented examples`,
+          comment: `Rule xml:S125 is ignored, we provide commented examples`,
         });
 
         if (!application.authenticationUsesCsrf && application.generateAuthenticationApi) {
@@ -838,7 +904,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             ruleId: 'S4502',
             ruleKey: 'java:S4502',
             resourceKey: `${application.javaPackageSrcDir}config/SecurityConfiguration.java`,
-            comment: `Rule https://rules.sonarsource.com/java/RSPEC-4502 is ignored, as for JWT tokens we are not subject to CSRF attack`,
+            comment: `Rule java:S4502 is ignored, as for JWT tokens we are not subject to CSRF attack`,
           });
         }
 
@@ -846,27 +912,27 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           ruleId: 'S4684',
           ruleKey: 'java:S4684',
           resourceKey: `${application.javaPackageSrcDir}web/rest/**/*`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-4684`,
+          comment: `Rule java:S4684`,
         });
 
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S5145',
           ruleKey: 'javasecurity:S5145',
           resourceKey: `${application.javaPackageSrcDir}**/*`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-5145 is ignored, as we use log filter to format log messages`,
+          comment: `Rule java:S5145 is ignored, as we use log filter to format log messages`,
         });
 
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437',
           ruleKey: 'java:S6437',
           resourceKey: `${application.srcMainResources}config/application-secret-samples.yml`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
+          comment: `Rule java:S6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437-2',
           ruleKey: 'java:S6437',
-          resourceKey: `${application.srcMainResources}config/application-tls.yml`,
-          comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
+          resourceKey: `${application.srcMainResources}config/application-tls-samples.yml`,
+          comment: `Rule java:S6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6418',
@@ -961,7 +1027,7 @@ if (os.isMacOsX() && !arch.isAmd64()) {
         const { buildToolExecutable } = application;
         this.log.ok(`Spring Boot ${application.springBootDependencies['spring-boot-dependencies']} application generated successfully.`);
 
-        if (application.dockerServices?.length && !control.environmentHasDockerCompose) {
+        if (application.dockerServices?.length && !this.skipChecks && !control.environmentHasDockerCompose) {
           const dockerComposeCommand = chalk.yellow.bold('docker compose');
           this.log('');
           this.log

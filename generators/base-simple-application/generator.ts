@@ -19,9 +19,9 @@
 import type { ComposeOptions } from 'yeoman-generator';
 
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { createDelayedMutationContext, mutateData } from '../../lib/utils/index.ts';
+import { createDelayedMutationContext, droppedMutationMessage, mutateData } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
-import { PRIORITY_NAMES } from '../base-core/priorities.ts';
+import { PRIORITY_NAMES, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
@@ -41,7 +41,11 @@ const { LOADING, COMPOSING_BOOTSTRAP, PREPARING, POST_PREPARING, DEFAULT, WRITIN
 
 const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING]);
 const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
+// A `*` matches the priorities a name starts, the ones of the custom objects (`loadingService`) included.
 const PRIORITY_WITH_APPLICATION = new Set<string>([
+  'loading*',
+  'preparing*',
+  'postPreparing*',
   LOADING,
   COMPOSING_BOOTSTRAP,
   PREPARING,
@@ -56,7 +60,7 @@ const PRIORITY_WITH_APPLICATION = new Set<string>([
 
 const getFirstArgForPriority = (priorityName: string) => ({
   source: PRIORITY_WITH_SOURCE.has(priorityName),
-  application: PRIORITY_WITH_APPLICATION.has(priorityName),
+  application: priorityMatches(PRIORITY_WITH_APPLICATION, priorityName),
   applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.has(priorityName),
 });
 
@@ -78,7 +82,7 @@ export default class BaseSimpleApplicationGenerator<
       skipLoadCommand: false,
       configTransform: (...args) => {
         const configTransform = this.getContextData(CONTEXT_DATA_SANITIZATION_KEY, {
-          factory: () => (config: Record<string, any>, configKey?: string | undefined) => {
+          factory: () => (config: Record<string, any>, configKey?: string) => {
             const cleanups = sanitizeConfigForNodeApplications(config, { depth: -1, keyPath: configKey });
             for (const [key, { oldValue, newValue }] of Object.entries(cleanups)) {
               this.log.warn(
@@ -104,7 +108,11 @@ export default class BaseSimpleApplicationGenerator<
 
   get #application(): Application {
     return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => createDelayedMutationContext<Application>({ autoDelay: true }),
+      factory: () =>
+        createDelayedMutationContext<Application>({
+          autoDelay: true,
+          onDroppedMutation: dropped => this.log.debug(droppedMutationMessage(dropped)),
+        }),
     });
   }
 

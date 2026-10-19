@@ -14,13 +14,8 @@ bracketSameLine: false
 
 plugins:
   - prettier-plugin-packagejson
-  - prettier-plugin-java
 
 overrides:
-  # java rules:
-  - files: '*.java'
-    options:
-      tabWidth: 4
   # xml rules:
   - files: '*.xml'
     options:

@@ -23,8 +23,9 @@ import { defaults } from 'lodash-es';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-jdl-config.ts';
-import { createDelayedMutationContext, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
+import { createDelayedMutationContext, droppedMutationMessage, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
+import { priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
@@ -82,13 +83,10 @@ export default abstract class BaseWorkspacesGenerator<
     super(args, options, {
       skipLoadCommand: false,
       ...features,
+      customPriorities: [...CUSTOM_PRIORITIES, ...(features?.customPriorities ?? [])],
+      // The phases of the custom objects run once the deployment and its applications are prepared.
+      customObjects: features?.customObjects?.map(customObject => ({ before: DEFAULT, ...customObject })),
     } as Features);
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
   override get jhipsterConfigWithDefaults() {
@@ -102,7 +100,13 @@ export default abstract class BaseWorkspacesGenerator<
   get context() {
     // Delayed mutation context so command defaults and derived properties are applied only after the configuration is
     // loaded, like the application context.
-    return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, { factory: () => createDelayedMutationContext({ autoDelay: true }) });
+    return this.getContextData(CONTEXT_DATA_DEPLOYMENT_KEY, {
+      factory: () =>
+        createDelayedMutationContext({
+          autoDelay: true,
+          onDroppedMutation: dropped => this.log.debug(droppedMutationMessage(dropped)),
+        }),
+    });
   }
 
   get appsFolders(): string[] {
@@ -176,8 +180,12 @@ export default abstract class BaseWorkspacesGenerator<
   getArgsForPriority(priorityName: string): any {
     const args = super.getArgsForPriority(priorityName);
     if (
-      !(
+      !priorityMatches(
         [
+          // The priorities of the custom objects (`loadingService`), which run after the workspaces priorities.
+          'loading*',
+          'preparing*',
+          'postPreparing*',
           PROMPTING_WORKSPACES,
           CONFIGURING_WORKSPACES,
           LOADING_WORKSPACES,
@@ -188,8 +196,9 @@ export default abstract class BaseWorkspacesGenerator<
           PRE_CONFLICTS,
           INSTALL,
           END,
-        ] as string[]
-      ).includes(priorityName)
+        ],
+        priorityName,
+      )
     ) {
       return args;
     }

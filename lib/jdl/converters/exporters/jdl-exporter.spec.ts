@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'expect-node';
 import fs from 'node:fs';
 
 import helpers from 'yeoman-test';
@@ -26,7 +26,6 @@ import { getDefaultRuntime } from '../../../jdl-config/jdl-runtime.ts';
 import { JDLEntity } from '../../core/models/index.ts';
 import JDLApplication from '../../core/models/jdl-application.ts';
 import JDLObject from '../../core/models/jdl-object.ts';
-import type { JDLJSONApplicationConfiguration } from '../../core/parsing/jdl-parsing-types.ts';
 
 import exportToJDL from './jdl-exporter.ts';
 
@@ -102,10 +101,7 @@ describe('jdl - JDLExporter', () => {
             let jdlObject: JDLObject;
             beforeEach(() => {
               jdlObject = new JDLObject();
-              const jdlApplication: JDLJSONApplicationConfiguration = {
-                config: { clientFramework: 'no' },
-              };
-              jdlObject.addApplication(new JDLApplication(jdlApplication, runtime));
+              jdlObject.addApplication(new JDLApplication({ config: { clientFramework: 'no' } }, runtime));
             });
 
             it('should export the JDL and match snapshot', () => {

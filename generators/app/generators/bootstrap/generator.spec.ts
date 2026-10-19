@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename, resolve } from 'node:path';
 
 import { fieldTypes } from '../../../../lib/jhipster/index.ts';
-import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
 import Generator from './generator.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const {

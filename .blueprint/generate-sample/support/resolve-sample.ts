@@ -21,8 +21,15 @@ import { join } from 'node:path';
 
 import { globSync } from 'tinyglobby';
 
-import type { WorkflowSample } from '../../../lib/ci/index.ts';
-import { dailyBuildsFolder, entitiesSamplesDir, jdlEntitiesSamplesFolder, jdlSamplesFolder, samplesFolder } from '../../constants.ts';
+import type { GithubSample, WorkflowSample } from '../../../lib/ci/index.ts';
+import {
+  dailyBuildsFolder,
+  entitiesSamplesDir,
+  jdlEntitiesSamplesFolder,
+  jdlSamplesFolder,
+  samplesFolder,
+  testIntegrationFolder,
+} from '../../constants.ts';
 
 import { entitiesByType } from './copy-entity-samples.ts';
 import { jdlEntitySamplePath } from './copy-jdl-entity-samples.ts';
@@ -39,7 +46,7 @@ export type ResolvedSample = {
   entitiesSample?: string;
   /** `.jhipster/*.json` entity files copied to the project. */
   entityFiles: string[];
-  /** Names passed to `copyJdlEntitySamples`, `*` expanded. */
+  /** Names of the `jdl-entity` samples, `*` expanded. */
   jdlEntityNames: string[];
   /** `jdl-entities` files or folders copied to the project. */
   jdlEntityFiles: string[];
@@ -47,8 +54,9 @@ export type ResolvedSample = {
   jdlSampleNames: string[];
   /** `jdl-samples` folders (copied with their content) or jdl entity files listed by `jdl-samples`. */
   jdlSampleFiles: string[];
-  /** `JHI_PROFILE` value. */
+  /** `defaultEnvironment` option. */
   profile?: string;
+  /** `defaultPackaging: 'war'` option. */
   war: boolean;
 };
 
@@ -58,16 +66,35 @@ const resolveEntitiesSample = (entity?: string): string | undefined => {
   return entity === 'none' ? undefined : entity;
 };
 
+/**
+ * A sample of a group workflow generated from a `.yo-rc.json` folder (`app-sample`), as the workflow sample it stands for:
+ * its entities and its generator options given like the ones of a json workflow.
+ */
+export const groupWorkflowSample = (name: string, { sample }: GithubSample): WorkflowSample | undefined =>
+  // A group item is a partial matrix, as the samples of the json workflows are.
+  sample['app-sample'] ? ({ ...sample, name } as WorkflowSample) : undefined;
+
 const findWorkflowSample = (sampleName: string): WorkflowSample | undefined =>
   Object.values(getWorkflowSamples())
     .map(samples => samples[sampleName])
     .find(Boolean);
 
+/** The `.yo-rc.json` folder of a sample: of the daily builds, a path of test-integration, or a folder of its samples. */
+const yoRcFolderOf = (appSample: string): string => {
+  if (isDaily(appSample)) return join(dailyBuildsFolder, appSample.replace(DAILY_PREFIX, ''));
+  // Like `generate-blueprint-samples/typescript`.
+  if (appSample.includes('/')) return join(testIntegrationFolder, appSample);
+  return join(samplesFolder, appSample);
+};
+
 /**
  * Resolve what `generate-sample` copies and runs for a sample, without touching the file system.
  */
-export const resolveSample = (sampleName: string, { entity: passedEntity }: { entity?: string } = {}): ResolvedSample => {
-  const sample = findWorkflowSample(sampleName);
+export const resolveSample = (
+  sampleName: string,
+  { entity: passedEntity, sample: groupSample }: { entity?: string; sample?: WorkflowSample } = {},
+): ResolvedSample => {
+  const sample = groupSample ?? findWorkflowSample(sampleName);
   const jdlEntity = sample?.['jdl-entity'];
   const jdlSamples = sample?.['jdl-samples'];
   const appSample = sample?.['app-sample'] ?? sample?.name ?? sampleName;
@@ -85,7 +112,7 @@ export const resolveSample = (sampleName: string, { entity: passedEntity }: { en
     existsSync(join(jdlSamplesFolder, jdlSample)) ? join(jdlSamplesFolder, jdlSample) : jdlEntitySamplePath(jdlSample),
   );
 
-  const yoRcFolder = isDaily(appSample) ? join(dailyBuildsFolder, appSample.replace(DAILY_PREFIX, '')) : join(samplesFolder, appSample);
+  const yoRcFolder = yoRcFolderOf(appSample);
 
   return {
     name: sampleName,

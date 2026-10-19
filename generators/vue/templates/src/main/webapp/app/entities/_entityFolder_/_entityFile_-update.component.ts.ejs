@@ -46,7 +46,7 @@ import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/share
 <%_ } _%>
 import { type I<%- entityAngularName %>, <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
-<%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
+<%_ const enumImports = entityClientEnumImports; _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
@@ -63,14 +63,16 @@ export default defineComponent({
     const userService = inject('userService', () => new UserService());
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<Array<any>> = ref([]);
   <%_ } else { _%>
-    <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { %>
+    <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
+
     const <%- relationship.otherEntity.entityInstance %>Service = inject('<%- relationship.otherEntity.entityInstance %>Service', () => new <%- relationship.otherEntity.entityAngularName %>Service());
-    <%_ } %>
+    <%_ } _%>
+
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<I<%- relationship.otherEntity.entityAngularName %>[]> = ref([]);
   <%_ } _%>
 <%_ } _%>
-<%_ for (const [importedType] of enumImports) { _%>
-    const <%- this._.lowerFirst(importedType) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
+<%_ for (const enumField of enumTypeFields) { _%>
+    const <%- enumField.enumInstance %>Values: Ref<string[]> = ref(Object.keys(<%- enumField.fieldType %>));
 <%_ } _%>
     const isSaving = ref(false);
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
@@ -166,8 +168,8 @@ export default defineComponent({
       alertService,
       <%- entityInstance %>,
       previousState,
-<%_ for (const [importedType] of enumImports) { _%>
-      <%- this._.lowerFirst(importedType) %>Values,
+<%_ for (const enumField of enumTypeFields) { _%>
+      <%- enumField.enumInstance %>Values,
 <%_ } _%>
       isSaving,
       currentLanguage,

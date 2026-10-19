@@ -70,12 +70,6 @@ jobs:
         shell: bash
         working-directory: ${{ github.workspace }}/app
     if: >-
-      !contains(github.event.head_commit.message, '[react]') &&
-      !contains(github.event.head_commit.message, '[vue]') &&
-      !contains(github.event.pull_request.title, '[react]') &&
-      !contains(github.event.pull_request.title, '[vue]') &&
-      !contains(github.event.head_commit.message, '[ci skip]') &&
-      !contains(github.event.head_commit.message, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
       github.event.action != 'closed' &&
@@ -116,7 +110,6 @@ jobs:
         env:
           JHI_FOLDER_APP: ${{ github.workspace }}/app
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
-          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: jhipster.cjs info
       # Make sure that the script-shell is set to bash, otherwise npm scripts will fail on Windows runners
       - run: npm config -L project set script-shell=bash
@@ -136,7 +129,6 @@ jobs:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
-          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------

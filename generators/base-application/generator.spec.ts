@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
-import { defaultHelpers as helpers } from '#testing';
+import { shouldSupportFeatures } from '#test-support';
+import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -41,31 +41,144 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('entityDefaults, fieldDefaults and relationshipDefaults', () => {
+    const prepared: Record<string, any> = {};
+    const preparedFields: Record<string, any> = {};
+    const preparedRelationships: Record<string, any> = {};
+
+    class CustomGenerator extends Generator {
+      async beforeQueue() {
+        await this.dependsOnBootstrap('app');
+      }
+
+      get [Generator.PREPARING_EACH_ENTITY]() {
+        return this.asPreparingEachEntityTaskGroup({
+          setDefaults({ entityDefaults }) {
+            // Properties a blueprint adds to the entity, unknown to the base entity type.
+            const defaults: any[] = [
+              { customLabel: ({ name }: any) => `label-${name}`, customFlag: true },
+              { customLabel: 'not applied', customPage: ({ customLabel }: any) => `${customLabel}-page` },
+              // Waits for a property a later task sets, applied once the entities are prepared.
+              { customDelayed: ({ customLater }: any, { delayMarker }: any) => (customLater ? `${customLater}-delayed` : delayMarker) },
+            ];
+            entityDefaults(...defaults);
+          },
+          setLater({ entity }) {
+            (entity as any).customLater = `later-${entity.name}`;
+            prepared[entity.name] = entity;
+          },
+        });
+      }
+
+      get [Generator.PREPARING_EACH_ENTITY_FIELD]() {
+        return this.asPreparingEachEntityFieldTaskGroup({
+          setDefaults({ entity, field, fieldDefaults }) {
+            const defaults: any[] = [
+              { customFieldLabel: ({ fieldName }: any) => `label-${fieldName}` },
+              {
+                customFieldDelayed: ({ customLater }: any, { delayMarker }: any) => (customLater ? `${customLater}-delayed` : delayMarker),
+              },
+            ];
+            fieldDefaults(...defaults);
+            (field as any).customLater = `later-${field.fieldName}`;
+            preparedFields[`${entity.name}.${field.fieldName}`] = field;
+          },
+        });
+      }
+
+      get [Generator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+        return this.asPreparingEachEntityRelationshipTaskGroup({
+          setDefaults({ entity, relationship, relationshipDefaults }) {
+            const defaults: any[] = [
+              { customRelationshipLabel: ({ relationshipName }: any) => `label-${relationshipName}` },
+              {
+                customRelationshipDelayed: ({ customLater }: any, { delayMarker }: any) =>
+                  customLater ? `${customLater}-delayed` : delayMarker,
+              },
+            ];
+            relationshipDefaults(...defaults);
+            (relationship as any).customLater = `later-${relationship.relationshipName}`;
+            preparedRelationships[`${entity.name}.${relationship.relationshipName}`] = relationship;
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await helpers
+        .run(CustomGenerator)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withJHipsterConfig({}, [
+          {
+            name: 'One',
+            fields: [
+              { fieldName: 'name', fieldType: 'String' },
+              { fieldName: 'code', fieldType: 'String', options: { customFieldLabel: 'from annotation' } },
+            ],
+            relationships: [
+              { relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' },
+              {
+                relationshipName: 'other',
+                otherEntityName: 'Two',
+                relationshipType: 'many-to-one',
+                options: { customRelationshipLabel: 'from annotation' },
+              },
+            ],
+          },
+          { name: 'Two', annotations: { customLabel: 'from annotation' } },
+        ]);
+    });
+
+    it('should set the defaults the entity has no value for, in order', () => {
+      expect(prepared.One).toMatchObject({ customLabel: 'label-One', customFlag: true, customPage: 'label-One-page' });
+    });
+
+    it('should keep the value an annotation gives', () => {
+      expect(prepared.Two).toMatchObject({ customLabel: 'from annotation', customPage: 'from annotation-page' });
+    });
+
+    it('should apply the delayed defaults once the entities are prepared', () => {
+      expect(prepared.One).toMatchObject({ customDelayed: 'later-One-delayed' });
+      expect(preparedFields['One.name']).toMatchObject({ customFieldDelayed: 'later-name-delayed' });
+      expect(preparedRelationships['One.two']).toMatchObject({ customRelationshipDelayed: 'later-two-delayed' });
+    });
+
+    it('should set the defaults of the fields, keeping the value an annotation gives', () => {
+      expect(preparedFields['One.name']).toMatchObject({ customFieldLabel: 'label-name' });
+      expect(preparedFields['One.code']).toMatchObject({ customFieldLabel: 'from annotation' });
+    });
+
+    it('should set the defaults of the relationships, keeping the value an annotation gives', () => {
+      expect(preparedRelationships['One.two']).toMatchObject({ customRelationshipLabel: 'label-two' });
+      expect(preparedRelationships['One.other']).toMatchObject({ customRelationshipLabel: 'from annotation' });
+    });
+  });
+
   describe('custom priorities tasks', () => {
     // no args
-    const initializing = esmocha.fn();
-    const prompting = esmocha.fn();
-    const configuring = esmocha.fn();
-    const composing = esmocha.fn();
+    const initializing = exnode.fn();
+    const prompting = exnode.fn();
+    const configuring = exnode.fn();
+    const composing = exnode.fn();
 
     // application arg
-    const loading = esmocha.fn();
-    const preparing = esmocha.fn();
-    const postPreparing = esmocha.fn();
-    const writing = esmocha.fn();
-    const postWriting = esmocha.fn();
-    const install = esmocha.fn();
-    const end = esmocha.fn();
+    const loading = exnode.fn();
+    const preparing = exnode.fn();
+    const postPreparing = exnode.fn();
+    const writing = exnode.fn();
+    const postWriting = exnode.fn();
+    const install = exnode.fn();
+    const end = exnode.fn();
 
     // entities args
-    const configuringEachEntity = esmocha.fn();
-    const preparingEachEntity = esmocha.fn();
-    const preparingEachEntityField = esmocha.fn();
-    const preparingEachEntityRelationship = esmocha.fn();
-    const postPreparingEachEntity = esmocha.fn();
-    const defaultTask = esmocha.fn();
-    const writingEntities = esmocha.fn();
-    const postWritingEntities = esmocha.fn();
+    const configuringEachEntity = exnode.fn();
+    const preparingEachEntity = exnode.fn();
+    const preparingEachEntityField = exnode.fn();
+    const preparingEachEntityRelationship = exnode.fn();
+    const postPreparingEachEntity = exnode.fn();
+    const defaultTask = exnode.fn();
+    const writingEntities = exnode.fn();
+    const postWritingEntities = exnode.fn();
 
     class CustomGenerator extends Generator {
       async beforeQueue() {
@@ -209,10 +322,16 @@ describe(`generator - ${generator}`, () => {
         description: expect.any(String),
       };
 
+      const entityDefaultsArg = {
+        ...entityArg,
+        entityDefaults: expect.any(Function),
+      };
+
       const fieldArg = {
         ...entityArg,
         fieldName: expect.any(String),
         field: expect.any(Object),
+        fieldDefaults: expect.any(Function),
       };
 
       const relationshipArg = {
@@ -220,6 +339,7 @@ describe(`generator - ${generator}`, () => {
         entityName: expect.any(String),
         relationshipName: expect.any(String),
         relationship: expect.any(Object),
+        relationshipDefaults: expect.any(Function),
       };
 
       const entitiesArg = {
@@ -241,12 +361,12 @@ describe(`generator - ${generator}`, () => {
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
       expect(preparingEachEntity).toHaveBeenCalledTimes(6);
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityDefaultsArg, entityName: 'User' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityDefaultsArg, entityName: 'UserManagement' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityDefaultsArg, entityName: 'Authority' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityDefaultsArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityDefaultsArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityDefaultsArg, entityName: 'Three' });
 
       expect(preparingEachEntityField).toHaveBeenCalledTimes(25);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
@@ -287,30 +407,59 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('entities order', () => {
+    class OrderGenerator extends Generator {
+      async beforeQueue() {
+        await this.dependsOnBootstrap('app');
+      }
+
+      get [Generator.END]() {
+        return { end() {} };
+      }
+    }
+
+    before(async () => {
+      await helpers
+        .run(OrderGenerator)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        // UserManagement gets the changelog date of the creation timestamp plus one minute: 20200804035352.
+        .withJHipsterConfig({ creationTimestamp: 1596513172471 }, [
+          { name: 'Bar' },
+          { name: 'Foo', annotations: { changelogDate: '20200804035352' } },
+          { name: 'UserManagement' },
+        ]);
+    });
+
+    it('orders an entity without changelog date by the date it gets, so that a regeneration keeps the order', () => {
+      const yoRc = runResult.fs.readJSON(`${runResult.cwd}/.yo-rc.json`) as { 'generator-jhipster': { entities: string[] } };
+      expect(yoRc['generator-jhipster'].entities).toEqual(['Foo', 'UserManagement', 'Bar']);
+    });
+  });
+
   describe('entities option', () => {
     // no args
-    const initializing = esmocha.fn();
-    const prompting = esmocha.fn();
-    const configuring = esmocha.fn();
-    const composing = esmocha.fn();
+    const initializing = exnode.fn();
+    const prompting = exnode.fn();
+    const configuring = exnode.fn();
+    const composing = exnode.fn();
 
     // application arg
-    const loading = esmocha.fn();
-    const preparing = esmocha.fn();
-    const writing = esmocha.fn();
-    const postWriting = esmocha.fn();
-    const install = esmocha.fn();
-    const end = esmocha.fn();
+    const loading = exnode.fn();
+    const preparing = exnode.fn();
+    const writing = exnode.fn();
+    const postWriting = exnode.fn();
+    const install = exnode.fn();
+    const end = exnode.fn();
 
     // entities args
-    const configuringEachEntity = esmocha.fn();
-    const preparingEachEntity = esmocha.fn();
-    const preparingEachEntityField = esmocha.fn();
-    const preparingEachEntityRelationship = esmocha.fn();
-    const postPreparingEachEntity = esmocha.fn();
-    const defaultTask = esmocha.fn();
-    const writingEntities = esmocha.fn();
-    const postWritingEntities = esmocha.fn();
+    const configuringEachEntity = exnode.fn();
+    const preparingEachEntity = exnode.fn();
+    const preparingEachEntityField = exnode.fn();
+    const preparingEachEntityRelationship = exnode.fn();
+    const postPreparingEachEntity = exnode.fn();
+    const defaultTask = exnode.fn();
+    const writingEntities = exnode.fn();
+    const postWritingEntities = exnode.fn();
 
     class CustomGenerator extends Generator {
       async beforeQueue() {
@@ -453,10 +602,16 @@ describe(`generator - ${generator}`, () => {
         description: expect.any(String),
       };
 
+      const entityDefaultsArg = {
+        ...entityArg,
+        entityDefaults: expect.any(Function),
+      };
+
       const fieldArg = {
         ...entityArg,
         fieldName: expect.any(String),
         field: expect.any(Object),
+        fieldDefaults: expect.any(Function),
       };
 
       const relationshipArg = {
@@ -464,6 +619,7 @@ describe(`generator - ${generator}`, () => {
         entityName: expect.any(String),
         relationshipName: expect.any(String),
         relationship: expect.any(Object),
+        relationshipDefaults: expect.any(Function),
       };
 
       const entitiesArg = {
@@ -493,12 +649,12 @@ describe(`generator - ${generator}`, () => {
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
       expect(preparingEachEntity).toHaveBeenCalledTimes(6);
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityDefaultsArg, entityName: 'User' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityDefaultsArg, entityName: 'UserManagement' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityDefaultsArg, entityName: 'Authority' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityDefaultsArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityDefaultsArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityDefaultsArg, entityName: 'Three' });
 
       expect(preparingEachEntityField).toHaveBeenCalledTimes(25);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });

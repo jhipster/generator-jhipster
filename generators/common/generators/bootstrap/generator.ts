@@ -29,8 +29,6 @@ import type {
 } from '../../types.ts';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig, CommonOptions> {
-  customLifecycle = true;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -76,9 +74,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
   }
 
   get preparingEachEntity() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      prepareEntity({ entity }) {
-        mutateData(entity, commonMutateEntity);
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entityDefaults }) {
+        entityDefaults(commonMutateEntity);
       },
     });
   }
@@ -89,8 +87,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      preparing({ field }) {
-        mutateData(field, commonMutateField);
+      preparing({ fieldDefaults }) {
+        fieldDefaults(commonMutateField);
       },
     });
   }

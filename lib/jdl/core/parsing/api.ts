@@ -19,15 +19,15 @@
 
 import { type CstNode, EOF, type ILexingError, type ILexingResult, type IRecognitionException, type IToken } from 'chevrotain';
 
-import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.ts';
-import performJDLPostParsingTasks from './jdl-post-parsing-tasks.ts';
+import { buildJDLAstBuilderVisitor } from './ast/builder-visitor.ts';
+import { tokenLocation } from './ast/location.ts';
+import performJDLPostParsingTasks from './ast/post-parsing-tasks.ts';
 import { COMMENTS_GROUP } from './lexer/lexer.ts';
-import { tokenLocation } from './location.ts';
+import performAdditionalSyntaxChecks from './parser/syntax-checks.ts';
 import { checkSemantics } from './semantic/index.ts';
 import type { JDLDiagnostic } from './semantic/types.ts';
 import type { JDLLocation, ParsedJDLApplications } from './types/parsed.ts';
 import type { JDLRuntime } from './types/runtime.ts';
-import performAdditionalSyntaxChecks from './validator.ts';
 
 type ParseOptions = {
   startRule?: string;

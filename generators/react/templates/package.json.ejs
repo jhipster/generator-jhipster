@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@eslint/js": null,
+    "@stylistic/eslint-plugin": "<%- nodeDependencies['@stylistic/eslint-plugin'] %>",
     "@eslint-react/eslint-plugin": "<%- nodeDependencies['@eslint-react/eslint-plugin'] %>",
     "@testing-library/react": "<%- nodeDependencies['@testing-library/react'] %>",
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
@@ -55,10 +56,9 @@
     "@types/react-dom": "<%- nodeDependencies['@types/react-dom'] %>",
     "@vitejs/plugin-react": "<%- nodeDependencies['@vitejs/plugin-react'] %>",
     "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
+    "@vitest/eslint-plugin": "<%- nodeDependencies['@vitest/eslint-plugin'] %>",
     "autoprefixer": "<%- nodeDependencies.autoprefixer %>",
     "eslint": "<%- nodeDependencies.eslint %>",
-    "eslint-config-prettier": "<%- nodeDependencies['eslint-config-prettier'] %>",
-    "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",
     "happy-dom": "<%- nodeDependencies['happy-dom'] %>",
 <%_ if (enableTranslation) { _%>
     "deepmerge": null,
@@ -89,10 +89,9 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
-    "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
+    "cleanup": "rimraf <%- relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%- relativeDir(clientRootDir, clientDistDir) %>",
     "build": "<%- nodePackageManager %> run webapp:prod --",
-    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<%- skipServer ? '' : ' npm:backend:start' %>",
     "start": "<%- nodePackageManager %> run webapp:dev --",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
@@ -102,7 +101,6 @@
     "test:watch": "<%- nodePackageManager %> run vitest --",
     "vitest": "vitest",
     "vitest-run": "vitest run --coverage",
-    "watch": "concurrently 'npm run start' npm:backend:start",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
     "webapp:build:dev": "vite build",
     "webapp:build:prod": "vite build",

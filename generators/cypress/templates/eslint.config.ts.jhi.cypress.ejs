@@ -22,11 +22,11 @@ import tseslint from 'typescript-eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   {
-    files: ['<%- this.relativeDir(clientRootDir, cypressDir) %>**/*.ts'],
+    files: ['<%- relativeDir(clientRootDir, cypressDir) %>**/*.ts'],
     extends: [...tseslint.configs.recommendedTypeChecked, cypress.configs.recommended],
     languageOptions: {
       parserOptions: {
-        "project": ["./<%- this.relativeDir(clientRootDir, cypressDir) %>tsconfig.json"],
+        project: ["./<%- relativeDir(clientRootDir, cypressDir) %>tsconfig.json"],
       },
     },
     rules: {

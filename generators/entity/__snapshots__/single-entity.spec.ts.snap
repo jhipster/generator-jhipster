@@ -19,11 +19,13 @@ exports[`generator - entity --single-entity when regenerating with default confi
     },
   ],
   "addEntityTranslationKey": [
-    {
-      "language": "en",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
+    [
+      {
+        "language": "en",
+        "translationKey": "foo",
+        "translationValue": "Foo",
+      },
+    ],
   ],
   "addLiquibaseChangelog": [
     {

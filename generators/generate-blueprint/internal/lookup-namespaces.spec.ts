@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import { lookupGeneratorsNamespaces } from './lookup-namespaces.ts';
 
@@ -59,6 +59,8 @@ describe('lookupGeneratorsNamespaces', () => {
   "docker",
   "docker-compose",
   "docker:bootstrap",
+  "e2e:bootstrap",
+  "e2e:common",
   "entities",
   "entity",
   "export-jdl",
@@ -68,7 +70,6 @@ describe('lookupGeneratorsNamespaces', () => {
   "generate-blueprint:standalone",
   "git",
   "heroku",
-  "info",
   "init",
   "java",
   "java-simple-application",
@@ -92,7 +93,6 @@ describe('lookupGeneratorsNamespaces', () => {
   "javascript-simple-application:eslint",
   "javascript-simple-application:husky",
   "javascript-simple-application:prettier",
-  "jdl",
   "jdl:bootstrap",
   "kubernetes",
   "kubernetes:bootstrap",
@@ -109,6 +109,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "react:bootstrap",
   "server",
   "server:bootstrap",
+  "server:i18n",
   "spring-boot",
   "spring-boot:bootstrap",
   "spring-boot:cache",

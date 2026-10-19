@@ -19,11 +19,16 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
+import type { Store } from 'yeoman-environment';
+
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
-import { type GeneratorsStore, JHIPSTER_NAMESPACE_PREFIX, lookupGeneratorsMeta } from './lookups.ts';
+import { lookupGeneratorsMeta } from './lookups.ts';
 
-export type { GeneratorsStore } from './lookups.ts';
+export const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
+
+/** The part of a generators store the lookups need. */
+export type GeneratorsStore = Pick<Store, 'getGeneratorsMeta'>;
 
 export type GeneratorCommand = {
   namespace: string;
@@ -48,8 +53,11 @@ const readUsageDescription = (generatorFile: string): string | undefined => {
   return description?.[1].trim();
 };
 
-/** The namespace of a generator as the cli names it: without the prefix for the jhipster generators. */
-const toCommandNamespace = (namespace: string) =>
+/**
+ * The namespace of a generator as the cli names it: without the prefix for the jhipster generators (`spring-boot`,
+ * `spring-boot:cache`), the namespace itself for the others, like the generators of a blueprint (`jhipster-foo:app`).
+ */
+export const toCommandNamespace = (namespace: string) =>
   namespace.startsWith(JHIPSTER_NAMESPACE_PREFIX) ? namespace.slice(JHIPSTER_NAMESPACE_PREFIX.length) : namespace;
 
 const loadGeneratorCommands = (store?: GeneratorsStore): GeneratorCommand[] => {

@@ -22,9 +22,9 @@ package <%- entityAbsolutePackage %>.service.mapper;
     const testedRelationships = embedded
       ? []
       : restProperties.filter(
-        property => property.relationshipName && !property.otherEntity.embedded && property.ownerSide && !property.otherEntity.builtIn,
-      );
-    const relatedEntities = this._.uniq(testedRelationships.map(relationship => relationship.otherEntity));
+          property => property.relationshipName && !property.otherEntity.embedded && property.ownerSide && !property.otherEntity.builtIn,
+        );
+    const relatedEntities = [...new Set(testedRelationships.map(relationship => relationship.otherEntity))];
     const testedOtherEntities = relatedEntities.filter(otherEntity => otherEntity.entityClass !== entityClass);
 _%>
 import static <%- entityAbsoluteClass %>Asserts.*;

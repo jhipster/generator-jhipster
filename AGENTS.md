@@ -7,14 +7,14 @@ JHipster is a Yeoman-based code generator (TypeScript, ESM, Node — see `engine
 ## Build, lint, test
 
 - Install: `npm ci` (also compiles via `prepare` → `build`).
-- Build: `npm run build` (runs `clean` → `tsc` → copy non-TS template files + `.d.ts` to `dist/`, then `bin/fix-bin.cjs`). Use `npm run compile` alone for a faster TS-only recompile.
-- Type-check tests: `npm run check-types` (`tsc -p tsconfig.spec.json`).
+- Build: `npm run build` (runs `clean` → `tsc` of TypeScript 7, the `typescript7` alias → copy non-TS template files + `.d.ts` to `dist/`, then `bin/fix-bin.cjs`). Use `npm run compile` alone for a faster TS-only recompile.
+- Type-check tests: `npm run check-types` (`tsc -p tsconfig.spec.json` of TypeScript 7; the `typescript` package stays TypeScript 6, for typescript-eslint).
 - Lint: `npm run lint` (eslint, `--max-warnings 5`). Auto-fix: `npm run lint-fix` (runs eslint `--fix` then `prettier --write`).
 - Prettier check/format: `npm run prettier:check` / `npm run prettier:format`.
-- Full test (lint + type-check + mocha): `npm test`. Runs esmocha over `test generators cli .blueprint lib` with `--forbid-only`.
-- Fast test (skip lint/type-check): `npx esmocha`.
-- Single test file / directory: `npx esmocha <path>` (add `--no-parallel` for clearer stack traces).
-- Update snapshots: `npm run update-snapshot -- <path>` (single) or `npm run update-snapshots` (all). Equivalent: `npx esmocha <path> --no-parallel --update-snapshot`.
+- Full test (lint + type-check + tests): `npm test`. Runs expect-node (`exnode`) over the spec files of `expect-node.config.ts` (`test generators cli .blueprint lib`) with `--forbid-only`.
+- Fast test (skip lint/type-check): `npx exnode`.
+- Single test files / directories: `npx exnode <path>...` (add `--workers 0` to run each file in a process of its own).
+- Update snapshots: `npm run update-snapshot -- <path>...` or `npm run update-snapshots` (all). Equivalent: `npx exnode --update-snapshot <path>...`.
 - JDL-only tests: `npm run jdl:test` (watch: `npm run jdl:test-watch`).
 
 Snapshots live next to specs as `*.snap` and are committed. Never hand-edit them — regenerate.
@@ -29,7 +29,7 @@ Two options (see `DEVELOPMENT.md`):
 - Linked build: `npm run build && npm link`; rebuild after changes.
   On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link generator-jhipster` so the dev version is picked up. `jhipster --install-path` shows which copy is active.
 
-`jhipster describe` prints the generators; `jhipster describe <generator> [--no-imports] [--prompts] [--json]` the arguments, options, `.yo-rc.json` keys, choices, defaults, derived properties and prompts of a command (model in `lib/command/describe-command.ts`, generator resolution in `lib/resolver/`); `jhipster describe --config <name>` finds the command declaring a config. Use it instead of reading `command.ts` files when you need the option catalog or the prompt order.
+`jhipster describe` prints the generators; `jhipster describe <generator> [--no-imports] [--prompts] [--json]` the arguments, options, `.yo-rc.json` keys, choices, defaults, derived properties and prompts of a command (model in `lib/command/describe-command.ts`, generator resolution in `lib/resolver/`); `jhipster describe --config <name>` finds the command declaring a config. The generators are named as the cli names them, without the `jhipster:` prefix (`spring-boot`, `spring-boot:cache`; the generators of a blueprint keep their namespace), and `<generator>` takes that name or the namespace. Use it instead of reading `command.ts` files when you need the option catalog or the prompt order.
 
 ## Big-picture architecture
 
@@ -54,12 +54,22 @@ Two options (see `DEVELOPMENT.md`):
 
 ## Key conventions
 
-- **ESM + TypeScript everywhere**; `"type": "module"` in `package.json`. Use `.ts`/`.mts`. Tests are `*.spec.ts` run by `esmocha`.
+- **ESM + TypeScript everywhere**; `"type": "module"` in `package.json`. Use `.ts`/`.mts`. Tests are `*.spec.ts` run by `expect-node` on node:test, importing `describe`, `it`, `expect` and `exnode` (mocks) from `expect-node`.
 - **Task groups**: define priorities as getters returning the result of `this.as<Priority>TaskGroup({...})`. Never call tasks directly — the Yeoman environment orchestrates them.
 - **Config access**: prefer `this.jhipsterConfig` (persists to `.yo-rc.json`), `this.jhipsterConfigWithDefaults` (read-only with defaults applied), and the `application`/`entity`/`field`/`relationship` context objects injected into tasks. Derived booleans (e.g. `entity.dtoMapstruct`, `field.fieldTypeInteger`) belong in `preparing*` priorities, not in templates.
 - **Writing files**: use `this.writeFiles({ blocks, context })` with `condition` functions on blocks rather than branching inside templates. Use `editFile(path, transform)` or the needle APIs on `source` in `postWriting` to inject into already-written files.
 - **Templates**: EJS (`.ejs`). Two-space indent for template logic; generated file's own rules apply to content. Factor shared fragments into `.ejs` sub-templates included via `<%- include('../path', { ... }) -%>`.
-- **Commit messages** (enforced at review): imperative present tense, lowercase first letter, no trailing dot, header ≤100 chars. Reference issues in footer (`Fix #1234`). Use `[ci skip]` for docs-only commits.
+- **Commit messages** (enforced at review): imperative present tense, lowercase first letter, no trailing dot, header ≤100 chars. Do not reference issues in commit messages: GitHub adds every commit that mentions an issue (on each push, rebase and amend) to the issue timeline, and agents create many commits. Reference the issue in the pull request description instead (`Fix #1234`). Do not use `[ci skip]` or `[skip ci]`, even for docs-only commits: it blocks the required CI workflows.
 - **Tests required** for every feature or bug fix. When behavior touches generated output, update/extend snapshots rather than asserting strings by hand.
 - **Path aliases** for tests: `#testing` → `lib/testing/index.ts`, `#test-support` → `test/support/index.ts`.
 - **Node version**: CI and local must match `engines` in `package.json`; avoid APIs only in newer releases.
+
+## Opening pull requests
+
+- Open pull requests as draft (`gh pr create --draft`).
+- Use `.github/PULL_REQUEST_TEMPLATE.md` as the body: the description in place of its first comment, and its checklist kept.
+- Leave the "I have personally reviewed, understood, and tested the changes" item unchecked. The user checks it after reviewing the changes, and marks the pull request ready for review.
+
+## Reviewing pull requests
+
+- Post reviews as comments (`gh pr review --comment` or `gh pr comment`). Never submit a "request changes" review: it blocks the merge, and that decision belongs to a human reviewer alone.

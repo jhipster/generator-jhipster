@@ -22,15 +22,15 @@ import tseslint from 'typescript-eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   {
-    files: ['<%- this.relativeDir(clientRootDir, playwrightDir) %>**/*.ts'],
+    files: ['<%- relativeDir(clientRootDir, playwrightDir) %>**/*.ts'],
     extends: [...tseslint.configs.recommendedTypeChecked, playwright.configs['flat/recommended']],
     languageOptions: {
       parserOptions: {
-        "project": ["./<%- this.relativeDir(clientRootDir, playwrightDir) %>tsconfig.json"],
+        "project": ["./<%- relativeDir(clientRootDir, playwrightDir) %>tsconfig.json"],
       },
     },
     rules: {
-      // The suite mirrors the cypress one: it branches on the api response and splits setup across
+      // The suite mirrors the cypress one: it branches on the API response and splits setup across
       // several hooks, which these rules flag by design.
       'playwright/no-conditional-in-test': 'off',
       'playwright/no-conditional-expect': 'off',

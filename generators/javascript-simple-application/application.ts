@@ -25,7 +25,7 @@ import type { Application as JavascriptSimpleApplicationApplication } from './ty
 export type JavascriptSimpleApplicationLoadingAddedApplicationProperties = {
   /** Root package.json scripts */
   packageJsonScripts: Record<string, string>;
-  /** Root package.json scripts */
+  /** Client package.json scripts */
   clientPackageJsonScripts: Record<string, string>;
 
   prettierFolders: string[];

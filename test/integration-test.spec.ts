@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, it } from 'esmocha';
+import { before, describe, it } from 'expect-node';
 import assert from 'node:assert';
 import fs, { type PathOrFileDescriptor, existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -24,13 +24,9 @@ import path from 'node:path';
 import sortKeys from 'sort-keys';
 
 import { formatDateForChangelog } from '../generators/base/support/index.ts';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../lib/core/application-types.ts';
-import { authenticationTypes } from '../lib/jhipster/index.ts';
 
 const writeJsonSync = (file: PathOrFileDescriptor, content: any) => writeFileSync(file, JSON.stringify(content, null, 2));
 const readJsonSync = (file: PathOrFileDescriptor) => JSON.parse(fs.readFileSync(file, 'utf-8'));
-
-const { JWT, SESSION } = authenticationTypes;
 
 const fixSamples = process.argv.includes('--fix-samples');
 const itSamplesPath = path.join(import.meta.dirname, '..', '.blueprint', 'generate-sample', 'templates', 'test-integration', 'samples');
@@ -53,9 +49,6 @@ const itEntitiesSamplesPath = path.join(
   'samples',
   '.jhipster',
 );
-const REMEMBER_ME_KEY = 'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
-const JWT_SECRET_KEY =
-  'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=';
 
 const itSamplesEntries = fs
   .readdirSync(itSamplesPath, { withFileTypes: true })
@@ -89,18 +82,6 @@ describe('integration-test', () => {
               config.creationTimestamp = 1596513172471;
               writeJsonSync(yoFile, yoJson);
             }
-            if (config.authenticationType === SESSION && config.rememberMeKey !== REMEMBER_ME_KEY) {
-              config.rememberMeKey = REMEMBER_ME_KEY;
-              writeJsonSync(yoFile, yoJson);
-            } else if (
-              (config.authenticationType === JWT ||
-                config.applicationType === APPLICATION_TYPE_MICROSERVICE ||
-                config.applicationType === APPLICATION_TYPE_GATEWAY) &&
-              config.jwtSecretKey !== JWT_SECRET_KEY
-            ) {
-              config.jwtSecretKey = JWT_SECRET_KEY;
-              writeJsonSync(yoFile, yoJson);
-            }
             const yoJsonOrdered = sortKeys(yoJson, { deep: true });
             if (JSON.stringify(yoJson) !== JSON.stringify(yoJsonOrdered)) {
               writeJsonSync(yoFile, yoJsonOrdered);
@@ -111,19 +92,6 @@ describe('integration-test', () => {
         it('should contain creationTimestamp', () => {
           assert(config.creationTimestamp);
         });
-        if (
-          config.authenticationType === JWT ||
-          config.applicationType === APPLICATION_TYPE_MICROSERVICE ||
-          config.applicationType === APPLICATION_TYPE_GATEWAY
-        ) {
-          it('should contain jwtSecretKey', () => {
-            assert(config.jwtSecretKey);
-          });
-        } else if (config.authenticationType === SESSION) {
-          it('should contain rememberMeKey', () => {
-            assert(config.rememberMeKey);
-          });
-        }
         it('should be ordered', () => {
           assert(JSON.stringify(yoJson) === JSON.stringify(sortKeys(yoJson, { deep: true })));
         });

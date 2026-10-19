@@ -62,7 +62,7 @@ export const getGithubIssue = async ({ owner, repository, issue }: { owner: stri
   if (!response.ok) {
     throw new Error(`Response status: ${response.status}`);
   }
-  return await response.json();
+  return response.json();
 };
 
 export const getGithubSummaryFile = (): string | undefined => {

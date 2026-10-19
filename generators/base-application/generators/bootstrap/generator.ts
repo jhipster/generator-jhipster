@@ -25,7 +25,7 @@ import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
-import { isWin32, mutateData } from '../../../../lib/utils/index.ts';
+import { finalizeMutations, isWin32, mutateData } from '../../../../lib/utils/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { mutateApplication } from '../../application.ts';
@@ -124,11 +124,13 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      configureEntity({ application, entityName, entityStorage, entityConfig }) {
+      configureEntity({ application, control, entityName, entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
-        for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
-          convertFieldBlobType(field);
+        // Saved once: saving writes the file, which gives the storage a new store, the fields left would be converted in the old one.
+        const blobFields = entityConfig.fields!.filter(field => field.fieldType === 'byte[]');
+        if (blobFields.length > 0) {
+          blobFields.forEach(field => convertFieldBlobType(field));
           entityStorage.save();
         }
 
@@ -136,15 +138,31 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           entityConfig.annotations!.changelogDate = entityConfig.changelogDate;
           delete entityConfig.changelogDate;
         }
-        if (!entityConfig.annotations!.changelogDate) {
+        // Older versions stored the creation of an entity in incremental mode as a flag.
+        if (control.isJhipsterVersionLessThan('9.4.1') && 'incrementalChangelog' in entityConfig) {
+          const { incrementalChangelog } = entityConfig as { incrementalChangelog?: boolean };
+          delete (entityConfig as { incrementalChangelog?: boolean }).incrementalChangelog;
+          const { changelogDate, ...otherAnnotations } = entityConfig.annotations!;
+          if (incrementalChangelog && changelogDate && !otherAnnotations.incrementalChangelogDate) {
+            entityConfig.annotations = { ...otherAnnotations, incrementalChangelogDate: changelogDate };
+          }
+        }
+        const annotations = entityConfig.annotations!;
+        if (annotations.changelogDate && annotations.incrementalChangelogDate) {
+          throw new Error(`Entity ${entityName} cannot have both changelogDate and incrementalChangelogDate.`);
+        }
+        if (!annotations.changelogDate && !annotations.incrementalChangelogDate) {
           if (
             (entityName === 'UserManagement' && application.generateUserManagement) ||
             (entityName === 'User' && application.generateBuiltInUserEntity) ||
             (entityName === 'Authority' && application.generateBuiltInAuthorityEntity)
           ) {
-            entityConfig.annotations!.changelogDate = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp)[entityName];
+            annotations.changelogDate = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp)[entityName];
+          } else if (application.incrementalChangelog) {
+            // Its changelog goes to the incremental section of master.xml, also when master.xml is written again.
+            annotations.incrementalChangelogDate = this.nextTimestamp();
           } else {
-            entityConfig.annotations!.changelogDate = this.nextTimestamp();
+            annotations.changelogDate = this.nextTimestamp();
           }
           entityStorage.save();
         }
@@ -254,6 +272,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             let entity = entityStorage.getAll() as BaseEntity;
             entity.name ??= entityName;
             entity = { ...entity, ...entity.annotations };
+            entity.changelogDate ??= entity.incrementalChangelogDate;
             Object.assign(entityBootstrap, entity);
           }
         }
@@ -355,6 +374,16 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      finalizeEntityMutations({ entity }) {
+        // The delayed defaults of the entity, its fields and its relationships, as the application ones at post preparing.
+        finalizeMutations(entity);
+        for (const field of entity.fields) {
+          finalizeMutations(field);
+        }
+        for (const relationship of entity.relationships) {
+          finalizeMutations(relationship);
+        }
+      },
       hasRequiredRelationship({ entity }) {
         entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
       },

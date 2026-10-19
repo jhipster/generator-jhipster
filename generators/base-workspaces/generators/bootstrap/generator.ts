@@ -73,7 +73,7 @@ export default class BootstrapWorkspacesGenerator extends BaseWorkspacesGenerato
   }
 
   get preparingWorkspaces() {
-    return this.asLoadingWorkspacesTaskGroup({
+    return this.asPreparingWorkspacesTaskGroup({
       async loadDefaults({ deployment }) {
         defaults(deployment, this.jhipsterConfigWithDefaults);
       },

@@ -106,13 +106,12 @@ export const getEnumInfo = (
   clientRootFolder: string;
   enumJavadoc?: string;
 } => {
-  field.enumInstance = extractEnumInstance(field); // TODO remove side effect
   const enums = extractEnumEntries(field);
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: field.fieldType,
     enumJavadoc: field.fieldTypeDocumentation && formatDocAsJavaDoc(field.fieldTypeDocumentation),
-    enumInstance: field.enumInstance,
+    enumInstance: field.enumInstance ?? extractEnumInstance(field),
     enums,
     ...customValuesState,
     enumValues: getEnums(enums, customValuesState, field.fieldValuesJavadocs),

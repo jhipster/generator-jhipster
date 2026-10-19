@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 
@@ -46,6 +46,26 @@ export const foo = 'bar';
       expect(file.contents.toString()).toBe(`
 // eslint-disable-next-line no-console
 export const foo = 'bar';
+`);
+    });
+
+    it('should remove the useless path segments of a relative import of a file not on disk', async () => {
+      const file = {
+        path: '/not-on-disk/src/module/auth.module.ts',
+        contents: Buffer.from(`import { UserModule } from '../module/user.module.ts';
+
+export const modules = [UserModule];
+`),
+      };
+      setModifiedFileState(file);
+      await pipeline(
+        Readable.from([file]),
+        await createESLintTransform({ cwd: '/not-on-disk' }),
+        transform(() => undefined),
+      );
+      expect(file.contents.toString()).toBe(`import { UserModule } from "./user.module.ts";
+
+export const modules = [UserModule];
 `);
     });
   });

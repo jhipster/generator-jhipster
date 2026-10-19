@@ -20,7 +20,7 @@
 import { type GitHubMatrixGroup, type MatrixSample, extendMatrix, fromMatrix } from '../../../lib/ci/index.ts';
 import { convertOptionsToJDL } from '../support/jdl.ts';
 
-// Supported containers: https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot-docker-compose/src/main/java/org/springframework/boot/docker/compose/service/connection
+// Supported containers: https://docs.spring.io/spring-boot/reference/features/dev-services.html#features.dev-services.docker-compose.service-connections
 export default Object.fromEntries(
   [
     ...Object.entries(
@@ -56,7 +56,6 @@ export default Object.fromEntries(
     key as string,
     {
       'cmd-e2e': 'npm run ci:e2e:dev',
-      args: 'jdl',
       jdl: convertOptionsToJDL(value as MatrixSample),
     },
   ]),

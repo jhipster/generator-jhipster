@@ -16,17 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
+import { before, describe, exnode, expect, it } from 'expect-node';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, join } from 'node:path';
 
+import type EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { getDefaultJDLDefinitions } from '../../lib/jdl-config/jdl-runtime.ts';
 import { buildJDLApplicationConfig } from '../../lib/jdl-config/jhipster-jdl-config.ts';
-import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 import BaseGenerator from '../base/index.ts';
 
 import Generator from './index.ts';
 
-import { defaultHelpers as helpers, result as runResult } from '#testing';
+import { getCommandHelpOutput, shouldSupportFeatures } from '#test-support';
+import { createBlueprintFiles, defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
@@ -44,7 +47,6 @@ describe(`generator - ${generator}`, () => {
       expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
     });
   });
-  describe('blueprint support', () => testBlueprintSupport(generator));
 
   describe('for entities only jdl', () => {
     it('without baseName should reject', async () => {
@@ -84,6 +86,26 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.getSnapshot()).toEqual({
           '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
         });
+      });
+    });
+
+    describe('with ignoreApplication false over an application', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ baseName: 'jhipster' })
+          .withMockedGenerators(mockedGenerators)
+          .withOptions({ inline: 'entity Foo {}', ignoreApplication: false });
+      });
+
+      it('should compose with app instead of entities', () => {
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
+      });
+
+      it('should merge the entities into the application', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'jhipster', entities: ['Foo'] } });
+        runResult.assertFile('.jhipster/Foo.json');
       });
     });
 
@@ -154,6 +176,101 @@ describe(`generator - ${generator}`, () => {
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+
+    describe('with a jdl file outside the destination', () => {
+      before(async () => {
+        const jdlFile = join(mkdtempSync(join(tmpdir(), 'jhipster-jdl-')), 'app.jdl');
+        writeFileSync(jdlFile, 'application { config { baseName outside } }');
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(mockedGenerators)
+          .withArguments([jdlFile])
+          .withOptions({ skipSampleRepository: true });
+      });
+
+      it('should read it where it is', () => {
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { baseName: 'outside' } });
+      });
+    });
+
+    describe('run through the environment, with a blueprint declaring an application option', () => {
+      // A blueprint app generator declaring an option of the jdl, which only the configs of its command know.
+      const blueprintFiles = createBlueprintFiles('generator-jhipster-foo', {
+        generator: 'app',
+        generatorContent: `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {};
+};
+export const command = { configs: { fooOption: { jdl: { type: 'string', tokenType: 'NAME' }, scope: 'storage' } } };
+`,
+      });
+      const inline = 'application { config { baseName foo fooOption bar } }';
+
+      it('should accept the option of the blueprint', async () => {
+        await helpers
+          .runJHipster(generator)
+          .withFiles(blueprintFiles)
+          .withLookups({ localOnly: true })
+          .commitFiles()
+          .withOptions({ jsonOnly: true, blueprints: 'foo', inline });
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { fooOption: 'bar' } });
+      });
+
+      it('should refuse the option without the blueprint', async () => {
+        await expect(
+          helpers
+            .runJHipster(generator)
+            .withFiles(blueprintFiles)
+            .withLookups({ localOnly: true })
+            .commitFiles()
+            .withOptions({ jsonOnly: true, inline }),
+        ).rejects.toThrow(/Unknown application option: fooOption/);
+      });
+    });
+
+    describe('with blueprints option and an application without blueprints', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(['jhipster-foo:other'])
+          .withOptions({ jsonOnly: true, blueprints: 'foo', inline: 'application { config { baseName audited } }' });
+      });
+
+      it('should keep the blueprints of the option in the application config', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': { baseName: 'audited', blueprints: [{ name: 'generator-jhipster-foo' }] },
+        });
+      });
+    });
+
+    describe('with blueprints option and an application with blueprints', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(['jhipster-foo:other', 'jhipster-bar:other'])
+          .withOptions({ jsonOnly: true, blueprints: 'foo', inline: 'application { config { baseName audited blueprints [bar] } }' });
+      });
+
+      it('should store the blueprints of the option and of the jdl', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-foo' }, { name: 'generator-jhipster-bar' }] },
+        });
+      });
+    });
+
+    describe('with an application declaring a blueprint', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators(['jhipster-bar:app'])
+          .withOptions({ inline: 'application { config { baseName jhipster blueprints [bar] } }' });
+      });
+
+      it('should compose the application with the blueprint', () => {
+        runResult.assertGeneratorComposedOnce('jhipster-bar:app');
       });
     });
 
@@ -323,6 +440,109 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('with the createEnvBuilder option', () => {
+      const run = exnode.fn();
+      // A builder whose environment only records what it is asked to run.
+      const createEnvBuilder = exnode.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+        async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
+      );
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators([MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE])
+          .onEnvironment(env => {
+            // The adapter of the tests cannot create the adapter of another environment.
+            const adapter = env.adapter as typeof env.adapter & { newAdapter: () => typeof env.adapter };
+            adapter.newAdapter = () => adapter;
+          })
+          .withOptions({
+            inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
+            createEnvBuilder,
+          });
+      });
+
+      it('should build the environment of each application with it', () => {
+        expect(createEnvBuilder).toHaveBeenCalledTimes(2);
+        expect(createEnvBuilder.mock.calls.map(([envOptions]) => basename(envOptions?.cwd ?? '')).sort()).toEqual([
+          'jhipster',
+          'jhipster2',
+        ]);
+      });
+
+      it('should run the application generator in each environment', () => {
+        expect(run).toHaveBeenCalledTimes(2);
+        expect(run).toHaveBeenCalledWith(['jhipster:app'], expect.objectContaining({ skipPriorities: ['prompting'] }));
+      });
+    });
+
+    describe('with the blueprints option', () => {
+      const run = exnode.fn();
+      const createEnvBuilder = exnode.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+        async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
+      );
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators([MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE])
+          .onEnvironment(env => {
+            const adapter = env.adapter as typeof env.adapter & { newAdapter: () => typeof env.adapter };
+            adapter.newAdapter = () => adapter;
+          })
+          .withOptions({
+            // The cli gives the blueprints of the current folder .yo-rc.json as the blueprints option too, and the jdl
+            // definitions.
+            blueprints: 'foo',
+            jdlDefinitions: getDefaultJDLDefinitions(),
+            inline:
+              'application { config { blueprints [bar] } entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
+            createEnvBuilder,
+          });
+      });
+
+      it('should generate each application with the blueprints of its jdl only', () => {
+        expect(run).toHaveBeenCalledTimes(2);
+        for (const [, options] of run.mock.calls) {
+          expect(options).not.toHaveProperty('blueprints');
+          expect(options).not.toHaveProperty('blueprint');
+        }
+      });
+    });
+
+    describe('with the global blueprints option', () => {
+      const run = exnode.fn();
+      const createEnvBuilder = exnode.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+        async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
+      );
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedGenerators([MOCKED_APP, MOCKED_ENTITIES, MOCKED_DOCKER_COMPOSE])
+          .onEnvironment(env => {
+            const adapter = env.adapter as typeof env.adapter & { newAdapter: () => typeof env.adapter };
+            adapter.newAdapter = () => adapter;
+          })
+          .withOptions({
+            blueprints: 'foo',
+            globalBlueprints: 'baz',
+            jdlDefinitions: getDefaultJDLDefinitions(),
+            inline:
+              'application { config { blueprints [bar] } entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
+            createEnvBuilder,
+          });
+      });
+
+      it('should generate each application with the global blueprints', () => {
+        expect(run).toHaveBeenCalledTimes(2);
+        for (const [, options] of run.mock.calls) {
+          expect(options).not.toHaveProperty('blueprints');
+          expect(options).toMatchObject({ globalBlueprints: 'baz' });
+        }
+      });
+    });
+
     describe('with --ignore-application option', () => {
       before(async () => {
         await helpers.runJHipster(generator).withMockedGenerators(mockedGenerators).withOptions({
@@ -345,6 +565,54 @@ describe(`generator - ${generator}`, () => {
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
+    });
+  });
+
+  describe('over the configuration written before, in memory', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withFiles({
+          '.yo-rc.json': {
+            'generator-jhipster': {
+              baseName: 'jhipster',
+              creationTimestamp: 1577836800000,
+              lastLiquibaseTimestamp: 1577836860000,
+              languages: ['en', 'fr'],
+              testFrameworks: ['cypress'],
+            },
+          },
+          '.jhipster/Foo.json': {
+            name: 'Foo',
+            annotations: { changelogDate: '20200101000100', custom: 'kept' },
+            fields: [{ fieldName: 'removed', fieldType: 'String' }],
+            pagination: 'pagination',
+          },
+        })
+        .withOptions({
+          jsonOnly: true,
+          inline: 'application { config { baseName jhipster languages [pt] } entities Foo }\nentity Foo { name String }',
+        });
+    });
+
+    it('should change what the jdl states and keep the rest of the configuration', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', {
+        'generator-jhipster': {
+          creationTimestamp: 1577836800000,
+          lastLiquibaseTimestamp: 1577836860000,
+          languages: ['pt'],
+          testFrameworks: ['cypress'],
+        },
+      });
+    });
+
+    it('should change what the jdl states and keep the rest of the entity, its changelog date included', () => {
+      const entity = JSON.parse(runResult.getSnapshot()['.jhipster/Foo.json'].contents!);
+      expect(entity).toMatchObject({
+        annotations: { changelogDate: '20200101000100', custom: 'kept' },
+        pagination: 'pagination',
+      });
+      expect(entity.fields.map(({ fieldName }: { fieldName: string }) => fieldName)).toEqual(['name']);
     });
   });
 

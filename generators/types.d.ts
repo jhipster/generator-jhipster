@@ -28,6 +28,7 @@ export type GeneratorsWithBootstrap =
   | 'client'
   | 'common'
   | 'docker'
+  | 'e2e'
   | 'generate-blueprint'
   | 'java-simple-application'
   | 'java'
@@ -83,6 +84,8 @@ type GeneratorsByNamespace = {
   'docker-compose': import('./docker-compose/generator.ts').default;
   'jhipster:docker-compose': import('./docker-compose/generator.ts').default;
   'jhipster:docker:bootstrap': import('./docker/generators/bootstrap/generator.ts').default;
+  'jhipster:e2e:bootstrap': import('./e2e/generators/bootstrap/generator.ts').default;
+  'jhipster:e2e:common': import('./e2e/generators/common/generator.ts').default;
   entities: import('./entities/generator.ts').default;
   'jhipster:entities': import('./entities/generator.ts').default;
   entity: import('./entity/generator.ts').default;
@@ -152,6 +155,7 @@ type GeneratorsByNamespace = {
   server: import('./server/generator.ts').default;
   'jhipster:server': import('./server/generator.ts').default;
   'jhipster:server:bootstrap': import('./server/generators/bootstrap/generator.ts').default;
+  'jhipster:server:i18n': import('./server/generators/i18n/generator.ts').default;
   'spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;

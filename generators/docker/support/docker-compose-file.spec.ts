@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
-import { createDockerComposeFile } from './docker-compose-file.ts';
+import { createDockerComposeFile, mergeDockerComposeFile } from './docker-compose-file.ts';
 
 describe('generator - docker - docker-compose-file', () => {
   describe('createDockerComposeFile', () => {
@@ -37,6 +37,30 @@ name: jhipster
 name: customService
 "
 `);
+    });
+  });
+
+  describe('mergeDockerComposeFile', () => {
+    it('should merge the data into the source, adding the items of its lists', () => {
+      const source = `name: jhipster
+services:
+  postgresql:
+    image: postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+`;
+      expect(
+        mergeDockerComposeFile(
+          {
+            source: 'postgresql.yml',
+            data: { name: 'app', services: { postgresql: { image: 'postgres:18', environment: ['POSTGRES_USER=app'] } } },
+          },
+          source,
+        ),
+      ).toEqual({
+        name: 'app',
+        services: { postgresql: { image: 'postgres:18', environment: ['POSTGRES_HOST_AUTH_METHOD=trust', 'POSTGRES_USER=app'] } },
+      });
     });
   });
 });

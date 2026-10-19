@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaults, kebabCase } from 'lodash-es';
+import { defaults, kebabCase, lowerFirst } from 'lodash-es';
 
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
@@ -299,6 +299,7 @@ export function prepareCommonFieldForTemplates(
       throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
     }
     field.enumFileName = kebabCase(field.fieldType);
+    field.enumInstance = lowerFirst(field.fieldType);
     field.enumValues = getEnumValuesWithCustomValues(field.fieldValues!);
   }
 

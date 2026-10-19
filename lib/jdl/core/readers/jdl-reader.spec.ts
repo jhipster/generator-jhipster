@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { after, beforeEach, describe, expect, it } from 'esmocha';
+import { after, beforeEach, describe, expect, it } from 'expect-node';
 import fs from 'node:fs';
 
 import helpers from 'yeoman-test';
 
 import { getTestFile, parseFromContent, parseFromFiles } from '../__test-support__/index.ts';
-import type { ParsedJDLApplications } from '../parsing/types/parsed.ts';
+import type { ParsedJDLApplications } from '../parsing/index.ts';
 
 describe('jdl - JDLReader', () => {
   beforeEach(async () => {

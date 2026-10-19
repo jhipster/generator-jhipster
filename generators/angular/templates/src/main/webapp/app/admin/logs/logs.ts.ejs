@@ -28,7 +28,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-import { FormsModule } from '@angular/forms';
 import { SlicePipe } from '@angular/common';
 import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
 import { Log, LoggersResponse, Level } from './log.model';
@@ -48,7 +47,6 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
     TranslateDirective,
 <%_ } _%>
     FontAwesomeModule,
-    FormsModule,
     SortDirective,
     SortByDirective,
     SlicePipe,

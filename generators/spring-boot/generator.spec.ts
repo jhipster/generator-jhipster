@@ -17,15 +17,20 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
+import { before, describe, expect, it } from 'expect-node';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join } from 'node:path';
+import { createSecureContext } from 'node:tls';
 
+import { createReproducibleBase64Secret, createReproducibleSecret } from '../../lib/utils/secret.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
+import { createKeyStore } from '../java/support/key-store-node-crypto.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
 import Generator from './generator.ts';
+import type { Entity as SpringBootEntity } from './types.d.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { createTestHelpers, typedResult } from '#testing';
@@ -64,6 +69,63 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.getSnapshot('**/spring.factories')).toMatchSnapshot();
     });
   });
+  describe('KeyStore', () => {
+    const keyStoreFile = 'src/main/resources/config/tls/keystore-samples.p12';
+
+    describe('without an existing KeyStore', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }).withOptions({ fakeKeytool: false });
+      });
+
+      it('should write a PKCS#12 KeyStore that loads with the password', () => {
+        const pfx = runResult.fs.read(join(runResult.cwd, keyStoreFile), { raw: true });
+        expect(() => createSecureContext({ pfx, passphrase: 'password' })).not.toThrow();
+        expect(() => createSecureContext({ pfx, passphrase: 'wrong' })).toThrow('mac verify failure');
+      });
+
+      it('should write it once', () => {
+        expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
+      });
+    });
+
+    describe('with reproducibleSecrets', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true })
+          .withOptions({ fakeKeytool: false, reproducibleSecrets: true });
+      });
+
+      it('should derive the KeyStore from the creation timestamp', () => {
+        const { packageName, creationTimestamp } = runResult.application!;
+        const pfx = runResult.fs.read(join(runResult.cwd, keyStoreFile), { raw: true });
+        expect(pfx.equals(createKeyStore({ packageName: packageName!, creationTimestamp }))).toBe(true);
+      });
+    });
+
+    describe('with an existing KeyStore', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true })
+          // On the disk, as in a project: an identical write to a file already modified in memory keeps its metadata.
+          .doInDir(cwd => {
+            mkdirSync(join(cwd, dirname(keyStoreFile)), { recursive: true });
+            writeFileSync(join(cwd, keyStoreFile), 'existing');
+          })
+          .withOptions({ fakeKeytool: false });
+      });
+
+      it('should leave it unchanged', () => {
+        runResult.assertFileContent(keyStoreFile, /^existing$/);
+      });
+
+      it('should write it back as a write once file', () => {
+        expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
+      });
+    });
+  });
+
   describe('with jwt', () => {
     before(async () => {
       await helpers
@@ -104,10 +166,34 @@ describe(`generator - ${generator}`, () => {
         jhipsterPackageJson: expect.any(Object),
         jwtSecretKey: expect.any(String),
         springBootDependencies: expect.any(Object),
+        dockerComposeFiles: expect.any(Object),
         addLanguageCallbacks: expect.any(Array),
         supportedLanguages: expect.any(Array),
       });
     });
+  });
+
+  describe('with reproducibleSecrets', () => {
+    for (const [authenticationType, key, createKey] of [
+      ['jwt', 'jwtSecretKey', (seed: number) => createReproducibleBase64Secret(seed, 'jwtSecretKey', 64)],
+      ['session', 'rememberMeKey', (seed: number) => createReproducibleSecret(seed, 'rememberMeKey')],
+    ] as const) {
+      describe(`with ${authenticationType} authentication`, () => {
+        before(async () => {
+          await helpers
+            .runJHipster(generator)
+            .withJHipsterConfig({ authenticationType })
+            .withOptions({ reproducibleSecrets: true })
+            .withMockedSource({ except: ['addTestSpringFactory'] })
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
+        });
+
+        it(`derives the ${key} from the creation timestamp`, () => {
+          const { creationTimestamp } = runResult.application!;
+          expect(runResult.application![key]).toBe(createKey(creationTimestamp));
+        });
+      });
+    }
   });
 
   describe('with oauth2', () => {
@@ -127,6 +213,7 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.application).toMatchSnapshot({
         jhipsterPackageJson: expect.any(Object),
         springBootDependencies: expect.any(Object),
+        dockerComposeFiles: expect.any(Object),
         addLanguageCallbacks: expect.any(Array),
         supportedLanguages: expect.any(Array),
       });
@@ -307,6 +394,36 @@ describe(`generator - ${generator}`, () => {
     });
   }
 
+  for (const reactive of [false, true]) {
+    describe(`with ${reactive ? 'reactive ' : ''}filtering and non-adjacent fields sharing a custom filter`, () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withMockedSource({ except: ['addTestSpringFactory'] })
+          .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators })
+          .withJHipsterConfig({ skipClient: true, reactive }, [
+            {
+              name: 'Shop',
+              changelogDate: '20160926101210',
+              jpaMetamodelFiltering: true,
+              fields: [
+                { fieldName: 'status', fieldType: 'ShopStatus', fieldValues: 'OPEN,CLOSED' },
+                { fieldName: 'opensAt', fieldType: 'LocalTime' },
+                { fieldName: 'kind', fieldType: 'ShopKind', fieldValues: 'RETAIL,ONLINE' },
+                { fieldName: 'previousStatus', fieldType: 'ShopStatus', fieldValues: 'OPEN,CLOSED' },
+                { fieldName: 'closesAt', fieldType: 'LocalTime' },
+              ],
+            },
+          ]);
+      });
+
+      it('should prepare one custom filter per type', () => {
+        const types = (runResult.entities!.Shop as SpringBootEntity).entityJavaCustomFilters.map(({ type }) => type);
+        expect(types).toEqual([...new Set(types)]);
+      });
+    });
+  }
+
   describe('source api', () => {
     describe('editJavaFile with springBeans', () => {
       before(async () => {
@@ -369,6 +486,29 @@ describe(`generator - ${generator}`, () => {
       it('should match order', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).not.toContain('syncUserWithIdp');
       });
+    });
+  });
+
+  describe('with filtering entities', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators })
+        .withJHipsterConfig({ skipClient: true }, [
+          { name: 'Foo', changelogDate: '20160926101210', jpaMetamodelFiltering: true, fields: [] },
+          { name: 'Bar', changelogDate: '20160926101211', dto: 'mapstruct', fields: [] },
+        ]);
+    });
+
+    it('should give an entity filtering without service a service class, without writing it to its config', () => {
+      runResult.assertFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`);
+      runResult.assertFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooQueryService.java`);
+      runResult.assertNoJsonFileContent('.jhipster/Foo.json', { service: 'serviceClass' });
+    });
+
+    it('should not give an entity with a dto a service', () => {
+      runResult.assertNoFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/BarService.java`);
     });
   });
 });

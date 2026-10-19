@@ -39,12 +39,12 @@ declare module '*.css' {
   <%_ for (const remote of microfrontends) { _%>
 
 declare module '@<%- remote.moduleFederationName %>/entities-routes' {
-  const _default: () => import('react').React.JSX.Element;
+  const _default: () => import('react').JSX.Element;
   export default _default;
 }
 
 declare module '@<%- remote.moduleFederationName %>/entities-menu' {
-  const _default: () => import('react').React.JSX.Element;
+  const _default: () => import('react').JSX.Element;
   export default _default;
 }
   <%_ } _%>

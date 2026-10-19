@@ -18,11 +18,15 @@
  */
 
 import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+import type { EditorMetadata } from '../base-core/api.ts';
 
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
+/** sonar-project.properties is formatted with prettier when committing, its edits must keep this metadata. */
+export const SONAR_PROPERTIES_METADATA: EditorMetadata = { prettier: true };
+
 export const commonFiles = {
   global: [
     {
@@ -31,7 +35,7 @@ export const commonFiles = {
   ],
   sonar: [
     {
-      templates: ['sonar-project.properties'],
+      templates: [{ file: 'sonar-project.properties', metadata: SONAR_PROPERTIES_METADATA }],
     },
   ],
 };

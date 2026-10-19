@@ -20,7 +20,7 @@ import { asWritingTask } from '../base-application/support/task-type-inference.t
 import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 /**
- * Removes files that where generated in previous JHipster versions and therefore
+ * Removes files that were generated in previous JHipster versions and therefore
  * need to be removed.
  */
 export default asWritingTask<ClientEntity, ClientApplication>(function cleanupOldFilesTask({ application, control }) {

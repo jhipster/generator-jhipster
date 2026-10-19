@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
@@ -33,7 +33,7 @@ import type JDLOptions from '../../core/models/jdl-options.ts';
 import type JDLRelationship from '../../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 import JDLValidation from '../../core/models/jdl-validation.ts';
-import type { ParsedJDLApplications } from '../../core/parsing/types/parsed.ts';
+import type { ParsedJDLApplications } from '../../core/parsing/index.ts';
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 

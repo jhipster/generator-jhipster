@@ -25,6 +25,7 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.elasticsearch.config.ElasticsearchConfigurationSupport;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchCustomConversions;
+import org.springframework.data.elasticsearch.repository.config.Enable<%- reactivePrefix %>ElasticsearchRepositories;
 <%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext;
 import org.springframework.data.elasticsearch.core.mapping.ElasticsearchPersistentProperty;
@@ -42,6 +43,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Configuration
+@Enable<%- reactivePrefix %>ElasticsearchRepositories("<%- packageName %>.repository.search")
 public class ElasticsearchConfiguration extends ElasticsearchConfigurationSupport {
 
     @Bean

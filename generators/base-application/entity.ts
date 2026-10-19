@@ -321,6 +321,8 @@ type BaseApplicationAddedEntityProperties = {
   hasCyclicRequiredRelationship?: boolean;
 
   entityNameCapitalized: string;
+  /** The name of the entity class, as the generators of every backend and client name it. */
+  entityClass: string;
   entityNameKebabCase: string;
   entityNamePlural: string;
   entityNamePluralizedAndSpinalCased: string;
@@ -394,6 +396,7 @@ export const mutateEntity = {
   __override__: false,
   clientRootFolder: '',
   entityNameCapitalized: ({ name }) => upperFirst(name),
+  entityClass: ({ entityNameCapitalized }) => upperFirst(entityNameCapitalized),
   entityNameKebabCase: ({ name }) => kebabCase(name),
   entityNamePlural: ({ name }) => pluralize(name, { force: true }),
   entityNamePluralizedAndSpinalCased: ({ name }) => kebabCase(pluralize(name, { force: false })),

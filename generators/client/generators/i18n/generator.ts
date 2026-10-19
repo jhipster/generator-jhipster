@@ -40,8 +40,6 @@ export default class I18NGenerator extends ClientApplicationGenerator {
 
     await this.dependsOnBootstrap('languages');
     await this.dependsOnBootstrap('client');
-    // TODO entityClass is required for translations, should be moved to base application.
-    await this.dependsOnBootstrap('java');
   }
 
   get configuring() {
@@ -81,16 +79,15 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
-        source.addEntityTranslationKey = ({ translationKey, translationValue, language }) => {
-          this.mergeDestinationJson(`${application.clientI18nDir}${language}/global.json`, {
-            global: {
-              menu: {
-                entities: {
-                  [translationKey]: translationValue,
-                },
-              },
-            },
-          });
+        source.addEntityTranslationKey = keys => {
+          // Each translation file is merged once, with all of its keys.
+          const entitiesByLanguage: Record<string, Record<string, string>> = {};
+          for (const { translationKey, translationValue, language } of [keys].flat()) {
+            (entitiesByLanguage[language] ??= {})[translationKey] = translationValue;
+          }
+          for (const [language, entities] of Object.entries(entitiesByLanguage)) {
+            this.mergeDestinationJson(`${application.clientI18nDir}${language}/global.json`, { global: { menu: { entities } } });
+          }
         };
       },
     });
@@ -317,16 +314,17 @@ export default class I18NGenerator extends ClientApplicationGenerator {
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       addEntities({ entities, source }) {
-        for (const entity of entities.filter(
-          entity => !entity.skipClient && !entity.builtInUser && entity.entityTranslationKeyMenuPath.startsWith('global'),
-        )) {
-          for (const { languageTag } of this.languagesToGenerate) {
-            source.addEntityTranslationKey?.({
+        const translationKeys = entities
+          .filter(entity => !entity.skipClient && !entity.builtInUser && entity.entityTranslationKeyMenuPath.startsWith('global'))
+          .flatMap(entity =>
+            this.languagesToGenerate.map(({ languageTag }) => ({
               language: languageTag,
               translationKey: entity.entityTranslationKeyMenu,
               translationValue: entity.entityNameHumanized ?? startCase(entity.entityNameCapitalized),
-            });
-          }
+            })),
+          );
+        if (translationKeys.length > 0) {
+          source.addEntityTranslationKey?.(translationKeys);
         }
       },
     });

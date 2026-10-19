@@ -48,7 +48,7 @@ const command = {
       scope: 'storage',
     },
     skipCheckLengthOfIdentifier: {
-      description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
+      description: 'Skip checking the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
       cli: {
         type: Boolean,
       },
@@ -132,6 +132,13 @@ const command = {
       },
       choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
       scope: 'storage',
+    },
+  },
+  field: {
+    types: {
+      // The Joda-Time types of old applications, the server generator migrates them to Instant.
+      Date: { validations: ['required', 'unique'], deprecated: 'use Instant, which it is migrated to' },
+      DateTime: { validations: ['required', 'unique'], deprecated: 'use Instant, which it is migrated to' },
     },
   },
   import: ['common', 'spring-boot'],

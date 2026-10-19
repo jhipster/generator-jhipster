@@ -27,10 +27,11 @@ export const testIntegrationRelativeFolder = '.blueprint/generate-sample/templat
 export const testIntegrationFolder = join(packageRoot, testIntegrationRelativeFolder);
 export const samplesFolder = join(testIntegrationFolder, 'samples');
 
-export const jhipsterBin = join(packageRoot, 'bin/jhipster.cjs');
-
 export const jdlSamplesFolder = join(testIntegrationFolder, 'jdl-samples');
 export const dailyBuildsFolder = join(testIntegrationFolder, 'daily-builds');
 export const jdlEntitiesSamplesFolder = join(samplesFolder, 'jdl-entities');
 
 export const entitiesSamplesDir = join(samplesFolder, '.jhipster');
+
+/** The `github-build-matrix/samples/<group>.ts` files, the samples of the group workflows. */
+export const githubSamplesGroupFolder = join(packageRoot, '.blueprint/github-build-matrix/samples');

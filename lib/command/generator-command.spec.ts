@@ -17,14 +17,15 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import type { GeneratorMeta } from '@yeoman/types';
 
 import BaseApplicationGenerator from '../../generators/base-application/generator.ts';
-import { defaultHelpers as helpers, runResult } from '../testing/index.ts';
 
 import type { JHipsterCommandDefinition, JHipsterConfig } from './types.ts';
+
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const notImplementedCallback = (methodName: string) => {
   return () => {
@@ -36,6 +37,7 @@ const dummyMeta = {
   packageNamespace: 'jhipster',
   resolved: 'dummy',
   importModule: () => Promise.resolve({ command: {} }),
+  requireModule: () => ({ command: {} }),
   importGenerator: notImplementedCallback('importGenerator'),
   instantiateHelp: notImplementedCallback('instantiateHelp'),
   instantiate: notImplementedCallback('instantiate'),
@@ -72,10 +74,8 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
       const generatorMeta = {
         ...dummyMeta,
         namespace: 'jhipster:dummy',
-        importModule: () =>
-          Promise.resolve({
-            command: { configs: { testOption: config } } satisfies JHipsterCommandDefinition,
-          }),
+        importModule: () => Promise.resolve({ command: { configs: { testOption: config } } satisfies JHipsterCommandDefinition }),
+        requireModule: () => ({ command: { configs: { testOption: config } } satisfies JHipsterCommandDefinition }),
         importGenerator: () => Promise.resolve(CommandGenerator as any),
       };
       (CommandGenerator as any)._meta = generatorMeta;

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
@@ -116,6 +116,7 @@ describe(`generator - ${clientFramework}`, () => {
         expect(application).toMatchSnapshot({
           addLanguageCallbacks: expect.any(Array),
           customizeTemplatePaths: expect.any(Array),
+          dockerComposeFiles: expect.any(Object),
           dockerContainers: expect.any(Object),
           entities: expect.any(Array),
           languages: expect.any(Array),
@@ -279,7 +280,19 @@ describe(`generator - ${clientFramework}`, () => {
           [{ name: 'UserManagement', skipClient: false }],
         )
         .withMockedSource()
-        .withMockedGenerators(['jhipster:common']);
+        .withMockedGenerators(['jhipster:common'])
+        .onGenerator(generator => {
+          // As the app generator does: the bootstrap of the backend declares which fields can be sorted.
+          const angular = generator as unknown as {
+            beforeQueue: () => Promise<void>;
+            dependsOnBootstrap: (name: string) => Promise<unknown>;
+          };
+          const beforeQueue = angular.beforeQueue.bind(angular);
+          angular.beforeQueue = async () => {
+            await beforeQueue();
+            await angular.dependsOnBootstrap('server');
+          };
+        });
     });
 
     it('should match snapshot for UserManagement files', () => {

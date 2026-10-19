@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
-import { type Options, format, resolveConfig } from 'prettier';
+import { join } from 'node:path';
+
+import { type Options, clearConfigCache, format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 // @ts-expect-error No types available
@@ -25,10 +27,11 @@ import prettierPluginProperties from 'prettier-plugin-properties';
 
 import { addLineNumbers } from '../internal/transform-utils.ts';
 
-export default async ({
+const formatFile = async ({
   relativeFilePath,
   filePath,
   fileContents,
+  configRoot,
   prettierOptions,
   prettierPackageJson,
   prettierJava,
@@ -37,13 +40,15 @@ export default async ({
   relativeFilePath: string;
   filePath: string;
   fileContents: string;
+  /** Folder with the prettier config files not committed to disk yet, resolve the config from it instead of the disk. */
+  configRoot?: string;
   prettierOptions?: Record<string, unknown>;
   prettierPackageJson?: boolean;
   prettierJava?: boolean;
   prettierProperties?: boolean;
 }): Promise<{ result: string } | { errorMessage: string }> => {
   try {
-    const resolvedDestinationFileOptions = await resolveConfig(relativeFilePath);
+    const resolvedDestinationFileOptions = await resolveConfig(configRoot ? join(configRoot, relativeFilePath) : relativeFilePath);
     const fileOptions: Options = {
       // Config from disk
       ...resolvedDestinationFileOptions,
@@ -58,7 +63,7 @@ export default async ({
     if (prettierJava && filePath.endsWith('.java')) {
       fileOptions.plugins!.push(prettierPluginJava);
     }
-    if (prettierProperties) {
+    if (prettierProperties && filePath.endsWith('.properties')) {
       fileOptions.plugins!.push(prettierPluginProperties);
     }
     return { result: await format(fileContents, fileOptions) };
@@ -73,4 +78,15 @@ At: ${addLineNumbers(fileContents)}`;
     }
     return { errorMessage };
   }
+};
+
+export type PrettierFormatTask = Parameters<typeof formatFile>[0];
+
+/** A task of the transform, or the cleanup of its commit: the config files it read may change before a next one. */
+export default async (task: PrettierFormatTask | { cleanup: true }): Promise<Awaited<ReturnType<typeof formatFile>> | undefined> => {
+  if ('cleanup' in task) {
+    await clearConfigCache();
+    return undefined;
+  }
+  return formatFile(task);
 };

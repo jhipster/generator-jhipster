@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type commonCommand from '../../../generators/common/command.ts';
+import type { ExportFieldValidationPropertiesFromCommand } from '../../command/types.ts';
 import type { ValidationType } from '../../jdl/core/built-in-options/validations.ts';
 
 import type { Property } from './property.ts';
@@ -30,8 +32,12 @@ type FieldBlob = {
   fieldTypeBlobContent: 'image' | 'any' | 'text';
 };
 
+/** The values of the validations the generators declare: `fieldValidateRulesMinlength`, `fieldValidateRulesPattern`... */
+type FieldValidationValues = ExportFieldValidationPropertiesFromCommand<typeof commonCommand>;
+
 export type Field = Partial<FieldEnum> &
   Partial<FieldBlob> &
+  FieldValidationValues &
   Property & {
     fieldType: string;
     fieldName: string;
@@ -42,14 +48,7 @@ export type Field = Partial<FieldEnum> &
     options?: Record<string, boolean | string | number>;
 
     fieldValidateRules?: ValidationType[];
-    fieldValidateRulesPattern?: string;
-    fieldValidateRulesMaxlength?: number;
-    fieldValidateRulesMax?: number;
-    fieldValidateRulesMin?: number;
-    fieldValidateRulesMinlength?: number;
     fieldValidationRequired?: boolean;
-    fieldValidateRulesMaxbytes?: number;
-    fieldValidateRulesMinbytes?: number;
     /** @deprecated */
     fieldTypeJavadoc?: string;
   };

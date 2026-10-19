@@ -19,12 +19,15 @@
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { type DuplexWithDebug, transform } from 'p-transform';
 
+import type { EditorMetadata } from '../../../base-core/api.d.ts';
+
 import TemplateFileFs from './template-file-fs.ts';
 import type TemplateFile from './template-file.ts';
 
-export const createMultiStepTransform = () => {
+export const createMultiStepTransform = ({ log }: { log?: (message: string) => void } = {}) => {
   const templateFileFs = new TemplateFileFs({});
   const templateFiles: TemplateFile[] = [];
+  const fragmentFiles: TemplateFile[] = [];
 
   const duplex: DuplexWithDebug & { templateFileFs: TemplateFileFs } = transform(
     (file: MemFsEditorFile) => {
@@ -34,15 +37,23 @@ export const createMultiStepTransform = () => {
       const templateFile = templateFileFs.add(file);
       if (templateFile.rootTemplate) {
         templateFiles.push(templateFile);
+      } else {
+        fragmentFiles.push(templateFile);
       }
       return undefined;
     },
     async function () {
+      for (const fragment of fragmentFiles) {
+        if (!templateFileFs.get(fragment.parentPath!).filePath) {
+          log?.(`The fragment ${fragment.filePath} was dropped: its template ${fragment.parentPath} was not written with it.`);
+        }
+      }
       for (const templateFile of templateFiles) {
-        const file = templateFile.file!;
+        const file = templateFile.file! as MemFsEditorFile & { editorMetadata?: EditorMetadata };
+        file.editorMetadata = { ...file.editorMetadata, mergedFiles: templateFile.mergedFiles };
         file.path = templateFile.basePath!;
         file.contents = Buffer.from(templateFile.render().concat('\n'));
-        this.push(templateFile.file!);
+        this.push(file);
       }
     },
   ) as any;

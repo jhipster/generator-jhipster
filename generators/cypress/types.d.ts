@@ -5,6 +5,8 @@ import type {
   Entity as JavascriptEntity,
   Options as JavascriptOptions,
 } from '../client/types.ts';
+import type { E2eAddedApplicationProperties } from '../e2e/application.ts';
+import type { E2eAddedEntityProperties } from '../e2e/types.ts';
 
 export type { Features, Field, Relationship, Source } from '../client/types.ts';
 import type command from './command.ts';
@@ -15,12 +17,13 @@ export type Config = JavascriptConfig & Command['Config'];
 
 export type Options = JavascriptOptions & Command['Options'];
 
-export interface Entity extends JavascriptEntity {
+export interface Entity extends JavascriptEntity, E2eAddedEntityProperties {
   generateEntityCypress?: boolean;
 }
 
 export type Application<E extends Entity = Entity> = JavascriptApplication<E> &
-  Command['Application'] & {
+  Command['Application'] &
+  E2eAddedApplicationProperties & {
     cypressDir: string;
     cypressTemporaryDir: string;
     cypressBootstrapEntities: boolean;

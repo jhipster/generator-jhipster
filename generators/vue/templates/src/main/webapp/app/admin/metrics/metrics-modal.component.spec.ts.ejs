@@ -28,7 +28,7 @@ describe('MetricsModal', () => {
 
   beforeEach(() => {
     const wrapper = shallowMount(MetricsModal, {
-      propsData: {
+      props: {
         threadDump: [
           { name: 'test1', threadState: 'RUNNABLE' },
           { name: 'test2', threadState: 'WAITING' },

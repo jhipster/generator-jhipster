@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { filterBasicServerGenerators, shouldComposeWithCouchbase } from './__test-support/index.ts';
@@ -122,6 +122,38 @@ describe(`generator - ${generator}`, () => {
 
     it('should match files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
+
+  describe('with a filtering entity declaring no service', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withJHipsterConfig({ skipClient: true }, [
+          { name: 'Foo', changelogDate: '20160926101210', jpaMetamodelFiltering: true, service: 'no', fields: [] },
+        ]);
+    });
+
+    it('should disable its filtering', () => {
+      runResult.assertNoFile('src/main/java/com/mycompany/myapp/service/FooQueryService.java');
+      runResult.assertJsonFileContent('.jhipster/Foo.json', { jpaMetamodelFiltering: false, service: 'no' });
+    });
+  });
+
+  describe('with a filtering entity of a mongodb application', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withJHipsterConfig({ skipClient: true, databaseType: 'mongodb' }, [
+          { name: 'Foo', changelogDate: '20160926101210', jpaMetamodelFiltering: true, fields: [] },
+        ]);
+    });
+
+    it('should disable its filtering', () => {
+      runResult.assertNoFile('src/main/java/com/mycompany/myapp/service/FooQueryService.java');
+      runResult.assertJsonFileContent('.jhipster/Foo.json', { jpaMetamodelFiltering: false });
     });
   });
 });

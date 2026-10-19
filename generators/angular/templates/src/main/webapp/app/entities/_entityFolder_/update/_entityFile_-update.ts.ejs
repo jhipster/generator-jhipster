@@ -103,8 +103,8 @@ import { <%- importedType %> } from '<%- importedPath %>';
 export class <%- entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
     <%- entityInstance %>: I<%- entityAngularName %> | null = null;
-<%_ for (const [importedType] of enumImports) { _%>
-    <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+<%_ for (const enumField of enumTypeFields) { _%>
+    <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
 <%_ for (const field of fields.filter(field => field.angularFieldClientConstant)) { _%>
     <%- field.fieldName %>Values = <%- field.angularFieldClientConstant.angularConstantValues %>;
@@ -122,23 +122,23 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ } _%>
 
 <%_ if (anyFieldIsBlobDerived) { _%>
-    protected dataUtils = inject(DataUtils);
-    protected eventManager = inject(EventManager);
+    private readonly dataUtils = inject(DataUtils);
+    private readonly eventManager = inject(EventManager);
 <%_ } _%>
-    protected <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
-    protected <%- entityInstance %>FormService = inject(<%- entityAngularName %>FormService);
+    private readonly <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
+    private readonly <%- entityInstance %>FormService = inject(<%- entityAngularName %>FormService);
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const uniqueRel = relationshipsByEntityNeedingOptions[0]; _%>
   <%_ if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) { _%>
-    protected <%- uniqueRel.otherEntity.entityInstance %>Service = inject(<%- uniqueRel.otherEntity.entityAngularName %>Service);
+    private readonly <%- uniqueRel.otherEntity.entityInstance %>Service = inject(<%- uniqueRel.otherEntity.entityAngularName %>Service);
   <%_ } _%>
 <%_ } _%>
 <%_ if (anyFieldHasImageContentType) { _%>
-    protected elementRef = inject(ElementRef);
+    private readonly elementRef = inject(ElementRef);
 <%_ } _%>
-    protected activatedRoute = inject(ActivatedRoute);
+    private readonly activatedRoute = inject(ActivatedRoute);
 <%_ for (const { otherEntity, propertyName } of primaryKeyOnlyRelationships) { _%>
-    protected readonly <%- otherEntity.entityInstance %>Service = inject(<%- otherEntity.entityAngularName %>Service);
+    private readonly <%- otherEntity.entityInstance %>Service = inject(<%- otherEntity.entityAngularName %>Service);
     // eslint-disable-next-line @typescript-eslint/member-ordering
     readonly <%- propertyName %> = computed(() => this.<%- otherEntity.entityInstance %>Service.<%- otherEntity.entityInstancePlural %>().map(<%- otherEntity.entityInstance %> => <%- otherEntity.entityInstance %>.<%- otherEntity.primaryKey.name %>));
 <%_ } _%>
@@ -230,26 +230,26 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ } _%>
     }
 
-    protected subscribeToSaveResponse(result: Observable<I<%- entityAngularName %> | null>): void {
+    private subscribeToSaveResponse(result: Observable<I<%- entityAngularName %> | null>): void {
         result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
             next: () => this.onSaveSuccess(),
             error: () => this.onSaveError()
         });
     }
 
-    protected onSaveSuccess(): void {
+    private onSaveSuccess(): void {
         this.previousState();
     }
 
-    protected onSaveError(): void {
-        // Api for inheritance.
+    private onSaveError(): void {
+        // API for inheritance.
     }
 
-    protected onSaveFinalize(): void {
+    private onSaveFinalize(): void {
         this.isSaving.set(false);
     }
 
-    protected updateForm(<%- entityInstance %>: I<%- entityAngularName %>): void {
+    private updateForm(<%- entityInstance %>: I<%- entityAngularName %>): void {
         this.<%- entityInstance %> = <%- entityInstance %>;
         this.<%- entityInstance %>FormService.resetForm(this.editForm, <%- entityInstance %>);
 <%_ if (relationships.filter(rel => rel.persistableRelationship).length > 0) { _%>
@@ -282,10 +282,11 @@ export class <%- entityAngularName %>Update implements OnInit {
     }
 
 <%_ if (allRelationshipsByEntityNeedingOptions.length > 0) { _%>
-    protected loadRelationshipsOptions(): void {
+    private loadRelationshipsOptions(): void {
   <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
-    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); %>
-    <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); %>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
+
+    <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
     <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0]; _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
         this.<%- otherEntity.entityInstance %>Service
@@ -303,7 +304,7 @@ export class <%- entityAngularName %>Update implements OnInit {
             )))
             .subscribe((<%- otherEntity.entityInstancePlural %>: I<%- otherEntity.entityAngularName %>[]) => (this.<%- otherEntity.entityInstancePlural %>SharedCollection.set(<%- otherEntity.entityInstancePlural %>)));
     <%_ } _%>
-    <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
+    <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
       <%_ const filter = relationship.otherEntity.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
 
         this.<%- relationship.otherEntityName %>Service

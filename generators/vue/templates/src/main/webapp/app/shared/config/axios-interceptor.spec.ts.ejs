@@ -59,40 +59,36 @@ describe('Axios interceptor', () => {
 });
 
 describe('Axios errors interceptor', () => {
+  beforeEach(() => {
+    axios.interceptors.request.clear();
+    axios.interceptors.response.clear();
+  });
+
   it('should use callback on 401, 403 errors', async () => {
     const callback = vi.fn();
 
     setupAxiosConfig.setupAxiosInterceptors(callback, () => {});
 
-    try {
-      mock.onGet().reply(401);
-      await axios('/api/test');
-    } catch {
-      expect(callback).toHaveBeenCalled();
-    }
+    mock.onGet().reply(401);
+    await axios('/api/test');
+    expect(callback).toHaveBeenCalled();
   });
   it('should use callback on 50x errors', async () => {
     const callback = vi.fn();
 
     setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
 
-    try {
-      mock.onGet().reply(500);
-      await axios('/api/test');
-    } catch {
-      expect(callback).toHaveBeenCalled();
-    }
+    mock.onGet().reply(500);
+    await axios('/api/test');
+    expect(callback).toHaveBeenCalled();
   });
   it('should not use callback for errors different 50x, 401, 403', async () => {
     const callback = vi.fn();
 
     setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
 
-    try {
-      mock.onGet().reply(402);
-      await axios('/api/test');
-    } catch {
-      expect(callback).not.toHaveBeenCalled();
-    }
+    mock.onGet().reply(402);
+    await expect(axios('/api/test')).rejects.toThrow();
+    expect(callback).not.toHaveBeenCalled();
   });
 });

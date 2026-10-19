@@ -27,7 +27,7 @@ import {
 } from '../../support/commands';
 import { test, expect } from '../../support/fixtures';
 
-<% const registerPage = clientFrameworkVue ? '/register' : '/account/register'; _%>
+<%_ const registerPage = clientFrameworkVue ? '/register' : '/account/register'; _%>
 test.describe('<%- registerPage %>', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('<%- registerPage %>');

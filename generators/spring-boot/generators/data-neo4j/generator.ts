@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+import { snakeCase } from 'lodash-es';
+
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
@@ -87,6 +89,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
       prepareEntity({ entity }) {
         entity.relationships.forEach(relationship => {
           relationship.persistableRelationship ??= true;
+          relationship.relationshipNameUpperSnakeCase ??= snakeCase(relationship.relationshipName).toUpperCase();
         });
       },
     });

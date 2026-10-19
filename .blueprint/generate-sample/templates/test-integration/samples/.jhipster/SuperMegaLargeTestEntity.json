@@ -55,6 +55,5 @@
       "relationshipName": "superMegaLargeTestCustomTableName",
       "relationshipType": "one-to-many"
     }
-  ],
-  "service": "no"
+  ]
 }

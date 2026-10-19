@@ -28,6 +28,7 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrap('spring-boot');
       await this.dependsOnJHipster('jhipster:java-simple-application:build-tool');
     }
   }

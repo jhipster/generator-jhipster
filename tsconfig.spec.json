@@ -1,5 +1,5 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "lib/**/*", "test/**/*", ".blueprint/**/*", "eslint.config.ts"],
+  "include": ["cli/**/*", "generators/**/*", "lib/**/*", "test/**/*", ".blueprint/**/*", "eslint.config.ts", "expect-node.config.ts"],
   "exclude": [],
   "extends": "./tsconfig.json",
   "compilerOptions": {

@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, it } from 'esmocha';
+import { before, describe, it } from 'expect-node';
 import { basename } from 'node:path';
-
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const GENERATOR_LANGUAGES = 'languages';

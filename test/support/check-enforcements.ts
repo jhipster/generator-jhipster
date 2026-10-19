@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, it } from 'esmocha';
+import { before, describe, it } from 'expect-node';
 import assert from 'node:assert';
 import { opendirSync, readFileSync, writeFileSync } from 'node:fs';
 import path, { basename } from 'node:path';
@@ -44,7 +44,7 @@ const readDir = (dirPath: string) => {
 
 export default function checkEnforcements({ client }: { client?: boolean }, generator: string, ...generatorUsage: string[]) {
   describe('enforce some developments patterns', () => {
-    const allFiles = readDir(getGeneratorFolder(generator)).filter(file => !/i18n\/(.*)\.json\.ejs$/.test(file));
+    const allFiles = readDir(getGeneratorFolder(generator)).filter(file => !/i18n\/(.*)\.(json|properties)\.ejs$/.test(file));
     allFiles
       .filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file))
       .forEach(file => {
@@ -55,12 +55,13 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
           });
 
           [
-            ['src/main/webapp', '<%= clientSrcDir %>'],
-            ['src/test/javascript', '<%= clientTestDir %>'],
+            ['src/main/webapp', '<%- clientSrcDir %>'],
+            ['src/test/javascript', '<%- clientTestDir %>'],
+            ['src/main/docker', '<%- dockerServicesDir %>'],
             ...(client ?
               [
-                [' jhiTranslate', ' <%= jhiPrefix %>Translate'],
-                [' Java ', ' <%= backendType %> '],
+                [' jhiTranslate', ' <%- jhiPrefix %>Translate'],
+                [' Java ', ' <%- backendType %> '],
               ]
             : []),
           ].forEach(([notExpected, replacement]) => {

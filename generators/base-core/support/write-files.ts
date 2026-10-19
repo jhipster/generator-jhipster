@@ -19,7 +19,7 @@
 import type { EditFileCallback } from '../api.ts';
 
 /**
- * TODO move to utils when converted to typescripts
+ * TODO move to utils when converted to TypeScript
  * Converts multiples EditFileCallback callbacks into one.
  */
 

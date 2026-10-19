@@ -29,15 +29,16 @@ import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { CLI_NAME } from '../../cli/utils.ts';
 import type { YoRcFileContent } from '../../lib/constants/yeoman.ts';
 import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
-import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
-import BaseGenerator from '../base/index.ts';
-import { normalizeBlueprintName } from '../base/internal/blueprint.ts';
+import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
+import { mergeConfigContent, mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
+import BaseCoreGenerator from '../base-core/index.ts';
+import { optionsForAnotherProject } from '../base-core/internal/index.ts';
 import type { Options as BootstrapOptions } from '../bootstrap/types.d.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 
-import { addApplicationIndex, allNewApplications, customizeForMicroservices, resolveJDLDefinitions } from './internal/index.ts';
+import { allNewApplications, resolveJDLDefinitions, resolveJDLDefinitionsOf } from './internal/index.ts';
 import type { Config as JdlConfig, Options as JdlOptions } from './types.ts';
 
 /**
@@ -52,7 +53,14 @@ const toJdlFile = (file: string): string => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs<MemFsEditorFile> };
 
-export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
+/**
+ * Generates the applications, the entities and the deployments of jdl files.
+ *
+ * It is not blueprinted: a blueprint customizing it provides a jdl generator of its own, composing this one, and registers
+ * it in its cli. The applications it generates in their own folders use the blueprints their jdl declares, not the ones
+ * given to it.
+ */
+export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];
@@ -76,16 +84,23 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   exportedDeployments!: any[];
 
   async beforeQueue() {
-    if (!this.fromBlueprint) {
-      await this.composeWithBlueprints();
-    }
+    // The bootstrap generator commits the files the jdl writes, the configuration files sorted.
+    const bootstrapGenerator = await this.composeWithJHipster('bootstrap');
+    bootstrapGenerator.registerExportPath?.(this.destinationPath());
   }
 
   get initializing() {
-    return this.asInitializingTaskGroup({
+    return this.asAnyTaskGroup({
       loadArguments() {
         if (this.jdlFiles) {
           this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
+        }
+      },
+      initializeOptions() {
+        // The cli gives the builder of its environment: the applications are generated in environments built like it,
+        // with its blueprints and lookups.
+        if (this.options.createEnvBuilder) {
+          this.createEnvBuilder = this.options.createEnvBuilder;
         }
       },
       existingProject() {
@@ -99,18 +114,19 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
     });
   }
 
-  get [BaseGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+  get [BaseCoreGenerator.INITIALIZING]() {
+    return this.initializing;
   }
 
   get configuring() {
-    return this.asConfiguringTaskGroup({
+    return this.asAnyTaskGroup({
       async downloadJdlFiles() {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(
             this.jdlFiles.map(toJdlFile).map(async filename => {
               try {
-                this.readDestination(filename);
+                // A jdl file is read where it is, outside the destination too.
+                this.readDestination(filename, { allowOutsideRoot: true });
               } catch {
                 this.log.warn(`File not found: ${filename}. Attempting download from jdl-samples repository`);
                 const downloadedFile = await downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
@@ -128,10 +144,12 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.jdlContents.push(this.inline);
         }
         for (const jdlFile of this.jdlFiles ?? []) {
-          this.jdlContents.push(this.readDestination(jdlFile) ?? '');
+          this.jdlContents.push(this.readDestination(jdlFile, { allowOutsideRoot: true }) ?? '');
         }
       },
       async parseJDL() {
+        // The blueprints option, which the base command declares.
+        const { blueprints } = this.options as { blueprints?: string };
         const importer = createImporterFromContent(
           this.jdlContents.join('\n'),
           {
@@ -140,7 +158,15 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
             // Deployment configuration is written through the in-memory file system, like the application one.
             skipDeploymentFileGeneration: true,
           },
-          resolveJDLDefinitions(this.options),
+          // The cli passes the definitions; run through the environment with blueprints, they are built as the cli does.
+          resolveJDLDefinitions(this.options) ??
+            (blueprints ?
+              resolveJDLDefinitionsOf({
+                blueprints,
+                entrypointGenerator: this.entrypointGenerator,
+                getGeneratorMeta: namespace => this.env.getGeneratorMeta(namespace),
+              })
+            : undefined),
         );
 
         const importState = importer.import();
@@ -178,9 +204,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
               app.sharedFs = createMemFs();
             }
           }
-          addApplicationIndex(this.applications);
         }
-        customizeForMicroservices(this.exportedApplicationsWithEntities);
       },
       async generateJson() {
         if (this.applications.length === 0) {
@@ -246,12 +270,12 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
     });
   }
 
-  get [BaseGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseCoreGenerator.CONFIGURING]() {
+    return this.configuring;
   }
 
   get end() {
-    return this.asEndTaskGroup({
+    return this.asAnyTaskGroup({
       async generateDeployments() {
         if (!this.exportedDeployments?.length) {
           this.log.info('No deployment configured');
@@ -280,8 +304,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
     });
   }
 
-  get [BaseGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
+  get [BaseCoreGenerator.END]() {
+    return this.end;
   }
 
   async runNonInteractive(applications: ApplicationWithEntitiesAndPath[], options: any) {
@@ -293,7 +317,8 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const cwd = application.folder ? this.destinationPath(application.folder) : rootCwd;
         const adapter = this.env.adapter.newAdapter();
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
-        const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
+        // Each application uses the blueprints its jdl declares, stored in its own .yo-rc.json, not the ones of the cli.
+        const generatorOptions: any = { ...optionsForAnotherProject(this.options), ...options, skipPriorities: ['prompting'] };
 
         if (deferCommit) {
           generatorOptions.exportApplication = undefined;
@@ -365,8 +390,9 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
       }
       for (const entity of entities) {
         const configFile = this.destinationPath(`${appPath}${JHIPSTER_CONFIG_DIR}/${upperFirst(entity.name)}.json`);
+        // An entity written before, in memory or on the disk, keeps what the jdl does not state, like its changelog date.
         const oldConfig: any = fs.readJSON(configFile, {});
-        fs.writeJSON(configFile, { ...oldConfig, ...entity });
+        fs.writeJSON(configFile, mergeConfigContent(oldConfig, entity));
       }
     }
   }

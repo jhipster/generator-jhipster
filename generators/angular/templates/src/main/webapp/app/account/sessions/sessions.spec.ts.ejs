@@ -92,7 +92,7 @@ describe('Sessions', () => {
     (mockAccountService: AccountService, service: SessionsService) => {
       mockAccountService.identity = vi.fn(() => of(account));
       vi.spyOn(service, 'findAll').mockReturnValue(of(sessions));
-      vi.spyOn(service, 'delete').mockReturnValue(throwError(Error));
+      vi.spyOn(service, 'delete').mockReturnValue(throwError(() => new Error()));
 
       comp.ngOnInit();
       comp.invalidate('xyz');

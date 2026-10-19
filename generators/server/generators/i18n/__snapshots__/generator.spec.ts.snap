@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - server:i18n with a serverI18nDir and the translation enabled should write the messages to the folder 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "server/src/i18n/messages.properties": {
+    "stateCleared": "modified",
+  },
+  "server/src/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+  "server/test/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;

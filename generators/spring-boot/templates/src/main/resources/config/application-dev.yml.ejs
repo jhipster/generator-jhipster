@@ -63,10 +63,10 @@ management:
       enabled: false
   <%_ } _%>
   <%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    tracing:
-      endpoint: http://localhost:9411/api/v2/spans
   tracing:
+    export:
+      zipkin: # Use the "zipkin" Maven/Gradle profile to add the Zipkin dependencies
+        endpoint: http://localhost:9411/api/v2/spans
     sampling:
       probability: 1.0 # report 100% of traces
   <%_ } _%>
@@ -211,17 +211,6 @@ server:
 # ===================================================================
 
 jhipster:
-<%_ if (applicationTypeGateway) { _%>
-  gateway:
-    rate-limiting:
-      enabled: false
-      limit: 100000
-      duration-in-seconds: 3600
-  <%_ if (!reactive) { _%>
-    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-      app1: /api,/v3/api-docs # recommended dev configuration
-  <%_ } _%>
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
   database:
     couchbase:
@@ -237,12 +226,12 @@ jhipster:
   <%_ } _%>
   <%_ if (cacheProviderEhcache) { _%>
     ehcache: # Ehcache configuration
-      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+      time-to-live-seconds: 3600 # By default, objects stay 1 hour in the cache
       max-entries: 100 # Number of objects in each cache entry
   <%_ } _%>
   <%_ if (cacheProviderCaffeine) { _%>
     caffeine: # Caffeine configuration
-      time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
+      time-to-live-seconds: 3600 # By default, objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
       max-entries: 100 # Number of objects in each cache entry
   <%_ } _%>
   <%_ if (cacheProviderInfinispan) { _%>
@@ -251,16 +240,16 @@ jhipster:
       statsEnabled: true
       # local app cache
       local:
-        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        time-to-live-seconds: 3600 # By default, objects stay 1 hour (in seconds) in the cache
         max-entries: 100 # Number of objects in each cache entry
       # distributed app cache
       distributed:
-        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        time-to-live-seconds: 3600 # By default, objects stay 1 hour (in seconds) in the cache
         max-entries: 100 # Number of objects in each cache entry
         instance-count: 1
       # replicated app cache
       replicated:
-        time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        time-to-live-seconds: 3600 # By default, objects stay 1 hour (in seconds) in the cache
         max-entries: 100 # Number of objects in each cache entry
   <%_ } _%>
   <%_ if (cacheProviderMemcached) { _%>
@@ -271,7 +260,7 @@ jhipster:
   <%_ } _%>
   <%_ if (cacheProviderRedis) { _%>
     redis: # Redis configuration
-      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+      expiration: 3600 # By default, objects stay 1 hour (in seconds) in the cache
       server: redis://localhost:6379
       cluster: false
       # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
@@ -321,7 +310,7 @@ jhipster:
     base-url: http://127.0.0.1:<%- serverPort %>
 <%_ } _%>
   logging:
-    use-json-format: false # By default, logs are not in Json format
+    use-json-format: false # By default, logs are not in JSON format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
       enabled: false
       host: localhost

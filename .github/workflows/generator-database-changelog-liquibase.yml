@@ -31,8 +31,6 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/app
     if: >-
-      !contains(github.event.head_commit.message, '[ci skip]') &&
-      !contains(github.event.head_commit.message, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[skip ci]') &&
       !contains(github.event.pull_request.title, '[ci skip]') &&
       github.event.action != 'closed' &&
@@ -75,10 +73,11 @@ jobs:
       - uses: jhipster/actions/build-jhipster-bom@v2
         with:
           jhipster-bom-ref: ${{ steps.jhipster-output.outputs.jhipster-bom-branch }}
-      - run: jhipster.cjs generate-sample incremental-changelog-samples/liquibase-jdl-rename-field/app.jdl --skip-jhipster-dependencies
+      - run: jhipster.cjs generate-sample liquibase-jdl-rename-field --skip-jhipster-dependencies
         env:
           JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
-      - run: jhipster.cjs generate-sample --incremental-changelog incremental-changelog-samples/liquibase-jdl-rename-field-post/app.jdl --force
+      # The changed jdl over the application, as incremental changelogs: it overwrites the jdl of the first sample.
+      - run: jhipster.cjs generate-sample liquibase-jdl-rename-field-post --force
         env:
           JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - name: 'GENERATION: incremental changes'

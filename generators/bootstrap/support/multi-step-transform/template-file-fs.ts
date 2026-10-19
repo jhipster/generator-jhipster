@@ -26,7 +26,6 @@ import TemplateFile from './template-file.ts';
 
 export default class TemplateFileFs {
   fragmentFiles: Record<string, TemplateFile>;
-  rootFiles: MemFsEditorFile[] = [];
   extension: string;
   delimiter: string;
 

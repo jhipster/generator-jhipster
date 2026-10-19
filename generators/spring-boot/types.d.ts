@@ -1,4 +1,4 @@
-import type { CommandTypeMap } from '../../lib/command/types.ts';
+import type { CommandTypeMap, ExportEntityDerivedPropertiesFromCommand } from '../../lib/command/types.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.ts';
 import type { Config as CommonConfig } from '../common/types.d.ts';
@@ -31,6 +31,7 @@ export type { Features } from '../server/types.d.ts';
 
 type Command = CommandTypeMap<typeof command>;
 type CacheCommand = CommandTypeMap<typeof cacheCommand>;
+type CommandEntity = ExportEntityDerivedPropertiesFromCommand<typeof command>;
 
 export type SpringBootModule = keyof (typeof springBootDependencies)['modules'];
 
@@ -77,6 +78,10 @@ export type Field = ServerField &
 
     requiresPersistableImplementation?: boolean;
     fieldNameAsDatabaseColumn?: string;
+    /** The first text value of a text field in the resource integration test, escaped for a Java string. */
+    sbTestSampleText?: string;
+    /** The second text value of a text field in the resource integration test, escaped for a Java string. */
+    sbTestUpdatedText?: string;
   };
 
 export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {
@@ -85,10 +90,15 @@ export interface Relationship extends ServerRelationship, SpringBootAddedPropert
    * Defaults to the java property name; set it to keep an existing mapping when the property is renamed.
    */
   elasticsearchFieldName?: string;
+  /** The relationship name in upper snake case, naming the Neo4j relationship type. */
+  relationshipNameUpperSnakeCase?: string;
 }
 
-export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ServerEntity<F, R>, SpringEntity {
+export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
+  extends ServerEntity<F, R>, SpringEntity, CommandEntity {
   skipDbChangelog?: boolean;
+  /** The name of the entity in the alerts of its REST resource, the key of its client translations. */
+  entityAlertName?: string;
   entityJavaFilterableProperties: any[];
   entityJavaCustomFilters: any[];
 

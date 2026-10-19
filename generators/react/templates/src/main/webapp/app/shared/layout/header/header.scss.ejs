@@ -16,9 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+@use 'sass:color';
+
 $header-color: #fff;
 $header-color-secondary: #bbb;
-$header-color-hover: darken($header-color, 20%);
+$header-color-hover: color.adjust($header-color, $lightness: -20%);
 
 /* ==========================================================================
 Development Ribbon
@@ -26,10 +28,6 @@ Development Ribbon
 .ribbon {
   background-color: rgba(170, 0, 0, 0.5);
   left: -3.5em;
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
   overflow: hidden;
   position: absolute;

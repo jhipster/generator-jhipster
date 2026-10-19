@@ -65,7 +65,7 @@ describe('Entities reducer tests', () => {
     updateSuccess: false
   };
 
-  function testInitialState(state) {
+  function expectInitialState(state) {
     expect(state).toMatchObject({
       loading: false,
       errorMessage: null,
@@ -84,7 +84,7 @@ describe('Entities reducer tests', () => {
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(reducer(undefined, { type: '' }));
+      expectInitialState(reducer(undefined, { type: '' }));
     });
   });
 

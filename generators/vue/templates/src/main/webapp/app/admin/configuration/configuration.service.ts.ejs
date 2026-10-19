@@ -59,7 +59,7 @@ export default class ConfigurationService {
     // This code is for Spring Boot 2
     if (res.contexts !== undefined) {
       for (const key in res.contexts) {
-        // If the key is not bootstrap, it will be the ApplicationContext Id
+        // If the key is not bootstrap, it will be the ApplicationContext ID
         // For default app, it is baseName
         // For microservice, it is baseName-1
         if (!key.startsWith('bootstrap')) {
@@ -67,7 +67,7 @@ export default class ConfigurationService {
         }
       }
     }
-    // by default, use the default ApplicationContext Id
+    // by default, use the default ApplicationContext ID
     return res['contexts']['<%- baseName %>']['beans'];
   }
 }

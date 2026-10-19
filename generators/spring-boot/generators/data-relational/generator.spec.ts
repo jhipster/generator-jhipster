@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename, resolve } from 'node:path';
 
 import { cacheTypes, databaseTypes } from '../../../../lib/jhipster/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import Generator from '../../../server/index.ts';
 
+import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,

@@ -18,17 +18,16 @@
  */
 import assert from 'node:assert';
 import { existsSync, rmSync, statSync } from 'node:fs';
-import { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import { basename, extname, isAbsolute, join, join as joinPath, relative, resolve } from 'node:path';
 import { relative as posixRelative } from 'node:path/posix';
 
 import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
 import latestVersion from 'latest-version';
-import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
+import { get, kebabCase, merge, set, snakeCase } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
-import type { simpleGit } from 'simple-git';
 import type { PackageJson, SetRequired } from 'type-fest';
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import { stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage, type Task } from 'yeoman-generator';
 
@@ -75,9 +74,17 @@ import type {
   WriteContext,
   WriteFileOptions,
 } from './api.ts';
-import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig, mergeYamlContent, optionsForAnotherProject } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
+import {
+  CUSTOM_PRIORITIES,
+  type CustomObjectPhase,
+  PRIORITY_NAMES,
+  PRIORITY_PREFIX,
+  QUEUES,
+  customObjectPriorities,
+  customObjectPriorityName,
+} from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
@@ -106,8 +113,10 @@ const relativeDir = (from: string, to: string) => {
   return rel ? `${rel}/` : '';
 };
 
-const deepMerge = (source1: any, source2: any) =>
-  mergeWith({}, source1, source2, (a, b) => (Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined));
+/**
+ * The utilities given to the templates in their data.
+ */
+const templateUtilities = { relativeDir };
 
 /**
  * This is the base class for a generator for every generator.
@@ -118,6 +127,9 @@ export default class CoreGenerator<
   Features extends CoreFeatures = CoreFeatures,
 > extends YeomanGenerator<Config, Options, Features> {
   static readonly asPriority = asPriority;
+
+  /** The priority of a phase of a custom object (the `customObjects` feature), like `>preparingService`. */
+  static readonly objectPriority = (name: string, phase: CustomObjectPhase): string => asPriority(customObjectPriorityName(name, phase));
 
   static readonly INITIALIZING = asPriority(INITIALIZING);
 
@@ -188,6 +200,17 @@ export default class CoreGenerator<
       disableInGeneratorOptionsSupport: true,
       allowTemplatesOutsideRoot: true,
       ...features,
+      // Registered by yeoman-generator, after the queues they reference: the ones of a class before the ones of its
+      // subclasses, which come in the features, so a subclass priority added before the same queue runs after them, and
+      // the ones of the custom objects last, in their declaration order. None for the help.
+      customPriorities:
+        options?.help ? undefined : (
+          [
+            ...CUSTOM_PRIORITIES,
+            ...(features?.customPriorities ?? []),
+            ...(features?.customObjects ?? []).flatMap(({ name, before }) => customObjectPriorities(name, before)),
+          ]
+        ),
     });
 
     if (!this.options.help) {
@@ -209,8 +232,6 @@ export default class CoreGenerator<
     if (this.options.help) {
       return;
     }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
 
     const { blueprintSupport = false, queueCommandTasks = true } = this.features;
 
@@ -867,11 +888,18 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       }
     }
 
+    // The blueprints belong to the project they are given for: a generator composed in another folder uses the blueprints
+    // of the .yo-rc.json of that folder, unless they are passed to it.
+    const { destinationRoot } = options?.generatorOptions ?? {};
+    const inheritedOptions =
+      destinationRoot && resolve(this.destinationRoot(), destinationRoot) !== this.destinationRoot() ?
+        optionsForAnotherProject(this.options)
+      : this.options;
     return this.composeWith(generator, {
       forwardOptions: false,
       ...options,
       generatorOptions: {
-        ...this.options,
+        ...inheritedOptions,
         positionalArguments: undefined,
         ...options?.generatorOptions,
       },
@@ -937,14 +965,16 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   writeFile(
     source: string,
     destination: string,
-    data: Parameters<CoreGenerator['renderTemplate']>[2] = this,
+    data?: Parameters<CoreGenerator['renderTemplate']>[2],
     copyOptions: Parameters<CoreGenerator['renderTemplate']>[3] = {},
   ) {
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
 
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
+    // Without data, the generator is the data of the template.
+    const templateData = data === undefined ? (this as any) : { ...templateUtilities, ...(data as object) };
     try {
-      return this.renderTemplate(source, destination, data, {
+      return this.renderTemplate(source, destination, templateData, {
         noGlob: true,
         ...copyOptions,
         transformOptions: { root, ...copyOptions.transformOptions },
@@ -964,7 +994,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    let templateData: DataType = options.context ?? ({} as DataType);
+    // The templates get the utilities they call in their data.
+    let templateData: DataType = { ...templateUtilities, ...(options.context as object | undefined) } as DataType;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
@@ -1017,6 +1048,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       noEjs?: boolean;
       transform?: any[];
       binary?: boolean;
+      metadata?: EditorMetadata;
     };
 
     const renderTemplate = ({
@@ -1027,6 +1059,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       noEjs,
       transform,
       binary,
+      metadata,
     }: RenderTemplateParam): undefined | string => {
       if (condition !== undefined && !resolveCallback(condition)) {
         return undefined;
@@ -1106,7 +1139,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
       try {
         if (noEjs || (!appendEjs && extname(sourceFileFrom) !== '.ejs')) {
-          this.copyTemplate(sourceFileFrom, targetFile, { noGlob: true });
+          this.copyTemplate(sourceFileFrom, targetFile, { noGlob: true, metadata });
         } else {
           if ((templateData as any).entityClass) {
             if (!(templateData as any).baseName) {
@@ -1124,14 +1157,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             // together with the compiled template function.
             cache: false,
           };
-          const copyOptions = { noGlob: true, transformOptions };
+          const copyOptions = { noGlob: true, transformOptions, metadata };
           this.renderTemplate(appendEjs ? `${sourceFileFrom}.ejs` : sourceFileFrom, targetFile, templateData as any, copyOptions);
         }
       } catch (error) {
         throw new Error(`Error rendering template ${sourceFileFrom} to ${targetFile}: ${error}`, { cause: error });
       }
       if (!isBinary && transform?.length) {
-        this.editFile(targetFile, ...transform);
+        this.editFile(targetFile, { metadata }, ...transform);
       }
       return targetFile;
     };
@@ -1192,7 +1225,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               return { sourceFile, destinationFile, noEjs, transform: derivedTransform };
             }
 
-            const { condition, options, file, renameTo, transform: fileTransform = [], binary } = fileSpec;
+            const { condition, options, file, renameTo, transform: fileTransform = [], binary, metadata } = fileSpec;
             let { sourceFile, destinationFile } = fileSpec;
 
             if (typeof fileTransform === 'boolean') {
@@ -1215,12 +1248,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
 
-            if (
-              fileSpec.override !== undefined &&
-              !resolveCallback(fileSpec.override) &&
-              this.fs.exists(destinationFile.replace(/\.jhi$/, ''))
-            ) {
+            const writeOnce = fileSpec.override !== undefined && !resolveCallback(fileSpec.override);
+            const existingFile = destinationFile.replace(/\.jhi$/, '');
+            if (writeOnce && this.fs.exists(existingFile)) {
               this.log.debug(`skipping file ${destinationFile}`);
+              // Written back as it is: a file a generator keeps is told apart from the files no generator writes.
+              this.writeDestination(existingFile, this.fs.read(existingFile, { raw: true }), { metadata: { writeOnce: true } });
               return undefined;
             }
 
@@ -1232,6 +1265,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               transform: derivedTransform,
               noEjs,
               binary,
+              // Flagged when written from its template too: the file is the generator's until it exists.
+              metadata: writeOnce ? { ...metadata, writeOnce: true } : metadata,
             };
           });
         })
@@ -1317,7 +1352,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
-      const { autoCrlf = isWin32, assertModified } = actualOptions;
+      const { autoCrlf = isWin32, assertModified, metadata } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
@@ -1328,7 +1363,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           }
           this.log(errorMessage);
         }
-        this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent);
+        this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent, { metadata });
       } catch (error: unknown) {
         if (error instanceof Error) {
           throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`, { cause: error });
@@ -1349,25 +1384,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   /**
-   * Merge value to an existing yaml and write to destination
-   * Removes every comment (due to parsing/merging process) except the at the top of the file.
+   * Merge value to an existing yaml and write to destination, keeping the rest of the yaml as written, its comments and
+   * its style included.
    */
   mergeDestinationYaml(filepath: string, value: Record<string | number, any>) {
-    this.editFile(filepath, content => {
-      const lines = content.split('\n');
-      const headerComments: string[] = [];
-      lines.find(line => {
-        if (line.startsWith('#')) {
-          headerComments.push(line);
-          return false;
-        }
-        return true;
-      });
-
-      const mergedContent = stringifyYaml(deepMerge(parseYaml(content), value));
-      const header = headerComments.length > 0 ? headerComments.join('\n').concat('\n') : '';
-      return `${header}${mergedContent}`;
-    });
+    this.editFile(filepath, content => mergeYamlContent(content, value));
   }
 
   /**
@@ -1512,7 +1533,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @deprecated Use `createSimpleGit` from the superclass instead.
    * Create a simple-git instance using current destinationPath as baseDir.
    */
-  createGit(options?: Parameters<typeof simpleGit>[0]) {
+  createGit(options?: Parameters<YeomanGenerator['createSimpleGit']>[0]): ReturnType<YeomanGenerator['createSimpleGit']> {
     return super.createSimpleGit(options);
   }
 }

@@ -103,7 +103,7 @@ describe('Settings', () => {
 
   it('should notify of error upon failed save', () => {
     // GIVEN
-    mockAccountService.save = vi.fn(() => throwError(Error));
+    mockAccountService.save = vi.fn(() => throwError(() => new Error()));
 
     // WHEN
     comp.ngOnInit();

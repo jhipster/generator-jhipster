@@ -1,5 +1,3 @@
-import { asWritingTask } from '../../../base-application/support/task-type-inference.ts';
-
 /**
  * Copyright 2013-2026 the original author or authors from the JHipster project.
  *
@@ -18,6 +16,8 @@ import { asWritingTask } from '../../../base-application/support/task-type-infer
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingTask } from '../../../base-application/support/task-type-inference.ts';
+
 export default asWritingTask(function cleanupElasticsearchFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('4.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/ElasticSearchConfiguration.java`);

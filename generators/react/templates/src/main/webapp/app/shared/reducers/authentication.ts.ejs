@@ -138,7 +138,7 @@ export const logoutServer = createAsyncThunk('authentication/logout', async () =
 
 export const logout: () => AppThunk = () => async dispatch => {
   await dispatch(logoutServer());
-  // fetch new csrf token
+  // fetch new CSRF token
   dispatch(getSession());
 };
 <%_ } _%>

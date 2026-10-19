@@ -78,6 +78,7 @@ export async function generateKeyStore(keyStoreFile: string, { packageName }: { 
  * is rejected with `keystore file exists, but is empty`), so it is generated in a temporary folder and read back.
  *
  * Lets the caller write the contents through the in-memory file system, which is what `--export-application` needs.
+ * @deprecated use `createKeyStore`, which generates the KeyStore in memory, without keytool.
  */
 export async function generateKeyStoreContents(
   keyStoreFile: string,

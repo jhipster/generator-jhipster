@@ -57,7 +57,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
-            'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline -ntp',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
@@ -73,7 +72,6 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
-            'java:docker:arm64': 'npm run java:docker -- -PjibArchitecture=arm64',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache':
               'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package -- -x webapp -x webapp_test',
@@ -87,12 +85,16 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
+          // Builds the Docker image of the application: docker-compose suggests it to the applications whose package.json has it.
+          'docker:build': 'npm run java:docker',
+          // TODO v10: remove, java:docker builds the image of the architecture of the Docker daemon.
+          'java:docker:arm64': 'npm run java:docker',
           'ci:backend:test':
             'npm run backend:info && npm run backend:doc:test && npm run backend:nohttp:test && npm run backend:unit:test -- -P$npm_package_config_default_environment',
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${application.javaPackagingDestDir}e2e.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+          'ci:e2e:server:start': `java -jar ${application.javaPackagingDestDir}e2e.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment${application.e2eTls ? ',tls,tls-samples' : ''} ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
       packageJsonE2eScripts({ application }) {
@@ -100,10 +102,15 @@ export default class ServerGenerator extends JavaApplicationGenerator {
 
         let applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
         applicationWaitTimeout = application.authenticationTypeOauth2 ? applicationWaitTimeout * 2 : applicationWaitTimeout;
+        // With e2eTls, `ci:e2e:run` sets E2E_SERVER_PROTOCOL to https, the packaged server being started with its tls
+        // profile; the server of the development flows keeps http. wait-on does not verify the certificate, which is
+        // self-signed.
+        // eslint-disable-next-line no-template-curly-in-string
+        const protocol = application.e2eTls ? '${E2E_SERVER_PROTOCOL:-http}' : 'http';
         const applicationEndpoint =
           application.applicationTypeMicroservice ?
             `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
-          : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
+          : `${protocol}-get://127.0.0.1:$npm_package_config_backend_port/management/health`;
         scriptsStorage.set({
           'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
         });
@@ -113,7 +120,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           ruleId: 'S7027-dto',
           ruleKey: 'javaarchitecture:S7027',
           resourceKey: `${application.javaPackageSrcDir}service/dto/**/*`,
-          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for dtos',
+          comment: 'Rule java:S7027 is ignored for dtos',
         });
 
         (source as CommonSource).ignoreSonarRule?.({
@@ -121,7 +128,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           ruleKey: 'squid:UndocumentedApi',
           resourceKey: `${application.javaPackageSrcDir}**/*`,
           comment:
-            'Rule https://rules.sonarsource.com/java/RSPEC-1176 is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory',
+            'Rule java:S1176 is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory',
         });
       },
     });

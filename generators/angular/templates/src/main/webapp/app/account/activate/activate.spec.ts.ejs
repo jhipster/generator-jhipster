@@ -67,7 +67,7 @@ describe('Activate', () => {
   }));
 
   it('should set error to true upon activation failure', inject([ActivateService], (service: ActivateService) => {
-    vi.spyOn(service, 'get').mockReturnValue(throwError(Error));
+    vi.spyOn(service, 'get').mockReturnValue(throwError(() => new Error()));
 
     comp.ngOnInit();
 

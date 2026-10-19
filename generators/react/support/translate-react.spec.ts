@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { beforeEach, describe, exnode, expect, it } from 'expect-node';
 
 import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 
@@ -28,7 +28,7 @@ describe('generator - react - transform', () => {
     beforeEach(() => {
       let value = 0;
       replaceReactTranslations = createTranslationReplacer(
-        esmocha.fn<GetWebappTranslationCallback>().mockImplementation((key, interpolation) => {
+        exnode.fn<GetWebappTranslationCallback>().mockImplementation((key, interpolation) => {
           const stringifiedInterpolation = interpolation ? `-${JSON.stringify(interpolation)}` : '';
           return `${key}${stringifiedInterpolation}-translated-value-${value++}`;
         }),

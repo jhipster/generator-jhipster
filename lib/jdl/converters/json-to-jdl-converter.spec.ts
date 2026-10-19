@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'expect-node';
 import fs, { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { getDefaultRuntime } from '../../jdl-config/jdl-runtime.ts';
-import { createJHipsterConfigFiles, defaultHelpers as helpers } from '../../testing/index.ts';
 import { getTestFile } from '../core/__test-support__/index.ts';
 
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.ts';
+
+import { createJHipsterConfigFiles, defaultHelpers as helpers } from '#testing';
 
 describe('jdl - JSONToJDLConverter', () => {
   const runtime = getDefaultRuntime();

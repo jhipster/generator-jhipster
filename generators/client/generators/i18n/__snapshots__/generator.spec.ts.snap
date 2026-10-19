@@ -3,11 +3,13 @@
 exports[`generator - client:i18n with defaults options should call source snapshot 1`] = `
 {
   "addEntityTranslationKey": [
-    {
-      "language": "en",
-      "translationKey": "adminAuthority",
-      "translationValue": "Authority",
-    },
+    [
+      {
+        "language": "en",
+        "translationKey": "adminAuthority",
+        "translationValue": "Authority",
+      },
+    ],
   ],
 }
 `;

@@ -16,16 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { passthrough } from '@yeoman/transform';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
-import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import BaseGenerator from './index.ts';
 
+import { getCommandHelpOutput, shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
@@ -49,10 +49,10 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('skipPriorities', () => {
-    const initializing = esmocha.fn();
-    const prompting = esmocha.fn();
-    const writing = esmocha.fn();
-    const postWriting = esmocha.fn();
+    const initializing = exnode.fn();
+    const prompting = exnode.fn();
+    const writing = exnode.fn();
+    const postWriting = exnode.fn();
 
     class CustomGenerator extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {
@@ -89,7 +89,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('a priority registered outside base-core', () => {
-      const custom = esmocha.fn();
+      const custom = exnode.fn();
 
       class CustomPriorityGenerator extends BaseGenerator {
         constructor(args: any, options: any, features: any) {
@@ -121,7 +121,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('transform queue', () => {
-      const transformed = esmocha.fn();
+      const transformed = exnode.fn();
 
       class TransformGenerator extends BaseGenerator {
         get [BaseGenerator.DEFAULT]() {
@@ -189,10 +189,10 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('.cleanupFiles', () => {
-      let removeFiles: ReturnType<typeof esmocha.fn>;
+      let removeFiles: ReturnType<typeof exnode.fn>;
 
       before(async () => {
-        removeFiles = esmocha.fn();
+        removeFiles = exnode.fn();
 
         await helpers
           .run(CustomGenerator)
@@ -223,6 +223,110 @@ describe(`generator - ${generator}`, () => {
   "1.0.1-conditional-truthy-file2.txt",
 ]
 `);
+      });
+    });
+
+    describe('.cleanupBlueprintFiles of a blueprint, the control created by a jhipster generator', () => {
+      let removeFiles: ReturnType<typeof exnode.fn>;
+
+      class BlueprintGenerator extends BaseGenerator {
+        rootGeneratorName() {
+          return 'generator-jhipster-foo';
+        }
+
+        get [BaseGenerator.POST_WRITING]() {
+          return this.asPostWritingTaskGroup({
+            async cleanup({ control }) {
+              control.removeFiles = removeFiles;
+              await control.cleanupBlueprintFiles({ '1.0.1': ['1.0.1-file.txt'] });
+            },
+          });
+        }
+      }
+
+      before(async () => {
+        removeFiles = exnode.fn();
+
+        await helpers
+          .run(
+            class extends CustomGenerator {
+              rootGeneratorName() {
+                return 'generator-jhipster';
+              }
+
+              async beforeQueue() {
+                await super.beforeQueue();
+                // The version of the blueprint that generated the project, as storeBlueprintVersion records it.
+                this.getContextData('oldVersion:generator-jhipster-foo', { replacement: '1.0.0' });
+                // Composed like a side by side blueprint: its tasks are queued after the ones of this generator.
+                await this.composeWithJHipster('jhipster-foo:blueprint');
+              }
+            },
+          )
+          .withJHipsterConfig({ jhipsterVersion: '1.0.0' })
+          .commitFiles()
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withGenerators([[BlueprintGenerator, { namespace: 'jhipster-foo:blueprint' }]])
+          .withTask('initializing', () => {});
+      });
+
+      it('should remove the files with the old version of the blueprint', () => {
+        expect(removeFiles).toHaveBeenCalledWith({ oldVersion: '1.0.0', removedInVersion: '1.0.1' }, '1.0.1-file.txt');
+      });
+    });
+
+    describe('.cleanupBlueprintFiles of two blueprints', () => {
+      let removeFiles: ReturnType<typeof exnode.fn>;
+
+      const createBlueprintGenerator = (rootGeneratorName: string, cleanup: Record<string, string[]>) =>
+        class extends BaseGenerator {
+          rootGeneratorName() {
+            return rootGeneratorName;
+          }
+
+          get [BaseGenerator.POST_WRITING]() {
+            return this.asPostWritingTaskGroup({
+              async cleanup({ control }) {
+                control.removeFiles = removeFiles;
+                await control.cleanupBlueprintFiles(cleanup);
+              },
+            });
+          }
+        };
+
+      before(async () => {
+        removeFiles = exnode.fn();
+
+        await helpers
+          .run(
+            class extends CustomGenerator {
+              rootGeneratorName() {
+                return 'generator-jhipster';
+              }
+
+              async beforeQueue() {
+                await super.beforeQueue();
+                this.getContextData('oldVersion:generator-jhipster-foo', { replacement: '1.0.0' });
+                this.getContextData('oldVersion:generator-jhipster-bar', { replacement: '2.0.0' });
+                await this.composeWithJHipster('jhipster-foo:blueprint');
+                await this.composeWithJHipster('jhipster-bar:blueprint');
+              }
+            },
+          )
+          .withJHipsterConfig({ jhipsterVersion: '1.0.0' })
+          .commitFiles()
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withGenerators([
+            [createBlueprintGenerator('generator-jhipster-foo', { '1.0.1': ['foo-file.txt'] }), { namespace: 'jhipster-foo:blueprint' }],
+            [createBlueprintGenerator('generator-jhipster-bar', { '2.0.1': ['bar-file.txt'] }), { namespace: 'jhipster-bar:blueprint' }],
+          ])
+          .withTask('initializing', () => {});
+      });
+
+      it('should remove the files of each blueprint with its own old version', () => {
+        expect(removeFiles).toHaveBeenCalledTimes(2);
+        expect(removeFiles).toHaveBeenCalledWith({ oldVersion: '1.0.0', removedInVersion: '1.0.1' }, 'foo-file.txt');
+        expect(removeFiles).toHaveBeenCalledWith({ oldVersion: '2.0.0', removedInVersion: '2.0.1' }, 'bar-file.txt');
       });
     });
 

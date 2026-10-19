@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { validations } from '../built-in-options/index.ts';
 
@@ -63,8 +63,7 @@ describe('jdl - JDLValidation', () => {
       let validation: JDLValidation;
 
       before(() => {
-        // @ts-expect-error
-        validation = new JDLValidation();
+        validation = new JDLValidation({});
       });
 
       it('should stringify its content', () => {

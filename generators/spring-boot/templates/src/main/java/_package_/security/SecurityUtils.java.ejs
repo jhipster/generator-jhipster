@@ -152,9 +152,9 @@ public final class SecurityUtils {
   <%_ if (user) { _%>
 
     /**
-     * Get the Id of the current user.
+     * Get the ID of the current user.
      *
-     * @return the Id of the current user.
+     * @return the ID of the current user.
      */
     public static <%- optionalOrMono %><<%- user.primaryKey.type %>> getCurrentUserId() {
     <%_ if (reactive) { _%>

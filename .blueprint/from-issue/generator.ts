@@ -98,6 +98,9 @@ export default class extends BaseGenerator {
         }
 
         this.data = extractDataFromInfo(issue.body ?? '');
+        if (this.data.ignoredFiles) {
+          this.log.warn(`Ignoring the files that are not a .yo-rc.json or a .jhipster/*.json: ${this.data.ignoredFiles.join(', ')}`);
+        }
         if (this.data.yoRcBlank) {
           setGithubTaskOutput(YO_RC_OUTPUT, BLANK);
         } else {

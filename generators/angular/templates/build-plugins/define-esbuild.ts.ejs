@@ -49,7 +49,7 @@ export default {
     build.initialOptions.define.SERVER_API_URL = "''";
 
     // Emit the swagger-ui libraries with the build output, next to the swagger-ui/index.html asset.
-    // The page itself stays an angular.json asset: the dev server serves html files from the assets only.
+    // The page itself stays an angular.json asset: the dev server serves HTML files from the assets only.
     build.onEnd(result => {
       const outdir = build.initialOptions.outdir ?? '';
       const files = [

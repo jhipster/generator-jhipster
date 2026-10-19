@@ -1,10 +1,20 @@
-import type { IsNever, PascalCase, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
+import type {
+  IsNever,
+  PascalCase,
+  Replace,
+  RequireAtLeastOne,
+  SetOptional,
+  Simplify,
+  TupleToUnion,
+  UnionToIntersection,
+  ValueOf,
+} from 'type-fest';
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 
 import type BaseCoreGenerator from '../../generators/base-core/generator.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
 import type { JHipsterNamedChoice } from '../core/types.ts';
-import type { JHipsterOptionDefinition } from '../jdl/core/parsing/types/parsing.ts';
+import type { JHipsterOptionDefinition } from '../jdl/core/parsing/index.ts';
 
 import type { MergeUnion } from './support/merge-union.ts';
 
@@ -200,9 +210,70 @@ export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<
 /** Map of named config specifications for a command, keyed by config property name. */
 export type JHipsterConfigs<ConfigContext = any> = Record<string, JHipsterConfig<ConfigContext>>;
 
+/**
+ * An option of the entities, a property of the `.jhipster/*.json` files named by its key, and the jdl option statement
+ * setting it: `<keyword> <entities>` for a unary one, `<keyword> <entities> with <value>` for a binary one.
+ */
+export type JHipsterEntityConfig = {
+  readonly description?: string;
+  /** The values a binary option accepts; a binary option without choices accepts any name. */
+  readonly choices?: readonly string[];
+  /** The value of the option for the entities the jdl does not set it on. */
+  readonly default?: string;
+  readonly jdl?: {
+    readonly type: 'unary' | 'binary';
+    /** The keyword of the statement, the name of the option by default. */
+    readonly keyword?: string;
+    /** Deprecated keywords still accepted for the option, warned about. */
+    readonly deprecatedKeywords?: readonly string[];
+    /** The value a unary option sets, true by default: `noFluentMethod` sets `fluentMethods` to false. */
+    readonly value?: boolean;
+  };
+};
+
+/** Map of the options of the entities a command declares, keyed by their property in the entity. */
+export type JHipsterEntityConfigs = Record<string, JHipsterEntityConfig>;
+
+/** A field type a command supports. */
+export type JHipsterFieldTypeConfig = {
+  readonly description?: string;
+  /** The validations a field of the type takes, `required` and `unique` being keywords of the language. */
+  readonly validations?: readonly string[];
+  /** Why the type is deprecated, warned about when a jdl uses it. */
+  readonly deprecated?: string;
+};
+
+/** A validation of the fields a command supports, `minlength(5)`: stored in `fieldValidateRules`, its value in `fieldValidateRules<Name>`. */
+export type JHipsterFieldValidationConfig = {
+  readonly description?: string;
+  /** The value the validation takes in a jdl, an integer, a number or a regular expression; none for a keyword like `required`. */
+  readonly jdl?: { readonly value: 'integer' | 'number' | 'regex' };
+};
+
+/**
+ * What a command declares of the fields: the types by name, `Enum` being the type of a field whose type is an enum of the
+ * jdl, and the validations by name.
+ */
+export type JHipsterFieldConfigs = {
+  readonly types?: Record<string, JHipsterFieldTypeConfig>;
+  readonly validations?: Record<string, JHipsterFieldValidationConfig>;
+};
+
+/** A relationship option, set by a jdl option statement as the options of the entities, keyed by its property in the relationship. */
+export type JHipsterRelationshipConfig = JHipsterEntityConfig;
+
+/** Map of the options of the relationships a command declares, keyed by their property in the relationship. */
+export type JHipsterRelationshipConfigs = Record<string, JHipsterRelationshipConfig>;
+
 export type JHipsterCommandDefinition<ConfigContext = BaseCoreGenerator> = {
   readonly arguments?: JHipsterArguments;
   readonly configs?: JHipsterConfigs<ConfigContext>;
+  /** The options of the entities, written in the entity files and set by the jdl option statements. */
+  readonly entity?: JHipsterEntityConfigs;
+  /** The types and the validations of the fields. */
+  readonly field?: JHipsterFieldConfigs;
+  /** The options of the relationships, written in the entity files and set by the jdl option statements. */
+  readonly relationship?: JHipsterRelationshipConfigs;
   /**
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']
@@ -240,7 +311,25 @@ type ParsableConfigs = Record<string, ParsableConfig>;
 /** Minimal command shape accepted by the type-extraction utilities (`Export*FromCommand`, `CommandTypeMap`). */
 export type ParsableCommand = {
   readonly configs?: ParsableConfigs;
+  readonly entity?: ParsableEntityConfigs;
+  readonly field?: ParsableFieldConfigs;
+  readonly relationship?: ParsableEntityConfigs;
 };
+
+/** Minimal field types and validations shape used for type-level inference. */
+type ParsableFieldConfigs = {
+  readonly types?: Record<string, object>;
+  readonly validations?: Record<string, { readonly jdl?: { readonly value: 'integer' | 'number' | 'regex' } }>;
+};
+
+/** Minimal entity option shape used for type-level inference. */
+type ParsableEntityConfig = {
+  readonly choices?: readonly string[];
+  readonly jdl?: { readonly type: 'unary' | 'binary' };
+};
+
+/** Minimal entity options map used for type-level inference. */
+type ParsableEntityConfigs = Record<string, ParsableEntityConfig>;
 
 /** Unwrap constructor return type, e.g. `typeof Boolean` → `boolean` */
 type UnwrapConstructor<T> = T extends new () => infer R ? R : undefined;
@@ -410,12 +499,130 @@ export type ExportGeneratorOptionsFromCommand<C extends ParsableCommand> = Expor
 /** Extracts `generator`-scoped config properties from command `C` as a `Readonly` typed object. */
 export type ExportGeneratorPropertiesFromCommand<C extends ParsableCommand> = Readonly<ExportScopedPropertiesFromCommand<C, 'generator'>>;
 
+/** The entity options of command `C`. */
+type CommandEntityConfigs<C extends ParsableCommand> =
+  C extends { entity: infer E extends ParsableEntityConfigs } ? E : Record<never, never>;
+
 /**
- * Bundles all derived type views for a command into a single record with four keys:
+ * Types each entity option as its value in the entity: one of its choices, a boolean for a unary option, a name for a
+ * binary one without choices.
+ */
+type ResolveEntityConfigTypes<U extends ParsableEntityConfigs> = Simplify<{
+  -readonly [K in keyof U]?: U[K] extends { choices: readonly string[] } ? U[K]['choices'][number]
+  : U[K] extends { jdl: { type: 'unary' } } ? boolean
+  : U[K] extends { jdl: { type: 'binary' } } ? string
+  : unknown;
+}>;
+
+/**
+ * The flags derived from the entity options with choices, as `getEntityDerivedPropertyMutations` sets them: one for each
+ * choice, named as `derivedPropertyName` names it, and one for any choice but `no`.
+ */
+type ExplodeEntityChoicesToDerivedProperties<U extends ParsableEntityConfigs> =
+  ValueOf<{
+    [K in keyof U]: K extends string ?
+      U[K] extends { choices: readonly string[] } ?
+        { [Choice in U[K]['choices'][number] as DerivedProperty<K, Choice>]: boolean } & Record<`${K}Any`, boolean>
+      : never
+    : never;
+  }> extends infer Derived ?
+    // No option with choices derives no flag.
+    [Derived] extends [never] ?
+      Record<never, never>
+    : Simplify<UnionToIntersection<Derived>>
+  : never;
+
+/**
+ * Extracts the entity options of command `C` as their values in the entity files.
+ * @example
+ * ```ts
+ * type Config = ExportEntityConfigFromCommand<{ entity: { dto: { choices: ['mapstruct', 'no'] } } }>; // { dto?: 'mapstruct' | 'no' }
+ * ```
+ */
+export type ExportEntityConfigFromCommand<C extends ParsableCommand> = ResolveEntityConfigTypes<CommandEntityConfigs<C>>;
+
+/**
+ * Extracts the flags derived from the choices of the entity options of command `C`, as the entities have them once
+ * prepared.
+ * @example
+ * ```ts
+ * type Derived = ExportEntityDerivedPropertiesFromCommand<{ entity: { dto: { choices: ['mapstruct', 'no'] } } }>;
+ * // { dtoMapstruct: boolean; dtoNo: boolean; dtoAny: boolean }
+ * ```
+ */
+export type ExportEntityDerivedPropertiesFromCommand<C extends ParsableCommand> = ExplodeEntityChoicesToDerivedProperties<
+  CommandEntityConfigs<C>
+>;
+
+/**
+ * Extracts the entity options of command `C` with the flags derived from their choices, as the entities have them once
+ * prepared.
+ * @example
+ * ```ts
+ * type Entity = ExportEntityPropertiesFromCommand<{ entity: { dto: { choices: ['mapstruct', 'no'] } } }>;
+ * // { dto?: 'mapstruct' | 'no'; dtoMapstruct: boolean; dtoNo: boolean; dtoAny: boolean }
+ * ```
+ */
+export type ExportEntityPropertiesFromCommand<C extends ParsableCommand> = Simplify<
+  ExportEntityConfigFromCommand<C> & ExportEntityDerivedPropertiesFromCommand<C>
+>;
+
+/** The field types of command `C`, by name. */
+export type ExportFieldTypesFromCommand<C extends ParsableCommand> =
+  C extends { field: { types: infer Types extends Record<string, object> } } ? keyof Types & string : never;
+
+/** The validations of the fields of command `C`, by name. */
+export type ExportFieldValidationsFromCommand<C extends ParsableCommand> =
+  C extends { field: { validations: infer Validations extends Record<string, object> } } ? keyof Validations & string : never;
+
+/** The type of the value of a validation in the field: an integer or a number is a number, a regular expression a string. */
+type FieldValidationValue<Validation> =
+  Validation extends { jdl: { value: 'regex' } } ? string
+  : Validation extends { jdl: { value: 'integer' | 'number' } } ? number
+  : never;
+
+/**
+ * The properties of the fields holding the values of the validations of command `C`, `fieldValidateRulesMinlength` for
+ * `minlength`; the validations without a value, like `required`, have none.
+ * @example
+ * ```ts
+ * type Field = ExportFieldValidationPropertiesFromCommand<{ field: { validations: { minlength: { jdl: { value: 'integer' } } } } }>;
+ * // { fieldValidateRulesMinlength?: number }
+ * ```
+ */
+export type ExportFieldValidationPropertiesFromCommand<C extends ParsableCommand> =
+  C extends { field: { validations: infer Validations extends Record<string, object> } } ?
+    Simplify<{
+      -readonly [
+        Name in keyof Validations as FieldValidationValue<Validations[Name]> extends never ? never
+        : `fieldValidateRules${Capitalize<Name & string>}`
+      ]?: FieldValidationValue<Validations[Name]>;
+    }>
+  : Record<never, never>;
+
+/** The options of the relationships of command `C`. */
+type CommandRelationshipConfigs<C extends ParsableCommand> =
+  C extends { relationship: infer R extends ParsableEntityConfigs } ? R : Record<never, never>;
+
+/** Extracts the relationship options of command `C` as their values in the relationship of the entity files. */
+export type ExportRelationshipConfigFromCommand<C extends ParsableCommand> = ResolveEntityConfigTypes<CommandRelationshipConfigs<C>>;
+
+/** Extracts the flags derived from the choices of the relationship options of command `C`. */
+export type ExportRelationshipDerivedPropertiesFromCommand<C extends ParsableCommand> = ExplodeEntityChoicesToDerivedProperties<
+  CommandRelationshipConfigs<C>
+>;
+
+/**
+ * Bundles all derived type views for a command into a single record with nine keys:
  * - `Config` — `storage`-scoped config properties
  * - `Options` — all generator option types
  * - `Generator` — `generator`-scoped properties (readonly)
  * - `Application` — combined `storage` + `context` application properties with choice inference
+ * - `EntityConfig` — the entity options, as the entity files hold them
+ * - `Entity` — the entity options with the flags derived from their choices
+ * - `FieldValidations` — the properties of the fields holding the values of the validations
+ * - `RelationshipConfig` — the relationship options, as the entity files hold them
+ * - `Relationship` — the relationship options with the flags derived from their choices
  *
  * @example
  * ```ts
@@ -427,4 +634,9 @@ export type ExportGeneratorPropertiesFromCommand<C extends ParsableCommand> = Re
 export type CommandTypeMap<C1 extends ParsableCommand> = Record<'Config', ExportStoragePropertiesFromCommand<C1>> &
   Record<'Options', ExportGeneratorOptionsFromCommand<C1>> &
   Record<'Generator', ExportGeneratorPropertiesFromCommand<C1>> &
-  Record<'Application', ExportApplicationPropertiesFromCommand<C1>>;
+  Record<'Application', ExportApplicationPropertiesFromCommand<C1>> &
+  Record<'EntityConfig', ExportEntityConfigFromCommand<C1>> &
+  Record<'Entity', ExportEntityPropertiesFromCommand<C1>> &
+  Record<'FieldValidations', ExportFieldValidationPropertiesFromCommand<C1>> &
+  Record<'RelationshipConfig', ExportRelationshipConfigFromCommand<C1>> &
+  Record<'Relationship', Simplify<ExportRelationshipConfigFromCommand<C1> & ExportRelationshipDerivedPropertiesFromCommand<C1>>>;

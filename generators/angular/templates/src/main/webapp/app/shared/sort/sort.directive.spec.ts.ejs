@@ -29,7 +29,7 @@ import { SortState, sortStateSignal } from './sort-state';
   template: `
     <table>
       <thead>
-        <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)"></tr>
+        <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortStateChange)="transition($event)"></tr>
       </thead>
     </table>
   `,
@@ -52,7 +52,7 @@ describe('Directive: SortDirective', () => {
     tableRow = fixture.debugElement.query(By.directive(SortDirective));
   });
 
-  it('should invoke sortChange function', () => {
+  it('should emit sortStateChange', () => {
     // GIVEN
     const sortDirective = tableRow.injector.get(SortDirective as Type<SortDirective>);
 

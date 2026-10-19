@@ -87,7 +87,7 @@ const command = {
       },
       configure(gen, value) {
         if (value) {
-          gen.jhipsterConfig.testFrameworks = [...new Set([...(gen.jhipsterConfig.testFrameworks || []), ...value])];
+          gen.jhipsterConfig.testFrameworks = [...new Set([...(gen.jhipsterConfig.testFrameworks ?? []), ...value])];
         }
       },
       scope: 'none',

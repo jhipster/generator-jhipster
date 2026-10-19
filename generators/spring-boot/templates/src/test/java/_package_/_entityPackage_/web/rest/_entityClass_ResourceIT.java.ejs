@@ -1,4 +1,4 @@
-<%# eslint-disable ejs-templates/experimental-prefer-slurp-multiline, @stylistic/indent-binary-ops, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
+<%# eslint-disable ejs-templates/prefer-slurp-multiline, @stylistic/indent-binary-ops, ejs-templates/no-function-block -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -30,9 +30,7 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
     const requiredFields = fieldsToTest.filter(field => field.fieldValidate && !field.fieldTypeBytes && field.fieldValidationRequired);
     // Owner side relationships whose related entity has a field that can be observed after a request carrying a
     // nested related object, to check the request does not write into the related entity.
-    // Couchbase stores a relationship as an id, and its findById projects the joined document over that same field,
-    // so an entity whose relationship is set cannot be read back: https://github.com/jhipster/generator-jhipster/issues
-    const noCascadeRelationships = readOnly || databaseTypeCouchbase || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
+    const noCascadeRelationships = readOnly || primaryKey.ids.length > 1 ? [] : filterTestableRelationships
       .filter(relationship =>
         relationship.ownerSide
           && !relationship.id
@@ -45,11 +43,11 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
       .map(relationship => ({
         relationship,
         observedField: relationship.otherEntity.fields.find(
-        field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
-      ),
+          field => !field.id && !field.transient && !field.mapstructExpression && (field.fieldTypeString || field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeUUID),
+        ),
       }))
       .filter(({ observedField }) => observedField);
-    const noCascadeOtherEntities = this._.uniq(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity));
+    const noCascadeOtherEntities = [...new Set(noCascadeRelationships.map(({ relationship }) => relationship.otherEntity))];
     // A related entity is created for each relationship, and createEntity may already have persisted one of the same
     // class: the unique fields of the created ones are randomized so that none of them collide. The id is randomized
     // too when it is not generated and the same entity is related more than once.
@@ -67,11 +65,11 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
             .map(field => ({
               property: field.propertyConsumerName,
               value: {
-              String: `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`,
-              UUID: `UUID.fromString("${faker.string.uuid()}")`,
-              Long: `${faker.number.int({ min: 1, max: 1000000 })}L`,
-              Integer: `${faker.number.int({ min: 1, max: 1000000 })}`,
-            }[field.javaFieldType],
+                String: `"${faker.string.alpha({ length: Math.min(Math.max(10, field.fieldValidateRulesMinlength ?? 0), field.fieldValidateRulesMaxlength ?? 255) })}"`,
+                UUID: `UUID.fromString("${faker.string.uuid()}")`,
+                Long: `${faker.number.int({ min: 1, max: 1000000 })}L`,
+                Integer: `${faker.number.int({ min: 1, max: 1000000 })}`,
+              }[field.javaFieldType],
             }))
             .filter(fake => fake.value),
         ];
@@ -150,9 +148,6 @@ import <%- mapsIdAssoc.otherEntity.entityAbsolutePackage %>.repository.<%- mapsI
 <%_ if (searchEngineElasticsearch) { _%>
 import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
 <%_ } _%>
-<%_ if (!serviceNo && implementsEagerLoadApis) { _%>
-import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
-<%_ } _%>
 <%_ if (dtoMapstruct) { _%>
 import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
 import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
@@ -183,18 +178,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 <%_ } _%>
-<%_ if (implementsEagerLoadApis || databaseTypeNeo4j) { _%>
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 <%_ } else { _%>
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && !paginationNo || implementsEagerLoadApis) { _%>
+<%_ if (searchEngineElasticsearch && !paginationNo) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -214,10 +204,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
   <%_ if (databaseTypeSql) { _%>
+    <%_ if (searchEngineElasticsearch) { _%>
+import org.springframework.test.context.transaction.TestTransaction;
+    <%_ } _%>
 import org.springframework.transaction.annotation.Transactional;
   <%_ } _%>
 <%_ } _%>
-<%_ if (reactive && (implementsEagerLoadApis || searchEngineElasticsearch)) { _%>
+<%_ if (reactive && searchEngineElasticsearch) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -250,9 +243,6 @@ import java.time.LocalTime;
 <%_ } _%>
 <%_ if (fieldsToTest.some(field => field.fieldTypeLocalTime)) { _%>
 import java.time.format.DateTimeFormatter;
-<%_ } _%>
-<%_ if (!reactive && implementsEagerLoadApis) { _%>
-import java.util.ArrayList;
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import java.util.Base64;
@@ -289,14 +279,14 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ } else if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch || implementsEagerLoadApis) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch || searchEngineCouchbase) { _%>
 import static org.awaitility.Awaitility.await;
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.transient)) { _%>
@@ -310,9 +300,6 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 @IntegrationTest
 <%_ if (skipJunitTests) { _%>
 @Disabled("<%- skipJunitTests %>")
-<%_ } _%>
-<%_ if (implementsEagerLoadApis) { _%>
-@ExtendWith(MockitoExtension.class)
 <%_ } _%>
 <%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_ENTITY_TIMEOUT)
@@ -368,49 +355,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
       }
   _%>
   <%_ if (field.fieldTypeString || field.blobContentTypeText) { _%>
-    <%_ // Generate Strings, using the min and max string length if they are configured
-        let sampleTextString = '';
-        let updatedTextString = '';
-        let sampleTextLength = 10;
-        if (field.fieldValidateRulesMinlength > sampleTextLength) {
-          sampleTextLength = field.fieldValidateRulesMinlength;
-        }
-        if (field.fieldValidateRulesMaxlength < sampleTextLength) {
-          sampleTextLength = field.fieldValidateRulesMaxlength;
-        }
-        for (let i = 0; i < sampleTextLength; i++) {
-          sampleTextString += 'A';
-          updatedTextString += 'B';
-        }
-        if (field.fieldValidateRulesPattern !== undefined) {
-          // Generate Strings, using pattern
-          try {
-            const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
-            // set infinite repetitions max range
-            if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-              const value = field.generateFakeDataFromPattern();
-              sampleTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-            }
-            if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-              const value = field.generateFakeDataFromPattern();
-              updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-            }
-          } catch (error) {
-            this.log.warn(`Error generating test value for entity "${entityClass
-          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
-        }", generating default values for this field. Detailed error message: "${error.message}".`);
-        }
-        if (sampleTextString === updatedTextString) {
-          updatedTextString = `${updatedTextString}B`;
-          this.log.warn(`Randomly generated first and second test values for entity "${entityClass
-        }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
-        }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
-        }
-        }
-    _%>
 
-    private static final String <%- defaultValueName %> = "<%- sampleTextString %>";
-    private static final String <%- updatedValueName %> = "<%- updatedTextString %>";
+    private static final String <%- defaultValueName %> = "<%- field.sbTestSampleText %>";
+    private static final String <%- updatedValueName %> = "<%- field.sbTestUpdatedText %>";
   <%_ } else if (field.fieldTypeInteger) { _%>
 
     private static final Integer <%- defaultValueName %> = <%- defaultValue %>;
@@ -538,22 +485,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     @Autowired
     private UserRepository userRepository;
 <%_ } _%>
-<%_ if (implementsEagerLoadApis) { _%>
-
-    @Mock
-    private <%- entityClass %>Repository <%- entityInstance %>RepositoryMock;
-<%_ } _%>
 <%_ if (dtoMapstruct) { _%>
 
     @Autowired
     private <%- entityClass %>Mapper <%- entityInstance %>Mapper;
 <%_ } _%>
 <%_ if (!serviceNo) { _%>
-  <%_ if (implementsEagerLoadApis) { _%>
-
-    @Mock
-    private <%- entityClass %>Service <%- entityInstance %>ServiceMock;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 
@@ -580,7 +517,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
   <%_ for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) { _%>
     @Autowired
-    private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
+    private <%- relationship.otherEntity.entityNameCapitalized %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
   <%_ } _%>
 <%_ } else { _%>
   <%_ for (const otherEntity of noCascadeOtherEntities) { _%>
@@ -786,6 +723,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         assert<%- persistClass %>UpdatableFieldsEquals(returned<%- persistClass %>, getPersisted<%- persistClass %>(returned<%- persistClass %>));
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (databaseTypeSql && !reactive) { _%>
+
+        // Commit so the after-commit indexing runs before checking the search index
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+    <%_ } _%>
 
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
@@ -1044,7 +987,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%- entityInstance %>Repository.save(<%- persistInstance %>)<%- callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         List<<%- persistClass %>> <%- entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
             .accept(MediaType.APPLICATION_NDJSON)
@@ -1065,7 +1008,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- persistClass %> test<%- entityClass %> = <%- entityInstance %>List.getFirst();
 
   <%_ if (reactive && databaseTypeSql) { _%>
-        // Test fails because reactive api returns an empty object instead of null
+        // Test fails because reactive API returns an empty object instead of null
         // assert<%- persistClass %>AllPropertiesEquals(<%- persistInstance %>, test<%- entityClass %>);
         assert<%- persistClass %>UpdatableFieldsEquals(<%- persistInstance %>, test<%- entityClass %>);
   <%_ } else { _%>
@@ -1121,50 +1064,88 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   ) { %>.toString()<% } %>))<%- reactive ? '' : ')' %>
 <%_ } _%>;
     }
-<% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
-  <%_ const imperativeEagerLoadMockResult = paginationNo ? 'new ArrayList<>()' : 'new PageImpl(new ArrayList<>())'; _%>
-  <%_ const eagerLoadMockResult = reactive ? 'Flux.empty()' : imperativeEagerLoadMockResult; _%>
-    @SuppressWarnings({"unchecked"})
-    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <%- reactive ? '' : 'throws Exception ' %>{
-  <%_ if (serviceNo) { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } else { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } _%>
+<%_ if (databaseTypeCouchbase && !paginationNo) { _%>
+  <%_ const sortField = fieldsToTest.find(field => !field.fieldTypeBinary); _%>
 
+    @Test
+    void getAll<%- entityClassPlural %>SortedByTheirProperties() <%- reactive ? '' : 'throws Exception ' %>{
+        // Initialize the database
+  <%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+    <%_ } _%>
+  <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        for (String sort : new String[] { "<%- primaryKey.name %>,asc"<% if (sortField) { %>, "<%- sortField.fieldName %>,asc", "<%- sortField.fieldName %>,desc"<% } %> }) {
   <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=true")
-            .exchange()
-            .expectStatus().isOk();
+            webTestClient.get().uri(ENTITY_API_URL + "?sort=" + sort)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>));
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
-            .andExpect(status().isOk());
+            rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=" + sort))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>)));
   <%_ } _%>
-
-  <%_ if (serviceNo) { _%>
-        verify(<%- entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
-  <%_ } else { _%>
-        verify(<%- entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>);
-  <%_ } _%>
+        }
     }
 
-    @SuppressWarnings({"unchecked"})
-    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <%- reactive ? '' : 'throws Exception ' %>{
-  <%_ if (serviceNo) { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } else { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(<%- paginationNo ? '' : 'any()' %>)).thenReturn(<%- eagerLoadMockResult %>);
-  <%_ } _%>
-
+    @Test
+    void getAll<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=false")
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=doesNotExist,asc")
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
-            .andExpect(status().isOk());
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=doesNotExist,asc"))
+            .andExpect(status().isBadRequest());
   <%_ } _%>
-        verify(<%- entityInstance %>RepositoryMock, times(1)).findAll<%- reactive ? 'WithEagerRelationships(any()' : '(any(Pageable.class)' %>);
+    }
+  <%_ if (searchEngineCouchbase) { _%>
+
+    @Test
+    void search<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
+    <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+    <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:doesNotExist&sort=doesNotExist,asc"))
+            .andExpect(status().isBadRequest());
+    <%_ } _%>
+    }
+  <%_ } _%>
+<%_ } _%>
+<%_ if (implementsEagerLoadApis) { _%>
+
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>WithoutEagerRelationships() <%- reactive ? '' : 'throws Exception ' %>{
+        // Initialize the database
+  <%_ if (!primaryKey.derived) { _%>
+    <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+    <%_ } _%>
+  <%_ } _%>
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+
+        // Get all the <%- entityInstance %>List without loading the relationships
+  <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_API_URL + "?eagerload=false&sort=<%- primaryKey.name %>,desc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>));
+  <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false&sort=<%- primaryKey.name %>,desc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>)));
+  <%_ } _%>
     }
 <%_ } _%>
 
@@ -1215,7 +1196,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   ) { %>.toString()<% } %>))
 <%_ } _%>;
     }
-<%_ if (jpaMetamodelFiltering) { %>
+<%_ if (jpaMetamodelFiltering) { _%>
 
     @Test<%- transactionalAnnotation %>
     void get<%- entityClassPlural %>ByIdFiltering() <%- reactive ? '' : 'throws Exception ' %>{
@@ -1385,7 +1366,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? entityManagerVariable : '' %>);
       <%_ } _%>
       <%_ if (reactive) { _%>
-        <%- relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
+        <%- relationship.otherEntity.builtInUser ? 'user' : relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
       <%_ } else { _%>
         em.persist(<%- relationship.relationshipFieldName %>);
         em.flush();
@@ -1622,6 +1603,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         assertPersisted<%- persistClass %>ToMatchAllProperties(updated<%- persistClass %>);
 
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (databaseTypeSql && !reactive) { _%>
+        // Commit so the after-commit indexing runs before checking the search index
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+
+    <%_ } _%>
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -1629,7 +1616,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- persistClass %> test<%- entityClass %>Search = <%- entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
 
     <%_ if (reactive && databaseTypeSql) { _%>
-            // Test fails because reactive api returns an empty object instead of null
+            // Test fails because reactive API returns an empty object instead of null
             // assert<%- persistClass %>AllPropertiesEquals(test<%- entityClass %>Search, updated<%- persistClass %>);
             assert<%- persistClass %>UpdatableFieldsEquals(test<%- entityClass %>Search, updated<%- persistClass %>);
     <%_ } else { _%>
@@ -1691,7 +1678,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.APPLICATION_JSON)
@@ -1729,7 +1716,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
@@ -1951,7 +1938,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
@@ -1989,7 +1976,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
@@ -2037,7 +2024,12 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         long databaseSizeBeforeDelete = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+    <%_ if (databaseTypeSql && !reactive) { _%>
+      <%_ // committing tests leave the required entities of createEntity(em) behind, so the sizes are not comparable _%>
+        assertThat(<%- entityInstance %>SearchRepository.existsById(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>())).isTrue();
+    <%_ } else { _%>
         assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);
+    <%_ } _%>
   <%_ } _%>
 
         // Delete the <%- entityInstance %>
@@ -2058,8 +2050,22 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
   <%_ if (searchEngineElasticsearch) { _%>
+    <%_ if (reactive) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+    <%_ } else { _%>
+      <%_ if (databaseTypeSql) { _%>
+
+        // Commit so the after-commit indexing runs before checking the search index
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+
+      <%_ } _%>
+        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
+            assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
+        });
+    <%_ } _%>
   <%_ } _%>
 
     }
@@ -2085,7 +2091,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         // Search the <%- entityInstance %>
   <%_ if (searchEngineCouchbase) { _%>
         // Search results are eventually consistent and non-monotonic: retry the assertions until the <%- entityInstance %> is indexed
-        TestUtil.retryUntilSuccess(() ->
+        await().atMost(1, TimeUnit.MINUTES).pollInSameThread().ignoreExceptions().untilAsserted(() ->
   <%_ } _%>
   <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
@@ -2145,7 +2151,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     protected void assertPersisted<%- persistClass %>ToMatchAllProperties(<%- persistClass %> expected<%- persistClass %>) {
 <%_ if (reactive && databaseTypeSql) { _%>
-        // Test fails because reactive api returns an empty object instead of null
+        // Test fails because reactive API returns an empty object instead of null
         // assert<%- persistClass %>AllPropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
         assert<%- persistClass %>UpdatableFieldsEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
 <%_ } else { _%>
@@ -2155,7 +2161,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
     protected void assertPersisted<%- persistClass %>ToMatchUpdatableProperties(<%- persistClass %> expected<%- persistClass %>) {
 <%_ if (reactive && databaseTypeSql) { _%>
-        // Test fails because reactive api returns an empty object instead of null
+        // Test fails because reactive API returns an empty object instead of null
         // assert<%- persistClass %>AllUpdatablePropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
         assert<%- persistClass %>UpdatableFieldsEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
 <%_ } else { _%>

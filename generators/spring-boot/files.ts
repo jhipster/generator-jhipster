@@ -200,6 +200,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
         'config/application-prod.yml',
         'config/application-secret-samples.yml',
         'config/application-tls.yml',
+        'config/application-tls-samples.yml',
       ],
     },
   ],

@@ -6,7 +6,8 @@
  * - serviceDiscovery: eureka
  * - authenticationType: jwt
  * - prodDatabaseType: postgresql
- * - testFrameworks: cypress
+ * - testFrameworks: playwright
+ * - enableTranslation: false, the applications share the Angular locale without translations
  * - messageBroker: pulsar
  *
  * Imperative focus:
@@ -25,6 +26,7 @@ application {
     baseName gateway
     buildTool maven
     clientFramework angular
+    enableTranslation false
     creationTimestamp 1617901618886
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     // tests are not stable enough
@@ -47,6 +49,7 @@ application {
     buildTool maven
     cacheProvider ehcache
     clientFramework angular
+    enableTranslation false
     creationTimestamp 1617901618887
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     // tests are not stable enough
@@ -70,6 +73,7 @@ application {
     buildTool gradle
     cacheProvider ehcache
     clientFramework angular
+    enableTranslation false
     creationTimestamp 1617901618888
     dtoSuffix Rest
     entitySuffix Entity
@@ -94,6 +98,7 @@ application {
     baseName notification,
     buildTool gradle
     clientFramework angular
+    enableTranslation false
     creationTimestamp 1617901618889
     dtoSuffix Rest
     entitySuffix Entity

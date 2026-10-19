@@ -182,7 +182,7 @@ public class UserService {
                 userRepository.save(user);
       <%_ } _%>
       <%_ if (searchEngineElasticsearch) { _%>
-                userSearchRepository.save(user);
+                userSearchRepository.index(user);
       <%_ } _%>
       <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
@@ -374,7 +374,7 @@ public class UserService {
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
       <%_ if (searchEngineElasticsearch) { _%>
-        userSearchRepository.save(newUser);
+        userSearchRepository.index(newUser);
       <%_ } _%>
       <%_ if (cacheProviderAny) { _%>
         this.clearUserCaches(newUser);
@@ -497,12 +497,9 @@ public class UserService {
             .flatMap
       <%_ } else { _%>
             .map
-      <%_ } %>(user -> {
+      <%_ } -%>(user -> {
     <%_ } else { _%>
-        return Optional.of(userRepository
-            .findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+        return userRepository.findById(userDTO.getId())
             .map(user -> {
     <%_ } _%>
     <%_ if (databaseTypeCouchbase) { _%>
@@ -900,7 +897,7 @@ public class UserService {
   <%_ if (authenticationTypeOauth2) { _%>
 
     protected <% if (reactive) { %>Mono<<%- user.persistClass %>><% } else { %><%- user.persistClass %><% } %> syncUserWithIdP(Map<String, Object> details, <%- user.persistClass %> user) {
-        // save authorities in to sync user roles/groups between IdP and JHipster's local database
+        // save authorities in order to sync user roles/groups between IdP and JHipster's local database
     <%_ if (reactive) { _%>
         Collection<String> userAuthorities =
             user.getAuthorities().stream()<%- databaseTypeCouchbase ? '' : '.map(Authority::getName)' %>.toList();
@@ -958,7 +955,7 @@ public class UserService {
                 authorityRepository.save(authorityToSave);
             }
         }
-        // save account in to sync users between IdP and JHipster's local database
+        // save account in order to sync users between IdP and JHipster's local database
         Optional<<%- user.persistClass %>> existingUser = userRepository.findOneByLogin(user.getLogin());
         if (existingUser.isPresent()) {
             // if IdP sends last updated information, use it to determine if an update should happen
@@ -1009,10 +1006,10 @@ public class UserService {
   <%_ } _%>
     public <% if (reactive) { %>Mono<<%- user.adminUserDto %>><% } else { %><%- user.adminUserDto %><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
-        if (authToken instanceof OAuth2AuthenticationToken) {
-            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
-        } else if (authToken instanceof JwtAuthenticationToken) {
-            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+        if (authToken instanceof OAuth2AuthenticationToken oauth2Token) {
+            attributes = oauth2Token.getPrincipal().getAttributes();
+        } else if (authToken instanceof JwtAuthenticationToken jwtToken) {
+            attributes = jwtToken.getTokenAttributes();
         } else {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }

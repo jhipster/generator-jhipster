@@ -55,6 +55,5 @@
       "relationshipName": "testCustomTableName",
       "relationshipType": "one-to-many"
     }
-  ],
-  "service": "no"
+  ]
 }

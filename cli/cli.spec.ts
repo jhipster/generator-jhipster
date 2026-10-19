@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, afterEach, before, beforeEach, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
+import { after, afterEach, before, beforeEach, describe, exnode, expect, it, resetAllMocks } from 'expect-node';
 import assert from 'node:assert';
 import { fork } from 'node:child_process';
 import { join } from 'node:path';
@@ -121,13 +121,13 @@ export const command = {
 
 describe('cli', () => {
   const jhipsterCli = join(import.meta.dirname, '..', 'bin', 'jhipster.cjs');
-  const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
-  const getCommand = esmocha.fn<typeof actualGetCommand>();
+  const logger = { verboseInfo: exnode.fn(), warn: exnode.fn(), fatal: exnode.fn(), debug: exnode.fn() };
+  const getCommand = exnode.fn<typeof actualGetCommand>();
   let mockCli: (argv: string[], opts?: Record<string, any>) => Promise<JHipsterCommand>;
   let argv: string[];
 
   before(async () => {
-    await esmocha.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} });
+    await exnode.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} }, { reimport: true });
     const { buildJHipster } = await import('./program.ts');
 
     mockCli = async (argv: string[], opts = {}) => {
@@ -141,7 +141,7 @@ describe('cli', () => {
     };
   });
   after(() => {
-    esmocha.reset();
+    exnode.resetModules();
   });
 
   beforeEach(async () => {
@@ -160,6 +160,11 @@ describe('cli', () => {
   it('--version should run without errors', () => {
     const { stdout } = execaSync`${jhipsterCli} --version`;
     expect(coerce(stdout)).toBeTruthy();
+  });
+
+  it('--install-path should print the install path alone', () => {
+    const { stdout } = execaSync`${jhipsterCli} --install-path`;
+    expect(stdout).toBe(join(import.meta.dirname, '..'));
   });
 
   it('should return error on unknown command', () => {
@@ -226,27 +231,26 @@ describe('cli', () => {
       const BaseGenerator = (await import('../generators/base/index.ts')).default;
       env = await helpers.createTestEnv();
       generator = new (helpers.createDummyGenerator(BaseGenerator))([], { env });
-      env.run = esmocha.fn<typeof env.run>((...args) => {
+      env.run = exnode.fn<typeof env.run>((...args) => {
         runArgs = args;
         return Promise.resolve();
       });
-      const composeWithSpy = esmocha.spyOn(env, 'composeWith');
+      const composeWithSpy = exnode.spyOn(env, 'composeWith');
       composeWithSpy.mockImplementation(async () => undefined as unknown as BaseGenerator);
       const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
-      const getGeneratorMetaSpy = esmocha.spyOn(env, 'getGeneratorMeta');
+      const getGeneratorMetaSpy = exnode.spyOn(env, 'getGeneratorMeta');
       getGeneratorMetaSpy.mockImplementation((namespace: string): GeneratorMeta | undefined => {
         if (namespace === 'jhipster:mocked') {
           return {
             namespace,
-            importModule: async () => ({
-              command,
-            }),
+            importModule: async () => ({ command }),
+            requireModule: () => ({ command }),
             resolved: import.meta.filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
             importGenerator: undefined as any,
             instantiate: <G>() => Promise.resolve(generator as G),
-          };
+          } as GeneratorMeta;
         }
         return originalGetGeneratorMeta(namespace);
       });
@@ -275,6 +279,22 @@ describe('cli', () => {
         expect(options.fooBar).toBe(true);
       });
 
+      it('should not give the builder of its environment to the command', async () => {
+        await mockCli(argv, { commands, env, createEnvBuilder: exnode.fn<any>() });
+        const [, options] = runArgs;
+        expect(options.createEnvBuilder).toBeUndefined();
+      });
+
+      for (const cliCommand of ['jdl', 'upgrade']) {
+        it(`should give the builder of its environment to the ${cliCommand} command, which runs generators in other environments`, async () => {
+          const createEnvBuilder = exnode.fn<any>();
+          await mockCli(['jhipster', 'jhipster', cliCommand], { env, createEnvBuilder });
+          const [command, options] = runArgs;
+          expect(command).toEqual(`jhipster:${cliCommand}`);
+          expect(options.createEnvBuilder).toBe(createEnvBuilder);
+        });
+      }
+
       it('should pass the application jdl definitions of the configs of the command', async () => {
         await mockCli(argv, { commands, env });
         const [, options] = runArgs;
@@ -285,7 +305,7 @@ describe('cli', () => {
       });
 
       it('should pass the jdl definitions of getJDLDefinitions', async () => {
-        const getJDLDefinitions = esmocha.fn(({ defaults }: { defaults: JDLDefinitions; commandsConfigs: JHipsterConfigs }) => ({
+        const getJDLDefinitions = exnode.fn(({ defaults }: { defaults: JDLDefinitions; commandsConfigs: JHipsterConfigs }) => ({
           entity: defaults.entity,
         }));
         await mockCli(argv, { commands, env, getJDLDefinitions });
@@ -474,8 +494,9 @@ describe('cli', () => {
           expect(() => execaSync`${jhipsterCli} foo --blueprints bar`).toThrow(
             expect.objectContaining({
               exitCode: 1,
-              stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-bar'),
-              stderr: expect.stringContaining('foo is not a known command'),
+              stderr: expect.stringMatching(
+                /No custom commands found within blueprint: generator-jhipster-bar[\s\S]*foo is not a known command/,
+              ),
             }),
           );
         });
@@ -494,8 +515,9 @@ describe('cli', () => {
           expect(() => execaSync`${jhipsterCli} foo --blueprints bar,baz`).toThrow(
             expect.objectContaining({
               exitCode: 1,
-              stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-baz'),
-              stderr: expect.stringContaining('foo is not a known command'),
+              stderr: expect.stringMatching(
+                /No custom commands found within blueprint: generator-jhipster-baz[\s\S]*foo is not a known command/,
+              ),
             }),
           );
         });

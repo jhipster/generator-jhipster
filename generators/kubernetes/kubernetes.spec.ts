@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { defaultHelpers as helpers, runResult } from '#testing';
 
@@ -143,6 +143,50 @@ describe('generator - Kubernetes', () => {
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
+    });
+  });
+
+  describe('a postgresql microservice with the password of the databases given', () => {
+    before(async () => {
+      const chosenApps = ['03-psql'];
+
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+          dbRandomPassword: 'given-password',
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+
+    it('should store it instead of generating one', () => {
+      runResult.assertJsonFileContent('./kubernetes/.yo-rc.json', { 'generator-jhipster': { dbRandomPassword: 'given-password' } });
+    });
+
+    it('should deploy the databases with it', () => {
+      runResult.assertFileContent(
+        './kubernetes/mspsql-k8s/mspsql-postgresql.yml',
+        `postgresql-password: ${Buffer.from('given-password').toString('base64')}`,
+      );
     });
   });
 
@@ -870,6 +914,23 @@ describe('generator - Kubernetes', () => {
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
+    });
+  });
+
+  describe('with a config holding only the type and the applications', () => {
+    const chosenApps = ['01-gateway', '02-mysql'];
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withFiles({ 'kubernetes/.yo-rc.json': { 'generator-jhipster': { deploymentType: 'kubernetes', appsFolders: chosenApps } } });
+    });
+    it('should generate with the defaults, without asking', () => {
+      expect(runResult.askedQuestions).toEqual([]);
+      runResult.assertFile('kubernetes/kubectl-apply.sh');
     });
   });
 });
