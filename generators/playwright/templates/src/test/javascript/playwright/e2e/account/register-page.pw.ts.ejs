@@ -47,73 +47,73 @@ test.describe('<%- registerPage %>', () => {
 <%_ if (clientFrameworkReact) { _%>
     await page.locator(submitRegisterSelector).click();
 <%_ } _%>
-    await expect(page.locator(usernameRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(usernameRegisterSelector)).toContainClass(classInvalid);
     await page.locator(usernameRegisterSelector).fill('test');
     await page.locator(usernameRegisterSelector).blur();
-    await expect(page.locator(usernameRegisterSelector)).toHaveClass(new RegExp(classValid));
+    await expect(page.locator(usernameRegisterSelector)).toContainClass(classValid);
   });
 
   test('should not accept invalid email', async ({ page }) => {
 <%_ if (clientFrameworkReact) { _%>
     await page.locator(submitRegisterSelector).click();
 <%_ } _%>
-    await expect(page.locator(emailRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(emailRegisterSelector)).toContainClass(classInvalid);
     await page.locator(emailRegisterSelector).fill('testtest.fr');
     await page.locator(emailRegisterSelector).blur();
-    await expect(page.locator(emailRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(emailRegisterSelector)).toContainClass(classInvalid);
   });
 
   test('requires email in correct format', async ({ page }) => {
 <%_ if (clientFrameworkReact) { _%>
     await page.locator(submitRegisterSelector).click();
 <%_ } _%>
-    await expect(page.locator(emailRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(emailRegisterSelector)).toContainClass(classInvalid);
     await page.locator(emailRegisterSelector).fill('test@test.fr');
     await page.locator(emailRegisterSelector).blur();
-    await expect(page.locator(emailRegisterSelector)).toHaveClass(new RegExp(classValid));
+    await expect(page.locator(emailRegisterSelector)).toContainClass(classValid);
   });
 
   test('requires first password', async ({ page }) => {
 <%_ if (clientFrameworkReact) { _%>
     await page.locator(submitRegisterSelector).click();
 <%_ } _%>
-    await expect(page.locator(firstPasswordRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(firstPasswordRegisterSelector)).toContainClass(classInvalid);
     await page.locator(firstPasswordRegisterSelector).fill('test@test.fr');
     await page.locator(firstPasswordRegisterSelector).blur();
-    await expect(page.locator(firstPasswordRegisterSelector)).toHaveClass(new RegExp(classValid));
+    await expect(page.locator(firstPasswordRegisterSelector)).toContainClass(classValid);
   });
 
   test('requires password and confirm password to be same', async ({ page }) => {
 <%_ if (clientFrameworkReact) { _%>
     await page.locator(submitRegisterSelector).click();
 <%_ } _%>
-    await expect(page.locator(firstPasswordRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(firstPasswordRegisterSelector)).toContainClass(classInvalid);
     await page.locator(firstPasswordRegisterSelector).fill('test');
     await page.locator(firstPasswordRegisterSelector).blur();
-    await expect(page.locator(firstPasswordRegisterSelector)).toHaveClass(new RegExp(classValid));
-    await expect(page.locator(secondPasswordRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(firstPasswordRegisterSelector)).toContainClass(classValid);
+    await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classInvalid);
     await page.locator(secondPasswordRegisterSelector).fill('test');
     await page.locator(secondPasswordRegisterSelector).blur();
-    await expect(page.locator(secondPasswordRegisterSelector)).toHaveClass(new RegExp(classValid));
+    await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classValid);
   });
 
   test('requires password and confirm password have not the same value', async ({ page }) => {
 <%_ if (clientFrameworkReact) { _%>
     await page.locator(submitRegisterSelector).click();
 <%_ } _%>
-    await expect(page.locator(firstPasswordRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(firstPasswordRegisterSelector)).toContainClass(classInvalid);
     await page.locator(firstPasswordRegisterSelector).fill('test');
     await page.locator(firstPasswordRegisterSelector).blur();
-    await expect(page.locator(firstPasswordRegisterSelector)).toHaveClass(new RegExp(classValid));
+    await expect(page.locator(firstPasswordRegisterSelector)).toContainClass(classValid);
 <%_ if (clientFrameworkAngular) { _%>
-    await expect(page.locator(secondPasswordRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classInvalid);
     await page.locator(secondPasswordRegisterSelector).fill('otherPassword');
     await expect(page.locator(submitRegisterSelector)).toBeDisabled();
 <%_ } else { _%>
-    await expect(page.locator(secondPasswordRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classInvalid);
     await page.locator(secondPasswordRegisterSelector).fill('otherPassword');
     await page.locator(secondPasswordRegisterSelector).blur();
-    await expect(page.locator(secondPasswordRegisterSelector)).toHaveClass(new RegExp(classInvalid));
+    await expect(page.locator(secondPasswordRegisterSelector)).toContainClass(classInvalid);
 <%_ } _%>
   });
 
