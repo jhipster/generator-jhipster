@@ -9,7 +9,7 @@ dependencies {
   liquibaseRuntime "info.picocli:picocli:<%- javaDependencies.picocli %>"
 <%_ if (databaseTypeSql) { _%>
   <%_ if (prodDatabaseType !== devDatabaseType) { _%>
-  if (project.hasProperty("prod") || project.hasProperty("gae")) {
+  if (project.hasProperty("prod")) {
   <%_ } _%>
   <%_ if (prodDatabaseTypeMysql) { _%>
   liquibaseRuntime "com.mysql:mysql-connector-j"
