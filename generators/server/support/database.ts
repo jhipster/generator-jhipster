@@ -117,7 +117,7 @@ export function getDBTypeFromDBValue(db: string): string {
 }
 
 /**
- * get for tables/constraints in JHipster preferred style after applying any length limits required.
+ * get a name for tables/constraints in JHipster preferred style after applying any length limits required.
  *
  * @param {string} tableOrEntityName - name of the table or entity
  * @param {string} columnOrRelationshipName - name of the column or relationship

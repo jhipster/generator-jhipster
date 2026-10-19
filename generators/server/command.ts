@@ -48,7 +48,7 @@ const command = {
       scope: 'storage',
     },
     skipCheckLengthOfIdentifier: {
-      description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
+      description: 'Skip checking the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
       cli: {
         type: Boolean,
       },
