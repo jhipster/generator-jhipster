@@ -17,12 +17,14 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# The mssql service stores its data in /var/opt/mssql/data/ of its Docker container: to keep it in a folder of your machine,
+# add to the mssql service:
+#   volumes:
+#     - <folder-of-your-machine>:/var/opt/mssql/data/
 name: jhipster
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server
-    # volumes:
-    #   - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express

@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# The mongodb service stores its data in /data/db/ of its Docker container: to keep it in a folder of your machine,
+# add to the mongodb service:
+#   volumes:
+#     - <folder-of-your-machine>:/data/db/
 name: jhipster
 services:
   mongodb:

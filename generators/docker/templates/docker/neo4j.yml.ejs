@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# The neo4j service stores its data in /data of its Docker container: to keep it in a folder of your machine,
+# add to the neo4j service:
+#   volumes:
+#     - <folder-of-your-machine>:/data
 name: jhipster
 services:
   neo4j:

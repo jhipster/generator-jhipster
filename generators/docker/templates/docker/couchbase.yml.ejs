@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# The couchbase service stores its data in /opt/couchbase/var of its Docker container: to keep it in a folder of your machine,
+# add to the couchbase service:
+#   volumes:
+#     - <folder-of-your-machine>:/opt/couchbase/var
 name: jhipster
 services:
   couchbase:

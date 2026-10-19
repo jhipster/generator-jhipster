@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# The cassandra service stores its data in /var/lib/cassandra/data of its Docker container: to keep it in a folder of your machine,
+# add to the cassandra service:
+#   volumes:
+#     - <folder-of-your-machine>:/var/lib/cassandra/data
 name: jhipster
 services:
   cassandra:

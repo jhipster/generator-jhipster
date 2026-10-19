@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# The elasticsearch service stores its data in /usr/share/elasticsearch/data/ of its Docker container: to keep it in a folder of your machine,
+# add to the elasticsearch service:
+#   volumes:
+#     - <folder-of-your-machine>:/usr/share/elasticsearch/data/
 name: jhipster
 services:
   elasticsearch:

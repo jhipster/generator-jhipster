@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+# The postgresql service stores its data in /var/lib/postgresql/data/ of its Docker container: to keep it in a folder of your machine,
+# add to the postgresql service:
+#   volumes:
+#     - <folder-of-your-machine>:/var/lib/postgresql/data/
 name: jhipster
 services:
   postgresql:
