@@ -40,6 +40,8 @@ export type ClientResources = {
   comment?: string;
 };
 
+type EntityTranslationKey = { translationKey: string; translationValue: string; language: string };
+
 export type Source = JavascriptSource &
   CommonSource & {
     /**
@@ -63,5 +65,5 @@ export type Source = JavascriptSource &
      * @deprecated webpack is not supported by any client framework anymore.
      */
     addWebpackConfig?(args: { config: string }): void;
-    addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
+    addEntityTranslationKey: (arg: EntityTranslationKey | EntityTranslationKey[]) => void;
   };
