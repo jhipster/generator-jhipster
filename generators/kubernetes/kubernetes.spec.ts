@@ -652,6 +652,41 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('monolith and an application of a type of a blueprint', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' })
+        .withWorkspacesSamples('08-monolith')
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'monolith',
+          directoryPath: '../',
+          chosenApps: ['mobile', '08-monolith'],
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+    it('should deploy the monolith only', () => {
+      runResult.assertFile(expectedFiles.monolith);
+      expect(Object.keys(runResult.getSnapshot()).filter(file => file.startsWith('kubernetes/') && file.includes('mobile'))).toEqual([]);
+      runResult.assertNoFileContent('kubernetes/kubectl-apply.sh', /mobile/);
+    });
+  });
+
   describe('monolith application', () => {
     before(async () => {
       const chosenApps = ['08-monolith'];

@@ -22,6 +22,7 @@ import chalk from 'chalk';
 import { buildToolTypes } from '../../lib/jhipster/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
 import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.ts';
+import type { Features as BaseWorkspacesFeatures } from '../base-workspaces/types.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-boot/generators/data-relational/support/index.ts';
 
 import { applicationFiles, writeDeploymentFiles } from './files.ts';
@@ -42,7 +43,11 @@ export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<
   KubernetesWorkspacesApplication,
   KubernetesConfig,
   KubernetesOptions
-> {}
+> {
+  constructor(args?: string[], options?: KubernetesOptions, features?: BaseWorkspacesFeatures) {
+    super(args, options, { officialApplicationTypesOnly: true, ...features });
+  }
+}
 
 export default class KubernetesGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {

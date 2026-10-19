@@ -60,6 +60,35 @@ describe(`generator - ${helpers.commandName}`, () => {
     });
   });
 
+  describe('with an application type of a blueprint', () => {
+    describe('composing', () => {
+      before(async () => {
+        await helpers
+          .runJHipster()
+          .withMockedJHipsterGenerators()
+          // @ts-expect-error a type a blueprint declares, out of the official ones
+          .withJHipsterConfig({ applicationType: 'expo' });
+      });
+
+      it('should not compose with the generators of the application', () => {
+        result.assertGeneratorNotComposed('jhipster:common');
+        result.assertGeneratorNotComposed('jhipster:server');
+        result.assertGeneratorNotComposed('jhipster:client');
+      });
+    });
+
+    describe('writing', () => {
+      before(async () => {
+        // @ts-expect-error a type a blueprint declares, out of the official ones
+        await helpers.runJHipster().withJHipsterConfig({ applicationType: 'expo' });
+      });
+
+      it('should write the config and the package.json only', () => {
+        expect(Object.keys(result.getStateSnapshot()).sort()).toEqual(['.yo-rc.json', 'package.json']);
+      });
+    });
+  });
+
   describe('jdlStore', () => {
     describe('with application', () => {
       before(async () => {

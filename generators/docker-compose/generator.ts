@@ -35,6 +35,7 @@ import {
 } from '../base-workspaces/internal/docker-prompts.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../base-workspaces/internal/index.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
+import type { Features as BaseWorkspacesFeatures, Options as BaseWorkspacesOptions } from '../base-workspaces/types.ts';
 import { DOCKER_COMPOSE_SOURCES_DIR } from '../docker/constants.ts';
 import { mergeDockerComposeFile } from '../docker/support/index.ts';
 
@@ -45,6 +46,10 @@ const { PROMETHEUS } = monitoringTypes;
 const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
+  constructor(args?: string[], options?: BaseWorkspacesOptions, features?: BaseWorkspacesFeatures) {
+    super(args, options, { officialApplicationTypesOnly: true, ...features });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       this.jhipsterConfig.deploymentType ??= 'docker-compose';
