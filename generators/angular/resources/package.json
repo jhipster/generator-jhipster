@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "22.2.2",
+    "@angular/common": "22.2.3",
     "@fortawesome/angular-fontawesome": "5.1.0",
     "@fortawesome/free-solid-svg-icons": "7.3.1",
     "@ng-bootstrap/ng-bootstrap": "21.0.0",
@@ -18,9 +18,9 @@
   "devDependencies": {
     "@angular-architects/native-federation": "22.2.2",
     "@angular-builders/custom-esbuild": "22.0.1",
-    "@angular-devkit/architect": "0.2202.2",
-    "@angular/build": "22.2.2",
-    "@angular/cli": "22.2.2",
+    "@angular-devkit/architect": "0.2202.3",
+    "@angular/build": "22.2.3",
+    "@angular/cli": "22.2.3",
     "@eslint/js": "10.0.1",
     "@softarc/native-federation-orchestrator": "4.7.0",
     "@stylistic/eslint-plugin": "5.10.0",
