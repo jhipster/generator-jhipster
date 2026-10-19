@@ -105,9 +105,9 @@
     "prebuild": "npm run clean",
     "build": "npm run compile && npm run copy-files && npm run copy-types",
     "postbuild": "node bin/fix-bin.cjs",
-    "check-types": "node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc -p tsconfig.spec.json",
+    "check-types": "node ./node_modules/typescript7/bin/tsc -p tsconfig.spec.json",
     "clean": "rimraf dist",
-    "compile": "node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc",
+    "compile": "node ./node_modules/typescript7/bin/tsc",
     "copy-files": "cpy \"**\" \"!**/*.(js|cjs|mjs|ts|cts|mts|snap)\" \"!**/__*/*\" \"!**/node_modules/**\" \"!**/package-lock.json\" \"../dist/generators\" --cwd=generators --dot",
     "copy-types": "cpy \"(cli|generators|lib)/**/*.d.(|c|m)ts\" \"!**/node_modules/**\" \"!**/package-lock.json\" \"dist\" --cwd=.",
     "eslint": "eslint . --max-warnings 0",
@@ -198,6 +198,7 @@
     "jiti": "2.7.0",
     "jsdoc": "4.0.5",
     "rimraf": "6.1.3",
+    "typescript7": "npm:typescript@7.0.2",
     "yeoman-test": "11.8.2"
   },
   "peerDependencies": {

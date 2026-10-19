@@ -7,8 +7,8 @@ JHipster is a Yeoman-based code generator (TypeScript, ESM, Node — see `engine
 ## Build, lint, test
 
 - Install: `npm ci` (also compiles via `prepare` → `build`).
-- Build: `npm run build` (runs `clean` → `tsc` → copy non-TS template files + `.d.ts` to `dist/`, then `bin/fix-bin.cjs`). Use `npm run compile` alone for a faster TS-only recompile.
-- Type-check tests: `npm run check-types` (`tsc -p tsconfig.spec.json`).
+- Build: `npm run build` (runs `clean` → `tsc` of TypeScript 7, the `typescript7` alias → copy non-TS template files + `.d.ts` to `dist/`, then `bin/fix-bin.cjs`). Use `npm run compile` alone for a faster TS-only recompile.
+- Type-check tests: `npm run check-types` (`tsc -p tsconfig.spec.json` of TypeScript 7; the `typescript` package stays TypeScript 6, for typescript-eslint).
 - Lint: `npm run lint` (eslint, `--max-warnings 5`). Auto-fix: `npm run lint-fix` (runs eslint `--fix` then `prettier --write`).
 - Prettier check/format: `npm run prettier:check` / `npm run prettier:format`.
 - Full test (lint + type-check + tests): `npm test`. Runs expect-node (`exnode`) over the spec files of `expect-node.config.ts` (`test generators cli .blueprint lib`) with `--forbid-only`.
