@@ -43,7 +43,7 @@
     "globals": "17.13.0",
     "happy-dom": "20.14.6",
     "jiti": "2.7.0",
-    "postcss-import": "17.0.0",
+    "postcss-import": "17.0.1",
     "postcss-rtlcss": "6.0.0",
     "postcss-url": "10.1.4",
     "rimraf": "6.1.3",
