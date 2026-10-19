@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
+import { before, describe, it } from 'expect-node';
 import assert from 'node:assert';
 
 import { getEnumInfo } from './enum.ts';

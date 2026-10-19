@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, customDateType = 'Date', embedded);
-    const typeImports = this.generateEntityClientImports(relationships, dto);
-    const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
-    const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
+<%_ const variablesWithTypes = entityClientFields;
+    const typeImports = entityClientImports;
+    const defaultVariablesValues = entityClientFieldDefaultValues;
+    const enumImports = entityModelEnumImports;
 _%>
 <%_ for (const [importedType, importedPath] of typeImports) { _%>
   <%_ if (importedType !== 'I'.concat(entityAngularName)) { _%>

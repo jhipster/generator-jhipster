@@ -88,8 +88,8 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
-    "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
+    "cleanup": "rimraf <%- relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%- relativeDir(clientRootDir, clientDistDir) %>",
     "start": "ng serve<%- microfrontend ? '' : ' --hmr' %>",
     "start-tls": "<%- nodePackageManager %> run webapp:dev-ssl",
 <%_ if (skipServer) { _%>

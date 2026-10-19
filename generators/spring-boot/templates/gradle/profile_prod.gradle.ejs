@@ -41,7 +41,7 @@ bootRun {
 def webapp = tasks.register('webapp', NpmTask) {
     dependsOn(npmInstall)
 
-    outputs.dir(layout.buildDirectory.dir("<%- this.relativeDir(temporaryDir, clientDistDir) %>"))
+    outputs.dir(layout.buildDirectory.dir("<%- relativeDir(temporaryDir, clientDistDir) %>"))
         .withPropertyName("webapp-build-dir")
     outputs.upToDateWhen { false }
 

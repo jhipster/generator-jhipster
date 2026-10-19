@@ -20,10 +20,10 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   video: false,
-  fixturesFolder: '<%- this.relativeDir(clientRootDir, cypressDir) %>fixtures',
-  screenshotsFolder: '<%- this.relativeDir(clientRootDir, cypressTemporaryDir) %>screenshots',
-  downloadsFolder: '<%- this.relativeDir(clientRootDir, cypressTemporaryDir) %>downloads',
-  videosFolder: '<%- this.relativeDir(clientRootDir, cypressTemporaryDir) %>videos',
+  fixturesFolder: '<%- relativeDir(clientRootDir, cypressDir) %>fixtures',
+  screenshotsFolder: '<%- relativeDir(clientRootDir, cypressTemporaryDir) %>screenshots',
+  downloadsFolder: '<%- relativeDir(clientRootDir, cypressTemporaryDir) %>downloads',
+  videosFolder: '<%- relativeDir(clientRootDir, cypressTemporaryDir) %>videos',
   chromeWebSecurity: true,
   viewportWidth: 1200,
   viewportHeight: 720,
@@ -44,17 +44,15 @@ export default defineConfig({
 <%_ } _%>
   },
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
     async setupNodeEvents(on, config) {
 <%_ if (cypressCoverage) { _%>
       config.expose.CYPRESS_COVERAGE = config.env.CYPRESS_COVERAGE;
 <%_ } _%>
-      return (await import('./<%- this.relativeDir(clientRootDir, cypressDir) %>plugins/index')).default(on, config);
+      return (await import('./<%- relativeDir(clientRootDir, cypressDir) %>plugins/index')).default(on, config);
     },
     baseUrl: 'http://localhost:<%- gatewayServerPort || serverPort %>/',
-    specPattern: '<%- this.relativeDir(clientRootDir, cypressDir) %>e2e/**/*.cy.ts',
-    supportFile: '<%- this.relativeDir(clientRootDir, cypressDir) %>support/index.ts',
+    specPattern: '<%- relativeDir(clientRootDir, cypressDir) %>e2e/**/*.cy.ts',
+    supportFile: '<%- relativeDir(clientRootDir, cypressDir) %>support/index.ts',
     experimentalRunAllSpecs: true,
   },
 });

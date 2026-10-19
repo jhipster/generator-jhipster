@@ -60,7 +60,7 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
  * @returns variablesWithTypes: Array
  */
 const generateEntityClientFields = (
-  primaryKey: PrimaryKey,
+  primaryKey: PrimaryKey | undefined,
   fields: ClientField[],
   relationships: RelationshipWithEntity<ClientRelationship, ClientEntity>[],
   _dto: any,

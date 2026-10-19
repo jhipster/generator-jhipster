@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { it } from 'esmocha';
+import { it } from 'expect-node';
 
 import { JAVA_DOCKER_DIR } from '../../generator-constants.ts';
 

@@ -28,7 +28,7 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-import installLogsPrinter from "cypress-terminal-report/src/installLogsPrinter";
+import installLogsPrinter from 'cypress-terminal-report/src/installLogsPrinter';
 <%_ if (cypressAudit) { _%>
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { pa11y, prepareAudit } from 'cypress-audit';

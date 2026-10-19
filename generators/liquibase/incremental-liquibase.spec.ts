@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path, { basename, join } from 'node:path';
 
@@ -211,8 +211,7 @@ const exceptMockedGenerators: (keyof GeneratorsByNamespace)[] = [
   'liquibase',
 ];
 
-describe('generator - app - --incremental-changelog', function () {
-  this.timeout(45000);
+describe('generator - app - --incremental-changelog', () => {
   describe('when creating a new application', () => {
     before(async () => {
       await helpers

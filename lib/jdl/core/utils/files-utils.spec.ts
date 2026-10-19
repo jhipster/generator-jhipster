@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'expect-node';
 import fs from 'node:fs';
 import path from 'node:path';
 

@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { generateTestEntity } from '../../../client/support/index.ts';
 import { mutateApplication } from '../../application.ts';
 import type { Application as E2eApplication, Entity as E2eEntity } from '../../types.ts';
 
@@ -42,5 +44,23 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareTestEntities({ entity }) {
+        entity.resetFakerSeed?.('e2e');
+        mutateData(entity, {
+          __override__: false,
+          e2eTestEntitySample: ({ fields }) =>
+            generateTestEntity(fields.filter(field => !field.autoGenerate && !(field as { nullable?: boolean }).nullable)),
+          e2eTestEntity: ({ fields }) => generateTestEntity(fields.filter(field => !field.autoGenerate)),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 }

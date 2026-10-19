@@ -22,6 +22,7 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/generator.ts';
 import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
@@ -138,7 +139,7 @@ export default class VueGenerator extends VueApplicationGenerator {
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
-      async javaNodeBuildPaths({ application }) {
+      javaNodeBuildPaths({ application }) {
         const { clientBundlerRsbuild, clientBundlerVite, microfrontend, enableTranslation, enableI18nRTL, javaNodeBuildPaths } =
           application;
 
@@ -255,6 +256,27 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareEntityModel({ entity }) {
+        const fieldsWithoutId = entity.fields.filter(field => !field.id);
+        mutateData(entity, {
+          __override__: false,
+          entityClientFields: () =>
+            this.generateEntityClientFields(entity.primaryKey, fieldsWithoutId, entity.relationships, entity.dto, 'Date', entity.embedded),
+          entityClientImports: () => this.generateEntityClientImports(entity.relationships, entity.dto),
+          entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
+          entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
+          entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {

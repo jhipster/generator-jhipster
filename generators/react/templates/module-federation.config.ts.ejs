@@ -27,7 +27,7 @@ const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: 
 // Application modules are not installed packages, `import` points the federation plugin to the source file.
 const shareMappings = (...mappings: string[]) =>
   Object.fromEntries(
-    mappings.map(map => [map, { ...sharedDefaults, version: apiVersion, import: `./<%- this.relativeDir(clientRootDir, clientSrcDir) %>${map}` }]),
+    mappings.map(map => [map, { ...sharedDefaults, version: apiVersion, import: `./<%- relativeDir(clientRootDir, clientSrcDir) %>${map}` }]),
   );
 
 const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>

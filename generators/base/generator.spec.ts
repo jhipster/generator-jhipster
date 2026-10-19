@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import { passthrough } from '@yeoman/transform';
@@ -49,10 +49,10 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('skipPriorities', () => {
-    const initializing = esmocha.fn();
-    const prompting = esmocha.fn();
-    const writing = esmocha.fn();
-    const postWriting = esmocha.fn();
+    const initializing = exnode.fn();
+    const prompting = exnode.fn();
+    const writing = exnode.fn();
+    const postWriting = exnode.fn();
 
     class CustomGenerator extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {
@@ -89,7 +89,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('a priority registered outside base-core', () => {
-      const custom = esmocha.fn();
+      const custom = exnode.fn();
 
       class CustomPriorityGenerator extends BaseGenerator {
         constructor(args: any, options: any, features: any) {
@@ -121,7 +121,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('transform queue', () => {
-      const transformed = esmocha.fn();
+      const transformed = exnode.fn();
 
       class TransformGenerator extends BaseGenerator {
         get [BaseGenerator.DEFAULT]() {
@@ -189,10 +189,10 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('.cleanupFiles', () => {
-      let removeFiles: ReturnType<typeof esmocha.fn>;
+      let removeFiles: ReturnType<typeof exnode.fn>;
 
       before(async () => {
-        removeFiles = esmocha.fn();
+        removeFiles = exnode.fn();
 
         await helpers
           .run(CustomGenerator)
@@ -227,7 +227,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('.cleanupBlueprintFiles of a blueprint, the control created by a jhipster generator', () => {
-      let removeFiles: ReturnType<typeof esmocha.fn>;
+      let removeFiles: ReturnType<typeof exnode.fn>;
 
       class BlueprintGenerator extends BaseGenerator {
         rootGeneratorName() {
@@ -245,7 +245,7 @@ describe(`generator - ${generator}`, () => {
       }
 
       before(async () => {
-        removeFiles = esmocha.fn();
+        removeFiles = exnode.fn();
 
         await helpers
           .run(
@@ -276,7 +276,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('.cleanupBlueprintFiles of two blueprints', () => {
-      let removeFiles: ReturnType<typeof esmocha.fn>;
+      let removeFiles: ReturnType<typeof exnode.fn>;
 
       const createBlueprintGenerator = (rootGeneratorName: string, cleanup: Record<string, string[]>) =>
         class extends BaseGenerator {
@@ -295,7 +295,7 @@ describe(`generator - ${generator}`, () => {
         };
 
       before(async () => {
-        removeFiles = esmocha.fn();
+        removeFiles = exnode.fn();
 
         await helpers
           .run(

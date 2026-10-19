@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
 

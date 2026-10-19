@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
 import type { ParsedJDLOption } from '../../core/parsing/index.ts';

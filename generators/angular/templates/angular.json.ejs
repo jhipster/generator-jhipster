@@ -32,7 +32,7 @@
         }
       },
       "root": "",
-      "sourceRoot": "<%- this.relativeDir(clientRootDir, clientSrcDir).replace(/\/$/, '') %>",
+      "sourceRoot": "<%- relativeDir(clientRootDir, clientSrcDir).replace(/\/$/, '') %>",
       "prefix": "<%- jhiPrefixDashed %>",
       "architect": {
 <%_ if (microfrontend) { _%>
@@ -41,7 +41,7 @@
           "options": {
             "tsConfig": "tsconfig.federation.json",
             "federationConfigPath": "federation.config.ts",
-            "entryPoints": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>main.ts"],
+            "entryPoints": ["<%- relativeDir(clientRootDir, clientSrcDir) %>main.ts"],
             "cacheExternalArtifacts": true
           },
           "configurations": {
@@ -70,16 +70,16 @@
             ],
 <%_ } _%>
             "outputPath": {
-              "base": "<%- this.relativeDir(clientRootDir, clientDistDir) %>",
+              "base": "<%- relativeDir(clientRootDir, clientDistDir) %>",
               "browser": "",
               "server": "node-server",
               "media": "resources"
             },
-            "index": "<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html",
-            "browser": "<%- this.relativeDir(clientRootDir, clientSrcDir) %>main.ts",
+            "index": "<%- relativeDir(clientRootDir, clientSrcDir) %>index.html",
+            "browser": "<%- relativeDir(clientRootDir, clientSrcDir) %>main.ts",
             "polyfills": [
 <%_ if (communicationSpringWebsocket) { _%>
-              "./<%- this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
+              "./<%- relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
 <%_ } _%>
 <%_ if (microfrontend) { _%>
               "es-module-shims",
@@ -89,15 +89,15 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "<%- this.relativeDir(clientRootDir, clientSrcDir) %>content",
-              "<%- this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico",
-              "<%- this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp",
-              "<%- this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt",
-              "<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui"
+              "<%- relativeDir(clientRootDir, clientSrcDir) %>content",
+              "<%- relativeDir(clientRootDir, clientSrcDir) %>favicon.ico",
+              "<%- relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp",
+              "<%- relativeDir(clientRootDir, clientSrcDir) %>robots.txt",
+              "<%- relativeDir(clientRootDir, clientSrcDir) %>swagger-ui"
             ],
             "styles": [
-              "<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
-              "<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
+              "<%- relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
+              "<%- relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
             ],
             "scripts": [],
             "define": {
@@ -131,8 +131,8 @@
               "namedChunks": true,
               "fileReplacements": [
                 {
-                  "replace": "<%- this.relativeDir(clientRootDir, clientSrcDir) %>environments/environment.ts",
-                  "with": "<%- this.relativeDir(clientRootDir, clientSrcDir) %>environments/environment.development.ts"
+                  "replace": "<%- relativeDir(clientRootDir, clientSrcDir) %>environments/environment.ts",
+                  "with": "<%- relativeDir(clientRootDir, clientSrcDir) %>environments/environment.development.ts"
                 }
               ]
             }
@@ -146,7 +146,7 @@
             "target": "<%- dasherizedBaseName %>:serve-original:development",
             "tsConfig": "tsconfig.federation.json",
             "federationConfigPath": "federation.config.ts",
-            "entryPoints": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>main.ts"],
+            "entryPoints": ["<%- relativeDir(clientRootDir, clientSrcDir) %>main.ts"],
             "rebuildDelay": 500,
             "cacheExternalArtifacts": true,
             "dev": true,
@@ -210,7 +210,7 @@
             "coverageReporters": ["text", "lcov"],
             "reporters": [
               "default",
-              ["vitest-sonar-reporter", { "outputFile": "./<%- this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
+              ["vitest-sonar-reporter", { "outputFile": "./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
             ],
             "watch": false,
             "tsConfig": "tsconfig.spec.json"
@@ -222,7 +222,7 @@
   "cli": {
     "cache": {
       "enabled": true,
-      "path": "./<%- this.relativeDir(clientRootDir, temporaryDir) %>angular/",
+      "path": "./<%- relativeDir(clientRootDir, temporaryDir) %>angular/",
       "environment": "all"
     },
     "packageManager": "<%- nodePackageManager %>"

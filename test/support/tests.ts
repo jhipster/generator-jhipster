@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { existsSync } from 'node:fs';
 
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.ts';
@@ -203,8 +203,8 @@ export const testBlueprintSupport = (
   const addSpies = (generator: CoreGenerator) => {
     const { taskPrefix = '' } = generator.features;
     const apiPrefix = taskPrefix ? '' : '_';
-    const prioritiesSpy = esmocha.fn();
-    const prioritiesTasks: Record<string, ReturnType<typeof esmocha.fn>> = {};
+    const prioritiesSpy = exnode.fn();
+    const prioritiesTasks: Record<string, ReturnType<typeof exnode.fn>> = {};
     let prioritiesCount = 0;
     [...PRIORITY_NAMES_LIST, ...workspacesPriorityList].forEach(priority => {
       let callback;
@@ -218,7 +218,7 @@ export const testBlueprintSupport = (
       }
       const property = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${apiPrefix}${priority}`);
       if (property) {
-        const task = esmocha.fn();
+        const task = exnode.fn();
         prioritiesTasks[priority] = task;
         if (property.value && typeof property.value === 'function') {
           (generator as any)[`${apiPrefix}${priority}`] = () => {
@@ -241,9 +241,9 @@ export const testBlueprintSupport = (
   };
   describe('with blueprint', () => {
     let spy: {
-      prioritiesSpy: ReturnType<typeof esmocha.fn>;
+      prioritiesSpy: ReturnType<typeof exnode.fn>;
       prioritiesCount: number;
-      prioritiesTasks: Record<string, ReturnType<typeof esmocha.fn>>;
+      prioritiesTasks: Record<string, ReturnType<typeof exnode.fn>>;
     };
     before(async () => {
       await helpers
@@ -269,16 +269,13 @@ export const testBlueprintSupport = (
       });
     }
   });
-  describe('with sbs blueprint', () => {
+  describe.skipIf(skipSbsBlueprint)('with sbs blueprint', () => {
     let spy: {
-      prioritiesSpy: ReturnType<typeof esmocha.fn>;
+      prioritiesSpy: ReturnType<typeof exnode.fn>;
       prioritiesCount: number;
-      prioritiesTasks: Record<string, ReturnType<typeof esmocha.fn>>;
+      prioritiesTasks: Record<string, ReturnType<typeof exnode.fn>>;
     };
-    before(async function () {
-      if (skipSbsBlueprint) {
-        this.skip();
-      }
+    before(async () => {
       const context = helpers
         .runJHipster(generatorName)
         .withMockedJHipsterGenerators()
@@ -336,44 +333,39 @@ export const testBlueprintSupport = (
     [...PRIORITY_NAMES_LIST, ...workspacesPriorityList]
       .filter(priority => !Object.values(ENTITY_PRIORITY_NAMES).includes(priority as any))
       .forEach(priority => {
-        it(`should call ${priority} tasks if implemented`, function () {
+        it(`should call ${priority} tasks if implemented`, ({ skip }) => {
           if (!spy.prioritiesTasks[priority]) {
-            this.skip();
-            return;
+            skip();
           }
           expect(spy.prioritiesTasks[priority].mock.calls.length).toBe(1);
         });
       });
     if (entity) {
       [LOADING_ENTITIES, WRITING_ENTITIES, POST_WRITING_ENTITIES].forEach(priority => {
-        it(`should call ${priority} tasks once`, function () {
+        it(`should call ${priority} tasks once`, ({ skip }) => {
           if (!spy.prioritiesTasks[priority]) {
-            this.skip();
-            return;
+            skip();
           }
           expect(spy.prioritiesTasks[priority].mock.calls.length).toBe(1);
         });
       });
       [CONFIGURING_EACH_ENTITY, PREPARING_EACH_ENTITY, POST_PREPARING_EACH_ENTITY].forEach(priority => {
-        it(`should call ${priority} tasks twice`, function () {
+        it(`should call ${priority} tasks twice`, ({ skip }) => {
           if (!spy.prioritiesTasks[priority]) {
-            this.skip();
-            return;
+            skip();
           }
           expect(spy.prioritiesTasks[priority].mock.calls.length).toBe(2);
         });
       });
-      it(`should call ${PREPARING_EACH_ENTITY_FIELD} tasks 3 times`, function () {
+      it(`should call ${PREPARING_EACH_ENTITY_FIELD} tasks 3 times`, ({ skip }) => {
         if (!spy.prioritiesTasks[PREPARING_EACH_ENTITY_FIELD]) {
-          this.skip();
-          return;
+          skip();
         }
         expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_FIELD].mock.calls.length).toBe(3);
       });
-      it(`should call ${PREPARING_EACH_ENTITY_RELATIONSHIP} tasks 3 times`, function () {
+      it(`should call ${PREPARING_EACH_ENTITY_RELATIONSHIP} tasks 3 times`, ({ skip }) => {
         if (!spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP]) {
-          this.skip();
-          return;
+          skip();
         }
         expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP].mock.calls.length).toBe(3);
       });

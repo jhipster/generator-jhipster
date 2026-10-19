@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { beforeEach, describe, exnode, expect, it } from 'expect-node';
 import { inspect } from 'node:util';
 
 import type { GetWebappTranslationCallback } from '../../client/translation.ts';
@@ -32,11 +32,11 @@ describe('generator - angular - transform', () => {
       let value = 0;
       const testImpl: GetWebappTranslationCallback = (key, data) =>
         key === 'blank' ? '' : `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`;
-      replaceAngularTranslations = createTranslationReplacer(esmocha.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
+      replaceAngularTranslations = createTranslationReplacer(exnode.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: false,
       });
-      enabledAngularTranslations = createTranslationReplacer(esmocha.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
+      enabledAngularTranslations = createTranslationReplacer(exnode.fn<GetWebappTranslationCallback>().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: true,
       });
@@ -111,7 +111,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove nested [translateValues] attribute', () => {
+        it('should remove nested [translateValues] attributes', () => {
           const body = `
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values1</span></h1>
 <h1 [translateValues]="{ max: 20 }"><span [translateValues]="{ max: 20 }">translate-values2</span></h1>
@@ -292,7 +292,7 @@ title: 'translated-value-activate.title2-1',
       describe('.error.route.ts files', () => {
         const extension = '.error.route.ts';
 
-        it('should translate pageTitle fields with translation values', () => {
+        it('should translate errorMessage fields with translation values', () => {
           const body = `
 errorMessage: 'activate.title1',
 errorMessage: 'activate.title2',

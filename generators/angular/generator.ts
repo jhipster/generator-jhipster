@@ -149,7 +149,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           application.prettierFolders.push(`${application.clientSrcDir}**/`);
         }
       },
-      async javaNodeBuildPaths({ application }) {
+      javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json', 'build-plugins/');
         if (application.microfrontend) {
           application.javaNodeBuildPaths?.push('federation.config.ts', 'tsconfig.federation.json');
@@ -489,6 +489,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               {
                 '@angular-architects/native-federation': null,
                 '@angular-devkit/architect': null,
+                '@softarc/native-federation-orchestrator': null,
               }
             : {
                 '@angular-builders/custom-esbuild': null,

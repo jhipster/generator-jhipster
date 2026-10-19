@@ -7,14 +7,14 @@ JHipster is a Yeoman-based code generator (TypeScript, ESM, Node — see `engine
 ## Build, lint, test
 
 - Install: `npm ci` (also compiles via `prepare` → `build`).
-- Build: `npm run build` (runs `clean` → `tsc` → copy non-TS template files + `.d.ts` to `dist/`, then `bin/fix-bin.cjs`). Use `npm run compile` alone for a faster TS-only recompile.
-- Type-check tests: `npm run check-types` (`tsc -p tsconfig.spec.json`).
+- Build: `npm run build` (runs `clean` → `tsc` of TypeScript 7, the `typescript7` alias → copy non-TS template files + `.d.ts` to `dist/`, then `bin/fix-bin.cjs`). Use `npm run compile` alone for a faster TS-only recompile.
+- Type-check tests: `npm run check-types` (`tsc -p tsconfig.spec.json` of TypeScript 7; the `typescript` package stays TypeScript 6, for typescript-eslint).
 - Lint: `npm run lint` (eslint, `--max-warnings 5`). Auto-fix: `npm run lint-fix` (runs eslint `--fix` then `prettier --write`).
 - Prettier check/format: `npm run prettier:check` / `npm run prettier:format`.
-- Full test (lint + type-check + mocha): `npm test`. Runs esmocha over `test generators cli .blueprint lib` with `--forbid-only`.
-- Fast test (skip lint/type-check): `npx esmocha`.
-- Single test file / directory: `npx esmocha <path>` (add `--no-parallel` for clearer stack traces).
-- Update snapshots: `npm run update-snapshot -- <path>` (single) or `npm run update-snapshots` (all). Equivalent: `npx esmocha <path> --no-parallel --update-snapshot`.
+- Full test (lint + type-check + tests): `npm test`. Runs expect-node (`exnode`) over the spec files of `expect-node.config.ts` (`test generators cli .blueprint lib`) with `--forbid-only`.
+- Fast test (skip lint/type-check): `npx exnode`.
+- Single test files / directories: `npx exnode <path>...` (add `--workers 0` to run each file in a process of its own).
+- Update snapshots: `npm run update-snapshot -- <path>...` or `npm run update-snapshots` (all). Equivalent: `npx exnode --update-snapshot <path>...`.
 - JDL-only tests: `npm run jdl:test` (watch: `npm run jdl:test-watch`).
 
 Snapshots live next to specs as `*.snap` and are committed. Never hand-edit them — regenerate.
@@ -54,7 +54,7 @@ Two options (see `DEVELOPMENT.md`):
 
 ## Key conventions
 
-- **ESM + TypeScript everywhere**; `"type": "module"` in `package.json`. Use `.ts`/`.mts`. Tests are `*.spec.ts` run by `esmocha`.
+- **ESM + TypeScript everywhere**; `"type": "module"` in `package.json`. Use `.ts`/`.mts`. Tests are `*.spec.ts` run by `expect-node` on node:test, importing `describe`, `it`, `expect` and `exnode` (mocks) from `expect-node`.
 - **Task groups**: define priorities as getters returning the result of `this.as<Priority>TaskGroup({...})`. Never call tasks directly — the Yeoman environment orchestrates them.
 - **Config access**: prefer `this.jhipsterConfig` (persists to `.yo-rc.json`), `this.jhipsterConfigWithDefaults` (read-only with defaults applied), and the `application`/`entity`/`field`/`relationship` context objects injected into tasks. Derived booleans (e.g. `entity.dtoMapstruct`, `field.fieldTypeInteger`) belong in `preparing*` priorities, not in templates.
 - **Writing files**: use `this.writeFiles({ blocks, context })` with `condition` functions on blocks rather than branching inside templates. Use `editFile(path, transform)` or the needle APIs on `source` in `postWriting` to inject into already-written files.

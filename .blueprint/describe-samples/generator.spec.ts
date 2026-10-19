@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { after, before, describe, esmocha, expect, it } from 'esmocha';
+import { after, before, describe, exnode, expect, it } from 'expect-node';
 import assert from 'node:assert';
 import { basename, join } from 'node:path';
 
@@ -33,10 +33,10 @@ describe(`generator - ${generator}`, () => {
 
   // The generator prints the description on stdout; keep the test output clean.
   before(() => {
-    esmocha.spyOn(console, 'log').mockReturnValue(undefined);
+    exnode.spyOn(console, 'log').mockReturnValue(undefined);
   });
   after(() => {
-    esmocha.restoreAllMocks();
+    exnode.restoreAllMocks();
   });
 
   describe('without arguments', () => {

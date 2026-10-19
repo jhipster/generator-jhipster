@@ -123,11 +123,13 @@ exports[`generator - entity with default configuration should match source calls
     },
   ],
   "addEntityTranslationKey": [
-    {
-      "language": "en",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
+    [
+      {
+        "language": "en",
+        "translationKey": "foo",
+        "translationValue": "Foo",
+      },
+    ],
   ],
   "addLiquibaseChangelog": [
     {
@@ -267,11 +269,13 @@ exports[`generator - entity with enableTranslation disabled should match source 
     },
   ],
   "addEntityTranslationKey": [
-    {
-      "language": "en",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
+    [
+      {
+        "language": "en",
+        "translationKey": "foo",
+        "translationValue": "Foo",
+      },
+    ],
   ],
   "addLiquibaseChangelog": [
     {

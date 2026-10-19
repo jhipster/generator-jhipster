@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, esmocha, expect, it } from 'esmocha';
+import { describe, exnode, expect, it } from 'expect-node';
 import { join } from 'node:path';
 
 import jdlLogger from '../jdl/core/utils/objects/logger.ts';
@@ -60,7 +60,7 @@ describe('ci samples groups', () => {
 
   describe('readSampleJDLConfig', () => {
     it('reads the config of a jdl without logging its warnings', () => {
-      const warn = esmocha.spyOn(jdlLogger, 'warn');
+      const warn = exnode.spyOn(jdlLogger, 'warn');
       try {
         expect(
           readSampleJDLConfig('application { config { baseName foo buildTool gradle } entities A }\nentity A\npaginate A with pagination'),

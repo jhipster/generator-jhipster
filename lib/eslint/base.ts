@@ -77,7 +77,7 @@ const baseConfig: Config = {
         named: true,
         'newlines-between': 'always',
         pathGroups: [
-          { pattern: '{esmocha,vitest,jest}', group: 'builtin', position: 'before' },
+          { pattern: '{expect-node,esmocha,vitest,jest}', group: 'builtin', position: 'before' },
           { pattern: '{react,react-bootstrap,react-jhipster,react-router,vue,vue-i18n,vue-router}', group: 'builtin', position: 'after' },
           { pattern: '@angular/**', group: 'builtin', position: 'after' },
           { pattern: '{app,@}/**', group: 'parent', position: 'before' },

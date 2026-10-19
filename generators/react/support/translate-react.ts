@@ -22,8 +22,8 @@ import { Minimatch } from 'minimatch';
 
 import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 
-const TRANSLATE_IMPORT_1 = /import { ?[T|t]ranslate(?:, ?[T|t]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
-const TRANSLATE_IMPORT_2 = / *[T|t]ranslate,|, ?[T|t]ranslate/.source; // Translate import
+const TRANSLATE_IMPORT_1 = /import { ?[Tt]ranslate(?:, ?[Tt]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
+const TRANSLATE_IMPORT_2 = / *[Tt]ranslate,|, ?[Tt]ranslate/.source; // Translate import
 const TRANSLATE_IMPORT = [TRANSLATE_IMPORT_1, TRANSLATE_IMPORT_2].join('|');
 
 const TRANSLATE_FUNCTION = /translate\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{[^}]*\}))?\s*\)/g.source;

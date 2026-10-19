@@ -76,6 +76,11 @@ export interface Relationship extends BaseEntityChangesRelationship, DatabaseRel
   shouldWriteRelationship?: boolean;
 
   unique?: boolean;
+
+  /** The name of the foreign key constraint of a relationship written in the table of the entity. */
+  liquibaseForeignKeyName?: string;
+  /** The names of the unique constraints of a one-to-one relationship, by the column name of the id field it references. */
+  liquibaseUniqueConstraintNames?: Record<string, string>;
 }
 
 export type Field = BaseEntityChangesField &
@@ -94,6 +99,10 @@ export type Field = BaseEntityChangesField &
 
     liquibaseDefaultValueAttributeValue?: string;
     liquibaseDefaultValueAttributeName?: string;
+    /** The default value attribute of the column, like `defaultValue="value"`, empty without a default value. */
+    liquibaseDefaultValueAttribute?: string;
+    /** The attributes of the column after its type: the default value and the remarks, each with a leading space. */
+    liquibaseColumnAttributes?: string;
 
     uniqueConstraintName?: string;
   };
@@ -101,6 +110,8 @@ export type Field = BaseEntityChangesField &
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends BaseEntityChangesEntity<F, R>, JavaEntity<F, R>, DatabaseEntity<F, R> {
   anyRelationshipIsOwnerSide: boolean;
+  /** The remarks attribute of the table, with a leading space, empty without documentation. */
+  liquibaseRemarksAttribute?: string;
   liquibaseFakeData: Record<string, any>[];
   fakeDataCount: number;
 }

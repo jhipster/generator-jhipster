@@ -75,6 +75,10 @@ export type Application<E extends BaseApplicationEntity = Entity> = SpringBootAp
     devJdbcDriver?: string | null;
     devHibernateDialect?: string | null;
     devR2dbcUrl?: string;
+    /** The JDBC URL of the H2 database of the integration tests. */
+    sbItestsJdbcUrl?: string;
+    /** The R2DBC URL of the H2 database of the integration tests. */
+    sbItestsR2dbcUrl?: string;
     devDatabaseUsername?: string;
     devDatabasePassword?: string;
 

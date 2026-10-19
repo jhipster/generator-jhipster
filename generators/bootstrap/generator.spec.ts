@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { before, beforeEach, describe, exnode, expect, it } from 'expect-node';
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 
@@ -53,11 +53,11 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('a multi-step template written after the commit', () => {
-    let debug: ReturnType<typeof esmocha.spyOn>;
+    let debug: ReturnType<typeof exnode.spyOn>;
 
     before(async () => {
       await helpers.runJHipster(generator);
-      debug = esmocha.spyOn(result.generator.log, 'debug');
+      debug = exnode.spyOn(result.generator.log, 'debug');
       result.memFs.add({ path: result.generator.destinationPath('late.txt.jhi'), contents: Buffer.from('late') });
     });
 

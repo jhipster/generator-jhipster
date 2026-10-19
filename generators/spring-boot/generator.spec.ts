@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { createSecureContext } from 'node:tls';
@@ -166,6 +166,7 @@ describe(`generator - ${generator}`, () => {
         jhipsterPackageJson: expect.any(Object),
         jwtSecretKey: expect.any(String),
         springBootDependencies: expect.any(Object),
+        dockerComposeFiles: expect.any(Object),
         addLanguageCallbacks: expect.any(Array),
         supportedLanguages: expect.any(Array),
       });
@@ -212,6 +213,7 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.application).toMatchSnapshot({
         jhipsterPackageJson: expect.any(Object),
         springBootDependencies: expect.any(Object),
+        dockerComposeFiles: expect.any(Object),
         addLanguageCallbacks: expect.any(Array),
         supportedLanguages: expect.any(Array),
       });

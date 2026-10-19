@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'expect-node';
 
 import type { Entity as SpringBootEntity, Field as SpringBootField } from '../types.d.ts';
 

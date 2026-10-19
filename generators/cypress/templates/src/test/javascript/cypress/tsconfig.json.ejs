@@ -20,7 +20,7 @@
 <%_ if (clientFrameworkVue) { _%>
   "extends": "@vue/tsconfig/tsconfig.dom.json",
 <%_ } else { _%>
-  "extends": "<%- this.relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
+  "extends": "<%- relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
 <%_ } _%>
   "compilerOptions": {
     "sourceMap": false,
@@ -31,5 +31,5 @@
     "target": "es2018",
     "types": ["cypress", "node"]
   },
-  "include": ["./<%- this.relativeDir(cypressDir, clientRootDir) %>cypress*.config.ts", "./**/*.ts"]
+  "include": ["./<%- relativeDir(cypressDir, clientRootDir) %>cypress*.config.ts", "./**/*.ts"]
 }

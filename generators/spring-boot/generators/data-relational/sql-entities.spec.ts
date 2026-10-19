@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { cacheTypes, databaseTypes } from '../../../../lib/jhipster/index.ts';
 import { filterBasicServerGenerators } from '../../../server/__test-support/index.ts';

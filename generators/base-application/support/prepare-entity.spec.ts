@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'expect-node';
 
 import { formatDateForChangelog } from '../../base/support/index.ts';
 import type { Entity as BaseApplicationEntity } from '../types.d.ts';

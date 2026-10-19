@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, esmocha, expect, it } from 'esmocha';
+import { after, before, describe, exnode, expect, it } from 'expect-node';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { getDefaultJDLEntityConfig } from '../../../jdl-config/jdl-entity-config.ts';
@@ -1889,11 +1889,11 @@ entity A {
     });
   });
   describe('when parsing the deprecated paginate keyword inside an application', () => {
-    let warnSpy: ReturnType<typeof esmocha.spyOn>;
+    let warnSpy: ReturnType<typeof exnode.spyOn>;
     let parsedOptions: ParsedJDLApplications['applications'][number]['options'];
 
     before(() => {
-      warnSpy = esmocha.spyOn(logger, 'warn');
+      warnSpy = exnode.spyOn(logger, 'warn');
       parsedOptions = parseFromContent('entity A\napplication {\n  config { baseName foo }\n  entities A\n  paginate A with pagination\n}')
         .applications[0].options;
     });
@@ -1962,11 +1962,11 @@ entity A {
     });
   });
   describe('when parsing the deprecated paginate keyword', () => {
-    let warnSpy: ReturnType<typeof esmocha.spyOn>;
+    let warnSpy: ReturnType<typeof exnode.spyOn>;
     let parsedOptions: ParsedJDLApplications['options'];
 
     before(() => {
-      warnSpy = esmocha.spyOn(logger, 'warn');
+      warnSpy = exnode.spyOn(logger, 'warn');
       parsedOptions = parseFromContent('paginate A with pagination').options;
     });
 
@@ -2248,10 +2248,10 @@ relationship OneToMany {
     });
   });
   describe('when parsing a deprecated option', () => {
-    let warnSpy: ReturnType<typeof esmocha.spyOn>;
+    let warnSpy: ReturnType<typeof exnode.spyOn>;
 
     before(() => {
-      warnSpy = esmocha.spyOn(logger, 'warn');
+      warnSpy = exnode.spyOn(logger, 'warn');
       parseFromContent(`deployment { gatewayType SpringCloudGateway }
 `);
     });

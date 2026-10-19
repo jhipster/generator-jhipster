@@ -52,8 +52,8 @@ const optionDefinition = (configs: JDLOptionsDefinition['configs'], keyword: str
   Object.entries(configs).find(([name, { jdl }]) => (jdl.keyword ?? name) === keyword || jdl.deprecatedKeywords?.includes(keyword))?.[1];
 
 export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDLRuntime) {
+  // The parser of the runtime is already defined and analyzed.
   const { parser } = runtime;
-  parser.parse();
   const BaseJDLCSTVisitorWithDefaults = parser.getBaseCstVisitorConstructorWithDefaults() as unknown as JDLCstVisitor<any, any>;
 
   class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {

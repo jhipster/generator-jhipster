@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { afterEach, beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { afterEach, beforeEach, describe, exnode, expect, it } from 'expect-node';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 
@@ -49,7 +49,7 @@ const createSpawnCommandReturn = (resolvedValue?: any, data?: any) =>
 
 describe('generator - Heroku', () => {
   const herokuAppName = 'jhipster-test';
-  let stub: ReturnType<typeof esmocha.fn>;
+  let stub: ReturnType<typeof exnode.fn>;
   let createWithNameResult: any;
   let createWithoutNameResult: any;
   let appInfoResult: { appName: string; result: any } | undefined;
@@ -59,7 +59,7 @@ describe('generator - Heroku', () => {
     createWithoutNameResult = undefined;
     appInfoResult = undefined;
 
-    stub = esmocha.fn((method: string, command: string, args: string[]) => {
+    stub = exnode.fn((method: string, command: string, args: string[]) => {
       if (method === 'spawnCommand' && command === 'heroku plugins') {
         return createSpawnCommandReturn({ stdout: 'heroku-cli-deploy', stderr: '' });
       }

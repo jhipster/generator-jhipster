@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, expect, it } from 'esmocha';
+import { afterEach, before, describe, expect, it } from 'expect-node';
 
 import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
 

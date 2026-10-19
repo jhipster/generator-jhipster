@@ -54,7 +54,7 @@ export type Options = CoreOptions &
     reproducibleTests?: boolean;
     entities?: string[];
 
-    jhipsterContext?: BaseGenerator;
+    jhipsterContext?: BaseGenerator<Config, Options, Source, Features, any>;
     composeWithLocalBlueprint?: boolean;
   };
 

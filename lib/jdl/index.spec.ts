@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 // Only what `generator-jhipster/jdl` exports: what a tool reading a jdl has.
 import {

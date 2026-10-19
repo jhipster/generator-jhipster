@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { after, before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'expect-node';
 import { spawnSync } from 'node:child_process';
 import { X509Certificate, createPrivateKey } from 'node:crypto';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
@@ -234,19 +234,16 @@ describe('generator - java - support - key-store-node-crypto', () => {
       });
     });
 
-    describe('with keytool', () => {
-      const keytool = process.env.JAVA_HOME ? join(process.env.JAVA_HOME, 'bin', 'keytool') : 'keytool';
+    const keytool = process.env.JAVA_HOME ? join(process.env.JAVA_HOME, 'bin', 'keytool') : 'keytool';
+    // Optional: where there is no JDK, macOS included, which ships a keytool that only asks for one.
+    describe.skipIf(spawnSync(keytool, ['-help']).status !== 0)('with keytool', () => {
       // English output, whatever the locale.
       const list = (file: string, password: string) =>
         spawnSync(keytool, ['-J-Duser.language=en', '-list', '-v', '-keystore', file, '-storepass', password], { encoding: 'utf8' });
       let folder: string | undefined;
       let file: string;
 
-      before(function () {
-        // Optional: where there is no JDK, macOS included, which ships a keytool that only asks for one.
-        if (spawnSync(keytool, ['-help']).status !== 0) {
-          this.skip();
-        }
+      before(() => {
         folder = mkdtempSync(join(tmpdir(), 'keystore-'));
         file = join(folder, 'keystore.p12');
         writeFileSync(file, contents);
