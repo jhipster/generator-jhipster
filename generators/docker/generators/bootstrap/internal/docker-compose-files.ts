@@ -27,12 +27,12 @@ export type DockerComposeApplication = DockerApplication & SpringDataRelationalA
 type Application = DockerComposeApplication;
 
 /**
- * Adds a docker compose file to the application: its resource, named after it, and the data merged into it, with the
+ * Adds a docker compose file to the application: its template, named after it, and the data merged into it, with the
  * project name of the application.
  */
 const addDockerComposeFile = (application: Application, name: string, services: Record<string, DockerComposeServiceConfig>) => {
   application.dockerComposeFiles[name] = {
-    source: `${name}.yml`,
+    source: `${name}.yml.ejs`,
     data: { name: application.baseName.toLowerCase(), services },
   };
 };
@@ -132,7 +132,9 @@ export const addCouchbaseDockerComposeFiles = (application: Application) => {
   addDockerComposeFile(application, 'couchbase', { couchbase: { environment: [`BUCKET=${baseName}`] } });
   addDockerComposeFile(application, 'couchbase-cluster', {
     couchbase: { environment: [`BUCKET=${baseName}`] },
-    'couchbase-node': { environment: [`BUCKET=${baseName}`, `COUCHBASE_MASTER=${baseName.toLowerCase()}-couchbase`] },
+    'couchbase-node': {
+      environment: [`BUCKET=${baseName}`, `COUCHBASE_MASTER=${baseName.toLowerCase()}-couchbase`, 'AUTO_REBALANCE=false'],
+    },
   });
 };
 
@@ -204,7 +206,7 @@ export const addApplicationDockerComposeFile = (application: Application) => {
     app: {
       image: baseName.toLowerCase(),
       environment: [
-        ...Object.entries(dockerApplicationEnvironment).map(([key, value]) => `${key}=${value}`),
+        ...Object.entries(dockerApplicationEnvironment).map(([key, value]) => `${key}=${value ?? ''}`),
         ...(application.cacheProviderMemcached ? ['JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211'] : []),
         ...(application.cacheProviderRedis ? ['JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379', 'JHIPSTER_CACHE_REDIS_CLUSTER=false'] : []),
         ...(application.searchEngineElasticsearch ? ['SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200'] : []),

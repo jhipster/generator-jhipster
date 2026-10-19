@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import ejs from 'ejs';
 import { mergeWith } from 'lodash-es';
 import { Scalar, isMap, isScalar, isSeq, parse as parseYaml, parseDocument } from 'yaml';
 
@@ -48,12 +49,12 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
   ),
 });
 
-/** A docker compose file of an application as the docker generator writes it: its source merged with its data. */
+/** A docker compose file of an application as the docker generator writes it: its template merged with its data. */
 export const mergeDockerComposeFile = (
   { data }: DockerComposeFile,
   sourceContent: string,
 ): { name?: string; services: Record<string, any> } =>
-  mergeWith(parseYaml(sourceContent), structuredClone(data), (a, b) =>
+  mergeWith(parseYaml(ejs.render(sourceContent)), structuredClone(data), (a, b) =>
     Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined,
   );
 
