@@ -199,11 +199,6 @@ export default class CoreGenerator<
       unique: 'namespace',
       disableInGeneratorOptionsSupport: true,
       allowTemplatesOutsideRoot: true,
-      // The templates of JHipster read only their data, the generator is not their context: reading it throws in the
-      // tests. Blueprints keep the generator as the context of their templates.
-      ...(options?.namespace?.startsWith('jhipster:') ?
-        { templateContext: (options as { reproducibleTests?: boolean }).reproducibleTests ? 'throw' : 'none' }
-      : {}),
       ...features,
       // Registered by yeoman-generator, after the queues they reference: the ones of a class before the ones of its
       // subclasses, which come in the features, so a subclass priority added before the same queue runs after them, and
@@ -217,6 +212,13 @@ export default class CoreGenerator<
           ]
         ),
     });
+
+    if (this.options.namespace?.startsWith('jhipster:') && this.features.templateContext === undefined) {
+      // The templates of JHipster read only their data, the generator is not their context: reading it throws in the
+      // tests. Blueprints keep the generator as the context of their templates.
+      const { reproducibleTests } = this.options as { reproducibleTests?: boolean };
+      this.setFeatures({ templateContext: reproducibleTests ? 'throw' : 'none' } as Features);
+    }
 
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
