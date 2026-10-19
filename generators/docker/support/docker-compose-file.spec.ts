@@ -19,7 +19,7 @@
 
 import { describe, expect, it } from 'expect-node';
 
-import { createDockerComposeFile, mergeDockerComposeFile } from './docker-compose-file.ts';
+import { createDockerComposeFile, flowHealthcheckCommands, mergeDockerComposeFile } from './docker-compose-file.ts';
 
 describe('generator - docker - docker-compose-file', () => {
   describe('createDockerComposeFile', () => {
@@ -61,6 +61,30 @@ services:
         name: 'app',
         services: { postgresql: { image: 'postgres:18', environment: ['POSTGRES_HOST_AUTH_METHOD=trust', 'POSTGRES_USER=app'] } },
       });
+    });
+  });
+
+  describe('flowHealthcheckCommands', () => {
+    it('writes the healthcheck command of each service on one line', () => {
+      expect(
+        flowHealthcheckCommands(`services:
+  app:
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "curl -f 'http://localhost:8080/'"
+      retries: 40
+  db:
+    image: db
+`),
+      ).toBe(`services:
+  app:
+    healthcheck:
+      test: [ 'CMD-SHELL', 'curl -f ''http://localhost:8080/''' ]
+      retries: 40
+  db:
+    image: db
+`);
     });
   });
 });

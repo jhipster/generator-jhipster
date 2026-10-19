@@ -1,0 +1,12 @@
+name: jhipster
+services:
+  cassandra-migration:
+    environment:
+      - USER=docker-cassandra-migration
+      # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
+      - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
+    build:
+      context: .
+      dockerfile: cassandra/Cassandra-Migration.Dockerfile
+    volumes:
+      - ../resources/config/cql:/cql:ro
