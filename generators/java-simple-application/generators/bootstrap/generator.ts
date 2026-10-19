@@ -140,13 +140,13 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
       packageJsonScripts({ application }) {
-        // Fallback for the applications that do not set it: starts the packaged jar, without Spring profiles.
+        // Fallback for the applications that do not set it: tries the application by its packaged jar, without Spring profiles.
         // The scripts exist with the javascript application only.
         const { packageJsonScripts } = application as Partial<typeof application>;
         if (packageJsonScripts) {
           mutateData(packageJsonScripts as any, {
             __override__: false,
-            'java:jar:start': javaJarStartCommand({ destDir: application.javaPackagingDestDir, jarName: '*.jar' }),
+            'try-it': javaJarStartCommand({ destDir: application.javaPackagingDestDir, jarName: '*.jar' }),
           });
         }
       },

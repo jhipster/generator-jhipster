@@ -220,10 +220,13 @@ To launch your application's tests, run:
 To build the final jar and optimize the <%- baseName %> application for production, run:
 
 ```bash
-<%- nodePackageManagerCommand %> run java:jar:prod
+<%_ if (buildToolMaven) { _%>
+./mvnw -Pprod clean verify
+<%_ } _%>
+<%_ if (buildToolGradle) { _%>
+./gradlew -Pprod clean bootJar
+<%_ } _%>
 ```
-
-It runs `<%- packageJsonScripts['java:jar'] %>` with the `prod` profile (`-Pprod`).
 
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
@@ -231,10 +234,13 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 To ensure everything worked, run:
 
 ```bash
-<%- nodePackageManagerCommand %> run java:jar:start
+<%_ if (buildToolMaven) { _%>
+java -jar target/*.jar --spring.profiles.active=prod,secret-samples
+<%_ } _%>
+<%_ if (buildToolGradle) { _%>
+java -jar build/libs/*.jar --spring.profiles.active=prod,secret-samples
+<%_ } _%>
 ```
-
-It runs `<%- packageJsonScripts['java:jar:start'] %>`: the jar with the `prod` profile and the sample secrets of the `secret-samples` profile.
 
 The `secret-samples` profile, in `<%- srcMainResources %>config/application-secret-samples.yml`, holds sample passwords and secrets, for development and tests only.
 To run the application in production, do not activate it: provide your own passwords and secrets to the `prod` profile instead, for example with environment variables.
@@ -248,10 +254,13 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 
 ```bash
-<%- nodePackageManagerCommand %> run java:war:prod
+<%_ if (buildToolMaven) { _%>
+./mvnw -Pprod,war clean verify
+<%_ } _%>
+<%_ if (buildToolGradle) { _%>
+./gradlew -Pprod -Pwar clean bootWar
+<%_ } _%>
 ```
-
-It runs `<%- packageJsonScripts['java:war'] %>` with the `prod` profile (`-Pprod`).
 
 ### JHipster Control Center
 

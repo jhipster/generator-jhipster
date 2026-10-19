@@ -55,6 +55,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
             'backend:start': `./mvnw${excludeWebapp} -ntp --batch-mode`,
+            'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
+            'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline -ntp',
@@ -68,6 +70,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
             'backend:nohttp:test': `./gradlew checkstyleNohttp checkstyleMain spotlessCheck ${excludeWebapp}`,
             'backend:start': `./gradlew ${excludeWebapp}`,
+            'java:jar': './gradlew bootJar -x test -x integrationTest',
+            'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',
             'java:docker': './gradlew bootJar -Pprod jibDockerBuild',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache':
@@ -77,7 +81,9 @@ export default class ServerGenerator extends JavaApplicationGenerator {
 
         scriptsStorage.set({
           'java:jar:dev': 'npm run java:jar -- -Pdev,webapp',
+          'java:jar:prod': 'npm run java:jar -- -Pprod',
           'java:war:dev': 'npm run java:war -- -Pdev,webapp',
+          'java:war:prod': 'npm run java:war -- -Pprod',
           'java:docker:dev': 'npm run java:docker -- -Pdev,webapp',
           'java:docker:prod': 'npm run java:docker -- -Pprod',
           // Builds the Docker image of the application: docker-compose suggests it to the applications whose package.json has it.

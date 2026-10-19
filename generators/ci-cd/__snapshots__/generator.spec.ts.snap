@@ -379,11 +379,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   ],
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {
-    "java:jar": "./mvnw -ntp verify -DskipTests --batch-mode",
-    "java:jar:prod": "npm run java:jar -- -Pprod",
-    "java:jar:start": "java -jar target/*.jar --spring.profiles.active=prod,secret-samples",
-    "java:war": "./mvnw -ntp verify -DskipTests --batch-mode -Pwar",
-    "java:war:prod": "npm run java:war -- -Pprod",
+    "try-it": "java -jar target/*.jar --spring.profiles.active=prod,secret-samples",
   },
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
