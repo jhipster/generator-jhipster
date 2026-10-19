@@ -64,7 +64,7 @@ export const exportJDLTransform = ({
       } else if (file.path === jdlStorePath) {
         jdlStoreFileInMemory = file;
       } else if (file.contents && entitiesMatcher.match(file.path)) {
-        entitiesMap.set(basename(file.path).replace('.json', ''), JSON.parse(file.contents.toString()));
+        entitiesMap.set(basename(file.path, '.json'), JSON.parse(file.contents.toString()));
         entitiesFiles.push(file);
       } else {
         yield file;
