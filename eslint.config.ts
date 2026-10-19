@@ -146,7 +146,7 @@ export default defineConfig(
       prettierBlocklist: true,
       stylisticBlocklist: true,
       experimental: true,
-      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData'],
+      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData', 'relativeDir'],
     },
     js.configs.recommended,
     stylistic.configs.customize({

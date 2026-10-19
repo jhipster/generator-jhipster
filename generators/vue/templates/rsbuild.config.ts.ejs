@@ -29,12 +29,12 @@ import mfConfig from './module-federation.config.ts';
 <%_ } _%>
 
 export default defineConfig({
-  root: path.join(import.meta.dirname, '<%- this.relativeDir(clientRootDir, clientSrcDir) %>'),
+  root: path.join(import.meta.dirname, '<%- relativeDir(clientRootDir, clientSrcDir) %>'),
   resolve: {
     alias: {
       vue$: 'vue/dist/vue.esm-bundler.js',
-      '@content': path.resolve(import.meta.dirname, './<%- this.relativeDir(clientRootDir, clientSrcDir) %>content'),
-      '@': path.resolve(import.meta.dirname, './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app'),
+      '@content': path.resolve(import.meta.dirname, './<%- relativeDir(clientRootDir, clientSrcDir) %>content'),
+      '@': path.resolve(import.meta.dirname, './<%- relativeDir(clientRootDir, clientSrcDir) %>app'),
     },
   },
   plugins: [
@@ -55,7 +55,7 @@ export default defineConfig({
         type: 'persistent',
         storage: {
           type: 'filesystem',
-          directory: path.resolve(import.meta.dirname, './<%- this.relativeDir(clientRootDir, temporaryDir) %>rsbuild/'),
+          directory: path.resolve(import.meta.dirname, './<%- relativeDir(clientRootDir, temporaryDir) %>rsbuild/'),
         },
       },
     },
@@ -68,7 +68,7 @@ export default defineConfig({
 <%_ } _%>
     cleanDistPath: true,
     distPath: {
-      root: path.join(import.meta.dirname, './<%- this.relativeDir(clientRootDir, clientDistDir) %>'),
+      root: path.join(import.meta.dirname, './<%- relativeDir(clientRootDir, clientDistDir) %>'),
     },
     copy: [
       ...['js', 'css', 'html', 'png'].map(ext => ({

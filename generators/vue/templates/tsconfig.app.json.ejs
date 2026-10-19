@@ -1,13 +1,13 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*", "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/**/*.vue"],
-  "exclude": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/**/*.spec.ts"],
+  "include": ["<%- relativeDir(clientRootDir, clientSrcDir) %>**/*", "<%- relativeDir(clientRootDir, clientSrcDir) %>app/**/*.vue"],
+  "exclude": ["<%- relativeDir(clientRootDir, clientSrcDir) %>app/**/*.spec.ts"],
   "compilerOptions": {
     "composite": true,
-    "outDir": "<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/dist",
+    "outDir": "<%- relativeDir(clientRootDir, temporaryDir) %>out-tsc/dist",
     "types": ["vite/client"],
     "paths": {
-      "@/*": ["./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
+      "@/*": ["./<%- relativeDir(clientRootDir, clientSrcDir) %>app/*"]
     }
   }
 }

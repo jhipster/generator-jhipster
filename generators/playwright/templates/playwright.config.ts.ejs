@@ -23,16 +23,16 @@ import { defineConfig, devices } from '@playwright/test';
 const baseURL = process.env.E2E_BASE_URL ?? process.env.PLAYWRIGHT_TEST_BASE_URL ?? 'http://localhost:<%- gatewayServerPort || serverPort %>/';
 
 export default defineConfig({
-  testDir: './<%- this.relativeDir(clientRootDir, playwrightDir) %>e2e',
+  testDir: './<%- relativeDir(clientRootDir, playwrightDir) %>e2e',
   // Not *.spec.ts: the client unit test runner (vitest) globs that by default and would try to run the e2e specs.
   testMatch: '**/*.pw.ts',
-  outputDir: '<%- this.relativeDir(clientRootDir, playwrightTemporaryDir) %>results',
+  outputDir: '<%- relativeDir(clientRootDir, playwrightTemporaryDir) %>results',
   // The Cypress suite retries twice; keep the same tolerance for a fair parity comparison.
   retries: 2,
   fullyParallel: false,
   // The specs create and delete server side data, so they must not race each other.
   workers: 1,
-  reporter: process.env.CI ? [['list'], ['html', { open: 'never', outputFolder: '<%- this.relativeDir(clientRootDir, playwrightTemporaryDir) %>report' }]] : [['list']],
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never', outputFolder: '<%- relativeDir(clientRootDir, playwrightTemporaryDir) %>report' }]] : [['list']],
   use: {
     baseURL,
 <%_ if (locals.e2eTls) { _%>

@@ -27,18 +27,18 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-    "rootDir": "./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app",
-    "outDir": "<%- this.relativeDir(clientRootDir, clientDistDir) %>app",
+    "rootDir": "./<%- relativeDir(clientRootDir, clientSrcDir) %>app",
+    "outDir": "<%- relativeDir(clientRootDir, clientDistDir) %>app",
     "lib": ["dom", "es2024"],
     "types": ["vite/client"],
     "allowJs": true,
     "checkJs": false,
     "paths": {
-        "app/*": ["./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
+        "app/*": ["./<%- relativeDir(clientRootDir, clientSrcDir) %>app/*"]
     },
     "importHelpers": true
   },
-  "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>app"],
+  "include": ["<%- relativeDir(clientRootDir, clientSrcDir) %>app"],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "vitest.config.ts"],
   "references": [{ "path": "./tsconfig.vitest.json" }]
 }

@@ -24,7 +24,7 @@ import tseslint from 'typescript-eslint';
 import vitest from '@vitest/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
+  { ignores: ['<%- relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
   eslint.configs.recommended,
   {
     files: ['**/*.{js,cjs,mjs}'],
@@ -33,7 +33,7 @@ import vitest from '@vitest/eslint-plugin';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,tsx}'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,tsx}'],
     extends: [...tseslint.configs.recommendedTypeChecked, react.configs['recommended-type-checked']],
     plugins: {
       '@stylistic': stylistic,
@@ -97,7 +97,7 @@ import vitest from '@vitest/eslint-plugin';
     },
   },
   {
-    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.{ts,tsx}'],
+    files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.{ts,tsx}'],
     extends: [vitest.configs.recommended],
     rules: {
       'vitest/expect-expect': ['error', { assertFunctionNames: ['expect*'] }],
