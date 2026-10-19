@@ -34,7 +34,7 @@ export function prepareRelationshipForDatabase({
   entity: DatabaseEntity;
   relationship: DatabaseRelationship;
 }) {
-  // Database properties are used by liquibase and spring-boot there is no inheritance between them.
+  // Database properties are used by both liquibase and spring-boot, as there is no inheritance between them.
   mutateData(relationship, {
     // DB properties
     columnName: ({ relationshipName }) => hibernateSnakeCase(relationshipName),

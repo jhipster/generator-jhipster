@@ -25,7 +25,7 @@ dependencies {
   liquibaseRuntime "org.liquibase.ext:liquibase-mssql:${dependencyManagement.importedProperties['liquibase.version']}"
   <%_ } _%>
   <%_ if (prodDatabaseTypeOracle) { _%>
-  liquibaseRuntime "com.oracle.database.jdbc:ojdbc8"
+  liquibaseRuntime "com.oracle.database.jdbc:ojdbc17"
   <%_ } _%>
   <%_ if (prodDatabaseType !== devDatabaseType) { _%>
   }

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { afterEach, beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { afterEach, beforeEach, describe, exnode, expect, it } from 'expect-node';
 
 import type Environment from 'yeoman-environment';
 
@@ -36,13 +36,13 @@ describe('cli - describe', () => {
 
   beforeEach(() => {
     printed = [];
-    esmocha.spyOn(console, 'log').mockImplementation((value: string) => {
+    exnode.spyOn(console, 'log').mockImplementation((value: string) => {
       printed.push(value);
     });
   });
 
   afterEach(() => {
-    esmocha.restoreAllMocks();
+    exnode.restoreAllMocks();
   });
 
   const describeJson = async (generator: string, options: { imports?: boolean } = {}): Promise<CommandDescription> => {

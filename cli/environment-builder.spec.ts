@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, afterEach, before, beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { after, afterEach, before, beforeEach, describe, exnode, expect, it } from 'expect-node';
 import assert from 'node:assert';
 import fs from 'node:fs';
 
@@ -131,17 +131,17 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('createDefaultBuilder', () => {
-    let createSpy: ReturnType<typeof esmocha.spyOn>;
-    let _lookupJHipsterSpy: ReturnType<typeof esmocha.spyOn>;
-    let _loadBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
-    let _lookupBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
+    let createSpy: ReturnType<typeof exnode.spyOn>;
+    let _lookupJHipsterSpy: ReturnType<typeof exnode.spyOn>;
+    let _loadBlueprintsSpy: ReturnType<typeof exnode.spyOn>;
+    let _lookupBlueprintsSpy: ReturnType<typeof exnode.spyOn>;
 
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      createSpy = esmocha.spyOn(EnvironmentBuilder, 'create');
-      _lookupJHipsterSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupJHipster');
-      _loadBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_loadBlueprints');
-      _lookupBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupBlueprints');
+      createSpy = exnode.spyOn(EnvironmentBuilder, 'create');
+      _lookupJHipsterSpy = exnode.spyOn(EnvironmentBuilder.prototype, '_lookupJHipster');
+      _loadBlueprintsSpy = exnode.spyOn(EnvironmentBuilder.prototype, '_loadBlueprints');
+      _lookupBlueprintsSpy = exnode.spyOn(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       await EnvironmentBuilder.createDefaultBuilder();
     });

@@ -334,21 +334,23 @@ exports[`generator - entities regenerating all entities should match source call
     },
   ],
   "addEntityTranslationKey": [
-    {
-      "language": "en",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
-    {
-      "language": "en",
-      "translationKey": "bar",
-      "translationValue": "Bar",
-    },
-    {
-      "language": "en",
-      "translationKey": "skip",
-      "translationValue": "Skip",
-    },
+    [
+      {
+        "language": "en",
+        "translationKey": "foo",
+        "translationValue": "Foo",
+      },
+      {
+        "language": "en",
+        "translationKey": "bar",
+        "translationValue": "Bar",
+      },
+      {
+        "language": "en",
+        "translationKey": "skip",
+        "translationValue": "Skip",
+      },
+    ],
   ],
   "addLiquibaseChangelog": [
     {
@@ -603,16 +605,18 @@ exports[`generator - entities regenerating some entities should match source cal
     },
   ],
   "addEntityTranslationKey": [
-    {
-      "language": "en",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
-    {
-      "language": "en",
-      "translationKey": "bar",
-      "translationValue": "Bar",
-    },
+    [
+      {
+        "language": "en",
+        "translationKey": "foo",
+        "translationValue": "Foo",
+      },
+      {
+        "language": "en",
+        "translationKey": "bar",
+        "translationValue": "Bar",
+      },
+    ],
   ],
   "addLiquibaseChangelog": [
     {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import * as entityData from './application.ts';
 import { supportedLanguages } from './support/languages.ts';

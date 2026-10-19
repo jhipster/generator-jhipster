@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'expect-node';
 
 import { JDLEnum } from './index.ts';
 import JDLEnums from './jdl-enums.ts';

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe } from 'esmocha';
+import { describe } from 'expect-node';
 import { basename } from 'node:path';
 
 import Generator from './generator.ts';

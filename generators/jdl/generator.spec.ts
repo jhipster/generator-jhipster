@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
@@ -441,9 +441,9 @@ export const command = { configs: { fooOption: { jdl: { type: 'string', tokenTyp
     });
 
     describe('with the createEnvBuilder option', () => {
-      const run = esmocha.fn();
+      const run = exnode.fn();
       // A builder whose environment only records what it is asked to run.
-      const createEnvBuilder = esmocha.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+      const createEnvBuilder = exnode.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
         async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
       );
 
@@ -477,8 +477,8 @@ export const command = { configs: { fooOption: { jdl: { type: 'string', tokenTyp
     });
 
     describe('with the blueprints option', () => {
-      const run = esmocha.fn();
-      const createEnvBuilder = esmocha.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+      const run = exnode.fn();
+      const createEnvBuilder = exnode.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
         async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
       );
 
@@ -511,8 +511,8 @@ export const command = { configs: { fooOption: { jdl: { type: 'string', tokenTyp
     });
 
     describe('with the global blueprints option', () => {
-      const run = esmocha.fn();
-      const createEnvBuilder = esmocha.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
+      const run = exnode.fn();
+      const createEnvBuilder = exnode.fn<typeof EnvironmentBuilder.createDefaultBuilder>(
         async () => ({ getEnvironment: () => ({ run }) }) as unknown as EnvironmentBuilder,
       );
 

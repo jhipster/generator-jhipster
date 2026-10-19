@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import fs from 'node:fs';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../core/application-types.ts';

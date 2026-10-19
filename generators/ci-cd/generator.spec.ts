@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import Generator from './index.ts';
@@ -64,6 +64,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           javaDependencies: expect.any(Object),
+          dockerComposeFiles: expect.any(Object),
           dockerContainers: expect.any(Object),
           addLanguageCallbacks: expect.any(Array),
           supportedLanguages: expect.any(Array),

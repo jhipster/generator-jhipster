@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import { buildJDLRelationshipConfig, getDefaultJDLRelationshipConfig } from './jdl-relationship-config.ts';
 

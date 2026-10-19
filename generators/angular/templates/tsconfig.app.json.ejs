@@ -19,18 +19,18 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/app",
+    "outDir": "./<%- relativeDir(clientRootDir, temporaryDir) %>out-tsc/app",
     "types": ["@angular/localize", "node"]
   },
   "files": [
 <%_ if (microfrontend) { _%>
-    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts",
-    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts",
+    "<%- relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts",
+    "<%- relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts",
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill.ts",
+    "<%- relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill.ts",
 <%_ } _%>
-    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>main.ts"
+    "<%- relativeDir(clientRootDir, clientSrcDir) %>main.ts"
   ],
-  "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.d.ts"]
+  "include": ["<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.d.ts"]
 }

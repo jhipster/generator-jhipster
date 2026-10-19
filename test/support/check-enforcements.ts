@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, it } from 'esmocha';
+import { before, describe, it } from 'expect-node';
 import assert from 'node:assert';
 import { opendirSync, readFileSync, writeFileSync } from 'node:fs';
 import path, { basename } from 'node:path';

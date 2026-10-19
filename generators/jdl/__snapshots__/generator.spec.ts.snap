@@ -203,7 +203,7 @@ Options:
   --skip-commit-hook                       Skip adding husky commit hooks
   --enable-swagger-codegen                 API first development using OpenAPI-generator
   --search-engine <value>                  Provide search engine for the application when skipping server side generation (choices: "no", "elasticsearch", "couchbase")
-  --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
+  --skip-check-length-of-identifier        Skip checking the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation

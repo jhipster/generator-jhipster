@@ -16,7 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { DockerComposeService } from '../types.ts';
+import { mergeWith } from 'lodash-es';
+import { parse as parseYaml } from 'yaml';
+
+import type { DockerComposeFile, DockerComposeService } from '../types.ts';
 
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.
@@ -44,3 +47,12 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
     ]),
   ),
 });
+
+/** A docker compose file of an application as the docker generator writes it: its source merged with its data. */
+export const mergeDockerComposeFile = (
+  { data }: DockerComposeFile,
+  sourceContent: string,
+): { name?: string; services: Record<string, any> } =>
+  mergeWith(parseYaml(sourceContent), structuredClone(data), (a, b) =>
+    Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined,
+  );

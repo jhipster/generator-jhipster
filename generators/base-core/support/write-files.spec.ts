@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, esmocha, expect, it } from 'esmocha';
+import { describe, exnode, expect, it } from 'expect-node';
 
 import type { EditFileCallback } from '../api.ts';
 
@@ -33,7 +33,7 @@ describe('generator - base - support - writeFiles', () => {
     });
 
     it('with a callback, should return the callback return', () => {
-      const mock = esmocha.fn().mockReturnValue('return1');
+      const mock = exnode.fn().mockReturnValue('return1');
 
       const callback = joinCallbacks(mock as EditFileCallback<any>);
 
@@ -43,8 +43,8 @@ describe('generator - base - support - writeFiles', () => {
     });
 
     it('with two callbacks, should forward last callback and return the last callback return', () => {
-      const mock1 = esmocha.fn().mockReturnValue('return1');
-      const mock2 = esmocha.fn().mockReturnValue('return2');
+      const mock1 = exnode.fn().mockReturnValue('return1');
+      const mock2 = exnode.fn().mockReturnValue('return2');
 
       const callback = joinCallbacks(mock1 as EditFileCallback<any>, mock2 as EditFileCallback<any>);
 

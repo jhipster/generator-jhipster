@@ -94,7 +94,7 @@ export const javaSqlDatabaseArtifacts = {
     testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-postgresql', scope: 'test' },
   },
   oracle: {
-    jdbc: { groupId: 'com.oracle.database.jdbc', artifactId: 'ojdbc8' },
+    jdbc: { groupId: 'com.oracle.database.jdbc', artifactId: 'ojdbc17' },
     testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-oracle-xe', scope: 'test' },
   },
   h2: {

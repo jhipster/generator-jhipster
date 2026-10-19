@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
+import { describe, it } from 'expect-node';
 import { basename, join } from 'node:path';
 
 import Generator from './generator.ts';

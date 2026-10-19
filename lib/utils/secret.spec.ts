@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import { createBase64Secret, createReproducibleBase64Secret, createReproducibleSecret, createSecret } from './secret.ts';
 

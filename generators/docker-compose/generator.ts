@@ -36,6 +36,8 @@ import {
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../base-workspaces/internal/index.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
 import type { Features as BaseWorkspacesFeatures, Options as BaseWorkspacesOptions } from '../base-workspaces/types.ts';
+import { DOCKER_COMPOSE_SOURCES_DIR } from '../docker/constants.ts';
+import { mergeDockerComposeFile } from '../docker/support/index.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { writeFiles } from './files.ts';
@@ -165,8 +167,9 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingWorkspaces);
   }
 
-  get default() {
-    return this.asDefaultTaskGroup({
+  get writing() {
+    return this.asWritingTaskGroup({
+      // At writing: the docker bootstraps of the applications add their docker compose files at the default priority.
       async setAppsYaml({ deployment, applications }) {
         const faker = await createFaker();
 
@@ -177,8 +180,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           const path = this.workspacePath(appConfig.appFolder!);
           // The docker files of the application, in the folder it declares: a blueprint may keep them elsewhere.
           const dockerServicesDir = pathjs.join(path, appConfig.dockerServicesDir);
+          // A docker compose file of the application: its source merged with its data, or the file it wrote.
+          const composeFile = (fileName: string): { services: Record<string, any> } => {
+            const file = appConfig.dockerComposeFiles?.[fileName];
+            return file ?
+                mergeDockerComposeFile(file, this.fs.read(this.fetchFromInstalledJHipster(DOCKER_COMPOSE_SOURCES_DIR, file.source)))
+              : parseYaml(this.fs.read(`${dockerServicesDir}/${fileName}.yml`));
+          };
           // Add application configuration
-          const yaml = parseYaml(this.fs.read(`${dockerServicesDir}/app.yml`));
+          const yaml = composeFile('app');
           const yamlConfig = yaml.services.app;
           if (yamlConfig.depends_on) {
             yamlConfig.depends_on = Object.fromEntries(
@@ -259,7 +269,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.databaseTypeAny && !appConfig.prodDatabaseTypeOracle) {
             const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), dockerServicesDir));
-            const databaseYaml = parseYaml(this.fs.read(`${dockerServicesDir}/${database}.yml`));
+            const databaseYaml = composeFile(database!);
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
             let databaseYamlConfig = databaseYaml.services[database!];
             // Don't export database ports
@@ -267,7 +277,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
             if (appConfig.databaseTypeCassandra && appConfig.databaseMigrationLoader) {
               // migration service config
-              const cassandraMigrationYaml = parseYaml(this.fs.read(`${dockerServicesDir}/cassandra-migration.yml`));
+              const cassandraMigrationYaml = composeFile('cassandra-migration');
               const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
               cassandraMigrationConfig.build.context = relativePath;
               const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
@@ -281,7 +291,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             }
 
             if (deployment.clusteredDbApps?.includes(appConfig.appFolder!)) {
-              const clusterDbYaml = parseYaml(this.fs.read(`${dockerServicesDir}/${database}-cluster.yml`));
+              const clusterDbYaml = composeFile(`${database}-cluster`);
               const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
               databaseYamlConfig = clusterDbYaml.services[database!];
@@ -300,14 +310,14 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.searchEngineElasticsearch) {
             // Add search engine configuration
             const { searchEngine } = appConfig;
-            const searchEngineYaml = parseYaml(this.fs.read(`${dockerServicesDir}/${searchEngine}.yml`));
+            const searchEngineYaml = composeFile(searchEngine);
             const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
           // Add Memcached support
           if (appConfig.cacheProviderMemcached) {
-            const memcachedYaml = parseYaml(this.readDestination(`${dockerServicesDir}/memcached.yml`, { allowOutsideRoot: true }));
+            const memcachedYaml = composeFile('memcached');
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
@@ -315,7 +325,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = parseYaml(this.readDestination(`${dockerServicesDir}/redis.yml`, { allowOutsideRoot: true }));
+            const redisYaml = composeFile('redis');
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
@@ -335,15 +345,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           return yamlString;
         });
       },
-    });
-  }
-
-  get [BaseWorkspacesGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
-  get writing() {
-    return this.asWritingTaskGroup({
       cleanupOldFilesTask,
       writeFiles,
     });
