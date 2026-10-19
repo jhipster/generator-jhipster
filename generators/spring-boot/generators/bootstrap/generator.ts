@@ -55,8 +55,9 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         });
       },
       packageJsonScripts({ application }) {
-        // Tries the application, in a demonstration: the packaged jar of the production profile with the sample secrets.
+        // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
         mutateData(application.packageJsonScripts as any, {
+          'pretry-it': 'npm run java:jar:prod',
           'try-it': javaJarStartCommand({
             destDir: application.javaPackagingDestDir,
             jarName: '*.jar',

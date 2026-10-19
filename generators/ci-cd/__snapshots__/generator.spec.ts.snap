@@ -379,6 +379,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   ],
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {
+    "pretry-it": "npm run java:jar:prod",
     "try-it": "java -jar target/*.jar --spring.profiles.active=prod,secret-samples",
   },
   "packageName": "com.mycompany.myapp",
