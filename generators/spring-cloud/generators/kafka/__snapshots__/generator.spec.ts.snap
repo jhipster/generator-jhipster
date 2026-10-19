@@ -69,10 +69,6 @@ exports[`generator - spring-cloud:kafka with defaults options should call source
       "level": "WARN",
       "name": "kafka",
     },
-    {
-      "level": "WARN",
-      "name": "org.I0Itec",
-    },
   ],
 }
 `;
