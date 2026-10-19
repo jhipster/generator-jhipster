@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'expect-node';
 
 import { convertSingleContentToJDL } from '../../../../../lib/jdl/converters/json-to-jdl-converter.ts';
 import { type ImportState, createImporterFromContent } from '../../../../../lib/jdl/jdl-importer.ts';

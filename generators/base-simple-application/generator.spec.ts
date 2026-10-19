@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
@@ -43,20 +43,20 @@ describe(`generator - ${generator}`, () => {
 
   describe('custom priorities tasks', () => {
     // no args
-    const initializing = esmocha.fn();
-    const prompting = esmocha.fn();
-    const configuring = esmocha.fn();
-    const composing = esmocha.fn();
+    const initializing = exnode.fn();
+    const prompting = exnode.fn();
+    const configuring = exnode.fn();
+    const composing = exnode.fn();
 
     // application arg
-    const loading = esmocha.fn();
-    const preparing = esmocha.fn();
-    const defaultTask = esmocha.fn();
-    const postPreparing = esmocha.fn();
-    const writing = esmocha.fn();
-    const postWriting = esmocha.fn();
-    const install = esmocha.fn();
-    const end = esmocha.fn();
+    const loading = exnode.fn();
+    const preparing = exnode.fn();
+    const defaultTask = exnode.fn();
+    const postPreparing = exnode.fn();
+    const writing = exnode.fn();
+    const postWriting = exnode.fn();
+    const install = exnode.fn();
+    const end = exnode.fn();
 
     class CustomGenerator extends Generator {
       async beforeQueue() {
@@ -178,19 +178,19 @@ describe(`generator - ${generator}`, () => {
 
   describe('entities option', () => {
     // no args
-    const initializing = esmocha.fn();
-    const prompting = esmocha.fn();
-    const configuring = esmocha.fn();
-    const composing = esmocha.fn();
+    const initializing = exnode.fn();
+    const prompting = exnode.fn();
+    const configuring = exnode.fn();
+    const composing = exnode.fn();
 
     // application arg
-    const loading = esmocha.fn();
-    const preparing = esmocha.fn();
-    const defaultTask = esmocha.fn();
-    const writing = esmocha.fn();
-    const postWriting = esmocha.fn();
-    const install = esmocha.fn();
-    const end = esmocha.fn();
+    const loading = exnode.fn();
+    const preparing = exnode.fn();
+    const defaultTask = exnode.fn();
+    const writing = exnode.fn();
+    const postWriting = exnode.fn();
+    const install = exnode.fn();
+    const end = exnode.fn();
 
     class CustomGenerator extends Generator {
       async beforeQueue() {

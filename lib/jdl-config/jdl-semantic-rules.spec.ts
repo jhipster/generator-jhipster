@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import { checkSemantics } from '../jdl/core/parsing/index.ts';
 import { parseFromContent } from '../jdl/core/readers/jdl-reader.ts';

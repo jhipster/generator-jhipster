@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 

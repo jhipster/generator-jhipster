@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'expect-node';
 import childProcess from 'node:child_process';
 import { syncBuiltinESMExports } from 'node:module';
 

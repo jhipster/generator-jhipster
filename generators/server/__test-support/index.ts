@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { it } from 'esmocha';
+import { it } from 'expect-node';
 
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
 

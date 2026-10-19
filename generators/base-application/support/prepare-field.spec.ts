@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'expect-node';
 
 import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.ts';
 import BaseGenerator from '../../base/index.ts';

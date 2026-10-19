@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'esmocha';
+import { describe, expect, it } from 'expect-node';
 
 import { CommonDBValidations, fieldTypesValues } from '../jhipster/field-types.ts';
 

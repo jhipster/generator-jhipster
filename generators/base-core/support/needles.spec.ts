@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, exnode, expect, it } from 'expect-node';
 import test from 'node:test';
 
 import {
@@ -525,7 +525,7 @@ content to add2
     it('should execute editFile if generator and filePath is passed', async () => {
       const filePath = 'file.foo';
       const generator = await helpers.instantiateDummyBaseCoreGenerator();
-      const spy = esmocha.spyOn(generator, 'editFile');
+      const spy = exnode.spyOn(generator, 'editFile');
       spy.mockImplementation(() => undefined as any);
       createBaseNeedle.call(generator, { filePath }, needles);
       expect(generator.editFile).toHaveBeenCalledTimes(1);
