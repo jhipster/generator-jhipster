@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
-import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/index.ts';
-import type { Application as SpringBootApplication } from '../../../spring-boot/index.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from '../../constants.ts';
 import type {
@@ -29,27 +27,7 @@ import type {
   Source as DockerSource,
 } from '../../types.ts';
 
-/** An application with docker compose files: its docker data and the backend choices its services depend on. */
-type DockerComposeApplication = DockerApplication & SpringDataRelationalApplication<any> & SpringBootApplication<any>;
-
-/**
- * Adds a docker compose file to the application: its template, named after it, and the data merged into it, with the
- * project name of the application.
- */
-const addDockerComposeFile = (
-  application: DockerComposeApplication,
-  name: string,
-  services: Record<string, DockerComposeServiceConfig>,
-) => {
-  application.dockerComposeFiles[name] = {
-    source: `${name}.yml.ejs`,
-    data: { name: application.baseName.toLowerCase(), services },
-  };
-};
-
-/** Spring Boot docker compose support ignores the service. */
-const springBootIgnore = (ignore: boolean | undefined): DockerComposeServiceConfig =>
-  ignore ? { labels: { 'org.springframework.boot.ignore': true } } : {};
+import { type DockerComposeApplication, addDockerComposeFile, springBootIgnore } from './internal/docker-compose-files.ts';
 
 export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
   DockerApplication,
@@ -95,8 +73,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
       sqlDatabase({ application }) {
         const app = application as DockerComposeApplication;
         if (!app.databaseTypeSql) return;
-        const { baseName, prodDatabasePassword: password, dockerContainers } = app;
-        const lowercaseBaseName = baseName.toLowerCase();
+        const { baseName, lowercaseBaseName, prodDatabasePassword: password, dockerContainers } = app;
         if (app.prodDatabaseTypePostgresql) {
           addDockerComposeFile(app, 'postgresql', {
             postgresql: {
@@ -126,8 +103,8 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
       mongodb({ application }) {
         const app = application as DockerComposeApplication;
         if (!app.databaseTypeMongodb) return;
+        const { lowercaseBaseName } = app;
         const image = app.dockerContainers.mongodb;
-        const lowercaseBaseName = app.baseName.toLowerCase();
         addDockerComposeFile(app, 'mongodb', { mongodb: { image } });
         addDockerComposeFile(app, 'mongodb-cluster', {
           mongodb: { image, command: `mongos --configdb csvr/${lowercaseBaseName}-mongodb-config --bind_ip 0.0.0.0` },
@@ -138,7 +115,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
         const app = application as DockerComposeApplication;
         if (!app.databaseTypeCassandra) return;
         const { dockerContainers, databaseMigrationLoader, backendTypeSpringBoot } = app;
-        const contactPoint = `${app.baseName.toLowerCase()}-cassandra`;
+        const contactPoint = `${app.lowercaseBaseName}-cassandra`;
         // The service that applies the cql scripts of the application, with the cql loader.
         const migration: DockerComposeServiceConfig = {
           environment: [
@@ -167,12 +144,12 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
       couchbase({ application }) {
         const app = application as DockerComposeApplication;
         if (!app.databaseTypeCouchbase) return;
-        const { baseName } = app;
+        const { baseName, lowercaseBaseName } = app;
         addDockerComposeFile(app, 'couchbase', { couchbase: { environment: [`BUCKET=${baseName}`] } });
         addDockerComposeFile(app, 'couchbase-cluster', {
           couchbase: { environment: [`BUCKET=${baseName}`] },
           'couchbase-node': {
-            environment: [`BUCKET=${baseName}`, `COUCHBASE_MASTER=${baseName.toLowerCase()}-couchbase`, 'AUTO_REBALANCE=false'],
+            environment: [`BUCKET=${baseName}`, `COUCHBASE_MASTER=${lowercaseBaseName}-couchbase`, 'AUTO_REBALANCE=false'],
           },
         });
       },
@@ -200,7 +177,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
       app({ application }) {
         const app = application as DockerComposeApplication;
         if (!app.backendTypeSpringBoot && !app.dockerServices.includes('app')) return;
-        const { baseName, serverPort, dockerApplicationEnvironment } = app;
+        const { lowercaseBaseName, serverPort, dockerApplicationEnvironment, backendTypeSpringBoot } = app;
         // The services the application waits for, in the order the docker generator added them to the `app` file.
         const dependencies: [string, unknown, string][] = [
           ['cassandra', app.databaseTypeCassandra, SERVICE_HEALTHY],
@@ -223,14 +200,14 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
         );
         addDockerComposeFile(app, 'app', {
           app: {
-            image: baseName.toLowerCase(),
+            image: lowercaseBaseName,
             environment: [
               ...Object.entries(dockerApplicationEnvironment).map(([key, value]) => `${key}=${value ?? ''}`),
               ...(app.cacheProviderMemcached ? ['JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211'] : []),
               ...(app.cacheProviderRedis ? ['JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379', 'JHIPSTER_CACHE_REDIS_CLUSTER=false'] : []),
-              ...(app.searchEngineElasticsearch ? ['SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200'] : []),
-              ...(app.messageBrokerKafka ? ['SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092'] : []),
-              ...(app.messageBrokerPulsar ?
+              ...(backendTypeSpringBoot && app.searchEngineElasticsearch ? ['SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200'] : []),
+              ...(backendTypeSpringBoot && app.messageBrokerKafka ? ['SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092'] : []),
+              ...(backendTypeSpringBoot && app.messageBrokerPulsar ?
                 ['SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650', 'SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080']
               : []),
               ...(app.cacheProviderInfinispan ? ['JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true'] : []),
