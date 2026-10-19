@@ -64,6 +64,7 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           javaDependencies: expect.any(Object),
+          dockerComposeFiles: expect.any(Object),
           dockerContainers: expect.any(Object),
           addLanguageCallbacks: expect.any(Array),
           supportedLanguages: expect.any(Array),
