@@ -1281,7 +1281,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": undefined,
             },
@@ -1396,7 +1396,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
       {
         "dependencies": [
           {
-            "artifactId": "ojdbc8",
+            "artifactId": "ojdbc17",
             "groupId": "com.oracle.database.jdbc",
           },
           {
@@ -1516,7 +1516,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
@@ -3724,7 +3724,7 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
       {
         "dependencies": [
           {
-            "artifactId": "ojdbc8",
+            "artifactId": "ojdbc17",
             "groupId": "com.oracle.database.jdbc",
           },
           {
@@ -3844,7 +3844,7 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
@@ -5361,7 +5361,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
@@ -5496,7 +5496,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
       {
         "dependencies": [
           {
-            "artifactId": "ojdbc8",
+            "artifactId": "ojdbc17",
             "groupId": "com.oracle.database.jdbc",
           },
           {
@@ -5599,7 +5599,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": undefined,
             },
@@ -7528,7 +7528,7 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
       {
         "dependencies": [
           {
-            "artifactId": "ojdbc8",
+            "artifactId": "ojdbc17",
             "groupId": "com.oracle.database.jdbc",
           },
           {
@@ -7648,7 +7648,7 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
@@ -9733,7 +9733,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
@@ -9868,7 +9868,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
       {
         "dependencies": [
           {
-            "artifactId": "ojdbc8",
+            "artifactId": "ojdbc17",
             "groupId": "com.oracle.database.jdbc",
           },
           {
@@ -9971,7 +9971,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": undefined,
             },
@@ -12236,7 +12236,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": undefined,
             },
@@ -12351,7 +12351,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
       {
         "dependencies": [
           {
-            "artifactId": "ojdbc8",
+            "artifactId": "ojdbc17",
             "groupId": "com.oracle.database.jdbc",
           },
           {
@@ -12471,7 +12471,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
@@ -14971,7 +14971,7 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
@@ -15109,7 +15109,7 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
       {
         "dependencies": [
           {
-            "artifactId": "ojdbc8",
+            "artifactId": "ojdbc17",
             "groupId": "com.oracle.database.jdbc",
           },
           {
@@ -15229,7 +15229,7 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "ojdbc8",
+              "artifactId": "ojdbc17",
               "groupId": "com.oracle.database.jdbc",
               "inProfile": "prod",
             },
