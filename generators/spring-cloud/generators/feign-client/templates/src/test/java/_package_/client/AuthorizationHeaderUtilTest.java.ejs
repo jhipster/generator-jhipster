@@ -60,8 +60,8 @@ import org.springframework.web.client.RestTemplate;
 @ExtendWith(MockitoExtension.class)
 class AuthorizationHeaderUtilTest {
 
-    public static final String VALID_REGISTRATION_ID = "OIDC";
-    public static final String SUB_VALUE = "123456";
+    private static final String VALID_REGISTRATION_ID = "OIDC";
+    private static final String SUB_VALUE = "123456";
 
     @Mock
     private OAuth2AuthorizedClientService clientService;
@@ -252,10 +252,10 @@ class AuthorizationHeaderUtilTest {
         OAuthIdpTokenResponseDTO dto = new OAuthIdpTokenResponseDTO();
         dto.setAccessToken("tokenVal");
         dto.setIdToken("tokenVal");
-        dto.setNotBefore(0l);
+        dto.setNotBefore(0L);
         dto.setRefreshExpiresIn("1800");
         dto.setSessionState("ccea4a55");
-        dto.setExpiresIn(300l);
+        dto.setExpiresIn(300L);
         dto.setRefreshToken(hasRefreshToken ? "tokenVal" : null);
         dto.setScope("openid email profile offline_access");
         return Optional.of(dto);
