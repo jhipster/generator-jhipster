@@ -149,7 +149,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<EntityEnti
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      /* Use need microservice path to load the entity file */
+      /* Ask for the microservice path, needed to load the entity file */
       askForMicroserviceJson,
     });
   }
@@ -242,7 +242,7 @@ The entity ${entityName} is being created.
 `);
         }
       },
-      /* ask question to user if s/he wants to update entity */
+      /* Ask the user whether they want to update the entity */
       askForUpdate,
       askForFields,
       askForFieldsToRemove,

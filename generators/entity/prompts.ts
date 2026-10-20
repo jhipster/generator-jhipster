@@ -120,7 +120,7 @@ export const askForUpdate = asPromptingTask(async function askForUpdate(this: En
       choices: [
         {
           value: 'regenerate',
-          name: 'Yes, re generate the entity',
+          name: 'Yes, regenerate the entity',
         },
         {
           value: 'add',
@@ -179,7 +179,7 @@ export function askForFieldsToRemove(this: EntityGenerator) {
       when: response => response.fieldsToRemove.length !== 0,
       type: 'confirm',
       name: 'confirmRemove',
-      message: 'Are you sure to remove these fields?',
+      message: 'Are you sure you want to remove these fields?',
       default: true,
     },
   ]).then(props => {
@@ -237,7 +237,7 @@ export function askForRelationsToRemove(this: EntityGenerator) {
       when: response => response.relsToRemove.length !== 0,
       type: 'confirm',
       name: 'confirmRemove',
-      message: 'Are you sure to remove these relationships?',
+      message: 'Are you sure you want to remove these relationships?',
       default: true,
     },
   ]).then(props => {
@@ -808,7 +808,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
       },
       type: 'confirm',
       name: 'bidirectional',
-      message: 'Do you want to generate a bidirectional relationship',
+      message: 'Do you want to generate a bidirectional relationship?',
       default: true,
     },
     {
