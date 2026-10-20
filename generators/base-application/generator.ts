@@ -18,11 +18,11 @@
  */
 import { isDeepStrictEqual } from 'node:util';
 
-import upperFirst from 'lodash-es/upperFirst.js';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import { type DroppedMutation, droppedMutationMessage, enableDelayedMutations, mutateData } from '../../lib/utils/object.ts';
+import { upperFirst } from '../../lib/utils/string-utils.ts';
 import { priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';

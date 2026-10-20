@@ -18,12 +18,12 @@
  * limitations under the License.
  */
 
-import escape from 'lodash-es/escape.js';
 import type { ValueOf } from 'type-fest';
 
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
+import { escape } from '../../../lib/utils/string-utils.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Field as LiquibaseField } from '../types.d.ts';
 
 import formatAsLiquibaseRemarks from './formatting.ts';

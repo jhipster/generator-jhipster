@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 
-import camelCase from 'lodash-es/camelCase.js';
-import upperFirst from 'lodash-es/upperFirst.js';
-
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import BaseCoreGenerator from '../../generators/base-core/index.ts';
+import { camelCase, upperFirst } from '../../lib/utils/string-utils.ts';
 
 export default class extends BaseCoreGenerator {
   generatorNamespace!: string;

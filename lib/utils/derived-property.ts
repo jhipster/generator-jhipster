@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 
-import camelCase from 'lodash-es/camelCase.js';
-import upperFirst from 'lodash-es/upperFirst.js';
 import type { Simplify } from 'type-fest';
 
 import type { DerivedProperty, JHipsterChoices } from '../command/types.ts';
 
+import { camelCase, upperFirst } from './string-utils.ts';
 import { upperFirstCamelCase } from './string.ts';
 
 export const flatChoices = (choices: JHipsterChoices): string[] =>

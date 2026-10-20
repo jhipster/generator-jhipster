@@ -25,10 +25,8 @@ import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
 import latestVersion from 'latest-version';
 import get from 'lodash-es/get.js';
-import kebabCase from 'lodash-es/kebabCase.js';
 import merge from 'lodash-es/merge.js';
 import set from 'lodash-es/set.js';
-import snakeCase from 'lodash-es/snakeCase.js';
 import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson, SetRequired } from 'type-fest';
 import { stringify as stringifyYaml } from 'yaml';
@@ -61,6 +59,7 @@ import {
   normalizeLineEndings,
   removeFieldsWithNullishValues,
 } from '../../lib/utils/index.ts';
+import { kebabCase, snakeCase } from '../../lib/utils/string-utils.ts';
 import baseCommand from '../base/command.ts';
 import type BaseGenerator from '../base/generator.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';

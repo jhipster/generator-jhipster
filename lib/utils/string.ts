@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import camelCase from 'lodash-es/camelCase.js';
-import upperFirst from 'lodash-es/upperFirst.js';
+import { camelCase, upperFirst } from './string-utils.ts';
 
 /**
  * Calculate a hash code for a given string.

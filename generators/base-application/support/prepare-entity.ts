@@ -19,7 +19,6 @@
 import intersection from 'lodash-es/intersection.js';
 import sortedUniq from 'lodash-es/sortedUniq.js';
 import uniq from 'lodash-es/uniq.js';
-import upperFirst from 'lodash-es/upperFirst.js';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';
@@ -27,6 +26,7 @@ import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
 import type { EntityAll, FieldAll } from '../../../lib/types/application-all.d.ts';
 import { getMicroserviceAppName, mutateData, stringHashCode } from '../../../lib/utils/index.ts';
+import { upperFirst } from '../../../lib/utils/string-utils.ts';
 import { parseChangelog } from '../../base/support/timestamp.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import { getTypescriptKeyType } from '../../client/support/index.ts';

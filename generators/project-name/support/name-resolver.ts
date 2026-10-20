@@ -18,7 +18,7 @@
  */
 import path from 'node:path';
 
-import camelCase from 'lodash-es/camelCase.js';
+import { camelCase } from '../../../lib/utils/string-utils.ts';
 
 const defaultName = 'jhipster';
 

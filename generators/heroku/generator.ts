@@ -18,9 +18,9 @@
  */
 
 import chalk from 'chalk';
-import kebabCase from 'lodash-es/kebabCase.js';
 import { globSync } from 'tinyglobby';
 
+import { kebabCase } from '../../lib/utils/string-utils.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../java-simple-application/generators/gradle/internal/needles.ts';

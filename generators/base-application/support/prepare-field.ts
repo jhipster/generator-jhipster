@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 import defaults from 'lodash-es/defaults.js';
-import kebabCase from 'lodash-es/kebabCase.js';
-import lowerFirst from 'lodash-es/lowerFirst.js';
 
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
+import { kebabCase, lowerFirst } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { mutateField } from '../entity.ts';

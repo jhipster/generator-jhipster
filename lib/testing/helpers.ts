@@ -27,7 +27,6 @@ import { pathToFileURL } from 'node:url';
 import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
 import merge from 'lodash-es/merge.js';
 import pick from 'lodash-es/pick.js';
-import snakeCase from 'lodash-es/snakeCase.js';
 import type { EmptyObject } from 'type-fest';
 import type Environment from 'yeoman-environment';
 import type { EnvironmentOptions } from 'yeoman-environment';
@@ -61,6 +60,7 @@ import {
   normalizePath,
   normalizePathEnd,
 } from '../utils/index.ts';
+import { snakeCase } from '../utils/string-utils.ts';
 
 type WithJHipsterGenerators = {
   /**

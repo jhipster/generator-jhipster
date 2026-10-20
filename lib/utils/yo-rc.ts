@@ -21,12 +21,13 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import mergeWith from 'lodash-es/mergeWith.js';
-import upperFirst from 'lodash-es/upperFirst.js';
 import type { Merge } from 'type-fest';
 
 import { YO_RC_FILE, type YoRcConfigValue, type YoRcFileContent } from '../constants/yeoman.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.ts';
+
+import { upperFirst } from './string-utils.ts';
 
 export const YO_RC_CONFIG_KEY = 'generator-jhipster';
 

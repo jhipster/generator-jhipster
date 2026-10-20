@@ -18,12 +18,12 @@
  */
 import fs from 'node:fs';
 
-import escape from 'lodash-es/escape.js';
 import min from 'lodash-es/min.js';
 
 import { fieldTypes } from '../../lib/jhipster/index.ts';
 import type { EntityAll } from '../../lib/types/application-all.d.ts';
 import { mutateData } from '../../lib/utils/object.ts';
+import { escape } from '../../lib/utils/string-utils.ts';
 import {
   mutateField as mutateBaseApplicationField,
   mutateRelationship as mutateBaseApplicationRelationship,

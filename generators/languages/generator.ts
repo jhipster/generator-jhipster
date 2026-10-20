@@ -18,8 +18,8 @@
  */
 
 import chalk from 'chalk';
-import padEnd from 'lodash-es/padEnd.js';
 
+import { padEnd } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import type { Config as ClientConfig } from '../client/types.ts';
