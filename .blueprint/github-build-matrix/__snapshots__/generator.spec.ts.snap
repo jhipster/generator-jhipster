@@ -102,7 +102,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
     {
       "job-name": "ng-mongodb-kafka-cucumber (n[2]/j[1])",
       "sample": "ng-mongodb-kafka-cucumber",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "[2]",
       "java-version": "[1]",
       "npm-version": "NPM-VERSION",
@@ -266,7 +266,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
     {
       "job-name": "ng-webflux-mongodb (n[2]/j[0])",
       "sample": "ng-webflux-mongodb",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "[2]",
       "java-version": "[0]",
       "npm-version": "NPM-VERSION",
@@ -287,7 +287,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
     {
       "job-name": "ng-webflux-gradle-mongodb-oauth2 (n[2]/j[1])",
       "sample": "ng-webflux-gradle-mongodb-oauth2",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "[2]",
       "java-version": "[1]",
       "npm-version": "NPM-VERSION",
@@ -423,7 +423,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
     {
       "job-name": "ms-ng-oauth2-mongodb-caffeine (n[1]/j[1])",
       "sample": "ms-ng-oauth2-mongodb-caffeine",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "[1]",
       "java-version": "[1]",
       "npm-version": "NPM-VERSION",
@@ -1235,7 +1235,7 @@ exports[`generator - github-build-matrix with daily-ng-gradle-nosql should match
     {
       "job-name": "daily-gradle-ngx-mongodb",
       "sample": "daily-gradle-ngx-mongodb",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "25",
       "npm-version": "NPM-VERSION",
@@ -1447,7 +1447,7 @@ exports[`generator - github-build-matrix with daily-ng-maven-nosql should match 
     {
       "job-name": "daily-ngx-mongodb",
       "sample": "daily-ngx-mongodb",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "25",
       "npm-version": "NPM-VERSION",
@@ -1829,7 +1829,7 @@ exports[`generator - github-build-matrix with daily-react-gradle-nosql should ma
     {
       "job-name": "daily-gradle-react-mongodb",
       "sample": "daily-gradle-react-mongodb",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "25",
       "npm-version": "NPM-VERSION",
@@ -2041,7 +2041,7 @@ exports[`generator - github-build-matrix with daily-react-maven-nosql should mat
     {
       "job-name": "daily-react-mongodb",
       "sample": "daily-react-mongodb",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "25",
       "npm-version": "NPM-VERSION",
@@ -2244,7 +2244,7 @@ exports[`generator - github-build-matrix with daily-vue-gradle-nosql should matc
     {
       "job-name": "daily-vue-gradle-mongodb",
       "sample": "daily-vue-gradle-mongodb",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "25",
       "npm-version": "NPM-VERSION",
@@ -2500,7 +2500,7 @@ exports[`generator - github-build-matrix with daily-vue-maven-nosql should match
     {
       "job-name": "daily-vue-maven-mongodb",
       "sample": "daily-vue-maven-mongodb",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "25",
       "npm-version": "NPM-VERSION",
@@ -2856,7 +2856,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
     {
       "job-name": "mongodb-maven-jwt-kafka",
       "sample": "mongodb-maven-jwt-kafka",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "JAVA-VERSION",
       "npm-version": "NPM-VERSION",
@@ -2873,7 +2873,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
     {
       "job-name": "mongodb-reactive(true)-gradle-elasticsearch-oauth2-consul",
       "sample": "mongodb-reactive(true)-gradle-elasticsearch-oauth2-consul",
-      "os": "ubuntu-latest",
+      "os": "ubuntu-22.04",
       "node-version": "NODE-VERSION",
       "java-version": "JAVA-VERSION",
       "npm-version": "NPM-VERSION",

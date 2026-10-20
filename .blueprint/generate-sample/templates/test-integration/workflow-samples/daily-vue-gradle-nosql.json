@@ -2,7 +2,8 @@
   "include": [
     {
       "name": "vue-gradle-mongodb",
-      "entity": "mongodb"
+      "entity": "mongodb",
+      "os": "ubuntu-22.04"
     },
     {
       "name": "vue-gradle-cassandra",
