@@ -56,7 +56,6 @@ const { isReservedClassName } = reservedKeywords;
 export default class EntityGenerator extends BaseApplicationGenerator<EntityEntity, EntityApplication, EntityConfig, EntityOptions> {
   name!: string;
   application: any = {};
-  microserviceConfig?: any;
   entityStorage!: Storage;
   entityConfig!: EntityEntity;
   entityData!: {
@@ -191,9 +190,9 @@ The entity ${context.name} is being updated.
             try {
               // We are generating an entity from a microservice.
               // Load it directly into our entity configuration.
-              this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
-              if (this.microserviceConfig) {
-                this.entityStorage.set(this.microserviceConfig);
+              const microserviceConfig = this.fs.readJSON(context.microserviceFileName);
+              if (microserviceConfig) {
+                this.entityStorage.set(microserviceConfig);
               }
             } catch (err) {
               this.log.debug('Error:', err);
