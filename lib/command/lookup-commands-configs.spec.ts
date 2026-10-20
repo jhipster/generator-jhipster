@@ -74,6 +74,7 @@ describe('jdl options', () => {
   "nativeLanguage",
   "incrementalChangelog",
   "baseName",
+  "appSchemes",
   "enableSwaggerCodegen",
   "searchEngine",
   "websocket",
@@ -117,6 +118,7 @@ describe('jdl options', () => {
     'blueprints',
     'blueprint',
     'jhipsterVersion',
+    'appSchemes',
   ];
 
   const getChoices = (config: (typeof jdlConfigs)[number][1]): (string | boolean)[] | undefined => {
@@ -129,6 +131,18 @@ describe('jdl options', () => {
     const optionsWithoutChoices = jdlConfigs.filter(([_optionName, config]) => !getChoices(config)).map(([optionName]) => optionName);
     expect(optionsWithoutChoices.filter(optionName => !freeFormOptions.includes(optionName))).toEqual([]);
     expect(freeFormOptions.filter(optionName => !optionsWithoutChoices.includes(optionName))).toEqual([]);
+  });
+
+  describe('jdl - appSchemes', () => {
+    it('should set the url schemes', () => {
+      const state = createImporterFromContent('application { config { appSchemes [exp, myapp] } }').import();
+      expect(state.exportedApplicationsWithEntities.jhipster.config.appSchemes).toEqual(['exp', 'myapp']);
+    });
+    it('should not accept a value that is not a url scheme', () => {
+      expect(() => createImporterFromContent('application { config { appSchemes [MyApp] } }')).toThrow(
+        /The appSchemes property name must match: .*, got MyApp/,
+      );
+    });
   });
 
   for (const [optionName, config] of jdlConfigs) {

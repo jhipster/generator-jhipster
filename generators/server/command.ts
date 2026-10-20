@@ -17,12 +17,25 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHANUMERIC_DASH_PATTERN, ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
+import { ALPHANUMERIC_DASH_PATTERN, ALPHANUMERIC_PATTERN, URL_SCHEME_PATTERN } from '../../lib/constants/jdl.ts';
 
 import { getDBTypeFromDBValue } from './support/database.ts';
 
 const command = {
   configs: {
+    appSchemes: {
+      description:
+        'URL schemes of the apps (like mobile apps) signing in at the OAuth2 provider of the application, allowed as redirect URIs of its client',
+      cli: {
+        type: Array,
+      },
+      jdl: {
+        type: 'list',
+        tokenType: 'list',
+        tokenValuePattern: URL_SCHEME_PATTERN,
+      },
+      scope: 'storage',
+    },
     enableSwaggerCodegen: {
       description: 'API first development using OpenAPI-generator',
       cli: {

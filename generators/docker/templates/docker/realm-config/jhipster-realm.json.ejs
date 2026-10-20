@@ -1072,6 +1072,9 @@
       "secret": "web_app",
       "redirectUris": [
         "dev.localhost.ionic:*",
+<%_ for (const appScheme of locals.appSchemes ?? []) { _%>
+        "<%- appScheme %>:*",
+<%_ } _%>
         "http://127.0.0.1:*",
         "http://localhost:*",
         "https://127.0.0.1:*",
