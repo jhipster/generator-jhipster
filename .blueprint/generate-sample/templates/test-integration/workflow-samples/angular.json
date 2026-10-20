@@ -50,7 +50,8 @@
       "entity": "mongodb",
       "generatorOptions": {
         "defaultEnvironment": "dev"
-      }
+      },
+      "os": "ubuntu-22.04"
     },
     {
       "name": "ng-h2mem-ws-nol2",
@@ -95,12 +96,14 @@
     {
       "name": "ng-webflux-mongodb",
       "app-sample": "webflux-mongodb",
-      "entity": "mongodb"
+      "entity": "mongodb",
+      "os": "ubuntu-22.04"
     },
     {
       "name": "ng-webflux-gradle-mongodb-oauth2",
       "app-sample": "webflux-mongodb-oauth2",
-      "entity": "mongodb"
+      "entity": "mongodb",
+      "os": "ubuntu-22.04"
     },
     {
       "name": "ng-webflux-psql-default",
@@ -143,7 +146,8 @@
         "workspaces": true,
         "experimental": true,
         "monorepository": true
-      }
+      },
+      "os": "ubuntu-22.04"
     },
     {
       "name": "mf-ng-eureka-jwt-psql-ehcache",

@@ -57,6 +57,9 @@ export default Object.fromEntries(
     {
       'cmd-e2e': 'npm run ci:e2e:dev',
       jdl: convertOptionsToJDL(value as MatrixSample),
+      // MongoDB 8 does not start on the kernel 7.0 of ubuntu-latest (SERVER-125742): back to ubuntu-latest once its
+      // kernel is 7.0.14 or newer.
+      ...((value as MatrixSample).databaseType === 'mongodb' ? { os: 'ubuntu-22.04' } : {}),
     },
   ]),
 ) satisfies GitHubMatrixGroup;
