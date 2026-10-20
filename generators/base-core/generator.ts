@@ -1038,6 +1038,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
 
     const normalizeEjs = (file: string) => file.replace('.ejs', '');
+    const { reproducibleTests } = this.options as { reproducibleTests?: boolean };
+    const { templateContext } = this.features;
     const resolveCallback = <ReturnType extends boolean | string | undefined>(
       maybeCallback: ReturnType | ((data: any) => ReturnType),
     ): ReturnType => {
@@ -1160,9 +1162,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             ...options?.renderOptions,
             // Set root for ejs to lookup for partials.
             root: templatesRoots,
-            // The ejs cache causes problems in some situations, like a template compiled with the context of another
-            // generator, and it brings no gain to the generation.
-            cache: false,
+            // The ejs cache keeps the context of the generator that compiled a template, and it brings no gain to a
+            // generation. The tests render the same templates many times: it is enabled for the templates rendered
+            // without a context.
+            cache: Boolean(reproducibleTests) && (templateContext === 'none' || templateContext === 'throw'),
           };
           const copyOptions = { noGlob: true, transformOptions, metadata };
           this.renderTemplate(appendEjs ? `${sourceFileFrom}.ejs` : sourceFileFrom, targetFile, templateData as any, copyOptions);
