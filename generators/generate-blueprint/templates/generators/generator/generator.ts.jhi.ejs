@@ -27,9 +27,6 @@
 <%_ if (!application.dynamic) { _%>
 import <%- parentGenerator %>Generator, { type Features, type Options } from '<%- parentGeneratorImport %>';
 <%_ } _%>
-<%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
-import command from './command.<%- blueprintMjsExtension %>';
-<%_ } _%>
 
 <%_ if (application.dynamic) { _%>
 // eslint-disable-next-line import/prefer-default-export
