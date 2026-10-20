@@ -69,7 +69,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         (this.jhipsterConfig as ProjectNameConfig).baseName ??= 'workspaces';
         this.jhipsterConfig.defaultCommand ??= 'workspaces';
       },
-      async configureUsingFiles() {
+      configureUsingFiles() {
         if (!this.generateWorkspaces) return;
 
         // The deployment configuration may have been written by the jdl generator and not committed to disk yet.
@@ -152,7 +152,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         this.workspacesConfig.nodePackageManager =
           this.options.nodePackageManager ?? applications.find(app => app.nodePackageManager)?.nodePackageManager ?? 'npm';
       },
-      async loadConfig() {
+      loadConfig() {
         if (!this.generateWorkspaces) return;
 
         this.dockerCompose = this.workspacesConfig.dockerCompose;
