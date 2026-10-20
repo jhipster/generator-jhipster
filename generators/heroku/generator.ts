@@ -110,9 +110,6 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
               this.dynoSize = json.dynos[0].size;
             }
             this.log.verboseInfo(`Deploying as existing application: ${chalk.bold(this.herokuAppName)}`);
-            this.config.set({
-              herokuAppName: this.herokuAppName,
-            });
           } else {
             this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
             this.herokuAppName = undefined;
@@ -340,7 +337,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
       },
 
       async configureJHipsterRegistry({ application }) {
-        if (!this.hasHerokuCli || this.herokuAppExists || !application.serviceDiscoveryEureka) return undefined;
+        if (!this.hasHerokuCli || this.herokuAppExists || !application.serviceDiscoveryEureka) return;
 
         this.log.log('');
         const answers = await this.prompt([
@@ -567,7 +564,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
         throw new Error(stderr);
       } else {
-        this.log.verboseInfo(`No new ${addOn.valueOf()} add-on created`);
+        this.log.verboseInfo(`No new ${addOn} add-on created`);
       }
     }
   }
