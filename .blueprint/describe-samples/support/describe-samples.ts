@@ -21,6 +21,8 @@ import { basename, relative } from 'node:path';
 import { copiedFilesOf, describeGithubSamplesGroup, readSampleDefaultCommand, sampleFilesOf } from '../../../lib/ci/describe-samples.ts';
 import {
   type GitHubMatrix,
+  type GitHubMatrixGroup,
+  type GitHubMatrixOutput,
   type SampleDescription,
   type WorkflowSample,
   convertToGitHubMatrix,
@@ -32,6 +34,8 @@ import { githubSamplesGroupFolder } from '../../constants.ts';
 import { getWorkflowNames, getWorkflowSamples, isDaily } from '../../generate-sample/support/get-workflow-samples.ts';
 import { type ResolvedSample, groupWorkflowSample, resolveSample } from '../../generate-sample/support/resolve-sample.ts';
 import { workflowChoices } from '../../github-build-matrix/command.ts';
+import { buildMatrix } from '../../github-build-matrix/support/build-matrix.ts';
+import { detectChanges } from '../../github-build-matrix/support/git-changes.ts';
 import { samplesGroups } from '../../github-build-matrix/support/samples-groups.ts';
 import { buildDailyWorkflowMatrix, buildWorkflowMatrix } from '../../github-build-matrix/support/workflow-matrix.ts';
 
@@ -186,3 +190,34 @@ export const describeSampleGroups = (): Record<string, SampleGroupSummary> => {
 
 /** A sample, by its name or its job name, the names being unique across the samples groups. */
 export const describeSample = (name: string): SampleSummary => summaryOf(findSamples({ sampleName: name })[0]);
+
+/** The workflows the ci runs on a label of the pull request, not for its changes: never chosen by them. */
+const LABELED_WORKFLOWS = new Set(['docker-compose-integration']);
+
+/** The jobs of the generators workflow that enable another workflow: it runs only when its job is not disabled. */
+const ENABLED_BY_GENERATORS = new Set(['graalvm']);
+
+/**
+ * The samples the ci runs for changed files, by samples group: the matrix the build matrix rules give each workflow for
+ * those files, the workflows the generators workflow enables only when it does. Not the daily workflows, of
+ * jhipster-daily-builds, nor the ones the ci runs on a label of the pull request; the groups without samples left out.
+ *
+ * @param files the changed files, relative to the repository root
+ */
+export const describeChangedSamples = async (files: string[]): Promise<Record<string, string[]>> => {
+  const changes = detectChanges(files);
+  const generators = (await buildMatrix({ workflow: 'generators', changes })) as GitHubMatrixGroup;
+  const selected: Record<string, string[]> = {};
+  for (const group of WORKFLOWS) {
+    if (isDaily(group) || LABELED_WORKFLOWS.has(group) || (ENABLED_BY_GENERATORS.has(group) && generators[group]?.disabled)) {
+      continue;
+    }
+    // The sample of a job of the matrix is the sample name.
+    const { include = [] } = (await buildMatrix({ workflow: group, changes })) as GitHubMatrixOutput;
+    const samples = include.map(job => job.sample);
+    if (samples.length > 0) {
+      selected[group] = samples;
+    }
+  }
+  return selected;
+};
