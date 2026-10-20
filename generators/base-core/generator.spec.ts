@@ -145,6 +145,36 @@ describe('generator - base-core', () => {
     });
   });
 
+  describe('templates context', () => {
+    const ThisGenerator = helpers.createDummyGenerator(Base, {
+      async [Base.WRITING]() {
+        await this.writeFiles({
+          blocks: [{ templates: ['this.txt'] }],
+          context: {},
+          rootTemplatesPath: this.destinationPath('templates'),
+        });
+      },
+    });
+    const runWithNamespace = (namespace: string) =>
+      helpers
+        .run(namespace)
+        .withGenerators([[ThisGenerator, { namespace }]])
+        .withOptions({ reproducibleTests: true })
+        .doInDir(cwd => {
+          mkdirSync(join(cwd, 'templates'));
+          writeFileSync(join(cwd, 'templates/this.txt.ejs'), '<%- this.options.namespace %>');
+        });
+
+    it('should not give the generator to the templates of a JHipster generator', async () => {
+      await expect(runWithNamespace('jhipster:dummy')).rejects.toThrow('reads this.options');
+    });
+
+    it('should give the generator to the templates of a blueprint', async () => {
+      await runWithNamespace('jhipster-foo:dummy');
+      expect(runResult.memFs.get(runResult.generator.destinationPath('this.txt')).contents?.toString()).toBe('jhipster-foo:dummy');
+    });
+  });
+
   describe('writeFiles with override false', () => {
     const OverrideGenerator = helpers.createDummyGenerator(Base, {
       async [Base.WRITING]() {

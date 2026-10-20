@@ -213,6 +213,13 @@ export default class CoreGenerator<
         ),
     });
 
+    if (this.options.namespace?.startsWith('jhipster:') && this.features.templateContext === undefined) {
+      // The templates of JHipster read only their data, the generator is not their context: reading it throws in the
+      // tests. Blueprints keep the generator as the context of their templates.
+      const { reproducibleTests } = this.options as { reproducibleTests?: boolean };
+      this.setFeatures({ templateContext: reproducibleTests ? 'throw' : 'none' } as Features);
+    }
+
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster', { transform: this.features.configTransform });
@@ -1153,8 +1160,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             ...options?.renderOptions,
             // Set root for ejs to lookup for partials.
             root: templatesRoots,
-            // Caching is not applicable for JHipster: the generator is passed as `context`, and ejs caches it
-            // together with the compiled template function.
+            // The ejs cache causes problems in some situations, like a template compiled with the context of another
+            // generator, and it brings no gain to the generation.
             cache: false,
           };
           const copyOptions = { noGlob: true, transformOptions, metadata };
