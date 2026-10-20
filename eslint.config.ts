@@ -158,7 +158,7 @@ export default defineConfig(
       prettierBlocklist: true,
       stylisticBlocklist: true,
       experimental: true,
-      allowedGlobals: ['wrapMono', 'getOriginalField', 'generateFakeData', 'relativeDir'],
+      allowedGlobals: ['wrapMono', 'getOriginalField', 'relativeDir'],
     },
     js.configs.recommended,
     stylistic.configs.customize({
