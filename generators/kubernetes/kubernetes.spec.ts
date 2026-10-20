@@ -846,6 +846,8 @@ describe('generator - Kubernetes', () => {
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
+          // Asks kubectl for the Istio Ingress IP address.
+          skipChecks: false,
         })
         .withAnswers({
           deploymentApplicationType: 'microservice',

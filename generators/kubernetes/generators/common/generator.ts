@@ -431,12 +431,14 @@ export default class KubernetesCommonGenerator extends BaseKubernetesGenerator {
                   if (this.jhipsterConfigWithDefaults.istio) {
                     const istioIpCommand =
                       "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
-                    // If it's Istio, and no previous domain is configured, try to determine the default value
-                    try {
-                      const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
-                      defaultValue = `${istioIngressIp}.nip.io`;
-                    } catch {
-                      istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
+                    // If it's Istio, and no previous domain is configured, try to determine the default value, unless skipChecks
+                    if (!this.skipChecks) {
+                      try {
+                        const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
+                        defaultValue = `${istioIngressIp}.nip.io`;
+                      } catch {
+                        istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
+                      }
                     }
                   } else if (this.jhipsterConfigWithDefaults.ingressType === NGINX) {
                     defaultValue = '192.168.99.100.nip.io';
