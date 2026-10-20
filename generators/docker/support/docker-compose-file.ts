@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import ejs from 'ejs';
 import { mergeWith } from 'lodash-es';
-import { parse as parseYaml } from 'yaml';
+import { Scalar, isMap, isScalar, isSeq, parse as parseYaml, parseDocument } from 'yaml';
 
 import type { DockerComposeFile, DockerComposeService } from '../types.ts';
 
@@ -48,11 +49,30 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
   ),
 });
 
-/** A docker compose file of an application as the docker generator writes it: its source merged with its data. */
+/** A docker compose file of an application as the docker generator writes it: its template merged with its data. */
 export const mergeDockerComposeFile = (
   { data }: DockerComposeFile,
   sourceContent: string,
 ): { name?: string; services: Record<string, any> } =>
-  mergeWith(parseYaml(sourceContent), structuredClone(data), (a, b) =>
+  mergeWith(parseYaml(ejs.render(sourceContent)), structuredClone(data), (a, b) =>
     Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined,
   );
+
+/** Writes the healthcheck command of each service of a docker compose file on one line, as a flow list of quoted items. */
+export const flowHealthcheckCommands = (content: string): string => {
+  const document = parseDocument(content);
+  const services = document.get('services', true);
+  if (!isMap(services)) return content;
+  for (const { value: service } of services.items) {
+    const test = isMap(service) ? service.getIn(['healthcheck', 'test'], true) : undefined;
+    if (isSeq(test)) {
+      test.flow = true;
+      for (const item of test.items) {
+        if (isScalar(item) && typeof item.value === 'string') {
+          item.type = Scalar.QUOTE_SINGLE;
+        }
+      }
+    }
+  }
+  return document.toString({ lineWidth: 0 });
+};

@@ -17,21 +17,23 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+# The elasticsearch service stores its data in /usr/share/elasticsearch/data/ of its Docker container: to keep it in a folder of your machine,
+# add to the elasticsearch service:
+#   volumes:
+#     - <folder-of-your-machine>:/usr/share/elasticsearch/data/
+name: jhipster
 services:
   elasticsearch:
-    image: <%- dockerContainers.elasticsearch %>
-    # volumes:
-    #   - ~/volumes/jhipster/<%- baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
+    image: elasticsearch
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:9200:9200
       - 127.0.0.1:9300:9300
     environment:
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
-      - "discovery.type=single-node"
-      - "xpack.security.enabled=false"
+      - 'ES_JAVA_OPTS=-Xms256m -Xmx256m'
+      - 'discovery.type=single-node'
+      - 'xpack.security.enabled=false'
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s']
       interval: 5s

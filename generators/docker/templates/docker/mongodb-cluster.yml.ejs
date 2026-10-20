@@ -17,21 +17,21 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+name: jhipster
 services:
   mongodb:
-    image: <%- dockerContainers.mongodb %>
+    image: mongo
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:27017:27017
-    command: mongos --configdb csvr/<%- baseName.toLowerCase() %>-mongodb-config --bind_ip 0.0.0.0
+    command: mongos --configdb csvr/jhipster-mongodb-config --bind_ip 0.0.0.0
   mongodb-node:
     build:
       context: .
       dockerfile: mongodb/MongoDB.Dockerfile
     command: mongod --shardsvr --replSet rs1
   mongodb-config:
-    image: <%- dockerContainers.mongodb %>
-    container_name: <%- baseName.toLowerCase() %>-mongodb-config
+    image: mongo
+    container_name: jhipster-mongodb-config
     command: mongod --configsvr --dbpath /data/db --replSet csvr

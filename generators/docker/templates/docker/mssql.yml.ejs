@@ -17,17 +17,18 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+# The mssql service stores its data in /var/opt/mssql/data/ of its Docker container: to keep it in a folder of your machine,
+# add to the mssql service:
+#   volumes:
+#     - <folder-of-your-machine>:/var/opt/mssql/data/
+name: jhipster
 services:
   mssql:
-    image: <%- dockerContainers.mssql %>
-    # volumes:
-    #   - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
+    image: mcr.microsoft.com/mssql/server
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
       - MSSQL_SA_PASSWORD=yourStrong(!)Password
-      - MSSQL_DATABASE=<%- baseName %>
       - MSSQL_SLEEP=15
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
