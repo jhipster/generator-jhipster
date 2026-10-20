@@ -222,6 +222,10 @@ export default class CoreGenerator<
       const { reproducibleTests } = this.options as { reproducibleTests?: boolean };
       this.setFeatures({ templateContext: reproducibleTests ? 'throw' : 'none' } as Features);
     }
+    if (this.options.namespace?.startsWith('jhipster:')) {
+      // The JHipster generators import the lodash functions they use: reading this._ throws.
+      this.setFeatures({ disableLodashProperty: true } as Features);
+    }
 
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
