@@ -71,8 +71,7 @@ import { I<%- uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%
 import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/service/<%- uniqueRel.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
-<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ for (const [importedType, importedPath] of entityClientEnumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
 

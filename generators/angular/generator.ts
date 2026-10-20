@@ -248,7 +248,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             ...(entity.entityReadAuthority?.split(',') ?? []),
           ]),
         });
-        entity.generateEntityClientEnumImports = (fields: any) => getClientEnumImportsFormat(fields, ANGULAR);
       },
     });
   }
@@ -325,6 +324,12 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      prepareEnumImports({ entity }) {
+        mutateData(entity, {
+          __override__: false,
+          entityClientEnumImports: ({ fields }) => getClientEnumImportsFormat(fields, ANGULAR),
+        });
+      },
       prepareTranslationPipeUsage({ application: { enableTranslation }, entity }) {
         mutateData(entity as AngularEntity & { searchEngineAny?: boolean }, {
           angularEntityDetailsRequiresTranslationPipe: ({ fields }) =>

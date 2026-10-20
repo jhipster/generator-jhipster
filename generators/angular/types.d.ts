@@ -53,13 +53,6 @@ export type Relationship = ClientRelationship & {
 };
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ClientEntity<F, R> {
-  /**
-   * @experimental to be replaced with a calculated property
-   * Returns the TypeScript import section of enums referenced by all fields of the entity.
-   * @param fields returns the import of enums that are referenced by the fields
-   * @returns {typeImports:Map} the fields that potentially contains some enum types
-   */
-  generateEntityClientEnumImports?: (fields: any) => Map<any, any>;
   entityAngularAuthorities?: string;
   entityAngularReadAuthorities?: string;
   angularEntityListRequiresTranslationPipe?: boolean;
