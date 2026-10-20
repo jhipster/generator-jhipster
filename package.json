@@ -121,6 +121,7 @@
     "prettier:format": "prettier . --write --experimental-cli",
     "pretest": "npm run lint && npm run check-types",
     "test": "exnode --forbid-only",
+    "update-durations": "rimraf .expect-node.durations.json && exnode",
     "update-snapshot": "exnode --update-snapshot --",
     "update-snapshots": "exnode --update-snapshot"
   },
@@ -193,7 +194,7 @@
     "eslint-plugin-ejs-templates": "0.6.1",
     "eslint-plugin-n": "18.4.1",
     "eslint-plugin-prettier": "5.5.7",
-    "expect-node": "0.3.1",
+    "expect-node": "0.3.2",
     "jest-snapshot": "30.5.2",
     "jiti": "2.7.0",
     "jsdoc": "4.0.5",
