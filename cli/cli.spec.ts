@@ -578,13 +578,13 @@ describe('cli', () => {
     describe('loading options', () => {
       describe('using blueprint with cli option', () => {
         let stdout: string;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -603,13 +603,13 @@ describe('cli', () => {
 
       describe('using blueprint with custom generator option', () => {
         let stdout: string;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { generator: 'foo', files: cliSharedBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -705,13 +705,13 @@ export const command = {
       describe('--help', () => {
         let stdout: string;
         let exitCode: number | null;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe' });
           forked.on('exit', code => {
             exitCode = code;
@@ -734,13 +734,13 @@ export const command = {
       describe('running it', () => {
         let stdout: string;
         let exitCode: number | null;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe' });
           forked.on('exit', code => {
             exitCode = code;
