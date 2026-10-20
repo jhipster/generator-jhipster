@@ -93,7 +93,7 @@ public class OAuth2RefreshTokensWebFilter extends OncePerRequestFilter {
         if (clientManager == null) {
             throw new IllegalStateException(
                 "No OAuth2AuthorizedClientManager bean was found. Did you include the " +
-                "org.springframework.boot:spring-boot-starter-oauth2-client dependency?"
+                    "org.springframework.boot:spring-boot-starter-oauth2-client dependency?"
             );
         }
         return clientManager.authorize(request);

@@ -43,10 +43,14 @@ public class CacheConfiguration {
         var ehcache = jHipsterProperties.getCache().getEhcache();
 
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
-            CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
-                ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
+            CacheConfigurationBuilder.newCacheConfigurationBuilder(
+                Object.class,
+                Object.class,
+                ResourcePoolsBuilder.heap(ehcache.getMaxEntries())
+            )
                 .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
-                .build());
+                .build()
+        );
     }
 
 <%_ if (enableHibernateCache) { _%>
@@ -75,7 +79,7 @@ public class CacheConfiguration {
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
-           // jhipster-needle-ehcache-add-entry
+            // jhipster-needle-ehcache-add-entry
         };
     }
 

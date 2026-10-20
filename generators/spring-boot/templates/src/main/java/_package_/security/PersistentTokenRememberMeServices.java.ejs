@@ -110,7 +110,8 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
 
     @Override
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
-        synchronized (this) { // prevent 2 authentication requests from the same user in parallel
+        synchronized (this) {
+            // prevent 2 authentication requests from the same user in parallel
             String login = null;
             UpgradedRememberMeToken upgradedToken = upgradedTokenCache.get(cookieTokens[0]);
             if (upgradedToken != null) {

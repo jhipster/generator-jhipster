@@ -93,22 +93,28 @@ public class PersistentTokenRepository {
         PersistentTokenMapper persistentTokenMapper = new PersistentTokenMapperBuilder(session).build();
         persistentTokenDao = persistentTokenMapper.persistentTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
 
-        findPersistentTokenSeriesByUserIdStmt = session.prepare("""
+        findPersistentTokenSeriesByUserIdStmt = session.prepare(
+            """
             SELECT persistent_token_series
             FROM persistent_token_by_user
-            WHERE user_id = :user_id""");
+            WHERE user_id = :user_id"""
+        );
 
         // 30 days TTL
-        insertPersistentTokenSeriesByUserIdStmt = session.prepare("""
+        insertPersistentTokenSeriesByUserIdStmt = session.prepare(
+            """
             INSERT INTO persistent_token_by_user (user_id, persistent_token_series)
             VALUES (:user_id, :persistent_token_series)
-            USING TTL 2592000""");
+            USING TTL 2592000"""
+        );
 
         // 30 days TTL
-        insertPersistentTokenStmt = session.prepare("""
+        insertPersistentTokenStmt = session.prepare(
+            """
             INSERT INTO persistent_token (series, token_date, user_agent, token_value, login, user_id, ip_address)
             VALUES (:series, :token_date, :user_agent, :token_value, :login, :user_id, :ip_address)
-            USING TTL 2592000""");
+            USING TTL 2592000"""
+        );
 
         deletePersistentTokenSeriesByUserIdStmt = session.prepare(
             "DELETE FROM persistent_token_by_user WHERE user_id = :user_id AND persistent_token_series = :persistent_token_series"
@@ -124,7 +130,8 @@ public class PersistentTokenRepository {
         statementBuilder.setString("user_id", user.getId());
         ResultSet rs = session.execute(statementBuilder.build());
         List<PersistentToken> persistentTokens = new ArrayList<>();
-        rs.all().stream()
+        rs.all()
+            .stream()
             .map(row -> row.getString("persistent_token_series"))
             .map(token -> persistentTokenDao.get(token))
             .forEach(persistentTokens::add);
@@ -138,25 +145,34 @@ public class PersistentTokenRepository {
             throw new ConstraintViolationException(violations);
         }
         BatchStatementBuilder batch = BatchStatement.builder(DefaultBatchType.LOGGED);
-        batch.addStatement(insertPersistentTokenStmt.bind()
-            .setString("series", token.getSeries())
-            .setInstant("token_date", token.getTokenDate())
-            .setString("user_agent", token.getUserAgent())
-            .setString("token_value", token.getTokenValue())
-            .setString("login", token.getLogin())
-            .setString("user_id", token.getUserId())
-            .setString("ip_address", token.getIpAddress()));
-        batch.addStatement(insertPersistentTokenSeriesByUserIdStmt.bind()
-            .setString("user_id", token.getUserId())
-            .setString("persistent_token_series", token.getSeries()));
+        batch.addStatement(
+            insertPersistentTokenStmt
+                .bind()
+                .setString("series", token.getSeries())
+                .setInstant("token_date", token.getTokenDate())
+                .setString("user_agent", token.getUserAgent())
+                .setString("token_value", token.getTokenValue())
+                .setString("login", token.getLogin())
+                .setString("user_id", token.getUserId())
+                .setString("ip_address", token.getIpAddress())
+        );
+        batch.addStatement(
+            insertPersistentTokenSeriesByUserIdStmt
+                .bind()
+                .setString("user_id", token.getUserId())
+                .setString("persistent_token_series", token.getSeries())
+        );
         session.execute(batch.build());
     }
 
     public void delete(PersistentToken token) {
         persistentTokenDao.delete(token);
-        session.execute(deletePersistentTokenSeriesByUserIdStmt.bind()
-            .setString("user_id", token.getUserId())
-            .setString("persistent_token_series", token.getSeries()));
+        session.execute(
+            deletePersistentTokenSeriesByUserIdStmt
+                .bind()
+                .setString("user_id", token.getUserId())
+                .setString("persistent_token_series", token.getSeries())
+        );
     }
 }
 

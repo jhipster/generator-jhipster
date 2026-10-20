@@ -225,8 +225,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     /**
      * Delete all the users from the database.
      */
-    public static void deleteEntities(R2dbcEntityTemplate template) {
-    }
+    public static void deleteEntities(R2dbcEntityTemplate template) {}
 <%_ } _%>
 
     /**
@@ -271,7 +270,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         numberOfUsers = null;
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
-        cacheManager.getCacheNames().stream()
+        cacheManager
+            .getCacheNames()
+            .stream()
             .map(cacheName -> this.cacheManager.getCache(cacheName))
             .filter(Objects::nonNull)
             .forEach(Cache::invalidate);
@@ -361,7 +362,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // An entity with an existing ID cannot be created, so this API call must fail
   <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/admin/users")
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
@@ -392,7 +395,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .collectList().block()<% } %>.size();
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
-        userDTO.setLogin(DEFAULT_LOGIN);// this login should already be used
+        userDTO.setLogin(DEFAULT_LOGIN); // this login should already be used
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail("anothermail@localhost");

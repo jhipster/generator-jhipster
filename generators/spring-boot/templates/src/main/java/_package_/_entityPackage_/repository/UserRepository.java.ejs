@@ -63,7 +63,7 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
     <%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey);
 
   <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")
+    @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless = "#result == null")
   <%_ } _%>
   <%_ if (databaseTypeSql) { _%>
     @EntityGraph(attributePaths = "authorities")
@@ -74,7 +74,7 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
 
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless = "#result == null")
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     @EntityGraph(attributePaths = "authorities")

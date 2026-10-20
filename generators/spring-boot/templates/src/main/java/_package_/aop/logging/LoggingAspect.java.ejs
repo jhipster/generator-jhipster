@@ -61,11 +61,13 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.
      */
-    @Pointcut("""
+    @Pointcut(
+        """
         within(@org.springframework.stereotype.Repository *)
         || within(@org.springframework.stereotype.Service *)
         || within(@org.springframework.web.bind.annotation.RestController *)
-        """)
+        """
+    )
     public void springBeanPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advice methods.
     }
@@ -128,14 +130,10 @@ public class LoggingAspect {
             Object result = joinPoint.proceed();
 <%_ if (reactive) { _%>
             if (result instanceof Mono<?> mono) {
-                return mono
-                    .doOnSuccess(value -> logExit(log, joinPoint, value))
-                    .doOnError(e -> logError(log, joinPoint, e));
+                return mono.doOnSuccess(value -> logExit(log, joinPoint, value)).doOnError(e -> logError(log, joinPoint, e));
             }
             if (result instanceof Flux<?> flux) {
-                return flux
-                    .doOnComplete(() -> logExit(log, joinPoint, "completed"))
-                    .doOnError(e -> logError(log, joinPoint, e));
+                return flux.doOnComplete(() -> logExit(log, joinPoint, "completed")).doOnError(e -> logError(log, joinPoint, e));
             }
 <%_ } _%>
             logExit(log, joinPoint, result);

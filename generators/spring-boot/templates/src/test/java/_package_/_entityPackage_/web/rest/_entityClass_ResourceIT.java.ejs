@@ -762,7 +762,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 
         // An entity with an existing ID cannot be created, so this API call must fail
   <%_ if (reactive) { _%>
-        webTestClient.post().uri(ENTITY_API_URL)
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
@@ -919,7 +921,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
         <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);<% } %>
 
         <%_ if (reactive) { _%>
-        webTestClient.post().uri(ENTITY_API_URL)
+        webTestClient
+            .post()
+            .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
@@ -1718,7 +1722,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL)
+        webTestClient
+            .put()
+            .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
@@ -1978,7 +1984,9 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
         // If URL ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.patch().uri(ENTITY_API_URL)
+        webTestClient
+            .patch()
+            .uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()

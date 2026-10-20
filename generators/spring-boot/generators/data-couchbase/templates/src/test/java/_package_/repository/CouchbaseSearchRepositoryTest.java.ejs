@@ -41,7 +41,10 @@ class CouchbaseSearchRepositoryTest {
             Arguments.of("id:A", SearchQuery.docId("A")),
             Arguments.of("id:A id:B", SearchQuery.docId("A", "B")),
             Arguments.of("hello id:A", SearchQuery.conjuncts(SearchQuery.queryString("hello"), SearchQuery.docId("A"))),
-            Arguments.of("hello id:A kitty id:B", SearchQuery.conjuncts(SearchQuery.queryString("hello kitty"), SearchQuery.docId("A", "B"))),
+            Arguments.of(
+                "hello id:A kitty id:B",
+                SearchQuery.conjuncts(SearchQuery.queryString("hello kitty"), SearchQuery.docId("A", "B"))
+            ),
             Arguments.of("hello kitty", SearchQuery.queryString("hello kitty"))
         );
     }
