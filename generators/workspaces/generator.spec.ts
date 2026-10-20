@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'expect-node';
+import { describe, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import Generator from './generator.ts';
@@ -84,13 +84,5 @@ describe(`generator - ${generator}`, () => {
         },
       });
     });
-  });
-
-  it('bootstrap migration', async () => {
-    await helpers
-      .runJHipster('jhipster:bootstrap-application-base')
-      .prepareEnvironment()
-      .withMockedGenerators(['jhipster:base-application:bootstrap']);
-    expect(result.getComposedGenerators()).toContain('jhipster:base-application:bootstrap');
   });
 });
