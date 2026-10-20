@@ -250,7 +250,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           }
 
           if (appConfig.applicationTypeMonolith && deployment.monitoring === PROMETHEUS) {
-            yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false', 'MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
+            yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
           }
 
           if (deployment.serviceDiscoveryType === EUREKA) {
