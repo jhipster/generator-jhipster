@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { startCase } from 'lodash-es';
 
 import { getFrontendAppName } from '../../lib/utils/basename.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { startCase } from '../../lib/utils/string-utils.ts';
 import { LOGIN_REGEX_JS } from '../generator-constants.ts';
 
 import type { GetWebappTranslationCallback } from './translation.ts';

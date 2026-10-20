@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
-
 import type { DerivedBooleanPropertiesOf } from '../../lib/command/types.ts';
 import { BlobTypes, type FieldType, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
 import { type ValidationType, validationTypes } from '../../lib/jhipster/index.ts';
@@ -27,7 +25,7 @@ import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
 import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { pluralize } from '../../lib/utils/string-utils.ts';
+import { kebabCase, lowerFirst, pluralize, snakeCase, startCase, upperFirst } from '../../lib/utils/string-utils.ts';
 import { formatDocAsApiDescription } from '../java/support/doc.ts';
 
 import { isFieldEnumType } from './internal/types/field-types.ts';

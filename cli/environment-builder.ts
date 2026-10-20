@@ -22,7 +22,8 @@ import { pathToFileURL } from 'node:url';
 
 import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';
-import { cloneDeep, mergeWith } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep.js';
+import mergeWith from 'lodash-es/mergeWith.js';
 import Environment, { type Store } from 'yeoman-environment';
 
 import BaseGenerator from '../generators/base/index.ts';

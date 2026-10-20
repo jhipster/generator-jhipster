@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { upperFirst } from 'lodash-es';
+import { upperFirst } from '../../../lib/utils/string-utils.ts';
 
 /**
  * Convert to Java bean name case

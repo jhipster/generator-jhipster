@@ -17,13 +17,14 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { camelCase, lowerFirst, uniqBy } from 'lodash-es';
+import uniqBy from 'lodash-es/uniqBy.js';
 
 import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
 import { mutateData } from '../../lib/utils/index.ts';
+import { camelCase, lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';

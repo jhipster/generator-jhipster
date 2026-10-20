@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
-
 import { getEntityDerivedPropertyMutations } from '../../../../lib/command/mutations.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
+import { upperFirst } from '../../../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';

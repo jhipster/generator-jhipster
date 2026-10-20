@@ -19,7 +19,7 @@
 
 import { join } from 'node:path';
 
-import { defaults } from 'lodash-es';
+import defaults from 'lodash-es/defaults.js';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { isOfficialApplicationType } from '../../lib/core/application-types.ts';

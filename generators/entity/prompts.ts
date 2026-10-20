@@ -19,10 +19,12 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
+import isArray from 'lodash-es/isArray.js';
+import uniq from 'lodash-es/uniq.js';
 
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.ts';
+import { lowerFirst, snakeCase, upperFirst } from '../../lib/utils/string-utils.ts';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import type { Field as BaseApplicationField } from '../base-application/types.ts';
 

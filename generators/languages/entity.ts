@@ -16,9 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase } from 'lodash-es';
-
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { camelCase } from '../../lib/utils/string-utils.ts';
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,

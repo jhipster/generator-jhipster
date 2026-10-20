@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { camelCase, upperFirst } from 'lodash-es';
+import { camelCase, upperFirst } from './string-utils.ts';
 
 /**
  * Calculate a hash code for a given string.

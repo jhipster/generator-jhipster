@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import { lowerFirst, upperFirst } from 'lodash-es';
-
+import { lowerFirst, upperFirst } from '../../../lib/utils/string-utils.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
 import type {
   Application as BaseApplicationApplication,

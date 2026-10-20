@@ -18,9 +18,9 @@
  */
 
 import chalk from 'chalk';
-import { camelCase } from 'lodash-es';
 
 import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
+import { camelCase } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../common/types.ts';
 

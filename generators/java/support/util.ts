@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
-
 import { getMicroserviceAppName } from '../../../lib/utils/index.ts';
+import { upperFirst } from '../../../lib/utils/string-utils.ts';
 
 /**
  * get the java main class name.

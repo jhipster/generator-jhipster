@@ -21,11 +21,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import { upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { reservedKeywords } from '../../lib/jhipster/index.ts';
+import { upperFirst } from '../../lib/utils/string-utils.ts';
 import type { Features } from '../base/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';

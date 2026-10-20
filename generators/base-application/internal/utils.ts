@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaults } from 'lodash-es';
+import defaults from 'lodash-es/defaults.js';
 
 import { Validations, databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { Field as BaseField } from '../../../lib/jhipster/types/field.ts';

@@ -19,7 +19,7 @@
 
 import { join } from 'node:path';
 
-import { merge } from 'lodash-es';
+import merge from 'lodash-es/merge.js';
 
 import BaseGenerator from '../../generators/base-core/index.ts';
 import { getPackageRoot } from '../../lib/index.ts';

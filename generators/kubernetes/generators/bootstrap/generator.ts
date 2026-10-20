@@ -20,7 +20,7 @@ import assert from 'node:assert';
 import { randomBytes } from 'node:crypto';
 
 import chalk from 'chalk';
-import { defaults } from 'lodash-es';
+import defaults from 'lodash-es/defaults.js';
 
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { convertSecretToBase64, createBase64Secret } from '../../../../lib/utils/secret.ts';

@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { lowerFirst } from 'lodash-es';
-
+import { lowerFirst } from '../../../lib/utils/string-utils.ts';
 import { formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { Field as BaseApplicationField } from '../types.d.ts';
 

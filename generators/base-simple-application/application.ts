@@ -16,9 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kebabCase, upperFirst } from 'lodash-es';
-
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { kebabCase, upperFirst } from '../../lib/utils/string-utils.ts';
 import packageJson from '../../package.json' with { type: 'json' };
 import type { WriteContext } from '../base-core/api.ts';
 import type { ProjectNameAddedApplicationProperties } from '../project-name/application.ts';

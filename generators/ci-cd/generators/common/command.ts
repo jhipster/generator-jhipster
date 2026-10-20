@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { intersection, kebabCase } from 'lodash-es';
+import intersection from 'lodash-es/intersection.js';
 
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
+import { kebabCase } from '../../../../lib/utils/string-utils.ts';
 import type { CiCdProvider } from '../../support/providers.ts';
 
 import type Generator from './generator.ts';
