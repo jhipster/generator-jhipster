@@ -19,7 +19,7 @@
 
 /* eslint-disable no-console */
 import chalk from 'chalk';
-import { camelCase } from 'lodash-es';
+import camelCase from 'lodash-es/camelCase.js';
 
 import { fieldTypes } from '../../../lib/jhipster/index.ts';
 import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.ts';

@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase, upperFirst } from 'lodash-es';
+import camelCase from 'lodash-es/camelCase.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import type { JDLRelationshipType } from '../parsing/index.ts';
 

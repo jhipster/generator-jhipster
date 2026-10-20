@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { lowerFirst, upperFirst } from 'lodash-es';
+import lowerFirst from 'lodash-es/lowerFirst.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import type { ValidationResult } from '../../base-core/api.d.ts';
 import type {

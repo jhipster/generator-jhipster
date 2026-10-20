@@ -18,7 +18,7 @@
  */
 import assert from 'node:assert';
 
-import { snakeCase } from 'lodash-es';
+import snakeCase from 'lodash-es/snakeCase.js';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';

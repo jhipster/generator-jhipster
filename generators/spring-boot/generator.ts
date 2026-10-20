@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { camelCase, lowerFirst, uniqBy } from 'lodash-es';
+import camelCase from 'lodash-es/camelCase.js';
+import lowerFirst from 'lodash-es/lowerFirst.js';
+import uniqBy from 'lodash-es/uniqBy.js';
 
 import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';

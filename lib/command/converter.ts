@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { kebabCase } from 'lodash-es';
+import kebabCase from 'lodash-es/kebabCase.js';
 
 import type {
   CliSpec,

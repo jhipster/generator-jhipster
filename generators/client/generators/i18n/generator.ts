@@ -19,7 +19,7 @@
 import { glob } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { startCase } from 'lodash-es';
+import startCase from 'lodash-es/startCase.js';
 
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';

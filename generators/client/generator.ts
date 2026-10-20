@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { mutateData } from '../../lib/utils/object.ts';

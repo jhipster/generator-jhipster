@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { lowerFirst } from 'lodash-es';
+import lowerFirst from 'lodash-es/lowerFirst.js';
 
 import { normalizeBlueprintName } from '../../../utils/blueprint-name.ts';
 

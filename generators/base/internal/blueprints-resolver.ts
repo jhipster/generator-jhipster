@@ -20,7 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import { union } from 'lodash-es';
+import union from 'lodash-es/union.js';
 import semver from 'semver';
 import type { PackageJson } from 'type-fest';
 

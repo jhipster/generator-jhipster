@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { lowerFirst } from 'lodash-es';
+import lowerFirst from 'lodash-es/lowerFirst.js';
 
 import { asJdlRelationshipType } from '../../core/basic-types/relationship-types.ts';
 import JDLRelationship from '../../core/models/jdl-relationship.ts';

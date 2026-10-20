@@ -25,7 +25,9 @@ import { mock } from 'node:test';
 import { pathToFileURL } from 'node:url';
 
 import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
-import { merge, pick, snakeCase } from 'lodash-es';
+import merge from 'lodash-es/merge.js';
+import pick from 'lodash-es/pick.js';
+import snakeCase from 'lodash-es/snakeCase.js';
 import type { EmptyObject } from 'type-fest';
 import type Environment from 'yeoman-environment';
 import type { EnvironmentOptions } from 'yeoman-environment';

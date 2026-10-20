@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { lowerFirst } from 'lodash-es';
+import lowerFirst from 'lodash-es/lowerFirst.js';
 
 import { JDLEntity } from '../../core/models/index.ts';
 import type JDLField from '../../core/models/jdl-field.ts';

@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { DockerfileParser } from 'dockerfile-ast';
-import { camelCase, kebabCase } from 'lodash-es';
+import camelCase from 'lodash-es/camelCase.js';
+import kebabCase from 'lodash-es/kebabCase.js';
 
 /**
  * Extract version properties from pom content

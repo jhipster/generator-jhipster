@@ -19,7 +19,10 @@
 import { inspect } from 'node:util';
 
 import { transform } from '@yeoman/transform';
-import { defaultsDeep, get, has, merge } from 'lodash-es';
+import defaultsDeep from 'lodash-es/defaultsDeep.js';
+import get from 'lodash-es/get.js';
+import has from 'lodash-es/has.js';
+import merge from 'lodash-es/merge.js';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 

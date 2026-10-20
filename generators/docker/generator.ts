@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { intersection } from 'lodash-es';
+import intersection from 'lodash-es/intersection.js';
 
 import { stringHashCode } from '../../lib/utils/index.ts';
 import { createFaker } from '../base-application/support/index.ts';

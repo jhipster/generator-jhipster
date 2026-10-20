@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import { merge } from '../utils/object-utils.ts';
 

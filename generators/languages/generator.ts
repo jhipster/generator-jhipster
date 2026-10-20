@@ -18,7 +18,7 @@
  */
 
 import chalk from 'chalk';
-import { padEnd } from 'lodash-es';
+import padEnd from 'lodash-es/padEnd.js';
 
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';

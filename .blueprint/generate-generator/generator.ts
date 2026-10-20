@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { camelCase, upperFirst } from 'lodash-es';
+import camelCase from 'lodash-es/camelCase.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import BaseCoreGenerator from '../../generators/base-core/index.ts';

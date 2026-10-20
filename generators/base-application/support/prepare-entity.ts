@@ -16,7 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { intersection, sortedUniq, uniq, upperFirst } from 'lodash-es';
+import intersection from 'lodash-es/intersection.js';
+import sortedUniq from 'lodash-es/sortedUniq.js';
+import uniq from 'lodash-es/uniq.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../../lib/core/application-types.ts';
 import { binaryOptions } from '../../../lib/jdl/core/built-in-options/index.ts';

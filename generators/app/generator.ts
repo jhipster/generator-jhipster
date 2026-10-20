@@ -18,7 +18,7 @@
  */
 
 import chalk from 'chalk';
-import { camelCase } from 'lodash-es';
+import camelCase from 'lodash-es/camelCase.js';
 
 import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';

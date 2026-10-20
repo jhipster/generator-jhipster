@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { intersection } from 'lodash-es';
+import intersection from 'lodash-es/intersection.js';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHANUMERIC_PATTERN, ALPHANUMERIC_UNDERSCORE_PATTERN } from '../../lib/constants/jdl.ts';

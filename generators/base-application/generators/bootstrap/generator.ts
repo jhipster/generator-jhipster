@@ -20,7 +20,7 @@ import assert from 'node:assert';
 
 import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
-import { lowerFirst } from 'lodash-es';
+import lowerFirst from 'lodash-es/lowerFirst.js';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 

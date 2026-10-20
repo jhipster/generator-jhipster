@@ -21,7 +21,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import { upperFirst } from 'lodash-es';
+import upperFirst from 'lodash-es/upperFirst.js';
 import type { Storage } from 'yeoman-generator';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { snakeCase } from 'lodash-es';
+import snakeCase from 'lodash-es/snakeCase.js';
 
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';

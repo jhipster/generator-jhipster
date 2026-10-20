@@ -17,7 +17,11 @@
  * limitations under the License.
  */
 
-import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
+import kebabCase from 'lodash-es/kebabCase.js';
+import lowerFirst from 'lodash-es/lowerFirst.js';
+import snakeCase from 'lodash-es/snakeCase.js';
+import startCase from 'lodash-es/startCase.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import type { DerivedBooleanPropertiesOf } from '../../lib/command/types.ts';
 import { BlobTypes, type FieldType, fieldTypesValues } from '../../lib/jhipster/field-types.ts';

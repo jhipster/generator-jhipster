@@ -18,7 +18,7 @@
  */
 import { isDeepStrictEqual } from 'node:util';
 
-import { upperFirst } from 'lodash-es';
+import upperFirst from 'lodash-es/upperFirst.js';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';

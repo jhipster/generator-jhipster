@@ -22,7 +22,7 @@ import { type PathOrFileDescriptor, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { execaSync } from 'execa';
-import { escapeRegExp } from 'lodash-es';
+import escapeRegExp from 'lodash-es/escapeRegExp.js';
 
 import { packageJson } from '../../lib/index.ts';
 

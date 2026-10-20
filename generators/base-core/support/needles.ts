@@ -19,7 +19,8 @@
 import assert from 'node:assert';
 
 import { transformContents } from '@yeoman/transform';
-import { escapeRegExp, kebabCase } from 'lodash-es';
+import escapeRegExp from 'lodash-es/escapeRegExp.js';
+import kebabCase from 'lodash-es/kebabCase.js';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import type { CascadedEditFileCallback, EditFileCallback } from '../api.ts';

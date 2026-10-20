@@ -18,7 +18,8 @@
  */
 import fs from 'node:fs';
 
-import { escape, min } from 'lodash-es';
+import escape from 'lodash-es/escape.js';
+import min from 'lodash-es/min.js';
 
 import { fieldTypes } from '../../lib/jhipster/index.ts';
 import type { EntityAll } from '../../lib/types/application-all.d.ts';

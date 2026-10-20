@@ -18,7 +18,7 @@
  */
 
 import chalk from 'chalk';
-import { kebabCase } from 'lodash-es';
+import kebabCase from 'lodash-es/kebabCase.js';
 import { globSync } from 'tinyglobby';
 
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';

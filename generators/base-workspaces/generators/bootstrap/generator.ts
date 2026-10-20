@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaults } from 'lodash-es';
+import defaults from 'lodash-es/defaults.js';
 
 import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../../../lib/utils/path.ts';

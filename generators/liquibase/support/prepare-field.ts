@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-import { escape } from 'lodash-es';
+import escape from 'lodash-es/escape.js';
 import type { ValueOf } from 'type-fest';
 
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';

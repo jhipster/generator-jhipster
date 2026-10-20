@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { camelCase, upperFirst } from 'lodash-es';
+import camelCase from 'lodash-es/camelCase.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 import type { Simplify } from 'type-fest';
 
 import type { DerivedProperty, JHipsterChoices } from '../command/types.ts';

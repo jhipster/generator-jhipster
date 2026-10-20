@@ -91,6 +91,18 @@ export default defineConfig(
       ],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-this-alias': 'off',
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'lodash-es',
+              message: "Import the module of the function, like 'lodash-es/camelCase.js': the index imports every module of lodash-es.",
+              allowTypeImports: true,
+            },
+          ],
+        },
+      ],
     },
   },
   {

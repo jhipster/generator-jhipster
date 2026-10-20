@@ -20,7 +20,7 @@
 import { join } from 'node:path';
 import { Duplex } from 'node:stream';
 
-import { upperFirst } from 'lodash-es';
+import upperFirst from 'lodash-es/upperFirst.js';
 import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';

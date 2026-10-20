@@ -20,7 +20,8 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { mergeWith, upperFirst } from 'lodash-es';
+import mergeWith from 'lodash-es/mergeWith.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 import type { Merge } from 'type-fest';
 
 import { YO_RC_FILE, type YoRcConfigValue, type YoRcFileContent } from '../constants/yeoman.ts';

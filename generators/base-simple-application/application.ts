@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kebabCase, upperFirst } from 'lodash-es';
+import kebabCase from 'lodash-es/kebabCase.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import packageJson from '../../package.json' with { type: 'json' };

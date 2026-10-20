@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { snakeCase } from 'lodash-es';
+import snakeCase from 'lodash-es/snakeCase.js';
 
 import validations from '../jdl/core/built-in-options/validations.ts';
 

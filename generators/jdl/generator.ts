@@ -19,7 +19,7 @@
 import { readFile } from 'node:fs/promises';
 import { extname } from 'node:path';
 
-import { upperFirst } from 'lodash-es';
+import upperFirst from 'lodash-es/upperFirst.js';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, type MemFsEditorFile, create as createMemFsEditor } from 'mem-fs-editor';
 import { isFilePending } from 'mem-fs-editor/state';

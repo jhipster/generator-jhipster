@@ -17,7 +17,10 @@
  * limitations under the License.
  */
 
-import { capitalize, kebabCase, lowerFirst, upperFirst } from 'lodash-es';
+import capitalize from 'lodash-es/capitalize.js';
+import kebabCase from 'lodash-es/kebabCase.js';
+import lowerFirst from 'lodash-es/lowerFirst.js';
+import upperFirst from 'lodash-es/upperFirst.js';
 
 import { customCamelCase } from '../../../utils/string-utils.ts';
 import { asJdlRelationshipType } from '../../core/basic-types/relationship-types.ts';

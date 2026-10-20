@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaults, kebabCase, lowerFirst } from 'lodash-es';
+import defaults from 'lodash-es/defaults.js';
+import kebabCase from 'lodash-es/kebabCase.js';
+import lowerFirst from 'lodash-es/lowerFirst.js';
 
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';

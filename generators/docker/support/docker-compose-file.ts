@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import ejs from 'ejs';
-import { mergeWith } from 'lodash-es';
+import mergeWith from 'lodash-es/mergeWith.js';
 import { Scalar, isMap, isScalar, isSeq, parse as parseYaml, parseDocument } from 'yaml';
 
 import type { DockerComposeFile, DockerComposeService } from '../types.ts';
