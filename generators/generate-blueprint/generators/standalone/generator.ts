@@ -269,10 +269,10 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
             await this.spawn('npm', ['run', 'update-snapshot']);
           } catch (error) {
             if (generateSnapshots !== undefined) {
-              // We are forcing to generate snapshots fail the generation.
+              // Snapshot generation was explicitly requested, fail the generation.
               throw error;
             }
-            this.log.warn('Fail to generate snapshots');
+            this.log.warn('Failed to generate snapshots');
           }
         }
 
@@ -302,7 +302,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
     return this.asEndTaskGroup({
       end({ application }) {
         this.log.log(`${chalk.bold.green('##### USAGE #####')}
-To begin to work:
+To start working:
 - launch: ${chalk.yellow.bold('npm install')}
 - link: ${chalk.yellow.bold('npm link')}
 - link JHipster: ${chalk.yellow.bold('npm link generator-jhipster')}

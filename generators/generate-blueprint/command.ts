@@ -67,7 +67,7 @@ const command = {
       scope: 'storage',
     },
     skipWorkflows: {
-      description: 'Skip github workflows',
+      description: 'Skip GitHub workflows',
       cli: {
         type: Boolean,
       },
@@ -82,14 +82,14 @@ const command = {
     },
     githubRepository: {
       cli: {
-        description: 'Github Repository',
+        description: 'GitHub repository',
         type: String,
       },
       scope: 'storage',
     },
     githubWorkflows: {
       cli: {
-        description: 'Generate github workflows',
+        description: 'Generate GitHub workflows',
         type: Boolean,
       },
       scope: 'storage',
