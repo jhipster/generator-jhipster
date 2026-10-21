@@ -82,13 +82,17 @@ const describeResolved = (resolved: ResolvedSample, workflow: string, item: GitH
   };
 };
 
+/** A sample to describe, by its name and its job name; every sample when omitted. */
+type SampleFilter = (name: string, jobName: string) => boolean;
+
 /** Samples of the json workflows (`workflow-samples/<workflow>.json`), with the matrix values the workflow computes. */
-const describeWorkflowSamples = (workflow: string): SampleDescription[] => {
+const describeWorkflowSamples = (workflow: string, filter?: SampleFilter): SampleDescription[] => {
   const samples: WorkflowSample[] = Object.values(getWorkflowSamples([workflow])[workflow]);
   const group = isDaily(workflow) ? buildDailyWorkflowMatrix(workflow) : buildWorkflowMatrix(samples);
   const matrix = convertToGitHubMatrix(group, { randomEnvironment: !isDaily(workflow) });
-  return samples.map(sample => {
+  return samples.flatMap(sample => {
     const jobName = sample['job-name'] ?? sample.name;
+    if (filter && !filter(sample.name, jobName)) return [];
     return describeResolved(
       resolveSample(sample.name),
       workflow,
@@ -98,12 +102,14 @@ const describeWorkflowSamples = (workflow: string): SampleDescription[] => {
 };
 
 /** Samples of the group workflows (`github-build-matrix/samples/<workflow>.ts`). */
-const describeGroupSamples = (workflow: string): SampleDescription[] =>
+const describeGroupSamples = (workflow: string, filter?: SampleFilter): SampleDescription[] =>
   describeGithubSamplesGroup({
     samplesGroupFolder: githubSamplesGroupFolder,
     group: workflow,
     samples: samplesGroups[workflow] ?? {},
     root: packageRoot,
+    // The job of a sample of a group is named after it.
+    filter: filter && (name => filter(name, name)),
     describeSample: ({ name, item, matrix }) => {
       // A sample of the contract, a jdl or a sample-type, is described by it.
       if (item.jdl || item['sample-type']) return undefined;
@@ -130,19 +136,27 @@ export const WORKFLOWS = [
 /**
  * Describe the CI samples: what each job generates and the environment it runs on.
  */
-export const describeSamples = ({ workflow }: { workflow?: string } = {}): SampleDescription[] =>
+export const describeSamples = ({ workflow, filter }: { workflow?: string; filter?: SampleFilter } = {}): SampleDescription[] =>
   (workflow ? [workflow] : WORKFLOWS).flatMap(current =>
-    JSON_WORKFLOWS.has(current) ? describeWorkflowSamples(current) : describeGroupSamples(current),
+    JSON_WORKFLOWS.has(current) ? describeWorkflowSamples(current, filter) : describeGroupSamples(current, filter),
+  );
+
+/** The names of the samples of a workflow, every workflow when omitted, without describing them. */
+const sampleNames = (workflow?: string): string[] =>
+  (workflow ? [workflow] : WORKFLOWS).flatMap(current =>
+    JSON_WORKFLOWS.has(current) ?
+      Object.values(getWorkflowSamples([current])[current]).map(sample => sample.name)
+    : Object.keys(samplesGroups[current] ?? {}),
   );
 
 /** The samples of a workflow, every workflow when omitted, or the sample of a name or a job name. */
 export const findSamples = ({ sampleName, workflow }: { sampleName?: string; workflow?: string } = {}): SampleDescription[] => {
-  const samples = describeSamples({ workflow });
-  if (!sampleName) return samples;
-  const found = samples.filter(sample => sample.name === sampleName || sample.jobName === sampleName);
+  if (!sampleName) return describeSamples({ workflow });
+  // Only the samples of the name are described.
+  const found = describeSamples({ workflow, filter: (name, jobName) => name === sampleName || jobName === sampleName });
   if (found.length === 0) {
     // The names, so the caller, an AI agent too, can correct the name by itself.
-    throw new Error(`Sample ${sampleName} not found, expected one of ${samples.map(sample => sample.name).join(', ')}`);
+    throw new Error(`Sample ${sampleName} not found, expected one of ${sampleNames(workflow).join(', ')}`);
   }
   return found;
 };
