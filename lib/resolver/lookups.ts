@@ -75,8 +75,8 @@ export const lookupGeneratorsMeta = (store: Pick<Store, 'getGeneratorsMeta'> = g
   const generatorPath = ({ resolved }: ImportableGeneratorMeta) => relative(packageRoot, resolved).replaceAll('\\', '/');
   return (
     Object.values(store.getGeneratorsMeta())
-      // A generator registered as a class, like the aliases, has no module to import a command from.
-      .filter((meta): meta is ImportableGeneratorMeta => Boolean(meta.resolved && meta.requireModule))
+      // A generator registered as a class, like the aliases, has no sibling command module.
+      .filter((meta): meta is ImportableGeneratorMeta => Boolean(meta.resolved && meta.requireSibling))
       .sort((a, b) => Number(generatorPath(a) > generatorPath(b)) - Number(generatorPath(a) < generatorPath(b)))
   );
 };

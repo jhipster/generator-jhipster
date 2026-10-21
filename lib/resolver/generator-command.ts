@@ -21,11 +21,15 @@ import type { StoreGeneratorMeta } from 'yeoman-environment';
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
 /**
- * The command of a generator of a store: its sibling `command` module, read without loading the generator and its
- * imports, else the command its module exports (a generator without a sibling command module, like a blueprint one).
+ * The command of a generator of a store: the default export of its sibling `command` module, read without loading the
+ * generator and its imports. A generator without a `command` module has no command.
  */
-export const requireGeneratorCommand = (
-  meta: Pick<StoreGeneratorMeta, 'requireSibling' | 'requireModule'>,
-): JHipsterCommandDefinition | undefined =>
-  (meta.requireSibling?.('command') as { default?: JHipsterCommandDefinition } | undefined)?.default ??
-  (meta.requireModule?.() as { command?: JHipsterCommandDefinition } | undefined)?.command;
+export const requireGeneratorCommand = (meta: Pick<StoreGeneratorMeta, 'requireSibling'>): JHipsterCommandDefinition | undefined =>
+  (meta.requireSibling?.('command') as { default?: JHipsterCommandDefinition } | undefined)?.default;
+
+/** The command of a generator of a store, like requireGeneratorCommand, imported for a command that can not be required. */
+export const importGeneratorCommand = async (meta: object | undefined): Promise<JHipsterCommandDefinition | undefined> =>
+  (
+    (await (meta as Pick<StoreGeneratorMeta, 'importSibling'> | undefined)?.importSibling?.('command')) as
+      { default?: JHipsterCommandDefinition } | undefined
+  )?.default;

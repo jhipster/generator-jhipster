@@ -204,8 +204,11 @@ describe(`generator - ${generator}`, () => {
   const BaseGenerator = await env.requireGenerator('jhipster:base');
   return class extends BaseGenerator {};
 };
-export const command = { configs: { fooOption: { jdl: { type: 'string', tokenType: 'NAME' }, scope: 'storage' } } };
 `,
+        files: {
+          'generators/app/command.js': `export default { configs: { fooOption: { jdl: { type: 'string', tokenType: 'NAME' }, scope: 'storage' } } };
+`,
+        },
       });
       const inline = 'application { config { baseName foo fooOption bar } }';
 

@@ -70,8 +70,8 @@ const cliBlueprintFiles = {
     }
   };
 };
-
-export const command = {
+`,
+  'generators/foo/command.js': `export default {
   configs: {
     fooBar: {
       cli: {
@@ -104,8 +104,8 @@ const cliSharedBlueprintFiles = {
     get [BaseGenerator.INITIALIZING]() {}
   };
 };
-
-export const command = {
+`,
+  'generators/bar/command.js': `export default {
   configs: {
     foo: {
       cli: {
@@ -243,8 +243,8 @@ describe('cli', () => {
         if (namespace === 'jhipster:mocked') {
           return {
             namespace,
-            importModule: async () => ({ command }),
-            requireModule: () => ({ command }),
+            importSibling: async (name: string) => (name === 'command' ? { default: command } : undefined),
+            requireSibling: (name: string) => (name === 'command' ? { default: command } : undefined),
             resolved: import.meta.filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
@@ -642,8 +642,9 @@ describe('cli', () => {
       }
     };
   };
-
-export const command = {
+  `,
+                files: {
+                  'generators/app/command.js': `export default {
   configs: {
     fooBar: {
       cli: {
@@ -654,7 +655,8 @@ export const command = {
     },
   },
 };
-  `,
+`,
+                },
               }),
             )
             .commitFiles();

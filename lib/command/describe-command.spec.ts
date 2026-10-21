@@ -36,7 +36,12 @@ const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) 
   const generators = lookupGeneratorCommands();
   return (namespace: string): StoreGeneratorMeta | undefined => {
     const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
-    return command ? ({ namespace, requireModule: () => ({ command }) } as unknown as StoreGeneratorMeta) : undefined;
+    return command ?
+        ({
+          namespace,
+          requireSibling: (name: string) => (name === 'command' ? { default: command } : undefined),
+        } as unknown as StoreGeneratorMeta)
+      : undefined;
   };
 };
 
@@ -152,7 +157,7 @@ describe('command - describe command', () => {
       store.getGeneratorsMeta()['jhipster-foo:server'] = {
         namespace: 'jhipster-foo:server',
         resolved: '/generator-jhipster-foo/generators/server/index.js',
-        requireModule: () => ({ command: blueprintCommand }),
+        requireSibling: (name: string) => (name === 'command' ? { default: blueprintCommand } : undefined),
       } as any;
 
       const owners = findConfigOwners('databaseType', { store });
@@ -164,9 +169,8 @@ describe('command - describe command', () => {
   });
 
   describe('with a blueprint', () => {
-    const blueprintGenerator = (configs: string) => `export const command = { configs: ${configs} };
-export const createGenerator = async env => env.requireGenerator('jhipster:base');
-`;
+    const blueprintGenerator = "export const createGenerator = async env => env.requireGenerator('jhipster:base');\n";
+    const blueprintCommand = (configs: string) => `export default { configs: ${configs} };\n`;
     let resolver: GeneratorsResolver;
     let blueprintCommands: Awaited<ReturnType<GeneratorsResolver['loadCommands']>>;
 
@@ -178,10 +182,12 @@ export const createGenerator = async env => env.requireGenerator('jhipster:base'
             generator: [],
             files: {
               'cli/commands.js': "export default { foo: { desc: 'Foo of the blueprint' } };\n",
-              'generators/foo/index.js': blueprintGenerator(
+              'generators/foo/index.js': blueprintGenerator,
+              'generators/foo/command.js': blueprintCommand(
                 "{ fooOption: { description: 'Foo option', cli: { type: Boolean }, scope: 'storage' } }",
               ),
-              'generators/git/index.js': blueprintGenerator("{ gitOption: { cli: { type: Boolean }, scope: 'storage' } }"),
+              'generators/git/index.js': blueprintGenerator,
+              'generators/git/command.js': blueprintCommand("{ gitOption: { cli: { type: Boolean }, scope: 'storage' } }"),
             },
           }),
         )
