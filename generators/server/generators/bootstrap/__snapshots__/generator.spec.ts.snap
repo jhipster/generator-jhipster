@@ -5,6 +5,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "addLanguageCallbacks": Any<Array>,
   "addOpenapiGeneratorPlugin": true,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,

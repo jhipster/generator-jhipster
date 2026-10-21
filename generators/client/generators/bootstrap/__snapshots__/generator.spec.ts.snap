@@ -4,6 +4,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,

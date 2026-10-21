@@ -5,6 +5,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "addLanguageCallbacks": Any<Array>,
   "addOpenapiGeneratorPlugin": true,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,

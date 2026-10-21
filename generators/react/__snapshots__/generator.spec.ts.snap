@@ -4,6 +4,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "gateway",
   "applicationTypeAny": true,
   "applicationTypeGateway": true,
@@ -792,6 +793,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "gateway",
   "applicationTypeAny": true,
   "applicationTypeGateway": true,
@@ -1603,6 +1605,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "microservice",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,
@@ -2404,6 +2407,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "microservice",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,
@@ -3225,6 +3229,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,
@@ -4094,6 +4099,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,
@@ -4881,6 +4887,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,

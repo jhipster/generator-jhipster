@@ -5,6 +5,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "addLanguageCallbacks": Any<Array>,
   "addOpenapiGeneratorPlugin": true,
   "anyEntityHasRelationshipWithUser": false,
+  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,
