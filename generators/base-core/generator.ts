@@ -49,6 +49,7 @@ import {
   getCommandDerivedPropertyMutations,
 } from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
+import { requireGeneratorCommand } from '../../lib/resolver/generator-command.ts';
 import {
   CRLF,
   LF,
@@ -455,9 +456,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         const commandsToLoad = this.#commandsToLoad;
         if (!commandsToLoad.has(namespace)) {
           commandsToLoad.add(namespace);
-          const commandMeta = this.env.getGeneratorMeta(namespace);
-          const commandModule: any = await commandMeta?.importModule?.();
-          const command = commandModule?.command as JHipsterCommandDefinition | undefined;
+          const command = requireGeneratorCommand(this.env.getGeneratorMeta(namespace));
           if (command) {
             result.push(command);
             if (loadImports) {
@@ -552,7 +551,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   async #getCurrentJHipsterCommand(): Promise<JHipsterCommandDefinition> {
     if (!this.generatorCommand) {
-      const { command } = ((await this._meta?.importModule?.()) ?? {}) as any;
+      const command = requireGeneratorCommand(this._meta);
       if (!command) {
         throw new Error(`Command not found for generator ${this.options.namespace}`);
       }

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { requireGeneratorCommand } from '../resolver/generator-command.ts';
 import { lookupGeneratorsMeta } from '../resolver/lookups.ts';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
@@ -29,9 +30,9 @@ export const lookupCommandsConfigs = (options?: { filter: (config: JHipsterConfi
     jhipsterConfigs = {};
     for (const meta of lookupGeneratorsMeta()) {
       try {
-        const index = meta.requireModule!() as { command?: { configs?: JHipsterConfigs } };
-        if (index.command?.configs) {
-          Object.assign(jhipsterConfigs, index.command?.configs);
+        const command = requireGeneratorCommand(meta);
+        if (command?.configs) {
+          Object.assign(jhipsterConfigs, command.configs);
         }
       } catch (error) {
         throw new Error(`Error loading configs from ${meta.resolved}`, { cause: error });

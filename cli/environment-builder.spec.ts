@@ -57,8 +57,8 @@ const cliBlueprintFiles = {
     }
   };
 };
-
-export const command = {
+`,
+  'generators/foo/command.js': `export default {
   configs: {
     fooBar: {
       cli: {
@@ -91,8 +91,8 @@ const cliSharedBlueprintFiles = {
     get [BaseGenerator.INITIALIZING]() {}
   };
 };
-
-export const command = {
+`,
+  'generators/bar/command.js': `export default {
   configs: {
     foo: {
       cli: {

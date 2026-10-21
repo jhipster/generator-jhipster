@@ -20,6 +20,8 @@ import type { StoreGeneratorMeta } from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
+import { requireGeneratorCommand } from './generator-command.ts';
+
 export type GeneratorDependency = {
   /** Namespace as requested, `app`, `jhipster:spring-boot:cache` or `jhipster-foo:app` for a blueprint override. */
   namespace: string;
@@ -38,14 +40,12 @@ export type ResolveGeneratorDependenciesOptions = {
   onMissing?: (namespace: string) => void;
 };
 
-type JHipsterModule = { command?: JHipsterCommandDefinition };
-
 /**
  * Resolve the generators contributing options to a command the way the cli does: the generators, their `import`s
  * recursively, and the blueprint generators overriding them (a blueprint command with `override` replaces the
  * original). The result is ordered as the cli registers the options.
  *
- * Synchronous: the modules are loaded through `requireModule` of the store metas, which throws for a module that
+ * Synchronous: the commands are loaded with `require` (the sibling `command` module of each generator), which throws for a module that
  * cannot be required - a generator, of a blueprint too, has to be loadable with `require`.
  */
 export const resolveGeneratorDependencies = (
@@ -63,18 +63,18 @@ export const resolveGeneratorDependencies = (
       if (!blueprintNamespace) onMissing?.(namespace);
       return undefined;
     }
-    const module = meta.requireModule?.() as JHipsterModule | undefined;
-    dependencies.push({ namespace, meta, blueprintNamespace, command: module?.command });
-    return module;
+    const command = requireGeneratorCommand(meta);
+    dependencies.push({ namespace, meta, blueprintNamespace, command });
+    return command;
   };
 
   const lookup = ({ namespace, blueprintNamespace }: { namespace: string; blueprintNamespace?: string }) => {
     const lookupGeneratorAndImports = (options: { namespace: string; blueprintNamespace?: string }) => {
-      const module = register(options);
-      for (const imported of module?.command?.import ?? []) {
+      const command = register(options);
+      for (const imported of command?.import ?? []) {
         lookup({ namespace: imported, blueprintNamespace: options.blueprintNamespace });
       }
-      return module?.command?.override;
+      return command?.override;
     };
 
     let overridden = false;
