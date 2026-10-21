@@ -18,7 +18,7 @@
  */
 import { relative } from 'node:path';
 
-import { Store, type StoreGeneratorMeta } from 'yeoman-environment';
+import { Store, type StoreGeneratorMeta } from 'yeoman-environment/store';
 
 import { getPackageRoot, isDistFolder } from '../index.ts';
 
