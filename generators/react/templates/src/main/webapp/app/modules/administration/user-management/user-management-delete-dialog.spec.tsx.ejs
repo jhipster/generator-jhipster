@@ -1,0 +1,68 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+
+import { deleteUser, getUser } from './user-management.reducer';
+import UserManagementDeleteDialog from './user-management-delete-dialog';
+
+vi.mock('./user-management.reducer', () => ({
+  __esModule: true,
+  default: (state = { user: { login: 'user' } }) => state,
+  getUser: vi.fn(() => ({ type: 'userManagement/getUser' })),
+  deleteUser: vi.fn(() => ({ type: 'userManagement/deleteUser' })),
+}));
+
+const store = configureStore({
+  reducer: {
+    userManagement: (state = { user: { login: 'user' } }) => state,
+  },
+});
+
+const renderDialog = () =>
+  render(
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/admin/user-management/user/delete']}>
+        <Routes>
+          <Route path="/admin/user-management" element={<div>user-management-list</div>} />
+          <Route path="/admin/user-management/:login/delete" element={<UserManagementDeleteDialog />} />
+        </Routes>
+      </MemoryRouter>
+    </Provider>,
+  );
+
+describe('UserManagementDeleteDialog', () => {
+  it('should load the user on init', () => {
+    renderDialog();
+
+    expect(getUser).toHaveBeenCalledWith('user');
+  });
+
+  it('should navigate to the user management list after confirming the deletion', () => {
+    renderDialog();
+
+    fireEvent.click(document.querySelector('[data-cy="entityConfirmDeleteButton"]')!);
+
+    expect(deleteUser).toHaveBeenCalledWith('user');
+    expect(screen.getByText('user-management-list')).toBeTruthy();
+  });
+});
