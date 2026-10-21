@@ -24,7 +24,7 @@ import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
 import { mutateData } from '../../lib/utils/index.ts';
-import { camelCase, lowerFirst } from '../../lib/utils/string-utils.ts';
+import { lowerFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
 import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
@@ -479,8 +479,6 @@ ${classProperties
         mutateData(entity, getEntityDerivedPropertyMutations(command.entity), {
           entityPersistenceLayer: true,
           entityRestLayer: true,
-          entityAlertName: ({ clientRootFolder, skipUiGrouping, entityClass, entityInstance }) =>
-            clientRootFolder && !skipUiGrouping ? camelCase(`${clientRootFolder}${entityClass}`) : entityInstance,
           entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),
           entitySpringReadPreAuthorize: hasAnyAuthority([
             ...(entity.entityAuthority?.split(',') ?? []),
