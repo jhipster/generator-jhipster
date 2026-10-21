@@ -18,7 +18,8 @@
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
-import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from '../../constants.ts';
+import { DOCKER_COMPOSE_SOURCES_DIR, SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from '../../constants.ts';
+import { createDockerDeploymentServices, mergeDockerComposeFile } from '../../support/index.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
@@ -27,7 +28,12 @@ import type {
   Source as DockerSource,
 } from '../../types.ts';
 
-import { type DockerComposeApplication, addDockerComposeFile, springBootIgnore } from './internal/docker-compose-files.ts';
+import {
+  type DockerComposeApplication,
+  addDockerComposeFile,
+  applicationEnvironment,
+  springBootIgnore,
+} from './internal/docker-compose-files.ts';
 
 export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
   DockerApplication,
@@ -177,7 +183,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
       app({ application }) {
         const app = application as DockerComposeApplication;
         if (!app.backendTypeSpringBoot && !app.dockerServices.includes('app')) return;
-        const { lowercaseBaseName, serverPort, dockerApplicationEnvironment, backendTypeSpringBoot } = app;
+        const { lowercaseBaseName, serverPort, dockerApplicationEnvironment } = app;
         // The services the application waits for, in the order the docker generator added them to the `app` file.
         const dependencies: [string, unknown, string][] = [
           ['cassandra', app.databaseTypeCassandra, SERVICE_HEALTHY],
@@ -201,19 +207,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
         addDockerComposeFile(app, 'app', {
           app: {
             image: lowercaseBaseName,
-            environment: [
-              ...Object.entries(dockerApplicationEnvironment).map(([key, value]) => `${key}=${value ?? ''}`),
-              ...(backendTypeSpringBoot && app.cacheProviderMemcached ? ['JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211'] : []),
-              ...(backendTypeSpringBoot && app.cacheProviderRedis ?
-                ['JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379', 'JHIPSTER_CACHE_REDIS_CLUSTER=false']
-              : []),
-              ...(backendTypeSpringBoot && app.searchEngineElasticsearch ? ['SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200'] : []),
-              ...(backendTypeSpringBoot && app.messageBrokerKafka ? ['SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092'] : []),
-              ...(backendTypeSpringBoot && app.messageBrokerPulsar ?
-                ['SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650', 'SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080']
-              : []),
-              ...(app.cacheProviderInfinispan ? ['JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true'] : []),
-            ],
+            environment: applicationEnvironment(app, dockerApplicationEnvironment, ''),
             ...(app.applicationTypeMonolith || app.applicationTypeGateway ? { ports: [`127.0.0.1:${serverPort}:${serverPort}`] } : {}),
             healthcheck: {
               test: [
@@ -227,6 +221,33 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
             ...(Object.keys(dependsOn).length > 0 ? { depends_on: dependsOn } : {}),
           },
         });
+      },
+      deploymentServices({ application }) {
+        const app = application as DockerComposeApplication;
+        const { dockerComposeFiles, dockerDeploymentServicePrefix: servicePrefix } = app;
+        // The services of the application, the other ones (like keycloak) being shared by the applications of a deployment.
+        const serviceNames = new Set(Object.values(dockerComposeFiles).flatMap(({ data }) => Object.keys(data.services ?? {})));
+        const deploymentEnvironment = applicationEnvironment(
+          app,
+          { ...app.dockerApplicationEnvironment, ...app.dockerDeploymentEnvironment },
+          servicePrefix,
+        );
+        for (const file of Object.values(dockerComposeFiles)) {
+          const { data } = file;
+          const deploymentData =
+            data.services?.app ?
+              { ...data, services: { ...data.services, app: { ...data.services.app, environment: deploymentEnvironment } } }
+            : data;
+          const { services } = mergeDockerComposeFile(
+            { ...file, data: deploymentData },
+            this.fs.read(this.fetchFromInstalledJHipster(DOCKER_COMPOSE_SOURCES_DIR, file.source)),
+          );
+          file.deploymentServices = createDockerDeploymentServices(services, {
+            applicationServiceName: app.lowercaseBaseName,
+            servicePrefix,
+            isApplicationService: serviceName => serviceNames.has(serviceName),
+          });
+        }
       },
     });
   }

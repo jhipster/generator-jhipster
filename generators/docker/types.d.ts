@@ -47,6 +47,11 @@ export type DockerComposeServiceConfig = {
 export type DockerComposeFile = {
   source: string;
   data: { name?: string; services?: Record<string, DockerComposeServiceConfig> };
+  /**
+   * The services of the file as a deployment uses them, by the name the deployment gives them: its template merged with
+   * its data, the services the application depends on and the hosts of its variables named alike.
+   */
+  deploymentServices?: Record<string, DockerComposeServiceConfig>;
 };
 
 export type Application = BaseSimpleApplicationApplication &
