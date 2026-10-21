@@ -24,6 +24,7 @@ export {
   type SampleGroupSummary,
   type SampleJDL,
   type SampleSummary,
+  describeChangedSamples,
   describeSample,
   describeSampleGroup,
   describeSampleGroups,
