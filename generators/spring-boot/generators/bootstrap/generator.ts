@@ -118,8 +118,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         // The variables of the database, with the host of its service: its name in the docker compose files of the
         // application, `<application>-<service>` in a deployment.
-        const databaseEnvironment = (hostPrefix: string) => {
-          const environment: Record<string, string | undefined> = {};
+        const addDatabaseEnvironment = (environment: Record<string, string>, hostPrefix: string) => {
           if (application.databaseTypeSql) {
             const databaseName =
               application.prodDatabaseTypeMysql || application.prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
@@ -129,7 +128,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
               databaseName,
             });
             if (application.reactive) {
-              Object.assign(environment, {
+              mutateData(environment as any, {
                 SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType!, {
                   hostname,
                   databaseName,
@@ -138,22 +137,22 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
                 SPRING_R2DBC_PASSWORD: application.prodDatabasePassword,
               });
             } else {
-              Object.assign(environment, {
+              mutateData(environment as any, {
                 SPRING_DATASOURCE_URL: jdbcUrl,
                 SPRING_DATASOURCE_USERNAME: application.prodDatabaseUsername,
                 SPRING_DATASOURCE_PASSWORD: application.prodDatabasePassword,
               });
             }
-            Object.assign(environment, {
+            mutateData(environment as any, {
               SPRING_LIQUIBASE_URL: jdbcUrl,
             });
           } else if (application.databaseTypeMongodb) {
             const mongodbUri = `mongodb://${hostPrefix}mongodb:27017/${application.baseName}`;
-            Object.assign(environment, {
+            mutateData(environment as any, {
               SPRING_MONGODB_URI: mongodbUri,
             });
           } else if (application.databaseTypeCouchbase) {
-            Object.assign(environment, {
+            mutateData(environment as any, {
               SPRING_COUCHBASE_USERNAME: 'Administrator',
               SPRING_COUCHBASE_PASSWORD: 'password',
               SPRING_COUCHBASE_CONNECTION_STRING: `${hostPrefix}couchbase`,
@@ -161,24 +160,23 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
               JHIPSTER_SLEEP: '20', // Let database to start
             });
           } else if (application.databaseTypeNeo4j) {
-            Object.assign(environment, {
+            mutateData(environment as any, {
               SPRING_NEO4J_URI: `bolt://${hostPrefix}neo4j:7687`,
             });
             if (application.databaseMigrationLiquibase) {
-              Object.assign(environment, {
+              mutateData(environment as any, {
                 SPRING_LIQUIBASE_URL: `jdbc:neo4j:bolt://${hostPrefix}neo4j:7687`,
               });
             }
           } else if (application.databaseTypeCassandra) {
-            Object.assign(environment, {
+            mutateData(environment as any, {
               SPRING_CASSANDRA_CONTACTPOINTS: `${hostPrefix}cassandra`,
               JHIPSTER_SLEEP: '10', // Let migration complete
             });
           }
-          return environment;
         };
-        mutateData(dockerApplicationEnvironment as any, databaseEnvironment(''));
-        mutateData(application.dockerDeploymentEnvironment as any, databaseEnvironment(application.dockerDeploymentServicePrefix));
+        addDatabaseEnvironment(dockerApplicationEnvironment, '');
+        addDatabaseEnvironment(application.dockerDeploymentEnvironment, application.dockerDeploymentServicePrefix);
       },
     });
   }
