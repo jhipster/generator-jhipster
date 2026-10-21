@@ -377,6 +377,18 @@ describe('custom objects', () => {
         },
       },
       QuoteLine: { type: 'record', fields: { amount: { type: 'BigDecimal' } } },
+      DiscountedQuote: {
+        type: 'record',
+        fields: {
+          quote: {
+            type: {
+              $ref: '#/objects/Quote',
+              documentation: 'The quote with a discount.',
+              fields: { discount: { type: 'BigDecimal' }, total: { type: 'Long' } },
+            },
+          },
+        },
+      },
       Coupon: { type: 'record', fields: { code: { type: 'String', validations: { maxlength: 20 } } } },
     };
     let services: any[];
@@ -426,7 +438,7 @@ describe('custom objects', () => {
 
     it('gives the objects of the type of the custom object', () => {
       expect(services.map(service => service.name)).toEqual(['OrderCheckout']);
-      expect(generator.findObjects('record').map(record => record.name)).toEqual(['Coupon', 'Quote', 'QuoteLine']);
+      expect(generator.findObjects('record').map(record => record.name)).toEqual(['Coupon', 'DiscountedQuote', 'Quote', 'QuoteLine']);
     });
 
     it('gives the configuration of an object as declared', () => {
@@ -459,6 +471,23 @@ describe('custom objects', () => {
     it('embeds an object referencing itself', () => {
       const quote = generator.getObject('Quote');
       expect(quote.fields!.parent.type).toBe(quote);
+    });
+
+    it('merges the fields next to a reference over a copy of the referenced object', () => {
+      const quote = generator.getObject('Quote');
+      const discounted = generator.getObject('DiscountedQuote').fields!.quote.type;
+      expect(discounted).not.toBe(quote);
+      expect(discounted.name).toBe('Quote');
+      expect(discounted.documentation).toBe('The quote with a discount.');
+      expect(Object.keys(discounted.fields)).toEqual(['total', 'lines', 'tags', 'parent', 'discount']);
+      expect(discounted.fields.total.type).toBe('Long');
+      expect(discounted.fields.discount.type).toBe('BigDecimal');
+      // The objects the referenced one references are kept, and the referenced object is not changed.
+      expect(discounted.fields.lines.type[0]).toBe(generator.getObject('QuoteLine'));
+      expect(discounted.fields.parent.type).toBe(quote);
+      expect(quote.documentation).toBeUndefined();
+      expect(quote.fields!.total.type).toBe('BigDecimal');
+      expect(quote.fields!.discount).toBeUndefined();
     });
 
     it('fails for an object not declared', () => {

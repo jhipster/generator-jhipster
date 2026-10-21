@@ -201,7 +201,9 @@ items:
 
 - `getObjectConfig(name)` gives the configuration of an object as declared;
 - `getObject(name)` gives the object, with its `name`, and the objects and the entities it references embedded in place of
-  their reference, each the same instance wherever it is referenced, an entity the one the application prepares;
+  their reference, each the same instance wherever it is referenced, an entity the one the application prepares; a
+  reference with other fields (`{ "$ref": "#/objects/Quote", "documentation": "..." }`) gives a copy of the referenced
+  one with the fields merged over it, the objects and the entities it references kept;
 - `findObjects(type)` gives the objects of a type, sorted by name.
 
 The type of an object is the name of the custom object handling it: its getter gives `findObjects(<name>)`, and its

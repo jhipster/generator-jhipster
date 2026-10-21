@@ -308,16 +308,22 @@ export default class BaseApplicationGenerator<
     });
   }
 
-  /** Replaces, in place, each reference (`{ "$ref": ... }`) of a value by the object or the entity it references. */
+  /**
+   * Replaces, in place, each reference (`{ "$ref": ... }`) of a value by the object or the entity it references. A
+   * reference with other fields gives a copy of the referenced one with the fields merged over it.
+   */
   #embedReferences(value: unknown): unknown {
     if (Array.isArray(value)) {
       value.forEach((item, index) => {
         value[index] = this.#embedReferences(item);
       });
     } else if (value && typeof value === 'object') {
-      const { $ref } = value as { $ref?: unknown };
-      if (typeof $ref === 'string' && Object.keys(value).length === 1) {
-        return this.#resolveReference($ref);
+      const { $ref, ...fields } = value as { $ref?: unknown } & Record<string, unknown>;
+      if (typeof $ref === 'string') {
+        const referenced = this.#resolveReference($ref) as Record<string, unknown>;
+        return Object.keys(fields).length === 0 ?
+            referenced
+          : this.#mergeOver(referenced, this.#embedReferences(fields) as Record<string, unknown>);
       }
       for (const [key, item] of Object.entries(value)) {
         (value as Record<string, unknown>)[key] = this.#embedReferences(item);
@@ -326,8 +332,31 @@ export default class BaseApplicationGenerator<
     return value;
   }
 
+  /** The objects and the entities embedded in place of a reference, kept as they are by a merge. */
+  readonly #embedded = new WeakSet<object>();
+
+  /**
+   * A copy of a value with the fields merged over it, the nested objects merged too: the referenced objects and entities
+   * are kept, and a list or a value of the fields replaces the one of the value.
+   */
+  #mergeOver(value: Record<string, unknown>, fields: Record<string, unknown>): Record<string, unknown> {
+    const mergeable = (item: unknown): item is Record<string, unknown> =>
+      Boolean(item) && typeof item === 'object' && !Array.isArray(item) && !this.#embedded.has(item as object);
+    const merged: Record<string, unknown> = { ...value };
+    for (const [key, field] of Object.entries(fields)) {
+      merged[key] = mergeable(field) && mergeable(value[key]) ? this.#mergeOver(value[key], field) : field;
+    }
+    return merged;
+  }
+
   /** The object (`#/objects/<Name>`) or the entity (`.jhipster/<Entity>.json`) a reference names. */
   #resolveReference(reference: string): unknown {
+    const referenced = this.#referencedBy(reference);
+    this.#embedded.add(referenced);
+    return referenced;
+  }
+
+  #referencedBy(reference: string): object {
     if (reference.startsWith('#/objects/')) {
       return this.getObject(reference.slice('#/objects/'.length));
     }
