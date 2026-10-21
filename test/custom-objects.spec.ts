@@ -77,7 +77,7 @@ describe('custom objects', () => {
         }
 
         get service() {
-          return this.getContextData('test:service', { factory: () => ({}) });
+          return this.getContextData('test:service', { factory: () => [{}] });
         }
 
         async beforeQueue() {
@@ -159,7 +159,7 @@ describe('custom objects', () => {
         }
 
         get service() {
-          return this.getContextData('test:service', { factory: () => ({}) });
+          return this.getContextData('test:service', { factory: () => [{}] });
         }
 
         async beforeQueue() {
@@ -178,7 +178,7 @@ describe('custom objects', () => {
 
         get [objectPriority('service', 'loading')]() {
           return {
-            loading({ service }: any) {
+            loading({ service: [service] }: any) {
               service.loadedBy = [...(service.loadedBy ?? []), generatorName];
               events.push(`${generatorName} loading`);
             },
@@ -187,7 +187,7 @@ describe('custom objects', () => {
 
         get [objectPriority('service', 'preparing')]() {
           return {
-            preparing({ service }: any) {
+            preparing({ service: [service] }: any) {
               service.preparedBy ??= generatorName;
               events.push(`${generatorName} preparing ${service.loadedBy.join(', ')}`);
             },
@@ -196,7 +196,7 @@ describe('custom objects', () => {
 
         get [objectPriority('service', 'postPreparing')]() {
           return {
-            postPreparing({ service }: any) {
+            postPreparing({ service: [service] }: any) {
               events.push(`${generatorName} post preparing ${service.preparedBy}`);
             },
           };
@@ -256,6 +256,26 @@ describe('custom objects', () => {
       ).rejects.toThrow(/declares the custom object service without a service getter/);
     });
 
+    it('fails when the getter of the object does not give an array', async () => {
+      await expect(
+        helpers.run(
+          class extends CoreGenerator {
+            constructor(args: any, options: any, features: any) {
+              super(args, options, { ...features, queueCommandTasks: false, customObjects: [{ name: 'service' }] });
+            }
+
+            get service() {
+              return {};
+            }
+
+            get [objectPriority('service', 'loading')]() {
+              return { loading() {} };
+            }
+          },
+        ),
+      ).rejects.toThrow(/The service getter of the generator .* must give an array of objects/);
+    });
+
     describe('with a default reading a property another generator sets later', () => {
       let label: string;
 
@@ -266,7 +286,7 @@ describe('custom objects', () => {
           }
 
           get service() {
-            return this.getContextData('test:service', { factory: () => ({}) });
+            return this.getContextData('test:service', { factory: () => [{}] });
           }
 
           async beforeQueue() {
@@ -277,7 +297,7 @@ describe('custom objects', () => {
 
           get [objectPriority('service', 'loading')]() {
             return {
-              loading({ service }: any) {
+              loading({ service: [service] }: any) {
                 service.name = 'Book';
               },
             };
@@ -285,7 +305,7 @@ describe('custom objects', () => {
 
           get [objectPriority('service', 'preparing')]() {
             return {
-              preparing({ service }: any) {
+              preparing({ service: [service] }: any) {
                 preparing(service);
               },
             };
@@ -293,7 +313,7 @@ describe('custom objects', () => {
 
           get [objectPriority('service', 'postPreparing')]() {
             return {
-              postPreparing({ service }: any) {
+              postPreparing({ service: [service] }: any) {
                 ({ label } = service);
               },
             };
@@ -321,6 +341,128 @@ describe('custom objects', () => {
       it('waits for the property and applies the default before the post preparing', () => {
         expect(label).toBe('BookService label');
       });
+    });
+  });
+
+  describe('objects of the application', () => {
+    const objects = {
+      OrderCheckout: {
+        type: 'service',
+        documentation: 'The checkout of a cart.',
+        fields: {
+          placeOrder: { type: { $ref: '#/objects/PlaceOrder' }, documentation: 'Places the order of a cart.' },
+          quote: { type: { $ref: '#/objects/CalculateQuote' } },
+        },
+      },
+      PlaceOrder: {
+        type: 'operation',
+        annotations: { returns: { $ref: '.jhipster/Order.json' } },
+        fields: {
+          cartId: { type: 'Long', validations: { required: true } },
+          coupon: { type: { $ref: '#/objects/Coupon' } },
+        },
+      },
+      CalculateQuote: {
+        type: 'operation',
+        annotations: { get: true, returns: [{ $ref: '#/objects/Quote' }] },
+        fields: { cartId: { type: 'Long', validations: { required: true } } },
+      },
+      Quote: {
+        type: 'record',
+        fields: {
+          total: { type: 'BigDecimal' },
+          lines: { type: [{ $ref: '#/objects/QuoteLine' }] },
+          tags: { type: ['String'] },
+          parent: { type: { $ref: '#/objects/Quote' } },
+        },
+      },
+      QuoteLine: { type: 'record', fields: { amount: { type: 'BigDecimal' } } },
+      Coupon: { type: 'record', fields: { code: { type: 'String', validations: { maxlength: 20 } } } },
+    };
+    let services: any[];
+    let generator: BaseApplicationGenerator;
+    let order: any;
+
+    class ServiceGenerator extends BaseApplicationGenerator {
+      constructor(args: any, options: any, features: any) {
+        super(args, options, { ...features, queueCommandTasks: false, customObjects: [{ name: 'service', before: 'default' }] });
+      }
+
+      async beforeQueue() {
+        await this.dependsOnBootstrap('app');
+      }
+
+      get service() {
+        return this.findObjects('service');
+      }
+
+      get [objectPriority('service', 'preparing')]() {
+        return {
+          preparing(this: BaseApplicationGenerator, { service }: any) {
+            services = service;
+            generator = this;
+          },
+        };
+      }
+
+      get [BaseApplicationGenerator.DEFAULT]() {
+        return {
+          default({ entities }: any) {
+            order = entities.find((entity: any) => entity.name === 'Order');
+          },
+        };
+      }
+    }
+
+    before(async () => {
+      await helpers
+        .run(ServiceGenerator)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withFiles({
+          '.yo-rc.json': { 'generator-jhipster': { baseName: 'shop', skipUserManagement: true, entities: ['Order'] }, objects },
+          '.jhipster/Order.json': { name: 'Order', fields: [{ fieldName: 'total', fieldType: 'BigDecimal' }] },
+        });
+    });
+
+    it('gives the objects of the type of the custom object', () => {
+      expect(services.map(service => service.name)).toEqual(['OrderCheckout']);
+      expect(generator.findObjects('record').map(record => record.name)).toEqual(['Coupon', 'Quote', 'QuoteLine']);
+    });
+
+    it('gives the configuration of an object as declared', () => {
+      expect(generator.getObjectConfig('PlaceOrder')).toEqual(objects.PlaceOrder);
+      expect(generator.getObjectConfig('Unknown')).toBeUndefined();
+    });
+
+    it('embeds the referenced objects, the same instance wherever they are referenced', () => {
+      const [checkout] = services;
+      const placeOrder = generator.getObject('PlaceOrder');
+      expect(checkout.fields.placeOrder.type).toBe(placeOrder);
+      expect(placeOrder.fields!.coupon.type).toBe(generator.getObject('Coupon'));
+      expect(checkout.fields.quote.type.annotations.returns).toEqual([generator.getObject('Quote')]);
+      expect(checkout.fields.quote.type.annotations.returns[0]).toBe(generator.getObject('Quote'));
+    });
+
+    it('embeds the referenced entities, the entities the application prepares', () => {
+      expect(generator.getObject('PlaceOrder').annotations!.returns).toBe(order);
+      expect(order.entityClass).toBe('Order');
+    });
+
+    it('keeps the lists and the types of the JDL', () => {
+      const quote = generator.getObject('Quote');
+      expect(quote.fields!.lines.type).toEqual([generator.getObject('QuoteLine')]);
+      expect(quote.fields!.lines.type[0]).toBe(generator.getObject('QuoteLine'));
+      expect(quote.fields!.tags.type).toEqual(['String']);
+      expect(quote.fields!.total.type).toBe('BigDecimal');
+    });
+
+    it('embeds an object referencing itself', () => {
+      const quote = generator.getObject('Quote');
+      expect(quote.fields!.parent.type).toBe(quote);
+    });
+
+    it('fails for an object not declared', () => {
+      expect(() => generator.getObject('Unknown')).toThrow(/The object Unknown is not declared/);
     });
   });
 });

@@ -251,16 +251,19 @@ export const customObjectPriorityName = (name: string, phase: CustomObjectPhase)
 
 /**
  * The priorities of a custom object, before the `before` priority: its loading, preparing and post preparing, each with
- * the object (`service`), given by the getter of its name the generator implements. While it is prepared, a default
- * (`mutateData`) reading a property not yet set waits for it, applied before the post preparing.
+ * the objects (`service`), the array the getter of its name the generator implements gives. While they are prepared, a
+ * default (`mutateData`) reading a property not yet set waits for it, applied before the post preparing.
  */
 export const customObjectPriorities = (name: string, before: string = POST_PREPARING): Priority[] => {
-  const objectOf = (generator: CoreGenerator): Record<string, any> => {
-    const object = (generator as any)[name];
-    if (!object) {
+  const objectsOf = (generator: CoreGenerator): Record<string, any>[] => {
+    const objects = (generator as any)[name];
+    if (!objects) {
       throw new Error(`The generator ${generator.options.namespace} declares the custom object ${name} without a ${name} getter`);
     }
-    return object;
+    if (!Array.isArray(objects)) {
+      throw new Error(`The ${name} getter of the generator ${generator.options.namespace} must give an array of objects`);
+    }
+    return objects;
   };
   const priority = (phase: CustomObjectPhase, before: string): Priority => {
     const priorityName = customObjectPriorityName(name, phase);
@@ -271,18 +274,20 @@ export const customObjectPriorities = (name: string, before: string = POST_PREPA
       args: generator => {
         const coreGenerator = generator as CoreGenerator;
         const [firstArg] = coreGenerator.getArgsForPriority(priorityName);
-        const object = objectOf(coreGenerator);
-        if (phase === 'preparing') {
-          // The object loaded, a default reading a property not yet set waits for it, like the application ones.
-          enableDelayedMutations(object, {
-            autoDelay: true,
-            onDroppedMutation: dropped => coreGenerator.log.debug(droppedMutationMessage(dropped)),
-          });
-        } else if (phase === 'postPreparing') {
-          // The object prepared, the delayed defaults are applied before it is used.
-          finalizeMutations(object);
+        const objects = objectsOf(coreGenerator);
+        for (const object of objects) {
+          if (phase === 'preparing') {
+            // The object loaded, a default reading a property not yet set waits for it, like the application ones.
+            enableDelayedMutations(object, {
+              autoDelay: true,
+              onDroppedMutation: dropped => coreGenerator.log.debug(droppedMutationMessage(dropped)),
+            });
+          } else if (phase === 'postPreparing') {
+            // The object prepared, the delayed defaults are applied before it is used.
+            finalizeMutations(object);
+          }
         }
-        return [{ ...firstArg, [name]: object }];
+        return [{ ...firstArg, [name]: objects }];
       },
     };
   };

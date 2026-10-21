@@ -30,10 +30,13 @@ import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
 import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
+import type { ApplicationObject, ApplicationObjectConfig } from './objects.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
   CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY,
+  CONTEXT_DATA_APPLICATION_OBJECTS_KEY,
+  CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY,
   getEntitiesFromDir,
 } from './support/index.ts';
 import type {
@@ -259,6 +262,81 @@ export default class BaseApplicationGenerator<
       storages.set(entityPath, storage);
     }
     return storage;
+  }
+
+  /** The configuration of an object of the application, by its name, as the `objects` of the `.yo-rc.json` file declare it. */
+  getObjectConfig(name: string): ApplicationObjectConfig | undefined {
+    return this.#objectsStorage.get(name);
+  }
+
+  /**
+   * An object of the application, by its name: its configuration with the objects and the entities it references embedded
+   * in place of their reference, each the same instance wherever it is referenced, an entity the one the application
+   * prepares. An entity is embedded once the entities are loaded.
+   */
+  getObject(name: string): ApplicationObject {
+    const objects = this.getContextData<Map<string, ApplicationObject>>(CONTEXT_DATA_APPLICATION_OBJECTS_KEY, {
+      factory: () => new Map(),
+    });
+    let object = objects.get(name);
+    if (!object) {
+      const config = this.getObjectConfig(name);
+      if (!config) {
+        throw new Error(`The object ${name} is not declared in the objects of the .yo-rc.json file`);
+      }
+      object = { ...structuredClone(config), name } as ApplicationObject;
+      // Kept before its references are embedded, so an object referencing itself, directly or not, is the same instance.
+      objects.set(name, object);
+      this.#embedReferences(object);
+    }
+    return object;
+  }
+
+  /** The objects of the application of a type, the name of the custom object handling them (`service`), sorted by name. */
+  findObjects(type: string): ApplicationObject[] {
+    return Object.entries<ApplicationObjectConfig>(this.#objectsStorage.getAll())
+      .filter(([_name, config]) => config.type === type)
+      .map(([name]) => name)
+      .sort()
+      .map(name => this.getObject(name));
+  }
+
+  /** The `objects` of the `.yo-rc.json` file, shared by the generators of the application. */
+  get #objectsStorage(): Storage {
+    return this.getContextData<Storage>(CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY, {
+      factory: () => this.createStorage('.yo-rc.json', 'objects'),
+    });
+  }
+
+  /** Replaces, in place, each reference (`{ "$ref": ... }`) of a value by the object or the entity it references. */
+  #embedReferences(value: unknown): unknown {
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        value[index] = this.#embedReferences(item);
+      });
+    } else if (value && typeof value === 'object') {
+      const { $ref } = value as { $ref?: unknown };
+      if (typeof $ref === 'string' && Object.keys(value).length === 1) {
+        return this.#resolveReference($ref);
+      }
+      for (const [key, item] of Object.entries(value)) {
+        (value as Record<string, unknown>)[key] = this.#embedReferences(item);
+      }
+    }
+    return value;
+  }
+
+  /** The object (`#/objects/<Name>`) or the entity (`.jhipster/<Entity>.json`) a reference names. */
+  #resolveReference(reference: string): unknown {
+    if (reference.startsWith('#/objects/')) {
+      return this.getObject(reference.slice('#/objects/'.length));
+    }
+    const entityName = /([^/]+)\.json$/.exec(reference)?.[1];
+    const entity = entityName ? this.#entities.get(entityName) : undefined;
+    if (!entity) {
+      throw new Error(`The reference ${reference} is not an object nor a loaded entity of the application`);
+    }
+    return entity;
   }
 
   /**
