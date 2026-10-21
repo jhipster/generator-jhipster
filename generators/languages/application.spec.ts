@@ -31,7 +31,7 @@ describe('application mutation test', () => {
         supportedLanguages: expect.any(Array),
       });
     });
-    it(`expects ${name} to don't override existing properties`, () => {
+    it(`expects ${name} not to override existing properties`, () => {
       const [firstMutation, ...restMutations] = data;
       expect(
         Object.keys(mutateMockedCompleteData({ ...firstMutation, nativeLanguage: 'en', supportedLanguages }, ...restMutations)),
