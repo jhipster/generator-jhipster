@@ -82,7 +82,6 @@ export default abstract class BaseEntityChangesGenerator<
   >,
 > extends BaseApplicationGenerator<Entity, Application, Config, Options, Source, Features, Tasks> {
   recreateInitialChangelog!: boolean;
-  private entityChanges!: any[];
 
   abstract isChangelogNew({ entityName, changelogDate }: { entityName: string; changelogDate: string }): boolean;
 
@@ -94,15 +93,7 @@ export default abstract class BaseEntityChangesGenerator<
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as Tasks['DefaultTaskParam'];
-      this.entityChanges = this.generateIncrementalChanges({ application, entities });
-    }
-    if (([DEFAULT] as string[]).includes(priorityName)) {
-      return { ...firstArg, entityChanges: this.entityChanges };
-    }
-    if (([WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
-      // const { entities = [] } = this.options;
-      // const filteredEntities = data.entities.filter(entity => entities.includes(entity.name));
-      return { ...firstArg, entityChanges: this.entityChanges };
+      return { ...firstArg, entityChanges: this.generateIncrementalChanges({ application, entities }) };
     }
     return firstArg;
   }
