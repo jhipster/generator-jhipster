@@ -610,10 +610,10 @@ describe('generator - Docker Compose', () => {
     });
   });
 
-  describe('monolith using oauth2 with appSchemes', () => {
+  describe('monolith using oauth2 with oauth2AppSchemes', () => {
     before(async () => {
       await helpers
-        .generateDeploymentWorkspaces({ authenticationType: 'oauth2', appSchemes: ['exp', 'myapp'] })
+        .generateDeploymentWorkspaces({ authenticationType: 'oauth2', oauth2AppSchemes: ['exp', 'myapp'] })
         .withWorkspacesSamples('08-monolith')
         .withGenerateWorkspaceApplications();
 

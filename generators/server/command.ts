@@ -23,12 +23,9 @@ import { getDBTypeFromDBValue } from './support/database.ts';
 
 const command = {
   configs: {
-    appSchemes: {
+    oauth2AppSchemes: {
       description:
         'URL schemes of the apps (like mobile apps) signing in at the OAuth2 provider of the application, allowed as redirect URIs of its client',
-      cli: {
-        type: Array,
-      },
       jdl: {
         type: 'list',
         tokenType: 'list',

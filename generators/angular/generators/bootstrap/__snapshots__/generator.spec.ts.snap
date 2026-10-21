@@ -4,7 +4,6 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
-  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,
@@ -199,6 +198,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
+  "oauth2AppSchemes": undefined,
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,

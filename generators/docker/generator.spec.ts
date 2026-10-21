@@ -142,9 +142,11 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with appSchemes', () => {
+  describe('with oauth2AppSchemes', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig({ authenticationType: 'oauth2', appSchemes: ['exp', 'com.mycompany.app'] });
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ authenticationType: 'oauth2', oauth2AppSchemes: ['exp', 'com.mycompany.app'] });
     });
 
     it('should allow the app schemes as redirect URIs of the web_app client', () => {

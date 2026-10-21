@@ -133,7 +133,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.usesIngress = deployment.kubernetesServiceType === 'Ingress';
         deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
         deployment.keycloakRedirectUris = '';
-        deployment.keycloakAppSchemes = [...new Set(applications.flatMap(appConfig => appConfig.appSchemes ?? []))];
+        deployment.keycloakAppSchemes = [...new Set(applications.flatMap(appConfig => appConfig.oauth2AppSchemes ?? []))];
         deployment.entryPort = 8080;
         deployment.adminPassword ??= 'admin';
         deployment.adminPasswordBase64 ??= convertSecretToBase64(deployment.adminPassword);

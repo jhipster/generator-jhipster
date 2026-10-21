@@ -4,7 +4,6 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
 {
   "addLanguageCallbacks": Any<Array>,
   "anyEntityHasRelationshipWithUser": false,
-  "appSchemes": undefined,
   "applicationType": "monolith",
   "applicationTypeAny": true,
   "applicationTypeGateway": false,
@@ -200,6 +199,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
+  "oauth2AppSchemes": undefined,
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,

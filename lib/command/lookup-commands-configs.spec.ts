@@ -74,7 +74,7 @@ describe('jdl options', () => {
   "nativeLanguage",
   "incrementalChangelog",
   "baseName",
-  "appSchemes",
+  "oauth2AppSchemes",
   "enableSwaggerCodegen",
   "searchEngine",
   "websocket",
@@ -118,7 +118,7 @@ describe('jdl options', () => {
     'blueprints',
     'blueprint',
     'jhipsterVersion',
-    'appSchemes',
+    'oauth2AppSchemes',
   ];
 
   const getChoices = (config: (typeof jdlConfigs)[number][1]): (string | boolean)[] | undefined => {
@@ -133,14 +133,14 @@ describe('jdl options', () => {
     expect(freeFormOptions.filter(optionName => !optionsWithoutChoices.includes(optionName))).toEqual([]);
   });
 
-  describe('jdl - appSchemes', () => {
+  describe('jdl - oauth2AppSchemes', () => {
     it('should set the url schemes', () => {
-      const state = createImporterFromContent('application { config { appSchemes [exp, myapp] } }').import();
-      expect(state.exportedApplicationsWithEntities.jhipster.config.appSchemes).toEqual(['exp', 'myapp']);
+      const state = createImporterFromContent('application { config { oauth2AppSchemes [exp, myapp] } }').import();
+      expect(state.exportedApplicationsWithEntities.jhipster.config.oauth2AppSchemes).toEqual(['exp', 'myapp']);
     });
     it('should not accept a value that is not a url scheme', () => {
-      expect(() => createImporterFromContent('application { config { appSchemes [MyApp] } }')).toThrow(
-        /The appSchemes property name must match: .*, got MyApp/,
+      expect(() => createImporterFromContent('application { config { oauth2AppSchemes [MyApp] } }')).toThrow(
+        /The oauth2AppSchemes property name must match: .*, got MyApp/,
       );
     });
   });
