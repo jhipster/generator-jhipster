@@ -42,6 +42,11 @@ export type DockerAddedApplicationPreparingProperties = {
   dockerServicesDir: string;
   /** The prefix of the names a deployment gives the docker compose services of the application. */
   dockerDeploymentServicePrefix: string;
+  /**
+   * The command of the healthcheck of the `app` docker compose service, run by its shell: by default a request to
+   * `/management/health` with bash, which an application whose image has no bash replaces before the default priority.
+   */
+  dockerApplicationHealthcheckCommand?: string;
 };
 
 export const mutateApplicationLoading = {
