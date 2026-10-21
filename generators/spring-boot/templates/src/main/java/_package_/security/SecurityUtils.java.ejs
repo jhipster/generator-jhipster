@@ -136,8 +136,7 @@ public final class SecurityUtils {
             .flatMap(authentication -> Mono.justOrEmpty(extractCredentials(authentication)));
   <%_ } else { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-            .map(SecurityUtils::extractCredentials);
+        return Optional.ofNullable(securityContext.getAuthentication()).map(SecurityUtils::extractCredentials);
   <%_ } _%>
     }
 
@@ -187,8 +186,7 @@ public final class SecurityUtils {
             );
 <%_ } else { _%>
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
+        return authentication != null && getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
 <%_ } _%>
     }
 
@@ -269,7 +267,11 @@ public final class SecurityUtils {
     }
 
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
-        return roles.stream().filter(role -> role.startsWith("ROLE_")).<GrantedAuthority>map(SimpleGrantedAuthority::new).toList();
+        return roles
+            .stream()
+            .filter(role -> role.startsWith("ROLE_"))
+            .<GrantedAuthority>map(SimpleGrantedAuthority::new)
+            .toList();
     }
 <%_ } _%>
 <%_ if (generateAuthenticationApi && (authenticationTypeOauth2 && !syncUserWithIdp || authenticationTypeJwt && skipUserManagement)) { _%>

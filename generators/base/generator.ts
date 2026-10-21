@@ -27,6 +27,7 @@ import type { PackageJson } from 'type-fest';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
+import { requireGeneratorCommand } from '../../lib/resolver/generator-command.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import type { EditorMetadata } from '../base-core/api.ts';
@@ -689,14 +690,12 @@ export default class BaseGenerator<
           this.delegateToBlueprint = true;
           this.#checkBlueprintImplementsPriorities(blueprintGenerator);
         }
-        const blueprintModule: any = await blueprintGenerator._meta?.importModule?.();
-        blueprintCommand = blueprintModule?.command;
+        blueprintCommand = requireGeneratorCommand(blueprintGenerator._meta);
       } else {
         const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprintName));
         const generatorNamespace = `${generatorName}:${subGen}`;
         const blueprintMeta = this.env.findMeta(generatorNamespace);
-        const blueprintModule: any = await blueprintMeta?.importModule?.();
-        blueprintCommand = blueprintModule?.command;
+        blueprintCommand = requireGeneratorCommand(blueprintMeta);
         if (blueprintCommand?.compose) {
           this.generatorsToCompose.push(...blueprintCommand.compose);
         }

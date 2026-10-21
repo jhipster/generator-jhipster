@@ -123,6 +123,8 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "dockerApplicationEnvironment": Any<Object>,
   "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
+  "dockerDeploymentEnvironment": Any<Object>,
+  "dockerDeploymentServicePrefix": "jhipster-",
   "dockerServices": Any<Array>,
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",

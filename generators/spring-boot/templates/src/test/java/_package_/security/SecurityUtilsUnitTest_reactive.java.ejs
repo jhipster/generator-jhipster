@@ -66,7 +66,9 @@ class SecurityUtilsUnitTest {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         String login = SecurityUtils.getCurrentUserLogin()
-            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new AnonymousAuthenticationToken("key", "anonymousUser", authorities)))
+            .contextWrite(
+                ReactiveSecurityContextHolder.withAuthentication(new AnonymousAuthenticationToken("key", "anonymousUser", authorities))
+            )
             .block();
         assertThat(login).isNull();
     }
@@ -83,11 +85,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testGetCurrentUserJWTFromJwtCredentials() {
         var now = Instant.now();
-        var jwt = Jwt.withTokenValue("token")
-            .issuedAt(now)
-            .expiresAt(now.plusSeconds(60))
-            .header("Test", "test")
-            .build();
+        var jwt = Jwt.withTokenValue("token").issuedAt(now).expiresAt(now.plusSeconds(60)).header("Test", "test").build();
 
         String currentUserJwt = SecurityUtils.getCurrentUserJWT()
             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", jwt)))

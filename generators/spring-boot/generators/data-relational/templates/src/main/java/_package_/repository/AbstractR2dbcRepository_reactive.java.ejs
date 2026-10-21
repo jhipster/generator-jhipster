@@ -66,7 +66,9 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
     @SuppressWarnings("unchecked")
     protected AbstractR2dbcRepository(Class<T> entityType, R2dbcEntityTemplate template, R2dbcConverter converter, R2dbcDialect dialect) {
         super(
-            new MappingRelationalEntityInformation<>((RelationalPersistentEntity<T>) converter.getMappingContext().getRequiredPersistentEntity(entityType)),
+            new MappingRelationalEntityInformation<>(
+                (RelationalPersistentEntity<T>) converter.getMappingContext().getRequiredPersistentEntity(entityType)
+            ),
             template,
             converter
         );
@@ -151,12 +153,18 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
 
     @Override
     public <S extends T> Mono<S> save(S entity) {
-        return super.save(entity).flatMap(saved -> Flux.fromIterable(joinTables()).concatMap(joinTable -> updateJoinTable(joinTable, saved)).then(Mono.just(saved)));
+        return super.save(entity).flatMap(saved ->
+            Flux.fromIterable(joinTables())
+                .concatMap(joinTable -> updateJoinTable(joinTable, saved))
+                .then(Mono.just(saved))
+        );
     }
 
     @Override
     public Mono<Void> deleteById(ID id) {
-        return Flux.fromIterable(joinTables()).concatMap(joinTable -> deleteFromJoinTable(joinTable, id)).then(super.deleteById(id));
+        return Flux.fromIterable(joinTables())
+            .concatMap(joinTable -> deleteFromJoinTable(joinTable, id))
+            .then(super.deleteById(id));
     }
 
     /**
@@ -244,19 +252,43 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
         Class<K> relatedIdType = (Class<K>) relatedEntity.getRequiredIdProperty().getType();
         String relatedIdProperty = relatedEntity.getRequiredIdProperty().getName();
         return db
-            .sql("SELECT " + joinTable.entityColumn() + ", " + joinTable.referenceColumn() + " FROM " + joinTable.table() + " WHERE " + joinTable.entityColumn() + " IN (:entityIds)")
+            .sql(
+                "SELECT " +
+                    joinTable.entityColumn() +
+                    ", " +
+                    joinTable.referenceColumn() +
+                    " FROM " +
+                    joinTable.table() +
+                    " WHERE " +
+                    joinTable.entityColumn() +
+                    " IN (:entityIds)"
+            )
             .bind("entityIds", entitiesById.keySet())
-            .map((row, metadata) -> Map.entry((Object) row.get(joinTable.entityColumn(), entityIdType), row.get(joinTable.referenceColumn(), relatedIdType)))
+            .map((row, metadata) ->
+                Map.entry((Object) row.get(joinTable.entityColumn(), entityIdType), row.get(joinTable.referenceColumn(), relatedIdType))
+            )
             .all()
             .collectMultimap(Map.Entry::getKey, Map.Entry::getValue)
             .flatMap(references -> {
                 Set<K> ids = references.values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
-                Mono<Map<K, R>> related = ids.isEmpty() ?
-                    Mono.just(Map.of()) :
-                    template.select(relatedType).matching(Query.query(Criteria.where(relatedIdProperty).in(ids))).all().collectMap(relatedId);
+                Mono<Map<K, R>> related = ids.isEmpty()
+                    ? Mono.just(Map.of())
+                    : template
+                          .select(relatedType)
+                          .matching(Query.query(Criteria.where(relatedIdProperty).in(ids)))
+                          .all()
+                          .collectMap(relatedId);
                 return related.map(relatedById -> {
                     entitiesById.forEach((id, entity) ->
-                        setter.accept(entity, references.getOrDefault(id, List.of()).stream().map(relatedById::get).filter(Objects::nonNull).collect(Collectors.toSet()))
+                        setter.accept(
+                            entity,
+                            references
+                                .getOrDefault(id, List.of())
+                                .stream()
+                                .map(relatedById::get)
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toSet())
+                        )
                     );
                     return entities;
                 });
@@ -292,7 +324,12 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
         if (pageable.isPaged()) {
             sql += " " + dialect.limit().getLimitOffset(pageable.getPageSize(), pageable.getOffset());
         }
-        return populated(db.sql(sql).map((row, metadata) -> template.getConverter().read(entityType, row, metadata)).all());
+        return populated(
+            db
+                .sql(sql)
+                .map((row, metadata) -> template.getConverter().read(entityType, row, metadata))
+                .all()
+        );
     }
 
     private Mono<Void> updateJoinTable(JoinTable<T> joinTable, T entity) {
@@ -301,7 +338,15 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
             Flux.fromIterable(joinTable.referenceIds().apply(entity))
                 .concatMap(referenceId ->
                     db
-                        .sql("INSERT INTO " + joinTable.table() + " (" + joinTable.entityColumn() + ", " + joinTable.referenceColumn() + ") VALUES (:entityId, :referenceId)")
+                        .sql(
+                            "INSERT INTO " +
+                                joinTable.table() +
+                                " (" +
+                                joinTable.entityColumn() +
+                                ", " +
+                                joinTable.referenceColumn() +
+                                ") VALUES (:entityId, :referenceId)"
+                        )
                         .bind("entityId", entityId)
                         .bind("referenceId", referenceId)
                         .then()
@@ -311,7 +356,10 @@ public abstract class AbstractR2dbcRepository<T, ID> extends SimpleR2dbcReposito
     }
 
     private Mono<Void> deleteFromJoinTable(JoinTable<T> joinTable, Object entityId) {
-        return db.sql("DELETE FROM " + joinTable.table() + " WHERE " + joinTable.entityColumn() + " = :entityId").bind("entityId", entityId).then();
+        return db
+            .sql("DELETE FROM " + joinTable.table() + " WHERE " + joinTable.entityColumn() + " = :entityId")
+            .bind("entityId", entityId)
+            .then();
     }
 
     private RelationalPersistentEntity<?> mappingEntity(Class<?> type) {

@@ -36,8 +36,7 @@ import {
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../base-workspaces/internal/index.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
 import type { Features as BaseWorkspacesFeatures, Options as BaseWorkspacesOptions } from '../base-workspaces/types.ts';
-import { DOCKER_COMPOSE_SOURCES_DIR } from '../docker/constants.ts';
-import { mergeDockerComposeFile } from '../docker/support/index.ts';
+import { createDockerDeploymentServices } from '../docker/support/index.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { writeFiles } from './files.ts';
@@ -181,26 +180,22 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           const path = this.workspacePath(appConfig.appFolder!);
           // The docker files of the application, in the folder it declares: a blueprint may keep them elsewhere.
           const dockerServicesDir = pathjs.join(path, appConfig.dockerServicesDir);
-          // A docker compose file of the application: its source merged with its data, or the file it wrote.
-          const composeFile = (fileName: string): { services: Record<string, any> } => {
-            const file = appConfig.dockerComposeFiles?.[fileName];
-            return file ?
-                mergeDockerComposeFile(file, this.fs.read(this.fetchFromInstalledJHipster(DOCKER_COMPOSE_SOURCES_DIR, file.source)))
-              : parseYaml(this.fs.read(`${dockerServicesDir}/${fileName}.yml`));
+          // The name the deployment gives a service of the application.
+          const serviceName = (service: string) => `${appConfig.dockerDeploymentServicePrefix}${service}`;
+          // The services of a docker compose file of the application as the deployment uses them, by their name in it:
+          // prepared by the application, or from the file it wrote.
+          const composeServices = (fileName: string): Record<string, any> => {
+            const deploymentServices = appConfig.dockerComposeFiles?.[fileName]?.deploymentServices;
+            return deploymentServices ?
+                structuredClone(deploymentServices)
+              : createDockerDeploymentServices(parseYaml(this.fs.read(`${dockerServicesDir}/${fileName}.yml`)).services, {
+                  applicationServiceName: lowercaseBaseName,
+                  servicePrefix: appConfig.dockerDeploymentServicePrefix,
+                  isApplicationService: service => !['keycloak', 'jhipster-registry', 'consul'].includes(service),
+                });
           };
           // Add application configuration
-          const yaml = composeFile('app');
-          const yamlConfig = yaml.services.app;
-          if (yamlConfig.depends_on) {
-            yamlConfig.depends_on = Object.fromEntries(
-              Object.entries(yamlConfig.depends_on).map(([serviceName, config]) => {
-                if (['keycloak', 'jhipster-registry', 'consul'].includes(serviceName)) {
-                  return [serviceName, config];
-                }
-                return [`${lowercaseBaseName}-${serviceName}`, config];
-              }),
-            );
-          }
+          const yamlConfig = composeServices('app')[lowercaseBaseName];
           if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) {
             if (deployment.keycloakSecrets === undefined && appConfig.authenticationTypeOauth2) {
               faker.seed(stringHashCode(appConfig.baseName));
@@ -217,37 +212,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             const ports = yamlConfig.ports[0].split(':').slice(-2);
             ports[0] = appConfig.composePort;
             yamlConfig.ports[0] = ports.join(':');
-          }
-
-          if (yamlConfig.environment) {
-            yamlConfig.environment = yamlConfig.environment.map((envOption: string) => {
-              // Doesn't apply to keycloak, jhipster-registry and consul.
-              // docker-compose changes the container name to `${lowercaseBaseName}-${databaseType}`.
-              // we need to update the environment urls to the new container host.
-              [
-                'SPRING_R2DBC_URL',
-                'SPRING_DATASOURCE_URL',
-                'SPRING_LIQUIBASE_URL',
-                'SPRING_NEO4J_URI',
-                'SPRING_MONGODB_URI',
-                'JHIPSTER_CACHE_REDIS_SERVER',
-                'SPRING_ELASTICSEARCH_URIS',
-              ].forEach(varName => {
-                if (envOption.startsWith(varName)) {
-                  envOption = envOption
-                    .replace('://', `://${lowercaseBaseName}-`)
-                    .replace('oracle:thin:@', `oracle:thin:@${lowercaseBaseName}-`);
-                }
-              });
-              ['JHIPSTER_CACHE_MEMCACHED_SERVERS', 'SPRING_COUCHBASE_CONNECTION_STRING', 'SPRING_CASSANDRA_CONTACTPOINTS'].forEach(
-                varName => {
-                  if (envOption.startsWith(varName)) {
-                    envOption = envOption.replace(`${varName}=`, `${varName}=${lowercaseBaseName}-`);
-                  }
-                },
-              );
-              return envOption;
-            });
           }
 
           if (appConfig.applicationTypeMonolith && deployment.monitoring === PROMETHEUS) {
@@ -270,16 +234,14 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.databaseTypeAny && !appConfig.prodDatabaseTypeOracle) {
             const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), dockerServicesDir));
-            const databaseYaml = composeFile(database!);
-            const databaseServiceName = `${lowercaseBaseName}-${database}`;
-            let databaseYamlConfig = databaseYaml.services[database!];
+            const databaseServiceName = serviceName(database!);
+            let databaseYamlConfig = composeServices(database!)[databaseServiceName];
             // Don't export database ports
             delete databaseYamlConfig.ports;
 
             if (appConfig.databaseTypeCassandra && appConfig.databaseMigrationLoader) {
               // migration service config
-              const cassandraMigrationYaml = composeFile('cassandra-migration');
-              const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
+              const cassandraMigrationConfig = composeServices('cassandra-migration')[`${databaseServiceName}-migration`];
               cassandraMigrationConfig.build.context = relativePath;
               const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
               cassandraMigrationConfig.volumes[0] = `${cqlFilesRelativePath}:/cql:ro`;
@@ -292,17 +254,17 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             }
 
             if (deployment.clusteredDbApps?.includes(appConfig.appFolder!)) {
-              const clusterDbYaml = composeFile(`${database}-cluster`);
-              const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
+              const clusterServices = composeServices(`${database}-cluster`);
+              const dbNodeConfig = clusterServices[`${databaseServiceName}-node`];
               dbNodeConfig.build.context = relativePath;
-              databaseYamlConfig = clusterDbYaml.services[database!];
+              databaseYamlConfig = clusterServices[databaseServiceName];
               delete databaseYamlConfig.ports;
               if (appConfig.databaseTypeCouchbase) {
                 databaseYamlConfig.build.context = relativePath;
               }
               parentConfiguration[`${databaseServiceName}-node`] = dbNodeConfig;
               if (appConfig.databaseTypeMongodb) {
-                parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${database}-config`];
+                parentConfiguration[`${databaseServiceName}-config`] = clusterServices[`${databaseServiceName}-config`];
               }
             }
 
@@ -311,25 +273,22 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.searchEngineElasticsearch) {
             // Add search engine configuration
             const { searchEngine } = appConfig;
-            const searchEngineYaml = composeFile(searchEngine);
-            const searchEngineConfig = searchEngineYaml.services[searchEngine];
+            const searchEngineConfig = composeServices(searchEngine)[serviceName(searchEngine)];
             delete searchEngineConfig.ports;
-            parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
+            parentConfiguration[serviceName(searchEngine)] = searchEngineConfig;
           }
           // Add Memcached support
           if (appConfig.cacheProviderMemcached) {
-            const memcachedYaml = composeFile('memcached');
-            const memcachedConfig = memcachedYaml.services.memcached;
+            const memcachedConfig = composeServices('memcached')[serviceName('memcached')];
             delete memcachedConfig.ports;
-            parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
+            parentConfiguration[serviceName('memcached')] = memcachedConfig;
           }
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = composeFile('redis');
-            const redisConfig = redisYaml.services.redis;
+            const redisConfig = composeServices('redis')[serviceName('redis')];
             delete redisConfig.ports;
-            parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
+            parentConfiguration[serviceName('redis')] = redisConfig;
           }
           // Expose authenticationType
           deployment.authenticationType = appConfig.authenticationType;

@@ -89,15 +89,16 @@ public class CassandraTestContainer {
                 // CREATE KEYSPACE is a schema change and must reach schema agreement; the driver's 2s default request
                 // timeout is not enough on a loaded CI runner and fails the container startup with a DriverTimeoutException.
                 .withConfigLoader(
-                    DriverConfigLoader
-                        .programmaticBuilder()
+                    DriverConfigLoader.programmaticBuilder()
                         .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, Duration.ofSeconds(DATABASE_REQUEST_TIMEOUT_SECONDS))
                         .build()
                 )
                 .build()
         ) {
             session.execute(
-                "CREATE KEYSPACE IF NOT EXISTS " + DEFAULT_KEYSPACE_NAME + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}"
+                "CREATE KEYSPACE IF NOT EXISTS " +
+                    DEFAULT_KEYSPACE_NAME +
+                    " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}"
             );
         }
         try (
@@ -106,8 +107,7 @@ public class CassandraTestContainer {
                 .withLocalDatacenter(container.getLocalDatacenter())
                 .withKeyspace(DEFAULT_KEYSPACE_NAME)
                 .withConfigLoader(
-                    DriverConfigLoader
-                        .programmaticBuilder()
+                    DriverConfigLoader.programmaticBuilder()
                         .withDuration(DefaultDriverOption.REQUEST_TIMEOUT, Duration.ofSeconds(DATABASE_REQUEST_TIMEOUT_SECONDS))
                         .build()
                 )
