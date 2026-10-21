@@ -16,32 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import { dirname, join } from 'node:path';
-
 import type { StoreGeneratorMeta } from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
-import { getPackageRoot } from '../index.ts';
-
-const require = createRequire(import.meta.url);
-const COMMAND_FILES = ['command.ts', 'command.js', 'command.mjs'];
 
 /**
- * The command of a generator of a store. Read from the command module next to the generator module when there is one,
- * the module the generator exports its command from, so reading a command does not load the generator and its imports.
- * A generator of JHipster without one has no command; the one of another package, like a blueprint, is read from its
- * generator module.
+ * The command of a generator of a store: its sibling `command` module, read without loading the generator and its
+ * imports, else the command its module exports (a generator without a sibling command module, like a blueprint one).
  */
 export const requireGeneratorCommand = (
-  meta: Pick<StoreGeneratorMeta, 'resolved' | 'packagePath' | 'requireModule'>,
-): JHipsterCommandDefinition | undefined => {
-  const commandFile =
-    meta.resolved ? COMMAND_FILES.map(file => join(dirname(meta.resolved!), file)).find(file => existsSync(file)) : undefined;
-  if (commandFile) {
-    return (require(commandFile) as { default?: JHipsterCommandDefinition }).default;
-  }
-  if (meta.packagePath === getPackageRoot()) return undefined;
-  return (meta.requireModule?.() as { command?: JHipsterCommandDefinition } | undefined)?.command;
-};
+  meta: Pick<StoreGeneratorMeta, 'requireSibling' | 'requireModule'>,
+): JHipsterCommandDefinition | undefined =>
+  (meta.requireSibling?.('command') as { default?: JHipsterCommandDefinition } | undefined)?.default ??
+  (meta.requireModule?.() as { command?: JHipsterCommandDefinition } | undefined)?.command;

@@ -45,7 +45,7 @@ export type ResolveGeneratorDependenciesOptions = {
  * recursively, and the blueprint generators overriding them (a blueprint command with `override` replaces the
  * original). The result is ordered as the cli registers the options.
  *
- * Synchronous: the commands are loaded with `require` (see requireGeneratorCommand), which throws for a module that
+ * Synchronous: the commands are loaded with `require` (the sibling `command` module of each generator), which throws for a module that
  * cannot be required - a generator, of a blueprint too, has to be loadable with `require`.
  */
 export const resolveGeneratorDependencies = (
