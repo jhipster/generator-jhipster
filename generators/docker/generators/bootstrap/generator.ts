@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { DOCKER_COMPOSE_SOURCES_DIR, SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from '../../constants.ts';
@@ -184,11 +183,6 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
       app({ application }) {
         const app = application as DockerComposeApplication;
         if (!app.backendTypeSpringBoot && !app.dockerServices.includes('app')) return;
-        mutateData(app, {
-          __override__: false,
-          dockerApplicationHealthcheckCommand: ({ serverPort }) =>
-            String.raw`bash -c 'exec 3<>/dev/tcp/127.0.0.1/${serverPort}; printf "GET /management/health HTTP/1.0\r\nHost: localhost\r\n\r\n" >&3; grep -q "\"status\":\"UP\"" <&3'`,
-        });
         const { lowercaseBaseName, serverPort, dockerApplicationEnvironment, dockerApplicationHealthcheckCommand } = app;
         // The services the application waits for, in the order the docker generator added them to the `app` file.
         const dependencies: [string, unknown, string][] = [
@@ -216,7 +210,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
             environment: applicationEnvironment(app, dockerApplicationEnvironment, ''),
             ...(app.applicationTypeMonolith || app.applicationTypeGateway ? { ports: [`127.0.0.1:${serverPort}:${serverPort}`] } : {}),
             healthcheck: {
-              test: ['CMD-SHELL', dockerApplicationHealthcheckCommand!],
+              test: ['CMD-SHELL', dockerApplicationHealthcheckCommand],
               interval: '5s',
               timeout: '5s',
               retries: 40,
