@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import intersection from 'lodash-es/intersection.js';
 
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
 import { kebabCase } from '../../../../lib/utils/string-utils.ts';
@@ -25,7 +24,7 @@ import type { CiCdProvider } from '../../support/providers.ts';
 
 import type Generator from './generator.ts';
 
-const includesAnyValue = (values: string[] | undefined, expected: string[]) => Boolean(values && intersection(values, expected).length > 0);
+const includesAnyValue = (values: string[] | undefined, expected: string[]) => Boolean(values?.some(value => expected.includes(value)));
 
 const getCiCdValues = (generator: Generator): CiCdProvider[] => generator.ciCd;
 
