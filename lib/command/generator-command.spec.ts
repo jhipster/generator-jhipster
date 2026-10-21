@@ -36,7 +36,6 @@ const notImplementedCallback = (methodName: string) => {
 const dummyMeta = {
   packageNamespace: 'jhipster',
   resolved: 'dummy',
-  importSibling: (name: string) => Promise.resolve(name === 'command' ? { default: {} } : undefined),
   requireSibling: (name: string) => (name === 'command' ? { default: {} } : undefined),
   importGenerator: notImplementedCallback('importGenerator'),
   instantiateHelp: notImplementedCallback('instantiateHelp'),
@@ -74,10 +73,6 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
       const generatorMeta = {
         ...dummyMeta,
         namespace: 'jhipster:dummy',
-        importSibling: (name: string) =>
-          Promise.resolve(
-            name === 'command' ? { default: { configs: { testOption: config } } satisfies JHipsterCommandDefinition } : undefined,
-          ),
         requireSibling: (name: string) =>
           name === 'command' ? { default: { configs: { testOption: config } } satisfies JHipsterCommandDefinition } : undefined,
         importGenerator: () => Promise.resolve(CommandGenerator as any),

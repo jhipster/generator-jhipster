@@ -24,12 +24,8 @@ import type { JHipsterCommandDefinition } from '../command/types.ts';
  * The command of a generator of a store: the default export of its sibling `command` module, read without loading the
  * generator and its imports. A generator without a `command` module has no command.
  */
-export const requireGeneratorCommand = (meta: Pick<StoreGeneratorMeta, 'requireSibling'>): JHipsterCommandDefinition | undefined =>
-  (meta.requireSibling?.('command') as { default?: JHipsterCommandDefinition } | undefined)?.default;
-
-/** The command of a generator of a store, like requireGeneratorCommand, imported for a command that can not be required. */
-export const importGeneratorCommand = async (meta: object | undefined): Promise<JHipsterCommandDefinition | undefined> =>
+export const requireGeneratorCommand = (meta: object | undefined): JHipsterCommandDefinition | undefined =>
   (
-    (await (meta as Pick<StoreGeneratorMeta, 'importSibling'> | undefined)?.importSibling?.('command')) as
+    (meta as Pick<StoreGeneratorMeta, 'requireSibling'> | undefined)?.requireSibling?.('command') as
       { default?: JHipsterCommandDefinition } | undefined
   )?.default;

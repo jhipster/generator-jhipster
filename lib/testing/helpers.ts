@@ -389,10 +389,6 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
           const path = siblingPath(name);
           return path ? createRequire(import.meta.url)(path) : undefined;
         };
-        meta!.importSibling = async (name: string) => {
-          const path = siblingPath(name);
-          return path ? import(pathToFileURL(path).href) : undefined;
-        };
       }
     });
   }
