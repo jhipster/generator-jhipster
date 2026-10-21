@@ -24,6 +24,11 @@ import type { Application as DockerApplication, DockerComposeFile } from './type
 export type DockerAddedApplicationLoadingProperties = {
   dockerContainers: Record<string, string>;
   dockerApplicationEnvironment: Record<string, string>;
+  /**
+   * The variables of the application in a deployment, over `dockerApplicationEnvironment`: the ones naming the hosts of
+   * its services, which a deployment names `<application>-<service>`.
+   */
+  dockerDeploymentEnvironment: Record<string, string>;
   dockerServices: string[];
   /**
    * The docker compose files of the application a deployment uses, by name: the docker generator writes them to
@@ -35,12 +40,15 @@ export type DockerAddedApplicationLoadingProperties = {
 
 export type DockerAddedApplicationPreparingProperties = {
   dockerServicesDir: string;
+  /** The prefix of the names a deployment gives the docker compose services of the application. */
+  dockerDeploymentServicePrefix: string;
 };
 
 export const mutateApplicationLoading = {
   __override__: false,
   dockerContainers: () => ({}),
   dockerApplicationEnvironment: () => ({}),
+  dockerDeploymentEnvironment: () => ({}),
   dockerServices: () => [],
   dockerComposeFiles: () => ({}),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
@@ -51,6 +59,7 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
   dockerServicesDir: JAVA_DOCKER_DIR,
+  dockerDeploymentServicePrefix: ({ lowercaseBaseName }) => `${lowercaseBaseName}-`,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<DockerApplication>,
   DockerAddedApplicationPreparingProperties

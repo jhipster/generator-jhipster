@@ -41,3 +41,29 @@ export const addDockerComposeFile = (
 /** Spring Boot docker compose support ignores the service. */
 export const springBootIgnore = (ignore: boolean | undefined): DockerComposeServiceConfig =>
   ignore ? { labels: { 'org.springframework.boot.ignore': true } } : {};
+
+/**
+ * The variables of the `app` service: the ones of the application, then the Spring Boot ones of its services, named by
+ * their host with the prefix.
+ */
+export const applicationEnvironment = (
+  app: DockerComposeApplication,
+  variables: Record<string, string | undefined>,
+  hostPrefix: string,
+): string[] => {
+  const springBoot = app.backendTypeSpringBoot;
+  return [
+    ...Object.entries(variables).map(([key, value]) => `${key}=${value ?? ''}`),
+    ...(springBoot && app.cacheProviderMemcached ? [`JHIPSTER_CACHE_MEMCACHED_SERVERS=${hostPrefix}memcached:11211`] : []),
+    ...(springBoot && app.cacheProviderRedis ?
+      [`JHIPSTER_CACHE_REDIS_SERVER=redis://${hostPrefix}redis:6379`, 'JHIPSTER_CACHE_REDIS_CLUSTER=false']
+    : []),
+    ...(springBoot && app.searchEngineElasticsearch ? [`SPRING_ELASTICSEARCH_URIS=http://${hostPrefix}elasticsearch:9200`] : []),
+    // The message brokers are shared by the applications of a deployment: their host keeps its name.
+    ...(springBoot && app.messageBrokerKafka ? ['SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092'] : []),
+    ...(springBoot && app.messageBrokerPulsar ?
+      ['SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650', 'SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080']
+    : []),
+    ...(app.cacheProviderInfinispan ? ['JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true'] : []),
+  ];
+};

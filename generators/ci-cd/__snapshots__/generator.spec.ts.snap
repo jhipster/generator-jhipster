@@ -169,6 +169,13 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   },
   "dockerComposeFiles": Any<Object>,
   "dockerContainers": Any<Object>,
+  "dockerDeploymentEnvironment": {
+    "SPRING_DATASOURCE_PASSWORD": "",
+    "SPRING_DATASOURCE_URL": "jdbc:postgresql://jhipster-postgresql:5432/jhipster",
+    "SPRING_DATASOURCE_USERNAME": "jhipster",
+    "SPRING_LIQUIBASE_URL": "jdbc:postgresql://jhipster-postgresql:5432/jhipster",
+  },
+  "dockerDeploymentServicePrefix": "jhipster-",
   "dockerImage": undefined,
   "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",

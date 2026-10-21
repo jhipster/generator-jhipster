@@ -20,7 +20,7 @@ import ejs from 'ejs';
 import mergeWith from 'lodash-es/mergeWith.js';
 import { Scalar, isMap, isScalar, isSeq, parse as parseYaml, parseDocument } from 'yaml';
 
-import type { DockerComposeFile, DockerComposeService } from '../types.ts';
+import type { DockerComposeFile, DockerComposeService, DockerComposeServiceConfig } from '../types.ts';
 
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.
@@ -48,6 +48,38 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
     ]),
   ),
 });
+
+/**
+ * The services of a docker compose file of an application as a deployment uses them: `app` named after the
+ * application, the other services of the application and the ones it depends on named with the prefix, the services
+ * the applications of the deployment share (like keycloak) keeping their name.
+ */
+export const createDockerDeploymentServices = (
+  services: Record<string, DockerComposeServiceConfig>,
+  {
+    applicationServiceName,
+    servicePrefix,
+    isApplicationService,
+  }: { applicationServiceName: string; servicePrefix: string; isApplicationService: (serviceName: string) => boolean },
+): Record<string, DockerComposeServiceConfig> =>
+  Object.fromEntries(
+    Object.entries(services).map(([serviceName, service]) => [
+      serviceName === 'app' ? applicationServiceName : `${servicePrefix}${serviceName}`,
+      {
+        ...service,
+        ...(service.depends_on ?
+          {
+            depends_on: Object.fromEntries(
+              Object.entries(service.depends_on).map(([dependency, condition]) => [
+                isApplicationService(dependency) ? `${servicePrefix}${dependency}` : dependency,
+                condition,
+              ]),
+            ),
+          }
+        : {}),
+      },
+    ]),
+  );
 
 /** A docker compose file of an application as the docker generator writes it: its template merged with its data. */
 export const mergeDockerComposeFile = (
