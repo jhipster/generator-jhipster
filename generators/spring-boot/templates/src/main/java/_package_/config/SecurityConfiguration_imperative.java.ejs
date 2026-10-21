@@ -237,7 +237,8 @@ public class SecurityConfiguration {
                     .requestMatchers("/management/health/**").permitAll()
                     .requestMatchers("/management/info").permitAll()
                     .requestMatchers("/management/prometheus").permitAll()
-                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
+                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            )
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
             .rememberMe(rememberMe ->
                 rememberMe
@@ -378,7 +379,9 @@ public class SecurityConfiguration {
 
         jwtDecoder.setJwtValidator(withAudience);
   <%_ if (!applicationTypeMicroservice) { _%>
-        jwtDecoder.setClaimSetConverter(new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build()));
+        jwtDecoder.setClaimSetConverter(
+            new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build())
+        );
   <%_ } _%>
 
         return jwtDecoder;

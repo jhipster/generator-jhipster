@@ -199,14 +199,12 @@ _%>
         }
 
         Map<String, Object> problemProperties = problem.getProperties();
-        if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY))
-            problem.setProperty(MESSAGE_KEY,
-                getMappedMessageKey(err) != null
-                    ? getMappedMessageKey(err)
-                    : "error.http." + problem.getStatus());
+        if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY)) problem.setProperty(
+            MESSAGE_KEY,
+            getMappedMessageKey(err) != null ? getMappedMessageKey(err) : "error.http." + problem.getStatus()
+        );
 
-        if (problemProperties == null || !problemProperties.containsKey(PATH_KEY))
-            problem.setProperty(PATH_KEY, getPathValue(request));
+        if (problemProperties == null || !problemProperties.containsKey(PATH_KEY)) problem.setProperty(PATH_KEY, getPathValue(request));
 
         setFieldErrors(problem, err, problemProperties);
 
@@ -244,7 +242,8 @@ _%>
     }
 
     private List<FieldErrorVM> getFieldErrors(ConstraintViolationException ex) {
-        return ex.getConstraintViolations()
+        return ex
+            .getConstraintViolations()
             .stream()
             .map(violation ->
                 new FieldErrorVM(
@@ -286,7 +285,9 @@ _%>
     }
 
     private URI getMappedType(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        if (
+            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
+        ) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
 
@@ -294,8 +295,7 @@ _%>
         if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) {
             return ErrorConstants.ERR_VALIDATION;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
-        } else if (err instanceof ConcurrencyFailureException
-                || err.getCause() instanceof ConcurrencyFailureException) {
+        } else if (err instanceof ConcurrencyFailureException || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -307,7 +307,9 @@ _%>
     }
 
     private String getCustomizedTitle(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) return "Method argument not valid";
+        if (
+            err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException
+        ) return "Method argument not valid";
         return null;
     }
 
@@ -348,12 +350,12 @@ _%>
     private HttpHeaders buildHeaders(Throwable err) {
         return err instanceof BadRequestAlertException badRequestAlertException
             ? HeaderUtil.createFailureAlert(
-                applicationName,
-                true,
-                badRequestAlertException.getEntityName(),
-                badRequestAlertException.getErrorKey(),
-                badRequestAlertException.getMessage()
-            )
+                  applicationName,
+                  true,
+                  badRequestAlertException.getEntityName(),
+                  badRequestAlertException.getErrorKey(),
+                  badRequestAlertException.getMessage()
+              )
             : null;
     }
 <%_ if (reactive) { _%>

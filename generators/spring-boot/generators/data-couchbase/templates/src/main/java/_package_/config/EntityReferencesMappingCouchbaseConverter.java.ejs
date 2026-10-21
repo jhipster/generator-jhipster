@@ -59,7 +59,11 @@ public class EntityReferencesMappingCouchbaseConverter extends MappingCouchbaseC
             super.writePropertyInternal(source, target, prop, accessor);
         } else if (source instanceof Collection<?> entities) {
             CouchbaseList keys = new CouchbaseList();
-            entities.stream().map(entity -> related.getIdentifierAccessor(entity).getIdentifier()).filter(Objects::nonNull).forEach(keys::put);
+            entities
+                .stream()
+                .map(entity -> related.getIdentifierAccessor(entity).getIdentifier())
+                .filter(Objects::nonNull)
+                .forEach(keys::put);
             target.put(prop.getFieldName(), keys);
         } else {
             Object key = related.getIdentifierAccessor(source).getIdentifier();

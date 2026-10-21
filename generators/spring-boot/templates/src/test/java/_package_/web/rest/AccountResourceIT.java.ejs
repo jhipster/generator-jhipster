@@ -171,9 +171,7 @@ class AccountResourceIT {
             .expectStatus().isUnauthorized();
 <%_ } else { _%>
     void testNonAuthenticatedUser() throws Exception {
-        restAccountMockMvc
-            .perform(get("/api/authenticate"))
-            .andExpect(status().isUnauthorized());
+        restAccountMockMvc.perform(get("/api/authenticate")).andExpect(status().isUnauthorized());
 <%_ } _%>
     }
 
@@ -187,9 +185,7 @@ class AccountResourceIT {
             .expectStatus().isNoContent();
 <%_ } else { _%>
     void testAuthenticatedUser() throws Exception {
-        restAccountMockMvc
-            .perform(get("/api/authenticate").with(request -> request))
-            .andExpect(status().isNoContent());
+        restAccountMockMvc.perform(get("/api/authenticate").with(request -> request)).andExpect(status().isNoContent());
 <%_ } _%>
     }
 
@@ -260,9 +256,7 @@ class AccountResourceIT {
   <%_ } _%>
 <%_ } else { _%>
     void testGetUnknownAccount() throws Exception {
-        restAccountMockMvc.perform(get("/api/account")
-            .accept(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(status().isUnauthorized());
+        restAccountMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON)).andExpect(status().isUnauthorized());
 <%_ } _%>
     }
 
@@ -359,7 +353,9 @@ class AccountResourceIT {
 <%_ } _%>
     void testRegisterInvalidUsers(ManagedUserVM invalidUser) throws Exception {
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(invalidUser))
             .exchange()
@@ -439,7 +435,9 @@ class AccountResourceIT {
 
         // First user
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(firstUser))
             .exchange()
@@ -479,7 +477,9 @@ class AccountResourceIT {
 
         // Second (already activated) user
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(secondUser))
             .exchange()
@@ -516,7 +516,9 @@ class AccountResourceIT {
 
         // Register first user
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(firstUser))
             .exchange()
@@ -548,7 +550,9 @@ class AccountResourceIT {
 
         // Register second (non activated) user
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(secondUser))
             .exchange()
@@ -584,7 +588,9 @@ class AccountResourceIT {
 
         // Register third (not activated) user
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userWithUpperCaseEmail))
             .exchange()
@@ -1356,10 +1362,13 @@ class AccountResourceIT {
     @Test
 <%_ if (reactive) { _%>
     void testRequestPasswordResetInvalidEmail() {
-        accountWebTestClient.post().uri("/api/account/reset-password/init")
+        accountWebTestClient
+            .post()
+            .uri("/api/account/reset-password/init")
             .bodyValue("invalid-email")
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
     }
 <%_ } else { _%>
     void testRequestPasswordResetInvalidEmail() throws Exception {
@@ -1374,10 +1383,13 @@ class AccountResourceIT {
     @Test
 <%_ if (reactive) { _%>
     void testRequestPasswordResetTooLongEmail() {
-        accountWebTestClient.post().uri("/api/account/reset-password/init")
+        accountWebTestClient
+            .post()
+            .uri("/api/account/reset-password/init")
             .bodyValue("a".repeat(250) + "@x.co")
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
     }
 <%_ } else { _%>
     void testRequestPasswordResetTooLongEmail() throws Exception {

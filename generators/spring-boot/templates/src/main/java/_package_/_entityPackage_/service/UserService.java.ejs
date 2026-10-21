@@ -574,7 +574,7 @@ public class UserService {
     }
 
     <%_ if (databaseTypeCouchbase && cacheProviderAny) { _%>
-    @CacheEvict(cacheNames =  UserRepository.USERS_BY_LOGIN_CACHE, key = "#login")
+    @CacheEvict(cacheNames = UserRepository.USERS_BY_LOGIN_CACHE, key = "#login")
     <%_ } _%>
     <%_ if (reactive) { _%>
       <%_ if (databaseTypeSql) { _%>
@@ -969,14 +969,12 @@ public class UserService {
                 }
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
                     LOG.debug("Updating user '{}' in local database", user.getLogin());
-                    updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                        user.getLangKey(), user.getImageUrl());
+                    updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
                 }
                 // no last updated info, blindly update
             } else {
                 LOG.debug("Updating user '{}' in local database", user.getLogin());
-                updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                    user.getLangKey(), user.getImageUrl());
+                updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
             }
         } else {
             LOG.debug("Saving user '{}' in local database", user.getLogin());

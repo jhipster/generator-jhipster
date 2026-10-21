@@ -112,7 +112,9 @@ class EntityReferencesMappingCouchbaseConverterTest {
         Parent parent = parent();
         parent.children.forEach(child -> child.parents.add(parent));
 
-        assertThat(write(parent).export().get("children")).asInstanceOf(InstanceOfAssertFactories.LIST).containsExactlyInAnyOrder("c1", "c2");
+        assertThat(write(parent).export().get("children"))
+            .asInstanceOf(InstanceOfAssertFactories.LIST)
+            .containsExactlyInAnyOrder("c1", "c2");
         assertThat(write(parent.children.iterator().next()).export().get("parents"))
             .asInstanceOf(InstanceOfAssertFactories.LIST)
             .containsExactly("p1");
@@ -133,7 +135,9 @@ class EntityReferencesMappingCouchbaseConverterTest {
         Parent read = converter.read(Parent.class, write(parent()));
 
         assertThat(read.child.id).isEqualTo("c1");
-        assertThat(read.children).extracting(child -> child.id).containsExactlyInAnyOrder("c1", "c2");
+        assertThat(read.children)
+            .extracting(child -> child.id)
+            .containsExactlyInAnyOrder("c1", "c2");
         assertThat(read.address.city).isEqualTo("a city");
     }
 

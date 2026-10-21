@@ -298,7 +298,8 @@ public class SecurityConfiguration {
                     .pathMatchers("/management/health/**").permitAll()
                     .pathMatchers("/management/info").permitAll()
                     .pathMatchers("/management/prometheus").permitAll()
-                    .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
+                    .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            )
 <%_ if (authenticationTypeOauth2) { _%>
   <%_ if (generateAuthenticationApi) { _%>
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))

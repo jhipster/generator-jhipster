@@ -50,7 +50,8 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <%- reactivePrefix %
      */
     static Sort sortByProperties(Class<?> domainType, Sort sort, String prefix) {
         return Sort.by(
-            sort.stream()
+            sort
+                .stream()
                 .map(order -> {
                     String field = PropertyPath.from(order.getProperty(), domainType).toDotPath().replace(".", "`.`");
                     if ("id".equals(field)) {
@@ -58,7 +59,8 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <%- reactivePrefix %
                     }
                     return order.withProperty(prefix.isEmpty() ? "`%s`".formatted(field) : "%s.`%s`".formatted(prefix, field));
                 })
-                .toList());
+                .toList()
+        );
     }
 
     default Sort sortByProperties(Sort sort, String prefix) {

@@ -141,7 +141,8 @@ public class AccountResource {
     public <%- reactive ? 'Mono<Void>' : 'void' %> activateAccount(@RequestParam(value = "key") String key) {
         LOG.debug("REST request to activate account");
 <%_ if (reactive) { _%>
-        return userService.activateRegistration(key)
+        return userService
+            .activateRegistration(key)
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
             .then();
 <%_ } else { _%>
@@ -342,7 +343,8 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
 <%_ if (reactive) { _%>
-        return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
+        return userService
+            .completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
             .switchIfEmpty(
                 Mono.defer(() ->
                     Mono.fromRunnable(() -> {

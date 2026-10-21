@@ -146,14 +146,18 @@ public class ElasticsearchConfiguration extends ElasticsearchConfigurationSuppor
 class CustomElasticsearchMappingContext extends SimpleElasticsearchMappingContext {
 
     @Override
-    protected ElasticsearchPersistentProperty createPersistentProperty(Property property, SimpleElasticsearchPersistentEntity owner, SimpleTypeHolder simpleTypeHolder) {
+    protected ElasticsearchPersistentProperty createPersistentProperty(
+        Property property,
+        SimpleElasticsearchPersistentEntity owner,
+        SimpleTypeHolder simpleTypeHolder
+    ) {
         return new CustomElasticsearchPersistentProperty(property, owner, simpleTypeHolder);
     }
 }
 
 class CustomElasticsearchPersistentProperty extends SimpleElasticsearchPersistentProperty {
 
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({ "unchecked" })
     public CustomElasticsearchPersistentProperty(Property property, PersistentEntity owner, SimpleTypeHolder simpleTypeHolder) {
         super(property, owner, simpleTypeHolder);
     }

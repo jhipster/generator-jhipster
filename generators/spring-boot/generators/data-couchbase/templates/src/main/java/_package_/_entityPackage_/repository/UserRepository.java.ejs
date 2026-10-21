@@ -90,7 +90,7 @@ public interface UserRepository extends JHipsterCouchbaseRepository<<%- user.per
 
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
-    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless="#result == null")
+    @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE, unless = "#result == null")
 <%_ } _%>
     default <%- optionalOrMono %><<%- user.persistClass %>> findOneByLogin(String login) {
         return findById(login);
