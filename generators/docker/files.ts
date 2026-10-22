@@ -35,8 +35,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
   ],
   sqlDatabasesFiles: [
     {
-      // postgresql is written from the docker compose files of the application.
-      condition: ctx => ctx.dockerServices.some(service => ['mariadb', 'mysql', 'mssql'].includes(service)),
+      condition: ctx => ctx.dockerServices.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
       templates: [
         {
           sourceFile: ctx => `${TEMPLATES_DOCKER_DIR}${ctx.prodDatabaseType}.yml`,
@@ -123,7 +122,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication & Partial<Pick<
       condition: ctx => ctx.dockerServices.includes('redis'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
-      templates: ['redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
+      templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
     },
   ],
   searchDiscoveryFiles: [

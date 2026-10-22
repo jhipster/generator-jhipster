@@ -610,6 +610,50 @@ describe('generator - Docker Compose', () => {
     });
   });
 
+  describe('monolith using oauth2 with oauth2AppSchemes', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ authenticationType: 'oauth2', oauth2AppSchemes: ['exp', 'myapp'] })
+        .withWorkspacesSamples('08-monolith')
+        .withGenerateWorkspaceApplications();
+
+      await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: APPLICATION_TYPE_MONOLITH,
+        directoryPath: '../',
+        appsFolders: ['08-monolith'],
+        clusteredDbApps: [],
+      });
+    });
+    it('should allow the app schemes as redirect URIs of the web_app client', () => {
+      const realm = JSON.parse(
+        runResult.getSnapshot('**/jhipster-realm.json')['docker-compose/realm-config/jhipster-realm.json'].contents!,
+      );
+      const webApp = realm.clients.find((client: { clientId: string }) => client.clientId === 'web_app');
+      expect(webApp.redirectUris).toEqual(expect.arrayContaining(['exp:*', 'myapp:*']));
+    });
+  });
+
+  describe('monolith and an application of a type of a blueprint', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' })
+        .withWorkspacesSamples('08-monolith')
+        .withGenerateWorkspaceApplications();
+
+      await helpers.runJHipsterDeployment(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: APPLICATION_TYPE_MONOLITH,
+        directoryPath: '../',
+        appsFolders: ['mobile', '08-monolith'],
+        clusteredDbApps: [],
+      });
+    });
+    it('should deploy the monolith only', () => {
+      runResult.assertFileContent('docker-compose/docker-compose.yml', /samplemysql:/);
+      runResult.assertNoFileContent('docker-compose/docker-compose.yml', /mobile/);
+    });
+  });
+
   describe('gateway and multi microservices using oauth2', () => {
     const chosenApps = ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'];
     before(async () => {

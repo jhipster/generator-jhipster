@@ -17,15 +17,11 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+name: jhipster
 services:
   memcached:
-    image: <%- dockerContainers.memcached %>
+    image: memcached
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:11211:11211
-<%_ if (backendTypeSpringBoot) { _%>
-    labels:
-      org.springframework.boot.ignore: true
-<%_ } _%>

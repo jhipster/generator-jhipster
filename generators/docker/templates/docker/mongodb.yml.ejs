@@ -17,18 +17,20 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+# The mongodb service stores its data in /data/db/ of its Docker container: to keep it in a folder of your machine,
+# add to the mongodb service:
+#   volumes:
+#     - <folder-of-your-machine>:/data/db/
+name: jhipster
 services:
   mongodb:
-    image: <%- dockerContainers.mongodb %>
+    image: mongo
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:27017:27017
-    # volumes:
-    #   - ~/volumes/jhipster/<%- baseName %>/mongodb/:/data/db/
     healthcheck:
-      test: ['CMD', 'echo', "'db.runCommand(\"ping\").ok'", '|', 'mongo', 'localhost:27017/test', '--quiet']
+      test: ['CMD', 'echo', '''db.runCommand("ping").ok''', '|', 'mongo', 'localhost:27017/test', '--quiet']
       interval: 5s
       timeout: 5s
       retries: 10

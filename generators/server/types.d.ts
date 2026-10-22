@@ -44,6 +44,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 export type Application<E extends BaseApplicationEntity = Entity> = ExportApplicationPropertiesFromCommand<typeof Command> &
   CommonApplication<E> &
   JavaApplication<E> & {
+    oauth2AppSchemes?: string[];
     devDatabaseTypeH2Any?: boolean;
   };
 

@@ -29,7 +29,7 @@ import type FullEnvironment from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../generators/index.ts';
 import type { JHipsterConfigs } from '../lib/command/types.ts';
-import type { JDLDefinitions } from '../lib/jdl/index.ts';
+import type { JDLDefinitions } from '../lib/jdl/core/parsing/index.ts';
 
 import type JHipsterCommand from './jhipster-command.ts';
 import { createProgram } from './program.ts';
@@ -70,8 +70,8 @@ const cliBlueprintFiles = {
     }
   };
 };
-
-export const command = {
+`,
+  'generators/foo/command.js': `export default {
   configs: {
     fooBar: {
       cli: {
@@ -104,8 +104,8 @@ const cliSharedBlueprintFiles = {
     get [BaseGenerator.INITIALIZING]() {}
   };
 };
-
-export const command = {
+`,
+  'generators/bar/command.js': `export default {
   configs: {
     foo: {
       cli: {
@@ -243,8 +243,7 @@ describe('cli', () => {
         if (namespace === 'jhipster:mocked') {
           return {
             namespace,
-            importModule: async () => ({ command }),
-            requireModule: () => ({ command }),
+            requireSibling: (name: string) => (name === 'command' ? { default: command } : undefined),
             resolved: import.meta.filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
@@ -578,13 +577,13 @@ describe('cli', () => {
     describe('loading options', () => {
       describe('using blueprint with cli option', () => {
         let stdout: string;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['foo', '--blueprints', 'cli', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -603,13 +602,13 @@ describe('cli', () => {
 
       describe('using blueprint with custom generator option', () => {
         let stdout: string;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli-shared', { generator: 'foo', files: cliSharedBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['bar', '--blueprints', 'cli-shared', '--help'], { stdio: 'pipe' });
           forked.on('exit', () => {
             stdout = forked.stdout?.read().toString();
@@ -642,8 +641,9 @@ describe('cli', () => {
       }
     };
   };
-
-export const command = {
+  `,
+                files: {
+                  'generators/app/command.js': `export default {
   configs: {
     fooBar: {
       cli: {
@@ -654,7 +654,8 @@ export const command = {
     },
   },
 };
-  `,
+`,
+                },
               }),
             )
             .commitFiles();
@@ -705,13 +706,13 @@ export const command = {
       describe('--help', () => {
         let stdout: string;
         let exitCode: number | null;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--help'], { stdio: 'pipe' });
           forked.on('exit', code => {
             exitCode = code;
@@ -734,13 +735,13 @@ export const command = {
       describe('running it', () => {
         let stdout: string;
         let exitCode: number | null;
-        beforeEach(async () => {
+        before(async () => {
           await helpers
             .prepareTemporaryDir()
             .withFiles(createBlueprintFiles('generator-jhipster-cli', { files: cliBlueprintFiles }))
             .commitFiles();
         });
-        beforeEach(done => {
+        before(done => {
           const forked = fork(jhipsterCli, ['run', 'cli:foo', '--foo-bar'], { stdio: 'pipe' });
           forked.on('exit', code => {
             exitCode = code;

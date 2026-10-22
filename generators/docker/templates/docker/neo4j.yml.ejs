@@ -17,21 +17,23 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+# The neo4j service stores its data in /data of its Docker container: to keep it in a folder of your machine,
+# add to the neo4j service:
+#   volumes:
+#     - <folder-of-your-machine>:/data
+name: jhipster
 services:
   neo4j:
-    image: <%- dockerContainers.neo4j %>
-    # volumes:
-    #   - ~/volumes/jhipster/<%- baseName %>/neo4j/:/data
+    image: neo4j
     environment:
       - NEO4J_AUTH=none
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - "127.0.0.1:7474:7474"
-      - "127.0.0.1:7687:7687"
+      - '127.0.0.1:7474:7474'
+      - '127.0.0.1:7687:7687'
     healthcheck:
-      test: ["CMD", "wget", "http://localhost:7474/", "-O", "-"]
+      test: ['CMD', 'wget', 'http://localhost:7474/', '-O', '-']
       interval: 5s
       timeout: 5s
       retries: 10

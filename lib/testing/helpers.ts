@@ -19,13 +19,15 @@
 
 import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { isAbsolute, join, relative } from 'node:path';
+import { dirname, extname, isAbsolute, join, relative } from 'node:path';
 import { mock } from 'node:test';
 import { pathToFileURL } from 'node:url';
 
 import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
-import { merge, pick, snakeCase } from 'lodash-es';
+import merge from 'lodash-es/merge.js';
+import pick from 'lodash-es/pick.js';
 import type { EmptyObject } from 'type-fest';
 import type Environment from 'yeoman-environment';
 import type { EnvironmentOptions } from 'yeoman-environment';
@@ -59,6 +61,7 @@ import {
   normalizePath,
   normalizePathEnd,
 } from '../utils/index.ts';
+import { snakeCase } from '../utils/string-utils.ts';
 
 type WithJHipsterGenerators = {
   /**
@@ -372,13 +375,20 @@ class JHipsterRunContext<Generator extends YeomanGenerator = BaseCoreGenerator, 
     });
   }
 
-  // Register importModule and requireModule to have actual command for command lookups.
+  // Register the sibling modules of the actual generators, for the command lookups.
   override withMockedGenerators(generators: string[]): this {
     return super.withMockedGenerators(generators).onEnvironment(env => {
       for (const gen of generators.filter(gen => gen.startsWith('jhipster:'))) {
         const meta = (env as any).store.getMeta(gen);
-        meta!.importModule = () => import(pathToFileURL(getGenerator(gen)).href);
-        meta!.requireModule = () => createRequire(import.meta.url)(getGenerator(gen));
+        const generatorPath = getGenerator(gen);
+        const siblingPath = (name: string) => {
+          const path = join(dirname(generatorPath), `${name}${extname(generatorPath)}`);
+          return existsSync(path) ? path : undefined;
+        };
+        meta!.requireSibling = (name: string) => {
+          const path = siblingPath(name);
+          return path ? createRequire(import.meta.url)(path) : undefined;
+        };
       }
     });
   }

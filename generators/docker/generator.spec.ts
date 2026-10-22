@@ -113,4 +113,66 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+  describe('with a healthcheck command', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withSharedApplication({ dockerApplicationHealthcheckCommand: 'wget -qO- http://localhost:8080/management/health' })
+        .withJHipsterConfig();
+    });
+
+    it('should check the health of the application with the command', () => {
+      expect(runResult.fs.read(`${runResult.cwd}/src/main/docker/app.yml`)).toContain(
+        "test: [ 'CMD-SHELL', 'wget -qO- http://localhost:8080/management/health' ]",
+      );
+      expect((runResult.application! as any).dockerComposeFiles.app.deploymentServices.jhipster.healthcheck.test).toEqual([
+        'CMD-SHELL',
+        'wget -qO- http://localhost:8080/management/health',
+      ]);
+    });
+  });
+  describe('deployment services', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ prodDatabaseType: POSTGRESQL, cacheProvider: REDIS, authenticationType: 'oauth2' });
+    });
+
+    it('should name the services of the application with the prefix, the shared ones unprefixed', () => {
+      const { dockerComposeFiles } = runResult.application! as any;
+      expect(Object.keys(dockerComposeFiles.postgresql.deploymentServices)).toEqual(['jhipster-postgresql']);
+      expect(dockerComposeFiles.app.deploymentServices.jhipster.depends_on).toEqual({
+        'jhipster-postgresql': { condition: 'service_healthy' },
+        keycloak: { condition: 'service_healthy' },
+      });
+    });
+
+    it('should give the application the hosts of the deployment', () => {
+      const { environment } = (runResult.application! as any).dockerComposeFiles.app.deploymentServices.jhipster;
+      expect(environment).toContain('SPRING_DATASOURCE_URL=jdbc:postgresql://jhipster-postgresql:5432/jhipster');
+      expect(environment).toContain('JHIPSTER_CACHE_REDIS_SERVER=redis://jhipster-redis:6379');
+    });
+
+    it('should keep the hosts of the services in the docker compose files of the application', () => {
+      const app = runResult.fs.read(`${runResult.cwd}/src/main/docker/app.yml`);
+      expect(app).toContain('SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/jhipster');
+      expect(app).toMatch(/^ {6}postgresql:$/m);
+    });
+  });
+
+  describe('with oauth2AppSchemes', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ authenticationType: 'oauth2', oauth2AppSchemes: ['exp', 'com.mycompany.app'] });
+    });
+
+    it('should allow the app schemes as redirect URIs of the web_app client', () => {
+      const realm = JSON.parse(
+        runResult.getSnapshot('**/jhipster-realm.json')['src/main/docker/realm-config/jhipster-realm.json'].contents!,
+      );
+      const webApp = realm.clients.find((client: { clientId: string }) => client.clientId === 'web_app');
+      expect(webApp.redirectUris).toEqual(expect.arrayContaining(['exp:*', 'com.mycompany.app:*']));
+    });
+  });
 });

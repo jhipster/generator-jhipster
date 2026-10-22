@@ -20,6 +20,7 @@
 import { describe, expect, it } from 'expect-node';
 
 import { lookupCommandsConfigs } from '../command/lookup-commands-configs.ts';
+import { createImporterFromContent } from '../jdl/jdl-importer.ts';
 
 import { getDefaultJDLApplicationConfig, getDefaultJDLDeploymentConfig } from './jhipster-jdl-config.ts';
 
@@ -45,5 +46,18 @@ describe('jdl definitions', () => {
 
   it.skip('should match snapshot', () => {
     expect(getDefaultJDLApplicationConfig()).toMatchSnapshot();
+  });
+
+  describe('applicationType', () => {
+    it('should accept an application type of a blueprint', () => {
+      const state = createImporterFromContent('application { config { baseName mobile, applicationType expo } }').import();
+      expect(state.exportedApplicationsWithEntities.mobile.config.applicationType).toBe('expo');
+    });
+
+    it('should check the application type with its pattern', () => {
+      expect(() => createImporterFromContent('application { config { baseName mobile, applicationType Expo } }')).toThrow(
+        /applicationType property name must match/,
+      );
+    });
   });
 });

@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { camelCase, snakeCase, upperFirst } from 'lodash-es';
-
 import { mutateData } from '../../lib/utils/object.ts';
+import { camelCase, snakeCase, upperFirst } from '../../lib/utils/string-utils.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 

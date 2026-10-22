@@ -85,11 +85,13 @@ import java.util.*;
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import java.util.function.Supplier;
 <%_ } _%>
-<%_ if (authenticationTypeSession) { _%>
+<%_ if (authenticationTypeSession || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
   <%_ if (generateUserManagement) { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
@@ -235,16 +237,17 @@ public class SecurityConfiguration {
                     .requestMatchers("/management/health/**").permitAll()
                     .requestMatchers("/management/info").permitAll()
                     .requestMatchers("/management/prometheus").permitAll()
-                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
-<%_ if (authenticationTypeSession) { _%>
-  <%_ if (generateUserManagement) { _%>
+                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            )
+<%_ if (authenticationTypeSession && generateUserManagement) { _%>
             .rememberMe(rememberMe ->
                 rememberMe
                     .rememberMeServices(rememberMeServices)
                     .rememberMeParameter("remember-me")
                     .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
             )
-  <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeSession || (authenticationTypeOauth2 && !applicationTypeMicroservice)) { _%>
             .exceptionHandling(exceptionHanding -> {
                 AntPathMatcher pathMatcher = new AntPathMatcher();
   <%_ if (communicationSpringWebsocket) { _%>
@@ -261,6 +264,8 @@ public class SecurityConfiguration {
                     )
                 );
             })
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
             .formLogin(formLogin ->
                 formLogin
                     .loginPage("/")
@@ -374,7 +379,9 @@ public class SecurityConfiguration {
 
         jwtDecoder.setJwtValidator(withAudience);
   <%_ if (!applicationTypeMicroservice) { _%>
-        jwtDecoder.setClaimSetConverter(new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build()));
+        jwtDecoder.setClaimSetConverter(
+            new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplateBuilder.build())
+        );
   <%_ } _%>
 
         return jwtDecoder;

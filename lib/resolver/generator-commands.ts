@@ -23,6 +23,7 @@ import type { Store } from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../command/types.ts';
 
+import { requireGeneratorCommand } from './generator-command.ts';
 import { lookupGeneratorsMeta } from './lookups.ts';
 
 export const JHIPSTER_NAMESPACE_PREFIX = 'jhipster:';
@@ -63,11 +64,10 @@ export const toCommandNamespace = (namespace: string) =>
 const loadGeneratorCommands = (store?: GeneratorsStore): GeneratorCommand[] => {
   const generators: GeneratorCommand[] = [];
   for (const meta of lookupGeneratorsMeta(store)) {
-    const module = meta.requireModule!() as { command?: JHipsterCommandDefinition };
     generators.push({
       namespace: toCommandNamespace(meta.namespace),
       description: readUsageDescription(meta.resolved),
-      command: module.command,
+      command: requireGeneratorCommand(meta),
     });
   }
   return generators;

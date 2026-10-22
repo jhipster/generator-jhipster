@@ -30,7 +30,6 @@ import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
 import org.springframework.test.context.MergedContextConfiguration;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.util.TestPropertyValues;
 
 public class PulsarTestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
@@ -55,7 +54,6 @@ public class PulsarTestContainersSpringContextCustomizerFactory implements Conte
                     if (null == pulsarBean) {
                         pulsarBean = beanFactory.createBean(PulsarTestContainer.class);
                         beanFactory.registerSingleton(PulsarTestContainer.class.getName(), pulsarBean);
-                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(PulsarTestContainer.class.getName(), pulsarBean);
                     }
                     testValues =
                         testValues.and(

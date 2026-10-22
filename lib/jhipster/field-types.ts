@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { snakeCase } from 'lodash-es';
-
 import validations from '../jdl/core/built-in-options/validations.ts';
+import { snakeCase } from '../utils/string-utils.ts';
 
 const {
   Validations: { REQUIRED, UNIQUE, MAX, MAXBYTES, MAXLENGTH, MIN, MINBYTES, MINLENGTH, PATTERN },

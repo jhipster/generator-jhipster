@@ -441,8 +441,7 @@ public class UserRepository {
 <%_ } else { _%>
     private Optional<<%- user.persistClass %>> findOneFromIndex(BoundStatement stmt) {
         ResultSet rs = session.execute(stmt);
-        return Optional
-            .ofNullable(rs.one())
+        return Optional.ofNullable(rs.one())
             .map(row -> row.getString("id"))
             .flatMap(id -> userDao.get(id));
     }

@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
-
+import { upperFirst } from '../../../utils/string-utils.ts';
 import type { JSONField, JSONRelationship } from '../types/json-config.ts';
 import { merge } from '../utils/object-utils.ts';
 

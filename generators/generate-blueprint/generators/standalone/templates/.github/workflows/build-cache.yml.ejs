@@ -17,7 +17,7 @@ jobs:
           path: generator-jhipster-<%- baseName %>
       - uses: <%- githubActions['jhipster/actions/setup-runner'] %>
         with:
-          node-version: 24
+          node-version: <%- nodeVersion.split('.', 2)[0] %>
           binary-dir: ${{ github.workspace }}/generator-jhipster-<%- baseName %>/cli/
       - uses: <%- githubActions['jhipster/actions/cache-npm-dependencies'] %>
         with:
@@ -30,7 +30,7 @@ jobs:
       - uses: <%- githubActions['jhipster/actions/save-cache'] %>
         if: always()
         with:
-          key: ${{ github.run_id }}
+          key: -${{ github.run_id }}
           npm: true
           maven: true
           gradle: true

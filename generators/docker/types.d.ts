@@ -41,12 +41,17 @@ export type DockerComposeServiceConfig = {
 };
 
 /**
- * A docker compose file of an application: the yaml file with its static parts, by its name in the resources of the docker
- * bootstrap, and the data the application merges into it, like its project name, its images and its variables.
+ * A docker compose file of an application: its template, with its static parts, by its name in the templates of the docker
+ * generator, and the data the application merges into it, like its project name, its images and its variables.
  */
 export type DockerComposeFile = {
   source: string;
   data: { name?: string; services?: Record<string, DockerComposeServiceConfig> };
+  /**
+   * The services of the file as a deployment uses them, by the name the deployment gives them: its template merged with
+   * its data, the services the application depends on and the hosts of its variables named alike.
+   */
+  deploymentServices?: Record<string, DockerComposeServiceConfig>;
 };
 
 export type Application = BaseSimpleApplicationApplication &

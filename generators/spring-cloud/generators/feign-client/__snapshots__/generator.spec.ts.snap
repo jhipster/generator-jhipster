@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - feign-client with jwt should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud:feign-client with jwt should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -14,7 +14,7 @@ exports[`generator - feign-client with jwt should match generated files snapshot
 }
 `;
 
-exports[`generator - feign-client with oauth2 should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud:feign-client with oauth2 should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",

@@ -24,7 +24,9 @@ import { relative as posixRelative } from 'node:path/posix';
 import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
 import latestVersion from 'latest-version';
-import { get, kebabCase, merge, set, snakeCase } from 'lodash-es';
+import get from 'lodash-es/get.js';
+import merge from 'lodash-es/merge.js';
+import set from 'lodash-es/set.js';
 import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson, SetRequired } from 'type-fest';
 import { stringify as stringifyYaml } from 'yaml';
@@ -47,6 +49,7 @@ import {
   getCommandDerivedPropertyMutations,
 } from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
+import { requireGeneratorCommand } from '../../lib/resolver/generator-command.ts';
 import {
   CRLF,
   LF,
@@ -57,6 +60,7 @@ import {
   normalizeLineEndings,
   removeFieldsWithNullishValues,
 } from '../../lib/utils/index.ts';
+import { kebabCase, snakeCase } from '../../lib/utils/string-utils.ts';
 import baseCommand from '../base/command.ts';
 import type BaseGenerator from '../base/generator.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
@@ -79,11 +83,14 @@ import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import {
   CUSTOM_PRIORITIES,
   type CustomObjectPhase,
+  POST_WRITING_OBJECTS,
   PRIORITY_NAMES,
   PRIORITY_PREFIX,
   QUEUES,
+  WRITING_OBJECTS,
   customObjectPriorities,
   customObjectPriorityName,
+  writingObjectsPriorities,
 } from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
@@ -155,6 +162,12 @@ export default class CoreGenerator<
 
   static readonly POST_WRITING = asPriority(POST_WRITING);
 
+  /** The priority the custom objects of a generator are written in, after the writing priority. */
+  static readonly WRITING_OBJECTS = asPriority(WRITING_OBJECTS);
+
+  /** The priority the files of the custom objects of a generator are changed in, after the post writing priority. */
+  static readonly POST_WRITING_OBJECTS = asPriority(POST_WRITING_OBJECTS);
+
   static readonly INSTALL = asPriority(INSTALL);
 
   static readonly POST_INSTALL = asPriority(POST_INSTALL);
@@ -209,9 +222,21 @@ export default class CoreGenerator<
             ...CUSTOM_PRIORITIES,
             ...(features?.customPriorities ?? []),
             ...(features?.customObjects ?? []).flatMap(({ name, before }) => customObjectPriorities(name, before)),
+            ...(features?.customObjects?.length ? writingObjectsPriorities(features.customObjects.map(({ name }) => name)) : []),
           ]
         ),
     });
+
+    if (this.options.namespace?.startsWith('jhipster:') && this.features.templateContext === undefined) {
+      // The templates of JHipster read only their data, the generator is not their context: reading it throws in the
+      // tests. Blueprints keep the generator as the context of their templates.
+      const { reproducibleTests } = this.options as { reproducibleTests?: boolean };
+      this.setFeatures({ templateContext: reproducibleTests ? 'throw' : 'none' } as Features);
+    }
+    if (this.options.namespace?.startsWith('jhipster:')) {
+      // The JHipster generators import the lodash functions they use: reading this._ throws.
+      this.setFeatures({ disableLodashProperty: true } as Features);
+    }
 
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
@@ -441,9 +466,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         const commandsToLoad = this.#commandsToLoad;
         if (!commandsToLoad.has(namespace)) {
           commandsToLoad.add(namespace);
-          const commandMeta = this.env.getGeneratorMeta(namespace);
-          const commandModule: any = await commandMeta?.importModule?.();
-          const command = commandModule?.command as JHipsterCommandDefinition | undefined;
+          const command = requireGeneratorCommand(this.env.getGeneratorMeta(namespace));
           if (command) {
             result.push(command);
             if (loadImports) {
@@ -538,7 +561,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   async #getCurrentJHipsterCommand(): Promise<JHipsterCommandDefinition> {
     if (!this.generatorCommand) {
-      const { command } = ((await this._meta?.importModule?.()) ?? {}) as any;
+      const command = requireGeneratorCommand(this._meta);
       if (!command) {
         throw new Error(`Command not found for generator ${this.options.namespace}`);
       }
@@ -1031,6 +1054,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
 
     const normalizeEjs = (file: string) => file.replace('.ejs', '');
+    const { reproducibleTests } = this.options as { reproducibleTests?: boolean };
+    const { templateContext } = this.features;
+    const jhipsterGenerator = this.options.namespace?.startsWith('jhipster:');
     const resolveCallback = <ReturnType extends boolean | string | undefined>(
       maybeCallback: ReturnType | ((data: any) => ReturnType),
     ): ReturnType => {
@@ -1153,9 +1179,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             ...options?.renderOptions,
             // Set root for ejs to lookup for partials.
             root: templatesRoots,
-            // Caching is not applicable for JHipster: the generator is passed as `context`, and ejs caches it
-            // together with the compiled template function.
-            cache: false,
+            // The ejs cache keeps the context of the generator that compiled a template, and it brings no gain to a
+            // generation. The tests render the same templates many times: it is enabled for the templates of JHipster
+            // generators rendered without a context.
+            cache: Boolean(reproducibleTests && jhipsterGenerator) && (templateContext === 'none' || templateContext === 'throw'),
           };
           const copyOptions = { noGlob: true, transformOptions, metadata };
           this.renderTemplate(appendEjs ? `${sourceFileFrom}.ejs` : sourceFileFrom, targetFile, templateData as any, copyOptions);
@@ -1338,10 +1365,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
       if (!create || transformCallbacks.length === 0) {
+        // return a noop.
+        const noop = () => noop;
+        if (ignoreNonExisting === true && !this.ignoreNeedlesError) {
+          // The caller expects the file to be missing: nothing to tell.
+          this.log.debug(`Unable to find ${filePath}, not edited.`);
+          return noop;
+        }
         if (ignoreNonExisting || this.ignoreNeedlesError) {
           this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
-          // return a noop.
-          const noop = () => noop;
           return noop;
         }
         throw new Error(`Unable to find ${filePath}. ${errorMessage}`);

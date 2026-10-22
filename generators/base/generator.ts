@@ -27,12 +27,13 @@ import type { PackageJson } from 'type-fest';
 
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
 import { packageJson } from '../../lib/index.ts';
+import { requireGeneratorCommand } from '../../lib/resolver/generator-command.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
 import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import type { EditorMetadata } from '../base-core/api.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { GenericTask } from '../base-core/types.ts';
+import type { CustomObjectsOf, GenericTask } from '../base-core/types.ts';
 import { isDockerComposeAvailable } from '../docker/support/check-docker.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
@@ -598,6 +599,26 @@ export default class BaseGenerator<
   }
 
   /**
+   * Utility method to get typed objects for autocomplete: the custom objects of the generator come by name, with the type
+   * of their getters, for the names it declares as `customObjectNames`.
+   */
+  asWritingObjectsTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam'] & CustomObjectsOf<this>>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>> {
+    return taskGroup as unknown as Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>>;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete: the custom objects of the generator come by name, with the type
+   * of their getters, for the names it declares as `customObjectNames`.
+   */
+  asPostWritingObjectsTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostWritingTaskParam'] & CustomObjectsOf<this>>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>> {
+    return taskGroup as unknown as Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>>;
+  }
+
+  /**
    * Priority API stub for blueprints.
    *
    * Install priority should be used to prepare the project.
@@ -689,14 +710,12 @@ export default class BaseGenerator<
           this.delegateToBlueprint = true;
           this.#checkBlueprintImplementsPriorities(blueprintGenerator);
         }
-        const blueprintModule: any = await blueprintGenerator._meta?.importModule?.();
-        blueprintCommand = blueprintModule?.command;
+        blueprintCommand = requireGeneratorCommand(blueprintGenerator._meta);
       } else {
         const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprintName));
         const generatorNamespace = `${generatorName}:${subGen}`;
         const blueprintMeta = this.env.findMeta(generatorNamespace);
-        const blueprintModule: any = await blueprintMeta?.importModule?.();
-        blueprintCommand = blueprintModule?.command;
+        blueprintCommand = requireGeneratorCommand(blueprintMeta);
         if (blueprintCommand?.compose) {
           this.generatorsToCompose.push(...blueprintCommand.compose);
         }

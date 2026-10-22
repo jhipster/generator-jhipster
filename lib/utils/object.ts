@@ -134,12 +134,14 @@ export const dontOverrideMutateDataProperty = <const T extends MutateDataFunctio
   return fn;
 };
 
-class PropertyNotYetDefinedError extends Error {
+/**
+ * Thrown by a delayed mutation reading a property not defined yet, and caught by `handleMutateDataCallback`. Not an
+ * Error: a stack trace would be captured for each delayed mutation.
+ */
+class PropertyNotYetDefined {
   readonly property: string;
 
   constructor(property: string) {
-    super(`Property ${property} is not defined yet`);
-    this.name = 'PropertyNotYetDefinedError';
     this.property = property;
   }
 }
@@ -181,7 +183,7 @@ const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
       if (prop in obj) {
         return obj[prop];
       }
-      throw new PropertyNotYetDefinedError(prop.toString());
+      throw new PropertyNotYetDefined(prop.toString());
     },
   });
 
@@ -196,7 +198,7 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
       : { undefinedMarker: UndefinedMutation, data: context },
     );
   } catch (error) {
-    if (error instanceof PropertyNotYetDefinedError) {
+    if (error instanceof PropertyNotYetDefined) {
       if (mutationContext) {
         (context[MUTATION_CONTEXT_SYMBOL].waitingFor ??= {})[key] = error.property;
       }

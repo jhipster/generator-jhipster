@@ -55,6 +55,12 @@ export default class E2eBootstrapGenerator extends BaseApplicationGenerator<E2eE
           e2eTestEntitySample: ({ fields }) =>
             generateTestEntity(fields.filter(field => !field.autoGenerate && !(field as { nullable?: boolean }).nullable)),
           e2eTestEntity: ({ fields }) => generateTestEntity(fields.filter(field => !field.autoGenerate)),
+          e2eFakeData: () => entity.generateFakeData?.('cypress'),
+          e2eFieldsFakeData: ({ e2eFakeData, fields }) =>
+            e2eFakeData ??
+            Object.fromEntries(
+              fields.filter(field => !field.id || !field.autoGenerate).map(field => [field.fieldName, field.generateFakeData?.('cypress')]),
+            ),
         });
       },
     });

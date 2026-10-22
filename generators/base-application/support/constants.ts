@@ -18,3 +18,5 @@
  */
 export const CONTEXT_DATA_APPLICATION_ENTITIES_KEY = 'jhipster:application:entities';
 export const CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY = 'jhipster:application:entity-storages';
+export const CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY = 'jhipster:application:objects-storage';
+export const CONTEXT_DATA_APPLICATION_OBJECTS_KEY = 'jhipster:application:objects';

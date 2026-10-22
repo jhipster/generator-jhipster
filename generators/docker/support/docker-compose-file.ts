@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mergeWith } from 'lodash-es';
-import { parse as parseYaml } from 'yaml';
+import ejs from 'ejs';
+import mergeWith from 'lodash-es/mergeWith.js';
+import { Scalar, isMap, isScalar, isSeq, parse as parseYaml, parseDocument } from 'yaml';
 
-import type { DockerComposeFile, DockerComposeService } from '../types.ts';
+import type { DockerComposeFile, DockerComposeService, DockerComposeServiceConfig } from '../types.ts';
 
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.
@@ -48,11 +49,62 @@ export const createDockerExtendedServices = (...services: DockerComposeService[]
   ),
 });
 
-/** A docker compose file of an application as the docker generator writes it: its source merged with its data. */
+/**
+ * The services of a docker compose file of an application as a deployment uses them: `app` named after the
+ * application, the other services of the application and the ones it depends on named with the prefix, the services
+ * the applications of the deployment share (like keycloak) keeping their name.
+ */
+export const createDockerDeploymentServices = (
+  services: Record<string, DockerComposeServiceConfig>,
+  {
+    applicationServiceName,
+    servicePrefix,
+    isApplicationService,
+  }: { applicationServiceName: string; servicePrefix: string; isApplicationService: (serviceName: string) => boolean },
+): Record<string, DockerComposeServiceConfig> =>
+  Object.fromEntries(
+    Object.entries(services).map(([serviceName, service]) => [
+      serviceName === 'app' ? applicationServiceName : `${servicePrefix}${serviceName}`,
+      {
+        ...service,
+        ...(service.depends_on ?
+          {
+            depends_on: Object.fromEntries(
+              Object.entries(service.depends_on).map(([dependency, condition]) => [
+                isApplicationService(dependency) ? `${servicePrefix}${dependency}` : dependency,
+                condition,
+              ]),
+            ),
+          }
+        : {}),
+      },
+    ]),
+  );
+
+/** A docker compose file of an application as the docker generator writes it: its template merged with its data. */
 export const mergeDockerComposeFile = (
   { data }: DockerComposeFile,
   sourceContent: string,
 ): { name?: string; services: Record<string, any> } =>
-  mergeWith(parseYaml(sourceContent), structuredClone(data), (a, b) =>
+  mergeWith(parseYaml(ejs.render(sourceContent)), structuredClone(data), (a, b) =>
     Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined,
   );
+
+/** Writes the healthcheck command of each service of a docker compose file on one line, as a flow list of quoted items. */
+export const flowHealthcheckCommands = (content: string): string => {
+  const document = parseDocument(content);
+  const services = document.get('services', true);
+  if (!isMap(services)) return content;
+  for (const { value: service } of services.items) {
+    const test = isMap(service) ? service.getIn(['healthcheck', 'test'], true) : undefined;
+    if (isSeq(test)) {
+      test.flow = true;
+      for (const item of test.items) {
+        if (isScalar(item) && typeof item.value === 'string') {
+          item.type = Scalar.QUOTE_SINGLE;
+        }
+      }
+    }
+  }
+  return document.toString({ lineWidth: 0 });
+};

@@ -31,21 +31,36 @@ const { objectPriority } = CoreGenerator;
 const bases = [
   {
     Generator: CoreGenerator,
-    order: ['preparing', 'loadingService', 'preparingService', 'postPreparingService', 'postPreparing', 'default'],
+    order: [
+      'preparing',
+      'loadingService service',
+      'preparingService service',
+      'postPreparingService service',
+      'postPreparing',
+      'default',
+      'writing',
+      'writingObjects service',
+      'postWriting',
+      'postWritingObjects service',
+    ],
   },
   {
     Generator: BaseApplicationGenerator,
     order: [
       'preparing',
-      'loadingService custom',
-      'preparingService custom',
-      'postPreparingService custom',
+      'loadingService custom service',
+      'preparingService custom service',
+      'postPreparingService custom service',
       'postPreparing',
       'configuringEachEntity',
       'loadingEntities',
       'preparingEachEntity',
       'postPreparingEachEntity',
       'default',
+      'writing',
+      'writingObjects custom service',
+      'postWriting',
+      'postWritingObjects custom source service',
     ],
   },
   {
@@ -55,10 +70,14 @@ const bases = [
       'postPreparing',
       'loadingWorkspaces',
       'preparingWorkspaces',
-      'loadingService deployment applications',
-      'preparingService deployment applications',
-      'postPreparingService deployment applications',
+      'loadingService deployment applications service',
+      'preparingService deployment applications service',
+      'postPreparingService deployment applications service',
       'default',
+      'writing',
+      'writingObjects deployment applications service',
+      'postWriting',
+      'postWritingObjects deployment applications service',
     ],
   },
 ];
@@ -68,8 +87,17 @@ describe('custom objects', () => {
     describe(Generator.name, () => {
       const events: string[] = [];
       /** The priority, with the application or the deployment and its applications the phases of the object get. */
-      const event = (priorityName: string, { application, deployment, applications }: any = {}) =>
-        [priorityName, application?.baseName, deployment && 'deployment', applications && 'applications'].filter(Boolean).join(' ');
+      const event = (priorityName: string, { application, deployment, applications, source, service }: any = {}) =>
+        [
+          priorityName,
+          application?.baseName,
+          deployment && 'deployment',
+          applications && 'applications',
+          source && 'source',
+          Array.isArray(service) && 'service',
+        ]
+          .filter(Boolean)
+          .join(' ');
 
       class CustomGenerator extends (Generator as typeof CoreGenerator) {
         constructor(args: any, options: any, features: any) {
@@ -77,7 +105,7 @@ describe('custom objects', () => {
         }
 
         get service() {
-          return this.getContextData('test:service', { factory: () => ({}) });
+          return this.getContextData('test:service', { factory: () => [{}] });
         }
 
         async beforeQueue() {
@@ -133,6 +161,22 @@ describe('custom objects', () => {
         get [CoreGenerator.DEFAULT]() {
           return { default: () => events.push('default') };
         }
+
+        get [CoreGenerator.WRITING_OBJECTS]() {
+          return { writing: (arg: any) => events.push(event('writingObjects', arg)) };
+        }
+
+        get [CoreGenerator.WRITING]() {
+          return { writing: () => events.push('writing') };
+        }
+
+        get [CoreGenerator.POST_WRITING]() {
+          return { postWriting: () => events.push('postWriting') };
+        }
+
+        get [CoreGenerator.POST_WRITING_OBJECTS]() {
+          return { postWriting: (arg: any) => events.push(event('postWritingObjects', arg)) };
+        }
       }
 
       before(async () => {
@@ -159,7 +203,7 @@ describe('custom objects', () => {
         }
 
         get service() {
-          return this.getContextData('test:service', { factory: () => ({}) });
+          return this.getContextData('test:service', { factory: () => [{}] });
         }
 
         async beforeQueue() {
@@ -178,7 +222,7 @@ describe('custom objects', () => {
 
         get [objectPriority('service', 'loading')]() {
           return {
-            loading({ service }: any) {
+            loading({ service: [service] }: any) {
               service.loadedBy = [...(service.loadedBy ?? []), generatorName];
               events.push(`${generatorName} loading`);
             },
@@ -187,7 +231,7 @@ describe('custom objects', () => {
 
         get [objectPriority('service', 'preparing')]() {
           return {
-            preparing({ service }: any) {
+            preparing({ service: [service] }: any) {
               service.preparedBy ??= generatorName;
               events.push(`${generatorName} preparing ${service.loadedBy.join(', ')}`);
             },
@@ -196,7 +240,7 @@ describe('custom objects', () => {
 
         get [objectPriority('service', 'postPreparing')]() {
           return {
-            postPreparing({ service }: any) {
+            postPreparing({ service: [service] }: any) {
               events.push(`${generatorName} post preparing ${service.preparedBy}`);
             },
           };
@@ -238,6 +282,8 @@ describe('custom objects', () => {
       expect(objectPriority('service', 'loading')).toBe('>loadingService');
       expect(objectPriority('service', 'preparing')).toBe('>preparingService');
       expect(objectPriority('service', 'postPreparing')).toBe('>postPreparingService');
+      expect(CoreGenerator.WRITING_OBJECTS).toBe('>writingObjects');
+      expect(CoreGenerator.POST_WRITING_OBJECTS).toBe('>postWritingObjects');
     });
 
     it('fails when the generator does not implement the getter of the object', async () => {
@@ -256,6 +302,26 @@ describe('custom objects', () => {
       ).rejects.toThrow(/declares the custom object service without a service getter/);
     });
 
+    it('fails when the getter of the object does not give an array', async () => {
+      await expect(
+        helpers.run(
+          class extends CoreGenerator {
+            constructor(args: any, options: any, features: any) {
+              super(args, options, { ...features, queueCommandTasks: false, customObjects: [{ name: 'service' }] });
+            }
+
+            get service() {
+              return {};
+            }
+
+            get [objectPriority('service', 'loading')]() {
+              return { loading() {} };
+            }
+          },
+        ),
+      ).rejects.toThrow(/The service getter of the generator .* must give an array of objects/);
+    });
+
     describe('with a default reading a property another generator sets later', () => {
       let label: string;
 
@@ -266,7 +332,7 @@ describe('custom objects', () => {
           }
 
           get service() {
-            return this.getContextData('test:service', { factory: () => ({}) });
+            return this.getContextData('test:service', { factory: () => [{}] });
           }
 
           async beforeQueue() {
@@ -277,7 +343,7 @@ describe('custom objects', () => {
 
           get [objectPriority('service', 'loading')]() {
             return {
-              loading({ service }: any) {
+              loading({ service: [service] }: any) {
                 service.name = 'Book';
               },
             };
@@ -285,7 +351,7 @@ describe('custom objects', () => {
 
           get [objectPriority('service', 'preparing')]() {
             return {
-              preparing({ service }: any) {
+              preparing({ service: [service] }: any) {
                 preparing(service);
               },
             };
@@ -293,7 +359,7 @@ describe('custom objects', () => {
 
           get [objectPriority('service', 'postPreparing')]() {
             return {
-              postPreparing({ service }: any) {
+              postPreparing({ service: [service] }: any) {
                 ({ label } = service);
               },
             };
@@ -321,6 +387,176 @@ describe('custom objects', () => {
       it('waits for the property and applies the default before the post preparing', () => {
         expect(label).toBe('BookService label');
       });
+    });
+  });
+
+  describe('objects of the application', () => {
+    const objects = {
+      OrderCheckout: {
+        type: 'service',
+        documentation: 'The checkout of a cart.',
+        fields: {
+          placeOrder: { type: { $ref: '#/objects/PlaceOrder' }, documentation: 'Places the order of a cart.' },
+          quote: { type: { $ref: '#/objects/CalculateQuote' } },
+        },
+      },
+      PlaceOrder: {
+        type: 'operation',
+        annotations: { returns: { $ref: '.jhipster/Order.json' } },
+        fields: {
+          cartId: { type: 'Long', validations: { required: true } },
+          coupon: { type: { $ref: '#/objects/Coupon' } },
+        },
+      },
+      CalculateQuote: {
+        type: 'operation',
+        annotations: { get: true, returns: [{ $ref: '#/objects/Quote' }] },
+        fields: { cartId: { type: 'Long', validations: { required: true } } },
+      },
+      Quote: {
+        type: 'record',
+        fields: {
+          total: { type: 'BigDecimal' },
+          lines: { type: [{ $ref: '#/objects/QuoteLine' }] },
+          tags: { type: ['String'] },
+          parent: { type: { $ref: '#/objects/Quote' } },
+        },
+      },
+      QuoteLine: { type: 'record', fields: { amount: { type: 'BigDecimal' } } },
+      DiscountedQuote: {
+        type: 'record',
+        fields: {
+          quote: {
+            type: {
+              $ref: '#/objects/Quote',
+              documentation: 'The quote with a discount.',
+              fields: { discount: { type: 'BigDecimal' }, total: { type: 'Long' } },
+            },
+          },
+        },
+      },
+      Coupon: { type: 'record', fields: { code: { type: 'String', validations: { maxlength: 20 } } } },
+    };
+    let services: any[];
+    let writtenServices: string[];
+    let generator: BaseApplicationGenerator;
+    let order: any;
+
+    class ServiceGenerator extends BaseApplicationGenerator {
+      constructor(args: any, options: any, features: any) {
+        super(args, options, { ...features, queueCommandTasks: false, customObjects: [{ name: 'service', before: 'default' }] });
+      }
+
+      async beforeQueue() {
+        await this.dependsOnBootstrap('app');
+      }
+
+      declare readonly customObjectNames: readonly ['service'];
+
+      get service(): { name: string }[] {
+        return this.findObjects('service');
+      }
+
+      get [BaseApplicationGenerator.WRITING_OBJECTS]() {
+        return this.asWritingObjectsTaskGroup({
+          writeServices({ service }) {
+            // The objects come with the type of their getter.
+            writtenServices = service.map(({ name }) => name);
+            // @ts-expect-error the type of the getter
+            const wrong: number = service[0].name;
+            return wrong;
+          },
+        });
+      }
+
+      get [objectPriority('service', 'preparing')]() {
+        return {
+          preparing(this: BaseApplicationGenerator, { service }: any) {
+            services = service;
+            generator = this;
+          },
+        };
+      }
+
+      get [BaseApplicationGenerator.DEFAULT]() {
+        return {
+          default({ entities }: any) {
+            order = entities.find((entity: any) => entity.name === 'Order');
+          },
+        };
+      }
+    }
+
+    before(async () => {
+      await helpers
+        .run(ServiceGenerator)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withFiles({
+          '.yo-rc.json': { 'generator-jhipster': { baseName: 'shop', skipUserManagement: true, entities: ['Order'] }, objects },
+          '.jhipster/Order.json': { name: 'Order', fields: [{ fieldName: 'total', fieldType: 'BigDecimal' }] },
+        });
+    });
+
+    it('gives the objects of the type of the custom object', () => {
+      expect(services.map(service => service.name)).toEqual(['OrderCheckout']);
+      expect(generator.findObjects('record').map(record => record.name)).toEqual(['Coupon', 'DiscountedQuote', 'Quote', 'QuoteLine']);
+    });
+
+    it('gives the objects to the writing objects priority, with their type', () => {
+      expect(writtenServices).toEqual(['OrderCheckout']);
+    });
+
+    it('gives the configuration of an object as declared', () => {
+      expect(generator.getObjectConfig('PlaceOrder')).toEqual(objects.PlaceOrder);
+      expect(generator.getObjectConfig('Unknown')).toBeUndefined();
+    });
+
+    it('embeds the referenced objects, the same instance wherever they are referenced', () => {
+      const [checkout] = services;
+      const placeOrder = generator.getObject('PlaceOrder');
+      expect(checkout.fields.placeOrder.type).toBe(placeOrder);
+      expect(placeOrder.fields!.coupon.type).toBe(generator.getObject('Coupon'));
+      expect(checkout.fields.quote.type.annotations.returns).toEqual([generator.getObject('Quote')]);
+      expect(checkout.fields.quote.type.annotations.returns[0]).toBe(generator.getObject('Quote'));
+    });
+
+    it('embeds the referenced entities, the entities the application prepares', () => {
+      expect(generator.getObject('PlaceOrder').annotations!.returns).toBe(order);
+      expect(order.entityClass).toBe('Order');
+    });
+
+    it('keeps the lists and the types of the JDL', () => {
+      const quote = generator.getObject('Quote');
+      expect(quote.fields!.lines.type).toEqual([generator.getObject('QuoteLine')]);
+      expect(quote.fields!.lines.type[0]).toBe(generator.getObject('QuoteLine'));
+      expect(quote.fields!.tags.type).toEqual(['String']);
+      expect(quote.fields!.total.type).toBe('BigDecimal');
+    });
+
+    it('embeds an object referencing itself', () => {
+      const quote = generator.getObject('Quote');
+      expect(quote.fields!.parent.type).toBe(quote);
+    });
+
+    it('merges the fields next to a reference over a copy of the referenced object', () => {
+      const quote = generator.getObject('Quote');
+      const discounted = generator.getObject('DiscountedQuote').fields!.quote.type;
+      expect(discounted).not.toBe(quote);
+      expect(discounted.name).toBe('Quote');
+      expect(discounted.documentation).toBe('The quote with a discount.');
+      expect(Object.keys(discounted.fields)).toEqual(['total', 'lines', 'tags', 'parent', 'discount']);
+      expect(discounted.fields.total.type).toBe('Long');
+      expect(discounted.fields.discount.type).toBe('BigDecimal');
+      // The objects the referenced one references are kept, and the referenced object is not changed.
+      expect(discounted.fields.lines.type[0]).toBe(generator.getObject('QuoteLine'));
+      expect(discounted.fields.parent.type).toBe(quote);
+      expect(quote.documentation).toBeUndefined();
+      expect(quote.fields!.total.type).toBe('BigDecimal');
+      expect(quote.fields!.discount).toBeUndefined();
+    });
+
+    it('fails for an object not declared', () => {
+      expect(() => generator.getObject('Unknown')).toThrow(/The object Unknown is not declared/);
     });
   });
 });

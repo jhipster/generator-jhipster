@@ -18,9 +18,8 @@
  */
 import assert from 'node:assert';
 
-import { snakeCase } from 'lodash-es';
-
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.ts';
+import { snakeCase } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
 import type { Field as SpringDataRelationalField } from '../../spring-boot/generators/data-relational/types.d.ts';

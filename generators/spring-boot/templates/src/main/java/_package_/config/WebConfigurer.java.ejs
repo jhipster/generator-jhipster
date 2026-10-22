@@ -230,7 +230,10 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 <%_ if (devDatabaseTypeH2Any) { _%>
 
     private boolean h2ConsoleIsEnabled(Environment env) {
-        return env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) && "true".equals(env.getProperty("spring.h2.console.enabled"));
+        return (
+            env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) &&
+            "true".equals(env.getProperty("spring.h2.console.enabled"))
+        );
     }
   <%_ if (!reactive) { _%>
 

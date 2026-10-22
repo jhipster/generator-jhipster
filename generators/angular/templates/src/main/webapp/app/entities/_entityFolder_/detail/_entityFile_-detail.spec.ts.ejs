@@ -19,10 +19,13 @@
 <%_ const testEntity = tsPrimaryKeySamples[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPencilAlt<%- readOnly ? '' : ', faTimes' %> } from '@fortawesome/free-solid-svg-icons';
+<% if (!readOnly) { %>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<% } %>
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -30,6 +33,10 @@ import { of } from 'rxjs';
 
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util';
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+import { ITEM_DELETED_EVENT } from 'app/config';
+import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
 
 import { <%- entityAngularName %>Detail } from './<%- entityFileName %>-detail';
@@ -44,6 +51,9 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+<% if (!readOnly) { %>
+        { provide: NgbModal, useValue: { open: vi.fn() } },
+<% } %>
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
 <%_ } _%>
@@ -62,6 +72,9 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
+<% if (!readOnly) { %>
+    library.addIcons(faTimes);
+<% } %>
 <%_ if (anyFieldIsBlobDerived) { _%>
     dataUtils = TestBed.inject(DataUtils);
     vi.spyOn(window, 'open').mockImplementation(() => null);
@@ -91,6 +104,22 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
     });
   });
 
+<%_ if (!readOnly) { _%>
+  describe('Delete', () => {
+    it('should open the delete dialog and navigate to the list when the entity is deleted', () => {
+      const modalRef = { componentInstance: {}, closed: of(ITEM_DELETED_EVENT) };
+      const modalService = TestBed.inject(NgbModal);
+      const openSpy = vi.spyOn(modalService, 'open').mockReturnValue(modalRef as unknown as ReturnType<NgbModal['open']>);
+      const navigateSpy = vi.spyOn(TestBed.inject(Router), 'navigate');
+
+      comp.delete(<%- testEntity %>);
+
+      expect(openSpy).toHaveBeenCalledWith(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
+      expect(navigateSpy).toHaveBeenCalledWith(['/<%- entityPage %>']);
+    });
+  });
+
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
   describe('byteSize', () => {
     it('should call byteSize from DataUtils', () => {

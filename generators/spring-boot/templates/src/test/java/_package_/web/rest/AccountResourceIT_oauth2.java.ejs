@@ -177,6 +177,15 @@ class AccountResourceIT {
             .andExpect(status().isUnauthorized());
 <%_ } _%>
     }
+<%_ if (!reactive) { _%>
+
+    @Test
+    void testGetUnknownAccountWithAxiosDefaultAcceptHeader() throws Exception {
+        restAccountMockMvc
+            .perform(get("/api/account").accept(MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN, MediaType.ALL))
+            .andExpect(status().isUnauthorized());
+    }
+<%_ } _%>
 
     @Test
     @WithUnauthenticatedMockUser

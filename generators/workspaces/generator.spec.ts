@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, expect, it } from 'expect-node';
+import { describe, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import Generator from './generator.ts';
@@ -55,6 +55,19 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with an application of a type of a blueprint', () => {
+    it('keeps the application in the workspaces', async () => {
+      await helpers
+        .runJHipster(generator)
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'mobile'] })
+        .withJHipsterConfig({ baseName: 'workspaces' })
+        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
+        .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' });
+
+      result.assertJsonFileContent('package.json', { workspaces: { packages: ['gateway', 'mobile'] } });
+    });
+  });
+
   describe('with applications', () => {
     it('builds the Docker images of the applications with their docker:build scripts', async () => {
       await helpers
@@ -71,13 +84,5 @@ describe(`generator - ${generator}`, () => {
         },
       });
     });
-  });
-
-  it('bootstrap migration', async () => {
-    await helpers
-      .runJHipster('jhipster:bootstrap-application-base')
-      .prepareEnvironment()
-      .withMockedGenerators(['jhipster:base-application:bootstrap']);
-    expect(result.getComposedGenerators()).toContain('jhipster:base-application:bootstrap');
   });
 });

@@ -97,8 +97,6 @@ export interface Relationship extends ServerRelationship, SpringBootAddedPropert
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends ServerEntity<F, R>, SpringEntity, CommandEntity {
   skipDbChangelog?: boolean;
-  /** The name of the entity in the alerts of its REST resource, the key of its client translations. */
-  entityAlertName?: string;
   entityJavaFilterableProperties: any[];
   entityJavaCustomFilters: any[];
 

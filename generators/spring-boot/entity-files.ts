@@ -19,7 +19,6 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
 
 import { databaseTypes, entityOptions } from '../../lib/jhipster/index.ts';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
@@ -58,7 +57,6 @@ export const restFiles = javaWriteFileSection({
           file: '_package_/_entityPackage_/web/rest/_entityClass_ResourceIT.java',
           options: {
             context: {
-              _,
               chalkRed: chalk.red,
               fs,
               SERVER_TEST_SRC_DIR,

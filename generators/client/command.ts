@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { intersection } from 'lodash-es';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHANUMERIC_PATTERN, ALPHANUMERIC_UNDERSCORE_PATTERN } from '../../lib/constants/jdl.ts';
@@ -166,7 +165,7 @@ const command = {
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
         type: 'checkbox',
         message: 'Besides Jest/Vitest, which testing frameworks would you like to use?',
-        default: () => intersection([CYPRESS, PLAYWRIGHT], config.testFrameworks),
+        default: () => [CYPRESS, PLAYWRIGHT].filter(framework => config.testFrameworks?.includes(framework)),
       }),
       choices: [
         { name: 'Cypress', value: CYPRESS },

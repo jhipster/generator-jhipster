@@ -16,9 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { lowerFirst } from 'lodash-es';
-
 import { APPLICATION_TYPE_MICROSERVICE, type ApplicationType } from '../../../core/application-types.ts';
+import { lowerFirst } from '../../../utils/string-utils.ts';
 import { binaryOptions } from '../../core/built-in-options/index.ts';
 import type { JDLEntity } from '../../core/models/index.ts';
 import type JDLApplication from '../../core/models/jdl-application.ts';

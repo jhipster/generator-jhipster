@@ -88,14 +88,19 @@ class LoggingAspectTest {
         Object result = aspect.logAround(joinPoint);
 
         assertThat(result).isEqualTo("result");
-        assertThat(messages()).containsExactly("Enter: loggedMethod() with argument[s] = [arg]", "Exit: loggedMethod() with result = result");
+        assertThat(messages()).containsExactly(
+            "Enter: loggedMethod() with argument[s] = [arg]",
+            "Exit: loggedMethod() with result = result"
+        );
     }
 
     @Test
     void logAroundRethrowsIllegalArgumentException() throws Throwable {
         when(joinPoint.proceed()).thenThrow(new IllegalArgumentException("invalid"));
 
-        assertThatThrownBy(() -> aspect.logAround(joinPoint)).isInstanceOf(IllegalArgumentException.class).hasMessage("invalid");
+        assertThatThrownBy(() -> aspect.logAround(joinPoint))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("invalid");
 
         assertThat(messages()).contains("Illegal argument: [arg] in loggedMethod()");
     }
@@ -105,7 +110,9 @@ class LoggingAspectTest {
     void logAroundRethrowsAndLogsExceptions() throws Throwable {
         when(joinPoint.proceed()).thenThrow(new IllegalStateException("failed"));
 
-        assertThatThrownBy(() -> aspect.logAround(joinPoint)).isInstanceOf(IllegalStateException.class).hasMessage("failed");
+        assertThatThrownBy(() -> aspect.logAround(joinPoint))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("failed");
 
         assertThat(messages()).contains("Exception in loggedMethod() with cause = 'NULL' and exception = 'failed'");
     }
@@ -120,7 +127,10 @@ class LoggingAspectTest {
         assertThat(messages()).containsExactly("Enter: loggedMethod() with argument[s] = [arg]");
 
         assertThat(((Mono<?>) result).block()).isEqualTo("result");
-        assertThat(messages()).containsExactly("Enter: loggedMethod() with argument[s] = [arg]", "Exit: loggedMethod() with result = result");
+        assertThat(messages()).containsExactly(
+            "Enter: loggedMethod() with argument[s] = [arg]",
+            "Exit: loggedMethod() with result = result"
+        );
     }
 
     @Test
@@ -131,7 +141,10 @@ class LoggingAspectTest {
 
         assertThat(result).isInstanceOf(Flux.class);
         assertThat(((Flux<?>) result).cast(String.class).collectList().block()).containsExactly("first", "second");
-        assertThat(messages()).containsExactly("Enter: loggedMethod() with argument[s] = [arg]", "Exit: loggedMethod() with result = completed");
+        assertThat(messages()).containsExactly(
+            "Enter: loggedMethod() with argument[s] = [arg]",
+            "Exit: loggedMethod() with result = completed"
+        );
     }
 
     @Test
@@ -140,7 +153,9 @@ class LoggingAspectTest {
 
         Object result = aspect.logAround(joinPoint);
 
-        assertThatThrownBy(() -> ((Mono<?>) result).block()).isInstanceOf(IllegalStateException.class).hasMessage("failed");
+        assertThatThrownBy(() -> ((Mono<?>) result).block())
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("failed");
         assertThat(messages()).contains("Exception in loggedMethod() with cause = 'NULL' and exception = 'failed'");
     }
 

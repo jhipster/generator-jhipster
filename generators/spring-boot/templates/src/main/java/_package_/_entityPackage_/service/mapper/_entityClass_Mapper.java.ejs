@@ -18,8 +18,7 @@
 -%>
 package <%- entityAbsolutePackage %>.service.mapper;
 
-<%_ const getOriginalField = field => field.originalField || field;
-    const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
+<%_ const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
     const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
     const dtoRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded);
     let otherEntitiesFields = otherEntities
@@ -32,9 +31,9 @@ package <%- entityAbsolutePackage %>.service.mapper;
       .flat();
 _%>
 <%_ for (const a of otherEntitiesFields) { _%>
-  <%_ a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && getOriginalField(a.relatedField) === getOriginalField(b.relatedField) && b.collection === true); _%>
+  <%_ a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && a.relatedField.fieldName === b.relatedField.fieldName && b.collection === true); _%>
 <%_ } _%>
-<%_ const sameMapper = (a, b) => a.otherEntity === b.otherEntity && a.collection === b.collection && getOriginalField(a.relatedField) === getOriginalField(b.relatedField); _%>
+<%_ const sameMapper = (a, b) => a.otherEntity === b.otherEntity && a.collection === b.collection && a.relatedField.fieldName === b.relatedField.fieldName; _%>
 <%_ otherEntitiesFields = otherEntitiesFields.filter((a, index) => otherEntitiesFields.findIndex(b => sameMapper(a, b)) === index); _%>
 
 <%_ if (dtoRelationships.some(r => r.collection)) { _%>

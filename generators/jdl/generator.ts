@@ -19,7 +19,6 @@
 import { readFile } from 'node:fs/promises';
 import { extname } from 'node:path';
 
-import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, type MemFsEditorFile, create as createMemFsEditor } from 'mem-fs-editor';
 import { isFilePending } from 'mem-fs-editor/state';
@@ -30,6 +29,7 @@ import { CLI_NAME } from '../../cli/utils.ts';
 import type { YoRcFileContent } from '../../lib/constants/yeoman.ts';
 import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { normalizeBlueprintName } from '../../lib/utils/blueprint-name.ts';
+import { upperFirst } from '../../lib/utils/string-utils.ts';
 import { mergeConfigContent, mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import BaseCoreGenerator from '../base-core/index.ts';

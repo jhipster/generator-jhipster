@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 
-import { kebabCase, startCase, upperFirst } from 'lodash-es';
-
 import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, upperFirstCamelCase } from '../../lib/utils/index.ts';
-import { customCamelCase } from '../../lib/utils/string-utils.ts';
+import { customCamelCase, kebabCase, startCase, upperFirst } from '../../lib/utils/string-utils.ts';
 
 import { getHipster } from './internal/index.ts';
 

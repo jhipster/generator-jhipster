@@ -13,10 +13,10 @@ Options:
   --defaults                           Use default values for the generator
   --git-dependency <value>             Use git dependency (eg: github:jhipster/generator-jhipster#main)
   --cli-name <value>                   CLI name
-  --skip-workflows                     Skip github workflows
+  --skip-workflows                     Skip GitHub workflows
   --ignore-existing-generators         Ignore existing generators
-  --github-repository <value>          Github Repository
-  --github-workflows                   Generate github workflows
+  --github-repository <value>          GitHub repository
+  --github-workflows                   Generate GitHub workflows
   --generate-snapshots                 Generate test snapshots
   --sub-generators <value...>          Sub generators to generate
   --additional-sub-generators <value>  Comma separated additional sub generators to generate

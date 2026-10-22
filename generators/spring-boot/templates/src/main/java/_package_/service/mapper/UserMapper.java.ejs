@@ -121,9 +121,7 @@ public class UserMapper {
         Set<String> authorities = new HashSet<>();
 
         if (authoritiesAsString != null) {
-            authorities = authoritiesAsString.stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+            authorities = authoritiesAsString.stream().filter(Objects::nonNull).collect(Collectors.toSet());
         }
 
         return authorities;
@@ -159,9 +157,7 @@ public class UserMapper {
             return Set.of();
         }
 
-        return users.stream()
-            .map(this::toDtoId)
-            .collect(Collectors.toSet());
+        return users.stream().map(this::toDtoId).collect(Collectors.toSet());
     }
 
     @Named("login")
@@ -187,8 +183,6 @@ public class UserMapper {
             return Set.of();
         }
 
-        return users.stream()
-            .map(this::toDtoLogin)
-            .collect(Collectors.toSet());
+        return users.stream().map(this::toDtoLogin).collect(Collectors.toSet());
     }
 }
