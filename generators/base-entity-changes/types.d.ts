@@ -2,7 +2,6 @@ import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
-  RelationshipWithEntity,
 } from '../base-application/types.ts';
 export type { Application, Config, Features, Options, Relationship, Source } from '../base-application/types.ts';
 
@@ -18,29 +17,30 @@ export interface Entity<
   incrementalChangelog?: boolean;
 }
 
-export type BaseChangelogData = {
+/** The data the changelog of an entity is written with, filled by the generator writing it. */
+export type BaseChangelogData<E extends BaseApplicationEntity = BaseApplicationEntity> = {
   skipFakeData: boolean;
-  allFields: Field[];
-  fields: Field[];
-  addedFields: any[];
-  removedFields: any[];
-  relationships: RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity<Field>>[];
-  addedRelationships: any[];
-  removedRelationships: any[];
-  relationshipsToRecreateForeignKeysOnly: any[];
-  removedDefaultValueFields: any[];
-  addedDefaultValueFields: any[];
-  hasFieldConstraint: any;
+  allFields: E['fields'];
+  fields: E['fields'];
+  addedFields: E['fields'];
+  removedFields: E['fields'];
+  relationships: E['relationships'];
+  addedRelationships: E['relationships'];
+  removedRelationships: E['relationships'];
+  relationshipsToRecreateForeignKeysOnly: E['relationships'];
+  removedDefaultValueFields: E['fields'];
+  addedDefaultValueFields: E['fields'];
+  hasFieldConstraint: boolean;
   hasDefaultValueChange: boolean;
-  hasRelationshipConstraint: any;
-  shouldWriteAnyRelationship: any;
+  hasRelationshipConstraint: boolean;
+  shouldWriteAnyRelationship: boolean;
   requiresUpdateChangelogs: boolean;
 };
 
 export type BaseChangelog<E extends BaseApplicationEntity = BaseApplicationEntity> = {
   writeContext?: {
     entity: E;
-    databaseChangelog: BaseChangelogData;
+    databaseChangelog: BaseChangelog<E>;
     changelogDate: string;
     databaseType: string;
     prodDatabaseType?: string;
@@ -70,5 +70,5 @@ export type BaseChangelog<E extends BaseApplicationEntity = BaseApplicationEntit
   relationshipsToRecreateForeignKeysOnly: E['relationships'];
   removedDefaultValueFields: E['fields'];
   addedDefaultValueFields: E['fields'];
-  changelogData?: BaseChangelogData;
+  changelogData?: BaseChangelogData<E>;
 };

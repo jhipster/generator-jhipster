@@ -130,7 +130,7 @@ export default abstract class BaseEntityChangesGenerator<
     }
 
     if (application.generateBuiltInUserEntity && !previousEntitiesByName.User) {
-      previousEntitiesByName.User = { name: 'User', builtIn: true } as any;
+      previousEntitiesByName.User = { name: 'User', builtIn: true } as Entity;
     }
 
     const entities = Object.values(previousEntitiesByName);
@@ -169,10 +169,10 @@ export default abstract class BaseEntityChangesGenerator<
 
       // Calculate new fields
       const addedFieldNames = newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName));
-      const addedFields = addedFieldNames.map(fieldName => newFields.find(field => fieldName === field.fieldName)!);
+      const addedFields = newFields.filter(field => addedFieldNames.includes(field.fieldName));
       // Calculate removed fields
       const removedFieldNames = oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName));
-      const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName)!);
+      const removedFields = oldFields.filter(field => removedFieldNames.includes(field.fieldName));
 
       const oldRelationships = oldConfig.relationships || [];
 
@@ -213,26 +213,20 @@ export default abstract class BaseEntityChangesGenerator<
       // find the old fields that have not been deleted anyway or otherwise where the default value is different on the same new field
       const removedDefaultValueFields = oldFieldsWithDefaultValues
         .filter(oldField => !removedFieldNames.includes(oldField.fieldName))
-        .filter(
+        .filter(oldField => {
           // field was not removed, so check its default value
-          oldField =>
-            this.doDefaultValuesDiffer(
-              oldField,
-              newFields.find(newField => newField.fieldName === oldField.fieldName)!,
-            ),
-        );
+          const newField = newFields.find(field => field.fieldName === oldField.fieldName);
+          return newField !== undefined && this.doDefaultValuesDiffer(oldField, newField);
+        });
 
       // find the new fields that have not been added newly anyway or otherwise where the old field had a different default value
       const addedDefaultValueFields = newFieldsWithDefaultValues
         .filter(newField => !addedFieldNames.includes(newField.fieldName))
-        .filter(
+        .filter(newField => {
           // field was not added newly, so check its default value
-          newField =>
-            this.doDefaultValuesDiffer(
-              oldFields.find(oldField => oldField.fieldName === newField.fieldName)!,
-              newField,
-            ),
-        );
+          const oldField = oldFields.find(field => field.fieldName === newField.fieldName);
+          return oldField !== undefined && this.doDefaultValuesDiffer(oldField, newField);
+        });
 
       return {
         ...baseChangelog(),
