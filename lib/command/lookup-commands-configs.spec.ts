@@ -178,6 +178,11 @@ describe('jdl options', () => {
         it('should not accept unknown value when creating importer', () => {
           expect(() => createImporterFromContent(`application { config { ${optionName} unknown } }`)).toThrow(/, but found: "unknown"/);
         });
+      } else if (optionName === 'applicationType') {
+        it('should accept another value when importing', () => {
+          const state = createImporterFromContent(`application { config { ${optionName} other } }`).import();
+          expect(state.exportedApplicationsWithEntities.jhipster.config[optionName]).toBe('other');
+        });
       } else {
         it('should not accept unknown value when importing', () => {
           expect(() =>
