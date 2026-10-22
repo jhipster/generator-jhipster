@@ -49,6 +49,41 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('without a sample name, the workflow and the sample asked', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withAnswers({ workflow: 'vue', sampleName: 'vue-default' })
+        .withOptions({
+          sampleOnly: true,
+        });
+    });
+
+    it('should ask the workflow, then a sample of it', () => {
+      expect(runResult.askedQuestions.map(({ name }) => name)).toEqual(['workflow', 'sampleName']);
+    });
+
+    it('should copy the sample answered', () => {
+      expect((runResult.generator as unknown as Generator).sample?.name).toBe('vue-default');
+    });
+  });
+
+  describe('with a workflow, the sample asked among its samples', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withAnswers({ sampleName: 'react-default' })
+        .withOptions({
+          workflow: 'react',
+          sampleOnly: true,
+        });
+    });
+
+    it('should ask only the sample', () => {
+      expect(runResult.askedQuestions.map(({ name }) => name)).toEqual(['sampleName']);
+    });
+  });
+
   describe('the secrets of a sample', () => {
     before(async () => {
       await helpers
