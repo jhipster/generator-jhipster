@@ -46,9 +46,9 @@ import org.springframework.transaction.ReactiveTransactionManager;
 public class DatabaseConfiguration {
 <%_ if (reactive) { _%>
 
-     @Bean(ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
-     public ReactiveTransactionManager transactionManager(Driver driver, ReactiveDatabaseSelectionProvider databaseNameProvider) {
-         return new ReactiveNeo4jTransactionManager(driver, databaseNameProvider);
-     }
+    @Bean(ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+    public ReactiveTransactionManager transactionManager(Driver driver, ReactiveDatabaseSelectionProvider databaseNameProvider) {
+        return new ReactiveNeo4jTransactionManager(driver, databaseNameProvider);
+    }
 <%_ } _%>
 }
