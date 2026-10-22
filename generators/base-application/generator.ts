@@ -23,7 +23,7 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import { type DroppedMutation, droppedMutationMessage, enableDelayedMutations, mutateData } from '../../lib/utils/object.ts';
 import { upperFirst } from '../../lib/utils/string-utils.ts';
-import { priorityMatches } from '../base-core/priorities.ts';
+import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
@@ -94,13 +94,15 @@ const PRIORITY_WITH_ENTITIES_TO_LOAD = new Set<string>([LOADING_ENTITIES]);
 const PRIORITY_WITH_ENTITIES = new Set<string>([DEFAULT]);
 const PRIORITY_WITH_FILTERED_ENTITIES = new Set<string>([WRITING_ENTITIES, POST_WRITING_ENTITIES]);
 
-const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES]);
+const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES, POST_WRITING_OBJECTS]);
 const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
 // A `*` matches the priorities a name starts, the ones of the custom objects (`loadingService`) included.
 const PRIORITY_WITH_APPLICATION = new Set<string>([
   'loading*',
   'preparing*',
   'postPreparing*',
+  WRITING_OBJECTS,
+  POST_WRITING_OBJECTS,
   LOADING,
   COMPOSING_BOOTSTRAP,
   PREPARING,
@@ -135,7 +137,7 @@ const withDefaults = (data: Record<string, any>, onDroppedMutation: (dropped: Dr
 };
 
 const getFirstArgForPriority = (priorityName: string) => ({
-  source: PRIORITY_WITH_SOURCE.has(priorityName),
+  source: priorityMatches(PRIORITY_WITH_SOURCE, priorityName),
   application: priorityMatches(PRIORITY_WITH_APPLICATION, priorityName),
   applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.has(priorityName),
   entitiesToLoad: PRIORITY_WITH_ENTITIES_TO_LOAD.has(priorityName),

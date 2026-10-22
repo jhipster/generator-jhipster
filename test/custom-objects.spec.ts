@@ -31,21 +31,36 @@ const { objectPriority } = CoreGenerator;
 const bases = [
   {
     Generator: CoreGenerator,
-    order: ['preparing', 'loadingService', 'preparingService', 'postPreparingService', 'postPreparing', 'default'],
+    order: [
+      'preparing',
+      'loadingService service',
+      'preparingService service',
+      'postPreparingService service',
+      'postPreparing',
+      'default',
+      'writing',
+      'writingObjects service',
+      'postWriting',
+      'postWritingObjects service',
+    ],
   },
   {
     Generator: BaseApplicationGenerator,
     order: [
       'preparing',
-      'loadingService custom',
-      'preparingService custom',
-      'postPreparingService custom',
+      'loadingService custom service',
+      'preparingService custom service',
+      'postPreparingService custom service',
       'postPreparing',
       'configuringEachEntity',
       'loadingEntities',
       'preparingEachEntity',
       'postPreparingEachEntity',
       'default',
+      'writing',
+      'writingObjects custom service',
+      'postWriting',
+      'postWritingObjects custom source service',
     ],
   },
   {
@@ -55,10 +70,14 @@ const bases = [
       'postPreparing',
       'loadingWorkspaces',
       'preparingWorkspaces',
-      'loadingService deployment applications',
-      'preparingService deployment applications',
-      'postPreparingService deployment applications',
+      'loadingService deployment applications service',
+      'preparingService deployment applications service',
+      'postPreparingService deployment applications service',
       'default',
+      'writing',
+      'writingObjects deployment applications service',
+      'postWriting',
+      'postWritingObjects deployment applications service',
     ],
   },
 ];
@@ -68,8 +87,17 @@ describe('custom objects', () => {
     describe(Generator.name, () => {
       const events: string[] = [];
       /** The priority, with the application or the deployment and its applications the phases of the object get. */
-      const event = (priorityName: string, { application, deployment, applications }: any = {}) =>
-        [priorityName, application?.baseName, deployment && 'deployment', applications && 'applications'].filter(Boolean).join(' ');
+      const event = (priorityName: string, { application, deployment, applications, source, service }: any = {}) =>
+        [
+          priorityName,
+          application?.baseName,
+          deployment && 'deployment',
+          applications && 'applications',
+          source && 'source',
+          Array.isArray(service) && 'service',
+        ]
+          .filter(Boolean)
+          .join(' ');
 
       class CustomGenerator extends (Generator as typeof CoreGenerator) {
         constructor(args: any, options: any, features: any) {
@@ -132,6 +160,22 @@ describe('custom objects', () => {
 
         get [CoreGenerator.DEFAULT]() {
           return { default: () => events.push('default') };
+        }
+
+        get [CoreGenerator.WRITING_OBJECTS]() {
+          return { writing: (arg: any) => events.push(event('writingObjects', arg)) };
+        }
+
+        get [CoreGenerator.WRITING]() {
+          return { writing: () => events.push('writing') };
+        }
+
+        get [CoreGenerator.POST_WRITING]() {
+          return { postWriting: () => events.push('postWriting') };
+        }
+
+        get [CoreGenerator.POST_WRITING_OBJECTS]() {
+          return { postWriting: (arg: any) => events.push(event('postWritingObjects', arg)) };
         }
       }
 
@@ -238,6 +282,8 @@ describe('custom objects', () => {
       expect(objectPriority('service', 'loading')).toBe('>loadingService');
       expect(objectPriority('service', 'preparing')).toBe('>preparingService');
       expect(objectPriority('service', 'postPreparing')).toBe('>postPreparingService');
+      expect(CoreGenerator.WRITING_OBJECTS).toBe('>writingObjects');
+      expect(CoreGenerator.POST_WRITING_OBJECTS).toBe('>postWritingObjects');
     });
 
     it('fails when the generator does not implement the getter of the object', async () => {
@@ -392,6 +438,7 @@ describe('custom objects', () => {
       Coupon: { type: 'record', fields: { code: { type: 'String', validations: { maxlength: 20 } } } },
     };
     let services: any[];
+    let writtenServices: string[];
     let generator: BaseApplicationGenerator;
     let order: any;
 
@@ -404,8 +451,22 @@ describe('custom objects', () => {
         await this.dependsOnBootstrap('app');
       }
 
-      get service() {
+      declare readonly customObjectNames: readonly ['service'];
+
+      get service(): { name: string }[] {
         return this.findObjects('service');
+      }
+
+      get [BaseApplicationGenerator.WRITING_OBJECTS]() {
+        return this.asWritingObjectsTaskGroup({
+          writeServices({ service }) {
+            // The objects come with the type of their getter.
+            writtenServices = service.map(({ name }) => name);
+            // @ts-expect-error the type of the getter
+            const wrong: number = service[0].name;
+            return wrong;
+          },
+        });
       }
 
       get [objectPriority('service', 'preparing')]() {
@@ -439,6 +500,10 @@ describe('custom objects', () => {
     it('gives the objects of the type of the custom object', () => {
       expect(services.map(service => service.name)).toEqual(['OrderCheckout']);
       expect(generator.findObjects('record').map(record => record.name)).toEqual(['Coupon', 'DiscountedQuote', 'Quote', 'QuoteLine']);
+    });
+
+    it('gives the objects to the writing objects priority, with their type', () => {
+      expect(writtenServices).toEqual(['OrderCheckout']);
     });
 
     it('gives the configuration of an object as declared', () => {

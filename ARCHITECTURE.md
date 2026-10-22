@@ -153,11 +153,16 @@ each with the array of the objects (`service`):
 - `preparing<Name>`: its tasks prepare them;
 - `postPreparing<Name>`: its tasks use the prepared objects.
 
+The objects are written in two priorities of their own, with every custom object of the generator by name:
+`writingObjects` (`Generator.WRITING_OBJECTS`), after the writing priority and before the post writing one, and
+`postWritingObjects` (`Generator.POST_WRITING_OBJECTS`), after the post writing priority, with the `source` too. A
+generator declaring the names of its custom objects as the `customObjectNames` type gets them typed, with the type of
+their getters, through `asWritingObjectsTaskGroup` and `asPostWritingObjectsTaskGroup`.
+
 To share the objects with the other generators declaring them, the getter reads them from the context
 (`getContextData`), and each phase runs for every generator before the next one. While the objects are prepared, a
 default (`mutateData`) reading a property not yet set waits for it, and is applied before the post preparing, like the
-application ones. An application
-generator gives the phases the `application`, and they run before its entity priorities. A workspaces generator runs
+application ones. An application generator gives the phases the `application`, and they run before its entity priorities. A workspaces generator runs
 them after its workspaces priorities, before the default priority, and gives them the `deployment` and its
 `applications`. `Generator.objectPriority(name, phase)` gives the priority of a phase:
 
@@ -187,6 +192,19 @@ export default class extends Generator {
         }
       },
     };
+  }
+
+  // The names of the custom objects, for the writing objects tasks to get them typed.
+  declare readonly customObjectNames: readonly ['service'];
+
+  get [Generator.WRITING_OBJECTS]() {
+    return this.asWritingObjectsTaskGroup({
+      async writeServices({ application, service }) {
+        for (const each of service) {
+          await this.writeFiles({ sections: serviceFiles, context: { ...application, service: each } });
+        }
+      },
+    });
   }
 }
 ```

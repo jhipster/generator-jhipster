@@ -26,7 +26,7 @@ import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
 import { getDefaultJDLDeploymentDefaults } from '../../lib/jdl-config/jhipster-jdl-config.ts';
 import { createDelayedMutationContext, droppedMutationMessage, removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
 import BaseGenerator from '../base/index.ts';
-import { priorityMatches } from '../base-core/priorities.ts';
+import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
 import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
@@ -208,6 +208,8 @@ export default abstract class BaseWorkspacesGenerator<
           'loading*',
           'preparing*',
           'postPreparing*',
+          WRITING_OBJECTS,
+          POST_WRITING_OBJECTS,
           PROMPTING_WORKSPACES,
           CONFIGURING_WORKSPACES,
           LOADING_WORKSPACES,

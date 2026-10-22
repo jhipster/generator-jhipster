@@ -245,26 +245,54 @@ export const QUEUES = {
 /** The phases of a custom object, between the preparing and the post preparing priorities. */
 export type CustomObjectPhase = 'loading' | 'preparing' | 'postPreparing';
 
+/** The priorities the custom objects of a generator are written in: after the writing and the post writing ones. */
+export const WRITING_OBJECTS = 'writingObjects';
+export const POST_WRITING_OBJECTS = 'postWritingObjects';
+
 /** The priority name of a phase of a custom object: `loadingService`, `preparingService`, `postPreparingService`. */
 export const customObjectPriorityName = (name: string, phase: CustomObjectPhase): string =>
   `${phase}${name.charAt(0).toUpperCase()}${name.slice(1)}`;
 
+/** The objects of a custom object of a generator: the array the getter of its name gives. */
+const objectsOf = (generator: CoreGenerator, name: string): Record<string, any>[] => {
+  const objects = (generator as any)[name];
+  if (!objects) {
+    throw new Error(`The generator ${generator.options.namespace} declares the custom object ${name} without a ${name} getter`);
+  }
+  if (!Array.isArray(objects)) {
+    throw new Error(`The ${name} getter of the generator ${generator.options.namespace} must give an array of objects`);
+  }
+  return objects;
+};
+
+/**
+ * The priorities the custom objects of a generator are written in, with every object by its name (`service`): the
+ * writing objects one, after the writing priority and before the multi-step transform its files go through too, and the
+ * post writing objects one, after the post writing priority.
+ */
+export const writingObjectsPriorities = (names: readonly string[]): Priority[] =>
+  (
+    [
+      [WRITING_OBJECTS, MULTISTEP_TRANSFORM],
+      [POST_WRITING_OBJECTS, PRE_CONFLICTS],
+    ] as const
+  ).map(([priorityName, before]) => ({
+    priorityName,
+    queueName: `${QUEUE_PREFIX}${priorityName}`,
+    before,
+    args: generator => {
+      const coreGenerator = generator as CoreGenerator;
+      const [firstArg] = coreGenerator.getArgsForPriority(priorityName);
+      return [{ ...firstArg, ...Object.fromEntries(names.map(name => [name, objectsOf(coreGenerator, name)])) }];
+    },
+  }));
+
 /**
  * The priorities of a custom object, before the `before` priority: its loading, preparing and post preparing, each with
- * the objects (`service`), the array the getter of its name the generator implements gives. While they are prepared, a
- * default (`mutateData`) reading a property not yet set waits for it, applied before the post preparing.
+ * the objects (`service`), the array the getter of its name the generator implements gives. While they are prepared, a default (`mutateData`) reading a property not yet set waits for it,
+ * applied before the post preparing.
  */
 export const customObjectPriorities = (name: string, before: string = POST_PREPARING): Priority[] => {
-  const objectsOf = (generator: CoreGenerator): Record<string, any>[] => {
-    const objects = (generator as any)[name];
-    if (!objects) {
-      throw new Error(`The generator ${generator.options.namespace} declares the custom object ${name} without a ${name} getter`);
-    }
-    if (!Array.isArray(objects)) {
-      throw new Error(`The ${name} getter of the generator ${generator.options.namespace} must give an array of objects`);
-    }
-    return objects;
-  };
   const priority = (phase: CustomObjectPhase, before: string): Priority => {
     const priorityName = customObjectPriorityName(name, phase);
     return {
@@ -274,7 +302,7 @@ export const customObjectPriorities = (name: string, before: string = POST_PREPA
       args: generator => {
         const coreGenerator = generator as CoreGenerator;
         const [firstArg] = coreGenerator.getArgsForPriority(priorityName);
-        const objects = objectsOf(coreGenerator);
+        const objects = objectsOf(coreGenerator, name);
         for (const object of objects) {
           if (phase === 'preparing') {
             // The object loaded, a default reading a property not yet set waits for it, like the application ones.
