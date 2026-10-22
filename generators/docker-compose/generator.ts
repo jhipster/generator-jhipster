@@ -173,6 +173,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         const faker = await createFaker();
 
         deployment.keycloakRedirectUris = '';
+        deployment.keycloakAppSchemes = [...new Set(applications.flatMap(appConfig => appConfig.oauth2AppSchemes ?? []))];
         deployment.appsYaml = applications.map(appConfig => {
           const lowercaseBaseName = appConfig.baseName.toLowerCase();
           const parentConfiguration: Record<string, any> = {};

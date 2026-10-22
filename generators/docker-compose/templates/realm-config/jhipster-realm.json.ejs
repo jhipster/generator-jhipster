@@ -1074,6 +1074,9 @@
         <%- keycloakRedirectUris %>
         "http://localhost:8100/*",
         "http://127.0.0.1:8761/*",
+<%_ for (const appScheme of locals.keycloakAppSchemes ?? []) { _%>
+        "<%- appScheme %>:*",
+<%_ } _%>
         "dev.localhost.ionic:*"
       ],
       "webOrigins": [

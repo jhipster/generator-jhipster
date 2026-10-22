@@ -198,6 +198,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
   "nodeWebappBuildTarget": "webapp:build",
+  "oauth2AppSchemes": undefined,
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,

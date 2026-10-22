@@ -77,6 +77,8 @@ export type Deployment = DeploymentConfig & {
   dockerContainers?: Record<string, string>;
 
   keycloakRedirectUris?: string;
+  /** The URL schemes of the apps of the applications, allowed as redirect URIs of the client of the deployment. */
+  keycloakAppSchemes?: string[];
   keycloakSecrets?: string[];
   usesOauth2?: boolean;
   useKafka?: boolean;

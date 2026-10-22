@@ -141,4 +141,20 @@ describe(`generator - ${generator}`, () => {
       expect(app).toMatch(/^ {6}postgresql:$/m);
     });
   });
+
+  describe('with oauth2AppSchemes', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ authenticationType: 'oauth2', oauth2AppSchemes: ['exp', 'com.mycompany.app'] });
+    });
+
+    it('should allow the app schemes as redirect URIs of the web_app client', () => {
+      const realm = JSON.parse(
+        runResult.getSnapshot('**/jhipster-realm.json')['src/main/docker/realm-config/jhipster-realm.json'].contents!,
+      );
+      const webApp = realm.clients.find((client: { clientId: string }) => client.clientId === 'web_app');
+      expect(webApp.redirectUris).toEqual(expect.arrayContaining(['exp:*', 'com.mycompany.app:*']));
+    });
+  });
 });
