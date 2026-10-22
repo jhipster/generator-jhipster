@@ -49,6 +49,21 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with liquibase-jdl-rename-field-post, a sample generated over its base', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true })
+        .withArguments('liquibase-jdl-rename-field-post')
+        .withSpawnMock()
+        .withMockedJHipsterGenerators({ except: ['jhipster:info'] });
+    });
+
+    it('should generate its base in the project folder first', () => {
+      const [[, , args]] = runResult.spawnStub!.mock.calls.map((call: any) => call.arguments);
+      expect(args.slice(1, 5)).toEqual(['generate-sample', 'liquibase-jdl-rename-field', '--project-folder', runResult.cwd]);
+    });
+  });
+
   describe('the secrets of a sample', () => {
     before(async () => {
       await helpers

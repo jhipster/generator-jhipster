@@ -96,6 +96,13 @@ export const buildMatrix = async ({
       };
       break;
     }
+    case 'database-changelog': {
+      // The same changes as the database-changelog job of the generators workflow.
+      if (springBootDefaults || devBlueprint || changes.databaseChangelogWorkflow) {
+        matrix = await getGroupMatrix();
+      }
+      break;
+    }
     case 'graalvm': {
       if (hasWorkflowChanges || java || graalvm) {
         matrix = await getGroupMatrix();

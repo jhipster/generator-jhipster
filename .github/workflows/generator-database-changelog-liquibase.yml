@@ -73,11 +73,8 @@ jobs:
       - uses: jhipster/actions/build-jhipster-bom@v2
         with:
           jhipster-bom-ref: ${{ steps.jhipster-output.outputs.jhipster-bom-branch }}
-      - run: jhipster.cjs generate-sample liquibase-jdl-rename-field --skip-jhipster-dependencies
-        env:
-          JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
-      # The changed jdl over the application, as incremental changelogs: it overwrites the jdl of the first sample.
-      - run: jhipster.cjs generate-sample liquibase-jdl-rename-field-post --force
+      # The changed jdl over the application it declares as its base, as incremental changelogs.
+      - run: jhipster.cjs generate-sample liquibase-jdl-rename-field-post --skip-jhipster-dependencies --force
         env:
           JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - name: 'GENERATION: incremental changes'

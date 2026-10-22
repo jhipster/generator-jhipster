@@ -77,9 +77,19 @@ describe('describe-samples - support', () => {
 
     it('should give the samples the ci runs for a change of a server template, by group', async () => {
       const groups = await describeChangedSamples([serverTemplate]);
-      // graalvm runs because the generators workflow enables it for java changes; the daily and labeled groups never.
-      expect(Object.keys(groups).sort()).toEqual(['angular', 'graalvm', 'react', 'vue']);
+      // database-changelog and graalvm run because the generators workflow enables them for java changes; the daily and
+      // labeled groups never.
+      expect(Object.keys(groups).sort()).toEqual(['angular', 'database-changelog', 'graalvm', 'react', 'vue']);
       expect(groups.angular).toContain('ng-default');
+    });
+
+    it('should give the incremental changelog samples for a change of the entity changes', async () => {
+      const groups = await describeChangedSamples(['generators/base-entity-changes/generator.ts']);
+      expect(groups['database-changelog']).toEqual(['liquibase-jdl-rename-field', 'liquibase-jdl-rename-field-post']);
+    });
+
+    it('should describe the sample an incremental sample is generated over', () => {
+      expect(describeSample('liquibase-jdl-rename-field-post').base).toBe('liquibase-jdl-rename-field');
     });
 
     it('should leave out graalvm when the generators workflow does not enable it', async () => {
