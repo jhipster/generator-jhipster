@@ -29,7 +29,7 @@ import type FullEnvironment from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../generators/index.ts';
 import type { JHipsterConfigs } from '../lib/command/types.ts';
-import type { JDLDefinitions } from '../lib/jdl/index.ts';
+import type { JDLDefinitions } from '../lib/jdl/core/parsing/index.ts';
 
 import type JHipsterCommand from './jhipster-command.ts';
 import { createProgram } from './program.ts';

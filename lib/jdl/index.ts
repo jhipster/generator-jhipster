@@ -18,17 +18,4 @@
  */
 
 export * from './jdl-importer.ts';
-export {
-  type JDLApplicationConfig,
-  type JDLComment,
-  type JDLDefinitions,
-  type JDLDiagnostic,
-  type JDLLocation,
-  type JDLParseResult,
-  type JDLRuntime,
-  getCst,
-  parse,
-  parseJDL,
-} from './core/parsing/index.ts';
-export { createJDLRuntime, getDefaultJDLDefinitions, getDefaultRuntime } from '../jdl-config/jdl-runtime.ts';
-export { buildJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
+export { getCst, parse } from './core/parsing/index.ts';
