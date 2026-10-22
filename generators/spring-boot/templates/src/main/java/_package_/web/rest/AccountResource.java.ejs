@@ -122,9 +122,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
 <%_ if (reactive) { _%>
-        return userService.registerUser(managedUserVM, managedUserVM.getPassword())
-            .doOnSuccess(mailService::sendActivationEmail)
-            .then();
+        return userService.registerUser(managedUserVM, managedUserVM.getPassword()).doOnSuccess(mailService::sendActivationEmail).then();
 <%_ } else { _%>
         <%- user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);

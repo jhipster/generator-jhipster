@@ -167,7 +167,9 @@ public class LiquibaseConfiguration {
             String keyspaceName = session
                 .getKeyspace()
                 .map(CqlIdentifier::asInternal)
-                .orElseThrow(() -> new IllegalStateException("The Cassandra session is not bound to a keyspace, configure spring.cassandra.keyspace-name"));
+                .orElseThrow(() ->
+                    new IllegalStateException("The Cassandra session is not bound to a keyspace, configure spring.cassandra.keyspace-name")
+                );
             return (
                 "jdbc:cassandra://" +
                 contactPoint.host() +

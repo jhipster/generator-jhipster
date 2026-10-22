@@ -944,8 +944,7 @@ public class UserService {
       <%_ if (databaseTypeCouchbase) { _%>
         Collection<String> userAuthorities = user.getAuthorities();
       <%_ } else { _%>
-        Collection<String> userAuthorities =
-            user.getAuthorities().stream().map(Authority::getName).toList();
+        Collection<String> userAuthorities = user.getAuthorities().stream().map(Authority::getName).toList();
       <%_ } _%>
         for (String authority : userAuthorities) {
             if (!dbAuthorities.contains(authority)) {

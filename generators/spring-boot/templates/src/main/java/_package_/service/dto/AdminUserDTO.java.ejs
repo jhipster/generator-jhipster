@@ -108,9 +108,7 @@ public class <%- user.adminUserDto %> implements Serializable {
         this.lastModifiedDate = user.getLastModifiedDate();
   <%_ } _%>
   <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeSql) { _%>
-        this.authorities = user.getAuthorities().stream()
-            .map(Authority::getName)
-            .collect(Collectors.toSet());
+        this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
   <%_ } else { _%>
         this.authorities = user.getAuthorities();
   <%_ } _%>

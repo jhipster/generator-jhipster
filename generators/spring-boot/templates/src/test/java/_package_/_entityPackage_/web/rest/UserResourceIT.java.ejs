@@ -368,7 +368,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -408,11 +409,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // Create the User
   <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/admin/users")
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -452,11 +456,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // Create the User
   <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/admin/users")
+        webTestClient
+            .post()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(user))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -541,7 +548,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     <%_ } _%>
             .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users/{login}", user.getLogin()))
+        restUserMockMvc
+            .perform(get("/api/admin/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))

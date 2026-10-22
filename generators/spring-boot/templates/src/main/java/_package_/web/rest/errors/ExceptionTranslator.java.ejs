@@ -147,7 +147,9 @@ _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
         }
-        return Mono.just(new ResponseEntity<>(body, updateContentType(headers), HttpStatusCode.valueOf(((ProblemDetailWithCause) body).getStatus())));
+        return Mono.just(
+            new ResponseEntity<>(body, updateContentType(headers), HttpStatusCode.valueOf(((ProblemDetailWithCause) body).getStatus()))
+        );
 <%_ } else { _%>
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
 <%_ } _%>
@@ -172,12 +174,14 @@ _%>
             return ProblemDetailWithCauseBuilder.instance()
                 .withStatus(toStatus(ex).value())
                 .withTitle("Unauthorized")
-                .withDetail("Invalid credentials").build();
+                .withDetail("Invalid credentials")
+                .build();
         }
   <%_ } _%>
 <%_ } _%>
-        if (ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
-            return problemDetailWithCause;
+        if (
+            ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause
+        ) return problemDetailWithCause;
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 

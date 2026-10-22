@@ -299,9 +299,7 @@ public class SecurityConfiguration {
             })
     <%_ } _%>
   <%_ } _%>
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                    .jwtAuthenticationConverter(authenticationConverter())))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter())))
             .oauth2Client(withDefaults());
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
