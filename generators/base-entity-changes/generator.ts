@@ -82,6 +82,8 @@ export default abstract class BaseEntityChangesGenerator<
   >,
 > extends BaseApplicationGenerator<Entity, Application, Config, Options, Source, Features, Tasks> {
   recreateInitialChangelog!: boolean;
+  /** The changes of the entities, computed once for the priorities giving them. */
+  #entityChanges?: BaseEntityChangesChangelog<Entity>[];
 
   abstract isChangelogNew({ entityName, changelogDate }: { entityName: string; changelogDate: string }): boolean;
 
@@ -93,7 +95,8 @@ export default abstract class BaseEntityChangesGenerator<
     const firstArg = super.getTaskFirstArgForPriority(priorityName);
     if (([DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES] as string[]).includes(priorityName)) {
       const { application, entities } = firstArg as Tasks['DefaultTaskParam'];
-      return { ...firstArg, entityChanges: this.generateIncrementalChanges({ application, entities }) };
+      this.#entityChanges ??= this.generateIncrementalChanges({ application, entities });
+      return { ...firstArg, entityChanges: this.#entityChanges };
     }
     return firstArg;
   }
@@ -121,6 +124,10 @@ export default abstract class BaseEntityChangesGenerator<
           entityName,
           { name: entityName, ...JSON.parse(readFileSync(entityConfigPath).toString()) } as Entity,
         ]),
+    );
+    // The primary keys as the entity files declare them, before the entities are prepared.
+    const previousIdSignatures = Object.fromEntries(
+      Object.entries(previousEntitiesByName).map(([entityName, entity]) => [entityName, this.#idSignature(entity)]),
     );
 
     for (const [entityName, entity] of Object.entries(entitiesByName)) {
@@ -175,6 +182,13 @@ export default abstract class BaseEntityChangesGenerator<
       const removedFields = removedFieldNames.map(fieldName => oldFields.find(field => fieldName === field.fieldName)!);
 
       const oldRelationships = oldConfig.relationships || [];
+
+      if (previousIdSignatures[entityName] !== this.#idSignature(this.fs.readJSON(this.getEntityConfigPath(entityName)))) {
+        // The changes of the primary key are not written to the incremental changelog.
+        this.log.warn(
+          `The primary key of the entity ${entityName} changed: the incremental changelog does not migrate it, the database has to be changed by hand.`,
+        );
+      }
 
       // Calculate changed/newly added relationships
       const addedRelationships = newRelationships.filter(
@@ -250,6 +264,24 @@ export default abstract class BaseEntityChangesGenerator<
         addedDefaultValueFields,
       } satisfies BaseEntityChangesChangelog<Entity>;
     });
+  }
+
+  /** The fields and the relationships an entity file declares as its primary key. */
+  #idSignature(entity: unknown): string {
+    type Declared = { id?: boolean; options?: { id?: boolean } };
+    const { fields = [], relationships = [] } = (entity ?? {}) as {
+      fields?: (Declared & { fieldName: string; fieldType?: string })[];
+      relationships?: (Declared & { relationshipName: string; otherEntityName: string; relationshipType?: string })[];
+    };
+    const isId = ({ id, options }: Declared) => Boolean(id ?? options?.id);
+    return [
+      ...fields.filter(field => isId(field) || field.fieldName === 'id').map(field => `${field.fieldName}:${field.fieldType}`),
+      ...relationships
+        .filter(relationship => isId(relationship))
+        .map(relationship => `${relationship.relationshipName}:${relationship.otherEntityName}:${relationship.relationshipType}`),
+    ]
+      .sort()
+      .join();
   }
 
   private hasAnyDefaultValue(field: BaseEntityChangesField): boolean {
