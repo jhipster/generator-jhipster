@@ -372,6 +372,21 @@ describe('generator - CI-CD', () => {
         runResult.assertFileContent('.travis.yml', /CYPRESS_ENABLE_RECORD: false/);
       });
     });
+    describe('Travis CI: Gradle with Heroku', () => {
+      before(async () => {
+        await helpers
+          .runJHipster('ci-cd')
+          .withJHipsterConfig(gradleSample)
+          .withAnswers({
+            ciCd: ['travis'],
+            ciCdIntegrations: ['heroku'],
+            herokuAppName: 'sample-mysql',
+          });
+      });
+      it('builds the production jar before deploying it', () => {
+        runResult.assertFileContent('.travis.yml', /gradlew bootJar -Pprod deployHeroku/);
+      });
+    });
     describe('Travis CI: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
@@ -608,7 +623,7 @@ describe('generator - CI-CD', () => {
       it('contains Docker, Sonar, Heroku', () => {
         runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*jhipster-publish-docker/);
         runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*sonar.com/);
-        runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*deployHeroku/);
+        runResult.assertFileContent('.github/workflows/main.yml', /gradlew bootJar -Pprod deployHeroku/);
         runResult.assertFileContent('.github/workflows/main.yml', /snyk/);
       });
       it('contains Cypress', () => {
@@ -693,6 +708,21 @@ describe('generator - CI-CD', () => {
       it('contains Cypress', () => {
         runResult.assertFileContent('.circleci/config.yml', /run ci:e2e:package/);
         runResult.assertFileContent('.circleci/config.yml', /CYPRESS_ENABLE_RECORD: false/);
+      });
+    });
+    describe('Circle CI: Gradle with Heroku', () => {
+      before(async () => {
+        await helpers
+          .runJHipster('ci-cd')
+          .withJHipsterConfig(gradleSample)
+          .withAnswers({
+            ciCd: ['circle'],
+            ciCdIntegrations: ['heroku'],
+            herokuAppName: 'sample-mysql',
+          });
+      });
+      it('builds the production jar before deploying it', () => {
+        runResult.assertFileContent('.circleci/config.yml', /gradlew bootJar -Pprod deployHeroku/);
       });
     });
     describe('Circle CI: Maven with Snyk', () => {
