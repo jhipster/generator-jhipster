@@ -183,13 +183,37 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
           }
         }
-        application.languagesToGenerate.push(...this.languagesToApply);
+        for (const language of this.languagesToApply ?? []) {
+          if (!application.languagesToGenerate.includes(language)) {
+            application.languagesToGenerate.push(language);
+          }
+        }
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      languagesToGenerateDefinition({ application }) {
+        // `jhipster entity` composes this generator after the bootstrap prepared the application with the native language only.
+        for (const languageTag of application.languagesToGenerate) {
+          if (application.languagesToGenerateDefinition.some(def => def.languageTag === languageTag)) continue;
+          const languageDefinition = findLanguageForTag(languageTag, application.supportedLanguages);
+          if (!languageDefinition) {
+            throw new Error(`Unsupported language to generate: ${languageTag}`);
+          }
+          application.languagesToGenerateDefinition.push(languageDefinition);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get postWriting() {
