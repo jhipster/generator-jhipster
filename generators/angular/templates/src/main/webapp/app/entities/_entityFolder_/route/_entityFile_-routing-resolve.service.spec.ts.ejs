@@ -109,7 +109,9 @@ describe('<%- entityAngularName %> routing resolve service', () => {
 
     it('should route to error page if server returns an error other than 404', async () => {
       // GIVEN
-      vi.spyOn(service, 'find').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 500, statusText: 'Internal Server Error' })));
+      vi.spyOn(service, 'find').mockReturnValue(
+        throwError(() => new HttpErrorResponse({ status: 500, statusText: 'Internal Server Error' })),
+      );
       mockActivatedRouteSnapshot.params = { <%- primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN

@@ -32,13 +32,11 @@ describe('ItemCount test', () => {
   const inputParams = 'params';
 
 <%_ if (enableTranslation) { _%>
-  beforeEach(
-    () => {
-      TestBed.configureTestingModule({
-        providers: [provideTranslateService()],
-      });
-    }
-  );
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideTranslateService()],
+    });
+  });
 
 <%_ } _%>
   beforeEach(() => {

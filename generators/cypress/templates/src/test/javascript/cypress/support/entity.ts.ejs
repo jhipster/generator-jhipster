@@ -43,19 +43,23 @@ Cypress.Commands.add('getEntityCreateUpdateHeading', (entityName: string) => cy.
 
 Cypress.Commands.add('getEntityDetailsHeading', (entityInstanceName: string) => cy.get(`[data-cy="${entityInstanceName}DetailsHeading"]`));
 
-Cypress.Commands.add('getEntityDeleteDialogHeading', (entityInstanceName: string) => cy.get(`[data-cy="${entityInstanceName}DeleteDialogHeading"]`));
+Cypress.Commands.add('getEntityDeleteDialogHeading', (entityInstanceName: string) =>
+  cy.get(`[data-cy="${entityInstanceName}DeleteDialogHeading"]`),
+);
 
 Cypress.Commands.add('setFieldImageAsBytesOfEntity', (fieldName: string, fileName: string, mimeType: string) => {
   // fileName is the image which you have already put in cypress fixture folder
   // should be like: 'integration-test.png', 'image/png'
-  cy.fixture(fileName).as('image')
-    .get(`[data-cy="${fieldName}"]`).then(function(el) {
+  cy.fixture(fileName)
+    .as('image')
+    .get(`[data-cy="${fieldName}"]`)
+    .then(function (el) {
       const blob = Cypress.Blob.base64StringToBlob(this.image, mimeType);
       const file = new File([blob], fileName, { type: mimeType });
       const list = new DataTransfer();
       list.items.add(file);
       (el[0] as HTMLInputElement).files = list.files;
-      el[0].dispatchEvent(new Event('change', {bubbles: true}));
+      el[0].dispatchEvent(new Event('change', { bubbles: true }));
     });
 });
 

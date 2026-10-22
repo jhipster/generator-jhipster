@@ -35,7 +35,7 @@ export class AppPageTitleStrategy extends TitleStrategy {
     pageTitle ??= '<% if (enableTranslation) { %>global.title<% } else { %><%- humanizedBaseName %><% } %>';
 <%_ if (enableTranslation) { _%>
     this.translateService.get(pageTitle).subscribe(title => {
-        this.title.setTitle(title);
+      this.title.setTitle(title);
     });
 <%_ } else { _%>
     this.title.setTitle(pageTitle);
