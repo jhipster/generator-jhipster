@@ -33,7 +33,7 @@ describe('application mutation test', () => {
         graalvmReachabilityMetadata: expect.any(String),
       });
     });
-    it(`expects ${name} to don't override existing properties`, () => {
+    it(`expects ${name} not to override existing properties`, () => {
       expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
     });
   }
