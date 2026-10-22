@@ -89,7 +89,7 @@ jobs:
   <%_ if (ciCdIntegrationsHeroku) { _%>
             - run:
                 name: Deploy to Heroku
-                command: './gradlew bootJar -Pprod deployHeroku --no-daemon'
+                command: './gradlew stage -Pprod deployHeroku --no-daemon'
   <%_ } _%>
 <%_ } _%>
 <%_ if (cypressTests) { _%>

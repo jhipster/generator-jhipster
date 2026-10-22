@@ -383,8 +383,8 @@ describe('generator - CI-CD', () => {
             herokuAppName: 'sample-mysql',
           });
       });
-      it('builds the production jar before deploying it', () => {
-        runResult.assertFileContent('.travis.yml', /gradlew bootJar -Pprod deployHeroku/);
+      it('builds the production jar with the stage task before deploying it', () => {
+        runResult.assertFileContent('.travis.yml', /gradlew stage -Pprod deployHeroku/);
       });
     });
     describe('Travis CI: Maven Angular NPM with full options', () => {
@@ -623,7 +623,7 @@ describe('generator - CI-CD', () => {
       it('contains Docker, Sonar, Heroku', () => {
         runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*jhipster-publish-docker/);
         runResult.assertFileContent('.github/workflows/main.yml', /gradlew.*sonar.com/);
-        runResult.assertFileContent('.github/workflows/main.yml', /gradlew bootJar -Pprod deployHeroku/);
+        runResult.assertFileContent('.github/workflows/main.yml', /gradlew stage -Pprod deployHeroku/);
         runResult.assertFileContent('.github/workflows/main.yml', /snyk/);
       });
       it('contains Cypress', () => {
@@ -721,8 +721,8 @@ describe('generator - CI-CD', () => {
             herokuAppName: 'sample-mysql',
           });
       });
-      it('builds the production jar before deploying it', () => {
-        runResult.assertFileContent('.circleci/config.yml', /gradlew bootJar -Pprod deployHeroku/);
+      it('builds the production jar with the stage task before deploying it', () => {
+        runResult.assertFileContent('.circleci/config.yml', /gradlew stage -Pprod deployHeroku/);
       });
     });
     describe('Circle CI: Maven with Snyk', () => {
