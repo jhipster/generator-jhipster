@@ -57,6 +57,10 @@ jobs:
             - name: Install Node.js packages
               run: <%- nodePackageManager %> install
 <%_ } _%>
+<%_ if (!skipClient) { _%>
+            - name: Run frontend lint
+              run: <%- nodePackageManager %> run lint
+<%_ } _%>
 <%_ if (ciCdIntegrationsSnyk) { _%>
             - name: Install Snyk CLI
               run: |
