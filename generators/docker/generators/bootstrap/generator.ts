@@ -183,7 +183,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
       app({ application }) {
         const app = application as DockerComposeApplication;
         if (!app.backendTypeSpringBoot && !app.dockerServices.includes('app')) return;
-        const { lowercaseBaseName, serverPort, dockerApplicationEnvironment } = app;
+        const { lowercaseBaseName, serverPort, dockerApplicationEnvironment, dockerApplicationHealthcheckCommand } = app;
         // The services the application waits for, in the order the docker generator added them to the `app` file.
         const dependencies: [string, unknown, string][] = [
           ['cassandra', app.databaseTypeCassandra, SERVICE_HEALTHY],
@@ -210,10 +210,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
             environment: applicationEnvironment(app, dockerApplicationEnvironment, ''),
             ...(app.applicationTypeMonolith || app.applicationTypeGateway ? { ports: [`127.0.0.1:${serverPort}:${serverPort}`] } : {}),
             healthcheck: {
-              test: [
-                'CMD-SHELL',
-                String.raw`bash -c 'exec 3<>/dev/tcp/127.0.0.1/${serverPort}; printf "GET /management/health HTTP/1.0\r\nHost: localhost\r\n\r\n" >&3; grep -q "\"status\":\"UP\"" <&3'`,
-              ],
+              test: ['CMD-SHELL', dockerApplicationHealthcheckCommand],
               interval: '5s',
               timeout: '5s',
               retries: 40,

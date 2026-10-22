@@ -113,6 +113,24 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+  describe('with a healthcheck command', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withSharedApplication({ dockerApplicationHealthcheckCommand: 'wget -qO- http://localhost:8080/management/health' })
+        .withJHipsterConfig();
+    });
+
+    it('should check the health of the application with the command', () => {
+      expect(runResult.fs.read(`${runResult.cwd}/src/main/docker/app.yml`)).toContain(
+        "test: [ 'CMD-SHELL', 'wget -qO- http://localhost:8080/management/health' ]",
+      );
+      expect((runResult.application! as any).dockerComposeFiles.app.deploymentServices.jhipster.healthcheck.test).toEqual([
+        'CMD-SHELL',
+        'wget -qO- http://localhost:8080/management/health',
+      ]);
+    });
+  });
   describe('deployment services', () => {
     before(async () => {
       await helpers

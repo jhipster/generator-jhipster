@@ -225,6 +225,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
+  "dockerApplicationHealthcheckCommand": "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3'",
   "dockerComposeFiles": Any<Object>,
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
@@ -1118,6 +1119,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET": "web_app",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
+  "dockerApplicationHealthcheckCommand": "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf "GET /management/health HTTP/1.0\\r\\nHost: localhost\\r\\n\\r\\n" >&3; grep -q "\\"status\\":\\"UP\\"" <&3'",
   "dockerComposeFiles": Any<Object>,
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
