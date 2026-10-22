@@ -25,7 +25,7 @@ import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';
 import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/relationship.ts';
 import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { kebabCase, lowerFirst, pluralize, snakeCase, startCase, upperFirst } from '../../lib/utils/string-utils.ts';
+import { camelCase, kebabCase, lowerFirst, pluralize, snakeCase, startCase, upperFirst } from '../../lib/utils/string-utils.ts';
 import { formatDocAsApiDescription } from '../java/support/doc.ts';
 
 import { isFieldEnumType } from './internal/types/field-types.ts';
@@ -306,6 +306,11 @@ export type PrimaryKey<F extends Field = Field> = {
 
 type BaseApplicationAddedEntityProperties = {
   clientRootFolder: string;
+  /**
+   * The name of the entity in the alerts of its REST resource, which the client translates as
+   * `<frontendAppName>.<entityAlertName>.created`: the same for every backend.
+   */
+  entityAlertName: string;
   entityAuthority?: string;
   entityReadAuthority?: string;
 
@@ -401,6 +406,8 @@ export const mutateEntity = {
   entityInstance: ({ name }) => lowerFirst(name),
   entityInstancePlural: ({ entityNamePlural }) => lowerFirst(entityNamePlural),
   entityAuthority: ({ adminEntity }) => (adminEntity ? 'ROLE_ADMIN' : undefined),
+  entityAlertName: ({ clientRootFolder, skipUiGrouping, entityClass, entityInstance }) =>
+    clientRootFolder && !skipUiGrouping ? camelCase(`${clientRootFolder}${entityClass}`) : entityInstance,
 
   entityNameHumanized: ({ entityNameCapitalized }) => startCase(entityNameCapitalized),
   entityNamePluralHumanized: ({ entityNameHumanized }) => pluralize(entityNameHumanized, { force: false }),
