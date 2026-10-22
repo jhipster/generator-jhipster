@@ -49,11 +49,8 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
           const { enableTranslation, clientSrcDir } = application;
           if (!enableTranslation) return;
 
-          const { ignoreNeedlesError: ignoreNonExisting } = this;
-
           this.editFile(
             `${clientSrcDir}app/shared/language/find-language-from-key.pipe.ts`,
-            { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: generateLanguagesWebappOptions(allLanguages),
               needle: 'jhipster-needle-i18n-language-key-pipe',
@@ -62,7 +59,6 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
 
           this.editFile(
             `${clientSrcDir}app/config/language.constants.ts`,
-            { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: allLanguages.map(lang => `'${lang.languageTag}',`),
               needle: 'jhipster-needle-i18n-language-constant',

@@ -1355,10 +1355,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
       if (!create || transformCallbacks.length === 0) {
+        // return a noop.
+        const noop = () => noop;
+        if (ignoreNonExisting === true && !this.ignoreNeedlesError) {
+          // The caller expects the file to be missing: nothing to tell.
+          this.log.debug(`Unable to find ${filePath}, not edited.`);
+          return noop;
+        }
         if (ignoreNonExisting || this.ignoreNeedlesError) {
           this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
-          // return a noop.
-          const noop = () => noop;
           return noop;
         }
         throw new Error(`Unable to find ${filePath}. ${errorMessage}`);

@@ -260,11 +260,8 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
           const { javaPackageTestDir } = application;
-          const { ignoreNeedlesError: ignoreNonExisting } = this;
-
           this.editFile(
             `${javaPackageTestDir}/service/MailServiceIT.java`,
-            { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: allLanguages.map(language => `"${language.languageTag}"`).join(',\n'),
               needle: 'jhipster-needle-i18n-language-constant',

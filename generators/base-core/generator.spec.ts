@@ -224,6 +224,45 @@ describe('generator - base-core', () => {
     });
   });
 
+  describe('editFile of a missing file', () => {
+    /** The messages and the debug messages editing a missing file logs, with the options and the ignore needles error. */
+    const editMissingFile = async (options: Record<string, unknown>, ignoreNeedlesError = false) => {
+      const logged: { messages: string[]; debug: string[] } = { messages: [], debug: [] };
+      await helpers.run('dummy').withGenerators([
+        [
+          helpers.createDummyGenerator(Base, {
+            [Base.POST_WRITING]() {
+              const log = Object.assign((message: string) => logged.messages.push(message), {
+                debug: (message: string) => logged.debug.push(message),
+              });
+              Object.defineProperty(this, 'log', { value: log });
+              (this as any).ignoreNeedlesError = ignoreNeedlesError;
+              this.editFile('missing.txt', options, (content: string) => content);
+            },
+          }),
+          { namespace: 'dummy' },
+        ],
+      ]);
+      return logged;
+    };
+
+    it('tells nothing but a debug message with ignoreNonExisting', async () => {
+      const logged = await editMissingFile({ ignoreNonExisting: true });
+      expect(logged.messages).toEqual([]);
+      expect(logged.debug).toEqual([expect.stringMatching(/Unable to find .*missing\.txt, not edited\./)]);
+    });
+
+    it('warns with the reason given as ignoreNonExisting', async () => {
+      const logged = await editMissingFile({ ignoreNonExisting: 'Nothing added' });
+      expect(logged.messages).toEqual([expect.stringMatching(/Unable to find .*missing\.txt\..*Nothing added\./s)]);
+    });
+
+    it('warns with the ignore needles error', async () => {
+      const logged = await editMissingFile({ ignoreNonExisting: true }, true);
+      expect(logged.messages).toEqual([expect.stringMatching(/Unable to find .*missing\.txt\./s)]);
+    });
+  });
+
   describe('editPropertiesFile', () => {
     it('supports callbacks', async () => {
       await helpers.run('dummy').withGenerators([
