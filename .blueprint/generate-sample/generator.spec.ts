@@ -64,7 +64,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should copy the sample answered', () => {
-      expect(runResult.generator.sample?.name).toBe('vue-default');
+      expect((runResult.generator as unknown as Generator).sample?.name).toBe('vue-default');
     });
   });
 
