@@ -28,14 +28,13 @@ import { ResetMode } from 'simple-git';
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { packageJson } from '../../lib/index.ts';
 import BaseGenerator from '../base/index.ts';
-import { SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
+import { GENERATOR_JHIPSTER, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
 import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.ts';
 import type { Config as UpgradeConfig, Options as UpgradeOptions } from './types.ts';
 
 /* Constants used throughout */
-const GENERATOR_JHIPSTER = 'generator-jhipster';
 const DEFAULT_CLI_OPTIONS = '--force --skip-install --skip-git --ignore-errors --no-insight --skip-checks';
 const DEFAULT_NON_INTERACTIVE_OPTIONS = {
   skipInstall: true,
@@ -48,7 +47,6 @@ const DEFAULT_NON_INTERACTIVE_OPTIONS = {
 const DEFAULT_MERGE_OPTIONS = ['--strategy', 'ours'];
 
 export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, UpgradeOptions> {
-  requiredPackage = GENERATOR_JHIPSTER;
   createEnvBuilder!: typeof EnvironmentBuilder.createDefaultBuilder;
   actualApplicationBranch!: string;
   silent!: boolean;
@@ -314,7 +312,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   }
 
   getPackageJsonVersion() {
-    return this.readResourcesPackageJson(this.destinationPath('package.json'))?.devDependencies?.['generator-jhipster'];
+    return this.readResourcesPackageJson(this.destinationPath('package.json'))?.devDependencies?.[GENERATOR_JHIPSTER];
   }
 
   isV7(version: string): boolean {
