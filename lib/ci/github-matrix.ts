@@ -37,7 +37,6 @@ const knownGitHubMatrixProperties = new Set([
   'sample-type',
   'sample-file',
   'sample-folder',
-  'sample-base',
   'generatorOptions',
   'disabled',
   'args',
@@ -56,8 +55,6 @@ export type GitHubMatrix = {
   'sample-type'?: string;
   'sample-file'?: string;
   'sample-folder'?: string;
-  /** The sample generated first in the same folder, the sample being generated over it, like an incremental change. */
-  'sample-base'?: string;
   generatorOptions?: Record<string, unknown>;
   args?: string;
   'jwt-secret-key'?: string;

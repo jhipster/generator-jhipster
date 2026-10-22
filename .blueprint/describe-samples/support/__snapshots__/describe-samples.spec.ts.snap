@@ -2,7 +2,6 @@
 
 exports[`describe-samples - support describeSample should match a sample 1`] = `
 {
-  "base": undefined,
   "defaultCommand": "app",
   "disabled": undefined,
   "files": {
@@ -61,7 +60,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
 {
   "samples": {
     "mf-ng-eureka-jwt-psql-ehcache": {
-      "base": undefined,
       "defaultCommand": "jdl",
       "disabled": undefined,
       "files": Any<Object>,
@@ -70,7 +68,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ms-mf-ng-consul-oauth2-neo4j": {
-      "base": undefined,
       "defaultCommand": "jdl",
       "disabled": undefined,
       "files": Any<Object>,
@@ -79,7 +76,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ms-ng-oauth2-mongodb-caffeine": {
-      "base": undefined,
       "defaultCommand": "jdl",
       "disabled": undefined,
       "files": Any<Object>,
@@ -88,7 +84,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-couchbase": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -97,7 +92,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-default": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -106,7 +100,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-default-additional": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -115,7 +108,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-default-additional-playwright": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -124,7 +116,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-default-playwright-tls": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -133,7 +124,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-default-windows": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -142,7 +132,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-gradle-couchbase-search": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -151,7 +140,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-gradle-fr": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -160,7 +148,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-gradle-h2disk-ws-nocache": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -169,7 +156,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-gradle-mariadb-oauth2-infinispan": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -178,7 +164,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-h2mem-ws-nol2": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -187,7 +172,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-mongodb-kafka-cucumber": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -196,7 +180,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-mysql-es-noi18n-mapsid": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -205,7 +188,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-webflux-couchbase": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -214,7 +196,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-webflux-gradle-mongodb-oauth2": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -223,7 +204,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-webflux-gradle-session-h2mem-es": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -232,7 +212,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-webflux-mongodb": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,
@@ -241,7 +220,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-webflux-psql-additional": {
-      "base": undefined,
       "defaultCommand": "jdl",
       "disabled": undefined,
       "files": Any<Object>,
@@ -250,7 +228,6 @@ exports[`describe-samples - support describeSampleGroup should match the samples
       "workflow": "angular",
     },
     "ng-webflux-psql-default": {
-      "base": undefined,
       "defaultCommand": "app",
       "disabled": undefined,
       "files": Any<Object>,

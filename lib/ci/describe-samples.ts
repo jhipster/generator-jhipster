@@ -60,8 +60,6 @@ export type SampleDescription = {
   workflow: string;
   /** The job name the sample defines, the sample name by default, without the environment its CI job name appends. */
   jobName: string;
-  /** The sample generated first in the same folder, this one being generated over it, like an incremental change. */
-  base?: string;
   disabled?: boolean;
   sonar?: boolean;
   /** The generator the sample is generated with: the jdl one from its jdl, the app one from its `.yo-rc.json`. */
@@ -221,7 +219,6 @@ export const describeGithubSamplesGroup = ({
       name,
       workflow: group,
       jobName: name,
-      base: item['sample-base'],
       disabled: item.disabled ? true : undefined,
       generatorOptions: item.generatorOptions,
       matrix: sampleMatrixOf(entry),
