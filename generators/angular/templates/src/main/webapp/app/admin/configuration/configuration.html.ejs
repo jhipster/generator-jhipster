@@ -21,7 +21,14 @@
     <h2 id="configuration-page-heading" data-cy="configurationPageHeading">__jhiTranslateTag__('configuration.title')</h2>
 
     <label for="configuration-filter">__jhiTranslateTag__('configuration.filter')</label>
-    <input #beansFilterInput id="configuration-filter" type="text" [value]="beansFilter()" (input)="beansFilter.set(beansFilterInput.value)" class="form-control" />
+    <input
+      #beansFilterInput
+      id="configuration-filter"
+      type="text"
+      [value]="beansFilter()"
+      (input)="beansFilter.set(beansFilterInput.value)"
+      class="form-control"
+    />
 
     <h3 id="spring-configuration">Spring configuration</h3>
 
@@ -61,10 +68,7 @@
           <span>{{ propertySource.name }}</span>
         </h4>
 
-        <table
-          class="table table-sm table-striped table-bordered table-responsive d-table"
-          [aria-describedby]="'property-source-' + i"
-        >
+        <table class="table table-sm table-striped table-bordered table-responsive d-table" [aria-describedby]="'property-source-' + i">
           <thead>
             <tr>
               <th scope="col" class="w-40">Property</th>

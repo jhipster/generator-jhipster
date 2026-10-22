@@ -43,7 +43,7 @@ describe('<%- entityAngularName %> Form Service', () => {
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
             <%- relationship.propertyName %>: expect.any(Object),
 <%_ } _%>
-          })
+          }),
         );
       });
 

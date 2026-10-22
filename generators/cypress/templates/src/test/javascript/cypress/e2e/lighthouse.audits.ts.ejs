@@ -37,9 +37,9 @@ describe('Lighthouse Audits', () => {
       // Change the CPU slowdown multiplier to emulate different kind of devices
       // See https://github.com/GoogleChrome/lighthouse/blob/master/docs/throttling.md#cpu-throttling for details
       throttling: {
-        cpuSlowdownMultiplier: 1
+        cpuSlowdownMultiplier: 1,
       },
-      screenEmulation: {disabled: true}
+      screenEmulation: { disabled: true },
     };
     cy.lighthouse(customThresholds, desktopConfig).should('not.be.undefined');
   });

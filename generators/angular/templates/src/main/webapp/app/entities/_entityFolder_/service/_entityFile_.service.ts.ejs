@@ -57,7 +57,7 @@ type RestOf<T extends I<%- entityAngularName %><% if (!readOnly) { %> | New<%- e
   <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
   <%- field.fieldName %>?: string | null;
   <%_ } _%>
-  };
+};
 
 export type <%- entityRestName %> = RestOf<I<%- entityAngularName %>>;
 <%_ } _%>

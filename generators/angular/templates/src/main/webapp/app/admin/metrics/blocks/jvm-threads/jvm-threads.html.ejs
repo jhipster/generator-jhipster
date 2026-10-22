@@ -22,49 +22,25 @@
 
 <span><span>__jhiTranslateTag__('metrics.jvm.threads.runnable')</span> {{ stats.threadDumpRunnable }}</span>
 
-<ngb-progressbar
-  [value]="stats.threadDumpRunnable"
-  [max]="stats.threadDumpAll"
-  [striped]="true"
-  [animated]="false"
-  type="success"
->
+<ngb-progressbar [value]="stats.threadDumpRunnable" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="success">
   <span>{{ (stats.threadDumpRunnable * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
 
 <span><span>__jhiTranslateTag__('metrics.jvm.threads.timedwaiting')</span> ({{ stats.threadDumpTimedWaiting }})</span>
 
-<ngb-progressbar
-  [value]="stats.threadDumpTimedWaiting"
-  [max]="stats.threadDumpAll"
-  [striped]="true"
-  [animated]="false"
-  type="warning"
->
+<ngb-progressbar [value]="stats.threadDumpTimedWaiting" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
   <span>{{ (stats.threadDumpTimedWaiting * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
 
 <span><span>__jhiTranslateTag__('metrics.jvm.threads.waiting')</span> ({{ stats.threadDumpWaiting }})</span>
 
-<ngb-progressbar
-  [value]="stats.threadDumpWaiting"
-  [max]="stats.threadDumpAll"
-  [striped]="true"
-  [animated]="false"
-  type="warning"
->
+<ngb-progressbar [value]="stats.threadDumpWaiting" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
   <span>{{ (stats.threadDumpWaiting * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
 
 <span><span>__jhiTranslateTag__('metrics.jvm.threads.blocked')</span> ({{ stats.threadDumpBlocked }})</span>
 
-<ngb-progressbar
-  [value]="stats.threadDumpBlocked"
-  [max]="stats.threadDumpAll"
-  [striped]="true"
-  [animated]="false"
-  type="danger"
->
+<ngb-progressbar [value]="stats.threadDumpBlocked" [max]="stats.threadDumpAll" [striped]="true" [animated]="false" type="danger">
   <span>{{ (stats.threadDumpBlocked * 100) / stats.threadDumpAll | number: '1.0-0' }}%</span>
 </ngb-progressbar>
 
