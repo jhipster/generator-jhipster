@@ -303,7 +303,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isCreated()
+            .expectStatus()
+            .isCreated()
             .expectBody(<%- user.adminUserDto %>.class)
             .returnResult()
             .getResponseBody();
@@ -577,12 +578,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   <%_ } _%>
     void getNonExistingUser()<%- reactive ? '' : ' throws Exception' %> {
   <%_ if (reactive) { _%>
-        webTestClient.get().uri("/api/admin/users/unknown")
-            .exchange()
-            .expectStatus().isNotFound();
+        webTestClient.get().uri("/api/admin/users/unknown").exchange().expectStatus().isNotFound();
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users/unknown"))
-            .andExpect(status().isNotFound());
+        restUserMockMvc.perform(get("/api/admin/users/unknown")).andExpect(status().isNotFound());
   <%_ } _%>
     }
 

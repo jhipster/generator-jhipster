@@ -274,11 +274,14 @@ class AccountResourceIT {
         assertThat(userRepository.findOneByLogin("test-register-valid")<%- reactive ? '.blockOptional()' : '' %>).isEmpty();
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(validUser))
             .exchange()
-            .expectStatus().isCreated();
+            .expectStatus()
+            .isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -312,11 +315,14 @@ class AccountResourceIT {
         invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(invalidUser))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -354,7 +360,8 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(invalidUser))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -478,7 +485,8 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(secondUser))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -589,7 +597,8 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userWithUpperCaseEmail))
             .exchange()
-            .expectStatus().isCreated();
+            .expectStatus()
+            .isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -645,11 +654,14 @@ class AccountResourceIT {
         validUser.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
+        accountWebTestClient
+            .post()
+            .uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(validUser))
             .exchange()
-            .expectStatus().isCreated();
+            .expectStatus()
+            .isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -661,7 +673,8 @@ class AccountResourceIT {
 
         Optional<<%- user.persistClass %>> userDup = userRepository.findOne<%- databaseTypeSql ? 'WithAuthorities' : '' %>ByLogin("badguy")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(userDup).isPresent();
-        assertThat(userDup.orElseThrow().getAuthorities()).hasSize(1)
+        assertThat(userDup.orElseThrow().getAuthorities())
+            .hasSize(1)
             .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER)<%- reactiveBlockOrElseThrow %><% } %><%- databaseTypeCassandra || databaseTypeCouchbase ? 'AuthoritiesConstants.USER' : '' %>);
 
         userService.deleteUser("badguy")<%- reactorBlock %>;
@@ -706,13 +719,9 @@ class AccountResourceIT {
 <%_ } _%>
     void testActivateAccountWithWrongKey() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
-        accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey")
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey").exchange().expectStatus().isBadRequest();
 <%_ } else { _%>
-        restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey"))
-            .andExpect(status().isBadRequest());
+        restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey")).andExpect(status().isBadRequest());
 <%_ } _%>
     }
 
@@ -1060,11 +1069,14 @@ class AccountResourceIT {
         String newPassword = RandomStringUtils.insecure().next(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/account/change-password")
+        accountWebTestClient
+            .post()
+            .uri("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
@@ -1104,11 +1116,14 @@ class AccountResourceIT {
         String newPassword = RandomStringUtils.insecure().next(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/account/change-password")
+        accountWebTestClient
+            .post()
+            .uri("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
@@ -1431,11 +1446,14 @@ class AccountResourceIT {
         keyAndPassword.setNewPassword("new password");
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/account/reset-password/finish")
+        accountWebTestClient
+            .post()
+            .uri("/api/account/reset-password/finish")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(keyAndPassword))
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus()
+            .isOk();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
@@ -1475,11 +1493,14 @@ class AccountResourceIT {
         keyAndPassword.setNewPassword("foo");
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/account/reset-password/finish")
+        accountWebTestClient
+            .post()
+            .uri("/api/account/reset-password/finish")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(keyAndPassword))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")

@@ -321,7 +321,8 @@ public class UserResource {
 <%_ if (reactive) { _%>
     public Mono<<%- user.adminUserDto %>> getUser(@PathVariable("login") String login) {
         LOG.debug("REST request to get User : {}", login);
-        return userService.getUserWithAuthoritiesByLogin(login)
+        return userService
+            .getUserWithAuthoritiesByLogin(login)
             .map(<%- user.adminUserDto %>::new)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
 <%_ } else { _%>

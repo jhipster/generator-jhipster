@@ -174,7 +174,8 @@ public class AccountResource {
     @GetMapping("/account")
     public <%- wrapMono(user.adminUserDto) %> getAccount() {
         LOG.debug("REST request to get account");
-        return userService.getUserWithAuthorities()
+        return userService
+            .getUserWithAuthorities()
             .map(<%- user.adminUserDto %>::new)
 <%_ if (reactive) { _%>
             .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")));

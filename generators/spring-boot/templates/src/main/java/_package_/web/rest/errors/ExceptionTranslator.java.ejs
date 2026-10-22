@@ -232,7 +232,8 @@ _%>
     }
 
     private List<FieldErrorVM> getFieldErrors(<%- reactive ? 'WebExchangeBindException' : 'MethodArgumentNotValidException' %> ex) {
-        return ex.getBindingResult()
+        return ex
+            .getBindingResult()
             .getFieldErrors()
             .stream()
             .map(f ->

@@ -252,7 +252,7 @@ public class SecurityConfiguration {
                     )
             )
 <%_ if (applicationTypeMicroservice) { _%>
-                .requestCache(cache -> cache.requestCache(NoOpServerRequestCache.getInstance()))
+            .requestCache(cache -> cache.requestCache(NoOpServerRequestCache.getInstance()))
 <%_ } _%>
             .authorizeExchange(authz ->
                 // prettier-ignore
