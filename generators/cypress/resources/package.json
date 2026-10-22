@@ -6,7 +6,7 @@
     "cypress-terminal-report": "7.4.0",
     "eslint-plugin-cypress": "7.0.2",
     "lighthouse": "13.5.0",
-    "monocart-coverage-reports": "2.13.2"
+    "monocart-coverage-reports": "3.0.0"
   },
   "packageManager": "npm@12",
   "allowScripts": {
