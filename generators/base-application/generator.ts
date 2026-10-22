@@ -23,17 +23,20 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import { type DroppedMutation, droppedMutationMessage, enableDelayedMutations, mutateData } from '../../lib/utils/object.ts';
 import { upperFirst } from '../../lib/utils/string-utils.ts';
-import { priorityMatches } from '../base-core/priorities.ts';
+import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
 import { getChangelogDateForBuiltInEntities } from './internal/utils.ts';
+import type { ApplicationObject, ApplicationObjectConfig } from './objects.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
   CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY,
+  CONTEXT_DATA_APPLICATION_OBJECTS_KEY,
+  CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY,
   getEntitiesFromDir,
 } from './support/index.ts';
 import type {
@@ -91,13 +94,15 @@ const PRIORITY_WITH_ENTITIES_TO_LOAD = new Set<string>([LOADING_ENTITIES]);
 const PRIORITY_WITH_ENTITIES = new Set<string>([DEFAULT]);
 const PRIORITY_WITH_FILTERED_ENTITIES = new Set<string>([WRITING_ENTITIES, POST_WRITING_ENTITIES]);
 
-const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES]);
+const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES, POST_WRITING_OBJECTS]);
 const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
 // A `*` matches the priorities a name starts, the ones of the custom objects (`loadingService`) included.
 const PRIORITY_WITH_APPLICATION = new Set<string>([
   'loading*',
   'preparing*',
   'postPreparing*',
+  WRITING_OBJECTS,
+  POST_WRITING_OBJECTS,
   LOADING,
   COMPOSING_BOOTSTRAP,
   PREPARING,
@@ -132,7 +137,7 @@ const withDefaults = (data: Record<string, any>, onDroppedMutation: (dropped: Dr
 };
 
 const getFirstArgForPriority = (priorityName: string) => ({
-  source: PRIORITY_WITH_SOURCE.has(priorityName),
+  source: priorityMatches(PRIORITY_WITH_SOURCE, priorityName),
   application: priorityMatches(PRIORITY_WITH_APPLICATION, priorityName),
   applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.has(priorityName),
   entitiesToLoad: PRIORITY_WITH_ENTITIES_TO_LOAD.has(priorityName),
@@ -259,6 +264,110 @@ export default class BaseApplicationGenerator<
       storages.set(entityPath, storage);
     }
     return storage;
+  }
+
+  /** The configuration of an object of the application, by its name, as the `objects` of the `.yo-rc.json` file declare it. */
+  getObjectConfig(name: string): ApplicationObjectConfig | undefined {
+    return this.#objectsStorage.get(name);
+  }
+
+  /**
+   * An object of the application, by its name: its configuration with the objects and the entities it references embedded
+   * in place of their reference, each the same instance wherever it is referenced, an entity the one the application
+   * prepares. An entity is embedded once the entities are loaded.
+   */
+  getObject(name: string): ApplicationObject {
+    const objects = this.getContextData<Map<string, ApplicationObject>>(CONTEXT_DATA_APPLICATION_OBJECTS_KEY, {
+      factory: () => new Map(),
+    });
+    let object = objects.get(name);
+    if (!object) {
+      const config = this.getObjectConfig(name);
+      if (!config) {
+        throw new Error(`The object ${name} is not declared in the objects of the .yo-rc.json file`);
+      }
+      object = { ...structuredClone(config), name } as ApplicationObject;
+      // Kept before its references are embedded, so an object referencing itself, directly or not, is the same instance.
+      objects.set(name, object);
+      this.#embedReferences(object);
+    }
+    return object;
+  }
+
+  /** The objects of the application of a type, the name of the custom object handling them (`service`), sorted by name. */
+  findObjects(type: string): ApplicationObject[] {
+    return Object.entries<ApplicationObjectConfig>(this.#objectsStorage.getAll())
+      .filter(([_name, config]) => config.type === type)
+      .map(([name]) => name)
+      .sort()
+      .map(name => this.getObject(name));
+  }
+
+  /** The `objects` of the `.yo-rc.json` file, shared by the generators of the application. */
+  get #objectsStorage(): Storage {
+    return this.getContextData<Storage>(CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY, {
+      factory: () => this.createStorage('.yo-rc.json', 'objects'),
+    });
+  }
+
+  /**
+   * Replaces, in place, each reference (`{ "$ref": ... }`) of a value by the object or the entity it references. A
+   * reference with other fields gives a copy of the referenced one with the fields merged over it.
+   */
+  #embedReferences(value: unknown): unknown {
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        value[index] = this.#embedReferences(item);
+      });
+    } else if (value && typeof value === 'object') {
+      const { $ref, ...fields } = value as { $ref?: unknown } & Record<string, unknown>;
+      if (typeof $ref === 'string') {
+        const referenced = this.#resolveReference($ref) as Record<string, unknown>;
+        return Object.keys(fields).length === 0 ?
+            referenced
+          : this.#mergeOver(referenced, this.#embedReferences(fields) as Record<string, unknown>);
+      }
+      for (const [key, item] of Object.entries(value)) {
+        (value as Record<string, unknown>)[key] = this.#embedReferences(item);
+      }
+    }
+    return value;
+  }
+
+  /** The objects and the entities embedded in place of a reference, kept as they are by a merge. */
+  readonly #embedded = new WeakSet<object>();
+
+  /**
+   * A copy of a value with the fields merged over it, the nested objects merged too: the referenced objects and entities
+   * are kept, and a list or a value of the fields replaces the one of the value.
+   */
+  #mergeOver(value: Record<string, unknown>, fields: Record<string, unknown>): Record<string, unknown> {
+    const mergeable = (item: unknown): item is Record<string, unknown> =>
+      Boolean(item) && typeof item === 'object' && !Array.isArray(item) && !this.#embedded.has(item as object);
+    const merged: Record<string, unknown> = { ...value };
+    for (const [key, field] of Object.entries(fields)) {
+      merged[key] = mergeable(field) && mergeable(value[key]) ? this.#mergeOver(value[key], field) : field;
+    }
+    return merged;
+  }
+
+  /** The object (`#/objects/<Name>`) or the entity (`.jhipster/<Entity>.json`) a reference names. */
+  #resolveReference(reference: string): unknown {
+    const referenced = this.#referencedBy(reference);
+    this.#embedded.add(referenced);
+    return referenced;
+  }
+
+  #referencedBy(reference: string): object {
+    if (reference.startsWith('#/objects/')) {
+      return this.getObject(reference.slice('#/objects/'.length));
+    }
+    const entityName = /([^/]+)\.json$/.exec(reference)?.[1];
+    const entity = entityName ? this.#entities.get(entityName) : undefined;
+    if (!entity) {
+      throw new Error(`The reference ${reference} is not an object nor a loaded entity of the application`);
+    }
+    return entity;
   }
 
   /**

@@ -83,11 +83,14 @@ import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import {
   CUSTOM_PRIORITIES,
   type CustomObjectPhase,
+  POST_WRITING_OBJECTS,
   PRIORITY_NAMES,
   PRIORITY_PREFIX,
   QUEUES,
+  WRITING_OBJECTS,
   customObjectPriorities,
   customObjectPriorityName,
+  writingObjectsPriorities,
 } from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
@@ -159,6 +162,12 @@ export default class CoreGenerator<
 
   static readonly POST_WRITING = asPriority(POST_WRITING);
 
+  /** The priority the custom objects of a generator are written in, after the writing priority. */
+  static readonly WRITING_OBJECTS = asPriority(WRITING_OBJECTS);
+
+  /** The priority the files of the custom objects of a generator are changed in, after the post writing priority. */
+  static readonly POST_WRITING_OBJECTS = asPriority(POST_WRITING_OBJECTS);
+
   static readonly INSTALL = asPriority(INSTALL);
 
   static readonly POST_INSTALL = asPriority(POST_INSTALL);
@@ -213,6 +222,7 @@ export default class CoreGenerator<
             ...CUSTOM_PRIORITIES,
             ...(features?.customPriorities ?? []),
             ...(features?.customObjects ?? []).flatMap(({ name, before }) => customObjectPriorities(name, before)),
+            ...(features?.customObjects?.length ? writingObjectsPriorities(features.customObjects.map(({ name }) => name)) : []),
           ]
         ),
     });

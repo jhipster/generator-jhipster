@@ -145,18 +145,24 @@ get [Generator.PREPARING]() {
 #### Custom objects (base-core)
 
 A generator declares its own objects with the `customObjects` feature, a list of objects (`{ name, before }`), and
-implements a getter of each name giving the object. Each object gets three priorities before its `before` priority (the
-post preparing one by default, so after the preparing priority), in the order the objects are declared, each with the
-object (`service`):
+implements a getter of each name giving an array of the objects. Each object gets three priorities before its `before`
+priority (the post preparing one by default, so after the preparing priority), in the order the objects are declared,
+each with the array of the objects (`service`):
 
-- `loading<Name>`: its tasks load the object;
-- `preparing<Name>`: its tasks prepare it;
-- `postPreparing<Name>`: its tasks use the prepared object.
+- `loading<Name>`: its tasks load the objects;
+- `preparing<Name>`: its tasks prepare them;
+- `postPreparing<Name>`: its tasks use the prepared objects.
 
-To share the object with the other generators declaring it, the getter reads it from the context (`getContextData`), and
-each phase runs for every generator before the next one. While the object is prepared, a default (`mutateData`) reading
-a property not yet set waits for it, and is applied before the post preparing, like the application ones. An application
-generator gives the phases the `application`, and they run before its entity priorities. A workspaces generator runs
+The objects are written in two priorities of their own, with every custom object of the generator by name:
+`writingObjects` (`Generator.WRITING_OBJECTS`), after the writing priority and before the post writing one, and
+`postWritingObjects` (`Generator.POST_WRITING_OBJECTS`), after the post writing priority, with the `source` too. A
+generator declaring the names of its custom objects as the `customObjectNames` type gets them typed, with the type of
+their getters, through `asWritingObjectsTaskGroup` and `asPostWritingObjectsTaskGroup`.
+
+To share the objects with the other generators declaring them, the getter reads them from the context
+(`getContextData`), and each phase runs for every generator before the next one. While the objects are prepared, a
+default (`mutateData`) reading a property not yet set waits for it, and is applied before the post preparing, like the
+application ones. An application generator gives the phases the `application`, and they run before its entity priorities. A workspaces generator runs
 them after its workspaces priorities, before the default priority, and gives them the `deployment` and its
 `applications`. `Generator.objectPriority(name, phase)` gives the priority of a phase:
 
@@ -167,12 +173,12 @@ export default class extends Generator {
   }
 
   get service() {
-    return this.getContextData('my-blueprint:service', { factory: () => ({}) });
+    return this.getContextData('my-blueprint:service', { factory: () => [{}] });
   }
 
   get [Generator.objectPriority('service', 'loading')]() {
     return {
-      loading({ service }) {
+      loading({ service: [service] }) {
         service.name = 'Book';
       },
     };
@@ -181,9 +187,54 @@ export default class extends Generator {
   get [Generator.objectPriority('service', 'preparing')]() {
     return {
       preparing({ service }) {
-        service.className = `${service.name}Service`;
+        for (const each of service) {
+          each.className = `${each.name}Service`;
+        }
       },
     };
+  }
+
+  // The names of the custom objects, for the writing objects tasks to get them typed.
+  declare readonly customObjectNames: readonly ['service'];
+
+  get [Generator.WRITING_OBJECTS]() {
+    return this.asWritingObjectsTaskGroup({
+      async writeServices({ application, service }) {
+        for (const each of service) {
+          await this.writeFiles({ sections: serviceFiles, context: { ...application, service: each } });
+        }
+      },
+    });
+  }
+}
+```
+
+#### Objects of the application (base-application)
+
+The `objects` of the `.yo-rc.json` file declare the objects of an application by name, out of the `generator-jhipster`
+key: each with its `type`, `documentation`, `annotations` and `fields`, a field with its `type`, `documentation`,
+`validations` and `annotations`. A type is a type of the JDL or an enum, a reference to an entity
+(`{ "$ref": ".jhipster/Order.json" }`) or to an object (`{ "$ref": "#/objects/Quote" }`), or an array of the type of its
+items:
+
+- `getObjectConfig(name)` gives the configuration of an object as declared;
+- `getObject(name)` gives the object, with its `name`, and the objects and the entities it references embedded in place of
+  their reference, each the same instance wherever it is referenced, an entity the one the application prepares; a
+  reference with other fields (`{ "$ref": "#/objects/Quote", "documentation": "..." }`) gives a copy of the referenced
+  one with the fields merged over it, the objects and the entities it references kept;
+- `findObjects(type)` gives the objects of a type, sorted by name.
+
+The type of an object is the name of the custom object handling it: its getter gives `findObjects(<name>)`, and its
+`before` priority is the default one, the entities being prepared by then:
+
+```ts
+export default class extends BaseApplicationGenerator {
+  constructor(args, options, features) {
+    super(args, options, { ...features, customObjects: [{ name: 'service', before: 'default' }] });
+  }
+
+  get service() {
+    return this.findObjects('service');
   }
 }
 ```

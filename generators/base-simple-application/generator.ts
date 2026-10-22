@@ -21,7 +21,7 @@ import type { ComposeOptions } from 'yeoman-generator';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
 import { createDelayedMutationContext, droppedMutationMessage, mutateData } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
-import { PRIORITY_NAMES, priorityMatches } from '../base-core/priorities.ts';
+import { POST_WRITING_OBJECTS, PRIORITY_NAMES, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
@@ -39,13 +39,15 @@ import type {
 const { LOADING, COMPOSING_BOOTSTRAP, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } =
   PRIORITY_NAMES;
 
-const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING]);
+const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_OBJECTS]);
 const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
 // A `*` matches the priorities a name starts, the ones of the custom objects (`loadingService`) included.
 const PRIORITY_WITH_APPLICATION = new Set<string>([
   'loading*',
   'preparing*',
   'postPreparing*',
+  WRITING_OBJECTS,
+  POST_WRITING_OBJECTS,
   LOADING,
   COMPOSING_BOOTSTRAP,
   PREPARING,
@@ -59,7 +61,7 @@ const PRIORITY_WITH_APPLICATION = new Set<string>([
 ]);
 
 const getFirstArgForPriority = (priorityName: string) => ({
-  source: PRIORITY_WITH_SOURCE.has(priorityName),
+  source: priorityMatches(PRIORITY_WITH_SOURCE, priorityName),
   application: priorityMatches(PRIORITY_WITH_APPLICATION, priorityName),
   applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.has(priorityName),
 });
