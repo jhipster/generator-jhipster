@@ -187,6 +187,8 @@ export type DescribeGithubSamplesOptions = {
     item: GitHubMatrixGroupItem;
     matrix: GitHubMatrix | undefined;
   }) => SampleDescription | undefined;
+  /** The samples to describe, by name, every sample when omitted: the matrix of the group is the same. */
+  filter?: (name: string) => boolean;
 };
 
 /**
@@ -200,11 +202,13 @@ export const describeGithubSamplesGroup = ({
   samples,
   root,
   describeSample,
+  filter,
 }: Omit<DescribeGithubSamplesOptions, 'groups'> & { group: string; samples: GitHubMatrixGroup }): SampleDescription[] => {
   const relativeToRoot = (file: string) => relative(root, file);
   const descriptions: SampleDescription[] = [];
   const matrix = convertToGitHubMatrix(samples);
   for (const [name, item] of Object.entries(samples)) {
+    if (filter && !filter(name)) continue;
     const entry = matrix.include.find(candidate => candidate['job-name'] === name);
     const custom = describeSample?.({ name, group, item, matrix: entry });
     if (custom) {
