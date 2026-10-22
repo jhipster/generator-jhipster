@@ -47,6 +47,7 @@ const packageRoot = getPackageRoot();
 
 export default class extends BaseGenerator<Config & { entities: string[] }> {
   sampleName!: string;
+  workflow?: string;
   global?: boolean;
   projectFolder!: string;
   projectVersion?: string;
