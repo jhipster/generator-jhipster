@@ -19,15 +19,12 @@
 
 import { describe, expect, it } from 'expect-node';
 
-// Only what `generator-jhipster/jdl` exports: what a tool reading a jdl has.
-import {
-  type JDLDefinitions,
-  buildJDLApplicationConfig,
-  createImporterFromContent,
-  createJDLRuntime,
-  getDefaultJDLDefinitions,
-  parseJDL,
-} from './index.ts';
+// The importer `generator-jhipster/jdl` exports, with the parser and the JHipster definitions of `lib/jdl-config`.
+import { createJDLRuntime, getDefaultJDLDefinitions } from '../jdl-config/jdl-runtime.ts';
+import { buildJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
+
+import { type JDLDefinitions, parseJDL } from './core/parsing/index.ts';
+import { createImporterFromContent } from './index.ts';
 
 const defaults = getDefaultJDLDefinitions();
 /** The JHipster entity options, and one more. */

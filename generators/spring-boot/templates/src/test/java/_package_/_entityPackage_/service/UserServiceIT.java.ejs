@@ -243,7 +243,9 @@ class UserServiceIT {
     @AfterEach
     void cleanupAndCheck() {
 <%_ if (cacheProviderAny) { _%>
-        cacheManager.getCacheNames().stream()
+        cacheManager
+            .getCacheNames()
+            .stream()
             .map(cacheName -> this.cacheManager.getCache(cacheName))
             .filter(Objects::nonNull)
             .forEach(Cache::clear);

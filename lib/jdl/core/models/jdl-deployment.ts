@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isEqual } from 'lodash-es';
+import isEqual from 'lodash-es/isEqual.js';
 
 import { getDefaultJDLDeploymentDefaults } from '../../../jdl-config/jhipster-jdl-config.ts';
 import type { ParsedJDLDeployment } from '../parsing/index.ts';

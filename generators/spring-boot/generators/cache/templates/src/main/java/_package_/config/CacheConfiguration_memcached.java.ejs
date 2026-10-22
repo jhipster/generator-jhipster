@@ -64,9 +64,7 @@ public class CacheConfiguration {
         SSMCacheManager cacheManager = new SSMCacheManager();
         List<SSMCache> ssmCaches = new ArrayList<>();
         for (CacheFactory cache : caches) {
-            SSMCache ssmCache =
-                new SSMCache(cache.getObject(), jHipsterProperties.getCache().getMemcached().getExpiration(),
-                    false);
+            SSMCache ssmCache = new SSMCache(cache.getObject(), jHipsterProperties.getCache().getMemcached().getExpiration(), false);
 
             ssmCaches.add(ssmCache);
         }
@@ -109,10 +107,10 @@ public class CacheConfiguration {
 
         if (jHipsterProperties.getCache().getMemcached().getAuthentication().isEnabled()) {
             InetSocketAddress memcachedServers = AddrUtil.getOneAddress(jHipsterProperties.getCache().getMemcached().getServers());
-            AuthInfo authInfo =
-                AuthInfo.plain(
-                    jHipsterProperties.getCache().getMemcached().getAuthentication().getUsername(),
-                    jHipsterProperties.getCache().getMemcached().getAuthentication().getPassword());
+            AuthInfo authInfo = AuthInfo.plain(
+                jHipsterProperties.getCache().getMemcached().getAuthentication().getUsername(),
+                jHipsterProperties.getCache().getMemcached().getAuthentication().getPassword()
+            );
 
             authInfoMap.put(memcachedServers, authInfo);
         }

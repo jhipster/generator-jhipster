@@ -26,7 +26,7 @@ import { faBan, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { getUser, deleteUser } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export const UserManagementDeleteDialog = () => {
+export const UserManagementDeleteDialog = ({ onClose }: { onClose?: () => void }) => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -37,14 +37,18 @@ export const UserManagementDeleteDialog = () => {
   }, []);
 
   const handleClose = () => {
-    navigate('/admin/user-management');
+    if (onClose) {
+      onClose();
+    } else {
+      navigate('/admin/user-management');
+    }
   };
 
   const user = useAppSelector(state => state.userManagement.user);
 
   const confirmDelete = () => {
     dispatch(deleteUser(user.login));
-    handleClose();
+    navigate('/admin/user-management');
   };
 
   return (

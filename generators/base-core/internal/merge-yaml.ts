@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isPlainObject } from 'lodash-es';
+import isPlainObject from 'lodash-es/isPlainObject.js';
 import { type Document, isMap, isSeq, parseDocument } from 'yaml';
 
 const mergeIntoDocument = (document: Document, path: (string | number)[], value: unknown): void => {

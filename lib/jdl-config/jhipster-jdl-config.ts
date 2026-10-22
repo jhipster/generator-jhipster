@@ -48,7 +48,8 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
     ),
     optionsValues: Object.fromEntries(
       jdlOptions
-        .filter(option => option.knownChoices)
+        // A blueprint may add an application type: it is checked with its pattern only, not with its choices.
+        .filter(option => option.knownChoices && option.name !== 'applicationType')
         .map(option => [option.name, Object.fromEntries(option.knownChoices!.map(choice => [choice, choice]))]),
     ),
     optionsTypes: Object.fromEntries(

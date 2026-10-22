@@ -55,6 +55,22 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with additional languages', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('entity')
+        .withJHipsterConfig({ nativeLanguage: 'en', languages: ['en', 'fr'] })
+        .withJHipsterContextOptions()
+        .withAnswers({ fieldAdd: false, relationshipAdd: false, service: 'no', dto: 'no', pagination: 'no' })
+        .withArguments(['Foo'])
+        .withMockedSource();
+    });
+
+    it('should write the translations of every language', () => {
+      runResult.assertFile(['src/main/webapp/i18n/en/foo.json', 'src/main/webapp/i18n/fr/foo.json']);
+    });
+  });
+
   describe('with enableTranslation disabled', () => {
     before(async () => {
       await helpers

@@ -19,8 +19,7 @@
 import { glob } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { startCase } from 'lodash-es';
-
+import { startCase } from '../../../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
 import { getEnumInfo } from '../../../base-application/support/enum.ts';

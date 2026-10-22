@@ -16,11 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kebabCase, upperFirst } from 'lodash-es';
 
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../lib/utils/path.ts';
-import { pluralize } from '../../lib/utils/string-utils.ts';
+import { kebabCase, pluralize, upperFirst } from '../../lib/utils/string-utils.ts';
 import { upperFirstCamelCase } from '../../lib/utils/string.ts';
 import type { Relationship as BaseApplicationRelationship } from '../base-application/types.d.ts';
 import type { Entity as CommonEntity, Field as CommonField, Relationship as CommonRelationship } from '../common/types.ts';

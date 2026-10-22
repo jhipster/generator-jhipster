@@ -23,6 +23,14 @@ import type { JDLApplicationConfig, JDLDefinitions } from '../../lib/jdl/core/pa
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
+/**
+ * The custom objects of a generator by name, with the type of their getters: the ones of the names it declares as the
+ * `customObjectNames` type, the names of its `customObjects` feature:
+ * `declare readonly customObjectNames: readonly ['service']`.
+ */
+export type CustomObjectsOf<G> =
+  G extends { readonly customObjectNames: readonly (infer N)[] } ? { [K in N & keyof G]: G[K] } : Record<never, never>;
+
 export type Config = {
   defaultCommand?: string;
 };

@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { lowerFirst } from 'lodash-es';
-
 import { normalizeBlueprintName } from '../../../utils/blueprint-name.ts';
+import { lowerFirst } from '../../../utils/string-utils.ts';
 
 import type { JDLConversionCustomizations } from './ast-to-files.ts';
 

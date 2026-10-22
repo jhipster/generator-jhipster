@@ -21,11 +21,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import chalk from 'chalk';
-import { upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { reservedKeywords } from '../../lib/jhipster/index.ts';
+import { upperFirst } from '../../lib/utils/string-utils.ts';
 import type { Features } from '../base/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
@@ -56,7 +56,6 @@ const { isReservedClassName } = reservedKeywords;
 export default class EntityGenerator extends BaseApplicationGenerator<EntityEntity, EntityApplication, EntityConfig, EntityOptions> {
   name!: string;
   application: any = {};
-  microserviceConfig?: any;
   entityStorage!: Storage;
   entityConfig!: EntityEntity;
   entityData!: {
@@ -150,7 +149,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<EntityEnti
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      /* Use need microservice path to load the entity file */
+      /* Ask for the microservice path, needed to load the entity file */
       askForMicroserviceJson,
     });
   }
@@ -191,9 +190,9 @@ The entity ${context.name} is being updated.
             try {
               // We are generating an entity from a microservice.
               // Load it directly into our entity configuration.
-              this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
-              if (this.microserviceConfig) {
-                this.entityStorage.set(this.microserviceConfig);
+              const microserviceConfig = this.fs.readJSON(context.microserviceFileName);
+              if (microserviceConfig) {
+                this.entityStorage.set(microserviceConfig);
               }
             } catch (err) {
               this.log.debug('Error:', err);
@@ -243,7 +242,7 @@ The entity ${entityName} is being created.
 `);
         }
       },
-      /* ask question to user if s/he wants to update entity */
+      /* Ask the user whether they want to update the entity */
       askForUpdate,
       askForFields,
       askForFieldsToRemove,

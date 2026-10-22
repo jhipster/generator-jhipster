@@ -23,12 +23,8 @@ package <%- entityAbsolutePackage %>.service.mapper;
     const ownerSideRelationships = dtoRelationships.filter(relationship => relationship.ownerSide);
 
     // Entity -> DTO: one shallow mapping per related entity and display field, copying only the id and that field.
-    // A display field is an object of its related entity, so it identifies the mapping on its own.
-    const displayFieldOfCollections = new Set(
-      dtoRelationships.filter(relationship => relationship.collection).map(relationship => relationship.relatedField.originalField ?? relationship.relatedField),
-    );
-    const sameDtoMapping = (a, b) =>
-      a.otherEntity === b.otherEntity && (a.displayField.originalField ?? a.displayField) === (b.displayField.originalField ?? b.displayField);
+    // Each relationship may get its own copy of a display field (a derived primary key), so it is compared by name.
+    const sameDtoMapping = (a, b) => a.otherEntity === b.otherEntity && a.displayField.fieldName === b.displayField.fieldName;
     const toDtoMappings = dtoRelationships
       .map(relationship => ({ otherEntity: relationship.otherEntity, displayField: relationship.relatedField }))
       .filter((mapping, index, mappings) => mappings.findIndex(other => sameDtoMapping(mapping, other)) === index)
@@ -37,7 +33,9 @@ package <%- entityAbsolutePackage %>.service.mapper;
         name: `${mapping.otherEntity.entityInstance}${mapping.displayField.propertyNameCapitalized}`,
         methodName: `${mapping.otherEntity.entityNameCapitalized}${mapping.displayField.propertyNameCapitalized}`,
         // A Set variant is needed when any relationship using this mapping is a collection.
-        collection: displayFieldOfCollections.has(mapping.displayField.originalField ?? mapping.displayField),
+        collection: dtoRelationships.some(
+          relationship => relationship.collection && sameDtoMapping(mapping, { otherEntity: relationship.otherEntity, displayField: relationship.relatedField }),
+        ),
       }));
 
     // DTO -> entity: one mapping per related entity copying only the id. A relationship is persisted by the id of the

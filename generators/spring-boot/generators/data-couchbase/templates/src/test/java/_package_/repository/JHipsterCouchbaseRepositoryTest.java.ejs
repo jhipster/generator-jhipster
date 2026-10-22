@@ -55,8 +55,11 @@ class JHipsterCouchbaseRepositoryTest {
     void shouldOrderByThePropertiesAsQuotedFields() {
         Sort sort = sortByProperties(Sort.by(Sort.Order.asc("name"), Sort.Order.desc("nickName"), Sort.Order.asc("address.city")), "b");
 
-        assertThat(sort.stream().map(order -> order.getProperty() + " " + order.getDirection()))
-            .containsExactly("b.`name` ASC", "b.`nickName` DESC", "b.`address`.`city` ASC");
+        assertThat(sort.stream().map(order -> order.getProperty() + " " + order.getDirection())).containsExactly(
+            "b.`name` ASC",
+            "b.`nickName` DESC",
+            "b.`address`.`city` ASC"
+        );
     }
 
     @Test

@@ -44,13 +44,10 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
           const { enableTranslation, clientSrcDir } = application;
           if (!enableTranslation) return;
 
-          const { ignoreNeedlesError: ignoreNonExisting } = this;
-
           this.editFile(`${clientSrcDir}app/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, true));
 
           this.editFile(
             `${clientSrcDir}app/config/translation.ts`,
-            { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: generateLanguagesWebappOptions(allLanguages),
               needle: 'jhipster-needle-i18n-language-key-pipe',

@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { get, set } from 'lodash-es';
+import get from 'lodash-es/get.js';
+import set from 'lodash-es/set.js';
 
 import type CoreGenerator from '../../../../base-core/index.ts';
 import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.ts';

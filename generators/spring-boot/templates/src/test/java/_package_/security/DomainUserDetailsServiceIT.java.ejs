@@ -146,7 +146,7 @@ class DomainUserDetailsServiceIT {
     }
 
     @AfterEach
-    void cleanup () {
+    void cleanup() {
         userService.deleteUser(USER_ONE_LOGIN)<%- callBlock %>;
         userService.deleteUser(USER_TWO_LOGIN)<%- callBlock %>;
         userService.deleteUser(USER_THREE_LOGIN)<%- callBlock %>;

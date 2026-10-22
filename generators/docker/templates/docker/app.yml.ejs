@@ -17,42 +17,7 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+name: jhipster
 services:
   app:
-    image: <%- baseName.toLowerCase() %>
-    environment:
-<%_ for (const [key, value] of Object.entries(dockerApplicationEnvironment)) { _%>
-      - <%- key %>=<%- value %>
-<%_ } _%>
-<%_ if (cacheProviderMemcached) { _%>
-      - JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211
-<%_ } _%>
-<%_ if (cacheProviderRedis) { _%>
-      - JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379
-      - JHIPSTER_CACHE_REDIS_CLUSTER=false
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
-<%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
-<%_ } _%>
-<%_ if (messageBrokerPulsar) { _%>
-      - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
-      - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
-<%_ } _%>
-<%_ if (cacheProviderInfinispan) { _%>
-      - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
-<%_ } _%>
-<%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
-    # If you want to expose these ports outside your dev PC,
-    # remove the "127.0.0.1:" prefix
-    ports:
-      - 127.0.0.1:<%- serverPort %>:<%- serverPort %>
-<%_ } _%>
-    healthcheck:
-      test: ['CMD-SHELL', 'bash -c ''exec 3<>/dev/tcp/127.0.0.1/<%- serverPort %>; printf "GET /management/health HTTP/1.0\r\nHost: localhost\r\n\r\n" >&3; grep -q "\"status\":\"UP\"" <&3''']
-      interval: 5s
-      timeout: 5s
-      retries: 40
+    image: jhipster

@@ -30,7 +30,12 @@ const metaLookup = (blueprints: Record<string, JHipsterCommandDefinition> = {}) 
   const generators = lookupGeneratorCommands();
   return (namespace: string): StoreGeneratorMeta | undefined => {
     const command = blueprints[namespace] ?? generators.find(generator => `jhipster:${generator.namespace}` === namespace)?.command;
-    return command ? ({ namespace, requireModule: () => ({ command }) } as unknown as StoreGeneratorMeta) : undefined;
+    return command ?
+        ({
+          namespace,
+          requireSibling: (name: string) => (name === 'command' ? { default: command } : undefined),
+        } as unknown as StoreGeneratorMeta)
+      : undefined;
   };
 };
 

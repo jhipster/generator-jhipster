@@ -16,8 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { lowerFirst } from 'lodash-es';
+import lowerFirst from 'lodash-es/lowerFirst.js';
 import pluralizeString from 'pluralize';
+
+// The string functions of lodash-es, each imported from its own module.
+export { default as camelCase } from 'lodash-es/camelCase.js';
+export { default as capitalize } from 'lodash-es/capitalize.js';
+export { default as escape } from 'lodash-es/escape.js';
+export { default as escapeRegExp } from 'lodash-es/escapeRegExp.js';
+export { default as kebabCase } from 'lodash-es/kebabCase.js';
+export { default as lowerFirst } from 'lodash-es/lowerFirst.js';
+export { default as padEnd } from 'lodash-es/padEnd.js';
+export { default as snakeCase } from 'lodash-es/snakeCase.js';
+export { default as startCase } from 'lodash-es/startCase.js';
+export { default as upperFirst } from 'lodash-es/upperFirst.js';
 
 export function customCamelCase(string: string): string {
   checkStringIsValid(string);

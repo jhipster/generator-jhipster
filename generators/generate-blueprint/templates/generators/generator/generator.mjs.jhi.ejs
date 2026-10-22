@@ -27,9 +27,6 @@
 <%_ if (!application.dynamic) { _%>
 import <%- parentGenerator %>Generator from 'generator-jhipster/generators/<%- jhipsterGenerator %>';
 <%_ } _%>
-<%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
-import command from './command.<%- blueprintMjsExtension %>';
-<%_ } _%>
 
 <%_ if (application.dynamic) { _%>
 // eslint-disable-next-line import/prefer-default-export
@@ -57,7 +54,7 @@ export default class extends <%- parentGenerator %>Generator {
       sbsBlueprint: true,
 <%_ } else if (!customGenerator) { _%>
       checkBlueprint: true,
-      // Dropped it once migration is done.
+      // Drop it once migration is done.
       jhipster7Migration: true,
 <%_ } _%>
     });

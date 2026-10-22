@@ -19,9 +19,9 @@
 import assert from 'node:assert';
 
 import { transformContents } from '@yeoman/transform';
-import { escapeRegExp, kebabCase } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
+import { escapeRegExp, kebabCase } from '../../../lib/utils/string-utils.ts';
 import type { CascadedEditFileCallback, EditFileCallback } from '../api.ts';
 import type CoreGenerator from '../index.ts';
 

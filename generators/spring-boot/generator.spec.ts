@@ -255,6 +255,38 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with relationships to an entity with a derived primary key', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [
+        { name: 'Owner', changelogDate: '20160926101214', dto: 'mapstruct', fields: [{ fieldName: 'name', fieldType: 'String' }] },
+        {
+          name: 'Profile',
+          changelogDate: '20160926101215',
+          dto: 'mapstruct',
+          fields: [{ fieldName: 'bio', fieldType: 'String' }],
+          relationships: [{ relationshipName: 'owner', otherEntityName: 'Owner', relationshipType: 'one-to-one', options: { id: true } }],
+        },
+        {
+          name: 'Post',
+          changelogDate: '20160926101216',
+          dto: 'mapstruct',
+          fields: [{ fieldName: 'title', fieldType: 'String' }],
+          relationships: [
+            { relationshipName: 'author', otherEntityName: 'Profile', relationshipType: 'many-to-one' },
+            { relationshipName: 'reviewer', otherEntityName: 'Profile', relationshipType: 'many-to-many' },
+          ],
+        },
+      ]);
+    });
+
+    it('should map the derived primary key of the related entity once', () => {
+      // Each relationship gets its own copy of a derived primary key field.
+      const mapper = runResult.fs.read(`${runResult.cwd}/${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/PostMapper.java`);
+      expect(mapper.match(/ProfileDTO toDtoProfileId\(/g)).toHaveLength(1);
+      expect(mapper.match(/Set<ProfileDTO> toDtoProfileIdSet\(/g)).toHaveLength(1);
+    });
+  });
+
   describe('with eager load relationship and no pagination', () => {
     before(async () => {
       await helpers.runJHipster(generator).withJHipsterConfig({ skipClient: true }, [

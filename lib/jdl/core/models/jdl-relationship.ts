@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { upperFirst } from 'lodash-es';
-
+import { upperFirst } from '../../../utils/string-utils.ts';
 import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
 import type { RelationshipSide } from '../basic-types/relationships.ts';
 import { Validations } from '../built-in-options/index.ts';

@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
-
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { mutateData } from '../../lib/utils/object.ts';
+import { upperFirst } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { isReservedTypescriptKeyword } from '../javascript-simple-application/support/reserved-words.ts';

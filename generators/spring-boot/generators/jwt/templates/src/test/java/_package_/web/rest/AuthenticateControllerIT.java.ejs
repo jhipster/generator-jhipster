@@ -122,7 +122,9 @@ class AuthenticateControllerIT {
 <%_ } _%>
         login.setPassword("test");
 <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/authenticate")
+        webTestClient
+            .post()
+            .uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(login))
             .exchange()
@@ -172,7 +174,9 @@ class AuthenticateControllerIT {
         login.setPassword("test");
         login.setRememberMe(true);
 <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/authenticate")
+        webTestClient
+            .post()
+            .uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(login))
             .exchange()
@@ -198,7 +202,9 @@ class AuthenticateControllerIT {
         login.setUsername("wrong-user");
         login.setPassword("wrong password");
 <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/authenticate")
+        webTestClient
+            .post()
+            .uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(login))
             .exchange()

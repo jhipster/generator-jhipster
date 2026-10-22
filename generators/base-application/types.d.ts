@@ -10,6 +10,7 @@ import type { Entity } from './entity.ts';
 import type bootstrapCommand from './generators/bootstrap/command.ts';
 import type { OptionWithDerivedProperties } from './internal/types/application-options.ts';
 
+export type * from './objects.ts';
 export type * from './entity.ts';
 
 type Command = CommandTypeMap<typeof bootstrapCommand>;

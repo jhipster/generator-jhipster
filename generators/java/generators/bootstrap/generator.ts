@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
-
 import { mutateData } from '../../../../lib/utils/index.ts';
-import { pluralize } from '../../../../lib/utils/string-utils.ts';
+import { pluralize, upperFirst } from '../../../../lib/utils/string-utils.ts';
 import { mutateApplicationPreparing, mutateField, mutateRelationship } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { prepareEntity } from '../../support/index.ts';

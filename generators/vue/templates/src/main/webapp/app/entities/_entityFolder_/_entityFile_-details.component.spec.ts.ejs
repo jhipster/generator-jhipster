@@ -18,7 +18,7 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount, type MountingOptions } from '@vue/test-utils';
+import { flushPromises, shallowMount, type MountingOptions } from '@vue/test-utils';
 import { type RouteLocation } from 'vue-router';
 
 import <%- entityAngularName %>Details from './<%- entityFileName %>-details.vue';
@@ -28,13 +28,22 @@ type <%- entityAngularName %>DetailsComponentType = InstanceType<typeof <%- enti
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vi.fn();
+const routerPushMock = vi.fn();
 
 vi.mock('vue-router', () => ({
   useRoute: () => route,
-  useRouter: () => ({ go: routerGoMock }),
+  useRouter: () => ({ go: routerGoMock, push: routerPushMock }),
 }));
 
 const <%- entityInstance %>Sample = { <%- primaryKey.name %>: <%- tsKeyId %> };
+
+const bModalStub = {
+  render: () => {},
+  methods: {
+    hide: () => {},
+    show: () => {}
+  }
+};
 
 describe('Component Tests', () => {
   let alertService: AlertService;
@@ -51,6 +60,9 @@ describe('Component Tests', () => {
       route = {};
       <%- entityInstance %>ServiceStub = {
         find: vi.fn(),
+<%_ if (!readOnly) { _%>
+        delete: vi.fn(),
+<%_ } _%>
       };
 
       alertService = new AlertService({
@@ -64,6 +76,7 @@ describe('Component Tests', () => {
 
       mountOptions = {
         stubs: {
+          bModal: bModalStub as any,
           'font-awesome-icon': true,
           'router-link': true,
         },
@@ -106,5 +119,29 @@ describe('Component Tests', () => {
         expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
+<%_ if (!readOnly) { _%>
+
+    describe('Remove', () => {
+      it('Should delete entity and navigate to list', async () => {
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- tsKeyId %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+        <%- entityInstance %>ServiceStub.delete.mockResolvedValue({});
+
+        comp.prepareRemove(<%- entityInstance %>Sample);
+        comp.remove<%- entityAngularName %>();
+        await flushPromises();
+
+        expect(<%- entityInstance %>ServiceStub.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
+        expect(routerPushMock).toHaveBeenCalledWith({ name: '<%- entityAngularName %>' });
+      });
+    });
+<%_ } _%>
   });
 });

@@ -24,6 +24,11 @@ import type { Application as DockerApplication, DockerComposeFile } from './type
 export type DockerAddedApplicationLoadingProperties = {
   dockerContainers: Record<string, string>;
   dockerApplicationEnvironment: Record<string, string>;
+  /**
+   * The variables of the application in a deployment, over `dockerApplicationEnvironment`: the ones naming the hosts of
+   * its services, which a deployment names `<application>-<service>`.
+   */
+  dockerDeploymentEnvironment: Record<string, string>;
   dockerServices: string[];
   /**
    * The docker compose files of the application a deployment uses, by name: the docker generator writes them to
@@ -35,12 +40,20 @@ export type DockerAddedApplicationLoadingProperties = {
 
 export type DockerAddedApplicationPreparingProperties = {
   dockerServicesDir: string;
+  /** The prefix of the names a deployment gives the docker compose services of the application. */
+  dockerDeploymentServicePrefix: string;
+  /**
+   * The command of the healthcheck of the `app` docker compose service, run by its shell: by default a request to
+   * `/management/health` with bash, which an application whose image has no bash replaces.
+   */
+  dockerApplicationHealthcheckCommand: string;
 };
 
 export const mutateApplicationLoading = {
   __override__: false,
   dockerContainers: () => ({}),
   dockerApplicationEnvironment: () => ({}),
+  dockerDeploymentEnvironment: () => ({}),
   dockerServices: () => [],
   dockerComposeFiles: () => ({}),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
@@ -51,6 +64,11 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
   dockerServicesDir: JAVA_DOCKER_DIR,
+  dockerDeploymentServicePrefix: ({ lowercaseBaseName }) => `${lowercaseBaseName}-`,
+  // Delayed, so an application preparing its own command keeps it; the server port is prepared by then.
+  dockerApplicationHealthcheckCommand: ({ serverPort }, { delayMarker }) =>
+    delayMarker ??
+    String.raw`bash -c 'exec 3<>/dev/tcp/127.0.0.1/${serverPort}; printf "GET /management/health HTTP/1.0\r\nHost: localhost\r\n\r\n" >&3; grep -q "\"status\":\"UP\"" <&3'`,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<DockerApplication>,
   DockerAddedApplicationPreparingProperties

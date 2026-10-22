@@ -91,7 +91,11 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     private final UserRepository repository;
     private final ApplicationEventPublisher events;
 
-    UserSearchRepositoryInternalImpl(ElasticsearchTemplate elasticsearchTemplate, UserRepository repository, ApplicationEventPublisher events) {
+    UserSearchRepositoryInternalImpl(
+        ElasticsearchTemplate elasticsearchTemplate,
+        UserRepository repository,
+        ApplicationEventPublisher events
+    ) {
         this.elasticsearchTemplate = elasticsearchTemplate;
         this.repository = repository;
         this.events = events;

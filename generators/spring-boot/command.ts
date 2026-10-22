@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { intersection } from 'lodash-es';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHABETIC_LOWER_PATTERN, ALPHANUMERIC_PATTERN, NON_WHITESPACE_PATTERN } from '../../lib/constants/jdl.ts';
@@ -189,7 +188,7 @@ const command = {
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'checkbox',
         message: 'Besides JUnit, which testing frameworks would you like to use?',
-        default: () => intersection([GATLING, CUCUMBER], config.testFrameworks),
+        default: () => [GATLING, CUCUMBER].filter(framework => config.testFrameworks?.includes(framework)),
       }),
       choices: [
         { name: 'Gatling', value: GATLING },

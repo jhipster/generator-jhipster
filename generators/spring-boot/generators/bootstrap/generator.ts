@@ -116,59 +116,67 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           });
         }
 
-        if (application.databaseTypeSql) {
-          const databaseName = application.prodDatabaseTypeMysql || application.prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
-          const jdbcUrl = getJdbcUrl(application.prodDatabaseType!, {
-            hostname: application.prodDatabaseType,
-            databaseName,
-          });
-          if (application.reactive) {
-            mutateData(dockerApplicationEnvironment as any, {
-              SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType!, {
-                hostname: application.prodDatabaseType,
-                databaseName,
-              }),
-              SPRING_R2DBC_USERNAME: application.prodDatabaseUsername,
-              SPRING_R2DBC_PASSWORD: application.prodDatabasePassword,
+        // The variables of the database, with the host of its service: its name in the docker compose files of the
+        // application, `<application>-<service>` in a deployment.
+        const addDatabaseEnvironment = (environment: Record<string, string>, hostPrefix: string) => {
+          if (application.databaseTypeSql) {
+            const databaseName =
+              application.prodDatabaseTypeMysql || application.prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
+            const hostname = `${hostPrefix}${application.prodDatabaseType}`;
+            const jdbcUrl = getJdbcUrl(application.prodDatabaseType!, {
+              hostname,
+              databaseName,
             });
-          } else {
-            mutateData(dockerApplicationEnvironment as any, {
-              SPRING_DATASOURCE_URL: jdbcUrl,
-              SPRING_DATASOURCE_USERNAME: application.prodDatabaseUsername,
-              SPRING_DATASOURCE_PASSWORD: application.prodDatabasePassword,
+            if (application.reactive) {
+              mutateData(environment as any, {
+                SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType!, {
+                  hostname,
+                  databaseName,
+                }),
+                SPRING_R2DBC_USERNAME: application.prodDatabaseUsername,
+                SPRING_R2DBC_PASSWORD: application.prodDatabasePassword,
+              });
+            } else {
+              mutateData(environment as any, {
+                SPRING_DATASOURCE_URL: jdbcUrl,
+                SPRING_DATASOURCE_USERNAME: application.prodDatabaseUsername,
+                SPRING_DATASOURCE_PASSWORD: application.prodDatabasePassword,
+              });
+            }
+            mutateData(environment as any, {
+              SPRING_LIQUIBASE_URL: jdbcUrl,
+            });
+          } else if (application.databaseTypeMongodb) {
+            const mongodbUri = `mongodb://${hostPrefix}mongodb:27017/${application.baseName}`;
+            mutateData(environment as any, {
+              SPRING_MONGODB_URI: mongodbUri,
+            });
+          } else if (application.databaseTypeCouchbase) {
+            mutateData(environment as any, {
+              SPRING_COUCHBASE_USERNAME: 'Administrator',
+              SPRING_COUCHBASE_PASSWORD: 'password',
+              SPRING_COUCHBASE_CONNECTION_STRING: `${hostPrefix}couchbase`,
+              JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME: application.baseName,
+              JHIPSTER_SLEEP: '20', // Let database to start
+            });
+          } else if (application.databaseTypeNeo4j) {
+            mutateData(environment as any, {
+              SPRING_NEO4J_URI: `bolt://${hostPrefix}neo4j:7687`,
+            });
+            if (application.databaseMigrationLiquibase) {
+              mutateData(environment as any, {
+                SPRING_LIQUIBASE_URL: `jdbc:neo4j:bolt://${hostPrefix}neo4j:7687`,
+              });
+            }
+          } else if (application.databaseTypeCassandra) {
+            mutateData(environment as any, {
+              SPRING_CASSANDRA_CONTACTPOINTS: `${hostPrefix}cassandra`,
+              JHIPSTER_SLEEP: '10', // Let migration complete
             });
           }
-          mutateData(dockerApplicationEnvironment as any, {
-            SPRING_LIQUIBASE_URL: jdbcUrl,
-          });
-        } else if (application.databaseTypeMongodb) {
-          const mongodbUri = `mongodb://mongodb:27017/${application.baseName}`;
-          mutateData(dockerApplicationEnvironment as any, {
-            SPRING_MONGODB_URI: mongodbUri,
-          });
-        } else if (application.databaseTypeCouchbase) {
-          mutateData(dockerApplicationEnvironment as any, {
-            SPRING_COUCHBASE_USERNAME: 'Administrator',
-            SPRING_COUCHBASE_PASSWORD: 'password',
-            SPRING_COUCHBASE_CONNECTION_STRING: 'couchbase',
-            JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME: application.baseName,
-            JHIPSTER_SLEEP: '20', // Let database to start
-          });
-        } else if (application.databaseTypeNeo4j) {
-          mutateData(dockerApplicationEnvironment as any, {
-            SPRING_NEO4J_URI: 'bolt://neo4j:7687',
-          });
-          if (application.databaseMigrationLiquibase) {
-            mutateData(dockerApplicationEnvironment as any, {
-              SPRING_LIQUIBASE_URL: 'jdbc:neo4j:bolt://neo4j:7687',
-            });
-          }
-        } else if (application.databaseTypeCassandra) {
-          mutateData(dockerApplicationEnvironment as any, {
-            SPRING_CASSANDRA_CONTACTPOINTS: 'cassandra',
-            JHIPSTER_SLEEP: '10', // Let migration complete
-          });
-        }
+        };
+        addDatabaseEnvironment(dockerApplicationEnvironment, '');
+        addDatabaseEnvironment(application.dockerDeploymentEnvironment, application.dockerDeploymentServicePrefix);
       },
     });
   }

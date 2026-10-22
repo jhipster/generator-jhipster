@@ -19,6 +19,7 @@
 
 import type { StoreGeneratorMeta } from 'yeoman-environment';
 
+import { requireGeneratorCommand } from '../resolver/generator-command.ts';
 import {
   type GeneratorDependency,
   type ResolveGeneratorDependenciesOptions,
@@ -55,6 +56,10 @@ export const resolveCommand = (
     ...dependencies.filter(({ blueprintNamespace }) => !blueprintNamespace),
     ...dependencies.filter(({ blueprintNamespace }) => blueprintNamespace),
   ];
-  const { command: rootCommand } = (meta.requireModule?.() ?? {}) as { command?: JHipsterCommandDefinition };
-  return { meta, command: rootCommand, dependencies, configs: Object.assign({}, ...blueprintsLast.map(({ command }) => command?.configs)) };
+  return {
+    meta,
+    command: requireGeneratorCommand(meta),
+    dependencies,
+    configs: Object.assign({}, ...blueprintsLast.map(({ command }) => command?.configs)),
+  };
 };

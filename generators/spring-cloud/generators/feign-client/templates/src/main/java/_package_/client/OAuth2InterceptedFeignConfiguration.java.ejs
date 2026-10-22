@@ -18,12 +18,9 @@
 -%>
 package <%- packageName %>.client;
 
-<%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.context.annotation.Bean;
 
 import feign.RequestInterceptor;
-
-import <%- packageName %>.client.AuthorizationHeaderUtil;
 
 public class OAuth2InterceptedFeignConfiguration {
 
@@ -32,4 +29,3 @@ public class OAuth2InterceptedFeignConfiguration {
         return new TokenRelayRequestInterceptor(authorizationHeaderUtil);
     }
 }
-<%_ } _%>

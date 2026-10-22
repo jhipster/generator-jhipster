@@ -17,16 +17,18 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+# The cassandra service stores its data in /var/lib/cassandra/data of its Docker container: to keep it in a folder of your machine,
+# add to the cassandra service:
+#   volumes:
+#     - <folder-of-your-machine>:/var/lib/cassandra/data
+name: jhipster
 services:
   cassandra:
-    image: <%- dockerContainers.cassandra %>
-    container_name: <%- baseName.toLowerCase() %>-cassandra
+    image: cassandra
+    container_name: jhipster-cassandra
     environment:
       - MAX_HEAP_SIZE=2G
       - HEAP_NEWSIZE=512M
-    # volumes:
-    #   - ~/volumes/jhipster/<%- baseName %>/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
@@ -40,24 +42,3 @@ services:
       interval: 5s
       timeout: 25s
       retries: 20
-<%_ if (backendTypeSpringBoot) { _%>
-    labels:
-      org.springframework.boot.ignore: true
-<%_ } _%>
-<%_ if (databaseMigrationLoader) { _%>
-  cassandra-migration:
-    environment:
-      - CASSANDRA_CONTACT_POINT=<%- baseName.toLowerCase() %>-cassandra
-      - USER=docker-cassandra-migration
-      # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
-      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
-    build:
-      context: .
-      dockerfile: cassandra/Cassandra-Migration.Dockerfile
-    volumes:
-      - ../resources/config/cql:/cql:ro
-  <%_ if (backendTypeSpringBoot) { _%>
-    labels:
-      org.springframework.boot.ignore: true
-  <%_ } _%>
-<%_ } _%>

@@ -3,6 +3,7 @@
 exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
 {
   "clientRootFolder": "",
+  "entityAlertName": "name",
   "entityAuthority": "ROLE_ADMIN",
   "entityClass": "Name",
   "entityInstance": "name",

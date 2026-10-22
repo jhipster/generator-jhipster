@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import { lowerFirst, upperFirst } from 'lodash-es';
-
+import { lowerFirst, upperFirst } from '../../utils/string-utils.ts';
 import { asJdlRelationshipType } from '../core/basic-types/relationship-types.ts';
 import type { JDLOptionName } from '../core/built-in-options/binary-options.ts';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.ts';

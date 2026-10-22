@@ -140,7 +140,7 @@ export const subGeneratorPrompts = ({
     {
       type: 'checkbox',
       name: PRIORITIES,
-      message: `What task do you want do implement at ${chalk.yellow(subGenerator)} generator?`,
+      message: `What task do you want to implement at ${chalk.yellow(subGenerator)} generator?`,
       choices: prioritiesForSub(subGenerator),
       pageSize: 30,
       default: (answers: any) => (answers.sbs || additionalSubGenerator ? [] : prioritiesForSub(subGenerator)),

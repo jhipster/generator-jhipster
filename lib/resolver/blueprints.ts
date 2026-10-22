@@ -20,7 +20,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { cloneDeep } from 'lodash-es';
+import cloneDeep from 'lodash-es/cloneDeep.js';
 import type { Store, StoreGeneratorMeta } from 'yeoman-environment';
 
 import type { CliCommand } from '../../cli/types.ts';

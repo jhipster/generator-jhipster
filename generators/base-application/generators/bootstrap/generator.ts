@@ -20,12 +20,12 @@ import assert from 'node:assert';
 
 import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
-import { lowerFirst } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
 import { finalizeMutations, isWin32, mutateData } from '../../../../lib/utils/index.ts';
+import { lowerFirst } from '../../../../lib/utils/string-utils.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { mutateApplication } from '../../application.ts';

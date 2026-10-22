@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import { upperFirst } from 'lodash-es';
-
+import { upperFirst } from '../../../lib/utils/string-utils.ts';
 import type { Entity as BaseApplicationEntity } from '../types.ts';
 
 export const findEntityInEntities = (entityName: string, entities: BaseApplicationEntity[]): BaseApplicationEntity | undefined =>

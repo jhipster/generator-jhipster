@@ -21,7 +21,6 @@ import chalk from 'chalk';
 import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.ts';
 import { createJDLRuntime, getDefaultRuntime } from '../../lib/jdl-config/jdl-runtime.ts';
 import { CommandCoreGenerator } from '../base-core/generator.ts';
-import CoreGenerator from '../base-core/index.ts';
 import { resolveJDLDefinitions } from '../jdl/internal/jdl-definitions.ts';
 
 import type command from './command.ts';
@@ -30,7 +29,7 @@ export default class extends CommandCoreGenerator<typeof command> {
   jdlFile!: string;
   jdlContent?: string;
 
-  get [CoreGenerator.DEFAULT]() {
+  get [CommandCoreGenerator.DEFAULT]() {
     return this.asAnyTaskGroup({
       convertToJDL() {
         try {
@@ -47,7 +46,7 @@ export default class extends CommandCoreGenerator<typeof command> {
     });
   }
 
-  get [CoreGenerator.WRITING]() {
+  get [CommandCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       writeJdl() {
         if (this.jdlContent) {
@@ -57,7 +56,7 @@ export default class extends CommandCoreGenerator<typeof command> {
     });
   }
 
-  get [CoreGenerator.END]() {
+  get [CommandCoreGenerator.END]() {
     return this.asAnyTaskGroup({
       end() {
         this.log.log(chalk.green.bold('\nThe JDL export is complete!\n'));

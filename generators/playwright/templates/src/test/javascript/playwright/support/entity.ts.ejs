@@ -69,18 +69,4 @@ export class EntityHelper {
     // The blob widget renders more than one element with the field's data-cy; the cypress command used el[0].
     await this.page.locator(`[data-cy="${fieldName}"]`).first().setInputFiles({ name: fileName, mimeType, buffer });
   }
-
-  /**
-   * Ports `setFieldSelectToLastOfEntity`: selects the last option when the control has any, otherwise falls back to
-   * the keyboard, which is what the Cypress command does for comboboxes that populate asynchronously.
-   */
-  async setFieldSelectToLastOfEntity(fieldName: string): Promise<void> {
-    const select = this.page.locator(`[data-cy="${fieldName}"]`).first();
-    const optionCount = await select.locator('option').count();
-    if (optionCount > 0) {
-      await select.selectOption({ index: optionCount - 1 });
-    } else {
-      await select.press('ArrowDown');
-    }
-  }
 }

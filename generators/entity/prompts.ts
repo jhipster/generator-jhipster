@@ -19,10 +19,12 @@
 import fs from 'node:fs';
 
 import chalk from 'chalk';
-import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
+import isArray from 'lodash-es/isArray.js';
+import uniq from 'lodash-es/uniq.js';
 
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
 import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.ts';
+import { lowerFirst, snakeCase, upperFirst } from '../../lib/utils/string-utils.ts';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import type { Field as BaseApplicationField } from '../base-application/types.ts';
 
@@ -120,7 +122,7 @@ export const askForUpdate = asPromptingTask(async function askForUpdate(this: En
       choices: [
         {
           value: 'regenerate',
-          name: 'Yes, re generate the entity',
+          name: 'Yes, regenerate the entity',
         },
         {
           value: 'add',
@@ -179,7 +181,7 @@ export function askForFieldsToRemove(this: EntityGenerator) {
       when: response => response.fieldsToRemove.length !== 0,
       type: 'confirm',
       name: 'confirmRemove',
-      message: 'Are you sure to remove these fields?',
+      message: 'Are you sure you want to remove these fields?',
       default: true,
     },
   ]).then(props => {
@@ -237,7 +239,7 @@ export function askForRelationsToRemove(this: EntityGenerator) {
       when: response => response.relsToRemove.length !== 0,
       type: 'confirm',
       name: 'confirmRemove',
-      message: 'Are you sure to remove these relationships?',
+      message: 'Are you sure you want to remove these relationships?',
       default: true,
     },
   ]).then(props => {
@@ -808,7 +810,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
       },
       type: 'confirm',
       name: 'bidirectional',
-      message: 'Do you want to generate a bidirectional relationship',
+      message: 'Do you want to generate a bidirectional relationship?',
       default: true,
     },
     {

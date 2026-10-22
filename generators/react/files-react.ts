@@ -285,7 +285,10 @@ export const files = asWriteFilesSection({
     {
       condition: generator => generator.generateUserManagement,
       ...clientApplicationTemplatesBlock(),
-      templates: ['modules/administration/user-management/user-management.reducer.spec.ts'],
+      templates: [
+        'modules/administration/user-management/user-management.reducer.spec.ts',
+        'modules/administration/user-management/user-management-delete-dialog.spec.tsx',
+      ],
     },
     {
       condition: generator => generator.enableTranslation,

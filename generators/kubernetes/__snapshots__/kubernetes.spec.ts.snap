@@ -10918,6 +10918,10 @@ deploy:
 exports[`generator - Kubernetes gateway with istio routing should match spawn calls snapshot 1`] = `
 [
   [
+    "spawnCommand",
+    "kubectl version",
+  ],
+  [
     "spawnCommandSync",
     "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
     {

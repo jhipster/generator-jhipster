@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { camelCase } from 'lodash-es';
+import { camelCase } from './string-utils.ts';
 
 /**
  * Get the frontend application name.

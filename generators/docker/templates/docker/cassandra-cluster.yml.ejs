@@ -17,13 +17,15 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%- baseName.toLowerCase() %>
+# The cassandra service stores its data in /var/lib/cassandra/data of its Docker container: to keep it in a folder of your machine,
+# add to the cassandra service:
+#   volumes:
+#     - <folder-of-your-machine>:/var/lib/cassandra/data
+name: jhipster
 services:
   cassandra:
-    container_name: <%- baseName.toLowerCase() %>-cassandra
-    image: <%- dockerContainers.cassandra %>
-    # volumes:
-    #   - ~/volumes/jhipster/<%- baseName %>/cassandra/:/var/lib/cassandra/data
+    container_name: jhipster-cassandra
+    image: cassandra
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
@@ -33,19 +35,4 @@ services:
       - 127.0.0.1:9042:9042
       - 127.0.0.1:9160:9160
   cassandra-node:
-    image: <%- dockerContainers.cassandra %>
-    environment:
-      - CASSANDRA_SEEDS=<%- baseName.toLowerCase() %>-cassandra
-<%_ if (databaseMigrationLoader) { _%>
-  cassandra-migration:
-    environment:
-      - CASSANDRA_CONTACT_POINT=<%- baseName.toLowerCase() %>-cassandra
-      - USER=docker-cassandra-migration
-      # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
-      - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
-    build:
-      context: .
-      dockerfile: cassandra/Cassandra-Migration.Dockerfile
-    volumes:
-      - ../resources/config/cql:/cql:ro
-<%_ } _%>
+    image: cassandra

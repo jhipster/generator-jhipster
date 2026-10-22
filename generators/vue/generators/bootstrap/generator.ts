@@ -45,13 +45,10 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
           const { enableTranslation, clientSrcDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
-          const { ignoreNeedlesError: ignoreNonExisting } = this;
-
           this.editFile(`${clientSrcDir}app/shared/config/dayjs.ts`, createDayjsUpdateLanguagesEditFileCallback(allLanguages, true));
 
           this.editFile(
             `${clientSrcDir}app/shared/config/languages.ts`,
-            { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: generateLanguagesWebappOptions(allLanguages),
               needle: 'jhipster-needle-i18n-language-key-pipe',
@@ -61,7 +58,6 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
           if (application.microfrontend && (application.applicationTypeMicroservice || application.exposeMicrofrontend)) {
             this.editFile(
               `${clientRootDir}module-federation.config.ts`,
-              { ignoreNonExisting },
               createNeedleCallback({
                 contentToAdd: newLanguages.map(
                   lang => `    './i18n-${lang.languageTag}': './i18n/${lang.languageTag}/${lang.languageTag}.js',`,
@@ -79,7 +75,6 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
 
           this.editFile(
             `${clientSrcDir}app/shared/config/config.ts`,
-            { ignoreNonExisting },
             createNeedleCallback({
               contentToAdd: allLanguages.map(lang => generateDateTimeFormat(lang.languageTag)),
               needle: 'jhipster-needle-i18n-language-date-time-format',

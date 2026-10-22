@@ -18,8 +18,8 @@
  */
 
 import chalk from 'chalk';
-import { padEnd } from 'lodash-es';
 
+import { padEnd } from '../../lib/utils/string-utils.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import type { Config as ClientConfig } from '../client/types.ts';
@@ -175,20 +175,45 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       prepareForTemplates({ application }) {
-        if (application.enableTranslation) {
+        // The defaults of the configuration reach the application at preparing, after loading.
+        if (application.enableTranslation ?? this.jhipsterConfigWithDefaults.enableTranslation) {
           if (!this.languageCommand || this.regenerateLanguages) {
             this.languagesToApply = application.languages;
           } else {
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
           }
         }
-        application.languagesToGenerate.push(...this.languagesToApply);
+        for (const language of this.languagesToApply ?? []) {
+          if (!application.languagesToGenerate.includes(language)) {
+            application.languagesToGenerate.push(language);
+          }
+        }
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      languagesToGenerateDefinition({ application }) {
+        // `jhipster entity` composes this generator after the bootstrap prepared the application with the native language only.
+        for (const languageTag of application.languagesToGenerate) {
+          if (application.languagesToGenerateDefinition.some(def => def.languageTag === languageTag)) continue;
+          const languageDefinition = findLanguageForTag(languageTag, application.supportedLanguages);
+          if (!languageDefinition) {
+            throw new Error(`Unsupported language to generate: ${languageTag}`);
+          }
+          application.languagesToGenerateDefinition.push(languageDefinition);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get postWriting() {

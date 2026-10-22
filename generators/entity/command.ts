@@ -64,7 +64,7 @@ const command = {
     },
     clientRootFolder: {
       description:
-        'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
+        'Use a root folder name for entities on client side. By default it is empty for monoliths and name of the microservice for gateways',
       cli: {
         type: String,
       },

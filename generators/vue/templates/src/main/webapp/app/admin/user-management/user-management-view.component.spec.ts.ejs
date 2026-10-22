@@ -20,6 +20,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
+import { ref } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
@@ -27,13 +28,40 @@ import UserManagementView from './user-management-view.vue';
 import { Authority } from '@/shared/jhipster/constants';
 
 let route: Partial<RouteLocation>;
+const routerPushMock = vi.fn();
 
 vi.mock('vue-router', () => ({
   useRoute: () => route,
+  useRouter: () => ({ push: routerPushMock }),
 }));
+
+const bModalStub = {
+  render: () => {},
+  methods: {
+    hide: () => {},
+    show: () => {}
+  }
+};
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
+  delete: vi.spyOn(axios, 'delete'),
+};
+
+const userData = {
+  id: 1,
+  login: 'user',
+  firstName: 'first',
+  lastName: 'last',
+  email: 'first@last.com',
+  activated: true,
+  langKey: 'en',
+  authorities: [Authority.USER],
+  createdBy: 'admin',
+  createdDate: null,
+  lastModifiedBy: null,
+  lastModifiedDate: null,
+  password: null,
 };
 
 describe('UserManagementView Component', () => {
@@ -54,21 +82,6 @@ describe('UserManagementView Component', () => {
   describe('OnInit', () => {
     it('Should call load all on init', async () => {
       // GIVEN
-      const userData = {
-        id: 1,
-        login: 'user',
-        firstName: 'first',
-        lastName: 'last',
-        email: 'first@last.com',
-        activated: true,
-        langKey: 'en',
-        authorities: [Authority.USER],
-        createdBy: 'admin',
-        createdDate: null,
-        lastModifiedBy: null,
-        lastModifiedDate: null,
-        password: null,
-      };
       axiosStub.get.mockResolvedValue({ data: userData });
 
       route = {
@@ -86,6 +99,7 @@ describe('UserManagementView Component', () => {
           },
           provide: {
             alertService,
+            currentUsername: ref(''),
           },
         },
       });
@@ -97,6 +111,46 @@ describe('UserManagementView Component', () => {
       // THEN
       expect(axiosStub.get).toHaveBeenCalledWith('api/admin/users/' + <%- tsKeyId %>);
       expect(userManagementView.user).toEqual(userData);
+    });
+  });
+
+  describe('Delete', () => {
+    it('Should delete user and navigate to list', async () => {
+      // GIVEN
+      axiosStub.get.mockResolvedValue({ data: userData });
+      axiosStub.delete.mockResolvedValue({ headers: {} });
+
+      route = {
+        params: {
+          userId: '' + <%- tsKeyId %>,
+        },
+      };
+
+      const wrapper = shallowMount(UserManagementView, {
+        global: {
+          stubs: {
+            'b-badge': true,
+            'b-modal': bModalStub as any,
+            'router-link': true,
+            'font-awesome-icon': true,
+          },
+          provide: {
+            alertService,
+            currentUsername: ref(''),
+          },
+        },
+      });
+      const userManagementView = wrapper.vm;
+      await userManagementView.$nextTick();
+
+      // WHEN
+      userManagementView.prepareRemove(userData);
+      userManagementView.deleteUser();
+      await userManagementView.$nextTick();
+
+      // THEN
+      expect(axiosStub.delete).toHaveBeenCalledWith('api/admin/users/' + userData.login);
+      expect(routerPushMock).toHaveBeenCalledWith({ name: '<%- jhiPrefixCapitalized %>User' });
     });
   });
 });

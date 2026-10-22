@@ -18,7 +18,13 @@
  */
 import { before, describe, expect, it } from 'expect-node';
 
-import { type SampleGroupSummary, describeSample, describeSampleGroup, describeSampleGroups } from './describe-samples.ts';
+import {
+  type SampleGroupSummary,
+  describeChangedSamples,
+  describeSample,
+  describeSampleGroup,
+  describeSampleGroups,
+} from './describe-samples.ts';
 
 describe('describe-samples - support', () => {
   // The nested objects of the samples of a group, matched by their type only, so the snapshot shows their shape.
@@ -63,6 +69,26 @@ describe('describe-samples - support', () => {
 
     it('should fail for an unknown sample', () => {
       expect(() => describeSample('unknown')).toThrow(/^Sample unknown not found, expected one of .*\bng-default\b/);
+    });
+  });
+
+  describe('describeChangedSamples', () => {
+    const serverTemplate = 'generators/spring-boot/templates/src/main/java/_package_/config/WebConfigurer.java.ejs';
+
+    it('should give the samples the ci runs for a change of a server template, by group', async () => {
+      const groups = await describeChangedSamples([serverTemplate]);
+      // graalvm runs because the generators workflow enables it for java changes; the daily and labeled groups never.
+      expect(Object.keys(groups).sort()).toEqual(['angular', 'graalvm', 'react', 'vue']);
+      expect(groups.angular).toContain('ng-default');
+    });
+
+    it('should leave out graalvm when the generators workflow does not enable it', async () => {
+      const groups = await describeChangedSamples(['generators/angular/generator.ts']);
+      expect(Object.keys(groups).sort()).toEqual(['angular', 'devserver']);
+    });
+
+    it('should give no samples for no changes', async () => {
+      await expect(describeChangedSamples([])).resolves.toEqual({});
     });
   });
 });
