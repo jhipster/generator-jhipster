@@ -617,7 +617,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
@@ -677,7 +679,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
@@ -761,7 +765,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
@@ -831,7 +837,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri("/api/admin/users")
+        webTestClient
+            .put()
+            .uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()

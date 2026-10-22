@@ -19,7 +19,6 @@
 package <%- packageName %>.repository;
 
 import <%- user.entityAbsoluteClass %>;
-
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
@@ -95,5 +94,4 @@ public interface UserRepository extends <%- springBootBaseRepositoryClass %><<%-
 
 <%_ } _%>
     <%- pageOrFlux %><<%- user.persistClass %>> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
-
 }

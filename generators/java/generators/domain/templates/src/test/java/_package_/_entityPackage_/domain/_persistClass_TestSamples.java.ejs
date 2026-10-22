@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 <%_ const sampleFields = fields.filter(field => !field.mapstructExpression && (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID)); _%>
 public class <%- persistClass %>TestSamples {
-
 <%_ if (fields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
     private static final Random random = new Random();
 <%_ } _%>

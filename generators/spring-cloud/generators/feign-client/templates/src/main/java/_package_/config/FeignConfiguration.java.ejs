@@ -23,6 +23,7 @@ import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
 <%_ if (reactive) { _%>
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 <%_ } _%>
@@ -41,5 +42,4 @@ public class FeignConfiguration {
     feign.Logger.Level feignLoggerLevel() {
         return feign.Logger.Level.BASIC;
     }
-
 }
