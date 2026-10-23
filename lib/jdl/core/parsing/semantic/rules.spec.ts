@@ -483,6 +483,20 @@ entity A`),
     it('accepts it with its blueprint', () => {
       expect(check('application {\n  config { baseName a blueprints [foo] }\n  config(foo) { bar baz }\n}')).toEqual([]);
     });
+    it('accepts a scoped blueprint, by its short or its package name', () => {
+      expect(
+        check('application {\n  config { baseName a blueprints [@scope/foo] }\n  config(@scope/generator-jhipster-foo) { bar baz }\n}'),
+      ).toEqual([]);
+    });
+    it('reports a scoped namespace config without its blueprint of the same scope', () => {
+      expect(check('application {\n  config { baseName a blueprints [foo] }\n  config(@scope/foo) { bar baz }\n}')).toEqual([
+        {
+          ruleId: 'namespace-config-blueprint',
+          message: 'Blueprint namespace config @scope/foo requires the blueprint @scope/foo',
+          at: 'config(@scope/foo) { bar baz }',
+        },
+      ]);
+    });
   });
 
   describe('unused-enum', () => {

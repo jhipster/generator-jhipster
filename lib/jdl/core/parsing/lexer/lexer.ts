@@ -152,6 +152,13 @@ export const buildTokens = (): JDLTokens => {
 
   createTokenFromConfig({ name: 'TO', pattern: 'to' });
 
+  // A scoped package, like the blueprint `@scope/generator-jhipster-name`, or the namespace of one of its generators.
+  createTokenFromConfig({
+    name: 'SCOPED_NAME',
+    pattern: /@[a-z\d][a-z\d._-]*\/[a-zA-Z_][a-zA-Z_\-.\d]*(?::[a-zA-Z_][a-zA-Z_\-\d]*(?:#[a-zA-Z_\-\d]+)?)?/,
+    start_chars_hint: ['@'],
+  });
+
   // annotations
   createTokenFromConfig({ name: 'AT', pattern: '@' });
 

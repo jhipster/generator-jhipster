@@ -333,6 +333,23 @@ application {
     });
   });
 
+  it('should name a scoped blueprint and its namespace config after its package', () => {
+    const { files } = convert(`
+application {
+  config { baseName shop blueprints [@scope/foo] }
+  config(@scope/generator-jhipster-foo) { flag true }
+}
+`);
+    expect(files['shop/.yo-rc.json']).toEqual({
+      '@scope/generator-jhipster-foo': { flag: true },
+      'generator-jhipster': {
+        baseName: 'shop',
+        blueprints: [{ name: '@scope/generator-jhipster-foo' }],
+        entities: [],
+      },
+    });
+  });
+
   describe('convertAstToFiles, without customization', () => {
     const convertPlain = (jdl: string) =>
       convertAstToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime).files;

@@ -1119,7 +1119,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             }`,
                 jdlRuntime,
               ),
-            ).toThrow(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
+            ).toThrow(/^NoViableAltException: Expecting: one of these possible Token sequences:[\s\S]*but found: '42'/);
           });
         });
         describe('such as not a list', () => {
@@ -1697,7 +1697,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             }`,
                 jdlRuntime,
               ),
-            ).toThrow(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
+            ).toThrow(/^NoViableAltException: Expecting: one of these possible Token sequences:[\s\S]*but found: '42'/);
           });
         });
         describe('such as not a list', () => {
@@ -2029,7 +2029,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                     jdlRuntime,
                   ),
                 // A deployment block is lexed in a mode of its own, where `@`, an annotation token, is no token at all.
-              ).toThrow("MismatchedTokenException: Found an invalid token '@'");
+              ).toThrow(/^NoViableAltException: Expecting: one of these possible Token sequences:[\s\S]*but found: '@'/);
             });
           });
           describe('such as not a list', () => {
