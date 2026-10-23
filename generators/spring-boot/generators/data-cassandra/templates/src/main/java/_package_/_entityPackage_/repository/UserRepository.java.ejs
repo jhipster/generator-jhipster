@@ -388,22 +388,16 @@ public class UserRepository {
         batch.addStatement(userDao.saveQuery(user));
   <%_ if (generateUserManagement) { _%>
         if (!StringUtils.isEmpty(user.getActivationKey())) {
-            batch.addStatement(insertByActivationKeyStmt.bind()
-                .setString("activation_key", user.getActivationKey())
-                .setString("id", user.getId()));
+            batch.addStatement(
+                insertByActivationKeyStmt.bind().setString("activation_key", user.getActivationKey()).setString("id", user.getId())
+            );
         }
         if (!StringUtils.isEmpty(user.getResetKey())) {
-            batch.addStatement(insertByResetKeyStmt.bind()
-                .setString("reset_key", user.getResetKey())
-                .setString("id", user.getId()));
+            batch.addStatement(insertByResetKeyStmt.bind().setString("reset_key", user.getResetKey()).setString("id", user.getId()));
         }
   <%_ } _%>
-        batch.addStatement(insertByLoginStmt.bind()
-            .setString("login", user.getLogin())
-            .setString("id", user.getId()));
-        batch.addStatement(insertByEmailStmt.bind()
-            .setString("email", user.getEmail().toLowerCase())
-            .setString("id", user.getId()));
+        batch.addStatement(insertByLoginStmt.bind().setString("login", user.getLogin()).setString("id", user.getId()));
+        batch.addStatement(insertByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()).setString("id", user.getId()));
         session.execute(batch.build());
         return user;
     }
