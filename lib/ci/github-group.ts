@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { readFileSync, readdirSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import { extname, isAbsolute, join, relative, resolve } from 'node:path';
 
@@ -41,6 +42,37 @@ const assertGroupInFolder = (samplesGroupFolder: string, group: string): void =>
 export const githubSamplesGroupOf = (group: string, samples: GitHubMatrixGroup = {}): GitHubMatrixGroup =>
   Object.fromEntries(Object.entries(samples).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]));
 
+/**
+ * The samples of a group defined by a folder, read synchronously: each `.jdl` file or `.yo-rc.json` folder is a sample,
+ * with the options of the `samples.json` file of the folder.
+ */
+export const getGithubSamplesFolderGroup = (samplesGroupFolder: string, group: string): GitHubMatrixGroup => {
+  assertGroupInFolder(samplesGroupFolder, group);
+  const samplesFolderContent = readdirSync(join(samplesGroupFolder, group));
+  // Support jdl files and folder (with .yo-rc.json files)
+  const samples: GitHubMatrixGroup = Object.fromEntries(
+    samplesFolderContent
+      .filter(sample => ['', '.jdl'].includes(extname(sample)))
+      .map(sample => [
+        sample.replace('.jdl', ''),
+        {
+          'samples-group': group,
+          'sample-type': extname(sample) === '.jdl' ? 'jdl' : 'yo-rc',
+        },
+      ]),
+  );
+  if (samplesFolderContent.includes('samples.json')) {
+    const jsonSamples = JSON.parse(readFileSync(join(samplesGroupFolder, group, 'samples.json')).toString()) as GitHubMatrixGroup;
+    for (const [sample, value] of Object.entries(jsonSamples)) {
+      if (!samples[sample]) {
+        throw new Error(`Sample ${sample} not found in ${group}`);
+      }
+      samples[sample] = { ...samples[sample], ...value };
+    }
+  }
+  return samples;
+};
+
 export const getGithubSamplesGroup = async (
   samplesGroupFolder: string,
   group: string,
@@ -63,31 +95,7 @@ export const getGithubSamplesGroup = async (
       ]),
     );
   } else if (samplesFolderContent.includes(group)) {
-    const samplesFolderContent = await readdir(join(samplesGroupFolder, group));
-    if (samplesFolderContent.length > 0) {
-      // Support jdl files and folder (with .yo-rc.json files)
-      samples = Object.fromEntries(
-        samplesFolderContent
-          .filter(sample => ['', '.jdl'].includes(extname(sample)))
-          .map(sample => [
-            sample.replace('.jdl', ''),
-            {
-              'samples-group': group,
-              'sample-type': extname(sample) === '.jdl' ? 'jdl' : 'yo-rc',
-            },
-          ]),
-      );
-      if (samplesFolderContent.includes('samples.json')) {
-        const jsonFile = await readFile(join(samplesGroupFolder, group, 'samples.json'));
-        const jsonSamples = JSON.parse(jsonFile.toString()) as GitHubMatrixGroup;
-        for (const [sample, value] of Object.entries(jsonSamples)) {
-          if (!samples[sample]) {
-            throw new Error(`Sample ${sample} not found in ${group}`);
-          }
-          samples[sample] = { ...samples[sample], ...value };
-        }
-      }
-    }
+    samples = getGithubSamplesFolderGroup(samplesGroupFolder, group);
   }
   const unknownProperties = getUnknownGitHubMatrixGroupProperties(samples);
   if (unknownProperties.length) {
