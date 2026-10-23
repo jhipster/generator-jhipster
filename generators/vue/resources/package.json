@@ -41,7 +41,7 @@
     "eslint": "10.13.0",
     "eslint-plugin-vue": "10.11.1",
     "globals": "17.13.0",
-    "happy-dom": "21.0.3",
+    "happy-dom": "21.0.4",
     "jiti": "2.7.0",
     "postcss-import": "17.0.1",
     "postcss-rtlcss": "6.0.0",
