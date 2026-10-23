@@ -488,6 +488,13 @@ entity A`),
         check('application {\n  config { baseName a blueprints [@scope/foo] }\n  config(@scope/generator-jhipster-foo) { bar baz }\n}'),
       ).toEqual([]);
     });
+    it('accepts the namespace config of an instance of a scoped blueprint, by its blueprint', () => {
+      expect(
+        check(
+          'application {\n  config { baseName a blueprints [@scope/foo] }\n  config(@scope/generator-jhipster-foo:app#bar) { bar baz }\n}',
+        ),
+      ).toEqual([]);
+    });
     it('reports a scoped namespace config without its blueprint of the same scope', () => {
       expect(check('application {\n  config { baseName a blueprints [foo] }\n  config(@scope/foo) { bar baz }\n}')).toEqual([
         {

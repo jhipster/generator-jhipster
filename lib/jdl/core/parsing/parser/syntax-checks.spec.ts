@@ -478,6 +478,34 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).toThrow();
         });
       });
+      describe('a scoped blueprint', () => {
+        it('should not fail', () => {
+          expect(() =>
+            parse(
+              `application {
+  config {
+    blueprints [@scope/foo]
+  }
+}`,
+              jdlRuntime,
+            ),
+          ).not.toThrow();
+        });
+      });
+      describe('the namespace of an instance of a scoped blueprint', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(
+              `application {
+  config {
+    blueprints [@scope/foo:app#bar]
+  }
+}`,
+              jdlRuntime,
+            ),
+          ).toThrow(/^The blueprints property name must match: (.*), got @scope\/foo:app#bar\./);
+        });
+      });
     });
     describe('and using for buildTool', () => {
       describe('a valid value', () => {

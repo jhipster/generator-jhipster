@@ -350,6 +350,16 @@ application {
     });
   });
 
+  it('should keep the namespace config of an instance of a scoped blueprint as its section', () => {
+    const { files } = convert(`
+application {
+  config { baseName shop blueprints [@scope/foo] }
+  config(@scope/generator-jhipster-foo:app#bar) { flag true }
+}
+`);
+    expect(files['shop/.yo-rc.json']).toMatchObject({ '@scope/generator-jhipster-foo:app#bar': { flag: true } });
+  });
+
   describe('convertAstToFiles, without customization', () => {
     const convertPlain = (jdl: string) =>
       convertAstToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime).files;

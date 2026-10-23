@@ -446,9 +446,12 @@ export const duplicatedConfigKey: JDLSemanticRule = {
   ],
 };
 
-/** A blueprint by its name without the `generator-jhipster-` prefix, its scope kept: `expo` is `generator-jhipster-expo`. */
+/**
+ * A blueprint by its package name without the `generator-jhipster-` prefix, its scope kept: `expo` is
+ * `generator-jhipster-expo`, and the namespace of one of its generators or instances, `@scope/foo:app#bar`, is `@scope/foo`.
+ */
 const blueprintKey = (name: string): string => {
-  const [, scope = '', unscoped] = /^(@[^/]+\/)?(.*)$/.exec(name)!;
+  const [, scope = '', unscoped] = /^(@[^/]+\/)?([^:]*)/.exec(name)!;
   return `${scope}${unscoped.replace(/^generator-jhipster-/, '')}`;
 };
 
