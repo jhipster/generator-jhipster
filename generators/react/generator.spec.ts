@@ -166,10 +166,18 @@ describe(`generator - ${clientFramework}`, () => {
             if (enableTranslation) {
               assertion(
                 `${clientSrcDir}app/shared/layout/menus/admin.tsx`,
-                '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
-                  '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
-                  '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
-                  '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>',
+                '    <MenuItem icon="tachometer-alt" to="/admin/metrics">\n' +
+                  '      <Translate contentKey="global.menu.admin.metrics">Metrics</Translate>\n' +
+                  '    </MenuItem>\n' +
+                  '    <MenuItem icon="heart" to="/admin/health">\n' +
+                  '      <Translate contentKey="global.menu.admin.health">Health</Translate>\n' +
+                  '    </MenuItem>\n' +
+                  '    <MenuItem icon="cogs" to="/admin/configuration">\n' +
+                  '      <Translate contentKey="global.menu.admin.configuration">Configuration</Translate>\n' +
+                  '    </MenuItem>\n' +
+                  '    <MenuItem icon="tasks" to="/admin/logs">\n' +
+                  '      <Translate contentKey="global.menu.admin.logs">Logs</Translate>\n' +
+                  '    </MenuItem>',
               );
             }
           });
