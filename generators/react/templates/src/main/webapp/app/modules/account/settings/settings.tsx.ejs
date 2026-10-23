@@ -107,13 +107,7 @@ export const SettingsPage = () => {
               data-cy="email"
             />
 <%_ if (enableTranslation) { _%>
-            <ValidatedField
-              type="select"
-              id="langKey"
-              name="langKey"
-              label={translate('settings.form.language')}
-              data-cy="langKey"
-            >
+            <ValidatedField type="select" id="langKey" name="langKey" label={translate('settings.form.language')} data-cy="langKey">
               {locales.map(locale => (
                 <option value={locale} key={locale}>
                   {languages[locale].name}

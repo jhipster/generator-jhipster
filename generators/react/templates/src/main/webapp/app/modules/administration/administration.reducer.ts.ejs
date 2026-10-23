@@ -27,7 +27,7 @@ const initialState = {
   errorMessage: null as string | null,
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   gateway: {
-    routes: []
+    routes: [],
   },
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -113,7 +113,9 @@ export const AdministrationSlice = createSlice({
 <%_ if (communicationSpringWebsocket) { _%>
     websocketActivityMessage(state, action) {
       // filter out activities from the same session
-      const uniqueActivities = state.tracker.activities.filter((activity: { sessionId: string }) => activity.sessionId !== action.payload.sessionId);
+      const uniqueActivities = state.tracker.activities.filter(
+        (activity: { sessionId: string }) => activity.sessionId !== action.payload.sessionId,
+      );
       // remove any activities with the page of logout
       const activities = [...uniqueActivities, action.payload].filter((activity: { page: string }) => activity.page !== 'logout');
       state.tracker = { activities };
@@ -127,7 +129,7 @@ export const AdministrationSlice = createSlice({
       .addCase(getGatewayRoutes.fulfilled, (state, action) => {
         state.loading = false;
         state.gateway = {
-          routes: action.payload.data
+          routes: action.payload.data,
         };
       })
   <%_ } _%>

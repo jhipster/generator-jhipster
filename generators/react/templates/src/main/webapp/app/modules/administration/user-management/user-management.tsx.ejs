@@ -185,11 +185,10 @@ export const UserManagement = () => {
 <%_ } _%>
               <td>
                 {user.authorities?.map((authority, j) => (
-                      <div key={`user-auth-${i}-${j}`}>
-                        <Badge bg="info">{authority}</Badge>
-                      </div>
-                    ))
-                  }
+                  <div key={`user-auth-${i}-${j}`}>
+                    <Badge bg="info">{authority}</Badge>
+                  </div>
+                ))}
               </td>
 <%_ if (!databaseTypeCassandra) { _%>
               <td>
@@ -216,7 +215,14 @@ export const UserManagement = () => {
                       <Translate contentKey="entity.action.edit">Edit</Translate>
                     </span>
                   </Button>
-                  <Button as={Link as any} to={`${user.login}/delete`} variant="danger" size="sm" disabled={account.login === user.login} data-cy="entityDeleteButton">
+                  <Button
+                    as={Link as any}
+                    to={`${user.login}/delete`}
+                    variant="danger"
+                    size="sm"
+                    disabled={account.login === user.login}
+                    data-cy="entityDeleteButton"
+                  >
                     <FontAwesomeIcon icon={faTrash} />{' '}
                     <span className="d-none d-md-inline">
                       <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -225,12 +231,12 @@ export const UserManagement = () => {
                 </div>
               </td>
             </tr>
-          ))
-        }
+          ))}
         </tbody>
       </Table>
 <%_ if (!databaseTypeCassandra) { _%>
-        { totalItems && (<div className={ users?.length > 0 ? '' : 'd-none' }>
+      {totalItems && (
+        <div className={users?.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} <%- enableTranslation ? 'i18nEnabled' : '' %> />
           </div>
@@ -243,7 +249,8 @@ export const UserManagement = () => {
               totalItems={totalItems}
             />
           </div>
-        </div>)}
+        </div>
+      )}
 <%_ } _%>
     </div>
   );
