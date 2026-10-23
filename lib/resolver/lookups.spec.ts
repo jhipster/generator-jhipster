@@ -18,7 +18,7 @@
  */
 import { describe, expect, it } from 'expect-node';
 
-import { getJHipsterStore } from './lookups.ts';
+import { getJHipsterStore, jhipsterNamespace } from './lookups.ts';
 
 describe('resolver - lookups', () => {
   describe('getJHipsterStore', () => {
@@ -30,6 +30,12 @@ describe('resolver - lookups', () => {
     });
     it('should flatten the nested generators', () => {
       expect(getJHipsterStore().namespaces()).toContain('jhipster:spring-boot:cache');
+    });
+  });
+  describe('jhipsterNamespace', () => {
+    it('should name a generator of a package published under another name jhipster', () => {
+      expect(jhipsterNamespace('@scope/jhipster:app')).toBe('jhipster:app');
+      expect(jhipsterNamespace('fork:spring-boot:cache')).toBe('jhipster:spring-boot:cache');
     });
   });
 });

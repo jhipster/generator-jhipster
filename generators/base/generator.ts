@@ -94,7 +94,8 @@ export default class BaseGenerator<
     } = this.features;
 
     this.sbsBlueprint = sbsBlueprint;
-    this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
+    // A generator of the package of jhipster, whatever its name, like a fork published under a scope, is no blueprint.
+    this.fromBlueprint = this.rootGeneratorName() !== packageJson.name;
 
     if (this.fromBlueprint) {
       this.blueprintStorage = this._getStorage(undefined, { transform: this.features.configTransform });
@@ -797,7 +798,7 @@ export default class BaseGenerator<
    * Check if the generator specified as blueprint is installed.
    */
   #checkBlueprint(blueprint: string) {
-    if (blueprint === 'generator-jhipster') {
+    if (blueprint === 'generator-jhipster' || blueprint === packageJson.name) {
       throw new Error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
     }
   }

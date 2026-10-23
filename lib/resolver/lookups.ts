@@ -46,10 +46,17 @@ type ImportableGeneratorMeta = StoreGeneratorMeta & { resolved: string };
 let jhipsterStore: Store | undefined;
 
 /**
+ * The namespace of a jhipster generator, `jhipster:<generator>` whatever the name of the package installing it, like a
+ * fork published under a scope and installed as `generator-jhipster@npm:@scope/generator-jhipster`.
+ */
+export const jhipsterNamespace = (namespace?: string): string | undefined =>
+  namespace?.includes(':') ? `jhipster:${namespace.slice(namespace.indexOf(':') + 1)}` : namespace;
+
+/**
  * Look up the jhipster generators of this installation, its source or its build, in a store.
  */
 export const lookupJHipsterGenerators = (store: Store) =>
-  store.lookupSync({ packagePaths: [getPackageRoot()], lookups: jhipsterGeneratorsLookup });
+  store.lookupSync({ packagePaths: [getPackageRoot()], lookups: jhipsterGeneratorsLookup, customizeNamespace: jhipsterNamespace });
 
 /**
  * A store with only the jhipster generators, looked up the way the environment builder looks them up, or with `empty`

@@ -47,7 +47,7 @@ import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../gen
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
-import { getPackageRoot } from '../index.ts';
+import { getPackageRoot, packageJson } from '../index.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import { getJHipsterStore } from '../resolver/lookups.ts';
@@ -707,7 +707,7 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
 
       rootGeneratorName(): string {
         // Force fromBlueprint to be false.
-        return 'generator-jhipster';
+        return packageJson.name;
       }
 
       get [BaseGenerator.INITIALIZING]() {
