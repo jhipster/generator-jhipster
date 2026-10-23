@@ -21,7 +21,7 @@ import type {
 } from '../../generators/spring-boot/generators/data-relational/types.d.ts';
 import type { Config as SpringBootConfig, Options as SpringBootOptions } from '../../generators/spring-boot/types.d.ts';
 import type { Config as SpringCloudConfig, Options as SpringCloudOptions } from '../../generators/spring-cloud/types.d.ts';
-import type { YO_RC_CONFIG_KEY } from '../utils/yo-rc.ts';
+import type { GENERATOR_JHIPSTER } from '../constants/jhipster.ts';
 
 export type ConfigAll = Simplify<
   AppConfig &
@@ -68,4 +68,4 @@ export type OptionsAll = Simplify<
     SpringDataRelationalOptions
 >;
 
-export type YoRcContent<Content = ConfigAll> = Record<typeof YO_RC_CONFIG_KEY, Content>;
+export type YoRcContent<Content = ConfigAll> = Record<typeof GENERATOR_JHIPSTER, Content>;
