@@ -38,6 +38,7 @@ const patterns = {
   client: ['generators/{client,init,javascript-simple-application}/**'],
   common: ['generators/{app,common,docker,languages}/**'],
   databaseChangelogWorkflow: [
+    'generators/base-entity-changes/**',
     '.github/workflows/generator-database-changelog-liquibase.yml',
     '.blueprint/github-build-matrix/samples/database-changelog.ts',
     '.blueprint/generate-sample/templates/samples/incremental-changelog-samples/**',
