@@ -110,11 +110,11 @@ export const <%- entityReactName %> = () => {
         searchEntities({
           query: search,
   <%_ if (paginationNo) { _%>
-          sort: `${sortState.sort},${sortState.order}`
+          sort: `${sortState.sort},${sortState.order}`,
   <%_ } else { _%>
           page: paginationState.activePage - 1,
           size: paginationState.itemsPerPage,
-          sort: `${paginationState.sort},${paginationState.order}`
+          sort: `${paginationState.sort},${paginationState.order}`,
   <%_ } _%>
         }),
       );
@@ -527,7 +527,10 @@ export const <%- entityReactName %> = () => {
               totalItems={totalItems}
             />
           </div>
-        </div>) : '' }
+        </div>
+      ) : (
+        ''
+      )}
   <%_ } _%>
 <%_ } _%>
     </div>

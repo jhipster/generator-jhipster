@@ -35,7 +35,7 @@ type ToastMessage = {
 
 const addErrorAlert = (message: ToastMessage) => {
 <%_ if (enableTranslation) { _%>
-  toast.error(message.key ? translate(message.key, message.data) ?? message.message : message.message);
+  toast.error(message.key ? (translate(message.key, message.data) ?? message.message) : message.message);
 <%_ } else { _%>
   toast.error(message.message);
 <%_ } _%>

@@ -253,13 +253,15 @@ export const <%- entityReactName %>Slice = createEntitySlice({
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
+<%_ if (readOnly) { _%>
+      });
+<%_ } else { _%>
       })
-<%_ if (!readOnly) { _%>
       .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
-      })
+      });
 <%_ } _%>
   },
 });

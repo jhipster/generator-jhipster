@@ -134,7 +134,7 @@ describe('User management reducer tests', () => {
         loading: false,
         users: payload.data,
 <%_ if (!databaseTypeCassandra) { _%>
-        totalItems: headers['x-total-count']
+        totalItems: headers['x-total-count'],
 <%_ } _%>
       });
     });
