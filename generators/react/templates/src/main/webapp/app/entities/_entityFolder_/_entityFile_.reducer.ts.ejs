@@ -40,7 +40,7 @@ const initialState: EntityState<I<%- entityReactName %>> = {
 <%_ if (!paginationNo) { _%>
   totalItems: 0,
 <%_ } _%>
-  updateSuccess: false
+  updateSuccess: false,
 };
 
 const apiUrl = '<%- entityApi %>api/<%- entityApiUrl %>';
@@ -117,7 +117,7 @@ export const createEntity = createAsyncThunk(
     return result;
   <%_ } _%>
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 export const updateEntity = createAsyncThunk(
@@ -136,7 +136,7 @@ export const updateEntity = createAsyncThunk(
     return result;
   <%_ } _%>
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 export const partialUpdateEntity = createAsyncThunk(
@@ -155,7 +155,7 @@ export const partialUpdateEntity = createAsyncThunk(
     return result;
   <%_ } _%>
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 export const deleteEntity = createAsyncThunk(
@@ -175,7 +175,7 @@ export const deleteEntity = createAsyncThunk(
     return result;
   <%_ } _%>
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 <%_ } _%>
 

@@ -180,10 +180,10 @@ describe('Notification Middleware', () => {
   };
 
   const makeStore = () =>
-  configureStore({
-    reducer: (state = {}) => state,
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(notificationMiddleware),
-  });
+    configureStore({
+      reducer: (state = {}) => state,
+      middleware: getDefaultMiddleware => getDefaultMiddleware().concat(notificationMiddleware),
+    });
 
 <%_ if (enableTranslation) { _%>
   beforeAll(() => {

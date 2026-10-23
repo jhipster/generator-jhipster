@@ -144,7 +144,7 @@ describe('Administration reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        gateway: { routes: payload.data }
+        gateway: { routes: payload.data },
       });
     });
   <%_ } _%>
@@ -234,7 +234,7 @@ describe('Administration reducer tests', () => {
       const toTest = administration(undefined, websocketActivityMessage(payload));
 
       expect(toTest).toMatchObject({
-        tracker: { activities: [payload] }
+        tracker: { activities: [payload] },
       });
     });
 
@@ -245,7 +245,7 @@ describe('Administration reducer tests', () => {
       const secondState = administration(firstState, websocketActivityMessage(secondPayload));
 
       expect(secondState).toMatchObject({
-        tracker: { activities: [secondPayload] }
+        tracker: { activities: [secondPayload] },
       });
     });
 
@@ -256,7 +256,7 @@ describe('Administration reducer tests', () => {
       const secondState = administration(firstState, websocketActivityMessage(secondPayload));
 
       expect(secondState).toMatchObject({
-        tracker: { activities: [] }
+        tracker: { activities: [] },
       });
     });
   });

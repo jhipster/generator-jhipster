@@ -82,15 +82,11 @@ export const UserManagementDetail = () => {
           <dt><Translate contentKey="userManagement.profiles">Profiles</Translate></dt>
           <dd>
             <ul className="list-unstyled">
-              {
-                user.authorities?.map(
-                  (authority, i) => (
-                    <li key={`user-auth-${i}`}>
-                      <Badge bg="info">{authority}</Badge>
-                    </li>
-                  )
-                )
-              }
+              {user.authorities?.map((authority, i) => (
+                <li key={`user-auth-${i}`}>
+                  <Badge bg="info">{authority}</Badge>
+                </li>
+              ))}
             </ul>
           </dd>
         </dl>
@@ -100,8 +96,14 @@ export const UserManagementDetail = () => {
         <span className="d-none d-md-inline">
           <Translate contentKey="entity.action.back">Back</Translate>
         </span>
-      </Button>&nbsp;
-      <Button onClick={() => setShowDeleteDialog(true)} variant="danger" disabled={account.login === user.login} data-cy="entityDeleteButton">
+      </Button>
+      &nbsp;
+      <Button
+        onClick={() => setShowDeleteDialog(true)}
+        variant="danger"
+        disabled={account.login === user.login}
+        data-cy="entityDeleteButton"
+      >
         <FontAwesomeIcon icon={faTrash} />{' '}
         <span className="d-none d-md-inline">
           <Translate contentKey="entity.action.delete">Delete</Translate>
