@@ -44,10 +44,7 @@ import org.mapstruct.Named;
 public class UserMapper {
 
     public List<<%- user.dtoClass %>> usersToUserDTOs(List<<%- user.persistClass %>> users) {
-        return users.stream()
-            .filter(Objects::nonNull)
-            .map(this::userToUserDTO)
-            .toList();
+        return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).toList();
     }
 
     public <%- user.dtoClass %> userToUserDTO(<%- user.persistClass %> user) {
@@ -59,10 +56,7 @@ public class UserMapper {
     }
 
     public List<<%- user.persistClass %>> userDTOsToUsers(List<<%- user.adminUserDto %>> userDTOs) {
-        return userDTOs.stream()
-            .filter(Objects::nonNull)
-            .map(this::userDTOToUser)
-            .toList();
+        return userDTOs.stream().filter(Objects::nonNull).map(this::userDTOToUser).toList();
     }
 
     public <%- user.persistClass %> userDTOToUser(<%- user.adminUserDto %> userDTO) {

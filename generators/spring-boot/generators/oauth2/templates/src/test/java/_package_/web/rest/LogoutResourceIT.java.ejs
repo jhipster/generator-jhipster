@@ -86,14 +86,11 @@ class LogoutResourceIT {
         claims.put("sub", 123);
 
 <%_ if (reactive) { _%>
-        this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
-            .apply(springSecurity())
-            .configureClient()
-            .build();
+        this.webTestClient = WebTestClient.bindToApplicationContext(this.context).apply(springSecurity()).configureClient().build();
 <%_ } else { _%>
-        SecurityContextHolder
-            .getContext()
-            .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)));
+        SecurityContextHolder.getContext().setAuthentication(
+            registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))
+        );
         SecurityContextHolderAwareRequestFilter authInjector = new SecurityContextHolderAwareRequestFilter();
         authInjector.afterPropertiesSet();
 
@@ -105,22 +102,37 @@ class LogoutResourceIT {
     void getLogoutInformation() <%- reactive ? '' : 'throws Exception ' %>{
         final String ORIGIN_URL = "http://localhost:8080";
 <%_ if (reactive) { _%>
-        String logoutUrl = this.registrations.findByRegistrationId("oidc")
-            .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata()
-                .get("end_session_endpoint").toString()).block();
+        String logoutUrl = this.registrations
+            .findByRegistrationId("oidc")
+            .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString())
+            .block();
         logoutUrl = logoutUrl + "?id_token_hint=" + ID_TOKEN + "&post_logout_redirect_uri=" + ORIGIN_URL;
-        this.webTestClient.mutateWith(csrf())
-            .mutateWith(mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))))
-            .post().uri("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL).exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+        this.webTestClient
+            .mutateWith(csrf())
+            .mutateWith(
+                mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)))
+            )
+            .post()
+            .uri("http://localhost:8080/api/logout")
+            .header(HttpHeaders.ORIGIN, ORIGIN_URL)
+            .exchange()
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
-            .jsonPath("$.logoutUrl").isEqualTo(logoutUrl);
+            .jsonPath("$.logoutUrl")
+            .isEqualTo(logoutUrl);
 <%_ } else { _%>
-        String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
-            .getConfigurationMetadata().get("end_session_endpoint").toString();
+        String logoutUrl = this.registrations
+            .findByRegistrationId("oidc")
+            .getProviderDetails()
+            .getConfigurationMetadata()
+            .get("end_session_endpoint")
+            .toString();
         logoutUrl = logoutUrl + "?id_token_hint=" + ID_TOKEN + "&post_logout_redirect_uri=" + ORIGIN_URL;
-        restLogoutMockMvc.perform(post("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL))
+        restLogoutMockMvc
+            .perform(post("http://localhost:8080/api/logout").header(HttpHeaders.ORIGIN, ORIGIN_URL))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.logoutUrl").value(logoutUrl));

@@ -927,7 +927,8 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
         <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)

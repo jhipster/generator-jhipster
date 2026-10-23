@@ -148,12 +148,12 @@ class AccountResourceIT {
   <%_ } _%>
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
 <%_ } else { _%>
-        TestSecurityContextHolder
-            .getContext()
-            .setAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, testAuthenticationToken()));
+        TestSecurityContextHolder.getContext().setAuthentication(
+            registerAuthenticationToken(authorizedClientService, clientRegistration, testAuthenticationToken())
+        );
 
-        restAccountMockMvc.perform(get("/api/account")
-            .accept(MediaType.APPLICATION_JSON))
+        restAccountMockMvc
+            .perform(get("/api/account").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
@@ -167,14 +167,9 @@ class AccountResourceIT {
     @Test
     void testGetUnknownAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
-        webTestClient.get().uri("/api/account")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isUnauthorized();
+        webTestClient.get().uri("/api/account").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isUnauthorized();
 <%_ } else { _%>
-        restAccountMockMvc.perform(get("/api/account")
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isUnauthorized());
+        restAccountMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
 <%_ } _%>
     }
 <%_ if (!reactive) { _%>
@@ -191,12 +186,9 @@ class AccountResourceIT {
     @WithUnauthenticatedMockUser
     void testNonAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
-        webTestClient.get().uri("/api/authenticate")
-            .exchange()
-            .expectStatus().isUnauthorized();
+        webTestClient.get().uri("/api/authenticate").exchange().expectStatus().isUnauthorized();
 <%_ } else { _%>
-        restAccountMockMvc.perform(get("/api/authenticate"))
-            .andExpect(status().isUnauthorized());
+        restAccountMockMvc.perform(get("/api/authenticate")).andExpect(status().isUnauthorized());
 <%_ } _%>
     }
 
@@ -204,13 +196,9 @@ class AccountResourceIT {
     @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
-        webTestClient
-            .get().uri("/api/authenticate")
-            .exchange()
-            .expectStatus().isNoContent();
+        webTestClient.get().uri("/api/authenticate").exchange().expectStatus().isNoContent();
 <%_ } else { _%>
-        restAccountMockMvc.perform(get("/api/authenticate").with(request -> request))
-            .andExpect(status().isNoContent());
+        restAccountMockMvc.perform(get("/api/authenticate").with(request -> request)).andExpect(status().isNoContent());
 <%_ } _%>
     }
 }

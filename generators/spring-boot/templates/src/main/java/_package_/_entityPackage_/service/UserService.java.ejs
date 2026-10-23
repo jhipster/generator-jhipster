@@ -162,7 +162,8 @@ public class UserService {
     <%_ } _%>
     public <%- reactive ? 'Mono' : 'Optional' %><<%- user.persistClass %>> activateRegistration(String key) {
         LOG.debug("Activating user for activation key {}", key);
-        return userRepository.findOneByActivationKey(key)
+        return userRepository
+            .findOneByActivationKey(key)
             .<%- reactive ? 'flatMap' : 'map' %>(user -> {
                 // activate given user for the registration key.
                 user.setActivated(true);
@@ -262,7 +263,8 @@ public class UserService {
     <%_ } _%>
     public <% if (reactive) { %>Mono<<%- user.persistClass %>><% } else { %><%- user.persistClass %><% } %> registerUser(<%- user.adminUserDto %> userDTO, String password) {
     <%_ if (reactive) { _%>
-        return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
+        return userRepository
+            .findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(existingUser -> {
                 if (!existingUser.isActivated()) {
       <%_ if (cacheProviderAny) { _%>
@@ -499,7 +501,8 @@ public class UserService {
             .map
       <%_ } -%>(user -> {
     <%_ } else { _%>
-        return userRepository.findById(userDTO.getId())
+        return userRepository
+            .findById(userDTO.getId())
             .map(user -> {
     <%_ } _%>
     <%_ if (databaseTypeCouchbase) { _%>
@@ -553,7 +556,9 @@ public class UserService {
             .doOnNext(user -> LOG.debug("Changed Information for User: {}", user))
     <%_ } else { /* reactive */ _%>
       <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
-                userDTO.getAuthorities().stream()
+                userDTO
+                    .getAuthorities()
+                    .stream()
                     .map(authorityRepository::findById)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
@@ -944,8 +949,7 @@ public class UserService {
       <%_ if (databaseTypeCouchbase) { _%>
         Collection<String> userAuthorities = user.getAuthorities();
       <%_ } else { _%>
-        Collection<String> userAuthorities =
-            user.getAuthorities().stream().map(Authority::getName).toList();
+        Collection<String> userAuthorities = user.getAuthorities().stream().map(Authority::getName).toList();
       <%_ } _%>
         for (String authority : userAuthorities) {
             if (!dbAuthorities.contains(authority)) {

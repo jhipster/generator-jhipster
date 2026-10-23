@@ -133,9 +133,8 @@ class AuthenticateControllerIT {
             .expectBody()
             .jsonPath("$.id_token").isNotEmpty();
 <%_ } else { _%>
-        mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(login)))
+        mockMvc
+            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
@@ -185,9 +184,8 @@ class AuthenticateControllerIT {
             .expectBody()
             .jsonPath("$.id_token").isNotEmpty();
 <%_ } else { _%>
-        mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(login)))
+        mockMvc
+            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
@@ -208,14 +206,16 @@ class AuthenticateControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(login))
             .exchange()
-            .expectStatus().isUnauthorized()
-            .expectHeader().doesNotExist("Authorization")
+            .expectStatus()
+            .isUnauthorized()
+            .expectHeader()
+            .doesNotExist("Authorization")
             .expectBody()
-            .jsonPath("$.id_token").doesNotExist();
+            .jsonPath("$.id_token")
+            .doesNotExist();
 <%_ } else { _%>
-        mockMvc.perform(post("/api/authenticate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(login)))
+        mockMvc
+            .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
             .andExpect(header().doesNotExist("Authorization"));

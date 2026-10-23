@@ -275,7 +275,8 @@ public class SecurityConfiguration {
                     .permitAll()
             )
             .logout(logout ->
-                logout.logoutUrl("/api/logout").logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).permitAll());
+                logout.logoutUrl("/api/logout").logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).permitAll()
+            );
 <%_ } else if (authenticationTypeJwt) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling((exceptions) -> exceptions
@@ -299,9 +300,7 @@ public class SecurityConfiguration {
             })
     <%_ } _%>
   <%_ } _%>
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                    .jwtAuthenticationConverter(authenticationConverter())))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(authenticationConverter())))
             .oauth2Client(withDefaults());
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>

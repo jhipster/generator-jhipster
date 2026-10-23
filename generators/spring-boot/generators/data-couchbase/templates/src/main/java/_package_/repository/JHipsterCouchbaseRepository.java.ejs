@@ -123,7 +123,8 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <%- reactivePrefix %
 <%_ if (reactive) { _%>
         return entities.mapNotNull(entity -> (ID) getEntityInformation().getId(entity));
 <%_ } else { _%>
-        return entities.stream()
+        return entities
+            .stream()
             .map(entity -> (ID) getEntityInformation().getId(entity))
             .toList();
 <%_ } _%>

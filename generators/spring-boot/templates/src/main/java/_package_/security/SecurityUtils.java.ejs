@@ -180,10 +180,7 @@ public final class SecurityUtils {
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
             .map(Authentication::getAuthorities)
-            .map(authorities -> authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .noneMatch(AuthoritiesConstants.ANONYMOUS::equals)
-            );
+            .map(authorities -> authorities.stream().map(GrantedAuthority::getAuthority).noneMatch(AuthoritiesConstants.ANONYMOUS::equals));
 <%_ } else { _%>
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
