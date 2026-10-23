@@ -623,7 +623,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus()
+            .isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -685,7 +686,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus()
+            .isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -771,7 +773,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -843,7 +846,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus()
+            .isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -868,7 +872,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webTestClient.delete().uri("/api/admin/users/{login}", user.getLogin())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isNoContent();
+            .expectStatus()
+            .isNoContent();
   <%_ } else { _%>
         restUserMockMvc.perform(delete("/api/admin/users/{login}", user.getLogin())
             .accept(MediaType.APPLICATION_JSON)<% if (authenticationUsesCsrf) { %>

@@ -134,19 +134,27 @@ class AccountResourceIT {
     void testGetExistingAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient
-            .mutateWith(mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))))
+            .mutateWith(
+                mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)))
+            )
             .mutateWith(csrf())
-            .get().uri("/api/account")
+            .get()
+            .uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
-            .jsonPath("$.login").isEqualTo("jane")
+            .jsonPath("$.login")
+            .isEqualTo("jane")
   <%_ if (generateBuiltInUserEntity) { _%>
-            .jsonPath("$.email").isEqualTo("jane.doe@jhipster.com")
+            .jsonPath("$.email")
+            .isEqualTo("jane.doe@jhipster.com")
   <%_ } _%>
-            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
+            .jsonPath("$.authorities")
+            .isEqualTo(AuthoritiesConstants.ADMIN);
 <%_ } else { _%>
         TestSecurityContextHolder.getContext().setAuthentication(
             registerAuthenticationToken(authorizedClientService, clientRegistration, testAuthenticationToken())

@@ -128,10 +128,13 @@ class AuthenticateControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(login))
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().valueMatches("Authorization", "Bearer .+")
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .valueMatches("Authorization", "Bearer .+")
             .expectBody()
-            .jsonPath("$.id_token").isNotEmpty();
+            .jsonPath("$.id_token")
+            .isNotEmpty();
 <%_ } else { _%>
         mockMvc
             .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))
@@ -179,10 +182,13 @@ class AuthenticateControllerIT {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(login))
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().valueMatches("Authorization", "Bearer .+")
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .valueMatches("Authorization", "Bearer .+")
             .expectBody()
-            .jsonPath("$.id_token").isNotEmpty();
+            .jsonPath("$.id_token")
+            .isNotEmpty();
 <%_ } else { _%>
         mockMvc
             .perform(post("/api/authenticate").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(login)))

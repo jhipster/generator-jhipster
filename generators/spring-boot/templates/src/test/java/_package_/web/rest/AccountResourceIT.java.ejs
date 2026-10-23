@@ -203,21 +203,32 @@ class AccountResourceIT {
         userService.createUser(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
-        accountWebTestClient.get().uri("/api/account")
+        accountWebTestClient
+            .get()
+            .uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
-            .jsonPath("$.login").isEqualTo(TEST_USER_LOGIN)
-            .jsonPath("$.firstName").isEqualTo("john")
-            .jsonPath("$.lastName").isEqualTo("doe")
-            .jsonPath("$.email").isEqualTo("john.doe@jhipster.com")
+            .jsonPath("$.login")
+            .isEqualTo(TEST_USER_LOGIN)
+            .jsonPath("$.firstName")
+            .isEqualTo("john")
+            .jsonPath("$.lastName")
+            .isEqualTo("doe")
+            .jsonPath("$.email")
+            .isEqualTo("john.doe@jhipster.com")
   <%_ if (user.hasImageField) { _%>
-            .jsonPath("$.imageUrl").isEqualTo("https://placehold.co/50x50")
+            .jsonPath("$.imageUrl")
+            .isEqualTo("https://placehold.co/50x50")
   <%_ } _%>
-            .jsonPath("$.langKey").isEqualTo("en")
-            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
+            .jsonPath("$.langKey")
+            .isEqualTo("en")
+            .jsonPath("$.authorities")
+            .isEqualTo(AuthoritiesConstants.ADMIN);
 <%_ } else { _%>
         restAccountMockMvc
             .perform(get("/api/account").accept(MediaType.APPLICATION_JSON))
@@ -1009,13 +1020,15 @@ class AccountResourceIT {
             .expectStatus()
             .isBadRequest();
 <%_ } else { _%>
-        restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
+        restAccountMockMvc
+            .perform(
+                post("/api/account/change-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(new PasswordChangeDTO("1" + currentPassword, "new password")))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())
+                    .with(csrf())
   <%_ } _%>
-        )
+            )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
@@ -1055,12 +1068,15 @@ class AccountResourceIT {
             .expectStatus()
             .isOk();
 <%_ } else { _%>
-        restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
+        restAccountMockMvc
+            .perform(
+                post("/api/account/change-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())
-  <%_ } _%>)
+                    .with(csrf())
+  <%_ } _%>
+            )
             .andExpect(status().isOk());
 <%_ } _%>
 
@@ -1101,13 +1117,15 @@ class AccountResourceIT {
             .expectStatus()
             .isBadRequest();
 <%_ } else { _%>
-        restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+        restAccountMockMvc
+            .perform(
+                post("/api/account/change-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())
+                    .with(csrf())
   <%_ } _%>
-        )
+            )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
@@ -1148,13 +1166,15 @@ class AccountResourceIT {
             .expectStatus()
             .isBadRequest();
 <%_ } else { _%>
-        restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+        restAccountMockMvc
+            .perform(
+                post("/api/account/change-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())
+                    .with(csrf())
   <%_ } _%>
-        )
+            )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
@@ -1193,13 +1213,15 @@ class AccountResourceIT {
             .expectStatus()
             .isBadRequest();
 <%_ } else { _%>
-        restAccountMockMvc.perform(post("/api/account/change-password")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "")))
+        restAccountMockMvc
+            .perform(
+                post("/api/account/change-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "")))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())
+                    .with(csrf())
   <%_ } _%>
-        )
+            )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
