@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import type { JDLFiles } from './ast-to-files.ts';
+import { GENERATOR_JHIPSTER } from '../../../constants/jhipster.ts';
 
-const GENERATOR_JHIPSTER = 'generator-jhipster';
+import type { JDLFiles } from './ast-to-files.ts';
 
 /** An application of the json files: its folder, its config, and the names of the microservices of its entities. */
 type StackApplication = { folder: string; config: Record<string, any>; microserviceNames: string[] };
