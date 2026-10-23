@@ -350,14 +350,19 @@ application {
     });
   });
 
-  it('should keep the namespace config of an instance of a scoped blueprint as its section', () => {
+  it('should write the namespace config of a generator and of an instance in the config of its package, as yeoman stores them', () => {
     const { files } = convert(`
 application {
   config { baseName shop blueprints [@scope/foo] }
+  config(@scope/generator-jhipster-foo) { top true }
+  config(@scope/generator-jhipster-foo:app) { generator true }
   config(@scope/generator-jhipster-foo:app#bar) { flag true }
 }
 `);
-    expect(files['shop/.yo-rc.json']).toMatchObject({ '@scope/generator-jhipster-foo:app#bar': { flag: true } });
+    expect(files['shop/.yo-rc.json']).toEqual({
+      '@scope/generator-jhipster-foo': { top: true, ':app': { generator: true, '#bar': { flag: true } } },
+      'generator-jhipster': { baseName: 'shop', blueprints: [{ name: '@scope/generator-jhipster-foo' }], entities: [] },
+    });
   });
 
   describe('convertAstToFiles, without customization', () => {

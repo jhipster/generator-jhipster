@@ -30,6 +30,25 @@ import type { JDLConversionCustomizations } from './ast-to-files.ts';
  * - a relationship naming no field on either side names both, after the entity of the other side with a lower-case
  *   first letter: it is bidirectional.
  */
+/**
+ * The namespace configs by the section of their package, as yeoman stores them: the config of a generator of the
+ * package under `:<generator>`, the config of one of its instances under `#<instance>` in it, where the
+ * `generatorConfig` and the `instanceConfig` of a generator read them.
+ */
+const nestNamespaceConfigs = (namespaceConfigs: Record<string, Record<string, unknown>>): Record<string, Record<string, unknown>> => {
+  const sections: Record<string, Record<string, unknown>> = {};
+  for (const [namespace, namespaceConfig] of Object.entries(namespaceConfigs)) {
+    const match = /^((?:@[^/]+\/)?[^:#]+)(?::([^#]+))?(?:#(.+))?$/.exec(namespace);
+    const [packageName, generator, instance] = match ? [match[1], match[2], match[3]] : [namespace];
+    let target: Record<string, unknown> = (sections[normalizeBlueprintName(packageName)] ??= {});
+    for (const key of [generator && `:${generator}`, instance && `#${instance}`]) {
+      if (key) target = (target[key] ??= {}) as Record<string, unknown>;
+    }
+    Object.assign(target, namespaceConfig);
+  }
+  return sections;
+};
+
 export const jhipsterCustomizations: JDLConversionCustomizations = {
   application: ({ config, namespaceConfigs }) => ({
     config: {
@@ -37,9 +56,7 @@ export const jhipsterCustomizations: JDLConversionCustomizations = {
       ...config,
       ...(config.blueprints ? { blueprints: config.blueprints.map((name: string) => normalizeBlueprintName(name)) } : {}),
     },
-    namespaceConfigs: Object.fromEntries(
-      Object.entries(namespaceConfigs).map(([namespace, namespaceConfig]) => [normalizeBlueprintName(namespace), namespaceConfig]),
-    ),
+    namespaceConfigs: nestNamespaceConfigs(namespaceConfigs),
   }),
   relationship: relationship => {
     const { from, to } = relationship;
