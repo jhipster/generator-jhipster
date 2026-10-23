@@ -333,6 +333,38 @@ application {
     });
   });
 
+  it('should name a scoped blueprint and its namespace config after its package', () => {
+    const { files } = convert(`
+application {
+  config { baseName shop blueprints [@scope/foo] }
+  config(@scope/generator-jhipster-foo) { flag true }
+}
+`);
+    expect(files['shop/.yo-rc.json']).toEqual({
+      '@scope/generator-jhipster-foo': { flag: true },
+      'generator-jhipster': {
+        baseName: 'shop',
+        blueprints: [{ name: '@scope/generator-jhipster-foo' }],
+        entities: [],
+      },
+    });
+  });
+
+  it('should write the namespace config of a generator and of an instance in the config of its package, as yeoman stores them', () => {
+    const { files } = convert(`
+application {
+  config { baseName shop blueprints [@scope/foo] }
+  config(@scope/generator-jhipster-foo) { top true }
+  config(@scope/generator-jhipster-foo:app) { generator true }
+  config(@scope/generator-jhipster-foo:app#bar) { flag true }
+}
+`);
+    expect(files['shop/.yo-rc.json']).toEqual({
+      '@scope/generator-jhipster-foo': { top: true, ':app': { generator: true, '#bar': { flag: true } } },
+      'generator-jhipster': { baseName: 'shop', blueprints: [{ name: '@scope/generator-jhipster-foo' }], entities: [] },
+    });
+  });
+
   describe('convertAstToFiles, without customization', () => {
     const convertPlain = (jdl: string) =>
       convertAstToFiles(performJDLPostParsingTasks(parse(jdl, runtime, { onWarning: () => {} })), runtime).files;
