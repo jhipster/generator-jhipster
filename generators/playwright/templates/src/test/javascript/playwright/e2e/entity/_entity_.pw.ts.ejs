@@ -354,16 +354,17 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
       // (save button enabled) instead of a fixed delay before submitting.
       await expect(page.locator(entityCreateSaveButtonSelector)).toBeEnabled();
   <%_ } _%>
-      const postRequest = page.waitForResponse(
-        response => new URL(response.url()).pathname === <%- entityInstance %>ApiUrl && response.request().method() === 'POST',
-      );
+      // The body is read as soon as the response arrives: the navigation to the list page that
+      // follows the save can evict it, and it is needed to delete the instance again in afterEach.
+      const postRequest = page
+        .waitForResponse(response => new URL(response.url()).pathname === <%- entityInstance %>ApiUrl && response.request().method() === 'POST')
+        .then(async response => ({ status: response.status(), body: await response.json() }));
       const listRequest = entitiesRequest(page);
       await page.locator(entityCreateSaveButtonSelector).click();
 
       const postResponse = await postRequest;
-      expect(postResponse.status()).toBe(201);
-      // Best effort: the body is only needed to delete the instance again in afterEach.
-      <%- entityInstance %> = await postResponse.json().catch(() => undefined);
+      expect(postResponse.status).toBe(201);
+      <%- entityInstance %> = postResponse.body;
       expect((await listRequest).status()).toBe(200);
       await expect(page).toHaveURL(url => url.pathname === <%- entityInstance %>PageUrl);
     });
