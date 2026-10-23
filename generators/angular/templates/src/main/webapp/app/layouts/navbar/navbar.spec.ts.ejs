@@ -48,23 +48,21 @@ describe('Navbar Component', () => {
     imageUrl: '',
   };
 
-  beforeEach(
-    () => {
-      TestBed.configureTestingModule({
-        providers: [
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
 <%_ } _%>
-          {
-            provide: ActivatedRoute,
-            useValue: {}
-          },
-          provideHttpClientTesting(),
-          LoginService
-        ],
-      });
-    }
-  );
+        {
+          provide: ActivatedRoute,
+          useValue: {},
+        },
+        provideHttpClientTesting(),
+        LoginService,
+      ],
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(Navbar);
