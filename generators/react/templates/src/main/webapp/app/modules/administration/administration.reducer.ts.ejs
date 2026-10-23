@@ -184,7 +184,7 @@ export const AdministrationSlice = createSlice({
         state => {
           state.errorMessage = null;
           state.loading = true;
-        }
+        },
       )
       .addMatcher(
         isRejected(

@@ -169,19 +169,21 @@ describe('Entities reducer tests', () => {
 <%_ if (paginationInfiniteScroll) { _%>
       const links = getPageNumberFromLinkHeader(payload.headers.link);
 <%_ } _%>
-      expect(reducer(undefined, {
-        type: getEntities.fulfilled.type,
-        payload
-      })).toEqual({
-      ...initialState,
+      expect(
+        reducer(undefined, {
+          type: getEntities.fulfilled.type,
+          payload,
+        }),
+      ).toEqual({
+        ...initialState,
 <%_ if (paginationInfiniteScroll) { _%>
-      links,
+        links,
 <%_ } _%>
-      loading: false,
+        loading: false,
 <%_ if (!paginationNo) { _%>
-      totalItems: payload.headers['x-total-count'],
+        totalItems: payload.headers['x-total-count'],
 <%_ } _%>
-      entities: payload.data
+        entities: payload.data,
       });
     });
 <%_ if (searchEngineAny) { _%>
@@ -190,19 +192,21 @@ describe('Entities reducer tests', () => {
   <%_ if (paginationInfiniteScroll) { _%>
       const links = getPageNumberFromLinkHeader(payload.headers.link);
   <%_ } _%>
-      expect(reducer(undefined, {
-        type: searchEntities.fulfilled.type,
-        payload
-      })).toEqual({
-      ...initialState,
+      expect(
+        reducer(undefined, {
+          type: searchEntities.fulfilled.type,
+          payload,
+        }),
+      ).toEqual({
+        ...initialState,
   <%_ if (paginationInfiniteScroll) { _%>
-      links,
+        links,
   <%_ } _%>
-      loading: false,
+        loading: false,
   <%_ if (!paginationNo) { _%>
-      totalItems: payload.headers['x-total-count'],
+        totalItems: payload.headers['x-total-count'],
   <%_ } _%>
-      entities: payload.data
+        entities: payload.data,
       });
     });
 <%_ } _%>

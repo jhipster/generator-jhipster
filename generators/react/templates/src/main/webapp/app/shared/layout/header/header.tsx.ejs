@@ -73,17 +73,18 @@ const Header = (props: IHeaderProps) => {
     }
   }, [loadingCount]);
 
-  const renderDevRibbon = () => !props.isInProduction && (
-    <div className="ribbon dev">
-      <a href="">
+  const renderDevRibbon = () =>
+    !props.isInProduction && (
+      <div className="ribbon dev">
+        <a href="">
 <%_ if (enableTranslation) { _%>
-        <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
+          <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
 <%_ } else { _%>
-        Development
+          Development
 <%_ } _%>
-      </a>
-    </div>
-  );
+        </a>
+      </div>
+    );
 
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 

@@ -132,17 +132,17 @@ export const <%- entityReactName %> = () => {
       );
     }
 <%_ } else { _%>
-      dispatch(
-        getEntities({
+    dispatch(
+      getEntities({
   <%_ if (paginationNo) { _%>
-          sort: `${sortState.sort},${sortState.order}`,
+        sort: `${sortState.sort},${sortState.order}`,
   <%_ } else { _%>
-          page: paginationState.activePage - 1,
-          size: paginationState.itemsPerPage,
-          sort: `${paginationState.sort},${paginationState.order}`,
+        page: paginationState.activePage - 1,
+        size: paginationState.itemsPerPage,
+        sort: `${paginationState.sort},${paginationState.order}`,
   <%_ } _%>
-        }),
-      );
+      }),
+    );
 <%_ } _%>
   };
 
