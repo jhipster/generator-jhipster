@@ -35,6 +35,7 @@ export * from './github.ts';
 export {
   type GithubSample,
   getGithubSamples,
+  getGithubSamplesFolderGroup,
   getGithubSamplesGroup,
   getGithubSamplesGroups,
   githubSamplesGroupOf,

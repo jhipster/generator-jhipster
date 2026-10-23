@@ -28,7 +28,7 @@ import {
   readSampleDefaultCommand,
   readSampleJDLConfig,
 } from './describe-samples.ts';
-import { getGithubSamples, getGithubSamplesGroup } from './github-group.ts';
+import { getGithubSamples, getGithubSamplesFolderGroup, getGithubSamplesGroup } from './github-group.ts';
 
 const fixtures = join(import.meta.dirname, '__test-support__/samples-groups');
 const valid = join(fixtures, 'valid');
@@ -87,6 +87,22 @@ describe('ci samples groups', () => {
       await expect(getGithubSamples(join(fixtures, 'duplicated'))).rejects.toThrow(
         'Sample same is defined by the first and second samples groups',
       );
+    });
+  });
+
+  describe('getGithubSamplesFolderGroup', () => {
+    it('gives each jdl file and folder of the group as a sample, synchronously', () => {
+      expect(getGithubSamplesFolderGroup(valid, 'files')).toEqual({
+        'app-jdl': { 'samples-group': 'files', 'sample-type': 'jdl' },
+        'app-yo-rc': { 'samples-group': 'files', 'sample-type': 'yo-rc' },
+      });
+    });
+    it('gives the samples getGithubSamplesGroup gives', async () => {
+      const { samples } = await getGithubSamplesGroup(valid, 'files');
+      expect(getGithubSamplesFolderGroup(valid, 'files')).toEqual(samples);
+    });
+    it('refuses a group outside its folder', () => {
+      expect(() => getGithubSamplesFolderGroup(valid, '../duplicated')).toThrow('is not inside');
     });
   });
 
