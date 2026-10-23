@@ -38,7 +38,7 @@ import {
 } from '../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication, DerivedField } from '../base-application/types.ts';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
-import type { BaseChangelog } from '../base-entity-changes/types.ts';
+import type { BaseChangelog, BaseChangelogData } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
 import type { Field as CommonField } from '../common/types.ts';
 import { mutateField as mutateJavaField } from '../java/application.ts';
@@ -613,7 +613,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       postWriteChangelogs({ source }) {
         return Promise.all(
           this.databaseChangelogs.map(databaseChangelog => {
-            const { entity, changelogData } = databaseChangelog;
+            const { entity } = databaseChangelog;
+            // A changelog prepared for writing has its data.
+            const changelogData = databaseChangelog.changelogData!;
             if (entity.skipServer) {
               return undefined;
             }
@@ -621,7 +623,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             if (databaseChangelog.newEntity) {
               return this._addLiquibaseFilesReferences({ entity, databaseChangelog, source });
             }
-            if (changelogData!.requiresUpdateChangelogs) {
+            if (changelogData.requiresUpdateChangelogs) {
               return this._addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source });
             }
             return undefined;
@@ -654,7 +656,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   /**
    * Write files for new entities.
    */
-  _writeLiquibaseFiles({ context: writeContext, changelogData }: { context: any; changelogData: any }) {
+  _writeLiquibaseFiles({ context: writeContext, changelogData }: { context: any; changelogData: BaseChangelogData<LiquibaseEntity> }) {
     const promises: any[] = [];
     const context = {
       ...writeContext,
@@ -699,7 +701,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   /**
    * Write files for updated entities.
    */
-  _writeUpdateFiles({ context: writeContext, changelogData }: { context: any; changelogData: any }) {
+  _writeUpdateFiles({ context: writeContext, changelogData }: { context: any; changelogData: BaseChangelogData<LiquibaseEntity> }) {
     const {
       addedFields,
       allFields,
@@ -749,15 +751,15 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     return Promise.all(promises);
   }
 
-  private _requiresConstraintUpdates(changelogData: any) {
+  private _requiresConstraintUpdates(changelogData: BaseChangelogData<LiquibaseEntity>) {
     return changelogData.hasFieldConstraint || changelogData.addedRelationships.length > 0 || changelogData.hasDefaultValueChange;
   }
 
-  private _isBasicEntityUpdate(changelogData: any) {
+  private _isBasicEntityUpdate(changelogData: BaseChangelogData<LiquibaseEntity>) {
     return changelogData.addedFields.length > 0 || changelogData.removedFields.length > 0 || changelogData.shouldWriteAnyRelationship;
   }
 
-  private _requiresWritingFakeData(changelogData: any) {
+  private _requiresWritingFakeData(changelogData: BaseChangelogData<LiquibaseEntity>) {
     return !changelogData.skipFakeData && (changelogData.addedFields.length || changelogData.addedRelationships.length);
   }
 
@@ -772,7 +774,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }: {
     entity: LiquibaseEntity;
     databaseChangelog: BaseChangelog<LiquibaseEntity>;
-    changelogData: any;
+    changelogData: BaseChangelogData<LiquibaseEntity>;
     source: LiquibaseSource;
   }) {
     if (this._isBasicEntityUpdate(changelogData)) {
@@ -947,7 +949,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
     /* Required by the templates */
     databaseChangelog.writeContext = {
       entity,
-      databaseChangelog: databaseChangelog as any,
+      databaseChangelog,
       changelogDate: databaseChangelog.changelogDate,
       databaseType,
       prodDatabaseType,
@@ -989,11 +991,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
   }
 
   writeChangelog({ databaseChangelog }: { databaseChangelog: BaseChangelog<LiquibaseEntity> }): Promise<any[]> | undefined {
-    const { writeContext: context, changelogData } = databaseChangelog;
+    const { writeContext: context } = databaseChangelog;
+    // A changelog prepared for writing has its data.
+    const changelogData = databaseChangelog.changelogData!;
     if (databaseChangelog.newEntity) {
       return this._writeLiquibaseFiles({ context, changelogData });
     }
-    if (changelogData!.requiresUpdateChangelogs) {
+    if (changelogData.requiresUpdateChangelogs) {
       return this._writeUpdateFiles({ context, changelogData });
     }
     return undefined;
