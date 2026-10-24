@@ -99,6 +99,9 @@ public class <%- dtoClass %> implements Serializable {
     private <%- property.propertyDtoJavaType %> <%- property.propertyName %><%- property.collection && relationship ? ' = new HashSet<>()' : '' %>;
   <%_ if (property.fieldWithContentType) { _%>
 
+    <%_ if (property.blobContentTypeImage) { _%>
+    <%- property.javaContentTypeValidatorsPartial %>
+    <%_ } _%>
     private String <%- property.propertyName %>ContentType;
   <%_ } _%>
 <%_ } _%>
