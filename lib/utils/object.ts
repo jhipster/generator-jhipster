@@ -135,6 +135,35 @@ export const dontOverrideMutateDataProperty = <const T extends MutateDataFunctio
 };
 
 /**
+ * A mutation computed once the data is prepared, not when it is set: in a mutation context (the defaults of an application,
+ * an entity, a field or a relationship) it returns the delay marker first, and `finalizeMutations` computes it, the
+ * properties set after it (a field or a relationship prepared later) available then. Without a mutation context, a plain
+ * `mutateData` call, it is computed at once. A context with `autoDelay` (the application at loading) also delays, implicitly,
+ * a mutation reading a property not set yet: that property stays undefined until `finalizeMutations`.
+ * @example
+ * entityDefaults({
+ *   requiredRelationships: finalizeDefault(({ relationships }) => relationships.filter(rel => rel.relationshipRequired)),
+ * });
+ */
+export const finalizeDefault =
+  <Data extends object, Value>(compute: (data: Data) => Value) =>
+  (data: Data, { delayMarker }: { delayMarker?: typeof DelayedMutation }): Value | typeof DelayedMutation =>
+    delayMarker ?? compute(data);
+
+/**
+ * Like `finalizeDefault`, but an undefined value is final: the property is left undefined, while with `finalizeDefault` a
+ * delayed mutation returning undefined gives way to the mutation registered before it for the same property (a default of
+ * JHipster under a default of a blueprint).
+ */
+export const finalizeDefaultOrUndefined =
+  <Data extends object, Value>(compute: (data: Data) => Value | undefined) =>
+  (
+    data: Data,
+    { delayMarker, undefinedMarker }: { delayMarker?: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation },
+  ): Value | typeof DelayedMutation | typeof UndefinedMutation =>
+    delayMarker ?? compute(data) ?? undefinedMarker;
+
+/**
  * Thrown by a delayed mutation reading a property not defined yet, and caught by `handleMutateDataCallback`. Not an
  * Error: a stack trace would be captured for each delayed mutation.
  */
