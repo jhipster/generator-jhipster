@@ -78,7 +78,7 @@ export const mutateApplication = {
     }
     return false;
   },
-  microfrontends: finalizeDefaultOrUndefined(({ microfrontend }) => (microfrontend ? [] : undefined)),
+  microfrontends: finalizeDefaultOrUndefined(({ microfrontend }: ClientApplication) => (microfrontend ? [] : undefined)),
   exposeMicrofrontend: finalizeDefault(() => false),
   clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',

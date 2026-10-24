@@ -105,7 +105,9 @@ export const mutateApplicationPreparing = {
 
   backendType: finalizeDefault(() => 'Java'),
   backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
-  backendTypeJavaAny: finalizeDefault(({ backendTypeSpringBoot }) => backendTypeSpringBoot),
+  backendTypeJavaAny: finalizeDefault(
+    ({ backendTypeSpringBoot }: BaseSimpleApplicationPreparingAddedApplicationProperties) => backendTypeSpringBoot,
+  ),
   temporaryDir: finalizeDefault(() => 'temp/'),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<ProjectNameAddedApplicationProperties & BaseSimpleApplicationAddedApplicationProperties>,
