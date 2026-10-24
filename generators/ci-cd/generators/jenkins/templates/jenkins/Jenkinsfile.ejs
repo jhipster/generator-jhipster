@@ -64,6 +64,15 @@ node {
 <%- indent %>       sh './snyk monitor --all-projects'
 <%- indent %>    }
   <%_ } _%>
+  <%_ if (!skipClient) { _%>
+<%- indent %>    stage('frontend lint') {
+    <%_ if (insideDocker) { _%>
+<%- indent %>        sh "npm run lint"
+    <%_ } else { _%>
+<%- indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%- nodePackageManager %> -Dfrontend.<%- nodePackageManager %>.arguments='run lint'"
+    <%_ } _%>
+<%- indent %>    }
+  <%_ } _%>
 <%- indent %>    stage('backend tests') {
 <%- indent %>        try {
 <%- indent %>            sh "./mvnw -ntp verify -P-webapp"
@@ -125,6 +134,11 @@ node {
 <%- indent %>    }
 <%- indent %>    stage('Snyk monitor') {
 <%- indent %>       sh './snyk monitor --all-projects'
+<%- indent %>    }
+  <%_ } _%>
+  <%_ if (!skipClient) { _%>
+<%- indent %>    stage('frontend lint') {
+<%- indent %>        sh "./gradlew <%- nodePackageManager %>_run_lint -PnodeInstall --no-daemon"
 <%- indent %>    }
   <%_ } _%>
 <%- indent %>    stage('backend tests') {
