@@ -1,29 +1,28 @@
 <template>
-    <div>
-        <h2 id="tracker-page-heading" data-cy="trackerPageHeading">{{ t$('tracker.title') }}</h2>
+  <div>
+    <h2 id="tracker-page-heading" data-cy="trackerPageHeading">{{ t$('tracker.title') }}</h2>
 
-        <div class="table-responsive">
-            <table class="table table-striped" data-cy="trackerTable">
-                <thead>
-                <tr>
-                    <th>{{ t$('tracker.table.userlogin') }}</th>
-                    <th>{{ t$('tracker.table.ipaddress') }}</th>
-                    <th>{{ t$('tracker.table.page') }}</th>
-                    <th>{{ t$('tracker.table.time') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="activity of activities" :key="activity.sessionId">
-                    <td>{{activity.userLogin}}</td>
-                    <td>{{activity.ipAddress}}</td>
-                    <td>{{activity.page}}</td>
-                    <td>{{formatDate(activity.time)}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="table-responsive">
+      <table class="table table-striped" data-cy="trackerTable">
+        <thead>
+          <tr>
+            <th>{{ t$('tracker.table.userlogin') }}</th>
+            <th>{{ t$('tracker.table.ipaddress') }}</th>
+            <th>{{ t$('tracker.table.page') }}</th>
+            <th>{{ t$('tracker.table.time') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="activity of activities" :key="activity.sessionId">
+            <td>{{ activity.userLogin }}</td>
+            <td>{{ activity.ipAddress }}</td>
+            <td>{{ activity.page }}</td>
+            <td>{{ formatDate(activity.time) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </template>
 
-<script lang="ts" src="./tracker.component.ts">
-</script>
+<script lang="ts" src="./tracker.component.ts"></script>

@@ -40,9 +40,9 @@ const error = {
   response: {
     status: null,
     data: {
-      type: null
-    }
-  }
+      type: null,
+    },
+  },
 };
 
 const axiosStub = {
@@ -232,9 +232,9 @@ describe('Service Tests', () => {
       });
 
       it('should not partial update a <%- entityAngularName %>', async () => {
-          axiosStub.patch.mockRejectedValue(error);
+        axiosStub.patch.mockRejectedValue(error);
 
-          await expect(service.partialUpdate({})).rejects.toMatchObject(error);
+        await expect(service.partialUpdate({})).rejects.toMatchObject(error);
       });
 
 <%_ } _%>

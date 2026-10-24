@@ -10,7 +10,9 @@
       >{{ t$('metrics.jvm.threads.waiting') }}&nbsp;<span class="badge rounded-pill">{{ threadDumpData.threadDumpWaiting }}</span></span
     >&nbsp;
     <span class="badge bg-warning" @click="threadDumpFilter = 'TIMED_WAITING'"
-      >{{ t$('metrics.jvm.threads.timedwaiting') }}&nbsp;<span class="badge rounded-pill">{{ threadDumpData.threadDumpTimedWaiting }}</span></span
+      >{{ t$('metrics.jvm.threads.timedwaiting') }}&nbsp;<span class="badge rounded-pill">{{
+        threadDumpData.threadDumpTimedWaiting
+      }}</span></span
     >&nbsp;
     <span class="badge bg-danger" @click="threadDumpFilter = 'BLOCKED'"
       >{{ t$('metrics.jvm.threads.blocked') }}&nbsp;<span class="badge rounded-pill">{{ threadDumpData.threadDumpBlocked }}</span></span

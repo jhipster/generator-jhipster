@@ -28,7 +28,9 @@
       </div>
       <div class="col-md-4">
         <h4>{{ t$('metrics.jvm.threads.title') }}</h4>
-        <span><span>{{ t$('metrics.jvm.threads.runnable') }}</span> {{ threadStats.threadDumpRunnable }}</span>
+        <span
+          ><span>{{ t$('metrics.jvm.threads.runnable') }}</span> {{ threadStats.threadDumpRunnable }}</span
+        >
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpRunnable"
@@ -37,7 +39,9 @@
           </b-progress-bar>
         </b-progress>
 
-        <span><span>{{ t$('metrics.jvm.threads.timedwaiting') }}</span> ({{ threadStats.threadDumpTimedWaiting }})</span>
+        <span
+          ><span>{{ t$('metrics.jvm.threads.timedwaiting') }}</span> ({{ threadStats.threadDumpTimedWaiting }})</span
+        >
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpTimedWaiting"
@@ -46,7 +50,9 @@
           </b-progress-bar>
         </b-progress>
 
-        <span><span>{{ t$('metrics.jvm.threads.waiting') }}</span> ({{ threadStats.threadDumpWaiting }})</span>
+        <span
+          ><span>{{ t$('metrics.jvm.threads.waiting') }}</span> ({{ threadStats.threadDumpWaiting }})</span
+        >
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpWaiting"
@@ -55,7 +61,9 @@
           </b-progress-bar>
         </b-progress>
 
-        <span><span>{{ t$('metrics.jvm.threads.blocked') }}</span> ({{ threadStats.threadDumpBlocked }})</span>
+        <span
+          ><span>{{ t$('metrics.jvm.threads.blocked') }}</span> ({{ threadStats.threadDumpBlocked }})</span
+        >
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpBlocked"

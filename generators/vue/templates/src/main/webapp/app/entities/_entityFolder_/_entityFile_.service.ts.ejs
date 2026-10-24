@@ -30,12 +30,12 @@ const baseSearchApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search?query=
 export default class <%- entityAngularName %>Service {
 <%_ if (searchEngineAny) { _%>
   <%_ if (paginationNo) { _%>
-  async search(query) : Promise<any> {
+  async search(query): Promise<any> {
     const res = await axios.get(`${baseSearchApiUrl}${query}`);
     return res.data;
   }
   <%_ } else { _%>
-  search(query, paginationQuery) : Promise<any> {
+  search(query, paginationQuery): Promise<any> {
     return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`);
   }
   <%_ } _%>

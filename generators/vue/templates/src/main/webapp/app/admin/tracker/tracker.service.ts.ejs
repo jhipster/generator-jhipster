@@ -58,7 +58,7 @@ export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; a
         trackerService.disconnect();
       }
     },
-    { immediate: true }
+    { immediate: true },
   );
   return trackerService;
 };

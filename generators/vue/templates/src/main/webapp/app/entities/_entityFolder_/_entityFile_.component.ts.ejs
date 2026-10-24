@@ -38,7 +38,7 @@ export default defineComponent({
   name: '<%- entityAngularName %>',
   setup() {
 <%_ if (enableTranslation) { _%>
-    const { t: t$} = useI18n();
+    const { t: t$ } = useI18n();
 <%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
     const dateFormat = useDateFormat();
@@ -226,7 +226,7 @@ export default defineComponent({
       {
         threshold: 0.5,
         immediate: false,
-      }
+      },
     );
     watchEffect(() => {
       if (links.value.next) {

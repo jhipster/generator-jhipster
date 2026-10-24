@@ -37,18 +37,15 @@
               data-cy="firstname"
             />
             <div v-if="v$.settingsAccount.firstName.$anyDirty && v$.settingsAccount.firstName.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.firstName.required.$invalid"
-              >{{ t$('settings.messages.validate.firstname.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.firstName.minLength.$invalid"
-              >{{ t$('settings.messages.validate.firstname.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.firstName.maxLength.$invalid"
-              >{{ t$('settings.messages.validate.firstname.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.firstName.required.$invalid">{{
+                t$('settings.messages.validate.firstname.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.firstName.minLength.$invalid">{{
+                t$('settings.messages.validate.firstname.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.firstName.maxLength.$invalid">{{
+                t$('settings.messages.validate.firstname.maxlength')
+              }}</small>
             </div>
           </div>
           <div class="mb-3">
@@ -67,18 +64,15 @@
               data-cy="lastname"
             />
             <div v-if="v$.settingsAccount.lastName.$anyDirty && v$.settingsAccount.lastName.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.lastName.required.$invalid"
-              >{{ t$('settings.messages.validate.lastname.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.lastName.minLength.$invalid"
-              >{{ t$('settings.messages.validate.lastname.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.lastName.maxLength.$invalid"
-              >{{ t$('settings.messages.validate.lastname.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.lastName.required.$invalid">{{
+                t$('settings.messages.validate.lastname.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.lastName.minLength.$invalid">{{
+                t$('settings.messages.validate.lastname.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.lastName.maxLength.$invalid">{{
+                t$('settings.messages.validate.lastname.maxlength')
+              }}</small>
             </div>
           </div>
           <div class="mb-3">
@@ -98,22 +92,18 @@
               data-cy="email"
             />
             <div v-if="v$.settingsAccount.email.$anyDirty && v$.settingsAccount.email.$invalid">
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.required.$invalid"
-              >{{ t$('global.messages.validate.email.required') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.email.$invalid"
-              >{{ t$('global.messages.validate.email.invalid') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.minLength.$invalid"
-              >{{ t$('global.messages.validate.email.minlength') }}</small>
-              <small
-                class="form-text text-danger"
-                v-if="v$.settingsAccount.email.maxLength.$invalid"
-              >{{ t$('global.messages.validate.email.maxlength') }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.required.$invalid">{{
+                t$('global.messages.validate.email.required')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.email.$invalid">{{
+                t$('global.messages.validate.email.invalid')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.minLength.$invalid">{{
+                t$('global.messages.validate.email.minlength')
+              }}</small>
+              <small class="form-text text-danger" v-if="v$.settingsAccount.email.maxLength.$invalid">{{
+                t$('global.messages.validate.email.maxlength')
+              }}</small>
             </div>
           </div>
 <%_ if (enableTranslation) { _%>
