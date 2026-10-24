@@ -84,7 +84,7 @@ script:
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%- sonarOrga %> <% } %>-Dsonar.host.url=<%- sonarUrl %> -Dsonar.login=$SONAR_TOKEN; fi
   <%_ } _%>
   <%_ if (ciCdIntegrationsHeroku) { _%>
-  - ./gradlew deployHeroku
+  - ./gradlew stage -Pprod deployHeroku --no-daemon
   <%_ } _%>
 <%_ } _%>
 <%_ if (cypressTests) { _%>
