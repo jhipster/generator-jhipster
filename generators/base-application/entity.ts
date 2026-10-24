@@ -367,6 +367,8 @@ type BaseApplicationAddedEntityProperties = {
    */
   anyFieldHasFileBasedContentType?: boolean;
 
+  /** The relationships required to create the entity: required, or part of its id. */
+  requiredRelationships?: RelationshipWithEntity<Relationship, Entity>[];
   /**
    * Any relationship is required or id
    */
