@@ -139,15 +139,17 @@ export const dontOverrideMutateDataProperty = <const T extends MutateDataFunctio
  * an entity, a field or a relationship) it returns the delay marker first, and `finalizeMutations` computes it, the
  * properties set after it (a field or a relationship prepared later) available then. Without a mutation context, a plain
  * `mutateData` call, it is computed at once. A context with `autoDelay` (the application at loading) also delays, implicitly,
- * a mutation reading a property not set yet: that property stays undefined until `finalizeMutations`.
+ * a mutation reading a property not set yet: that property stays undefined until `finalizeMutations`. The type of the
+ * data is the one of the parameter of `compute`, not the one of the mutation: annotate it to read the data, so a
+ * declaration file gives its name rather than the whole type of the mutation.
  * @example
  * entityDefaults({
- *   requiredRelationships: finalizeDefault(({ relationships }) => relationships.filter(rel => rel.relationshipRequired)),
+ *   requiredRelationships: finalizeDefault(({ relationships }: Entity) => relationships.filter(rel => rel.relationshipRequired)),
  * });
  */
 export const finalizeDefault =
   <Data extends object, Value>(compute: (data: Data) => Value) =>
-  (data: Data, { delayMarker }: { delayMarker?: typeof DelayedMutation }): Value | typeof DelayedMutation =>
+  (data: NoInfer<Data>, { delayMarker }: { delayMarker?: typeof DelayedMutation }): Value | typeof DelayedMutation =>
     delayMarker ?? compute(data);
 
 /**
@@ -158,7 +160,7 @@ export const finalizeDefault =
 export const finalizeDefaultOrUndefined =
   <Data extends object, Value>(compute: (data: Data) => Value | undefined) =>
   (
-    data: Data,
+    data: NoInfer<Data>,
     { delayMarker, undefinedMarker }: { delayMarker?: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation },
   ): Value | typeof DelayedMutation | typeof UndefinedMutation =>
     delayMarker ?? compute(data) ?? undefinedMarker;

@@ -114,7 +114,7 @@ describe('utils - object', () => {
   });
   describe('finalizeDefault', () => {
     type Data = { prop?: string; prop2?: string };
-    const defaults: MutateDataParam<Data> = { prop2: finalizeDefault(({ prop }) => `${prop}2`) };
+    const defaults: MutateDataParam<Data> = { prop2: finalizeDefault(({ prop }: Data) => `${prop}2`) };
 
     it('is delayed in a mutation context, then computed by finalizeMutations with the properties set after it', () => {
       const data: Data = createDelayedMutationContext();
