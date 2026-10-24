@@ -27,6 +27,10 @@ describe('generator - server - support - string', () => {
       it('returns a table name', () => {
         expect(hibernateSnakeCase('tableName')).toEqual('table_name');
       });
+
+      it('inserts an underscore before a trailing uppercase', () => {
+        expect(hibernateSnakeCase('oneToOneOwnerX')).toEqual('one_to_one_owner_x');
+      });
     });
   });
 });
