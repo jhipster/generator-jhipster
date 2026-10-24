@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
 import { LOGIN_REGEX, MAIN_DIR, TEST_DIR } from '../generator-constants.ts';
 
 import type { Application as CommonApplication } from './types.ts';
@@ -67,7 +67,7 @@ export const mutateApplication = {
   authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
   endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
 
-  devServerPort: (_, { delayMarker }) => delayMarker ?? 9060,
+  devServerPort: finalizeDefault(() => 9060),
   serverPort: ({ applicationTypeMicroservice }) => (applicationTypeMicroservice ? 8081 : 8080),
   gatewayServerPort: (ctx, { undefinedMarker }) => (ctx.microfrontend && ctx.applicationTypeMicroservice ? 8080 : undefinedMarker),
 
