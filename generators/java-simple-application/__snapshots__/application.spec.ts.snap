@@ -21,6 +21,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "javaManagedProperties": {},
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaPackagingDestDir": "target/",
   "javaProperties": {},
   "javaVersion": Any<String>,
   "jhipsterDependenciesVersion": Any<String>,

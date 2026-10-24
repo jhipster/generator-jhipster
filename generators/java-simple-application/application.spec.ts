@@ -19,6 +19,8 @@
 
 import { describe, expect, it } from 'expect-node';
 
+import { createDelayedMutationContext, finalizeMutations, mutateData } from '../../lib/utils/object.ts';
+
 import * as entityData from './application.ts';
 
 import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '#testing';
@@ -37,4 +39,23 @@ describe('application mutation test', () => {
       expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
     });
   }
+});
+
+describe('javaPackagingDestDir', () => {
+  const { javaPackagingDestDir } = entityData.mutateApplicationPreparing;
+
+  it('waits for a build tool a blueprint adds to set it', () => {
+    const application = createDelayedMutationContext<any>();
+    mutateData(application, { buildTool: 'custom', temporaryDir: 'out/' }, { javaPackagingDestDir });
+    mutateData(application, { javaPackagingDestDir: 'out/dist/' });
+    finalizeMutations(application);
+    expect(application.javaPackagingDestDir).toBe('out/dist/');
+  });
+
+  it('is the folder of maven for a build tool a blueprint adds that does not set it', () => {
+    const application = createDelayedMutationContext<any>();
+    mutateData(application, { buildTool: 'custom', temporaryDir: 'out/' }, { javaPackagingDestDir });
+    finalizeMutations(application);
+    expect(application.javaPackagingDestDir).toBe('out/');
+  });
 });

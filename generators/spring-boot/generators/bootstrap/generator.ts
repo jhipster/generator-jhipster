@@ -19,6 +19,7 @@
 import assert from 'node:assert';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
+import { javaJarStartCommand } from '../../../java-simple-application/internal/java-jar-start-command.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
@@ -51,6 +52,17 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         applicationDefaults(mutateApplicationPreparing, {
           // Deprecated: Spring Boot 3 is no longer supported, springBoot4 is always true.
           springBoot4: true,
+        });
+      },
+      packageJsonScripts({ application }) {
+        // Tries the application, in a demonstration: builds the jar of the production profile, then runs it with the sample secrets.
+        mutateData(application.packageJsonScripts as any, {
+          'pretry-it': 'npm run java:jar:prod',
+          'try-it': javaJarStartCommand({
+            destDir: application.javaPackagingDestDir,
+            jarName: '*.jar',
+            profiles: 'prod,secret-samples',
+          }),
         });
       },
       hibernate({ application, applicationDefaults }) {
