@@ -235,7 +235,7 @@ export default defineComponent({
     },
 
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
-    clearInputImage(field, fieldContentType, idInput) : void {
+    clearInputImage(field, fieldContentType, idInput): void {
       if (this.<%- entityInstance %> && field && fieldContentType) {
         if (Object.prototype.hasOwnProperty.call(this.<%- entityInstance %>, field)) {
           this.<%- entityInstance %>[field] = null;
@@ -251,7 +251,7 @@ export default defineComponent({
 
 <%_ } _%>
 <%_ if (relationshipsContainManyToOne) { _%>
-    getSelected(selectedVals, option, pkField = 'id') : any {
+    getSelected(selectedVals, option, pkField = 'id'): any {
       if (selectedVals) {
         return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
       }

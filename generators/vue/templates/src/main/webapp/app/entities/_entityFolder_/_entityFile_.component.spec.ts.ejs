@@ -29,8 +29,8 @@ const bModalStub = {
   render: () => {},
   methods: {
     hide: () => {},
-    show: () => {}
-  }
+    show: () => {},
+  },
 };
 
 describe('Component Tests', () => {
@@ -77,7 +77,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
-        }
+        },
       };
     });
 

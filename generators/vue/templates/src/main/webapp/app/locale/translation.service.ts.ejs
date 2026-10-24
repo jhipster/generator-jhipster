@@ -66,13 +66,13 @@ export default class TranslationService {
   }
 <%_ if (enableI18nRTL) { _%>
 
-    private isRTL(lang: string): boolean {
-      return this.languages[lang]?.rtl;
-    }
+  private isRTL(lang: string): boolean {
+    return this.languages[lang]?.rtl;
+  }
 
-    private updatePageDirection(currentLanguage: string): void {
-      document.querySelector('html').setAttribute('dir', this.isRTL(currentLanguage) ? 'rtl' : 'ltr');
-    }
+  private updatePageDirection(currentLanguage: string): void {
+    document.querySelector('html').setAttribute('dir', this.isRTL(currentLanguage) ? 'rtl' : 'ltr');
+  }
 <%_ } _%>
 
   isLanguageSupported(lang: string) {
