@@ -114,7 +114,7 @@ An important aspect of the Operator is that it will not be in charge of deployin
 
 The JHipster Kubernetes Operator can be built as a Spring Boot Starter meaning that it doesn't necessarily need to be its own independent container it can be attached to an existing service if it is required.
 
-The Operator will provide an excellent entry point for domain specific extensions and integrations with another platform wide services such as Istio, KNative, Jenkins X (Tekton Pipelines), etc. It will provide the entry point for a Developer Workflow on top of Kubernetes.
+The Operator will provide an excellent entry point for domain specific extensions and integrations with other platform wide services such as Istio, KNative, Jenkins X (Tekton Pipelines), etc. It will provide the entry point for a Developer Workflow on top of Kubernetes.
 
 # Drawbacks
 
@@ -135,17 +135,17 @@ Building Kubernetes Operators is a long journey. In order to find some best prac
 
 [prior-art]: #prior-art
 
-You can see here my first attempt here: https://github.com/salaboy/jhipster-operator/tree/jhipsterconf19
+You can see my first attempt here: https://github.com/salaboy/jhipster-operator/tree/jhipsterconf19
 The README.md file provides a glimpse of this first iteration, but after a lot of feedback a set of changes will be applied in the master branch to make the Operator simpler and more focused.
 
 - Presentation in JHipster Conf 2: https://salaboy.com/2019/07/03/jhipster-conf-rocks/
-- Source code(first stab at it): https://github.com/salaboy/jhipster-operator
+- Source code (first stab at it): https://github.com/salaboy/jhipster-operator
 - Slides: https://www.slideshare.net/salaboy/do-we-need-a-jhipster-kubernetes-operator
 - Video: https://youtu.be/9iqTtwptTT8
 
 # Frequently Asked Questions (F.A.Q.)
 
-- **Q: This definitely is cool but is this really necessary for a JHipster application.**
+- **Q: This definitely is cool but is this really necessary for a JHipster application?**
 - **A**: If you are running in Kubernetes, the JHipster K8s Operator will provide you extra functionality and it will allow Kubernetes to understand JHipster specific concerns.
 - **Q: Are we rebuilding any features provided by tools like Istio (because many of the proposed features look very similar to what it does)?**
 - **A**: Not at all, we are providing an integration point for tools like Istio, KNative and CI/CD tools based on CRDs such as Jenkins X and Spinnaker.
