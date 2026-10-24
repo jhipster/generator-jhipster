@@ -31,6 +31,9 @@ const FULL_BODY = String.raw`
 <span>{{ t$('login.password.forgot1')}}"</span>
 <span>{{t$('login.password.forgot2') }}"</span>
 <span>{{t$('login.password.forgot3')}}"</span>
+<b-link to="/account/reset/request" class="alert-link">{{
+  t$('login.password.forgot4')
+}}</b-link>
 <b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"
@@ -155,6 +158,7 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 <span>getWebappTranslation('login.password.forgot1')"</span>
 <span>getWebappTranslation('login.password.forgot2')"</span>
 <span>getWebappTranslation('login.password.forgot3')"</span>
+<b-link to="/account/reset/request" class="alert-link">getWebappTranslation('login.password.forgot4')</b-link>
 <b-form-group label="getWebappTranslation('login.form.password')" label-for="password">
   <b-form-input
     id="password"
@@ -198,6 +202,9 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 <span>{{ t$('login.password.forgot1') }}"</span>
 <span>{{ t$('login.password.forgot2') }}"</span>
 <span>{{ t$('login.password.forgot3') }}"</span>
+<b-link to="/account/reset/request" class="alert-link">{{
+  t$('login.password.forgot4')
+}}</b-link>
 <b-form-group :label="t$('login.form.password')" label-for="password">
   <b-form-input
     id="password"
