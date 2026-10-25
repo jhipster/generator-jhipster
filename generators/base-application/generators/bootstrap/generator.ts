@@ -41,6 +41,8 @@ import {
 import {
   addFakerToEntity,
   derivedPrimaryKeyProperties,
+  hasCyclicRequiredRelationship,
+  isRequiredRelationship,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
   prepareCommonFieldForTemplates,
@@ -327,6 +329,14 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         await addFakerToEntity(entity, application.nativeLanguage);
         prepareEntityForTemplates(entity, this);
       },
+      requiredRelationships({ entityDefaults }) {
+        // Delayed: the relationships are prepared after the entity, these are set once the entities are prepared.
+        entityDefaults({
+          requiredRelationships: ({ relationships }, { delayMarker }) => delayMarker ?? relationships.filter(isRequiredRelationship),
+          anyRelationshipIsRequired: ({ requiredRelationships }, { delayMarker }) => delayMarker ?? requiredRelationships!.length > 0,
+          hasCyclicRequiredRelationship: (entity, { delayMarker }) => delayMarker ?? hasCyclicRequiredRelationship(entity),
+        });
+      },
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.
         if (!entity.embedded && !entity.primaryKey) {
@@ -383,19 +393,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         for (const relationship of entity.relationships) {
           finalizeMutations(relationship);
         }
-      },
-      hasRequiredRelationship({ entity }) {
-        entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
-      },
-      checkForCircularRelationships({ entity }) {
-        const detectCyclicRequiredRelationship = (entity: BaseApplicationEntity, relatedEntities: Set<BaseApplicationEntity>): boolean => {
-          if (relatedEntities.has(entity)) return true;
-          relatedEntities.add(entity);
-          return entity.relationships
-            ?.filter(rel => rel.relationshipRequired || rel.id)
-            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set(relatedEntities)));
-        };
-        entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
       },
       processEntityPrimaryKeysDerivedProperties({ entity }) {
         if (!entity.primaryKey) return;

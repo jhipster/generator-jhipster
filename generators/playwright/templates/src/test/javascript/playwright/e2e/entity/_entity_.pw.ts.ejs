@@ -34,7 +34,6 @@ import {
 import { test, expect } from '../../support/fixtures';
 <%_ const baseApi = `${entityApi}api/`;
 
-    const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
     const requiredOtherEntities = [...new Set(requiredRelationships.map(rel => rel.otherEntity))];
     const otherEntities = [...new Set(Object.values(differentRelationships).filter(rels => rels.length > 0).map(rels => rels[0].otherEntity))];
     // We cannot generate a required entity with relationship with required relationships.
