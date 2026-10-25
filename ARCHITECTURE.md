@@ -435,9 +435,9 @@ Examples:
 
 More information can be found at:
 
-[Extending and customizing](https://www.jhipster.tech/modules/extending-and-customizing/)
-[Creating a stand alone Blueprint](https://www.jhipster.tech/modules/creating-a-module/)
-[Creating a blueprint](https://www.jhipster.tech/modules/creating-a-blueprint/)
+- [Extending and customizing](https://www.jhipster.tech/modules/extending-and-customizing/)
+- [Creating a stand alone Blueprint](https://www.jhipster.tech/modules/creating-a-module/)
+- [Creating a blueprint](https://www.jhipster.tech/modules/creating-a-blueprint/)
 
 ### Blueprint scope
 
