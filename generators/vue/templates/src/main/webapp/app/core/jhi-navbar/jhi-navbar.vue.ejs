@@ -22,12 +22,7 @@
       <span class="logo-img"></span>
       <span class="navbar-title">{{ t$('global.title') }}</span> <span class="navbar-version">{{ version }}</span>
     </b-navbar-brand>
-    <b-navbar-toggle
-      class="jh-navbar-toggler d-lg-none"
-      target="header-tabs"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <b-navbar-toggle class="jh-navbar-toggler d-lg-none" target="header-tabs" aria-expanded="false" aria-label="Toggle navigation">
       <font-awesome-icon icon="bars" />
     </b-navbar-toggle>
 
@@ -39,7 +34,15 @@
             <span>{{ t$('global.menu.home') }}</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown :no-size="true" end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+        <b-nav-item-dropdown
+          :no-size="true"
+          end
+          id="entity-menu"
+          v-if="authenticated"
+          active-class="active"
+          class="pointer"
+          data-cy="entity"
+        >
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="th-list" />
