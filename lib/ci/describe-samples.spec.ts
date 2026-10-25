@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 import { describe, exnode, expect, it } from 'expect-node';
+import { mkdtempSync, readdirSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import jdlLogger from '../jdl/core/utils/objects/logger.ts';
@@ -68,6 +70,24 @@ describe('ci samples groups', () => {
         expect(warn).not.toHaveBeenCalled();
       } finally {
         warn.mockRestore();
+      }
+    });
+
+    it('writes no file of the deployments of a jdl', () => {
+      const cwd = process.cwd();
+      const folder = mkdtempSync(join(tmpdir(), 'describe-samples-'));
+      process.chdir(folder);
+      try {
+        expect(
+          readSampleJDLConfig(
+            'application { config { baseName gateway applicationType gateway buildTool gradle } }\n' +
+              'deployment { deploymentType docker-compose appsFolders [gateway] }',
+          ),
+        ).toEqual({ applicationType: 'gateway', buildTool: 'gradle' });
+        expect(readdirSync(folder)).toEqual([]);
+      } finally {
+        process.chdir(cwd);
+        rmSync(folder, { recursive: true });
       }
     });
   });
