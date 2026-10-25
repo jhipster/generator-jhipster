@@ -140,7 +140,7 @@ export const <%- entityReactName %>Update = () => {
       <%- rel.propertyName %>: <%- rel.otherEntity.entityInstancePlural %>.find(it => it.<%- rel.otherEntity.primaryKey.name %>.toString() === values.<%- rel.propertyName %>?.toString()),
   <%_ } _%>
 <%_ } _%>
-    }
+    };
 
     if (isNew) {
       dispatch(createEntity(entity));

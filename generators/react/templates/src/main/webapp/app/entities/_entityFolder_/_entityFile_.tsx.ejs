@@ -116,7 +116,7 @@ export const <%- entityReactName %> = () => {
           size: paginationState.itemsPerPage,
           sort: `${paginationState.sort},${paginationState.order}`
   <%_ } _%>
-        })
+        }),
       );
     } else {
       dispatch(
@@ -128,7 +128,7 @@ export const <%- entityReactName %> = () => {
           size: paginationState.itemsPerPage,
           sort: `${paginationState.sort},${paginationState.order}`,
   <%_ } _%>
-        })
+        }),
       );
     }
 <%_ } else { _%>
@@ -141,7 +141,7 @@ export const <%- entityReactName %> = () => {
           size: paginationState.itemsPerPage,
           sort: `${paginationState.sort},${paginationState.order}`,
   <%_ } _%>
-        })
+        }),
       );
 <%_ } _%>
   };
@@ -151,7 +151,7 @@ export const <%- entityReactName %> = () => {
     dispatch(reset());
     setPaginationState({
       ...paginationState,
-      activePage: 1
+      activePage: 1,
     });
     dispatch(getEntities({}));
   };
@@ -175,7 +175,7 @@ export const <%- entityReactName %> = () => {
   <%_ } else { _%>
       setPaginationState({
         ...paginationState,
-        activePage: 1
+        activePage: 1,
       });
       dispatch(
         searchEntities({
@@ -183,7 +183,7 @@ export const <%- entityReactName %> = () => {
           page: paginationState.activePage - 1,
           size: paginationState.itemsPerPage,
           sort: `${paginationState.sort},${paginationState.order}`,
-        })
+        }),
       );
   <%_ } _%>
     }
@@ -198,7 +198,7 @@ export const <%- entityReactName %> = () => {
   <%_ if (!paginationNo) { _%>
     setPaginationState({
       ...paginationState,
-      activePage: 1
+      activePage: 1,
     });
   <%_ } _%>
     dispatch(getEntities({}));
@@ -215,14 +215,14 @@ export const <%- entityReactName %> = () => {
   }, [updateSuccess]);
 
   useEffect(() => {
-    getAllEntities()
+    getAllEntities();
   }, [paginationState.activePage]);
 
   const handleLoadMore = () => {
     if (globalThis.scrollY > 0) {
       setPaginationState({
         ...paginationState,
-        activePage: paginationState.activePage + 1
+        activePage: paginationState.activePage + 1,
       });
     }
   };
@@ -264,7 +264,7 @@ export const <%- entityReactName %> = () => {
         ...paginationState,
         activePage: +page,
         sort: sortSplit[0],
-        order: sortSplit[1]
+        order: sortSplit[1],
       });
     }
   }, [pageLocation.search]);
@@ -277,20 +277,20 @@ export const <%- entityReactName %> = () => {
       ...paginationState,
       activePage: 1,
       order: paginationState.order === ASC ? DESC : ASC,
-      sort: p
+      sort: p,
     });
     setSorting(true);
 <%_ } else if (paginationPagination) { _%>
     setPaginationState({
       ...paginationState,
       order: paginationState.order === ASC ? DESC : ASC,
-      sort: p
+      sort: p,
     });
 <%_ } else { _%>
     setSortState({
       ...sortState,
       order: sortState.order === ASC ? DESC : ASC,
-      sort: p
+      sort: p,
     });
 <%_ } _%>
   };
@@ -299,13 +299,13 @@ export const <%- entityReactName %> = () => {
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
-      activePage: currentPage
+      activePage: currentPage,
     });
 <%_ } _%>
 
   const handleSyncList = () => {
 <%_ if (paginationNo || paginationPagination) { _%>
-      sortEntities();
+    sortEntities();
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
       resetAll();

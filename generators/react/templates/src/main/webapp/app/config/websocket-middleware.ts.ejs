@@ -58,7 +58,7 @@ export const sendActivity = (page: string) => {
     stompClient?.send(
       '/topic/activity', // destination
       JSON.stringify({ page }), // body
-      {} // header
+      {}, // header
     );
   });
 };

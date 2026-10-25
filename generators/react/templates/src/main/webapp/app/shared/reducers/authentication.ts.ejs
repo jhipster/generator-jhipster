@@ -73,9 +73,13 @@ export const getAccount = createAsyncThunk('authentication/get_account', async (
 });
 
 <%_ if (authenticationTypeSession) { _%>
-export const authenticate = createAsyncThunk('authentication/login', async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }), {
-  serializeError: serializeAxiosError,
-});
+export const authenticate = createAsyncThunk(
+  'authentication/login',
+  async (data: string) => axios.post<any>('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }),
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const login: (username: string, password: string, rememberMe?: boolean) => AppThunk =
   (username, password, rememberMe = false) =>
@@ -163,14 +167,14 @@ export const AuthenticationSlice = createSlice({
     authError(state, action) {
       return {
         ...state,
-        redirectMessage: action.payload
+        redirectMessage: action.payload,
       };
     },
     clearAuth(state) {
       return {
         ...state,
         loading: false,
-        isAuthenticated: false
+        isAuthenticated: false,
       };
     },
   },
@@ -210,7 +214,7 @@ export const AuthenticationSlice = createSlice({
   <%_ if (authenticationTypeOauth2) { _%>
       .addCase(logoutServer.fulfilled, (state, action) => ({
         ...initialState,
-        logoutUrl: action.payload.data.logoutUrl
+        logoutUrl: action.payload.data.logoutUrl,
       }))
   <%_ } else { _%>
       .addCase(logoutServer.fulfilled, () => initialState)

@@ -88,22 +88,23 @@ export const HealthPage = () => {
               </tr>
             </thead>
             <tbody>
-              {Object.keys(data).map((configPropKey, configPropIndex) =>
-                configPropKey !== 'status' && (
-                  <tr key={configPropIndex}>
-                    <td>{configPropKey}</td>
-                    <td>
-                      <Badge bg={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
-                    </td>
-                    <td>
-                      {data[configPropKey].details && (
-                        <a onClick={getSystemHealthInfo(configPropKey, data[configPropKey])}>
-                          <FontAwesomeIcon icon={faEye} />
-                        </a>
-                      )}
-                    </td>
-                  </tr>
-                ),
+              {Object.keys(data).map(
+                (configPropKey, configPropIndex) =>
+                  configPropKey !== 'status' && (
+                    <tr key={configPropIndex}>
+                      <td>{configPropKey}</td>
+                      <td>
+                        <Badge bg={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
+                      </td>
+                      <td>
+                        {data[configPropKey].details && (
+                          <a onClick={getSystemHealthInfo(configPropKey, data[configPropKey])}>
+                            <FontAwesomeIcon icon={faEye} />
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  ),
               )}
             </tbody>
           </Table>

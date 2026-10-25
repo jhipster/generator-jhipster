@@ -41,7 +41,7 @@ import reducer, {
   updateEntity,
   partialUpdateEntity,
 <%_ } _%>
-  reset
+  reset,
 } from './<%- entityFileName %>.reducer';
 import { EntityState } from 'app/shared/reducers/reducer.utils';
 import { I<%- entityReactName %>, defaultValue } from 'app/shared/model/<%- entityModelFileName %>.model';
@@ -55,14 +55,14 @@ describe('Entities reducer tests', () => {
     entity: defaultValue,
 <%_ if (paginationInfiniteScroll) { _%>
     links: {
-      next: 0
+      next: 0,
     },
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
     totalItems: 0,
 <%_ } _%>
     updating: false,
-    updateSuccess: false
+    updateSuccess: false,
   };
 
   function expectInitialState(state) {
@@ -70,7 +70,7 @@ describe('Entities reducer tests', () => {
       loading: false,
       errorMessage: null,
       updating: false,
-      updateSuccess: false
+      updateSuccess: false,
     });
     expect(state.entities).toEqual([]);
     expect(state.entity).toEqual(defaultValue);
@@ -105,35 +105,29 @@ describe('Entities reducer tests', () => {
             updateSuccess: false,
             loading: true
           });
-        }
+        },
       );
     });
 
 <%_ if (!readOnly) { _%>
     it('should set state to updating', () => {
       testMultipleTypes(
-        [
-          createEntity.pending.type,
-          updateEntity.pending.type,
-          partialUpdateEntity.pending.type,
-          deleteEntity.pending.type
-        ],
+        [createEntity.pending.type, updateEntity.pending.type, partialUpdateEntity.pending.type, deleteEntity.pending.type],
         {},
         state => {
           expect(state).toMatchObject({
             errorMessage: null,
             updateSuccess: false,
-            updating: true
+            updating: true,
           });
-        }
+        },
       );
     });
 <%_ } _%>
 
     it('should reset the state', () => {
-      expect(
-        reducer({ ...initialState, loading: true }, reset())).toEqual({
-          ...initialState
+      expect(reducer({ ...initialState, loading: true }, reset())).toEqual({
+        ...initialState,
       });
     });
   });
@@ -159,12 +153,12 @@ describe('Entities reducer tests', () => {
           expect(state).toMatchObject({
             errorMessage: null,
             updateSuccess: false,
-            updating: false
+            updating: false,
           });
         },
         {
           message: 'error message',
-        }
+        },
       );
     });
   });
@@ -218,39 +212,40 @@ describe('Entities reducer tests', () => {
       expect(
         reducer(undefined, {
           type: getEntity.fulfilled.type,
-          payload
-        })
+          payload,
+        }),
       ).toEqual({
         ...initialState,
         loading: false,
-        entity: payload.data
+        entity: payload.data,
       });
     });
 
 <%_ if (!readOnly) { _%>
     it('should create/update entity', () => {
       const payload = { data: 'fake payload' };
-      expect(reducer(undefined, {
-        type: createEntity.fulfilled.type,
-        payload
-      })).toEqual({
+      expect(
+        reducer(undefined, {
+          type: createEntity.fulfilled.type,
+          payload,
+        }),
+      ).toEqual({
         ...initialState,
         updating: false,
         updateSuccess: true,
-        entity: payload.data
+        entity: payload.data,
       });
     });
 
     it('should delete entity', () => {
       const payload = 'fake payload';
-      const toTest = reducer(undefined,
-        {
-          type: deleteEntity.fulfilled.type,
-          payload
-        });
+      const toTest = reducer(undefined, {
+        type: deleteEntity.fulfilled.type,
+        payload,
+      });
       expect(toTest).toMatchObject({
         updating: false,
-        updateSuccess: true
+        updateSuccess: true,
       });
     });
 <%_ } _%>

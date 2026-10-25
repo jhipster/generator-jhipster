@@ -58,7 +58,7 @@ describe('Authentication reducer tests', () => {
         loginSuccess: false,
         loginError: false, // Errors returned from server side
 <%_ } _%>
-        redirectMessage: null
+        redirectMessage: null,
       });
       expect(isAccountEmpty(toTest)).toBe(true);
     });
@@ -131,7 +131,7 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         loading: false,
         isAuthenticated: false,
-        errorMessage: error.message
+        errorMessage: error.message,
       });
       expect(isAccountEmpty(toTest)).toBe(true);
     });
@@ -184,7 +184,7 @@ describe('Authentication reducer tests', () => {
       const toTest = authentication({ ...initialState, isAuthenticated: true }, clearAuth());
       expect(toTest).toMatchObject({
         loading: false,
-        isAuthenticated: false
+        isAuthenticated: false,
       });
     });
   });
