@@ -4,13 +4,14 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
 
 - [Questions and help](#question)
 - [Issues and Bugs](#issue)
-- [Bug bounties](#bounties)
 - [Feature Requests](#feature)
-- [RFCs](#rfcs)
 - [Submission Guidelines](#submit)
+- [Development environment setup](#development-environment-setup)
 - [Coding Rules](#rules)
 - [Git Commit Guidelines](#commit)
 - [Use of AI coding assistants](#ai-assistants)
+- [RFCs](#rfcs)
+- [Bug bounties](#bounties)
 
 And don't forget, we also accept [financial contributions to the project](https://www.jhipster.tech/sponsors/) using Open Collective.
 
