@@ -328,6 +328,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/base-entity-changes/generator.ts": {
     "stateCleared": "modified",
   },
+  "generators/base-entity-changes/generators/changelogs/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/generators/changelogs/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/generators/changelogs/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/generators/changelogs/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-entity-changes/generators/changelogs/templates/template-file-base-entity-changes:changelogs.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/base-entity-changes/index.ts": {
     "stateCleared": "modified",
   },
