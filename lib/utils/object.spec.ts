@@ -27,6 +27,8 @@ import {
   createDelayedMutationContext,
   droppedMutationMessage,
   enableDelayedMutations,
+  finalizeDefault,
+  finalizeDefaultOrUndefined,
   finalizeMutations,
   mutateData,
   removeFieldsWithNullishValues,
@@ -110,6 +112,52 @@ describe('utils - object', () => {
       expect(removeFieldsWithNullishValues({ foo: ['bar', undefined, null] })).toMatchObject({ foo: ['bar'] });
     });
   });
+  describe('finalizeDefault', () => {
+    type Data = { prop?: string; prop2?: string };
+    const defaults: MutateDataParam<Data> = { prop2: finalizeDefault(({ prop }: Data) => `${prop}2`) };
+
+    it('is delayed in a mutation context, then computed by finalizeMutations with the properties set after it', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, defaults);
+      expect(data.prop2).toBeUndefined();
+      data.prop = 'bar';
+      finalizeMutations(data);
+      expect(data.prop2).toBe('bar2');
+    });
+
+    it('is computed at once without a mutation context', () => {
+      const data: Data = { prop: 'foo' };
+      mutateData(data, defaults);
+      expect(data.prop2).toBe('foo2');
+    });
+  });
+
+  describe('finalizeDefaultOrUndefined', () => {
+    type Data = { prop?: string; prop2?: string };
+    const earlier: MutateDataParam<Data> = { prop2: finalizeDefault(() => 'earlier') };
+
+    it('leaves an undefined value undefined, the mutation registered before it not applied', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, earlier, { prop2: finalizeDefaultOrUndefined(() => undefined) });
+      finalizeMutations(data);
+      expect(data).toHaveProperty('prop2', undefined);
+    });
+
+    it('gives way to the mutation registered before it with finalizeDefault', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, earlier, { prop2: finalizeDefault(() => undefined) });
+      finalizeMutations(data);
+      expect(data.prop2).toBe('earlier');
+    });
+
+    it('applies a defined value', () => {
+      const data: Data = createDelayedMutationContext();
+      mutateData(data, earlier, { prop2: finalizeDefaultOrUndefined(() => 'later') });
+      finalizeMutations(data);
+      expect(data.prop2).toBe('later');
+    });
+  });
+
   describe('mutateData', () => {
     describe('with a simple mutation', () => {
       const mutatedData: { prop?: string } = {};
