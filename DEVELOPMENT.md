@@ -211,8 +211,8 @@ For simple code (few lines), logic can be embedded in the main file but if logic
 
 Sub templates should be named with the `ejs` extension because it's the default one, it enables editors to apply correct syntax highlighting and it enables us to use a very concise syntax:
 
-    <%- include('../common/field_validators', {field, reactive}); -%>
+    <%- include('../../_partials_entity_/save_user_snapshot_template') -%>
 
-This statement means that [_PersistClass_.java.jhi.jakarta_validation.ejs](generators/java/generators/domain/templates/src/main/java/_package_/_entityPackage_/domain/_persistClass_.java.jhi.jakarta_validation.ejs) template includes [field_validators.ejs](generators/java/generators/domain/templates/_global_partials_entity_/field_validators.ejs) sub template.
+This statement means that the [`_entityClass_Resource.java.ejs`](generators/spring-boot/templates/src/main/java/_package_/_entityPackage_/web/rest/_entityClass_Resource.java.ejs) template includes the [`save_user_snapshot_template.ejs`](generators/spring-boot/templates/src/main/java/_package_/_entityPackage_/_partials_entity_/save_user_snapshot_template.ejs) sub template.
 
 Sub templates can be unit tested.
