@@ -134,9 +134,10 @@ const allGenerators: (keyof GeneratorsByNamespace)[] = lookupGeneratorsWithNames
 const filterBootstrapGenerators = (gen: keyof GeneratorsByNamespace): boolean =>
   !gen.startsWith('jhipster:bootstrap-') &&
   !gen.endsWith(':bootstrap') &&
-  gen !== 'jhipster:project-name' &&
-  // Prepares the application for its database, like a bootstrap generator: a mock of it drops the properties every backend reads.
-  gen !== 'jhipster:base-application:database';
+  // A generator nested in a base generator prepares the application, like a bootstrap one: a mock of it drops the
+  // properties every generator composing it reads, and the failure surfaces far from its cause.
+  !/^jhipster:base-[^:]+:/.test(gen) &&
+  gen !== 'jhipster:project-name';
 const composedGeneratorsToCheck = allGenerators
   .filter(filterBootstrapGenerators)
   .filter(gen => !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen));

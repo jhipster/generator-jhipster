@@ -61,9 +61,10 @@ export const filterBasicServerGenerators = (ns: string) => {
   return (
     subGenerator !== 'bootstrap' &&
     !generator.startsWith('bootstrap') &&
+    // A generator nested in a base generator prepares the application, like a bootstrap one.
+    !(generator.startsWith('base-') && subGenerator) &&
     ![
       `jhipster:project-name`,
-      `jhipster:base-application:database`,
       `jhipster:java-simple-application:build-tool`,
       `jhipster:java-simple-application:gradle`,
       `jhipster:java`,
