@@ -69,7 +69,6 @@ export function prepareRelationshipForLiquibase({
   prepareRelationshipForDatabase({ application: application as any, entity, relationship });
   mutateData(relationship, {
     unique: ({ id, ownerSide, relationshipOneToOne }) => id || (ownerSide && relationshipOneToOne),
-    nullable: ({ relationshipValidate, relationshipRequired }) => !(relationshipValidate && relationshipRequired),
   });
 
   relationship.shouldWriteRelationship =
@@ -87,7 +86,6 @@ export function prepareRelationshipForLiquibase({
   mutateData(relationship, {
     __override__: false,
     columnDataType: (data: any) => data.otherEntity.columnType,
-    columnRequired: data => data.nullable === false || data.relationshipRequired,
     liquibaseGenerateFakeData: data => data.columnRequired && data.persistableRelationship && !data.collection,
   });
 

@@ -19,7 +19,7 @@
 import BaseApplicationGenerator from '../../index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
-import { hibernateSnakeCase, prepareRelationshipForDatabase } from './support/index.ts';
+import { hibernateSnakeCase, prepareFieldForDatabase, prepareRelationshipForDatabase } from './support/index.ts';
 import type { Application as DatabaseApplication } from './types.d.ts';
 
 /**
@@ -45,6 +45,17 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
         applicationDefaults({
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
         });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareFieldForDatabase({ field }) {
+        // A transient field is stored in no column, as the generator of the changelog has it.
+        if (!field.transient) {
+          prepareFieldForDatabase({ field });
+        }
       },
     });
   }

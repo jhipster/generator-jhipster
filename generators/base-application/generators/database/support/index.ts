@@ -28,5 +28,6 @@ export {
 } from './database-data.ts';
 export * from './database-type.ts';
 export * from './naming.ts';
+export * from './prepare-field.ts';
 export * from './prepare-relationship.ts';
 export * from './string.ts';

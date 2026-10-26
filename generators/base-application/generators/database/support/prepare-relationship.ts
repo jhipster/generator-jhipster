@@ -48,5 +48,11 @@ export function prepareRelationshipForDatabase({
           }).value,
         }
       : undefined,
+    // Set before columnRequired, which reads it.
+    nullable: ({ relationshipValidate, relationshipRequired }) => !(relationshipValidate && relationshipRequired),
+  });
+  mutateData(relationship, {
+    __override__: false,
+    columnRequired: data => data.nullable === false || data.relationshipRequired,
   });
 }
