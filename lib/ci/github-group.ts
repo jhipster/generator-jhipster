@@ -19,16 +19,26 @@
 
 import { readFileSync, readdirSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { extname, isAbsolute, join, relative, resolve } from 'node:path';
 
 import { type GitHubMatrixGroup, getUnknownGitHubMatrixGroupProperties } from './github-matrix.ts';
 
-export const getGithubSamplesGroups = async (samplesGroupFolder: string, keepExtensions = false): Promise<string[]> => {
-  const samplesFolderContent = await readdir(samplesGroupFolder);
-  return samplesFolderContent
+/** Loads a samples group synchronously: Node requires an ES module without top-level await. */
+const requireGroup = createRequire(import.meta.url);
+
+/** The samples groups of the content of a folder: its `.json`, `.js` and `.ts` modules and its folders, the `_` ones left out. */
+const samplesGroupNames = (samplesFolderContent: string[], keepExtensions: boolean): string[] =>
+  samplesFolderContent
     .filter(sample => !sample.startsWith('_') && ['.json', '.js', '.ts', ''].includes(extname(sample)))
     .map(sample => (keepExtensions ? sample : sample.split('.')[0]));
-};
+
+export const getGithubSamplesGroups = async (samplesGroupFolder: string, keepExtensions = false): Promise<string[]> =>
+  samplesGroupNames(await readdir(samplesGroupFolder), keepExtensions);
+
+/** The samples groups of a folder, read synchronously, like getGithubSamplesGroups. */
+export const getGithubSamplesGroupsSync = (samplesGroupFolder: string, keepExtensions = false): string[] =>
+  samplesGroupNames(readdirSync(samplesGroupFolder), keepExtensions);
 
 /** A samples group is read from inside its folder: a group given by the command line cannot load another module. */
 const assertGroupInFolder = (samplesGroupFolder: string, group: string): void => {
@@ -73,35 +83,66 @@ export const getGithubSamplesFolderGroup = (samplesGroupFolder: string, group: s
   return samples;
 };
 
+/** The samples of a group defined by a `.json` file, each tagged with its group. */
+const jsonSamplesGroupOf = (group: string, jsonFile: string): GitHubMatrixGroup =>
+  Object.fromEntries(
+    Object.entries(JSON.parse(jsonFile) as GitHubMatrixGroup).map(([sample, value]) => [sample, { ...value, 'samples-group': group }]),
+  );
+
+/** The extension of the module defining a group, none for a group defined by a folder. */
+const samplesGroupExtension = (samplesFolderContent: string[], group: string): string | undefined =>
+  ['js', 'ts', 'json'].find(ext => samplesFolderContent.includes(`${group}.${ext}`));
+
+/** The warnings of the samples of a group: the properties no job of the matrix takes. */
+const samplesGroupWarnings = (group: string, samples: GitHubMatrixGroup): string[] => {
+  const unknownProperties = getUnknownGitHubMatrixGroupProperties(samples);
+  return unknownProperties.length ? [`Unknown properties in ${group}: ${unknownProperties.join(', ')}`] : [];
+};
+
 export const getGithubSamplesGroup = async (
   samplesGroupFolder: string,
   group: string,
 ): Promise<{ samples: GitHubMatrixGroup; warnings: string[] }> => {
   assertGroupInFolder(samplesGroupFolder, group);
-  const warnings: string[] = [];
   let samples: GitHubMatrixGroup = {};
   const samplesFolderContent = await getGithubSamplesGroups(samplesGroupFolder, true);
-  const groupExt = ['js', 'ts', 'json'].find(ext => samplesFolderContent.includes(`${group}.${ext}`));
+  const groupExt = samplesGroupExtension(samplesFolderContent, group);
   if (groupExt === 'js' || groupExt === 'ts') {
     const jsGroup: { default?: GitHubMatrixGroup } = await import(join(samplesGroupFolder, `${group}.${groupExt}`));
     // A module without default export defines no sample.
     samples = githubSamplesGroupOf(group, jsGroup.default);
   } else if (groupExt === 'json') {
-    const jsonFile = await readFile(join(samplesGroupFolder, `${group}.json`));
-    samples = Object.fromEntries(
-      Object.entries(JSON.parse(jsonFile.toString()) as GitHubMatrixGroup).map(([sample, value]) => [
-        sample,
-        { ...value, 'samples-group': group },
-      ]),
-    );
+    samples = jsonSamplesGroupOf(group, (await readFile(join(samplesGroupFolder, `${group}.json`))).toString());
   } else if (samplesFolderContent.includes(group)) {
     samples = getGithubSamplesFolderGroup(samplesGroupFolder, group);
   }
-  const unknownProperties = getUnknownGitHubMatrixGroupProperties(samples);
-  if (unknownProperties.length) {
-    warnings.push(`Unknown properties in ${group}: ${unknownProperties.join(', ')}`);
+  return { samples, warnings: samplesGroupWarnings(group, samples) };
+};
+
+/**
+ * The samples of a group, read synchronously, like getGithubSamplesGroup: its `.js` or `.ts` module is loaded with
+ * require, which Node does for an ES module without top-level await, so a group awaiting at its top level fails with
+ * ERR_REQUIRE_ASYNC_MODULE. For the tools that cannot await, like the support module of a `.blueprint`, which
+ * yeoman-environment loads with require.
+ */
+export const getGithubSamplesGroupSync = (
+  samplesGroupFolder: string,
+  group: string,
+): { samples: GitHubMatrixGroup; warnings: string[] } => {
+  assertGroupInFolder(samplesGroupFolder, group);
+  let samples: GitHubMatrixGroup = {};
+  const samplesFolderContent = getGithubSamplesGroupsSync(samplesGroupFolder, true);
+  const groupExt = samplesGroupExtension(samplesFolderContent, group);
+  if (groupExt === 'js' || groupExt === 'ts') {
+    const jsGroup = requireGroup(join(samplesGroupFolder, `${group}.${groupExt}`)) as { default?: GitHubMatrixGroup };
+    // A module without default export defines no sample.
+    samples = githubSamplesGroupOf(group, jsGroup.default);
+  } else if (groupExt === 'json') {
+    samples = jsonSamplesGroupOf(group, readFileSync(join(samplesGroupFolder, `${group}.json`)).toString());
+  } else if (samplesFolderContent.includes(group)) {
+    samples = getGithubSamplesFolderGroup(samplesGroupFolder, group);
   }
-  return { samples, warnings };
+  return { samples, warnings: samplesGroupWarnings(group, samples) };
 };
 
 export type GithubSample = { group: string; sample: GitHubMatrixGroup[string] };
