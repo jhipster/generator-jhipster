@@ -96,7 +96,7 @@ Please ensure to run `npm run lint` and `npm test` on the project root before su
 
 ## <a name="commit"></a> Git Commit Guidelines
 
-We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://help.github.com/articles/about-git-rebase/#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
+We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://docs.github.com/en/get-started/using-git/about-git-rebase#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
 
 If the commit only involves documentation changes you can skip the continuous integration pipelines using `[ci skip]` or `[skip ci]` in your commit message header.
 
@@ -134,7 +134,7 @@ The Body should include the motivation for the change and contrast this with pre
 
 The footer is the place to reference GitHub issues that this commit **Closes**.
 
-You **must** use the [GitHub keywords](https://help.github.com/articles/closing-issues-via-commit-messages) for
+You **must** use the [GitHub keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) for
 automatically closing the issues referenced in your commit.
 
 ### Example
