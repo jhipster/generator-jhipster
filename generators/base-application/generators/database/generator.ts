@@ -19,7 +19,7 @@
 import BaseApplicationGenerator from '../../index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
-import { hibernateSnakeCase } from './support/index.ts';
+import { hibernateSnakeCase, prepareRelationshipForDatabase } from './support/index.ts';
 import type { Application as DatabaseApplication } from './types.d.ts';
 
 /**
@@ -45,6 +45,14 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
         applicationDefaults({
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
         });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationshipForDatabase({ application, entity, relationship }) {
+        prepareRelationshipForDatabase({ application: application as any, entity: entity as any, relationship });
       },
     });
   }

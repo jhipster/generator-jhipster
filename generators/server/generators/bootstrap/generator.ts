@@ -175,8 +175,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ application, entity, relationship }) {
-        prepareRelationship({ application, entity, relationship });
+      prepareRelationship({ relationship }) {
+        prepareRelationship({ relationship });
       },
     });
   }
