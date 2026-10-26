@@ -18,9 +18,9 @@
   "devDependencies": {
     "@angular-architects/native-federation": "22.2.3",
     "@angular-builders/custom-esbuild": "22.0.1",
-    "@angular-devkit/architect": "0.2202.3",
-    "@angular/build": "22.2.3",
-    "@angular/cli": "22.2.3",
+    "@angular-devkit/architect": "0.2202.4",
+    "@angular/build": "22.2.4",
+    "@angular/cli": "22.2.4",
     "@eslint/js": "10.0.1",
     "@softarc/native-federation-orchestrator": "4.8.0",
     "@stylistic/eslint-plugin": "5.10.0",
