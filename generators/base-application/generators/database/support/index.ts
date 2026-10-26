@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export { default as prepareSqlApplicationProperties } from './application-properties.ts';
+export { default as getDatabaseUrl, getJdbcUrl, getR2dbcUrl } from './database-url.ts';
 export {
   type DatabaseData,
   type DatabaseDataSpec,
