@@ -476,14 +476,16 @@ export default class BaseApplicationGenerator<
    */
   asConfiguringEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['ConfiguringEachEntityTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['LoadingEntitiesTaskParam']>>>(taskGroup: T): TaskGroup {
+  asLoadingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['LoadingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -492,7 +494,7 @@ export default class BaseApplicationGenerator<
    */
   asPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -501,7 +503,7 @@ export default class BaseApplicationGenerator<
    */
   asPreparingEachEntityFieldTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityFieldTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -510,7 +512,7 @@ export default class BaseApplicationGenerator<
    */
   asPreparingEachEntityRelationshipTaskGroup<
     T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityRelationshipTaskParam']>>,
-  >(taskGroup: T): TaskGroup {
+  >(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -519,14 +521,16 @@ export default class BaseApplicationGenerator<
    */
   asPostPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostPreparingEachEntityTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['WritingEntitiesTaskParam']>>>(taskGroup: T): TaskGroup {
+  asWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['WritingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -535,7 +539,7 @@ export default class BaseApplicationGenerator<
    */
   asPostWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostWritingEntitiesTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 

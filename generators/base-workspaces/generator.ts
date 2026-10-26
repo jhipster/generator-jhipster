@@ -246,7 +246,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asPromptingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -255,7 +255,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asConfiguringWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -264,7 +264,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asLoadingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -273,7 +273,7 @@ export default abstract class BaseWorkspacesGenerator<
    */
   asPreparingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingWorkspacesTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 }

@@ -315,7 +315,7 @@ export default class CoreGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asAnyTaskGroup<const T extends Record<string, GenericTask<this, any>>>(taskGroup: T): TaskGroup {
+  asAnyTaskGroup<const T extends Record<string, GenericTask<this, any>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 

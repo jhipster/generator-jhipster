@@ -178,7 +178,7 @@ export default class BaseSimpleApplicationGenerator<
    */
   asBootstrapApplicationTaskGroup<const T extends Record<string, GenericTask<this, Tasks['BootstrapApplicationTaskParam']>>>(
     taskGroup: T,
-  ): TaskGroup {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 }
