@@ -124,6 +124,9 @@ export const getGithubSamplesGroup = async (
  * require, which Node does for an ES module without top-level await, so a group awaiting at its top level fails with
  * ERR_REQUIRE_ASYNC_MODULE. For the tools that cannot await, like the support module of a `.blueprint`, which
  * yeoman-environment loads with require.
+ *
+ * Such a group takes the whole reading with it, not only itself: a caller that reads every group of a folder as its
+ * module is loaded, as the support of the build matrix does, gets no group at all, and the matrix of the CI with them.
  */
 export const getGithubSamplesGroupSync = (
   samplesGroupFolder: string,
