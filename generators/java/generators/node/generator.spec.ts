@@ -78,7 +78,7 @@ describe(`generator - ${generator}`, () => {
     ['angular', 'TESTS-results-sonar-vitest.xml', 'outputs.file("build/test-results/lcov.info")'],
     ['react', 'TESTS-results-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],
     ['vue', 'TESTS-results-vitest.xml', 'outputs.dir("build/vite-coverage/")'],
-  ]) {
+  ] as const) {
     describe(`with gradle build tool and ${clientFramework}`, () => {
       before(async () => {
         await helpers
