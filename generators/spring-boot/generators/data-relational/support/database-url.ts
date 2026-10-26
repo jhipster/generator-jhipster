@@ -16,67 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { databaseTypes } from '../../../../../lib/jhipster/index.ts';
-
-import databaseData, { type getData } from './database-data.ts';
-
-const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_DISK, H2_MEMORY } = databaseTypes;
-
-type DatabaseUrlOptions = Parameters<getData>[0] & { databaseName?: string; hostname?: string; skipExtraOptions?: boolean };
-
-export default function getDatabaseUrl(databaseType: string, protocol: 'r2dbc' | 'jdbc', options: DatabaseUrlOptions = {}): string {
-  if (!protocol) {
-    throw new Error('protocol is required');
-  }
-  const { databaseName, hostname, skipExtraOptions } = options;
-  if (!databaseName) {
-    throw new Error("option 'databaseName' is required");
-  }
-  if (([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL] as string[]).includes(databaseType) && !hostname) {
-    throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
-  } else if (!([MYSQL, MARIADB, POSTGRESQL, ORACLE, MSSQL, H2_DISK, H2_MEMORY] as string[]).includes(databaseType)) {
-    throw new Error(`${databaseType} databaseType is not supported`);
-  }
-  let databaseDataForType = databaseData[databaseType];
-  if (databaseDataForType[protocol]) {
-    databaseDataForType = {
-      ...databaseDataForType,
-      ...databaseDataForType[protocol],
-    };
-  }
-  if (databaseDataForType.getData) {
-    databaseDataForType = {
-      ...databaseDataForType,
-      ...databaseDataForType.getData(options),
-    };
-  }
-  const { port = '', protocolSuffix = '', extraOptions = '', localDirectory = options.localDirectory } = databaseDataForType;
-  let url = `${protocol}:${protocolSuffix}`;
-  if (hostname || localDirectory) {
-    url = `${url}${localDirectory || hostname + port}${databaseName}`;
-  } else {
-    url = `${url}${databaseName}${port}`;
-  }
-  return `${url}${skipExtraOptions ? '' : extraOptions}`;
-}
-
 /**
- * Returns the JDBC URL for a databaseType
- *
- * @param databaseType
- * @param options
+ * @deprecated moved to `jhipster:base-application:database`; import it from
+ * `generators/base-application/generators/database/support`.
  */
-export function getJdbcUrl(databaseType: string, options?: DatabaseUrlOptions) {
-  return getDatabaseUrl(databaseType, 'jdbc', options);
-}
-
-/**
- * Returns the R2DBC URL for a databaseType
- *
- * @param databaseType
- * @param options
- */
-export function getR2dbcUrl(databaseType: string, options?: DatabaseUrlOptions) {
-  return getDatabaseUrl(databaseType, 'r2dbc', options);
-}
+export { default, getJdbcUrl, getR2dbcUrl } from '../../../../base-application/generators/database/support/database-url.ts';

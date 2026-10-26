@@ -29,6 +29,8 @@ import {
   mutateRelationship as mutateBaseApplicationRelationship,
   mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
 } from '../base-application/entity.ts';
+import { default as prepareSqlApplicationProperties } from '../base-application/generators/database/support/application-properties.ts';
+import { getJdbcUrl } from '../base-application/generators/database/support/database-url.ts';
 import {
   loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
@@ -46,7 +48,6 @@ import { prepareEntity as prepareEntityForServer } from '../java/support/index.t
 import type { MavenProperty } from '../java-simple-application/generators/maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
 import type { Entity as ServerEntity } from '../server/types.ts';
-import { getJdbcUrl, prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-boot/generators/data-relational/types.ts';
 
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
