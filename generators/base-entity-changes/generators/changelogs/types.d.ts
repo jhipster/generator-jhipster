@@ -38,7 +38,10 @@ export type EntityChangelogObject = ApplicationObjectConfig & {
   changedFields?: string[];
   addedRelationships?: string[];
   removedRelationships?: string[];
-  changedRelationships?: string[];
+  /** The relationships changed in their type, their other entity or their side: their foreign key or join table recreated. */
+  recreatedRelationships?: string[];
+  /** The relationships changed only in their other properties, like onDelete and onUpdate. */
+  optionsChangedRelationships?: string[];
   /** Written by hand, never by the generator: the fields the changelog renames, from their former name to their new one. */
   renamedFields?: Record<string, string>;
   /** Written by hand, never by the generator: the relationships the changelog renames, from their former name to their new one. */

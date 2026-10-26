@@ -30,6 +30,8 @@ export const CHANGELOGS_CUSTOM_OBJECT = 'changelogs';
 const CONTEXT_DATA_CHANGELOGS_KEY = 'jhipster:base-entity-changes:changelogs';
 /** The names of the changelogs of the changes this generation brings, shared like the changelogs. */
 const CONTEXT_DATA_NEW_CHANGELOGS_KEY = 'jhipster:base-entity-changes:new-changelogs';
+/** Whether the application had changelogs before this generation, shared like the changelogs. */
+const CONTEXT_DATA_FORMER_CHANGELOGS_KEY = 'jhipster:base-entity-changes:former-changelogs';
 
 type Generator = BaseApplicationGenerator<any, any, any, any, any, any, any>;
 
@@ -46,6 +48,22 @@ const diffItems = (before: Record<string, any>[] = [], after: Record<string, any
       name => beforeByName.has(name) && !isDeepStrictEqual(beforeByName.get(name), afterByName.get(name)),
     ),
   };
+};
+
+/** The properties of a relationship whose change recreates it: its foreign key or its join table. */
+const RECREATING_RELATIONSHIP_PROPERTIES = ['relationshipType', 'otherEntityName', 'relationshipSide'];
+
+/**
+ * The changed relationships split into the ones to recreate, changed in their type, their other entity or their side, and
+ * the ones changed only in their other properties, like onDelete and onUpdate.
+ */
+const splitChangedRelationships = (before: Record<string, any>[] = [], after: Record<string, any>[] = [], changed: string[]) => {
+  const beforeByName = new Map(before.map(relationship => [relationship.relationshipName as string, relationship]));
+  const afterByName = new Map(after.map(relationship => [relationship.relationshipName as string, relationship]));
+  const recreated = changed.filter(name =>
+    RECREATING_RELATIONSHIP_PROPERTIES.some(property => beforeByName.get(name)![property] !== afterByName.get(name)![property]),
+  );
+  return { recreated, optionsChanged: changed.filter(name => !recreated.includes(name)) };
 };
 
 /**
@@ -109,8 +127,11 @@ const formerEntities = (generator: Generator): { name: string; definition: Entit
     .map(({ name, path }) => ({ name, definition: JSON.parse(readFileSync(path, 'utf8')) as EntityConfig }))
     .filter(({ definition }) => !definition.builtIn);
 
+const formerChangelogs = (generator: Generator): boolean =>
+  generator.getContextData<boolean>(CONTEXT_DATA_FORMER_CHANGELOGS_KEY, { factory: () => findChangelogs(generator).length > 0 });
+
 const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
-  if (findChangelogs(generator).length === 0) {
+  if (!formerChangelogs(generator)) {
     // A project without changelogs: the ones creating its entities, as its files on the disk declare them.
     for (const { name, definition } of formerEntities(generator)) {
       record(
@@ -146,6 +167,7 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
     } else if (!isDeepStrictEqual(normalizeEntity(last.entity!), entity)) {
       const fields = diffItems(last.entity!.fields, entity.fields, 'fieldName');
       const relationships = diffItems(last.entity!.relationships, entity.relationships, 'relationshipName');
+      const changedRelationships = splitChangedRelationships(last.entity!.relationships, entity.relationships, relationships.changed);
       record(generator, {
         operation: 'update',
         entityName: name,
@@ -156,7 +178,8 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
         changedFields: fields.changed,
         addedRelationships: relationships.added,
         removedRelationships: relationships.removed,
-        changedRelationships: relationships.changed,
+        recreatedRelationships: changedRelationships.recreated,
+        optionsChangedRelationships: changedRelationships.optionsChanged,
       });
     }
   }
@@ -184,6 +207,15 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
  */
 export const getEntityChangelogs = (generator: Generator): EntityChangelogObject[] =>
   generator.getContextData<EntityChangelogObject[]>(CONTEXT_DATA_CHANGELOGS_KEY, { factory: () => recordChangelogs(generator) });
+
+/**
+ * Whether the application had changelogs before this generation: without them, the changelogs creating its entities are
+ * recorded from its \`.jhipster\` files, entities a migration never created.
+ */
+export const hasFormerEntityChangelogs = (generator: Generator): boolean => {
+  getEntityChangelogs(generator);
+  return formerChangelogs(generator);
+};
 
 /**
  * Whether a changelog is one of a change this generation brings, recorded by it: the changelogs to write the migrations

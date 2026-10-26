@@ -20,7 +20,7 @@ import { before, describe, expect, it } from 'expect-node';
 import { basename, join, resolve } from 'node:path';
 
 import Generator from './generator.ts';
-import { isNewEntityChangelog } from './support/index.ts';
+import { hasFormerEntityChangelogs, isNewEntityChangelog } from './support/index.ts';
 
 import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, result } from '#testing';
@@ -47,6 +47,10 @@ describe(`generator - ${generator}`, () => {
 
     it('tells it is a changelog of this generation', () => {
       expect(isNewEntityChangelog(result.generator as Generator, { changelogDate: '20200101000100', entityName: 'Order' })).toBe(true);
+    });
+
+    it('tells the application had no changelogs', () => {
+      expect(hasFormerEntityChangelogs(result.generator as Generator)).toBe(false);
     });
 
     it('records the changelog creating it, at its changelog date', () => {
@@ -86,6 +90,10 @@ describe(`generator - ${generator}`, () => {
       expect(isNewEntityChangelog(result.generator as Generator, { changelogDate: '20200101000100', entityName: 'Order' })).toBe(false);
     });
 
+    it('tells the application had no changelogs', () => {
+      expect(hasFormerEntityChangelogs(result.generator as Generator)).toBe(false);
+    });
+
     it('records the changelogs creating them, from the disk', () => {
       expect(changelogObjects()['20200101000100_Order']).toMatchObject({ operation: 'create', entityName: 'Order' });
       expect(Object.keys(changelogObjects())).toHaveLength(1);
@@ -121,6 +129,10 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
+    it('tells the application had changelogs', () => {
+      expect(hasFormerEntityChangelogs(result.generator as Generator)).toBe(true);
+    });
+
     it('records a changelog of the changes, the recorded one kept', () => {
       const objects = changelogObjects();
       expect(Object.keys(objects)).toHaveLength(2);
@@ -133,9 +145,56 @@ describe(`generator - ${generator}`, () => {
         changedFields: ['code'],
         addedRelationships: [],
         removedRelationships: [],
-        changedRelationships: [],
+        recreatedRelationships: [],
+        optionsChangedRelationships: [],
       });
       expect(update.changelogDate > '20200101000100').toBe(true);
+    });
+  });
+
+  describe('with relationships changed after its changelog', () => {
+    const customer = { name: 'Customer', changelogDate: '20200101000000', fields: [], relationships: [] };
+    const relationship = (relationshipName: string, options: Record<string, any> = {}) => ({
+      relationshipName,
+      otherEntityName: 'customer',
+      relationshipType: 'many-to-one' as const,
+      ...options,
+    });
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({}, [
+          customer,
+          {
+            ...order,
+            relationships: [
+              relationship('buyer', { relationshipType: 'one-to-one' as const }),
+              relationship('seller', { options: { onDelete: 'CASCADE' } }),
+            ],
+          },
+        ])
+        .withYoRcConfig('objects', {
+          '20200101000000_Customer': {
+            type: 'changelog',
+            operation: 'create',
+            entityName: 'Customer',
+            changelogDate: '20200101000000',
+            entity: customer,
+          },
+          '20200101000100_Order': {
+            type: 'changelog',
+            operation: 'create',
+            entityName: 'Order',
+            changelogDate: '20200101000100',
+            entity: { ...order, relationships: [relationship('buyer'), relationship('seller')] },
+          },
+        });
+    });
+
+    it('tells the relationships to recreate from the ones changed only in their options', () => {
+      const update = Object.values(changelogObjects()).find(object => object.operation === 'update');
+      expect(update).toMatchObject({ recreatedRelationships: ['buyer'], optionsChangedRelationships: ['seller'] });
     });
   });
 

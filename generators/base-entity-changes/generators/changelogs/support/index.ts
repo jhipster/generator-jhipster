@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { CHANGELOGS_CUSTOM_OBJECT, getEntityChangelogs, isNewEntityChangelog } from './changelogs.ts';
+export { CHANGELOGS_CUSTOM_OBJECT, getEntityChangelogs, hasFormerEntityChangelogs, isNewEntityChangelog } from './changelogs.ts';
 export type { ChangelogOperation, EntityChangelogObject } from '../types.ts';
