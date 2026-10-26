@@ -16,5 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export {
+  type DatabaseData,
+  type DatabaseDataSpec,
+  default as databaseData,
+  getDBCExtraOption,
+  type getData,
+  getDatabaseData,
+} from './database-data.ts';
 export * from './database-type.ts';
+export * from './naming.ts';
 export * from './string.ts';
