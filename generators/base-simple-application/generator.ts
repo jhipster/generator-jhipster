@@ -22,7 +22,7 @@ import { getConfigWithDefaults } from '../../lib/jhipster/default-application-op
 import { createDelayedMutationContext, droppedMutationMessage, mutateData } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { POST_WRITING_OBJECTS, PRIORITY_NAMES, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
-import type { GenericTask } from '../base-core/types.ts';
+import type { GenericTask, TaskGroup } from '../base-core/types.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
 import { sanitizeConfigForNodeApplications } from './support/config-hardening.ts';
@@ -178,7 +178,7 @@ export default class BaseSimpleApplicationGenerator<
    */
   asBootstrapApplicationTaskGroup<const T extends Record<string, GenericTask<this, Tasks['BootstrapApplicationTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['BootstrapApplicationTaskParam']>> {
+  ): TaskGroup {
     return taskGroup;
   }
 }

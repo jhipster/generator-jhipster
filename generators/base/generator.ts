@@ -393,9 +393,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInitializingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InitializingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['InitializingTaskParam']>> {
+  asInitializingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InitializingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -411,9 +409,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PromptingTaskParam']>> {
+  asPromptingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -429,9 +425,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringTaskParam']>> {
+  asConfiguringTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -447,9 +441,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ComposingTaskParam']>> {
+  asComposingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -465,9 +457,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingComponentTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ComposingTaskParam']>> {
+  asComposingComponentTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -484,9 +474,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['LoadingTaskParam']>> {
+  asLoadingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -505,7 +493,7 @@ export default class BaseGenerator<
    */
   asComposingBootstrapTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingBootstrapTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ComposingBootstrapTaskParam']>> {
+  ): TaskGroup {
     return taskGroup;
   }
 
@@ -521,9 +509,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PreparingTaskParam']>> {
+  asPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -539,9 +525,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostPreparingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostPreparingTaskParam']>> {
+  asPostPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostPreparingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -557,9 +541,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asDefaultTaskGroup<const T extends Record<string, GenericTask<this, Tasks['DefaultTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['DefaultTaskParam']>> {
+  asDefaultTaskGroup<const T extends Record<string, GenericTask<this, Tasks['DefaultTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -575,9 +557,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>> {
+  asWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -593,9 +573,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostWritingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>> {
+  asPostWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostWritingTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -605,8 +583,8 @@ export default class BaseGenerator<
    */
   asWritingObjectsTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam'] & CustomObjectsOf<this>>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>> {
-    return taskGroup as unknown as Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>>;
+  ): TaskGroup {
+    return taskGroup;
   }
 
   /**
@@ -615,8 +593,8 @@ export default class BaseGenerator<
    */
   asPostWritingObjectsTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostWritingTaskParam'] & CustomObjectsOf<this>>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>> {
-    return taskGroup as unknown as Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>>;
+  ): TaskGroup {
+    return taskGroup;
   }
 
   /**
@@ -631,9 +609,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InstallTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['InstallTaskParam']>> {
+  asInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InstallTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -649,9 +625,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostInstallTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostInstallTaskParam']>> {
+  asPostInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostInstallTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
@@ -667,9 +641,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asEndTaskGroup<const T extends Record<string, GenericTask<this, Tasks['EndTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['EndTaskParam']>> {
+  asEndTaskGroup<const T extends Record<string, GenericTask<this, Tasks['EndTaskParam']>>>(taskGroup: T): TaskGroup {
     return taskGroup;
   }
 
