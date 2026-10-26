@@ -50,7 +50,7 @@
     "sass": "1.70.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.0",
-    "vite": "8.3.4",
+    "vite": "8.3.5",
     "vite-plugin-static-copy": "4.1.1",
     "vitest": "5.0.5",
     "vitest-sonar-reporter": "3.0.0"
