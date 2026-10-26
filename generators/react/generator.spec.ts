@@ -131,6 +131,11 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_REACT/);
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_VUE/);
       });
+      if (sampleConfig.applicationType === 'microservice') {
+        it('should share application modules by absolute path', () => {
+          runResult.assertFileContent(`${clientRootDir}module-federation.config.ts`, 'import: fileURLToPath(new URL(`./');
+        });
+      }
 
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
