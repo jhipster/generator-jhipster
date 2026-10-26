@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /**
- * @deprecated moved to `jhipster:base-application:database`; import it from
- * `generators/base-application/generators/database/support`.
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`; import it from
+ * `generators/base-application/generators/database-bootstrap/support`.
  */
-export { default, getJdbcUrl, getR2dbcUrl } from '../../../../base-application/generators/database/support/database-url.ts';
+export { default, getJdbcUrl, getR2dbcUrl } from '../../../../base-application/generators/database-bootstrap/support/database-url.ts';

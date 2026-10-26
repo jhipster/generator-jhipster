@@ -22,10 +22,14 @@ import { databaseTypes } from '../../../lib/jhipster/index.ts';
 const { SQL } = databaseTypes;
 
 /**
- * @deprecated moved to `jhipster:base-application:database`; import them from
- * `generators/base-application/generators/database/support`.
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`; import them from
+ * `generators/base-application/generators/database-bootstrap/support`.
  */
-export { type DatabaseTypeData, databaseTypeData, getDatabaseTypeData } from '../../base-application/generators/database/support/index.ts';
+export {
+  type DatabaseTypeData,
+  databaseTypeData,
+  getDatabaseTypeData,
+} from '../../base-application/generators/database-bootstrap/support/index.ts';
 
 export const R2DBC_DB_OPTIONS = [
   {
@@ -81,8 +85,8 @@ export function getDBTypeFromDBValue(db: string): string {
 }
 
 /**
- * @deprecated moved to `jhipster:base-application:database`; import them from
- * `generators/base-application/generators/database/support`.
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`; import them from
+ * `generators/base-application/generators/database-bootstrap/support`.
  */
 export {
   calculateDbName,
@@ -90,4 +94,4 @@ export {
   getFKConstraintName,
   getJoinTableName,
   getUXConstraintName,
-} from '../../base-application/generators/database/support/index.ts';
+} from '../../base-application/generators/database-bootstrap/support/index.ts';

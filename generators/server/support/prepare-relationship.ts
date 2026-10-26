@@ -22,10 +22,10 @@ import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/suppor
 import type { Relationship as ServerRelationship } from '../types.ts';
 
 /**
- * @deprecated moved to `jhipster:base-application:database`, which prepares it as a task; import it from
- * `generators/base-application/generators/database/support`.
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`, which prepares it as a task; import it from
+ * `generators/base-application/generators/database-bootstrap/support`.
  */
-export { prepareRelationshipForDatabase } from '../../base-application/generators/database/support/index.ts';
+export { prepareRelationshipForDatabase } from '../../base-application/generators/database-bootstrap/support/index.ts';
 
 export function prepareRelationship({ relationship }: { relationship: ServerRelationship }) {
   if (relationship.documentation) {

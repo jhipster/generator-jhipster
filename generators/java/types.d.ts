@@ -3,7 +3,7 @@ import type {
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
 } from '../../lib/command/index.ts';
-import type { Application as DatabaseApplication } from '../base-application/generators/database/types.d.ts';
+import type { Application as DatabaseApplication } from '../base-application/generators/database-bootstrap/types.d.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,

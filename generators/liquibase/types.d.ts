@@ -4,7 +4,7 @@ import type {
   DatabaseField,
   DatabaseProperty,
   DatabaseRelationship,
-} from '../base-application/generators/database/types.d.ts';
+} from '../base-application/generators/database-bootstrap/types.d.ts';
 import type {
   Config as BaseEntityChangesConfig,
   Entity as BaseEntityChangesEntity,
@@ -39,15 +39,15 @@ export type LiquibaseSourceType = BaseEntityChangesSource & {
 export type Source = LiquibaseSourceType & JavaSource;
 
 /**
- * @deprecated moved to `jhipster:base-application:database`; import them from
- * `generators/base-application/generators/database/types.d.ts`.
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`; import them from
+ * `generators/base-application/generators/database-bootstrap/types.d.ts`.
  */
 export type {
   DatabaseEntity,
   DatabaseField,
   DatabaseProperty,
   DatabaseRelationship,
-} from '../base-application/generators/database/types.d.ts';
+} from '../base-application/generators/database-bootstrap/types.d.ts';
 
 type Property = {
   liquibaseGenerateFakeData?: boolean;

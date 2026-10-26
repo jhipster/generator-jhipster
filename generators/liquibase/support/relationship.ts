@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../lib/utils/index.ts';
-import { getFKConstraintName, prepareRelationshipForDatabase } from '../../base-application/generators/database/support/index.ts';
+import { getFKConstraintName, prepareRelationshipForDatabase } from '../../base-application/generators/database-bootstrap/support/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Relationship as LiquibaseRelationship } from '../types.ts';
 
 function relationshipBaseDataEquals(relationshipA: LiquibaseRelationship, relationshipB: LiquibaseRelationship) {

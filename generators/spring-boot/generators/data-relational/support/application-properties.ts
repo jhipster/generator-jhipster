@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /**
- * @deprecated moved to `jhipster:base-application:database`; import it from
- * `generators/base-application/generators/database/support`.
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`; import it from
+ * `generators/base-application/generators/database-bootstrap/support`.
  */
-export { default } from '../../../../base-application/generators/database/support/application-properties.ts';
+export { default } from '../../../../base-application/generators/database-bootstrap/support/application-properties.ts';

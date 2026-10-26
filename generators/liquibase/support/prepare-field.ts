@@ -24,7 +24,7 @@ import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
 import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { mutateData } from '../../../lib/utils/index.ts';
 import { escape } from '../../../lib/utils/string-utils.ts';
-import { prepareFieldForDatabase } from '../../base-application/generators/database/support/index.ts';
+import { prepareFieldForDatabase } from '../../base-application/generators/database-bootstrap/support/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Field as LiquibaseField } from '../types.d.ts';
 
 import formatAsLiquibaseRemarks from './formatting.ts';

@@ -29,8 +29,8 @@ import {
   mutateRelationship as mutateBaseApplicationRelationship,
   mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
 } from '../base-application/entity.ts';
-import { default as prepareSqlApplicationProperties } from '../base-application/generators/database/support/application-properties.ts';
-import { getJdbcUrl } from '../base-application/generators/database/support/database-url.ts';
+import { default as prepareSqlApplicationProperties } from '../base-application/generators/database-bootstrap/support/application-properties.ts';
+import { getJdbcUrl } from '../base-application/generators/database-bootstrap/support/database-url.ts';
 import {
   loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,

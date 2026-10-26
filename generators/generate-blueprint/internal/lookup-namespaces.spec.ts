@@ -31,7 +31,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "base",
   "base-application",
   "base-application:bootstrap",
-  "base-application:database",
+  "base-application:database-bootstrap",
   "base-core",
   "base-entity-changes",
   "base-simple-application",

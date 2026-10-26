@@ -20,7 +20,7 @@
 import { getEntityDerivedPropertyMutations } from '../../../../lib/command/mutations.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { upperFirst } from '../../../../lib/utils/string-utils.ts';
-import prepareSqlApplicationProperties from '../../../base-application/generators/database/support/application-properties.ts';
+import prepareSqlApplicationProperties from '../../../base-application/generators/database-bootstrap/support/application-properties.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';
@@ -50,7 +50,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
     await this.dependsOnBootstrap('common');
     // The database preparation the backend reads, composed before it so its tasks of a priority run first.
-    await this.dependsOnJHipster('jhipster:base-application:database');
+    await this.dependsOnJHipster('jhipster:base-application:database-bootstrap');
   }
 
   get composingBootstrap() {

@@ -25,7 +25,7 @@ import { type MutateDataParam, mutateData } from '../../../lib/utils/object.ts';
 import { formatDateForChangelog } from '../../base/support/timestamp.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../../generator-constants.ts';
 import type BaseApplicationGenerator from '../generator.ts';
-import { getDatabaseTypeData } from '../generators/database/support/index.ts';
+import { getDatabaseTypeData } from '../generators/database-bootstrap/support/index.ts';
 import { loadRequiredConfigIntoEntity } from '../support/index.ts';
 import type {
   Application as BaseApplicationApplication,

@@ -26,6 +26,6 @@
  */
 
 /**
- * @deprecated moved to `jhipster:base-application:database`; import it from `generators/base-application/generators/database/support`.
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`; import it from `generators/base-application/generators/database-bootstrap/support`.
  */
-export { hibernateSnakeCase } from '../../base-application/generators/database/support/index.ts';
+export { hibernateSnakeCase } from '../../base-application/generators/database-bootstrap/support/index.ts';
