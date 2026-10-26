@@ -130,7 +130,7 @@
     "@faker-js/faker": "10.6.0",
     "@types/ejs": "3.1.5",
     "@types/lodash-es": "4.17.12",
-    "@yeoman/adapter": "5.1.0",
+    "@yeoman/adapter": "5.1.1",
     "@yeoman/conflicter": "4.2.0",
     "@yeoman/namespace": "2.1.0",
     "@yeoman/transform": "2.1.2",
