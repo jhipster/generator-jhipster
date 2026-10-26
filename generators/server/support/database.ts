@@ -18,50 +18,19 @@
  */
 import crypto from 'node:crypto';
 
-import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import type { ValidationResult } from '../../base-core/api.d.ts';
 import databaseData from '../../spring-boot/generators/data-relational/support/database-data.ts';
 
 import { hibernateSnakeCase } from './string.ts';
 
-const dbTypes = fieldTypes;
-const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;
-const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
+const { SQL } = databaseTypes;
 
-type DatabaseTypeData = {
-  name: string;
-  defaultPrimaryKeyType: string;
-};
-
-const databaseTypeDataFallback: DatabaseTypeData = {
-  name: 'Unknown',
-  defaultPrimaryKeyType: TYPE_LONG,
-};
-
-export const databaseTypeData: Record<string, DatabaseTypeData> = {
-  [CASSANDRA]: {
-    name: 'Cassandra',
-    defaultPrimaryKeyType: TYPE_UUID,
-  },
-  [COUCHBASE]: {
-    name: 'Couchbase',
-    defaultPrimaryKeyType: TYPE_STRING,
-  },
-  [MONGODB]: {
-    name: 'MongoDB',
-    defaultPrimaryKeyType: TYPE_STRING,
-  },
-  [NEO4J]: {
-    name: 'Neo4j',
-    defaultPrimaryKeyType: TYPE_STRING,
-  },
-  [SQL]: {
-    name: 'SQL',
-    defaultPrimaryKeyType: TYPE_LONG,
-  },
-};
-
-export const getDatabaseTypeData = (databaseType: string): DatabaseTypeData => databaseTypeData[databaseType] ?? databaseTypeDataFallback;
+/**
+ * @deprecated moved to `jhipster:base-application:database`; import them from
+ * `generators/base-application/generators/database/support`.
+ */
+export { type DatabaseTypeData, databaseTypeData, getDatabaseTypeData } from '../../base-application/generators/database/support/index.ts';
 
 export const R2DBC_DB_OPTIONS = [
   {

@@ -32,11 +32,11 @@ import type CoreGenerator from '../../base-core/generator.ts';
 import { getTypescriptKeyType } from '../../client/support/index.ts';
 import type { Application as ClientApplication } from '../../client/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
-import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../spring-boot/types.ts';
 import { mutateEntity } from '../entity.ts';
+import { getDatabaseTypeData, hibernateSnakeCase } from '../generators/database/support/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
