@@ -24,6 +24,14 @@ import type { JDLApplicationConfig, JDLDefinitions } from '../../lib/jdl/core/pa
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
 
 /**
+ * The tasks of a priority, as a generator hands them to the environment. The name of each task and the type of its
+ * parameter are of no use to a consumer of the generator, and leaving them out of the declaration of every priority
+ * keeps the declaration of a generator small: a blueprint that compiles with `skipLibCheck: false` checks those
+ * declarations, and the structural type of a task parameter is large enough to exhaust the heap of the compiler.
+ */
+export type TaskGroup = Record<string, GenericTask<any, any>>;
+
+/**
  * The custom objects of a generator by name, with the type of their getters: the ones of the names it declares as the
  * `customObjectNames` type, the names of its `customObjects` feature:
  * `declare readonly customObjectNames: readonly ['service']`.

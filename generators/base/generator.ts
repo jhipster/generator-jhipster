@@ -33,7 +33,7 @@ import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import type { EditorMetadata } from '../base-core/api.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { CustomObjectsOf, GenericTask } from '../base-core/types.ts';
+import type { CustomObjectsOf, GenericTask, TaskGroup } from '../base-core/types.ts';
 import { isDockerComposeAvailable } from '../docker/support/check-docker.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
@@ -176,8 +176,8 @@ export default class BaseGenerator<
   /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
    */
-  delegateTasksToBlueprint<TaskGroupType>(tasksGetter: () => TaskGroupType): TaskGroupType {
-    return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();
+  delegateTasksToBlueprint<TaskGroupType extends TaskGroup>(tasksGetter: () => TaskGroupType): TaskGroup {
+    return this.delegateToBlueprint ? {} : tasksGetter();
   }
 
   /**
