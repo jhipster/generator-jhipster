@@ -547,7 +547,7 @@ describe(`generator - ${generator}`, () => {
   for (const [buildTool, command] of [
     ['maven', './mvnw -Pprod clean verify sonar:sonar'],
     ['gradle', './gradlew -Pprod clean check jacocoTestReport sonar'],
-  ]) {
+  ] as const) {
     describe(`README with ${buildTool}`, () => {
       before(async () => {
         await helpers.runJHipster('app').withJHipsterConfig({ buildTool, skipClient: true });
