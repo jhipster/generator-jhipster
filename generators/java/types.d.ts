@@ -3,6 +3,7 @@ import type {
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
 } from '../../lib/command/index.ts';
+import type { Application as DatabaseApplication } from '../base-application/generators/database/types.d.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -106,10 +107,6 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 export type Config = BaseApplicationConfig & JavaSimpleApplicationConfig & ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
 
 export type Options = BaseApplicationOptions & JavaSimpleApplicationOptions & ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
-
-type DatabaseApplication = {
-  jhiTablePrefix: string;
-};
 
 type SpringApplication = {
   generateSpringAuditor: boolean;

@@ -25,27 +25,7 @@
  * @returns hibernate SnakeCase in JHipster preferred style
  */
 
-export function hibernateSnakeCase(value: string): string {
-  let res = '';
-  if (value) {
-    if (value.length === 1) {
-      return value.toLowerCase();
-    }
-    value = value.replace('.', '_');
-    res = value[0];
-    for (let i = 1, len = value.length - 1; i < len; i++) {
-      if (
-        value[i - 1] !== value[i - 1].toUpperCase() &&
-        value[i] !== value[i].toLowerCase() &&
-        value[i + 1] !== value[i + 1].toUpperCase()
-      ) {
-        res += `_${value[i]}`;
-      } else {
-        res += value[i];
-      }
-    }
-    res += value.at(-1);
-    res = res.toLowerCase();
-  }
-  return res;
-}
+/**
+ * @deprecated moved to `jhipster:base-application:database`; import it from `generators/base-application/generators/database/support`.
+ */
+export { hibernateSnakeCase } from '../../base-application/generators/database/support/index.ts';

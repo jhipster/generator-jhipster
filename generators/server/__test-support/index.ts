@@ -63,6 +63,7 @@ export const filterBasicServerGenerators = (ns: string) => {
     !generator.startsWith('bootstrap') &&
     ![
       `jhipster:project-name`,
+      `jhipster:base-application:database`,
       `jhipster:java-simple-application:build-tool`,
       `jhipster:java-simple-application:gradle`,
       `jhipster:java`,

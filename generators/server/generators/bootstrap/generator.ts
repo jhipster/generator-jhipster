@@ -49,6 +49,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     }
 
     await this.dependsOnBootstrap('common');
+    // The database preparation the backend reads, composed before it so its tasks of a priority run first.
+    await this.dependsOnJHipster('jhipster:base-application:database');
   }
 
   get composingBootstrap() {
@@ -91,11 +93,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         if (application.entitySuffix === application.dtoSuffix) {
           throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equal!');
         }
-      },
-      prepareForTemplates({ applicationDefaults }) {
-        applicationDefaults({
-          jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
-        });
       },
     });
   }

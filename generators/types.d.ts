@@ -52,6 +52,7 @@ type GeneratorsByNamespace = {
   'jhipster:app': import('./app/generator.ts').default;
   'jhipster:app:bootstrap': import('./app/generators/bootstrap/generator.ts').default;
   'jhipster:base-application:bootstrap': import('./base-application/generators/bootstrap/generator.ts').default;
+  'jhipster:base-application:database': import('./base-application/generators/database/generator.ts').default;
   'jhipster:base-simple-application:bootstrap': import('./base-simple-application/generators/bootstrap/generator.ts').default;
   'jhipster:base-workspaces:bootstrap': import('./base-workspaces/generators/bootstrap/generator.ts').default;
   bootstrap: import('./bootstrap/generator.ts').default;
