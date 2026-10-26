@@ -288,6 +288,20 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('oauth2 login url', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework, skipServer: true, authenticationType: 'oauth2' })
+        .withMockedGenerators(['jhipster:common']);
+    });
+
+    it('should navigate to the sign-in route by path', () => {
+      // react-router's navigate() treats a protocol-relative url as a path.
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/util/url-utils.ts`, "export const getLoginUrl = () => '/sign-in';");
+    });
+  });
+
   describe('addClientStyle needle api', () => {
     before(async () => {
       await helpers
