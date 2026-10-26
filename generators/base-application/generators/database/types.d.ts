@@ -16,6 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type {
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  Relationship as BaseApplicationRelationship,
+} from '../../types.d.ts';
+
 /**
  * The properties the preparation of the database adds to the application, whichever database it is.
  */
@@ -23,3 +29,31 @@ export type Application = {
   /** The prefix of the tables of JHipster itself, from `jhiPrefix`. */
   jhiTablePrefix: string;
 };
+
+/** What a relational database adds to a property of an entity, be it a field or a relationship. */
+export type DatabaseProperty = {
+  columnName?: string;
+  columnRequired?: boolean;
+  nullable?: boolean;
+};
+
+export type DatabaseField = BaseApplicationField & DatabaseProperty;
+
+export interface DatabaseRelationship extends BaseApplicationRelationship, DatabaseProperty {
+  shouldWriteJoinTable?: boolean;
+
+  joinTable?: {
+    name: string;
+    constraintName?: string;
+    otherConstraintName?: string;
+  };
+
+  joinColumnNames?: string[];
+}
+
+export interface DatabaseEntity<
+  F extends DatabaseField = DatabaseField,
+  R extends DatabaseRelationship = DatabaseRelationship,
+> extends BaseApplicationEntity<F, R> {
+  entityTableName: string;
+}
