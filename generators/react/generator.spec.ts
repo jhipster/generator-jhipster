@@ -139,7 +139,7 @@ describe(`generator - ${clientFramework}`, () => {
           runResult.assertNoFileContent(`${clientRootDir}module-federation.config.ts`, "'app/shared/reducers/locale'");
         });
         it('should not share application modules with the dev server', () => {
-          runResult.assertFileContent(`${clientRootDir}module-federation.config.ts`, '...(development ? {} : applicationModules),');
+          expect(runResult.getSnapshot('**/module-federation.config.ts')).toMatchSnapshot();
         });
       }
 
@@ -387,8 +387,7 @@ describe(`generator - ${clientFramework}`, () => {
     });
 
     it('should share application modules with the dev server too', () => {
-      runResult.assertFileContent('module-federation.config.ts', '...applicationModules,');
-      runResult.assertNoFileContent('module-federation.config.ts', 'development');
+      expect(runResult.getSnapshot('**/module-federation.config.ts')).toMatchSnapshot();
     });
   });
 });
