@@ -49,7 +49,9 @@ import org.hibernate.type.SqlTypes;
   <%_ if (field.fieldIsEnum) { _%>
     @Enumerated(EnumType.STRING)
   <%_ } _%>
-  <%_ if (field.fieldTypeBytes) { _%>
+  <%_ if (field.fieldTypeBytes && field.blobContentTypeText && prodDatabaseTypePostgresql) { _%>
+    @JdbcTypeCode(SqlTypes.LONGVARCHAR)
+  <%_ } else if (field.fieldTypeBytes) { _%>
     @Lob
   <%_ } _%>
   <%_ if (field.fieldTypeUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb)) { _%>
