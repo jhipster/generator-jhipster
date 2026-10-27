@@ -42,6 +42,10 @@ dependencies {
   implementation "org.liquibase.ext:liquibase-cassandra:${dependencyManagement.importedProperties['liquibase.version']}"
   implementation "org.springframework:spring-jdbc"
 <%_ } _%>
+<%_ if (!reactive && backendTypeSpringBoot) { _%>
+  // The diffLog activity's hibernate:spring reference reads the compiled entities.
+  liquibaseRuntime sourceSets.main.output
+<%_ } _%>
   // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
@@ -65,6 +69,8 @@ liquibase {
 <%_ } _%>
       logLevel "debug"
       classpath "<%- srcMainResources %>"
+      // Liquibase 5 resolves the changelog and its includes from the search path.
+      searchPath ".,<%- srcMainResources %>"
     }
     diffLog {
       driver "<%- devJdbcDriver %>"

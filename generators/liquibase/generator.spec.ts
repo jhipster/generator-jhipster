@@ -16,16 +16,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe } from 'expect-node';
+import { before, describe, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import Generator from './generator.ts';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('with gradle', () => {
+    before(async () => {
+      await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'gradle', skipClient: true });
+    });
+
+    it('should find the changelogs and the entities for the gradle tasks', () => {
+      runResult.assertFileContent('gradle/liquibase.gradle', 'searchPath ".,src/main/resources/"');
+      runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime sourceSets.main.output');
+      runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime "org.liquibase.ext:liquibase-hibernate7:');
+    });
+  });
 });
