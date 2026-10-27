@@ -16,19 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import MenuItem from 'app/shared/layout/menus/menu-item';
 <%_ if (authenticationTypeOauth2) { _%>
 import { DropdownItem } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 <%_ } _%>
 import { Translate, translate } from 'react-jhipster';
 <%_ if (authenticationTypeOauth2) { _%>
-import { getLoginUrl } from 'app/shared/util/url-utils';
-<%_ } _%>
-import { NavDropdown } from './menu-components';
-<%_ if (authenticationTypeOauth2) { _%>
 import { useLocation, useNavigate } from 'react-router';
 <%_ } _%>
+
+<%_ if (authenticationTypeOauth2) { _%>
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+<%_ } _%>
+
+import MenuItem from 'app/shared/layout/menus/menu-item';
+<%_ if (authenticationTypeOauth2) { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
+
+import { NavDropdown } from './menu-components';
 
 const accountMenuItemsAuthenticated = () => (
   <>

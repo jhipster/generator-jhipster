@@ -19,26 +19,28 @@
 import './header.scss';
 
 import { useEffect, useRef } from 'react';
-import { Translate<%- enableTranslation ? ', Storage' : '' %> } from 'react-jhipster';
 import {
-  Navbar,
   Nav,
+  Navbar,
 } from 'react-bootstrap';
+import { Translate<%- enableTranslation ? ', Storage' : '' %> } from 'react-jhipster';
+
 import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 
-import { Home, Brand } from './header-components';
-import {
-  AdminMenu,
-  EntitiesMenu,
-  AccountMenu,
-<%_ if (enableTranslation) { _%>
-  LocaleMenu,
-<%_ } _%>
-} from '../menus';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 <%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
+import {
+  AccountMenu,
+  AdminMenu,
+  EntitiesMenu,
+<%_ if (enableTranslation) { _%>
+  LocaleMenu,
+<%_ } _%>
+} from '../menus';
+
+import { Brand, Home } from './header-components';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;

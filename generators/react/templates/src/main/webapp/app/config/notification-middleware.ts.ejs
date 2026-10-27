@@ -19,11 +19,13 @@
 <%_ if (enableTranslation) { _%>
 import { translate } from 'react-jhipster';
 <%_ } _%>
-import { toast } from 'react-toastify';
-import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
+
 import { isAxiosError } from 'axios';
-import { FieldErrorVM, isProblemWithMessage } from 'app/shared/jhipster/problem-details';
+import { toast } from 'react-toastify';
+
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
+import { FieldErrorVM, isProblemWithMessage } from 'app/shared/jhipster/problem-details';
+import { isFulfilledAction, isRejectedAction } from 'app/shared/reducers/reducer.utils';
 
 type ToastMessage = {
   message?: string;

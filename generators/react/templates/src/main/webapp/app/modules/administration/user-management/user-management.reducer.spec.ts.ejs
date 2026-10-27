@@ -16,22 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { configureStore } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { configureStore } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+import { Authority } from 'app/shared/jhipster/constants';
+import { defaultValue } from 'app/shared/model/user.model';
+
 import userManagement, {
-  getUsers,
-  getUsersAsAdmin,
+  createUser,
+  deleteUser,
   getRoles,
   getUser,
-  createUser,
-  updateUser,
-  deleteUser,
+  getUsers,
+  getUsersAsAdmin,
   reset,
+  updateUser,
 } from './user-management.reducer';
-import { defaultValue } from 'app/shared/model/user.model';
-import { Authority } from 'app/shared/jhipster/constants';
 
 describe('User management reducer tests', () => {
   const username = process.env.E2E_USERNAME ?? 'admin';

@@ -17,29 +17,37 @@
  limitations under the License.
 -%>
 import { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
 import {
   Button,
-  Row,
   Col,
   FormText,
-  <%- anyFieldHasDocumentation ? 'OverlayTrigger, Tooltip,' : '' %>
+<%_ if (anyFieldHasDocumentation) { _%>
+  OverlayTrigger,
+<%_ } _%>
+  Row,
+<%_ if (anyFieldHasDocumentation) { _%>
+  Tooltip,
+<%_ } _%>
 } from 'react-bootstrap';
 import {
-  isNumber,
   Translate,
-  translate,
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+  ValidatedBlobField,
+<%_ } _%>
   ValidatedField,
   ValidatedForm,
-  <%- anyFieldHasFileBasedContentType ? 'ValidatedBlobField,' : '' %>
+  isNumber,
+  translate,
 } from 'react-jhipster';
+import { Link, useNavigate, useParams } from 'react-router';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipManyToMany) !== undefined) { _%>
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 <%_ const otherEntityActions = new Set(); _%>
 <%_ for (const otherEntity of otherEntitiesWithPersistableRelationship.filter(otherEntity => !otherEntity.embedded)) { _%>

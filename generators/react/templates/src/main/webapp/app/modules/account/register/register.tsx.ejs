@@ -16,17 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState, useEffect } from 'react';
-import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
-import { Row, Col, Alert, Button } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
+import { Translate, ValidatedField, ValidatedForm, isEmail, translate } from 'react-jhipster';
 import { Link } from 'react-router';
 
+import { toast } from 'react-toastify';
+
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 <%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
-import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
-import { useAppDispatch, useAppSelector } from 'app/config/store';
+
 import { handleRegister, reset } from './register.reducer';
 
 export const RegisterPage = () => {
