@@ -840,7 +840,7 @@ describe('generator - Kubernetes', () => {
           command,
           options,
         }))
-        .filter(({ command }) => command.startsWith('kubectl version'));
+        .filter(({ command }: { command: string }) => command.startsWith('kubectl version'));
     const kubectlWarnings = () =>
       (runResult.env.adapter.log as any).warn.mock.calls
         .map(({ arguments: [message] }: { arguments: [string] }) => message)
