@@ -751,11 +751,11 @@ class JHipsterTest<JHipsterTestGenerator extends YeomanGenerator = BaseCoreGener
     });
   }
 
-  async createEnv({ jhipsterStore, ...options }: JHipsterEnvironmentOptions): Promise<Environment> {
+  createEnv({ jhipsterStore, ...options }: JHipsterEnvironmentOptions): Promise<Environment> {
     // Only the generators of the test, unless it asks for the jhipster ones. The environment works on a clone of the
     // store: the environment options are passed on to the next run of a run result, the generators a run registers are not.
     const store = getJHipsterStore({ empty: !jhipsterStore });
-    return EnvironmentBuilder.create({ store, ...options }).getEnvironment();
+    return Promise.resolve(EnvironmentBuilder.create({ store, ...options }).getEnvironment());
   }
 }
 

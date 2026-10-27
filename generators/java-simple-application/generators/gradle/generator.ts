@@ -92,7 +92,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
           gradleVersion: this.useVersionPlaceholders ? 'GRADLE_VERSION' : this.gradleVersionFromWrapper,
         });
       },
-      async verify({ application }) {
+      verify({ application }) {
         assert.equal(application.buildTool, GRADLE);
       },
       prepareConventionsPlugins({ applicationDefaults }) {

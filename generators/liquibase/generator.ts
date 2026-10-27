@@ -241,7 +241,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get default() {
     return this.asDefaultTaskGroup({
-      async calculateChangelogs({ application, entities, entityChanges }) {
+      calculateChangelogs({ application, entities, entityChanges }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog || !entityChanges) {
           return;
         }

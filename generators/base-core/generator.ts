@@ -384,13 +384,13 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       queueName: QUEUES.INITIALIZING_QUEUE,
       taskName: 'parseCurrentCommand',
       cancellable: true,
-      async method() {
+      method() {
         try {
-          await this.#getCurrentJHipsterCommand();
+          this.#getCurrentJHipsterCommand();
         } catch {
           return;
         }
-        await this.#parseCurrentJHipsterCommand();
+        this.#parseCurrentJHipsterCommand();
       },
     });
 
@@ -400,7 +400,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       cancellable: true,
       async method() {
         try {
-          const command = await this.#getCurrentJHipsterCommand();
+          const command = this.#getCurrentJHipsterCommand();
           if (!command.configs) return;
         } catch {
           return;
@@ -415,14 +415,14 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       queueName: QUEUES.CONFIGURING_QUEUE,
       taskName: 'configureCurrentCommand',
       cancellable: true,
-      async method() {
+      method() {
         try {
-          const command = await this.#getCurrentJHipsterCommand();
+          const command = this.#getCurrentJHipsterCommand();
           if (!command.configs) return;
         } catch {
           return;
         }
-        await this.#configureCurrentJHipsterCommandConfig();
+        this.#configureCurrentJHipsterCommandConfig();
       },
     });
 
@@ -432,7 +432,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       cancellable: true,
       async method() {
         try {
-          await this.#getCurrentJHipsterCommand();
+          this.#getCurrentJHipsterCommand();
         } catch {
           return;
         }
@@ -488,7 +488,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         try {
           const commandsToLoad = this.#commandsToLoad;
           if (!commandsToLoad.has(this.options.namespace)) {
-            const command = await this.#getCurrentJHipsterCommand();
+            const command = this.#getCurrentJHipsterCommand();
             if (command.configs) {
               commandsToLoad.add(this.options.namespace);
               directCommands.push(command);
@@ -518,7 +518,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       queueName: QUEUES.PREPARING_QUEUE,
       taskName: 'preparingCurrentCommand',
       cancellable: true,
-      async method() {
+      method() {
         mutateData(
           this.context,
           getCommandDefaultMutations(directCommandsMergedConfigs),
@@ -559,7 +559,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Get the current Command Definition for the generator.
    * `generatorCommand` takes precedence.
    */
-  async #getCurrentJHipsterCommand(): Promise<JHipsterCommandDefinition> {
+  #getCurrentJHipsterCommand(): JHipsterCommandDefinition {
     if (!this.generatorCommand) {
       const command = requireGeneratorCommand(this._meta);
       if (!command) {
@@ -575,8 +575,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Parse command definition arguments, options and configs.
    * Blueprints with command override takes precedence.
    */
-  async #parseCurrentJHipsterCommand() {
-    const generatorCommand = await this.#getCurrentJHipsterCommand();
+  #parseCurrentJHipsterCommand() {
+    const generatorCommand = this.#getCurrentJHipsterCommand();
     this.#parseJHipsterCommand(generatorCommand);
   }
 
@@ -585,7 +585,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Blueprints with command override takes precedence.
    */
   async #promptCurrentJHipsterCommand() {
-    const generatorCommand = await this.#getCurrentJHipsterCommand();
+    const generatorCommand = this.#getCurrentJHipsterCommand();
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
@@ -596,8 +596,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Configure the current JHipster command.
    * Blueprints with command override takes precedence.
    */
-  async #configureCurrentJHipsterCommandConfig() {
-    const generatorCommand = await this.#getCurrentJHipsterCommand();
+  #configureCurrentJHipsterCommandConfig() {
+    const generatorCommand = this.#getCurrentJHipsterCommand();
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
@@ -611,8 +611,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Load the current JHipster command storage configuration into the context.
    * Blueprints with command override takes precedence.
    */
-  async loadCurrentJHipsterCommandConfig(context: any) {
-    const generatorCommand = await this.#getCurrentJHipsterCommand();
+  loadCurrentJHipsterCommandConfig(context: any) {
+    const generatorCommand = this.#getCurrentJHipsterCommand();
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
@@ -626,7 +626,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Blueprints commands compose without generators will be composed.
    */
   async #composeCurrentJHipsterCommand() {
-    const generatorCommand = await this.#getCurrentJHipsterCommand();
+    const generatorCommand = this.#getCurrentJHipsterCommand();
     for (const compose of generatorCommand.compose ?? []) {
       await this.composeWithJHipster(compose);
     }
