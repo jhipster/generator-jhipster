@@ -230,7 +230,7 @@ export const <%- entityReactName %>Slice = createEntitySlice({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
   <%_ if (!databaseTypeCassandra) { _%>
-            totalItems: parseInt(headers['x-total-count'], 10)
+            totalItems: Number.parseInt(headers['x-total-count'], 10)
   <%_ } _%>
 <%_ } _%>
           };

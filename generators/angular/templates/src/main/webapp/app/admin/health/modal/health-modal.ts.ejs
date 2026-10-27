@@ -16,14 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-import { HealthKey, HealthDetails } from '../health.model';
+import { HealthDetails, HealthKey } from '../health.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-health-modal',

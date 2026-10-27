@@ -24,10 +24,13 @@
     const entityFormName = anyFieldIsTimeDerived ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
 _%>
 import { Service } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 <%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
 import dayjs from 'dayjs/esm';
+<%_ } _%>
+
+<%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
 import { DATE_TIME_FORMAT } from 'app/config';
 <%_ } _%>
 import { I<%- entityAngularName %>, New<%- entityAngularName %> } from '../<%- entityFileName %>.model';

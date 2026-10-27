@@ -16,14 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { DecimalPipe, KeyValuePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { KeyValuePipe, DecimalPipe } from '@angular/common';
+
+import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
+
+import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-
-import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
-import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-jvm-memory',

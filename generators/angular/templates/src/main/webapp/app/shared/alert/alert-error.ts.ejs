@@ -16,17 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, inject, signal } from '@angular/core';
+
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
+import { Subscription } from 'rxjs';
 
-import { AlertErrorModel } from './alert-error.model';
 import { AlertModel, AlertService, EventManager, EventWithContent } from 'app/core/util';
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
+
+import { AlertErrorModel } from './alert-error.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-alert-error',

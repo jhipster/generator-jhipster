@@ -47,13 +47,16 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
       async checkKubernetes() {
         if (this.skipChecks) return;
 
-        try {
-          await this.spawnCommand('kubectl version');
-        } catch {
+        // `--client` reports the kubectl version without contacting the current context's cluster.
+        const { exitCode, stderr } = await this.spawnCommand('kubectl version --client', { reject: false, stdio: 'pipe' });
+        if (exitCode !== 0) {
           this.log.warn(
-            'kubectl 1.2 or later is not installed on your computer.\n' +
-              'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n',
+            'kubectl is not installed on your computer or does not run.\n' +
+              'Make sure you have kubectl installed. Read https://kubernetes.io/docs/tasks/tools/\n',
           );
+          if (stderr) {
+            this.log.debug(stderr);
+          }
         }
       },
     });

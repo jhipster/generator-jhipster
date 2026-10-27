@@ -18,12 +18,14 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed } from 'vue';
-import { shallowMount } from '@vue/test-utils';
+
 import { createTestingPinia } from '@pinia/testing';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 import { useLoginModal } from '@/account/login-modal';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+
 import Register from './register.vue';
 
 type RegisterComponentType = InstanceType<typeof Register>;

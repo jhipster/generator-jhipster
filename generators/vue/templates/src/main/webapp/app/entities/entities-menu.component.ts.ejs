@@ -17,12 +17,14 @@
  limitations under the License.
 -%>
 import {
+<%_ if (enableTranslation && applicationTypeMicroservice) { _%>
+  type ComputedRef,
+<%_ } _%>
   defineComponent,
 <%_ if (enableTranslation && applicationTypeMicroservice) { _%>
   inject,
   onMounted,
   watch,
-  type ComputedRef,
 <%_ } _%>
 } from 'vue';
 <%_ if (enableTranslation) { _%>

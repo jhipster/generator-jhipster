@@ -16,28 +16,34 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, signal, OnInit, effect } from '@angular/core';
+import { Component, OnInit, effect, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-<%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
-<%_ } _%>
 
-import { StateStorageService, AccountService } from 'app/core/auth';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap/collapse';
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap/dropdown';
-import { HasAnyAuthorityDirective } from 'app/shared/auth';
 <%_ if (enableTranslation) { _%>
-import { LANGUAGES } from 'app/config';
-import ActiveMenuDirective from './active-menu.directive';
-import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
-<%_ } _%>
-import { LoginService } from 'app/login/login.service';
-import { ProfileService } from 'app/layouts/profiles/profile.service';
-<% if (microfrontend) { %>
-import { loadNavbarItems } from 'app/core/microfrontend';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { environment } from 'environments/environment';
+
+<%_ if (enableTranslation) { _%>
+import { LANGUAGES } from 'app/config';
+<%_ } _%>
+import { AccountService, StateStorageService } from 'app/core/auth';
+<%_ if (microfrontend) { _%>
+import { loadNavbarItems } from 'app/core/microfrontend';
+<%_ } _%>
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { LoginService } from 'app/login/login.service';
+import { HasAnyAuthorityDirective } from 'app/shared/auth';
+<%_ if (enableTranslation) { _%>
+import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+
+<%_ if (enableTranslation) { _%>
+import ActiveMenuDirective from './active-menu.directive';
+<%_ } _%>
 import NavbarItem from './navbar-item.model';
 
 @Component({

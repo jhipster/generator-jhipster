@@ -17,8 +17,10 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
+
 import Logs from './logs.vue';
 
 type LogsComponentType = InstanceType<typeof Logs>;

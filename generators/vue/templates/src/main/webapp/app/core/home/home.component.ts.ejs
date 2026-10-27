@@ -21,10 +21,11 @@ import { type ComputedRef, defineComponent, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
+<%_ if (!authenticationTypeOauth2) { _%>
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import type LoginService from '@/account/login.service';
-<%_ } else { _%>
-import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 
 export default defineComponent({

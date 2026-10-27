@@ -18,3 +18,9 @@
  */
 
 export const GENERATOR_JHIPSTER = 'generator-jhipster';
+
+/**
+ * The ECMAScript edition of the lowest Node version of the engines (`^22.18.0`): the `ecmaVersion` of eslint and the
+ * `target` of a generated blueprint. The `target` and `lib` of tsconfig.json, which cannot import it, follow it too.
+ */
+export const ECMASCRIPT_VERSION = 2024;

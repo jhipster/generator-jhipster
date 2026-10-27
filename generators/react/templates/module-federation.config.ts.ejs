@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { fileURLToPath } from 'node:url';
+
 import type { createModuleFederationConfig } from '@module-federation/sdk';
 
 import packageJson from './package.json' with { type: 'json' };
@@ -25,9 +27,17 @@ const apiVersion = '0.0.1';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
 // Application modules are not installed packages, `import` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
 const shareMappings = (...mappings: string[]) =>
   Object.fromEntries(
-    mappings.map(map => [map, { ...sharedDefaults, version: apiVersion, import: `./<%- relativeDir(clientRootDir, clientSrcDir) %>${map}` }]),
+    mappings.map(map => [
+      map,
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(`./<%- relativeDir(clientRootDir, clientSrcDir) %>${map}`, import.meta.url)),
+      },
+    ]),
   );
 
 const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
@@ -57,7 +67,8 @@ export default {
       'app/shared/layout/menus/menu-components',
       'app/shared/layout/menus/menu-item',
       'app/shared/reducers',
-      'app/shared/reducers/locale',
+      // `app/shared/reducers/locale` is not shared: its `registerTranslations` loads the translations of the application
+      // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
       'app/shared/reducers/reducer.utils',
       'app/shared/util/date-utils',
       'app/shared/util/entity-utils',

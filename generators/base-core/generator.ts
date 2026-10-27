@@ -93,7 +93,7 @@ import {
   writingObjectsPriorities,
 } from './priorities.ts';
 import { CONTEXT_DATA_GIT_ROOT_KEY, type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
-import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
+import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions, TaskGroup } from './types.ts';
 
 const {
   INITIALIZING,
@@ -315,7 +315,7 @@ export default class CoreGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asAnyTaskGroup<const T extends Record<string, GenericTask<this, any>>>(taskGroup: T): Record<keyof T, GenericTask<any, any>> {
+  asAnyTaskGroup<const T extends Record<string, GenericTask<this, any>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 

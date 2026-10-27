@@ -18,10 +18,10 @@
 -%>
 import axios from 'axios';
 
-import { type AccountStore } from '@/store';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
+import { type AccountStore } from '@/store';
 
 export default class AccountService {
   constructor(private readonly store: AccountStore) {}

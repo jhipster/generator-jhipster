@@ -16,10 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type BToastProps, useToast } from 'bootstrap-vue-next';
 <%_ if (enableTranslation) { _%>
 import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
+
+import { type BToastProps, useToast } from 'bootstrap-vue-next';
+
 import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 
 export const useAlertService = () => {

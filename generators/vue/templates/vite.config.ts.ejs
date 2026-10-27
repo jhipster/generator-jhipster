@@ -16,15 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { fileURLToPath, URL } from 'node:url';
 import path from 'node:path';
+import { URL, fileURLToPath } from 'node:url';
 
-import { defineConfig, normalizePath } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend && clientBundlerVite) { _%>
 import { federation } from '@module-federation/vite';
+<%_ } _%>
+import vue from '@vitejs/plugin-vue';
+import { defineConfig, normalizePath } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+<%_ if (microfrontend && clientBundlerVite) { _%>
 import federationConfig from './module-federation.config.ts';
 <%_ } _%>
 

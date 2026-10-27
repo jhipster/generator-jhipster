@@ -18,13 +18,15 @@
 -%>
 import path from 'node:path';
 
+<%_ if (microfrontend) { _%>
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+<%_ } _%>
 import { defineConfig } from '@rsbuild/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginVue } from '@rsbuild/plugin-vue';
 import { getAbsoluteFSPath } from 'swagger-ui-dist';
-<%_ if (microfrontend) { _%>
-import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 
+<%_ if (microfrontend) { _%>
 import mfConfig from './module-federation.config.ts';
 <%_ } _%>
 
