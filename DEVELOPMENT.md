@@ -12,7 +12,7 @@ Here are the most important steps.
 
 Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhipster) and click on the "fork" button. You can then clone your own fork of the project, and start working on it.
 
-[Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
+[Please read the GitHub forking documentation for more information](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo)
 
 ### Set `jhipster` command to use the cloned project
 
