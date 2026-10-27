@@ -587,7 +587,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             {
               scope: 'liquibaseRuntime',
               groupId: 'org.liquibase.ext',
-              artifactId: 'liquibase-hibernate6',
+              artifactId: 'liquibase-hibernate7',
               // eslint-disable-next-line no-template-curly-in-string
               version: liquibaseVersion ? '${liquibaseVersion}' : "${dependencyManagement.importedProperties['liquibase.version']}",
             },
