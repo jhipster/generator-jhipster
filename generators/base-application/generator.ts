@@ -24,7 +24,7 @@ import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import { type DroppedMutation, droppedMutationMessage, enableDelayedMutations, mutateData } from '../../lib/utils/object.ts';
 import { upperFirst } from '../../lib/utils/string-utils.ts';
 import { POST_WRITING_OBJECTS, WRITING_OBJECTS, priorityMatches } from '../base-core/priorities.ts';
-import type { GenericTask } from '../base-core/types.ts';
+import type { GenericTask, TaskGroup } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
@@ -476,7 +476,7 @@ export default class BaseApplicationGenerator<
    */
   asConfiguringEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['ConfiguringEachEntityTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringEachEntityTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -485,7 +485,7 @@ export default class BaseApplicationGenerator<
    */
   asLoadingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['LoadingEntitiesTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['LoadingEntitiesTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -494,7 +494,7 @@ export default class BaseApplicationGenerator<
    */
   asPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -503,7 +503,7 @@ export default class BaseApplicationGenerator<
    */
   asPreparingEachEntityFieldTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityFieldTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityFieldTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -512,7 +512,7 @@ export default class BaseApplicationGenerator<
    */
   asPreparingEachEntityRelationshipTaskGroup<
     T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityRelationshipTaskParam']>>,
-  >(taskGroup: T): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityRelationshipTaskParam']>> {
+  >(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -521,7 +521,7 @@ export default class BaseApplicationGenerator<
    */
   asPostPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostPreparingEachEntityTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostPreparingEachEntityTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -530,7 +530,7 @@ export default class BaseApplicationGenerator<
    */
   asWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['WritingEntitiesTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['WritingEntitiesTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -539,7 +539,7 @@ export default class BaseApplicationGenerator<
    */
   asPostWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostWritingEntitiesTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostWritingEntitiesTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
