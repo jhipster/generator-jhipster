@@ -17,10 +17,11 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Router, createMemoryHistory, createRouter } from 'vue-router';
+
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import { Subject, type Subscription } from 'rxjs';
-import { createMemoryHistory, createRouter, type Router } from 'vue-router';
 
 import <%- jhiPrefixCapitalized %>Tracker from './tracker.vue';
 

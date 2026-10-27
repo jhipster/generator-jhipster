@@ -16,18 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, provide, type Component } from 'vue';
+import { type Component, defineComponent, provide } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { storeToRefs } from 'pinia';
+
 import { BApp } from 'bootstrap-vue-next';
+import { storeToRefs } from 'pinia';
 
 <%_ if (!authenticationTypeOauth2) { _%>
-import { useLoginModal } from '@/account/login-modal';
 import LoginForm from '@/account/login-form/login-form.vue';
+import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
-import Ribbon from '@/core/ribbon/ribbon.vue';
 import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
+import Ribbon from '@/core/ribbon/ribbon.vue';
 import { useAlertService } from '@/shared/alert/alert.service';
 import '@/shared/config/dayjs';
 

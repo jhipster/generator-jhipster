@@ -16,10 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, inject, ref, type Ref, onMounted } from 'vue';
+import { type Ref, defineComponent, inject, onMounted, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
+
 import GatewayService from './gateway.service';
 
 export default defineComponent({

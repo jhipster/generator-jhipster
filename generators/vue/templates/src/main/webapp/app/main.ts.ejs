@@ -16,43 +16,46 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { createApp, provide, computed, watch<%- enableTranslation ? ', onMounted' : '' %> } from 'vue';
-import { createPinia, storeToRefs } from 'pinia'
+import { computed, createApp<%- enableTranslation ? ', onMounted' : '' %>, provide, watch } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-
-import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/store';
-import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
-
-import App from './app.vue';
-import router from './router';
 import { START_LOCATION } from 'vue-router';
-import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
-import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
-import JhiItemCount from '@/shared/jhi-item-count.vue';
-import JhiSortIndicator from '@/shared/sort/jhi-sort-indicator.vue';
-<%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+
+<%_ if (microfrontend) { _%>
+import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
+<%_ } _%>
+import { createPinia, storeToRefs } from 'pinia'
+
+import AccountService from '@/account/account.service';
+<%_ if (generateUserManagement) { _%>
+import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import LoginService from '@/account/login.service';
 <%_ } _%>
-<%_ if (generateUserManagement) { _%>
-import { useLoginModal } from '@/account/login-modal';
-<%_ } _%>
-import AccountService from '@/account/account.service';
-
-import '../content/scss/global.scss';
-import '../content/scss/vendor.scss';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
+import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
+import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
+import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
+import JhiItemCount from '@/shared/jhi-item-count.vue';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
+import JhiSortIndicator from '@/shared/sort/jhi-sort-indicator.vue';
+import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/store';
+
 <%_ if (communicationSpringWebsocket) { _%>
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
+import App from './app.vue';
+import router from './router';
+
+import '../content/scss/global.scss';
+import '../content/scss/vendor.scss';
 <%_ if (microfrontend) { _%>
-import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 
 registerRemotes([
   <%_ for (const remote of microfrontends) { _%>

@@ -18,10 +18,12 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount, type MountingOptions } from '@vue/test-utils';
+
+import { type MountingOptions, shallowMount } from '@vue/test-utils';
+
+import AlertService from '@/shared/alert/alert.service';
 
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';
-import AlertService from '@/shared/alert/alert.service';
 
 type <%- entityAngularName %>ComponentType = InstanceType<typeof <%- entityAngularName %>>;
 
