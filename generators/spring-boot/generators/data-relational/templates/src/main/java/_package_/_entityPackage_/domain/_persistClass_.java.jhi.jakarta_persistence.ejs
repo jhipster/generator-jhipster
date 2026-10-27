@@ -102,16 +102,16 @@ import org.hibernate.type.SqlTypes;
     @NotNull
       <%_ } _%>
     @JoinTable(name = "<%- relationship.joinTable.name %>",
-               joinColumns = <%- primaryKey.fields.length > 1 ? '{' : '' %>
-      <%_ for (const [idx, field] of primaryKey.fields.entries()) { _%>
-                   <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- `${entityTableName}_${field.columnName}` %>")
+               joinColumns = <%- relationship.joinTable.joinColumns.length > 1 ? '{' : '' %>
+      <%_ for (const [idx, column] of relationship.joinTable.joinColumns.entries()) { _%>
+                   <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- column.name %>")
       <%_ } _%>
-               <%- primaryKey.fields.length > 1 ? '}' : '' %>,
-               inverseJoinColumns = <%- relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
-      <%_ for (const [idx, field] of relationship.otherEntity.primaryKey.fields.entries()) { _%>
-                   <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- `${relationship.columnName}_${field.columnName}` %>"))
+               <%- relationship.joinTable.joinColumns.length > 1 ? '}' : '' %>,
+               inverseJoinColumns = <%- relationship.joinTable.inverseJoinColumns.length > 1 ? '{' : '' %>
+      <%_ for (const [idx, column] of relationship.joinTable.inverseJoinColumns.entries()) { _%>
+                   <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- column.name %>"))
       <%_ } _%>
-               <%- relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
+               <%- relationship.joinTable.inverseJoinColumns.length > 1 ? '}' : '' %>
     <%_ } _%>
   <%_ } else { -%>
     <%_ if (relationship.ignoreOtherSideProperty) { -%>

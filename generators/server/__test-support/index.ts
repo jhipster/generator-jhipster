@@ -61,6 +61,8 @@ export const filterBasicServerGenerators = (ns: string) => {
   return (
     subGenerator !== 'bootstrap' &&
     !generator.startsWith('bootstrap') &&
+    // A generator whose name ends in `-bootstrap` prepares the application, like one named `bootstrap`.
+    !subGenerator?.endsWith('-bootstrap') &&
     ![
       `jhipster:project-name`,
       `jhipster:java-simple-application:build-tool`,

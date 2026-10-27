@@ -132,7 +132,12 @@ const allGenerators: (keyof GeneratorsByNamespace)[] = lookupGeneratorsWithNames
   .map(gen => `jhipster:${gen.namespace}`)
   .sort() as (keyof GeneratorsByNamespace)[];
 const filterBootstrapGenerators = (gen: keyof GeneratorsByNamespace): boolean =>
-  !gen.startsWith('jhipster:bootstrap-') && !gen.endsWith(':bootstrap') && gen !== 'jhipster:project-name';
+  !gen.startsWith('jhipster:bootstrap-') &&
+  !gen.endsWith(':bootstrap') &&
+  // A generator whose name ends in `-bootstrap` prepares the application, like one whose namespace is `:bootstrap`: a
+  // mock of it drops the properties every generator composing it reads, and the failure surfaces far from its cause.
+  !gen.endsWith('-bootstrap') &&
+  gen !== 'jhipster:project-name';
 const composedGeneratorsToCheck = allGenerators
   .filter(filterBootstrapGenerators)
   .filter(gen => !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen));

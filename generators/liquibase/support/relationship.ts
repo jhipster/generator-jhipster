@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../lib/utils/index.ts';
-import { getFKConstraintName, prepareRelationshipForDatabase } from '../../server/support/index.ts';
+import { getFKConstraintName, prepareRelationshipForDatabase } from '../../base-application/generators/database-bootstrap/support/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Relationship as LiquibaseRelationship } from '../types.ts';
 
 function relationshipBaseDataEquals(relationshipA: LiquibaseRelationship, relationshipB: LiquibaseRelationship) {
@@ -65,10 +65,10 @@ export function prepareRelationshipForLiquibase({
   entity: LiquibaseEntity;
   relationship: LiquibaseRelationship;
 }) {
+  // The relationships of a previous entity never go through the priorities, so the database prepares them here too.
   prepareRelationshipForDatabase({ application: application as any, entity, relationship });
   mutateData(relationship, {
     unique: ({ id, ownerSide, relationshipOneToOne }) => id || (ownerSide && relationshipOneToOne),
-    nullable: ({ relationshipValidate, relationshipRequired }) => !(relationshipValidate && relationshipRequired),
   });
 
   relationship.shouldWriteRelationship =
@@ -86,7 +86,6 @@ export function prepareRelationshipForLiquibase({
   mutateData(relationship, {
     __override__: false,
     columnDataType: (data: any) => data.otherEntity.columnType,
-    columnRequired: data => data.nullable === false || data.relationshipRequired,
     liquibaseGenerateFakeData: data => data.columnRequired && data.persistableRelationship && !data.collection,
   });
 
