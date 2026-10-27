@@ -20,7 +20,7 @@ import { useEffect
 <%_ if (!readOnly) { _%>
 , useState
 <%_ } _%> } from 'react';
-import { Button, Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, Tooltip, ' : '' %>Row } from 'react-bootstrap';
+import { Button, Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, ' : '' %>Row<%- anyFieldHasDocumentation ? ', Tooltip' : '' %> } from 'react-bootstrap';
 import {
   Translate,
 <%_ if (anyFieldIsBlobDerived) { _%>

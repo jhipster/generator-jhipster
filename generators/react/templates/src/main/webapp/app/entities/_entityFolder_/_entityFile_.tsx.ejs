@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { useEffect, useState } from 'react';
-import { Button, <%- searchEngineAny ? 'FormControl, InputGroup, Form, Row, Col, ' : '' %>Table } from 'react-bootstrap';
+import { Button, <%- searchEngineAny ? 'Col, Form, FormControl, InputGroup, Row, ' : '' %>Table } from 'react-bootstrap';
 import {
 <%_ if (anyFieldIsBlobDerived) { _%>
   byteSize,

@@ -19,7 +19,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
-import locale, { loaded<%- microfrontend ? ', addTranslationSourcePrefix' : '' %>, setLocale, updateLocale } from 'app/shared/reducers/locale';
+import locale, { <%- microfrontend ? 'addTranslationSourcePrefix, ' : '' %>loaded, setLocale, updateLocale } from 'app/shared/reducers/locale';
 
 vi.mock('../../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({ default: { key: 'value'<%- applicationTypeMicroservice ? ", global: { title: 'Microfrontend' }" : '' %> } }));
 

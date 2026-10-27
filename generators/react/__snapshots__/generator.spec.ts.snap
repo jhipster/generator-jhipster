@@ -1613,7 +1613,7 @@ exports[`generator - react microfrontend translations should keep the translatio
     "contents": "import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
-import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
+import locale, { addTranslationSourcePrefix, loaded, setLocale, updateLocale } from 'app/shared/reducers/locale';
 
 vi.mock('../../../i18n/en/en.js', () => ({ default: { key: 'value', global: { title: 'Microfrontend' } } }));
 
@@ -1747,11 +1747,11 @@ describe('Locale reducer tests', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/locale.ts": {
-    "contents": "import dayjs from 'dayjs';
-import merge from 'deepmerge';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+    "contents": "import { TranslatorContext } from 'react-jhipster';
 
-import { TranslatorContext } from 'react-jhipster';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
+import merge from 'deepmerge';
 
 const initialState = {
   currentLocale: '',
