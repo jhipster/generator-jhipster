@@ -386,4 +386,19 @@ describe(`generator - ${clientFramework}`, () => {
       );
     });
   });
+
+  describe('microfrontend translations', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'microservice', enableTranslation: true })
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should keep the translations registered by the host when registering its own', () => {
+      expect(runResult.getSnapshot('**/app/shared/reducers/locale*.ts')).toMatchSnapshot();
+    });
+  });
 });
