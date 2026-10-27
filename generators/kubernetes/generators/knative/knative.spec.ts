@@ -881,4 +881,89 @@ describe('generator - Knative', () => {
       });
     });
   });
+  describe('knative check', () => {
+    const chosenApps = ['01-gateway'];
+    const answers = {
+      deploymentApplicationType: 'microservice',
+      directoryPath: '../',
+      chosenApps,
+      adminPassword: 'meetup',
+      dockerRepositoryName: 'jhipsterrepository',
+      dockerPushCommand: 'docker push',
+      kubernetesNamespace: 'jhipsternamespace',
+      jhipsterConsole: false,
+      clusteredDbApps: [],
+      generatorType: 'k8s',
+      istio: true,
+    };
+    const knativeCommand = 'kubectl get deployments --namespace knative-serving --output name';
+    const knativeWarnings = () =>
+      (runResult.env.adapter.log as any).warn.mock.calls
+        .map(({ arguments: [message] }: { arguments: [string] }) => message)
+        .filter((message: string) => message.includes('Knative Serving'));
+
+    describe('with Knative Serving installed', () => {
+      const knativeCalls: { command: string; options: unknown }[] = [];
+
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
+          .withSpawnMock((_method: string, command: string, options: unknown) => {
+            if (command === knativeCommand) {
+              knativeCalls.push({ command, options });
+              return Promise.resolve({ exitCode: 0, stdout: 'deployment.apps/activator\ndeployment.apps/controller\n', stderr: '' });
+            }
+            if (command.startsWith('helm ')) {
+              return Promise.resolve({ exitCode: 0, stdout: 'version.BuildInfo{Version:"v3.16.1"}', stderr: '' });
+            }
+            return Promise.resolve({ exitCode: 0, stdout: '', stderr: '' });
+          })
+          .withOptions({ skipChecks: false })
+          .withAnswers(answers);
+      });
+      it('lists the Knative Serving deployments without a shell pipeline', () => {
+        expect(knativeCalls).toEqual([{ command: knativeCommand, options: { reject: false, stdio: 'pipe' } }]);
+      });
+      it('does not warn', () => {
+        expect(knativeWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with Knative Serving missing', () => {
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
+          .withSpawnMock((_method: string, command: string) => {
+            if (command === knativeCommand) {
+              return Promise.resolve({
+                exitCode: 1,
+                stdout: '',
+                stderr: 'Error from server (NotFound): namespaces "knative-serving" not found',
+              });
+            }
+            if (command.startsWith('helm ')) {
+              return Promise.resolve({ exitCode: 0, stdout: 'version.BuildInfo{Version:"v3.16.1"}', stderr: '' });
+            }
+            return Promise.resolve({ exitCode: 0, stdout: '', stderr: '' });
+          })
+          .withOptions({ skipChecks: false })
+          .withAnswers(answers);
+      });
+      it('warns that Knative Serving is missing and where to install it', () => {
+        expect(knativeWarnings()).toEqual([
+          'Knative Serving was not found in your current Kubernetes cluster.\nMake sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
+        ]);
+      });
+    });
+  });
 });

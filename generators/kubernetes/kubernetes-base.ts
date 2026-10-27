@@ -23,12 +23,16 @@ import type { BaseKubernetesGenerator } from './generator.ts';
 export const checkHelm = asInitializingTask(async function (this: BaseKubernetesGenerator) {
   if (this.skipChecks) return;
 
-  try {
-    await this.spawnCommand(String.raw`helm version --client | grep -E "(v2\.1[2-9]{1,2}\.[0-9]{1,3})|(v3\.[0-9]{1,2}\.[0-9]{1,3})"`);
-  } catch {
+  // Commands are spawned without a shell, so the version is matched here instead of piping it to grep.
+  // `--client` keeps helm 2 from contacting Tiller and is accepted by later versions.
+  const { exitCode, stdout, stderr } = await this.spawnCommand('helm version --client', { reject: false, stdio: 'pipe' });
+  if (exitCode !== 0 || !/v(2\.1[2-9]|[3-9])\./.test(stdout)) {
     this.log.warn(
-      'helm 2.12.x or later is not installed on your computer.\n' +
-        'Make sure you have helm installed. Read https://github.com/helm/helm/\n',
+      'helm 2.12 or later is not installed on your computer or does not run.\n' +
+        'Make sure you have helm installed. Read https://helm.sh/docs/intro/install/\n',
     );
+    if (stderr) {
+      this.log.debug(stderr);
+    }
   }
 });

@@ -63,15 +63,21 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
       checkHelm,
       async checkKnative() {
         if (this.skipChecks) return;
-        try {
-          await this.spawnCommand(
-            String.raw`kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\.[8-9]{1,3}\.[0-9]*`,
-          );
-        } catch {
+
+        // Commands are spawned without a shell, so the output is inspected here instead of piping it to grep.
+        // Knative 1.x no longer labels its deployments with a release version, so only their presence is checked.
+        const { exitCode, stdout, stderr } = await this.spawnCommand('kubectl get deployments --namespace knative-serving --output name', {
+          reject: false,
+          stdio: 'pipe',
+        });
+        if (exitCode !== 0 || !stdout.trim()) {
           this.log.warn(
-            'Knative 0.8.* or later is not installed on your computer.\n' +
+            'Knative Serving was not found in your current Kubernetes cluster.\n' +
               'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
           );
+          if (stderr) {
+            this.log.debug(stderr);
+          }
         }
       },
       defaults() {

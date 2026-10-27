@@ -570,4 +570,76 @@ describe('generator - Kubernetes Helm', () => {
       runResult.assertFile(expectedFiles.applyScript);
     });
   });
+  describe('helm check', () => {
+    const chosenApps = ['01-gateway'];
+    const answers = {
+      deploymentApplicationType: 'microservice',
+      directoryPath: '../',
+      chosenApps,
+      adminPassword: 'meetup',
+      dockerRepositoryName: 'jhipsterrepository',
+      dockerPushCommand: 'docker push',
+      kubernetesNamespace: 'jhipsternamespace',
+      jhipsterConsole: false,
+      kubernetesServiceType: 'LoadBalancer',
+      clusteredDbApps: [],
+    };
+    const helmWarnings = () =>
+      (runResult.env.adapter.log as any).warn.mock.calls
+        .map(({ arguments: [message] }: { arguments: [string] }) => message)
+        .filter((message: string) => message.includes('helm'));
+
+    describe('with helm installed', () => {
+      const helmCalls: { command: string; options: unknown }[] = [];
+
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
+          .withSpawnMock((_method: string, command: string, options: unknown) => {
+            if (command.startsWith('helm ')) {
+              helmCalls.push({ command, options });
+              return Promise.resolve({ exitCode: 0, stdout: 'version.BuildInfo{Version:"v3.16.1", GoVersion:"go1.22.7"}', stderr: '' });
+            }
+            return Promise.resolve({ exitCode: 0, stdout: '', stderr: '' });
+          })
+          .withOptions({ skipChecks: false })
+          .withAnswers(answers);
+      });
+      it('asks helm for its client version without a shell pipeline', () => {
+        expect(helmCalls).toEqual([{ command: 'helm version --client', options: { reject: false, stdio: 'pipe' } }]);
+      });
+      it('does not warn', () => {
+        expect(helmWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with helm missing', () => {
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
+          .withSpawnMock((_method: string, command: string) =>
+            command.startsWith('helm ') ?
+              Promise.resolve({ exitCode: undefined, stdout: '', stderr: 'spawn helm ENOENT' })
+            : Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }),
+          )
+          .withOptions({ skipChecks: false })
+          .withAnswers(answers);
+      });
+      it('warns that helm is missing and where to install it', () => {
+        expect(helmWarnings()).toEqual([
+          'helm 2.12 or later is not installed on your computer or does not run.\nMake sure you have helm installed. Read https://helm.sh/docs/intro/install/\n',
+        ]);
+      });
+    });
+  });
 });
