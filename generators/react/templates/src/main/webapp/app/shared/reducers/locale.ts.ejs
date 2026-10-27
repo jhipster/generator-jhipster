@@ -49,7 +49,7 @@ export const registerTranslations = (
   if (!registration) {
     registration = import(`../../../i18n/${locale}/${locale}.js`)
       .then(translations => {
-<%_ if (applicationTypeMicroservice) { _%>
+  <%_ if (applicationTypeMicroservice) { _%>
         // The translations already registered by the host application win, so a microfrontend adds its own keys
         // without replacing the host's, like the application title.
         const registered = TranslatorContext.context.translations[locale];
@@ -57,9 +57,9 @@ export const registerTranslations = (
           locale,
           registered ? merge(translations.default, registered, { arrayMerge: (_target, source) => source }) : translations.default,
         );
-<%_ } else { _%>
+  <%_ } else { _%>
         TranslatorContext.registerTranslations(locale, translations.default);
-<%_ } _%>
+  <%_ } _%>
       })
       .catch(error => {
         // Allow retrying if the translations could not be registered.
