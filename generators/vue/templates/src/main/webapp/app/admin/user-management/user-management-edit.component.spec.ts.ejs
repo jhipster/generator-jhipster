@@ -93,7 +93,7 @@ describe('UserManagementEdit Component', () => {
 
       // THEN
 <%_ if (generateBuiltInAuthorityEntity) { _%>
-      expect(axiosStub.get).toHaveBeenCalledWith('api/authorities')
+      expect(axiosStub.get).toHaveBeenCalledWith('api/authorities');
 <%_ } _%>
       expect(axiosStub.get).toHaveBeenCalledWith('api/admin/users/' + <%- tsKeyId %>);
     });
