@@ -131,6 +131,14 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_REACT/);
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_VUE/);
       });
+      if (sampleConfig.applicationType === 'microservice') {
+        it('should share application modules by absolute path', () => {
+          runResult.assertFileContent(`${clientRootDir}module-federation.config.ts`, 'import: fileURLToPath(new URL(`./');
+        });
+        it('should not share the locale reducer, so the microfrontend registers its own translations', () => {
+          runResult.assertNoFileContent(`${clientRootDir}module-federation.config.ts`, "'app/shared/reducers/locale'");
+        });
+      }
 
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
