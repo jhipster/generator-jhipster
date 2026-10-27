@@ -10920,6 +10920,10 @@ exports[`generator - Kubernetes gateway with istio routing should match spawn ca
   [
     "spawnCommand",
     "kubectl version --client",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
   [
     "spawnCommandSync",
