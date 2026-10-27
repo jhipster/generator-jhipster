@@ -39,6 +39,15 @@ export type DatabaseProperty = {
 
 export type DatabaseField = BaseApplicationField & DatabaseProperty;
 
+/** A column of a join table, one for each field of the primary key of the entity it references. */
+export type DatabaseJoinColumn = {
+  name: string;
+  /** The column of the primary key it references. */
+  referencedColumnName: string;
+  /** The field of the primary key it references. */
+  field: DatabaseField;
+};
+
 export interface DatabaseRelationship extends BaseApplicationRelationship, DatabaseProperty {
   shouldWriteJoinTable?: boolean;
 
@@ -46,6 +55,10 @@ export interface DatabaseRelationship extends BaseApplicationRelationship, Datab
     name: string;
     constraintName?: string;
     otherConstraintName?: string;
+    /** The columns referencing the entity of the relationship, one for each field of its primary key. */
+    joinColumns: DatabaseJoinColumn[];
+    /** The columns referencing the other entity, one for each field of its primary key. */
+    inverseJoinColumns: DatabaseJoinColumn[];
   };
 
   joinColumnNames?: string[];

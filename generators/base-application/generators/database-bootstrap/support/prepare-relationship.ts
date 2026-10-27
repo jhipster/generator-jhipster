@@ -17,10 +17,17 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../../../lib/utils/index.ts';
-import type { DatabaseEntity, DatabaseRelationship } from '../types.d.ts';
+import type { DatabaseEntity, DatabaseField, DatabaseJoinColumn, DatabaseRelationship } from '../types.d.ts';
 
 import { getJoinTableName } from './naming.ts';
 import { hibernateSnakeCase } from './string.ts';
+
+/** A column of a join table: the column of a field of a primary key, prefixed by the side it stands for. */
+const joinColumn = (prefix: string, field: DatabaseField): DatabaseJoinColumn => ({
+  name: `${prefix}_${field.columnName}`,
+  referencedColumnName: field.columnName!,
+  field,
+});
 
 /**
  * The properties a relationship takes from the database: the column it is stored in and, for a relational database, the
@@ -46,6 +53,15 @@ export function prepareRelationshipForDatabase({
           name: getJoinTableName(entity.entityTableName, relationshipName, {
             prodDatabaseType: application.prodDatabaseType,
           }).value,
+          // Getters, read when the files are written: the column of a field is prepared by the generator of the backend, and
+          // a primary key derived from a relationship takes its fields from the other entity.
+          get joinColumns() {
+            return entity.primaryKey!.fields.map(field => joinColumn(entity.entityTableName, field));
+          },
+          get inverseJoinColumns() {
+            const { otherEntity } = relationship as DatabaseRelationship & { otherEntity: DatabaseEntity };
+            return otherEntity.primaryKey!.fields.map(field => joinColumn(relationship.columnName!, field));
+          },
         }
       : undefined,
     // Set before columnRequired, which reads it.
