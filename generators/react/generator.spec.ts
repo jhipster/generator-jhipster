@@ -138,6 +138,9 @@ describe(`generator - ${clientFramework}`, () => {
         it('should not share the locale reducer, so the microfrontend registers its own translations', () => {
           runResult.assertNoFileContent(`${clientRootDir}module-federation.config.ts`, "'app/shared/reducers/locale'");
         });
+        it('should not share application modules with the dev server', () => {
+          runResult.assertFileContent(`${clientRootDir}module-federation.config.ts`, '...(development ? {} : applicationModules),');
+        });
       }
 
       describe('withAdminUi', () => {
@@ -370,6 +373,22 @@ describe(`generator - ${clientFramework}`, () => {
         `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
         /<MenuItem icon="asterisk" to="\/entityPage">\n( *)Router Name\n( *)<\/MenuItem>/,
       );
+    });
+  });
+
+  describe('gateway with microfrontends', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'gateway', microfrontends: [{ baseName: 'blog' }] })
+        .withSharedApplication({ gatewayServicesApiAvailable: true, getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should share application modules with the dev server too', () => {
+      runResult.assertFileContent('module-federation.config.ts', '...applicationModules,');
+      runResult.assertNoFileContent('module-federation.config.ts', 'development');
     });
   });
 });

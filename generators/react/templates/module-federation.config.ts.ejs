@@ -47,6 +47,24 @@ const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
 
+const applicationModules = shareMappings(
+  'app/config/constants',
+  'app/config/store',
+  'app/shared/error/error-boundary-routes',
+  'app/shared/layout/menus/menu-components',
+  'app/shared/layout/menus/menu-item',
+  'app/shared/reducers',
+  // `app/shared/reducers/locale` is not shared: its `registerTranslations` loads the translations of the application
+  // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
+  'app/shared/reducers/reducer.utils',
+  'app/shared/util/date-utils',
+  'app/shared/util/entity-utils',
+);
+
+<%_ if (applicationTypeMicroservice) { _%>
+const development = process.env.NODE_ENV !== 'production';
+
+<%_ } _%>
 export default {
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
@@ -60,19 +78,13 @@ export default {
   shareScope: 'default',
   shared: {
     ...shareDependencies(),
-    ...shareMappings(
-      'app/config/constants',
-      'app/config/store',
-      'app/shared/error/error-boundary-routes',
-      'app/shared/layout/menus/menu-components',
-      'app/shared/layout/menus/menu-item',
-      'app/shared/reducers',
-      // `app/shared/reducers/locale` is not shared: its `registerTranslations` loads the translations of the application
-      // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
-      'app/shared/reducers/reducer.utils',
-      'app/shared/util/date-utils',
-      'app/shared/util/entity-utils',
-    ),
+<%_ if (applicationTypeMicroservice) { _%>
+    // The dev server runs the microfrontend on its own, so there is no host to share the application modules with.
+    // Sharing them there also breaks the start: @module-federation/vite evaluates them before the shared packages they import.
+    ...(development ? {} : applicationModules),
+<%_ } else { _%>
+    ...applicationModules,
+<%_ } _%>
   },
   dts: false,
   manifest: true,
