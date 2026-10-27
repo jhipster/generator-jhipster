@@ -24,7 +24,7 @@ import baseConfig from './base.ts';
 
 const recommended: Config = {
   languageOptions: {
-    ecmaVersion: 2022,
+    ecmaVersion: 2024,
     sourceType: 'module',
   },
   settings: {

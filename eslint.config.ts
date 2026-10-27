@@ -21,7 +21,7 @@ export default defineConfig(
     files: jsTsFiles,
     extends: [js.configs.recommended],
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2024,
       sourceType: 'module',
       globals: {
         ...globals.node,
