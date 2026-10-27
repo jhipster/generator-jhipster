@@ -21,24 +21,26 @@
     const testEntityPrimaryKey2 = tsPrimaryKeySamples[1];
 _%>
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
+<%_ if (!readOnly) { _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import {
-  of,
 <%_ if (!readOnly) { _%>
   Subject,
 <%_ } _%>
+  of,
 } from 'rxjs';
-<%_ if (!readOnly) { _%>
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 
+<%_ if (!readOnly) { _%>
 import { sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 <%_ } _%>
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';

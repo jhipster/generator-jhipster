@@ -29,20 +29,21 @@ import { HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { of, Subject, from } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 
-import { <%- entityAngularName %>FormService } from './<%- entityFileName %>-form.service';
-import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
-import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions.filter(relationships => relationships[0].otherEntity.entityAngularName !== entityAngularName)) { _%>
   <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0]; _%>
 import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%- otherEntity.entityFolderName %>/<%- otherEntity.entityFileName %>.model';
 import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
+import { <%- entityAngularName %>FormService } from './<%- entityFileName %>-form.service';
 import { <%- entityAngularName %>Update } from './<%- entityFileName %>-update';
 
 describe('<%- entityAngularName %> Management Update Component', () => {

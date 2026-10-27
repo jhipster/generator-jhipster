@@ -16,12 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
-import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
-import { LoggersResponse, Level } from './log.model';
+import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
+
+import { Level, LoggersResponse } from './log.model';
 
 @Service()
 export class LogsService {

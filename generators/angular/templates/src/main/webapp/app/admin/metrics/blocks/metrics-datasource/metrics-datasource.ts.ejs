@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-<%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
-<%_ } _%>
+import { Component, input } from '@angular/core';
 
 import { Databases } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-metrics-datasource',
