@@ -23,7 +23,10 @@ export type DatabaseData = {
   protocolSuffix: string;
   jdbcDriver: string;
   hibernateDialect: string;
+  /** The fragment of the JDBC url around the port, like `:5432/`. */
   port?: string;
+  /** The port the database listens to by default, like 5432. */
+  defaultPort?: number;
   localDirectory?: string;
   extraOptions?: string;
   defaultUsername?: string;
@@ -94,6 +97,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: '',
     hibernateDialect: 'org.hibernate.dialect.SQLServer2012Dialect',
     port: ':1433;database=',
+    defaultPort: 1433,
     defaultUsername: 'SA',
     defaultPassword: 'yourStrong(!)Password',
 
@@ -112,6 +116,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     hibernateDialect: 'org.hibernate.dialect.MariaDB103Dialect',
     port: ':3306/',
     extraOptions: '?useLegacyDatetimeCode=false',
+    defaultPort: 3306,
     defaultUsername: 'root',
 
     constraintNameMaxLength: 64,
@@ -125,6 +130,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     tableNameMaxLength: 64,
     constraintNameMaxLength: 64,
     port: ':3306/',
+    defaultPort: 3306,
     extraOptions: '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true',
     defaultUsername: 'root',
   },
@@ -134,6 +140,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'oracle.jdbc.OracleDriver',
     hibernateDialect: 'org.hibernate.dialect.Oracle12cDialect',
     port: ':1521:',
+    defaultPort: 1521,
     defaultUsername: 'system',
     defaultPassword: 'oracle',
     defaultDatabaseName: 'xe',
@@ -147,6 +154,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.postgresql.Driver',
     hibernateDialect: 'org.hibernate.dialect.PostgreSQLDialect',
     port: ':5432/',
+    defaultPort: 5432,
     constraintNameMaxLength: 63,
     tableNameMaxLength: 63,
   },

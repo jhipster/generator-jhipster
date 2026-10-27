@@ -16,10 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { databaseTypes } from '../../../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
-import { hibernateSnakeCase, prepareFieldForDatabase, prepareRelationshipForDatabase } from './support/index.ts';
+import {
+  databaseData,
+  getDatabaseTypeData,
+  hibernateSnakeCase,
+  prepareFieldForDatabase,
+  prepareRelationshipForDatabase,
+} from './support/index.ts';
 import type { Application as DatabaseApplication } from './types.d.ts';
 
 /**
@@ -44,6 +51,11 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
       prepareDatabase({ applicationDefaults }) {
         applicationDefaults({
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
+          // The port of a relational database depends on its vendor, the one of another database on its type.
+          prodDatabasePort: (data, { undefinedMarker }) =>
+            (data.databaseType === databaseTypes.SQL ?
+              databaseData[data.prodDatabaseType]?.defaultPort
+            : getDatabaseTypeData(data.databaseType).defaultPort) ?? undefinedMarker,
         });
       },
     });

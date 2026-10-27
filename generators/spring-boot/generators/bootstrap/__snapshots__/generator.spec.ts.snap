@@ -204,6 +204,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "prodActiveProfiles": Any<Array>,
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
+  "prodDatabasePort": 5432,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,

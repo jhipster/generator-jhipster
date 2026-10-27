@@ -204,6 +204,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "prodActiveProfiles": Any<Array>,
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
+  "prodDatabasePort": 5432,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,

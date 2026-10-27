@@ -412,6 +412,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "prodActiveProfiles": [],
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
+  "prodDatabasePort": 5432,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,

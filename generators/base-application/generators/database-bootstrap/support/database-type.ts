@@ -25,6 +25,8 @@ const { MONGODB, NEO4J, COUCHBASE, CASSANDRA, SQL } = databaseTypes;
 export type DatabaseTypeData = {
   name: string;
   defaultPrimaryKeyType: string;
+  /** The port the database listens to by default, when it is not a relational one, whose port depends on its vendor. */
+  defaultPort?: number;
 };
 
 const databaseTypeDataFallback: DatabaseTypeData = {
@@ -36,6 +38,7 @@ export const databaseTypeData: Record<string, DatabaseTypeData> = {
   [CASSANDRA]: {
     name: 'Cassandra',
     defaultPrimaryKeyType: TYPE_UUID,
+    defaultPort: 9042,
   },
   [COUCHBASE]: {
     name: 'Couchbase',
@@ -44,10 +47,12 @@ export const databaseTypeData: Record<string, DatabaseTypeData> = {
   [MONGODB]: {
     name: 'MongoDB',
     defaultPrimaryKeyType: TYPE_STRING,
+    defaultPort: 27017,
   },
   [NEO4J]: {
     name: 'Neo4j',
     defaultPrimaryKeyType: TYPE_STRING,
+    defaultPort: 7687,
   },
   [SQL]: {
     name: 'SQL',

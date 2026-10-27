@@ -28,6 +28,8 @@ import type {
 export type Application = {
   /** The prefix of the tables of JHipster itself, from `jhiPrefix`. */
   jhiTablePrefix: string;
+  /** The port the production database listens to by default, for its service and the configuration of the backend. */
+  prodDatabasePort?: number;
 };
 
 /** What a relational database adds to a property of an entity, be it a field or a relationship. */

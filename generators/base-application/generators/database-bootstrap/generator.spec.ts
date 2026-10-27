@@ -41,6 +41,30 @@ describe(`generator - ${generator}`, () => {
     it('should derive the table prefix of JHipster from the prefix', () => {
       expect(result.application!.jhiTablePrefix).toBe('jhi');
     });
+
+    it('should give the port of the production database, postgresql', () => {
+      expect(result.application!.prodDatabasePort).toBe(5432);
+    });
+  });
+
+  describe('with a relational database of another vendor', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withJHipsterConfig({ prodDatabaseType: 'mysql' });
+    });
+
+    it('should give the port of the vendor', () => {
+      expect(result.application!.prodDatabasePort).toBe(3306);
+    });
+  });
+
+  describe('with a database that is not relational', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withJHipsterConfig({ databaseType: 'mongodb' });
+    });
+
+    it('should give the port of its type', () => {
+      expect(result.application!.prodDatabasePort).toBe(27017);
+    });
   });
 
   describe('with a prefix of its own', () => {
