@@ -48,7 +48,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         if (this.skipChecks) return;
 
         try {
-          await this.spawnCommand('kubectl version');
+          await this.spawnCommand('kubectl version --client');
         } catch {
           this.log.warn(
             'kubectl 1.2 or later is not installed on your computer.\n' +
