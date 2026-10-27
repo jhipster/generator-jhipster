@@ -81,7 +81,7 @@ jhipster --with-entities
 You should see your changes reflected in the generated project.
 
 Note: The generated project might not build properly in case the generator is using a
-snapshot version of [jhipster/jhipster-bom](https://github.com/jhipster/jhipster-bom). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+snapshot version of [jhipster/jhipster-bom](https://github.com/jhipster/jhipster-bom). This issue is mentioned in https://github.com/jhipster/generator-jhipster/issues/9571. In
 this case, clone the jhipster/jhipster-bom project and build it using:
 
 ```shell script
@@ -96,7 +96,7 @@ or on Windows:
 
 ### Use a text editor
 
-As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [VSCode](https://code.visualstudio.com/) or [IntelliJ IDEA](https://www.jetbrains.com/idea/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
+As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDEs will not work correctly. We recommend you use a text editor like [VSCode](https://code.visualstudio.com/) or [IntelliJ IDEA](https://www.jetbrains.com/idea/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
 
 ### Use a debugger
 
@@ -148,7 +148,7 @@ Fixing lint and prettier errors
 
 ## Generating and testing samples
 
-Sample generating is provided by `generator-jhipster` local blueprint which we will refer as `dev blueprint`.
+Sample generating is provided by `generator-jhipster` local blueprint which we will refer to as `dev blueprint`.
 The dev blueprint is enabled by running jhipster in JIT mode (executing `./bin/jhipster.cjs` file relative to this file).
 
 ### Generating samples using dev blueprint
@@ -163,7 +163,7 @@ Daily builds samples are prefixed with `daily-`.
 
 A common samples folder will be used if `--global` option is used like `jhipster generate-sample ng-default --global`.
 At first execution a prompt will ask for the samples folder, the chosen value will be reused at next executions.
-At samples folder, a `jhipster-samples.code-workspace` is generated. It provides a single vscode workspace for `generator-jhipster` and samples generated at the samples folder. It's very used for quick looks.
+At samples folder, a `jhipster-samples.code-workspace` is generated. It provides a single vscode workspace for `generator-jhipster` and samples generated at the samples folder. It's very useful for quick looks.
 
 ### Testing samples
 
@@ -186,7 +186,7 @@ List of commands being in the package.json scripts section of the generated samp
 ### Development Containers
 
 A container is built using Java, Node, and npm as recommended by `generator-jhipster`.
-Once up, you should have the stack maintainers recommends.
+Once up, you should have the stack the maintainers recommend.
 
 ### Execution shortcuts
 
@@ -196,7 +196,7 @@ Shortcuts are provided to easily generate integration tests samples.
 - select the sample's GitHub workflow.
 - run the shortcut.
 - select the sample.
-- sample is generated at `../jhipster-samples/` folder relative the `generator-jhipster` folder.
+- sample is generated at `../jhipster-samples/` folder relative to the `generator-jhipster` folder.
 
 Some daily builds samples are available too.
 

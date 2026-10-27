@@ -64,7 +64,7 @@ Click [here][issue-template] to open a bug issue with a pre-filled template. For
 
 You can run `jhipster info` in your project folder to get most of the above required info.
 
-Issues opened without any of these info will be **closed** without any explanation.
+Issues opened without this information will be **closed** without any explanation.
 
 ## Development environment setup
 
@@ -87,7 +87,7 @@ That's it! Thank you for your contribution!
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
 - All features or bug fixes **must be tested** by one or more tests.
-- Most files formatting are checked by prettier and eslint.
+- The formatting of most files is checked by Prettier and ESLint.
 - EJS files use a two-space indentation for template logic and follow the generated file rules for the templating parts.
 
 The jhipster generator structure and file naming conventions are documented in the [RFC 6](./rfcs/6-jhipster-rfc-jhipster-generator-file-structure.md).

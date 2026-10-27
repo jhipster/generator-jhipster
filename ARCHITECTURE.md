@@ -87,7 +87,7 @@ get [Generator.CONFIGURING]() {
   return this.asConfiguringTaskGroup() {
     checkConfig() {
       if (this.jhipsterConfigWithDefaults.reactive && this.jhipsterConfigWithDefaults.cacheProvider !== 'no') {
-        this.log.warn("Reactive applications doesn't support cache. Disabling");
+        this.log.warn("Reactive applications don't support cache. Disabling");
         this.jhipsterConfig.cacheProvider = 'no';
       }
     },
@@ -258,7 +258,7 @@ get [Generator.CONFIGURING_EACH_ENTITY]() {
 
 #### Loading entities (base-application)
 
-Usually empty the entire entity configuration is loaded by default.
+Usually empty: the entire entity configuration is loaded by default.
 
 #### Preparing each entity (base-application)
 
@@ -304,7 +304,7 @@ get [Generator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
 
 #### Default (yeoman)
 
-Generate properties to improve understanding that depends on others' properties:
+Generate properties to improve understanding that depend on others' properties:
 
 ```ts
 get [Generator.DEFAULT]() {
