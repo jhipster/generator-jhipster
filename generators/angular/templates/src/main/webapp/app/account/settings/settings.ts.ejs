@@ -16,17 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 <%_ if (enableTranslation) { _%>
-import { TranslateService, TranslatePipe } from '@ngx-translate/core';
-import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
-import { AlertError } from 'app/shared/alert';
-import { AccountService, Account } from 'app/core/auth';
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config';
+<%_ } _%>
+import { Account, AccountService } from 'app/core/auth';
+import { AlertError } from 'app/shared/alert';
+<%_ if (enableTranslation) { _%>
+import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 const initialAccount: Account = {} as Account;

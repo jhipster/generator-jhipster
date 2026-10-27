@@ -16,12 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { type Ref, computed, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
+
 import ConfigurationService from './configuration.service';
 
 export default defineComponent({

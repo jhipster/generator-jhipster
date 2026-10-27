@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config';
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -26,13 +25,12 @@ import { Router } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
+import { serverApiUrl } from 'app/config';
 import { Authority } from 'app/shared/jhipster/constants';
-import { Account } from './account.model';
-import { StateStorageService } from './state-storage.service';
-<%_ if (generateUserManagement) { _%>
-<%_ } _%>
 
+import { Account } from './account.model';
 import { AccountService } from './account.service';
+import { StateStorageService } from './state-storage.service';
 
 function accountWithAuthorities(authorities: string[]): Account {
   return {

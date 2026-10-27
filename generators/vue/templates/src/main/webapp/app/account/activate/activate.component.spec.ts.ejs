@@ -17,8 +17,9 @@
  limitations under the License.
 -%>
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
+
 import { createTestingPinia } from '@pinia/testing';
+import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import Activate from './activate.vue';

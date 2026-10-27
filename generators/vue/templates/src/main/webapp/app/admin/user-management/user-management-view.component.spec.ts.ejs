@@ -18,14 +18,16 @@
 -%>
 <%_ const tsKeyId = user.primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount } from '@vue/test-utils';
-import axios from 'axios';
 import { ref } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
+import { shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+
 import AlertService from '@/shared/alert/alert.service';
-import UserManagementView from './user-management-view.vue';
 import { Authority } from '@/shared/jhipster/constants';
+
+import UserManagementView from './user-management-view.vue';
 
 let route: Partial<RouteLocation>;
 const routerPushMock = vi.fn();

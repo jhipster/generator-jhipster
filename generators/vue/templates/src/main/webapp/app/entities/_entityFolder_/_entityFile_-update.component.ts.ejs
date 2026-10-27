@@ -16,18 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { type Ref, computed, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
+
 import { useVuelidate } from '@vuelidate/core'
 
+import { useAlertService } from '@/shared/alert/alert.service';
+import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
-import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)

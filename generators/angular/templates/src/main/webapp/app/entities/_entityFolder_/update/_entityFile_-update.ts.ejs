@@ -24,45 +24,37 @@
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
 _%>
-import { Component, <%- builtInUserManagement ? 'computed, ' : '' %>inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
+<%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
+<%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
+<%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
 import { HttpResponse } from '@angular/common/http';
+import { Component, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %>, <%- builtInUserManagement ? 'computed, ' : '' %>inject, signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { finalize<%- relationships.some(rel => rel.persistableRelationship) ? ', map' : '' %>, Observable } from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-<%_ const constantLabelPipes = [...new Map(fields.filter(field => field.angularFieldClientConstant?.angularConstantLabelPipe).map(field => [field.angularFieldClientConstant.angularConstantLabelPipe.importName, field.angularFieldClientConstant.angularConstantLabelPipe])).values()]; _%>
-<%_ if (enableTranslation) { _%>
-import { <%- constantLabelPipes.filter(pipe => pipe.importPath === 'app/shared/language').map(pipe => `${pipe.importName}, `).join('') %>TranslateDirective } from 'app/shared/language';
-<%_ } _%>
-<%_ for (const pipe of constantLabelPipes.filter(pipe => pipe.importPath !== 'app/shared/language')) { _%>
-import { <%- pipe.importName %> } from '<%- pipe.importPath %>';
-<%_ } _%>
-<%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
-import { TranslatePipe } from '@ngx-translate/core';
-<%_ } _%>
-<%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ if (anyFieldHasTypeLocalDate) { _%>
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 <%_ } _%>
 <%_ if (anyFieldHasDocumentation) { _%>
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 <%_ } _%>
-import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
-import { ReactiveFormsModule } from '@angular/forms';
+<%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
+import { TranslatePipe } from '@ngx-translate/core';
+<%_ } _%>
+import { Observable, finalize<%- relationships.some(rel => rel.persistableRelationship) ? ', map' : '' %> } from 'rxjs';
 
-import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
-import { I<%- entityAngularName %><%- builtInUserManagement || (!primaryKey.autoGenerate && updatableEntity) ? `, New${entityAngularName}` : '' %> } from '../<%- entityFileName %>.model';
-import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
-<%_ const clientConstants = [...new Map(fields.filter(field => field.angularFieldClientConstant).map(field => [field.angularFieldClientConstant.angularConstantName, field.angularFieldClientConstant])).values()]; _%>
+<%_ for (const pipe of constantLabelPipes.filter(pipe => pipe.importPath !== 'app/shared/language')) { _%>
+import { <%- pipe.importName %> } from '<%- pipe.importPath %>';
+<%_ } _%>
 <%_ for (const { angularConstantName, angularConstantImportPath } of clientConstants) { _%>
 import { <%- angularConstantName %> } from '<%- angularConstantImportPath %>';
 <%_ } _%>
-<%_ for (const { otherEntity } of primaryKeyOnlyRelationships) { _%>
-import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
+<%_ for (const [importedType, importedPath] of entityClientEnumImports) { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
-import { EventManager, EventWithContent, DataUtils, FileLoadError } from 'app/core/util';
-import { type BlobType } from 'app/shared/jhipster/data-utils';
+import { DataUtils, EventManager, EventWithContent, FileLoadError } from 'app/core/util';
 <%_ } _%>
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const uniqueRel = relationshipsByEntityNeedingOptions[0]; _%>
@@ -71,9 +63,20 @@ import { I<%- uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%
 import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/service/<%- uniqueRel.otherEntity.entityFileName %>.service';
   <%_ } _%>
 <%_ } _%>
-<%_ for (const [importedType, importedPath] of entityClientEnumImports) { _%>
-import { <%- importedType %> } from '<%- importedPath %>';
+<%_ for (const { otherEntity } of primaryKeyOnlyRelationships) { _%>
+import { <%- otherEntity.entityAngularName %>Service } from 'app/entities/<%- otherEntity.entityFolderName %>/service/<%- otherEntity.entityFileName %>.service';
 <%_ } _%>
+import { AlertError<%- anyFieldIsBlobDerived ? ', AlertErrorModel' : '' %> } from 'app/shared/alert';
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { type BlobType } from 'app/shared/jhipster/data-utils';
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+import { <%- constantLabelPipes.filter(pipe => pipe.importPath === 'app/shared/language').map(pipe => `${pipe.importName}, `).join('') %>TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+import { I<%- entityAngularName %><%- builtInUserManagement || (!primaryKey.autoGenerate && updatableEntity) ? `, New${entityAngularName}` : '' %> } from '../<%- entityFileName %>.model';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+
+import { <%- entityAngularName %>FormGroup, <%- entityAngularName %>FormService } from './<%- entityFileName %>-form.service';
 
 @Component({
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-update',

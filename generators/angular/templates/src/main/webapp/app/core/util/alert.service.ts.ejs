@@ -16,11 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, SecurityContext, Service, signal, Signal, WritableSignal } from '@angular/core';
+import { SecurityContext, Service, Signal, WritableSignal, inject, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
+<%_ } _%>
 
+<%_ if (enableTranslation) { _%>
 import { translationNotFoundMessage } from 'app/config';
 <%_ } _%>
 

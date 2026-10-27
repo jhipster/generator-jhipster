@@ -17,8 +17,10 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import LoginService from './login.service';
+
 import axios from 'axios';
+
+import LoginService from './login.service';
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),

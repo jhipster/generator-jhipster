@@ -16,16 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type ComputedRef, defineComponent, inject, ref, type Ref } from 'vue';
+import { type ComputedRef, type Ref, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
 
+import { useAlertService } from '@/shared/alert/alert.service';
 import { useDateFormat } from '@/shared/composables'
 import { getMessageFromHeaders } from '@/shared/jhipster/headers';
+
 import UserManagementService from './user-management.service';
-import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>UserManagementView',

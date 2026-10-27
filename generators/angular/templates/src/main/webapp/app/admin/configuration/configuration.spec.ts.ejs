@@ -18,11 +18,12 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { of } from 'rxjs';
 
 import Configuration from './configuration';
-import { ConfigurationService } from './configuration.service';
 import { Bean, PropertySource } from './configuration.model';
+import { ConfigurationService } from './configuration.service';
 
 describe('Configuration', () => {
   let comp: Configuration;

@@ -16,12 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type Composer } from 'vue-i18n';
+
 <%_ if (microfrontend) { _%>
 import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>
 import axios from 'axios';
-import { type Composer } from 'vue-i18n';
 import dayjs from 'dayjs';
+
 import languages from '@/shared/config/languages';
 
 export default class TranslationService {

@@ -131,6 +131,14 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_REACT/);
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_VUE/);
       });
+      if (sampleConfig.applicationType === 'microservice') {
+        it('should share application modules by absolute path', () => {
+          runResult.assertFileContent(`${clientRootDir}module-federation.config.ts`, 'import: fileURLToPath(new URL(`./');
+        });
+        it('should not share the locale reducer, so the microfrontend registers its own translations', () => {
+          runResult.assertNoFileContent(`${clientRootDir}module-federation.config.ts`, "'app/shared/reducers/locale'");
+        });
+      }
 
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
@@ -288,6 +296,20 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('oauth2 login url', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework, skipServer: true, authenticationType: 'oauth2' })
+        .withMockedGenerators(['jhipster:common']);
+    });
+
+    it('should navigate to the sign-in route by path', () => {
+      // react-router's navigate() treats a protocol-relative url as a path.
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/util/url-utils.ts`, "export const getLoginUrl = () => '/sign-in';");
+    });
+  });
+
   describe('addClientStyle needle api', () => {
     before(async () => {
       await helpers
@@ -362,6 +384,21 @@ describe(`generator - ${clientFramework}`, () => {
         `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
         /<MenuItem icon="asterisk" to="\/entityPage">\n( *)Router Name\n( *)<\/MenuItem>/,
       );
+    });
+  });
+
+  describe('microfrontend translations', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'microservice', enableTranslation: true })
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should keep the translations registered by the host when registering its own', () => {
+      expect(runResult.getSnapshot('**/app/shared/reducers/locale*.ts')).toMatchSnapshot();
     });
   });
 });

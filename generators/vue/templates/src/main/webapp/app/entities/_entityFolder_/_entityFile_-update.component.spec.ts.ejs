@@ -18,15 +18,19 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount, type MountingOptions } from '@vue/test-utils';
 import { type RouteLocation } from 'vue-router';
 
+import { type MountingOptions, shallowMount } from '@vue/test-utils';
 <%_ if (anyFieldIsTimeDerived) { _%>
 import dayjs from 'dayjs';
+<%_ } _%>
+
+import AlertService from '@/shared/alert/alert.service';
+<%_ if (anyFieldIsTimeDerived) { _%>
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
+
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
-import AlertService from '@/shared/alert/alert.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)

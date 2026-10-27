@@ -19,11 +19,13 @@
 <%_ const tsKeyId = user.primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
+
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import AlertService from '@/shared/alert/alert.service';
 import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
+
 import UserManagement from './user-management.vue';
 
 type UserManagementComponentType = InstanceType<typeof UserManagement>;

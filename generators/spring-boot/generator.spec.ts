@@ -560,4 +560,16 @@ describe(`generator - ${generator}`, () => {
       });
     });
   }
+
+  for (const serviceDiscoveryType of ['no', 'consul'] as const) {
+    describe(`gradle with ${serviceDiscoveryType} service discovery`, () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ buildTool: 'gradle', serviceDiscoveryType, skipClient: true });
+      });
+
+      it('should replace the placeholders in every configuration file', () => {
+        expect(runResult.getSnapshot('**/gradle/profile_*.gradle')).toMatchSnapshot();
+      });
+    });
+  }
 });

@@ -20,6 +20,9 @@ import { TranslatorContext } from 'react-jhipster';
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
+<%_ if (applicationTypeMicroservice) { _%>
+import merge from 'deepmerge';
+<%_ } _%>
 
 const initialState = {
   currentLocale: '',
@@ -44,16 +47,25 @@ export const registerTranslations = (
   if (!locale) return Promise.resolve();
   let registration = registeredLocales.get(locale);
   if (!registration) {
-    registration = import(`../../../i18n/${locale}/${locale}.js`).then(
-      translations => {
+    registration = import(`../../../i18n/${locale}/${locale}.js`)
+      .then(translations => {
+  <%_ if (applicationTypeMicroservice) { _%>
+        // The translations already registered by the host application win, so a microfrontend adds its own keys
+        // without replacing the host's, like the application title.
+        const registered = TranslatorContext.context.translations[locale];
+        TranslatorContext.registerTranslations(
+          locale,
+          registered ? merge(translations.default, registered, { arrayMerge: (_target, source) => source }) : translations.default,
+        );
+  <%_ } else { _%>
         TranslatorContext.registerTranslations(locale, translations.default);
-      },
-      error => {
-        // Allow retrying if the translations could not be loaded.
+  <%_ } _%>
+      })
+      .catch(error => {
+        // Allow retrying if the translations could not be registered.
         registeredLocales.delete(locale);
         throw error;
-      },
-    );
+      });
     registeredLocales.set(locale, registration);
   }
   return registration;

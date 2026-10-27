@@ -18,11 +18,13 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { flushPromises, shallowMount, type MountingOptions } from '@vue/test-utils';
 import { type RouteLocation } from 'vue-router';
 
-import <%- entityAngularName %>Details from './<%- entityFileName %>-details.vue';
+import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
+
 import AlertService from '@/shared/alert/alert.service';
+
+import <%- entityAngularName %>Details from './<%- entityFileName %>-details.vue';
 
 type <%- entityAngularName %>DetailsComponentType = InstanceType<typeof <%- entityAngularName %>Details>;
 

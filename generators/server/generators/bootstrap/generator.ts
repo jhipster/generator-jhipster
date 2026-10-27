@@ -20,12 +20,12 @@
 import { getEntityDerivedPropertyMutations } from '../../../../lib/command/mutations.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { upperFirst } from '../../../../lib/utils/string-utils.ts';
+import prepareSqlApplicationProperties from '../../../base-application/generators/database-bootstrap/support/application-properties.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import javaDomainCommand from '../../../java/generators/domain/command.ts';
-import prepareSqlApplicationProperties from '../../../spring-boot/generators/data-relational/support/application-properties.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
 import {
   addEntitiesOtherRelationships,
@@ -49,6 +49,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     }
 
     await this.dependsOnBootstrap('common');
+    // The database preparation the backend reads, composed before it so its tasks of a priority run first.
+    await this.dependsOnJHipster('jhipster:base-application:database-bootstrap');
   }
 
   get composingBootstrap() {
@@ -91,11 +93,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         if (application.entitySuffix === application.dtoSuffix) {
           throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equal!');
         }
-      },
-      prepareForTemplates({ applicationDefaults }) {
-        applicationDefaults({
-          jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
-        });
       },
     });
   }
@@ -178,8 +175,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareRelationship({ application, entity, relationship }) {
-        prepareRelationship({ application, entity, relationship });
+      prepareRelationship({ relationship }) {
+        prepareRelationship({ relationship });
       },
     });
   }
