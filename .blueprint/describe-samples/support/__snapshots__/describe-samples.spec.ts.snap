@@ -280,6 +280,11 @@ exports[`describe-samples - support describeSampleGroups should match the sample
       "daily-gradle-ngx-psql-es-noi18n",
     ],
   },
+  "daily-liquibase": {
+    "samples": [
+      "daily-gradle-liquibase",
+    ],
+  },
   "daily-monolith-oauth2": {
     "samples": [
       "daily-ngx-oauth2",
