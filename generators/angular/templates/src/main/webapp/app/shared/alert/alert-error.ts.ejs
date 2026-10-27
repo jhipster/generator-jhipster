@@ -134,11 +134,11 @@ export class AlertError implements OnDestroy {
       }
       // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
       const convertedField: string = fieldError.field.replaceAll(/\[\d*\]/g, '[]');
-      const fieldName: string =
 <%_ if (enableTranslation) { _%>
+      const fieldName: string =
         this.translateService.instant(`<%- frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
 <%_ } else { _%>
-        convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+      const fieldName: string = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
 <%_ } _%>
       this.addErrorAlert(`Error on field "${fieldName}"`<%- enableTranslation ? ', `error.${fieldError.message as string}`, { fieldName }' : '' %>);
     }
