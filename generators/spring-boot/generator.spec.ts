@@ -560,4 +560,17 @@ describe(`generator - ${generator}`, () => {
       });
     });
   }
+
+  describe('gradle with consul', () => {
+    before(async () => {
+      await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'gradle', serviceDiscoveryType: 'consul', skipClient: true });
+    });
+
+    it('should replace the version placeholder in every configuration file', () => {
+      for (const file of ['gradle/profile_dev.gradle', 'gradle/profile_prod.gradle']) {
+        runResult.assertFileContent(file, 'filesMatching(["**/application*.yml", "**/bootstrap*.yml"])');
+      }
+      expect(runResult.getSnapshot('**/gradle/profile_*.gradle')).toMatchSnapshot();
+    });
+  });
 });
