@@ -17,13 +17,15 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import * as setupAxiosConfig from './axios-interceptor';
+
 import axios from 'axios';
 import MockAdapter from "axios-mock-adapter";
 
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
+
+import * as setupAxiosConfig from './axios-interceptor';
 
 const mock = new MockAdapter(axios);
 

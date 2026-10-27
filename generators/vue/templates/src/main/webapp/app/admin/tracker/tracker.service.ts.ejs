@@ -18,17 +18,18 @@
 -%>
 import { type ComputedRef, inject, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import SockJS from 'sockjs-client';
-import { map } from 'rxjs';
+
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import Cookies from 'js-cookie';
+import { map } from 'rxjs';
+import SockJS from 'sockjs-client';
 
 import {
-  CSRF_TOKEN_COOKIE_NAME,
-  CSRF_TOKEN_HEADER_NAME,
 <%_ if (authenticationTypeJwt) { _%>
   AUTHENTICATION_TOKEN_KEY,
 <%_ } _%>
+  CSRF_TOKEN_COOKIE_NAME,
+  CSRF_TOKEN_HEADER_NAME,
 } from '@/shared/jhipster/constants';
 import { encodeCsrfToken } from '@/shared/jhipster/encode-csrf-token';
 

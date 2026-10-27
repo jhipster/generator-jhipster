@@ -17,8 +17,10 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import useDataUtils from './data-utils.service';
+
 import { paddingSize } from '@/shared/jhipster/data-utils';
+
+import useDataUtils from './data-utils.service';
 
 describe('DataUtils Service', () => {
   let dataUtilsService: ReturnType<typeof useDataUtils>;

@@ -16,23 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, inject, onMounted, ref, type Ref, watch, watchEffect } from 'vue';
+import { type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
+
 <%_ if (paginationInfiniteScroll) { _%>
 import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
 
-import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
-<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
-import useDataUtils from '@/shared/data/data-utils.service';
-<%_ } _%>
+import { useAlertService } from '@/shared/alert/alert.service';
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
 import { useDateFormat } from '@/shared/composables'
 <%_ } _%>
+<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
+import useDataUtils from '@/shared/data/data-utils.service';
+<%_ } _%>
+import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
-import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   name: '<%- entityAngularName %>',

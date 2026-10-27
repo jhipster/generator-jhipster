@@ -17,11 +17,12 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import Metrics from './metrics.vue';
 import MetricsService from './metrics.service';
+import Metrics from './metrics.vue';
 
 type MetricsComponentType = InstanceType<typeof Metrics>;
 

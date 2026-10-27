@@ -17,17 +17,19 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type RouteLocation } from 'vue-router';
+
+import { createTestingPinia } from '@pinia/testing';
 import { type MountingOptions, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import { type RouteLocation } from 'vue-router';
-import { createTestingPinia } from '@pinia/testing';
+
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-
-import AccountService from '../account.service';
-import LoginForm from './login-form.vue';
 import { useStore } from '@/store';
+import AccountService from '../account.service';
+
+import LoginForm from './login-form.vue';
 
 type LoginFormComponentType = InstanceType<typeof LoginForm>;
 

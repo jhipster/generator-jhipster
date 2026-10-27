@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { computed, ref } from 'vue';
+
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue';
 
 export const useAccountStore = defineStore('main', () => {
   const userIdentity = ref(null);
