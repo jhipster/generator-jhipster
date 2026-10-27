@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, describe, it } from 'expect-node';
+import { before, describe, expect, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import Generator from './generator.ts';
@@ -35,10 +35,28 @@ describe(`generator - ${generator}`, () => {
       await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'gradle', skipClient: true });
     });
 
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
     it('should find the changelogs and the entities for the gradle tasks', () => {
       runResult.assertFileContent('gradle/liquibase.gradle', 'searchPath ".,src/main/resources/"');
       runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime sourceSets.main.output');
       runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime "org.liquibase.ext:liquibase-hibernate7:');
+    });
+  });
+
+  describe('with gradle and a reactive application', () => {
+    before(async () => {
+      await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'gradle', skipClient: true, reactive: true });
+    });
+
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
+    it('should not add the hibernate reference, which needs JPA entities', () => {
+      runResult.assertFileContent('gradle/liquibase.gradle', 'searchPath ".,src/main/resources/"');
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'sourceSets.main.output');
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'liquibase-hibernate');
     });
   });
 });

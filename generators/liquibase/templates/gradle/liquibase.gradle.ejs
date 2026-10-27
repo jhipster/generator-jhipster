@@ -42,7 +42,7 @@ dependencies {
   implementation "org.liquibase.ext:liquibase-cassandra:${dependencyManagement.importedProperties['liquibase.version']}"
   implementation "org.springframework:spring-jdbc"
 <%_ } _%>
-<%_ if (!reactive && backendTypeSpringBoot) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
   // The diffLog activity's hibernate:spring reference reads the compiled entities.
   liquibaseRuntime sourceSets.main.output
 <%_ } _%>
