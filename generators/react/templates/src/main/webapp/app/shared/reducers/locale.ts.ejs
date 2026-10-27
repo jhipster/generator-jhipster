@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import dayjs from 'dayjs';
+<%_ if (microfrontend) { _%>
+import merge from 'deepmerge';
+<%_ } _%>
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { TranslatorContext } from 'react-jhipster';
@@ -46,7 +49,10 @@ export const registerTranslations = (
   if (!registration) {
     registration = import(`../../../i18n/${locale}/${locale}.js`).then(
       translations => {
-        TranslatorContext.registerTranslations(locale, translations.default);
+        // The translations already registered by the host application win, so a microfrontend adds its own keys
+        // without replacing the host's, like the application title.
+        const registered = TranslatorContext.context.translations[locale];
+        TranslatorContext.registerTranslations(locale, registered ? merge(translations.default, registered) : translations.default);
       },
       error => {
         // Allow retrying if the translations could not be loaded.
