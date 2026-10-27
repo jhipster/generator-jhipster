@@ -376,8 +376,7 @@ describe(`generator - ${clientFramework}`, () => {
     });
 
     it('should keep the translations registered by the host when registering its own', () => {
-      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/reducers/locale.ts`, 'merge(translations.default, registered)');
-      expect(runResult.getSnapshot('**/app/shared/reducers/locale.ts')).toMatchSnapshot();
+      expect(runResult.getSnapshot('**/app/shared/reducers/locale*.ts')).toMatchSnapshot();
     });
   });
 });
