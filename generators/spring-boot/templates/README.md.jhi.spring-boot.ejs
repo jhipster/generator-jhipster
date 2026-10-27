@@ -283,30 +283,29 @@ Note: we have turned off forced authentication redirect for UI in [<%- dockerSer
 
 You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarsource.com/sonarqube-server/latest/analyzing-source-code/scanners/sonarscanner/)<% if (buildTool) { %> or by using the <%- buildTool === 'maven' ? 'maven' : '' %><%- buildTool === 'gradle' ? 'gradle' : '' %> plugin<% } %>.
 
+The scanner needs a token. Log in at http://localhost:9001 as `admin`/`admin`, create a global analysis token under **My Account > Security**, and export it:
+
+```bash
+export SONAR_TOKEN=<your-token>
+```
+
 Then, run a Sonar analysis:
 
 <%_ if (buildToolMaven) { _%>
 ```bash
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
+./mvnw -Pprod clean verify sonar:sonar
 ```
 
 If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
 
 ```bash
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
+./mvnw initialize sonar:sonar
 ```
 <%_ } else if (buildToolGradle) { _%>
 ```bash
-./gradlew -Pprod clean check jacocoTestReport sonarqube -Dsonar.login=admin -Dsonar.password=admin
+./gradlew -Pprod clean check jacocoTestReport sonar
 ```
 <%_ } _%>
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```bash
-sonar.login=admin
-sonar.password=admin
-```
 
 For more information, refer to the [Code quality page][].
 
