@@ -24,6 +24,7 @@ import {
   databaseData,
   getDatabaseTypeData,
   hibernateSnakeCase,
+  prepareFieldColumnForDatabase,
   prepareFieldForDatabase,
   prepareRelationshipForDatabase,
 } from './support/index.ts';
@@ -63,7 +64,11 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      prepareFieldForDatabase({ field }) {
+      prepareFieldForDatabase({ application, entity, field }) {
+        // The column of every field, a transient one too, as the generator of the server has it.
+        if ((application as any).databaseTypeAny) {
+          prepareFieldColumnForDatabase({ application, entity: entity as any, field, log: this.log });
+        }
         // A transient field is stored in no column, as the generator of the changelog has it.
         if (!field.transient) {
           prepareFieldForDatabase({ field });

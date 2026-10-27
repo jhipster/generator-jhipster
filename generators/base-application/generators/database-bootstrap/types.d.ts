@@ -39,7 +39,13 @@ export type DatabaseProperty = {
   nullable?: boolean;
 };
 
-export type DatabaseField = BaseApplicationField & DatabaseProperty;
+export type DatabaseField = BaseApplicationField &
+  DatabaseProperty & {
+    /** The column of the field, its name in snake case, prefixed when it is a reserved keyword of the database. */
+    fieldNameAsDatabaseColumn?: string;
+    /** The name of the unique constraint of a unique field. */
+    uniqueConstraintName?: string;
+  };
 
 /** A column of a join table, one for each field of the primary key of the entity it references. */
 export type DatabaseJoinColumn = {
