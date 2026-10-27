@@ -9,6 +9,218 @@ exports[`generator - spring-boot addTestSpringFactory should add a test spring f
 }
 `;
 
+exports[`generator - spring-boot gradle with consul service discovery should replace the placeholders in every configuration file 1`] = `
+{
+  "gradle/profile_dev.gradle": {
+    "contents": "dependencies {
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+springBoot {
+    buildInfo {
+        excludes = ['time']
+    }
+}
+
+bootRun {
+    args = ["--spring.profiles.active=\${springProfiles}"]
+}
+
+
+processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', springProfiles)
+    filesMatching("config/**/*.yml") {
+        filter {
+            it.replace("@project.version@", version).replace("@spring.profiles.active@", springProfiles)
+        }
+    }
+}
+
+def integrationTest = tasks.register('integrationTest', Test) {
+    maxHeapSize = "1G"
+    useJUnitPlatform()
+    description = "Execute integration tests."
+    group = "verification"
+    include "**/*IT*", "**/*IntTest*"
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    testLogging {
+        events = ['FAILED', 'SKIPPED']
+        exceptionFormat = "full"
+    }
+    systemProperty('spring.profiles.active', springTestProfiles)
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    dependsOn(tasks.named('test'))
+}
+",
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "contents": "dependencies {
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+ext {
+    if (project.hasProperty("api-docs")) {
+        springProfiles += ",api-docs"
+    }
+}
+
+springBoot {
+    buildInfo()
+}
+
+bootRun {
+    args = ["--spring.profiles.active=\${springProfiles}"]
+}
+
+
+processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', springProfiles)
+    filesMatching("config/**/*.yml") {
+        filter {
+            it.replace("@project.version@", version).replace("@spring.profiles.active@", springProfiles)
+        }
+    }
+}
+
+def integrationTest = tasks.register('integrationTest', Test) {
+    maxHeapSize = "1G"
+    useJUnitPlatform()
+    description = "Execute integration tests."
+    group = "verification"
+    include "**/*IT*", "**/*IntTest*"
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    testLogging {
+        events = ['FAILED', 'SKIPPED']
+        exceptionFormat = "full"
+    }
+    systemProperty('spring.profiles.active', springTestProfiles)
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    dependsOn(tasks.named('test'))
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-boot gradle with no service discovery should replace the placeholders in every configuration file 1`] = `
+{
+  "gradle/profile_dev.gradle": {
+    "contents": "dependencies {
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+springBoot {
+    buildInfo {
+        excludes = ['time']
+    }
+}
+
+bootRun {
+    args = ["--spring.profiles.active=\${springProfiles}"]
+}
+
+
+processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', springProfiles)
+    filesMatching("config/**/*.yml") {
+        filter {
+            it.replace("@project.version@", version).replace("@spring.profiles.active@", springProfiles)
+        }
+    }
+}
+
+def integrationTest = tasks.register('integrationTest', Test) {
+    maxHeapSize = "1G"
+    useJUnitPlatform()
+    description = "Execute integration tests."
+    group = "verification"
+    include "**/*IT*", "**/*IntTest*"
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    testLogging {
+        events = ['FAILED', 'SKIPPED']
+        exceptionFormat = "full"
+    }
+    systemProperty('spring.profiles.active', springTestProfiles)
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    dependsOn(tasks.named('test'))
+}
+",
+    "stateCleared": "modified",
+  },
+  "gradle/profile_prod.gradle": {
+    "contents": "dependencies {
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+ext {
+    if (project.hasProperty("api-docs")) {
+        springProfiles += ",api-docs"
+    }
+}
+
+springBoot {
+    buildInfo()
+}
+
+bootRun {
+    args = ["--spring.profiles.active=\${springProfiles}"]
+}
+
+
+processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', springProfiles)
+    filesMatching("config/**/*.yml") {
+        filter {
+            it.replace("@project.version@", version).replace("@spring.profiles.active@", springProfiles)
+        }
+    }
+}
+
+def integrationTest = tasks.register('integrationTest', Test) {
+    maxHeapSize = "1G"
+    useJUnitPlatform()
+    description = "Execute integration tests."
+    group = "verification"
+    include "**/*IT*", "**/*IntTest*"
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    testLogging {
+        events = ['FAILED', 'SKIPPED']
+        exceptionFormat = "full"
+    }
+    systemProperty('spring.profiles.active', springTestProfiles)
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+    dependsOn(tasks.named('test'))
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - spring-boot source api editJavaFile with springBeans should match file content snapshot 1`] = `
 {
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
