@@ -16,16 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { KeyValuePipe, JsonPipe } from '@angular/common';
+import { JsonPipe, KeyValuePipe } from '@angular/common';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
+import { SortByDirective, SortDirective, SortService, sortStateSignal } from 'app/shared/sort';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
-import { ConfigurationService } from './configuration.service';
 import { Bean, PropertySource } from './configuration.model';
+import { ConfigurationService } from './configuration.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-configuration',

@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { DecimalPipe, KeyValuePipe } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { KeyValuePipe, DecimalPipe } from '@angular/common';
-<%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
-<%_ } _%>
 
 import { CacheMetrics } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-metrics-cache',

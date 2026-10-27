@@ -102,13 +102,14 @@ describe("UserManagement Management Delete Component", () => {
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.ts": {
     "contents": "import { Component, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
+
+import { ITEM_DELETED_EVENT } from "app/config";
 import { AlertError } from "app/shared/alert";
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
-import { ITEM_DELETED_EVENT } from "app/config";
 
 @Component({
   templateUrl: "./user-management-delete-dialog.html",
@@ -235,20 +236,19 @@ export class UserManagementDeleteDialog {
     "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import {
+  Router,
   provideRouter,
   withComponentInputBinding,
-  Router,
 } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
+
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
   faArrowLeft,
   faPencilAlt,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
-
 import { of } from "rxjs";
 
 import { ITEM_DELETED_EVENT } from "app/config";
@@ -341,21 +341,21 @@ describe("UserManagement Management Detail Component", () => {
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
     "contents": "import { Component, inject, input } from "@angular/core";
-import { Router } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
-import { filter, tap } from "rxjs";
-import { RouterLink } from "@angular/router";
-import { AccountService } from "app/core/auth";
+import { Router, RouterLink } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { filter, tap } from "rxjs";
+
+import { ITEM_DELETED_EVENT } from "app/config";
+import { AccountService } from "app/core/auth";
 import { Alert, AlertError } from "app/shared/alert";
 import {
   DurationPipe,
-  FormatMediumDatetimePipe,
   FormatMediumDatePipe,
+  FormatMediumDatetimePipe,
 } from "app/shared/date";
 import { IUserManagement } from "../user-management.model";
-import { ITEM_DELETED_EVENT } from "app/config";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
@@ -595,8 +595,8 @@ export class UserManagementDetail {
   vi,
 } from "vitest";
 import {
-  provideHttpClientTesting,
   HttpTestingController,
+  provideHttpClientTesting,
 } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute, convertToParamMap } from "@angular/router";
@@ -612,8 +612,8 @@ import {
   faSync,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { of, Subject } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { Subject, of } from "rxjs";
 
 import { sampleWithRequiredData } from "../user-management.test-samples";
 import { UserManagementService } from "../service/user-management.service";
@@ -844,18 +844,18 @@ describe("UserManagement Management Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
-    "contents": "import {
+    "contents": "import { HttpHeaders } from "@angular/common/http";
+import {
   Component,
+  WritableSignal,
   computed,
   effect,
   inject,
   linkedSignal,
   signal,
-  WritableSignal,
   untracked,
 } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { HttpHeaders } from "@angular/common/http";
 import {
   ActivatedRoute,
   Data,
@@ -863,37 +863,38 @@ import {
   Router,
   RouterLink,
 } from "@angular/router";
-import { combineLatest, filter, tap, map } from "rxjs";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
-import { AlertError, Alert } from "app/shared/alert";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
+import { combineLatest, filter, map, tap } from "rxjs";
+
 import {
-  sortStateSignal,
-  SortDirective,
-  SortByDirective,
-  type SortState,
-  SortService,
-} from "app/shared/sort";
+  DEFAULT_SORT_DATA,
+  ITEMS_PER_PAGE,
+  ITEM_DELETED_EVENT,
+  PAGE_HEADER,
+  SORT,
+  TOTAL_COUNT_RESPONSE_HEADER,
+} from "app/config";
+import { AccountService } from "app/core/auth";
+import { Alert, AlertError } from "app/shared/alert";
 import {
   DurationPipe,
-  FormatMediumDatetimePipe,
   FormatMediumDatePipe,
+  FormatMediumDatetimePipe,
 } from "app/shared/date";
-import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
 import { ItemCount } from "app/shared/pagination";
-import { IUserManagement } from "../user-management.model";
 import {
-  ITEMS_PER_PAGE,
-  PAGE_HEADER,
-  TOTAL_COUNT_RESPONSE_HEADER,
-  SORT,
-  ITEM_DELETED_EVENT,
-  DEFAULT_SORT_DATA,
-} from "app/config";
-import { UserManagementService } from "../service/user-management.service";
-import { AccountService } from "app/core/auth";
+  SortByDirective,
+  SortDirective,
+  SortService,
+  type SortState,
+  sortStateSignal,
+} from "app/shared/sort";
+import { IUserManagement } from "../user-management.model";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
+import { UserManagementService } from "../service/user-management.service";
 
 @Component({
   selector: "jhi-user-management",
@@ -1052,15 +1053,15 @@ export class UserManagement {
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
     "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
 import {
-  ActivatedRouteSnapshot,
   ActivatedRoute,
+  ActivatedRouteSnapshot,
   Router,
   convertToParamMap,
 } from "@angular/router";
+
 import { lastValueFrom, of, throwError } from "rxjs";
 
 import { UserManagementService } from "../service/user-management.service";
@@ -1185,7 +1186,7 @@ describe("UserManagement routing resolve service", () => {
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
 
-import { catchError, EMPTY, Observable, of } from "rxjs";
+import { EMPTY, Observable, catchError, of } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1218,18 +1219,18 @@ export default userManagementResolve;
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { TestBed } from "@angular/core/testing";
 import {
-  provideHttpClientTesting,
   HttpTestingController,
+  provideHttpClientTesting,
 } from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
 
 import { IUserManagement } from "../user-management.model";
 import {
-  sampleWithRequiredData,
+  sampleWithFullData,
   sampleWithNewData,
   sampleWithPartialData,
-  sampleWithFullData,
+  sampleWithRequiredData,
 } from "../user-management.test-samples";
 
 import {
@@ -1472,13 +1473,13 @@ describe("UserManagement Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { serverApiUrl } from "app/config";
-import { computed, inject, Service, signal } from "@angular/core";
-import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+    "contents": "import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
+import { Service, computed, inject, signal } from "@angular/core";
 
 import dayjs from "dayjs/esm";
+import { map, Observable } from "rxjs";
 
+import { serverApiUrl } from "app/config";
 import { createRequestOption } from "app/core/request";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
@@ -1680,8 +1681,8 @@ export class UserManagementService extends UserManagementsService {
 import { TestBed } from "@angular/core/testing";
 
 import {
-  sampleWithRequiredData,
   sampleWithNewData,
+  sampleWithRequiredData,
 } from "../user-management.test-samples";
 
 import { UserManagementFormService } from "./user-management-form.service";
@@ -1775,9 +1776,10 @@ describe("UserManagement Form Service", () => {
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
     "contents": "import { Service } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import dayjs from "dayjs/esm";
+
 import { DATE_TIME_FORMAT } from "app/config";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
@@ -2140,12 +2142,13 @@ import { HttpResponse } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of, Subject, from } from "rxjs";
+
+import { Subject, from, of } from "rxjs";
+
+import { IUserManagement } from "../user-management.model";
+import { UserManagementService } from "../service/user-management.service";
 
 import { UserManagementFormService } from "./user-management-form.service";
-import { UserManagementService } from "../service/user-management.service";
-import { IUserManagement } from "../user-management.model";
-
 import { UserManagementUpdate } from "./user-management-update";
 
 describe("UserManagement Management Update Component", () => {
@@ -2266,22 +2269,23 @@ describe("UserManagement Management Update Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { Component, computed, inject, signal, OnInit } from "@angular/core";
-import { HttpResponse } from "@angular/common/http";
+    "contents": "import { HttpResponse } from "@angular/common/http";
+import { Component, OnInit, computed, inject, signal } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { finalize, map, Observable } from "rxjs";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { AlertError } from "app/shared/alert";
-import { ReactiveFormsModule } from "@angular/forms";
+import { Observable, finalize, map } from "rxjs";
 
-import {
-  UserManagementFormService,
-  UserManagementFormGroup,
-} from "./user-management-form.service";
+import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
+import { AlertError } from "app/shared/alert";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
-import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
+
+import {
+  UserManagementFormGroup,
+  UserManagementFormService,
+} from "./user-management-form.service";
 
 @Component({
   selector: "jhi-user-management-update",
@@ -2369,6 +2373,7 @@ export class UserManagementUpdate implements OnInit {
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
     "contents": "import dayjs from "dayjs/esm";
+
 import { IAuthority } from "app/entities/admin/authority/authority.model";
 
 export interface IUserManagement {
@@ -2395,9 +2400,10 @@ export type NewUserManagement = Omit<IUserManagement, "login"> & {
   "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
     "contents": "import { Routes } from "@angular/router";
 
-import { userRouteAccessService } from "app/core/auth";
-import UserManagementResolve from "./route/user-management-routing-resolve.service";
 import { ASC } from "app/config";
+import { userRouteAccessService } from "app/core/auth";
+
+import UserManagementResolve from "./route/user-management-routing-resolve.service";
 
 const userManagementRoute: Routes = [
   {

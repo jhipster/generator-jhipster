@@ -16,22 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { serverApiUrl } from 'app/config';
-import { inject, Service } from '@angular/core';
 <%_ if (authenticationTypeOauth2) { _%>
 import { Location } from '@angular/common';
 <%_ } _%>
 import { HttpClient<%- authenticationTypeOauth2 ? '' : ', HttpHeaders' %> } from '@angular/common/http';
+import { Service, inject } from '@angular/core';
+
 <%_ if (authenticationTypeOauth2) { _%>
 import { Observable } from 'rxjs';
 <%_ } else { _%>
-import { map, Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 <%_ } _%>
 
+import { serverApiUrl } from 'app/config';
+
+<%_ if (!authenticationTypeOauth2) { _%>
+import { Login } from './login.model';
+<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { Logout } from './logout.model';
-<%_ } else { _%>
-import { Login } from './login.model';
 <%_ } _%>
 
 @Service()
