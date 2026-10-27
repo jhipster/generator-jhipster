@@ -80,7 +80,8 @@ export default {
     ...shareDependencies(),
 <%_ if (applicationTypeMicroservice) { _%>
     // The dev server runs the microfrontend on its own, so there is no host to share the application modules with.
-    // Sharing them there also breaks the start: @module-federation/vite evaluates them before the shared packages they import.
+    // Sharing them there also breaks the start: @module-federation/vite evaluates them before the shared packages they import,
+    // see https://github.com/module-federation/vite/issues/1507.
     ...(development ? {} : applicationModules),
 <%_ } else { _%>
     ...applicationModules,
