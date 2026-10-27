@@ -20,11 +20,13 @@
 import js from '@eslint/js';
 import type { Config } from 'eslint/config';
 
+import { ECMASCRIPT_VERSION } from '../constants/jhipster.ts';
+
 import baseConfig from './base.ts';
 
 const recommended: Config = {
   languageOptions: {
-    ecmaVersion: 2024,
+    ecmaVersion: ECMASCRIPT_VERSION,
     sourceType: 'module',
   },
   settings: {

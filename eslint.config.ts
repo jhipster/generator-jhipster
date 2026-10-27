@@ -9,6 +9,7 @@ import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
+import { ECMASCRIPT_VERSION } from './lib/constants/jhipster.ts';
 import { jsRules } from './lib/eslint/base.ts';
 import jhipster, { plugin as jhipsterPlugin } from './lib/eslint/index.ts';
 
@@ -21,7 +22,7 @@ export default defineConfig(
     files: jsTsFiles,
     extends: [js.configs.recommended],
     languageOptions: {
-      ecmaVersion: 2024,
+      ecmaVersion: ECMASCRIPT_VERSION,
       sourceType: 'module',
       globals: {
         ...globals.node,

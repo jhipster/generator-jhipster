@@ -89,6 +89,7 @@ exports[`generator - generate-blueprint with all option should match application
   "dockerImage": undefined,
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dynamic": false,
+  "ecmaVersion": 2024,
   "generators": Any<Object>,
   "gitDependency": undefined,
   "githubActions": {
@@ -1930,6 +1931,7 @@ exports[`generator - generate-blueprint with default config should match applica
   "dockerImage": undefined,
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dynamic": false,
+  "ecmaVersion": 2024,
   "gitDependency": undefined,
   "githubActions": {
     "actions/checkout": "actions/checkout@VERSION",
