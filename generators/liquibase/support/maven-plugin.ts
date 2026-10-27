@@ -69,7 +69,7 @@ export default function mavenPluginContent({
       </dependency>
       <dependency>
         <groupId>org.liquibase.ext</groupId>
-        <artifactId>liquibase-hibernate6</artifactId>
+        <artifactId>liquibase-hibernate7</artifactId>
         <version>\${liquibase.version}</version>
       </dependency>
       <dependency>
