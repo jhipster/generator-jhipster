@@ -364,6 +364,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/account/login-modal.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
@@ -1199,6 +1202,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/configuration/configuration.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.component.ts": {
@@ -2122,6 +2128,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/account/login-modal.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
@@ -2970,6 +2979,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
@@ -3935,6 +3947,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/admin/configuration/configuration.vue": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
@@ -4853,6 +4868,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
@@ -5680,6 +5698,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": {

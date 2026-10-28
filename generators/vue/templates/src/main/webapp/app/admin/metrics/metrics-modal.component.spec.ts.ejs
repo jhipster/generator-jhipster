@@ -75,3 +75,38 @@ describe('MetricsModal', () => {
     });
   });
 });
+
+describe('MetricsModal view', () => {
+  it('should filter the threads and show their stack trace', async () => {
+    // GIVEN
+    const stackTrace = [{ className: 'Foo', methodName: 'bar', fileName: 'Foo.java', lineNumber: 1 }];
+    const threadDump = ['RUNNABLE', 'WAITING', 'TIMED_WAITING', 'BLOCKED'].map(threadState => ({ threadName: threadState, threadState, stackTrace }));
+    const wrapper = shallowMount(MetricsModal, { props: { threadDump } });
+
+    // WHEN
+    for (const element of wrapper.findAll('span.badge, a')) {
+      await element.trigger('click');
+    }
+    await wrapper.find('input').setValue('BLOCKED');
+
+    // THEN
+    expect(wrapper.vm.filteredThreadDump).toEqual([expect.objectContaining({ threadState: 'BLOCKED' })]);
+    expect(wrapper.text()).toContain('Foo.bar(Foo.java:1)');
+  });
+
+  it('should count no thread without a thread dump', () => {
+    // WHEN
+    const wrapper = shallowMount(MetricsModal, { props: { threadDump: null } });
+
+    // THEN
+    expect(wrapper.vm.threadDumpData.threadDumpAll).toBe(0);
+  });
+
+  it('should default to no thread', () => {
+    // WHEN
+    const wrapper = shallowMount(MetricsModal);
+
+    // THEN
+    expect(wrapper.vm.filteredThreadDump).toEqual([]);
+  });
+});

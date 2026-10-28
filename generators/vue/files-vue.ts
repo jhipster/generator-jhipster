@@ -181,7 +181,7 @@ export const vueFiles = asWriteFilesSection({
   adminModule: [
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts'],
+      templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts', 'admin/docs/docs.component.spec.ts'],
     },
     {
       ...clientApplicationTemplatesBlock(),
