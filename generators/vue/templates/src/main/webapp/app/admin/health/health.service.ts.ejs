@@ -57,15 +57,12 @@ export default class HealthService {
     const details = {};
     let hasDetails = false;
 
-    for (const key in healthObject) {
-      if (Object.hasOwn(healthObject, key)) {
-        const value = healthObject[key];
-        if (key === 'status' || key === 'error') {
-          healthData[key] = value;
-        } else if (!this.isHealthObject(value)) {
-          details[key] = value;
-          hasDetails = true;
-        }
+    for (const [key, value] of Object.entries(healthObject)) {
+      if (key === 'status' || key === 'error') {
+        healthData[key] = value;
+      } else if (!this.isHealthObject(value)) {
+        details[key] = value;
+        hasDetails = true;
       }
     }
 
@@ -82,16 +79,13 @@ export default class HealthService {
   }
 
   flattenHealthData(result: any, path: any, data: any): any {
-    for (const key in data) {
-      if (Object.hasOwn(data, key)) {
-        const value = data[key];
-        if (this.isHealthObject(value)) {
-          if (this.hasSubSystem(value)) {
-            this.addHealthObject(result, false, value, this.getModuleName(path, key));
-            this.flattenHealthData(result, this.getModuleName(path, key), value);
-          } else {
-            this.addHealthObject(result, true, value, this.getModuleName(path, key));
-          }
+    for (const [key, value] of Object.entries(data ?? {})) {
+      if (this.isHealthObject(value)) {
+        if (this.hasSubSystem(value)) {
+          this.addHealthObject(result, false, value, this.getModuleName(path, key));
+          this.flattenHealthData(result, this.getModuleName(path, key), value);
+        } else {
+          this.addHealthObject(result, true, value, this.getModuleName(path, key));
         }
       }
     }
@@ -110,27 +104,10 @@ export default class HealthService {
   }
 
   hasSubSystem(healthObject: any): any {
-    let result = false;
-
-    for (const key in healthObject) {
-      if (Object.hasOwn(healthObject, key)) {
-        const value = healthObject[key];
-        if (value?.status) {
-          result = true;
-        }
-      }
-    }
-    return result;
+    return Object.values(healthObject).some((value: any) => value?.status);
   }
 
   isHealthObject(healthObject: any): any {
-    let result = false;
-
-    for (const key in healthObject) {
-      if (Object.hasOwn(healthObject, key) && key === 'status') {
-        result = true;
-      }
-    }
-    return result;
+    return typeof healthObject === 'object' && healthObject !== null && Object.hasOwn(healthObject, 'status');
   }
 }

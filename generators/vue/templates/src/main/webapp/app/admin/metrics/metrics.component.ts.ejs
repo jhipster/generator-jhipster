@@ -87,9 +87,7 @@ export default defineComponent({
         });
 
     const openModal = (): void => {
-      if (metricsModal.value?.show) {
-        metricsModal.value.show();
-      }
+      metricsModal.value.show();
     };
     const filterNaN = (input: any): any => (isNaN(input) ? 0 : input);
     const formatNumber1 = (value: any): any => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
