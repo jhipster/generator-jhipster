@@ -23,7 +23,7 @@ import { lookupGeneratorsWithNamespace } from '../../../lib/utils/index.ts';
  * The generators extending the core generator, which are not blueprinted: a blueprint customizing one provides a generator
  * of its own, composing it.
  */
-const NOT_BLUEPRINTABLE_GENERATORS = ['info', 'jdl'];
+const NOT_BLUEPRINTABLE_GENERATORS = new Set(['info', 'jdl']);
 
 let generatorNamespaces: string[] | undefined;
 
@@ -31,7 +31,7 @@ let generatorNamespaces: string[] | undefined;
 export const lookupGeneratorsNamespaces = (): string[] => {
   generatorNamespaces ??= lookupGeneratorsWithNamespace()
     .map(({ namespace }) => namespace)
-    .filter(namespace => !NOT_BLUEPRINTABLE_GENERATORS.includes(namespace))
+    .filter(namespace => !NOT_BLUEPRINTABLE_GENERATORS.has(namespace))
     .sort();
 
   return generatorNamespaces;
