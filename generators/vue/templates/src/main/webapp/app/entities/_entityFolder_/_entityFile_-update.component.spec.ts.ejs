@@ -186,6 +186,24 @@ describe('Component Tests', () => {
       });
     });
 
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+  <%_ const { fieldName } = fields.find(field => field.blobContentTypeImage); _%>
+    describe('clearInputImage', () => {
+      it('Should clear the image and its content type', async () => {
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.<%- entityInstance %>.<%- fieldName %> = 'AAAA';
+        comp.<%- entityInstance %>.<%- fieldName %>ContentType = 'image/png';
+        await comp.$nextTick();
+
+        comp.clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>');
+
+        expect(comp.<%- entityInstance %>.<%- fieldName %>).toBeNull();
+        expect(comp.<%- entityInstance %>.<%- fieldName %>ContentType).toBeNull();
+      });
+    });
+
+<%_ } _%>
     describe('Previous state', () => {
       it('Should go previous state', async () => {
         <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
