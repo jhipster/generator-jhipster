@@ -533,9 +533,10 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   generateEntityClientFieldDefaultValues(fields: ClientField[]): Record<string, string> {
     const defaultVariablesValues: Record<string, string> = {};
     fields.forEach(field => {
-      const { fieldType, fieldName } = field;
+      const { fieldType, fieldName, defaultValue } = field as ClientField & { defaultValue?: unknown };
       if (fieldType === TYPE_BOOLEAN) {
-        defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
+        // The default value of the field, like the activated of a new user, false otherwise.
+        defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? ${String(defaultValue) === 'true'};`;
       }
     });
     return defaultVariablesValues;
