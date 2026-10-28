@@ -47,11 +47,26 @@ import type {
   Field as VueField,
   Options as VueOptions,
   Source as VueSource,
+  VueFieldClientConstant,
 } from './types.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
+
+/**
+ * Client constants backing the values of `clientConstantsAsValues` fields, by field type.
+ */
+const vueClientConstants: Record<string, VueFieldClientConstant> = {
+  Languages: {
+    vueConstantImport: "import languages from '@/shared/config/languages';",
+    vueConstantValues: 'Object.keys(languages())',
+  },
+  Authority: {
+    vueConstantImport: "import { Authority } from '@/shared/jhipster/constants';",
+    vueConstantValues: 'Object.values(Authority)',
+  },
+};
 
 export class VueApplicationGenerator extends BaseApplicationGenerator<
   VueEntity,
@@ -267,6 +282,13 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareField({ field }) {
+        if (field.clientConstantsAsValues) {
+          const vueFieldClientConstant = vueClientConstants[field.fieldType];
+          if (!vueFieldClientConstant) {
+            throw new Error(`Field type '${field.fieldType}' has no Vue client constant to back its values`);
+          }
+          (field as VueField).vueFieldClientConstant = vueFieldClientConstant;
+        }
         mutateData(field as VueField, {
           // Single-quoted string literal content of a RegExp.
           fieldValidateRulesPatternVue: ({ fieldValidateRulesPattern }) =>

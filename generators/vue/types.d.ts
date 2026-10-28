@@ -27,7 +27,16 @@ import type { VueAddedApplicationProperties } from './application.ts';
 
 export type { Config, Features, Options, Relationship, Source } from '../client/types.d.ts';
 
+/** A client constant backing the values of a `clientConstantsAsValues` field. */
+export type VueFieldClientConstant = {
+  /** Import statement of the constant. */
+  vueConstantImport: string;
+  /** Expression that evaluates to the list of values. */
+  vueConstantValues: string;
+};
+
 export type Field = ClientField & {
+  vueFieldClientConstant?: VueFieldClientConstant;
   /** The validation pattern of the field, as the content of a single-quoted string. */
   fieldValidateRulesPatternVue?: string;
 };

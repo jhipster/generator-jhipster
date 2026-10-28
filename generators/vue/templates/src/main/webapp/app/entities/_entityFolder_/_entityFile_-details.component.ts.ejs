@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, defineComponent, inject, ref } from 'vue';
+import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>type Ref, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -45,6 +45,9 @@ export default defineComponent({
 <%_ } _%>
     const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
     const alertService = inject('alertService', () => useAlertService(), true);
+<%_ if (builtInUserManagement) { _%>
+    const username = inject<ComputedRef<string>>('currentUsername');
+<%_ } _%>
 
 <% if (anyFieldIsBlobDerived) { %>
     const dataUtils = useDataUtils();
@@ -82,6 +85,9 @@ export default defineComponent({
     }
 
     return {
+<%_ if (builtInUserManagement) { _%>
+      username,
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>
