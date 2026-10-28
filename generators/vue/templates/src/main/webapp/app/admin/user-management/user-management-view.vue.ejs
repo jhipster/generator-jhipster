@@ -82,7 +82,7 @@
           :disabled="username === user.login"
           data-cy="entityDeleteButton"
         >
-          <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+          <font-awesome-icon icon="trash"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
         </b-button>
         <b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" data-cy="userManagementDeleteDialogHeading">
           <div class="modal-body">

@@ -23,7 +23,7 @@ import { Router, provideRouter, withComponentInputBinding } from '@angular/route
 import { RouterTestingHarness } from '@angular/router/testing';
 
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft, faPencilAlt<%- readOnly ? '' : ', faTimes' %> } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPencilAlt<%- readOnly ? '' : ', faTrash' %> } from '@fortawesome/free-solid-svg-icons';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
@@ -76,7 +76,7 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
 <% if (!readOnly) { %>
-    library.addIcons(faTimes);
+    library.addIcons(faTrash);
 <% } %>
 <%_ if (anyFieldIsBlobDerived) { _%>
     dataUtils = TestBed.inject(DataUtils);
