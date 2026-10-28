@@ -2114,10 +2114,10 @@ export class UserManagementFormService {
           type="button"
           id="cancel-save"
           data-cy="entityCreateCancelButton"
-          class="btn btn-secondary"
+          class="btn btn-info"
           (click)="previousState()"
         >
-          <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
+          <fa-icon icon="arrow-left" />&nbsp;<span>Back</span>
         </button>
 
         <button
