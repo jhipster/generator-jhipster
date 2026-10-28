@@ -16,10 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Application as ClientApplication } from '../client/types.d.ts';
+import type {
+  Application as ClientApplication,
+  Entity as ClientEntity,
+  Field as ClientField,
+  Relationship as ClientRelationship,
+} from '../client/types.d.ts';
 
 import type { VueAddedApplicationProperties } from './application.ts';
 
-export type { Config, Entity, Features, Field, Options, Relationship, Source } from '../client/types.d.ts';
+export type { Config, Features, Field, Options, Relationship, Source } from '../client/types.d.ts';
+
+export interface Entity<F extends ClientField = ClientField, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
+  /** The authorities of the routes that change the entity, as a list of string literals. */
+  entityVueAuthorities?: string;
+  /** The authorities of the routes that read the entity, as a list of string literals. */
+  entityVueReadAuthorities?: string;
+}
 
 export type Application = ClientApplication & VueAddedApplicationProperties;

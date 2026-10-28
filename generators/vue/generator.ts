@@ -163,6 +163,7 @@ export default class VueGenerator extends VueApplicationGenerator {
         source.addEntitiesToClient = ({ application, entities }) => {
           const { enableTranslation } = application;
           for (const entity of entities) {
+            const { entityVueAuthorities = "'ROLE_USER'", entityVueReadAuthorities = "'ROLE_USER'" } = entity as VueEntity;
             const {
               entityInstance,
               entityFolderName,
@@ -197,13 +198,13 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   path: '${entityPage}',
   name: '${entityAngularName}',
   component: ${entityAngularName},
-  meta: { authorities: [Authority.USER] }
+  meta: { authorities: [${entityVueReadAuthorities}] }
 },
 {
   path: '${entityPage}/:${entityInstance}Id/view',
   name: '${entityAngularName}View',
   component: ${entityAngularName}Details,
-  meta: { authorities: [Authority.USER] }
+  meta: { authorities: [${entityVueReadAuthorities}] }
 },${
                   readOnly ? '' : (
                     `
@@ -211,13 +212,13 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   path: '${entityPage}/new',
   name: '${entityAngularName}Create',
   component: ${entityAngularName}Update,
-  meta: { authorities: [Authority.USER] }
+  meta: { authorities: [${entityVueAuthorities}] }
 },
 {
   path: '${entityPage}/:${entityInstance}Id/edit',
   name: '${entityAngularName}Edit',
   component: ${entityAngularName}Update,
-  meta: { authorities: [Authority.USER] }
+  meta: { authorities: [${entityVueAuthorities}] }
 },`
                   )
                 }`,
@@ -237,15 +238,19 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               }),
             );
 
-            this.editFile(
-              `${application.clientSrcDir}/app/entities/entities-menu.vue`,
-              createNeedleCallback({
-                needle: 'add-entity-to-menu',
-                contentToAdd: `<b-dropdown-item to="/${entityPage}">
+            const menuItem = `<b-dropdown-item to="/${entityPage}"${entity.adminEntity ? ' active-class="active"' : ''}>
   <font-awesome-icon icon="asterisk" />
   <span>${enableTranslation ? `{{ $t('${entityTranslationKeyMenuPath}') }}` : entityNameHumanized}</span>
-</b-dropdown-item>`,
-                contentToCheck: `<b-dropdown-item to="/${entityPage}">`,
+</b-dropdown-item>`;
+            // Admin entities, like the authorities, go to the admin menu.
+            this.editFile(
+              entity.adminEntity ?
+                `${application.clientSrcDir}/app/core/jhi-navbar/jhi-navbar.vue`
+              : `${application.clientSrcDir}/app/entities/entities-menu.vue`,
+              createNeedleCallback({
+                needle: entity.adminEntity ? 'add-element-to-admin-menu' : 'add-entity-to-menu',
+                contentToAdd: menuItem,
+                contentToCheck: `<b-dropdown-item to="/${entityPage}"`,
               }),
             );
           }
@@ -262,8 +267,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.asPostPreparingEachEntityTaskGroup({
       prepareEntityModel({ entity }) {
         const fieldsWithoutId = entity.fields.filter(field => !field.id);
+        // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
+        const asAuthorities = (authorities: string[]): string =>
+          (authorities.length > 0 ? authorities : ['ROLE_USER']).map(authority => `'${authority}'`).join(', ');
         mutateData(entity, {
           __override__: false,
+          entityVueAuthorities: () => asAuthorities(entity.entityAuthority?.split(',') ?? []),
+          entityVueReadAuthorities: () =>
+            asAuthorities([...(entity.entityAuthority?.split(',') ?? []), ...(entity.entityReadAuthority?.split(',') ?? [])]),
           entityClientFields: () =>
             this.generateEntityClientFields(entity.primaryKey, fieldsWithoutId, entity.relationships, entity.dto, 'Date', entity.embedded),
           entityClientImports: () => this.generateEntityClientImports(entity.relationships, entity.dto),
