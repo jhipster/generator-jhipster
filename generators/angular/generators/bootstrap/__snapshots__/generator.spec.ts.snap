@@ -257,7 +257,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": Any<Object>,
   "userManagement": Any<Object>,
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
   "withAdminUi": true,
   "withGeneratedFlag": undefined,

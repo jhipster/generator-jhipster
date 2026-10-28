@@ -32,6 +32,7 @@ import type { Application as ClientApplication, Entity as ClientEntity } from '.
 
 export type ClientAddedApplicationProperties = {
   clientI18nDir: string;
+  /** The pattern of a login, the source of a regular expression literal. */
   webappLoginRegExp: string;
   clientThemeNone: boolean;
   clientThemeAny: boolean;
@@ -67,7 +68,8 @@ export type ClientAddedApplicationProperties = {
 export const mutateApplication = {
   __override__: false,
   clientI18nDir: ctx => `${ctx.clientSrcDir}i18n/`,
-  webappLoginRegExp: LOGIN_REGEX_JS,
+  // LOGIN_REGEX_JS is escaped for a string literal.
+  webappLoginRegExp: LOGIN_REGEX_JS.replaceAll('\\\\', '\\'),
   frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
   microfrontend: (ctx, { data }) => {
     if (ctx.applicationTypeMicroservice) {
