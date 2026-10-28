@@ -212,6 +212,8 @@ export default class CoreGenerator<
       unique: 'namespace',
       disableInGeneratorOptionsSupport: true,
       allowTemplatesOutsideRoot: true,
+      // The config of a package installed under an alias, like a blueprint published under a scope, is the one of its alias.
+      rootGeneratorNameFromNamespace: true,
       ...features,
       // Registered by yeoman-generator, after the queues they reference: the ones of a class before the ones of its
       // subclasses, which come in the features, so a subclass priority added before the same queue runs after them, and
