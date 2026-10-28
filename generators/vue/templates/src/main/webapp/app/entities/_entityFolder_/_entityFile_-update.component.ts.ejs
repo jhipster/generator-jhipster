@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement) && !field.hidden && !(builtInUserManagement && field.readonly));
+<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
     const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
 _%>
 import { type Ref, computed, defineComponent, inject, ref } from 'vue';
@@ -94,6 +95,10 @@ export default defineComponent({
 
     const route = useRoute();
     const router = useRouter();
+<%_ if (userProvidedPrimaryKey) { _%>
+    // The primary key is given by the user: an entity is updated when the route has it.
+    const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
+<%_ } _%>
 
     const previousState = () => router.go(-1);
 
@@ -186,7 +191,7 @@ export default defineComponent({
     const save = async () => {
       isSaving.value = true;
       try {
-        if (<%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %>) {
+        if (<% if (userProvidedPrimaryKey) { %>isUpdate.value<% } else { %><%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %><% } %>) {
           const param = await <%- entityInstance %>Service().update(<%- entityInstance %>.value);
           alertService.showInfo(
 <%_ if (enableTranslation) { _%>
@@ -239,6 +244,9 @@ export default defineComponent({
       <%- entityInstance %>,
       previousState,
       save,
+<%_ if (userProvidedPrimaryKey) { _%>
+      isUpdate,
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
       clearInputImage,
 <%_ } _%>

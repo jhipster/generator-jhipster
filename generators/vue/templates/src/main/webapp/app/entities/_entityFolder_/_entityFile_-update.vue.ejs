@@ -1,11 +1,14 @@
-<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement) && !field.hidden && !(builtInUserManagement && field.readonly)); _%>
+<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
+    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
+_%>
 <template>
     <div class="d-flex justify-content-center">
         <div class="col-8">
             <form name="editForm" novalidate @submit.prevent="save()" >
                 <h2 id="<%- i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">{{ t$('<%- i18nKeyPrefix %>.home.createOrEditLabel') }}</h2>
                 <div>
-<%_ if (!builtInUserManagement) { _%>
+<%_ if (!builtInUserManagement && !userProvidedPrimaryKey) { _%>
                     <div class="mb-3" v-if="<%- entityInstance %>.<%- primaryKey.name %>">
                         <label for="id">{{ t$('global.field.id') }}</label>
                         <input type="text" class="form-control" id="id" name="<%- primaryKey.name %>"
@@ -95,7 +98,7 @@
                             :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %>></textarea>
     <%_ } else { _%>
                         <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %>/>
+                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %><%- (field.id && userProvidedPrimaryKey) ? ' :readonly="isUpdate"' : '' %>/>
       <%_ if (field.fieldTypeBinary) { _%>
                         <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
                             v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />

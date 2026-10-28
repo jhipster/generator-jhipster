@@ -44,7 +44,6 @@ import type {
   Config as VueConfig,
   Entity as VueEntity,
   Features as VueFeatures,
-  Field as VueField,
   Options as VueOptions,
   Source as VueSource,
   VueFieldClientConstant,
@@ -287,9 +286,9 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           if (!vueFieldClientConstant) {
             throw new Error(`Field type '${field.fieldType}' has no Vue client constant to back its values`);
           }
-          (field as VueField).vueFieldClientConstant = vueFieldClientConstant;
+          field.vueFieldClientConstant = vueFieldClientConstant;
         }
-        mutateData(field as VueField, {
+        mutateData(field, {
           // Single-quoted string literal content of a RegExp.
           fieldValidateRulesPatternVue: ({ fieldValidateRulesPattern }) =>
             fieldValidateRulesPattern?.replace(/\\\\/g, '\\').replace(/\\/g, '\\\\').replace(/'/g, "\\'"),

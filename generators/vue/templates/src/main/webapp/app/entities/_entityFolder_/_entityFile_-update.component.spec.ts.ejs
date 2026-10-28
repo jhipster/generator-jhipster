@@ -136,6 +136,15 @@ describe('Component Tests', () => {
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
+<%_ if (!builtInUserManagement && fields.some(field => field.id && !field.autoGenerate && !field.hidden)) { _%>
+        // The primary key is given by the user: the route tells an existing entity.
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+<%_ } _%>
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%- entityInstance %> = <%- entityInstance %>Sample;
