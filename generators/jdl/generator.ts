@@ -147,7 +147,7 @@ export default class JdlGenerator extends BaseCoreGenerator<JdlConfig, JdlOption
           this.jdlContents.push(this.readDestination(jdlFile, { allowOutsideRoot: true }) ?? '');
         }
       },
-      async parseJDL() {
+      parseJDL() {
         // The blueprints option, which the base command declares.
         const { blueprints } = this.options as { blueprints?: string };
         const importer = createImporterFromContent(

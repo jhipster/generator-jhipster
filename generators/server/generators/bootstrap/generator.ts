@@ -86,7 +86,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           prodDatabasePassword: undefined,
         });
       },
-      async loadDockerDependencies({ application }) {
+      loadDockerDependencies({ application }) {
         loadDockerDependenciesTask.call(this, { context: application });
       },
       checkSuffix({ application }) {
@@ -103,7 +103,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
-      async loadDockerDependencies({ application }) {
+      loadDockerDependencies({ application }) {
         loadDockerElasticsearchVersion.call(this, {
           dockerContainers: application.dockerContainers,
         });
@@ -199,7 +199,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get default() {
     return this.asDefaultTaskGroup({
-      async postPreparingEntity({ application, entities }) {
+      postPreparingEntity({ application, entities }) {
         if (!application.backendTypeJavaAny) return;
         for (const entity of entities) {
           if (entity.primaryKey) {

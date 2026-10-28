@@ -104,7 +104,7 @@ export default class KubernetesCommonGenerator extends BaseKubernetesGenerator {
               name: 'directoryPath',
               message: messageAskForPath,
               default: '../',
-              validate: async input => {
+              validate: input => {
                 const path = this.destinationPath(input);
                 try {
                   if (statSync(path).isDirectory()) {
