@@ -18,12 +18,6 @@
 -%>
 import {Authority} from "@/shared/jhipster/constants";
 
-<%_ if (generateUserManagement) { _%>
-  <%_ const { entityAngularName, entityFolderName, entityFileName } = userManagement; _%>
-  const <%- entityAngularName %> = () => import('@/entities/<%- entityFolderName %>/<%- entityFileName %>.vue');
-  const <%- entityAngularName %>Details = () => import('@/entities/<%- entityFolderName %>/<%- entityFileName %>-details.vue');
-  const <%- entityAngularName %>Update = () => import('@/entities/<%- entityFolderName %>/<%- entityFileName %>-update.vue');
-<%_ } _%>
   const <%- jhiPrefixCapitalized %>DocsComponent = () => import('@/admin/docs/docs.vue');
 <%_ if (withAdminUi) { _%>
   const <%- jhiPrefixCapitalized %>ConfigurationComponent = () => import('@/admin/configuration/configuration.vue');
@@ -39,33 +33,6 @@ import {Authority} from "@/shared/jhipster/constants";
 <%_ } _%>
 
 export default [
-<%_ if (generateUserManagement) { _%>
-  <%_ const { entityAngularName, entityInstance, entityPage } = userManagement; _%>
-    {
-      path: '/<%- entityPage %>',
-      name: '<%- entityAngularName %>',
-      component: <%- entityAngularName %>,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/<%- entityPage %>/new',
-      name: '<%- entityAngularName %>Create',
-      component: <%- entityAngularName %>Update,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/<%- entityPage %>/:<%- entityInstance %>Id/edit',
-      name: '<%- entityAngularName %>Edit',
-      component: <%- entityAngularName %>Update,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-    {
-      path: '/<%- entityPage %>/:<%- entityInstance %>Id/view',
-      name: '<%- entityAngularName %>View',
-      component: <%- entityAngularName %>Details,
-      meta: { authorities: [Authority.ADMIN] }
-    },
-<%_ } _%>
     {
       path: '/admin/docs',
       name: '<%- jhiPrefixCapitalized %>DocsComponent',

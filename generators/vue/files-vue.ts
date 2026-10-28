@@ -271,7 +271,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientAppl
   application,
   entities,
 }) {
-  entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser && !entity.builtInUserManagement);
+  entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
   await this.writeFiles({
     sections: entitiesFiles,
     context: {

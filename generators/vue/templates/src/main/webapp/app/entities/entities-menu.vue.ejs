@@ -1,6 +1,6 @@
 <template>
   <div>
-<%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
+<%_ for (entity of entities.filter(entity => !entity.embedded && !entity.adminEntity)) { _%>
     <b-dropdown-item to="/<%- entity.entityPage %>">
       <font-awesome-icon icon="asterisk" />
       <span>{{ t$('global.menu.entities.<%- entity.entityTranslationKeyMenu %>') }}</span>
