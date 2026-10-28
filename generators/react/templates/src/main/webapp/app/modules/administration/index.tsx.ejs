@@ -17,22 +17,26 @@
  limitations under the License.
 -%>
 import { Route } from 'react-router';
+
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
-<%_ if (generateUserManagement) { _%>
-import UserManagement from './user-management';
-<%_ } _%>
+
 <%_ if (withAdminUi) { _%>
-import Logs from './logs/logs';
-import Health from './health/health';
-import Metrics from './metrics/metrics';
 import Configuration from './configuration/configuration';
 <%_ } _%>
 import Docs from './docs/docs';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import Gateway from './gateway/gateway';
 <%_ } _%>
+<%_ if (withAdminUi) { _%>
+import Health from './health/health';
+import Logs from './logs/logs';
+import Metrics from './metrics/metrics';
+<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
 import Tracker from './tracker/tracker';
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+import UserManagement from './user-management';
 <%_ } _%>
 
 const AdministrationRoutes = () => (

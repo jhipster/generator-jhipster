@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { TranslatorContext } from 'react-jhipster';
+
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 <%_ if (applicationTypeMicroservice) { _%>
 import merge from 'deepmerge';
 <%_ } _%>
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-import { TranslatorContext } from 'react-jhipster';
 
 const initialState = {
   currentLocale: '',

@@ -16,24 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
-import { Button, Table, Badge } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Badge, Button, Table } from 'react-bootstrap';
 import {
-  Translate,
-  TextFormat,
-  JhiPagination,
   JhiItemCount,
-  getPaginationState
+  JhiPagination,
+  TextFormat,
+  Translate,
+  getPaginationState,
 } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, useLocation, useNavigate } from 'react-router';
+
 import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { getUsersAsAdmin, updateUser } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
+
+import { getUsersAsAdmin, updateUser } from './user-management.reducer';
 
 export const UserManagement = () => {
   const dispatch = useAppDispatch();

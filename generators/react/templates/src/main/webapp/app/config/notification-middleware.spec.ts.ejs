@@ -17,12 +17,14 @@
  limitations under the License.
 -%>
 
-import { configureStore } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
+
+import { configureStore } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+
 import { INVALID_PASSWORD_TYPE, MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 

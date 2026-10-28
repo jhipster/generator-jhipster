@@ -19,13 +19,16 @@
 <%_ const entityActionName = entityInstance.toUpperCase();
     const entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
-import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { configureStore } from '@reduxjs/toolkit';
+import axios from 'axios';
+
 <%_ if (paginationInfiniteScroll) { _%>
 import { getPageNumberFromLinkHeader } from 'app/shared/jhipster/link-header';
 <%_ } _%>
+import { I<%- entityReactName %>, defaultValue } from 'app/shared/model/<%- entityModelFileName %>.model';
+import { EntityState } from 'app/shared/reducers/reducer.utils';
 
 import reducer, {
 <%_ if (!readOnly) { _%>
@@ -33,18 +36,18 @@ import reducer, {
   deleteEntity,
 <%_ } _%>
   getEntities,
-<%_ if (searchEngineAny) { _%>
-  searchEntities,
-<%_ } _%>
   getEntity,
 <%_ if (!readOnly) { _%>
-  updateEntity,
   partialUpdateEntity,
 <%_ } _%>
   reset,
+<%_ if (searchEngineAny) { _%>
+  searchEntities,
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+  updateEntity,
+<%_ } _%>
 } from './<%- entityFileName %>.reducer';
-import { EntityState } from 'app/shared/reducers/reducer.utils';
-import { I<%- entityReactName %>, defaultValue } from 'app/shared/model/<%- entityModelFileName %>.model';
 
 describe('Entities reducer tests', () => {
 

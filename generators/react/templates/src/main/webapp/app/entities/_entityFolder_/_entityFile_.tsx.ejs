@@ -16,12 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState, useEffect } from 'react';
-<%_ if (paginationInfiniteScroll) { _%>
-import InfiniteScroll from 'react-infinite-scroll-component';
-<%_ } _%>
-import { Link, useLocation, useNavigate } from 'react-router';
-import { Button, <%- searchEngineAny ? 'FormControl, InputGroup, Form, Row, Col, ' : '' %>Table } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Button, <%- searchEngineAny ? 'Col, Form, FormControl, InputGroup, Row, ' : '' %>Table } from 'react-bootstrap';
 import {
 <%_ if (anyFieldIsBlobDerived) { _%>
   byteSize,
@@ -37,13 +33,28 @@ import {
   <%_ } _%>
 <%_ } _%>
 } from 'react-jhipster';
+import { Link, useLocation, useNavigate } from 'react-router';
+
+import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+<%_ if (paginationInfiniteScroll) { _%>
+import InfiniteScroll from 'react-infinite-scroll-component';
+<%_ } _%>
+
+<%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+<%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ if (anyFieldIsDuration) { _%>
+import { DurationFormat } from 'app/shared/DurationFormat';
+<%_ } _%>
 <%_ if (anyFieldHasFileBasedContentType) { _%>
 import { openFile } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-<%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+<%_ if (paginationNo) { _%>
+import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
+<%_ } else { _%>
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 <%_ } _%>
 import {
   ASC,
@@ -53,15 +64,6 @@ import {
 <%_ } _%>
   SORT,
 } from 'app/shared/util/pagination.constants';
-<%_ if (paginationNo) { _%>
-import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
-<%_ } else { _%>
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-<%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
-<%_ if (anyFieldIsDuration) { _%>
-import { DurationFormat } from 'app/shared/DurationFormat';
-<%_ } _%>
 
 import {
 <%_ if (searchEngineAny) { _%>

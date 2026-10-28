@@ -17,17 +17,19 @@
  limitations under the License.
 -%>
 import { useEffect } from 'react';
+import { Button, Col, FormText, Row } from 'react-bootstrap';
+import { Translate, ValidatedField, ValidatedForm, isEmail, translate } from 'react-jhipster';
 import { Link, useNavigate, useParams } from 'react-router';
-import { Button, Row, Col, FormText } from 'react-bootstrap';
-import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
 
-<%_ if (enableTranslation) { _%>
-import { locales, languages } from 'app/config/translation';
-<%_ } _%>
-import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
+import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ if (enableTranslation) { _%>
+import { languages, locales } from 'app/config/translation';
+<%_ } _%>
+
+import { createUser, getRoles, getUser, reset, updateUser } from './user-management.reducer';
 
 export const UserManagementUpdate = () => {
   const dispatch = useAppDispatch();
