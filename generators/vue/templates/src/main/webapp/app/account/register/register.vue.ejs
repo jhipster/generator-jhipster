@@ -140,7 +140,7 @@
               <small class="form-text text-danger" v-if="v$.confirmPassword.maxLength.$invalid">{{
                 t$('global.messages.validate.confirmpassword.maxlength')
               }}</small>
-              <small class="form-text text-danger" v-if="v$.confirmPassword.sameAsPassword">{{
+              <small class="form-text text-danger" v-if="v$.confirmPassword.sameAsPassword.$invalid">{{
                 t$('global.messages.error.dontmatch')
               }}</small>
             </div>

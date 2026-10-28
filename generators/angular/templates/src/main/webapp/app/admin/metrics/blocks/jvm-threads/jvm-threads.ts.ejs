@@ -16,15 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, computed, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
+
+import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-
-import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
-import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-threads';
 
 @Component({

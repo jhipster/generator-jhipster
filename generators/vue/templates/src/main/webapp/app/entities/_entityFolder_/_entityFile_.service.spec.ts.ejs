@@ -18,6 +18,7 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import axios from 'axios';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
@@ -33,8 +34,9 @@ import {
   <%_ } _%>
 } from '@/shared/composables/date-format';
 <%_ } _%>
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 import { <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+
+import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 
 const error = {
   response: {

@@ -170,7 +170,7 @@ describe(`generator - ${clientFramework}`, () => {
                 '  threadDump: [],\n' +
                 '  configuration: {\n' +
                 '    configProps: {} as any,\n' +
-                '    env: {} as any\n' +
+                '    env: {} as any,\n' +
                 '  },',
             );
 
@@ -299,6 +299,20 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('oauth2 login url', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework, skipServer: true, authenticationType: 'oauth2' })
+        .withMockedGenerators(['jhipster:common']);
+    });
+
+    it('should navigate to the sign-in route by path', () => {
+      // react-router's navigate() treats a protocol-relative url as a path.
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/util/url-utils.ts`, "export const getLoginUrl = () => '/sign-in';");
+    });
+  });
+
   describe('addClientStyle needle api', () => {
     before(async () => {
       await helpers
@@ -388,6 +402,21 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should share application modules with the dev server too', () => {
       expect(runResult.getSnapshot('**/module-federation.config.ts')).toMatchSnapshot();
+    });
+  });
+
+  describe('microfrontend translations', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'microservice', enableTranslation: true })
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should keep the translations registered by the host when registering its own', () => {
+      expect(runResult.getSnapshot('**/app/shared/reducers/locale*.ts')).toMatchSnapshot();
     });
   });
 });

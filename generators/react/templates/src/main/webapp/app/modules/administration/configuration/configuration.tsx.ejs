@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState, useEffect } from 'react';
-import { Table, FormControl, Row, Col, Badge } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Badge, Col, FormControl, Row, Table } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
 
-import { getConfigurations, getEnv } from '../administration.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getConfigurations, getEnv } from '../administration.reducer';
 
 export const ConfigurationPage = () => {
   const [filter, setFilter] = useState('');
@@ -64,7 +64,7 @@ export const ConfigurationPage = () => {
         <Translate contentKey="configuration.filter">Filter</Translate>
       </span>{' '}
       <FormControl type="search" value={filter} onChange={changeFilter} name="search" id="search" />
-      <label>Spring configuration</label>
+      <h3>Spring configuration</h3>
       <Table className="table table-striped table-bordered table-responsive d-table">
         <thead>
           <tr>

@@ -21,14 +21,14 @@
     const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
 _%>
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 <%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config';
 <%_ } _%>
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
-import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../<%- entityFileName %>.test-samples';
+import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 
 import { <%- entityAngularName %>Service<% if (requiresRestTypeConversion) { %>, <%- entityRestName %><% } %> } from './<%- entityFileName %>.service';
 

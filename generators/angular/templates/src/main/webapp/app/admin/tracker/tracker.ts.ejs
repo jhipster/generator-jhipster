@@ -16,12 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+
 import { Subscription } from 'rxjs';
 
-import { TrackerService } from 'app/core/tracker/tracker.service';
 import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
+import { TrackerService } from 'app/core/tracker/tracker.service';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>

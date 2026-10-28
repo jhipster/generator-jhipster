@@ -16,17 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
-import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>
 import { loadMoreDataWhenScrolled } from 'react-jhipster';
+<%_ } _%>
+
+import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+<%_ if (paginationInfiniteScroll) { _%>
 import { getPageNumberFromLinkHeader } from 'app/shared/jhipster/link-header';
-<%_ } else if (paginationNo) { _%>
+<%_ } _%>
+import { I<%- entityReactName %>, defaultValue } from 'app/shared/model/<%- entityModelFileName %>.model';
+import { EntityState, IQueryParams, createEntitySlice, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+import { cleanEntity } from 'app/shared/util/entity-utils';
+<%_ if (!paginationInfiniteScroll && paginationNo) { _%>
 import { ASC } from 'app/shared/util/pagination.constants';
 <%_ } _%>
-import { cleanEntity } from 'app/shared/util/entity-utils';
-import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
-import { I<%- entityReactName %>, defaultValue } from 'app/shared/model/<%- entityModelFileName %>.model';
 
 const initialState: EntityState<I<%- entityReactName %>> = {
   loading: false,
@@ -230,7 +235,7 @@ export const <%- entityReactName %>Slice = createEntitySlice({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
   <%_ if (!databaseTypeCassandra) { _%>
-            totalItems: parseInt(headers['x-total-count'], 10)
+            totalItems: Number.parseInt(headers['x-total-count'], 10)
   <%_ } _%>
 <%_ } _%>
           };
@@ -253,13 +258,15 @@ export const <%- entityReactName %>Slice = createEntitySlice({
         state.errorMessage = null;
         state.updateSuccess = false;
         state.loading = true;
+<%_ if (readOnly) { _%>
+      });
+<%_ } else { _%>
       })
-<%_ if (!readOnly) { _%>
       .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
         state.errorMessage = null;
         state.updateSuccess = false;
         state.updating = true;
-      })
+      });
 <%_ } _%>
   },
 });

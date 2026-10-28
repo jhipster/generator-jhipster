@@ -34,6 +34,7 @@ export type Application = Command['Application'] &
   BaseSimpleApplicationApplication & {
     blueprintMjsExtension: string;
     blueprintCliName: string;
+    ecmaVersion: number;
     commands: string[];
     blueprintsPath: string;
   };

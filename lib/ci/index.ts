@@ -37,7 +37,9 @@ export {
   getGithubSamples,
   getGithubSamplesFolderGroup,
   getGithubSamplesGroup,
+  getGithubSamplesGroupSync,
   getGithubSamplesGroups,
+  getGithubSamplesGroupsSync,
   githubSamplesGroupOf,
 } from './github-group.ts';
 export * from './github-matrix.ts';

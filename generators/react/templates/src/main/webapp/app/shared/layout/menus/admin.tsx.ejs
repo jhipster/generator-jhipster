@@ -16,19 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import MenuItem from 'app/shared/layout/menus/menu-item';
 import {
   DropdownItem
 } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDatabase } from '@fortawesome/free-solid-svg-icons';
-import { NavDropdown } from './menu-components';
 import { Translate, translate } from 'react-jhipster';
+
+import { faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import MenuItem from 'app/shared/layout/menus/menu-item';
+
+import { NavDropdown } from './menu-components';
 
 const adminMenuItems = () => (
   <>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
-    <MenuItem icon="road" to="/admin/gateway"><Translate contentKey="global.menu.admin.gateway">Gateway</Translate></MenuItem>
+    <MenuItem icon="road" to="/admin/gateway">
+      <Translate contentKey="global.menu.admin.gateway">Gateway</Translate>
+    </MenuItem>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
     <MenuItem icon="users" to="/admin/user-management">

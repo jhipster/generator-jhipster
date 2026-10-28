@@ -19,15 +19,16 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
+
 <%_ if (enableTranslation) { _%>
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
+import { of, throwError } from 'rxjs';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/jhipster/error.constants';
 
-import { RegisterService } from './register.service';
 import Register from './register';
+import { RegisterService } from './register.service';
 
 describe('Register', () => {
   let fixture: ComponentFixture<Register>;

@@ -16,16 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
 import { type Ref, defineComponent, inject, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
+import { useRoute, useRouter } from 'vue-router';
+
+import axios from 'axios';
+
+import { useLoginModal } from '@/account/login-modal';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { useLoginModal } from '@/account/login-modal';
 import type AccountService from '../account.service';
 
 export default defineComponent({

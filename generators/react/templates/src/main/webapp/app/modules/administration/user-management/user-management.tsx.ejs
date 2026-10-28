@@ -16,24 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
-import { Button, Table, Badge } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Badge, Button, Table } from 'react-bootstrap';
 import {
-  Translate,
-  TextFormat,
-  JhiPagination,
   JhiItemCount,
-  getPaginationState
+  JhiPagination,
+  TextFormat,
+  Translate,
+  getPaginationState,
 } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, useLocation, useNavigate } from 'react-router';
+
 import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
-import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import { getUsersAsAdmin, updateUser } from './user-management.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
+
+import { getUsersAsAdmin, updateUser } from './user-management.reducer';
 
 export const UserManagement = () => {
   const dispatch = useAppDispatch();
@@ -139,21 +141,37 @@ export const UserManagement = () => {
       <Table responsive striped>
         <thead>
           <tr>
-            <th className="hand" onClick={sort('id')}><Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} /></th>
-            <th className="hand" onClick={sort('login')}><Translate contentKey="userManagement.login">Login</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('login')} /></th>
-            <th className="hand" onClick={sort('email')}><Translate contentKey="userManagement.email">Email</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('email')} /></th>
+            <th className="hand" onClick={sort('id')}>
+              <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+            </th>
+            <th className="hand" onClick={sort('login')}>
+              <Translate contentKey="userManagement.login">Login</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('login')} />
+            </th>
+            <th className="hand" onClick={sort('email')}>
+              <Translate contentKey="userManagement.email">Email</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('email')} />
+            </th>
             <th />
 <%_ if (enableTranslation) { _%>
-            <th className="hand" onClick={sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('langKey')} /></th>
+            <th className="hand" onClick={sort('langKey')}>
+              <Translate contentKey="userManagement.langKey">Lang Key</Translate>{' '}
+              <FontAwesomeIcon icon={getSortIconByFieldName('langKey')} />
+            </th>
 <%_ } _%>
-            <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
+            <th>
+              <Translate contentKey="userManagement.profiles">Profiles</Translate>
+            </th>
 <%_ if (!databaseTypeCassandra) { _%>
-            <th className="hand" onClick={sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('createdDate')} /></th>
+            <th className="hand" onClick={sort('createdDate')}>
+              <Translate contentKey="userManagement.createdDate">Created Date</Translate>{' '}
+              <FontAwesomeIcon icon={getSortIconByFieldName('createdDate')} />
+            </th>
             <th className="hand" onClick={sort('lastModifiedBy')}>
-              <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedBy')} />
+              <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate>{' '}
+              <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedBy')} />
             </th>
             <th id="modified-date-sort" className="hand" onClick={sort('lastModifiedDate')}>
-              <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
+              <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate>{' '}
+              <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
             </th>
             <th />
 <%_ } _%>

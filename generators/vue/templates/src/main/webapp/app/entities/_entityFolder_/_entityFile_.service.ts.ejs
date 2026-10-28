@@ -17,10 +17,11 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-<% if (!paginationNo) { %>
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
-<% } %>
+
 import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+<%_ if (!paginationNo) { _%>
+import buildPaginationQueryOpts from '@/shared/sort/sorts';
+<%_ } _%>
 
 const baseApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>';
 <%_ if (searchEngineAny) { _%>

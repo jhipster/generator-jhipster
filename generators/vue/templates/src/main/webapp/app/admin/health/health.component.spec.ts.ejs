@@ -17,11 +17,12 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import Health from './health.vue';
 import HealthService from './health.service';
+import Health from './health.vue';
 
 type HealthComponentType = InstanceType<typeof Health>;
 

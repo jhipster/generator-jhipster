@@ -64,7 +64,7 @@ Click [here][issue-template] to open a bug issue with a pre-filled template. For
 
 You can run `jhipster info` in your project folder to get most of the above required info.
 
-Issues opened without any of these info will be **closed** without any explanation.
+Issues opened without this information will be **closed** without any explanation.
 
 ## Development environment setup
 
@@ -87,7 +87,7 @@ That's it! Thank you for your contribution!
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
 - All features or bug fixes **must be tested** by one or more tests.
-- Most files formatting are checked by prettier and eslint.
+- The formatting of most files is checked by Prettier and ESLint.
 - EJS files use a two-space indentation for template logic and follow the generated file rules for the templating parts.
 
 The jhipster generator structure and file naming conventions are documented in the [RFC 6](./rfcs/6-jhipster-rfc-jhipster-generator-file-structure.md).
@@ -96,7 +96,7 @@ Please ensure to run `npm run lint` and `npm test` on the project root before su
 
 ## <a name="commit"></a> Git Commit Guidelines
 
-We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://help.github.com/articles/about-git-rebase/#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
+We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://docs.github.com/en/get-started/using-git/about-git-rebase#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
 
 If the commit only involves documentation changes you can skip the continuous integration pipelines using `[ci skip]` or `[skip ci]` in your commit message header.
 
@@ -134,7 +134,7 @@ The Body should include the motivation for the change and contrast this with pre
 
 The footer is the place to reference GitHub issues that this commit **Closes**.
 
-You **must** use the [GitHub keywords](https://help.github.com/articles/closing-issues-via-commit-messages) for
+You **must** use the [GitHub keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword) for
 automatically closing the issues referenced in your commit.
 
 ### Example

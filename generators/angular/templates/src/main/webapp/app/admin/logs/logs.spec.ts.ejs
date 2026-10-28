@@ -17,16 +17,18 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { of } from 'rxjs';
 
-import Logs from './logs';
-import { LogsService } from './logs.service';
-import { Log, LoggersResponse } from './log.model';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
+
+import { Log, LoggersResponse } from './log.model';
+import Logs from './logs';
+import { LogsService } from './logs.service';
 
 describe('Logs', () => {
   let comp: Logs;

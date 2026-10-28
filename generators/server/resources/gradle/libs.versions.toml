@@ -1,5 +1,5 @@
 [libraries]
-springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '3.1.1' }
+springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '3.2.0' }
 
 cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '8.0.4' }
 

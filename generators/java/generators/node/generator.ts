@@ -38,7 +38,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async javaNodeBuildPaths({ application }) {
+      javaNodeBuildPaths({ application }) {
         const { buildToolMaven, srcMainWebapp, javaNodeBuildPaths, clientDistDir } = application;
 
         javaNodeBuildPaths.push(srcMainWebapp, 'package-lock.json', 'package.json');

@@ -1675,6 +1675,253 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
 }
 `;
 
+exports[`generator - react microfrontend translations should keep the translations registered by the host when registering its own 1`] = `
+{
+  "src/main/webapp/app/shared/reducers/locale.spec.ts": {
+    "contents": "import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { TranslatorContext } from 'react-jhipster';
+
+import locale, { addTranslationSourcePrefix, loaded, setLocale, updateLocale } from 'app/shared/reducers/locale';
+
+vi.mock('../../../i18n/en/en.js', () => ({ default: { key: 'value', global: { title: 'Microfrontend' } } }));
+
+const defaultLocale = 'en';
+const dispatch = vi.fn();
+const extra = {};
+
+describe('Locale reducer tests', () => {
+  it('should return the initial state', () => {
+    const localeState = locale(undefined, { type: '' });
+    expect(localeState).toMatchObject({
+      currentLocale: '',
+    });
+  });
+
+  it('should correctly set the first time locale', () => {
+    const localeState = locale(undefined, updateLocale(defaultLocale));
+    expect(localeState).toMatchObject({
+      currentLocale: defaultLocale,
+    });
+    expect(TranslatorContext.context.locale).toEqual(defaultLocale);
+  });
+
+  it('should correctly detect update in current locale state', () => {
+    TranslatorContext.setLocale(defaultLocale);
+    expect(TranslatorContext.context.locale).toEqual(defaultLocale);
+    const localeState = locale(
+      {
+        currentLocale: defaultLocale,
+        lastChange: Date.now(),
+        loadedKeys: [],
+      },
+      updateLocale('es'),
+    );
+    expect(localeState).toMatchObject({
+      currentLocale: 'es',
+    });
+    expect(TranslatorContext.context.locale).toEqual('es');
+  });
+
+  describe('registerTranslations with translations registered by the host', () => {
+    it('keeps the host translations and adds its own', async () => {
+      TranslatorContext.setDefaultLocale(defaultLocale);
+      TranslatorContext.registerTranslations(defaultLocale, { global: { title: 'Gateway' } });
+      const getState = vi.fn(() => ({ locale: { loadedKeys: [] } }));
+      await setLocale(defaultLocale)(dispatch, getState, extra);
+      expect(TranslatorContext.context.translations[defaultLocale]).toMatchObject({ key: 'value', global: { title: 'Gateway' } });
+    });
+  });
+
+  describe('setLocale reducer', () => {
+    describe('with default language loaded', () => {
+      it('dispatches updateLocale action for default locale', async () => {
+        TranslatorContext.setDefaultLocale(defaultLocale);
+        const getState = vi.fn(() => ({ locale: { loadedKeys: [defaultLocale] } }));
+        const result = await setLocale(defaultLocale)(dispatch, getState, extra);
+        expect(dispatch).toHaveBeenCalledWith(
+          expect.objectContaining({
+            type: setLocale.pending.type,
+            meta: expect.objectContaining({ requestStatus: 'pending' }),
+          }),
+        );
+        expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: loaded.type }));
+        expect(dispatch).toHaveBeenCalledWith(updateLocale(defaultLocale));
+        expect(setLocale.fulfilled.match(result)).toBe(true);
+      });
+    });
+
+    describe('with no language loaded', () => {
+      it('dispatches loaded and updateLocale action for default locale', async () => {
+        TranslatorContext.setDefaultLocale(defaultLocale);
+        const getState = vi.fn(() => ({ locale: { loadedKeys: [] } }));
+        const result = await setLocale(defaultLocale)(dispatch, getState, extra);
+        expect(dispatch).toHaveBeenCalledWith(loaded({ keys: [defaultLocale] }));
+        expect(dispatch).toHaveBeenCalledWith(updateLocale(defaultLocale));
+        expect(setLocale.fulfilled.match(result)).toBe(true);
+      });
+    });
+  });
+
+  describe('addTranslationSourcePrefix reducer', () => {
+    const sourcePrefix = 'foo/';
+
+    describe('with no keys loaded', () => {
+      it('dispatches loaded action with the prefixed key', async () => {
+        const getState = vi.fn(() => ({ locale: { currentLocale: defaultLocale, loadedKeys: [] } }));
+        const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
+        expect(dispatch).toHaveBeenCalledWith(loaded({ keys: [\`\${sourcePrefix}\${defaultLocale}\`] }));
+        expect(addTranslationSourcePrefix.fulfilled.match(result)).toBe(true);
+      });
+    });
+
+    describe('with key already loaded', () => {
+      it("doesn't dispatch loaded action", async () => {
+        const getState = vi.fn(() => ({ locale: { currentLocale: defaultLocale, loadedKeys: [\`\${sourcePrefix}\${defaultLocale}\`] } }));
+        const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
+        expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: loaded.type }));
+        expect(addTranslationSourcePrefix.fulfilled.match(result)).toBe(true);
+      });
+    });
+
+    describe('without current locale', () => {
+      it("doesn't dispatch loaded action", async () => {
+        const getState = vi.fn(() => ({ locale: { currentLocale: '', loadedKeys: [] } }));
+        const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
+        expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: loaded.type }));
+        expect(addTranslationSourcePrefix.fulfilled.match(result)).toBe(true);
+      });
+    });
+  });
+
+  describe('loaded reducer', () => {
+    let initialState;
+
+    beforeEach(() => {
+      initialState = { currentLocale: defaultLocale, lastChange: 0, loadedKeys: [] };
+    });
+
+    it("and empty parameter, doesn't add anything", () => {
+      const localeState = locale(initialState, loaded({}));
+      expect(localeState).toMatchObject({ currentLocale: defaultLocale, loadedKeys: [] });
+    });
+
+    it('and keys parameter, adds to loadedKeys', () => {
+      const localeState = locale(initialState, loaded({ keys: ['foo'] }));
+      expect(localeState).toMatchObject({ currentLocale: defaultLocale, loadedKeys: ['foo'] });
+    });
+  });
+});
+",
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/reducers/locale.ts": {
+    "contents": "import { TranslatorContext } from 'react-jhipster';
+
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
+import merge from 'deepmerge';
+
+const initialState = {
+  currentLocale: '',
+  lastChange: TranslatorContext.context.lastChange,
+  loadedKeys: [] as string[],
+};
+
+export type LocaleState = Readonly<typeof initialState>;
+
+const registeredLocales = new Map<string, Promise<void>>();
+
+/**
+ * Registers the translations bundled with this application for the locale.
+ * Defaults to the locale of the (shared) translator context, so a microfrontend registers its translations
+ * for the locale of the host application.
+ * The pending registration is memoized, so concurrent callers await the same registration instead of resolving early.
+ */
+export const registerTranslations = (
+  locale = TranslatorContext.context.locale || TranslatorContext.context.defaultLocale,
+): Promise<void> => {
+  if (!locale) return Promise.resolve();
+  let registration = registeredLocales.get(locale);
+  if (!registration) {
+    registration = import(\`../../../i18n/\${locale}/\${locale}.js\`)
+      .then(translations => {
+        // The translations already registered by the host application win, so a microfrontend adds its own keys
+        // without replacing the host's, like the application title.
+        const registered = TranslatorContext.context.translations[locale];
+        TranslatorContext.registerTranslations(
+          locale,
+          registered ? merge(translations.default, registered, { arrayMerge: (_target, source) => source }) : translations.default,
+        );
+      })
+      .catch(error => {
+        // Allow retrying if the translations could not be registered.
+        registeredLocales.delete(locale);
+        throw error;
+      });
+    registeredLocales.set(locale, registration);
+  }
+  return registration;
+};
+
+export const setLocale = createAsyncThunk('locale/setLocale', async (locale: string, thunkAPI: any) => {
+  const { loadedKeys } = thunkAPI.getState().locale;
+  if (!loadedKeys.includes(locale)) {
+    await registerTranslations(locale);
+    thunkAPI.dispatch(loaded({ keys: [locale] }));
+  }
+  thunkAPI.dispatch(updateLocale(locale));
+  return locale;
+});
+
+/**
+ * Registers the translations bundled with this microfrontend into the host application.
+ * Translations are merged into the host locale, the source prefix keeps track of what was already registered.
+ */
+export const addTranslationSourcePrefix = createAsyncThunk(
+  'locale/addTranslationSourcePrefix',
+  async (sourcePrefix: string, thunkAPI: any) => {
+    const { currentLocale, loadedKeys } = thunkAPI.getState().locale;
+    const key = \`\${sourcePrefix}\${currentLocale}\`;
+    if (currentLocale && !loadedKeys.includes(key)) {
+      await registerTranslations(currentLocale);
+      thunkAPI.dispatch(loaded({ keys: [key] }));
+    }
+    return key;
+  },
+);
+
+export const LocaleSlice = createSlice({
+  name: 'locale',
+  initialState,
+  reducers: {
+    updateLocale(state, action) {
+      const currentLocale = action.payload;
+      if (state.currentLocale !== currentLocale) {
+        dayjs.locale(currentLocale);
+        TranslatorContext.setLocale(currentLocale);
+      }
+      state.currentLocale = currentLocale;
+    },
+    loaded(state, action) {
+      const { keys } = action.payload;
+      if (keys) {
+        state.loadedKeys = state.loadedKeys.concat(keys);
+      }
+      state.lastChange = TranslatorContext.context.lastChange;
+    },
+  },
+});
+
+export const { updateLocale, loaded } = LocaleSlice.actions;
+
+// Reducer
+export default LocaleSlice.reducer;
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,

@@ -17,17 +17,21 @@
  limitations under the License.
 -%>
 import { useEffect, useState } from 'react';
+import { Badge, Button, Row } from 'react-bootstrap';
+import { TextFormat, Translate } from 'react-jhipster';
 import { Link, useParams } from 'react-router';
-import { Button, Row, Badge } from 'react-bootstrap';
-import { Translate, TextFormat } from 'react-jhipster';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
-<%- enableTranslation ? 'import { languages } from \'app/config/translation\';' : '' %>
-import { getUser } from './user-management.reducer';
-import UserManagementDeleteDialog from './user-management-delete-dialog';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ if (enableTranslation) { _%>
+import { languages } from 'app/config/translation';
+<%_ } _%>
+
+import UserManagementDeleteDialog from './user-management-delete-dialog';
+import { getUser } from './user-management.reducer';
 
 export const UserManagementDetail = () => {
   const dispatch = useAppDispatch();

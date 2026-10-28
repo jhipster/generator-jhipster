@@ -281,7 +281,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get default() {
     return this.asDefaultTaskGroup({
-      async queueTranslateTransform({ application }) {
+      queueTranslateTransform({ application }) {
         const { clientI18nDir, enableTranslation, getWebappTranslation } = application;
 
         assert.ok(getWebappTranslation, 'getWebappTranslation is required');

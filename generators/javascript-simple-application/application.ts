@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
 import { RECOMMENDED_NODE_VERSION } from '../generator-constants.ts';
 import { JAVA_JAVASCRIPT_TEST_DIR, JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 
@@ -67,14 +67,14 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
 
-  typescriptEslint: (_, { delayMarker }) => delayMarker ?? true,
+  typescriptEslint: finalizeDefault(() => true),
   nodeVersion: RECOMMENDED_NODE_VERSION,
   nodePackageManager: 'npm',
   nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
-  nodeWebappBuildTarget: (_, { delayMarker }) => delayMarker ?? 'webapp:build',
+  nodeWebappBuildTarget: finalizeDefault(() => 'webapp:build'),
 
-  clientRootDir: (_, { delayMarker }) => delayMarker ?? '',
-  clientDistDir: (_, { delayMarker }) => delayMarker ?? 'dist/',
+  clientRootDir: finalizeDefault(() => ''),
+  clientDistDir: finalizeDefault(() => 'dist/'),
   clientTestDir: ({ clientRootDir }) => (clientRootDir === '' ? JAVA_JAVASCRIPT_TEST_DIR : `${clientRootDir}test/`),
   clientSrcDir: ({ clientRootDir }) => (clientRootDir === '' ? JAVA_WEBAPP_SOURCES_DIR : `${clientRootDir}src/`),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<

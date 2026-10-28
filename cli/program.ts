@@ -235,7 +235,7 @@ export const buildCommands = ({
           command.generatorNamespaces = operands.map(
             namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`,
           );
-          await envBuilder?.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
+          envBuilder?.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
           for (const namespace of command.generatorNamespaces) {
             const resolved = resolveCommand({ command: namespace }, { getGeneratorMeta: namespace => env.getGeneratorMeta(namespace) });
             if (!resolved) {

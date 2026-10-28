@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Translate } from 'react-jhipster';
 
-import { getLoggers, changeLogLevel } from '../administration.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { changeLogLevel, getLoggers } from '../administration.reducer';
 
 export const LogsPage = () => {
   const [filter, setFilter] = useState('');

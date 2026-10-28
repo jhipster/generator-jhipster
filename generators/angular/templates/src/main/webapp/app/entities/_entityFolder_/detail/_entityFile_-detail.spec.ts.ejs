@@ -19,23 +19,26 @@
 <%_ const testEntity = tsPrimaryKeySamples[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, withComponentInputBinding, Router } from '@angular/router';
+import { Router, provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft, faPencilAlt<%- readOnly ? '' : ', faTimes' %> } from '@fortawesome/free-solid-svg-icons';
-<% if (!readOnly) { %>
+<%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-<% } %>
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
+<%_ if (!readOnly) { _%>
+import { ITEM_DELETED_EVENT } from 'app/config';
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util';
 <%_ } _%>
 <%_ if (!readOnly) { _%>
-import { ITEM_DELETED_EVENT } from 'app/config';
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
 

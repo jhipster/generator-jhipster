@@ -89,6 +89,7 @@ exports[`generator - generate-blueprint with all option should match application
   "dockerImage": undefined,
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dynamic": false,
+  "ecmaVersion": 2024,
   "generators": Any<Object>,
   "gitDependency": undefined,
   "githubActions": {
@@ -296,6 +297,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/base-application/generators/bootstrap/templates/template-file-base-application:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-bootstrap/templates/template-file-base-application:database-bootstrap.ejs": {
     "stateCleared": "modified",
   },
   "generators/base-application/index.ts": {
@@ -1930,6 +1946,7 @@ exports[`generator - generate-blueprint with default config should match applica
   "dockerImage": undefined,
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dynamic": false,
+  "ecmaVersion": 2024,
   "gitDependency": undefined,
   "githubActions": {
     "actions/checkout": "actions/checkout@VERSION",

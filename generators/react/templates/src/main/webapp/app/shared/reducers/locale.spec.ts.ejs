@@ -19,9 +19,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
-import locale, { setLocale, updateLocale, loaded<%- microfrontend ? ', addTranslationSourcePrefix' : '' %> } from 'app/shared/reducers/locale';
+import locale, { <%- microfrontend ? 'addTranslationSourcePrefix, ' : '' %>loaded, setLocale, updateLocale } from 'app/shared/reducers/locale';
 
-vi.mock('../../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({ default: { key: 'value' } }));
+vi.mock('../../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({ default: { key: 'value'<%- applicationTypeMicroservice ? ", global: { title: 'Microfrontend' }" : '' %> } }));
 
 const defaultLocale = '<%- nativeLanguage %>';
 const dispatch = vi.fn();
@@ -60,6 +60,18 @@ describe('Locale reducer tests', () => {
     expect(TranslatorContext.context.locale).toEqual('es');
   });
 
+<%_ if (applicationTypeMicroservice) { _%>
+  describe('registerTranslations with translations registered by the host', () => {
+    it('keeps the host translations and adds its own', async () => {
+      TranslatorContext.setDefaultLocale(defaultLocale);
+      TranslatorContext.registerTranslations(defaultLocale, { global: { title: 'Gateway' } });
+      const getState = vi.fn(() => ({ locale: { loadedKeys: [] } }));
+      await setLocale(defaultLocale)(dispatch, getState, extra);
+      expect(TranslatorContext.context.translations[defaultLocale]).toMatchObject({ key: 'value', global: { title: 'Gateway' } });
+    });
+  });
+
+<%_ } _%>
   describe('setLocale reducer', () => {
     describe('with default language loaded', () => {
       it('dispatches updateLocale action for default locale', async () => {

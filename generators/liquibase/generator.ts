@@ -29,6 +29,8 @@ import {
   mutateRelationship as mutateBaseApplicationRelationship,
   mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
 } from '../base-application/entity.ts';
+import { default as prepareSqlApplicationProperties } from '../base-application/generators/database-bootstrap/support/application-properties.ts';
+import { getJdbcUrl } from '../base-application/generators/database-bootstrap/support/database-url.ts';
 import {
   loadRequiredConfigIntoEntity,
   prepareCommonFieldForTemplates,
@@ -46,7 +48,6 @@ import { prepareEntity as prepareEntityForServer } from '../java/support/index.t
 import type { MavenProperty } from '../java-simple-application/generators/maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
 import type { Entity as ServerEntity } from '../server/types.ts';
-import { getJdbcUrl, prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-boot/generators/data-relational/types.ts';
 
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
@@ -240,7 +241,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get default() {
     return this.asDefaultTaskGroup({
-      async calculateChangelogs({ application, entities, entityChanges }) {
+      calculateChangelogs({ application, entities, entityChanges }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog || !entityChanges) {
           return;
         }
@@ -586,7 +587,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             {
               scope: 'liquibaseRuntime',
               groupId: 'org.liquibase.ext',
-              artifactId: 'liquibase-hibernate6',
+              artifactId: 'liquibase-hibernate7',
               // eslint-disable-next-line no-template-curly-in-string
               version: liquibaseVersion ? '${liquibaseVersion}' : "${dependencyManagement.importedProperties['liquibase.version']}",
             },
