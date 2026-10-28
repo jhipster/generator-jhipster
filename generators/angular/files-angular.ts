@@ -417,6 +417,7 @@ export const files = asWriteFilesSection({
         'core/util/parse-links.service.spec.ts',
         'core/util/alert.service.spec.ts',
         'home/home.spec.ts',
+        'layouts/error/error.route.spec.ts',
         'layouts/main/main.spec.ts',
         'layouts/navbar/navbar.spec.ts',
         'layouts/profiles/page-ribbon.spec.ts',
