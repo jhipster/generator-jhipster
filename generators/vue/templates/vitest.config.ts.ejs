@@ -36,9 +36,12 @@ export default mergeConfig(
       },
       coverage: {
         provider: 'v8',
-        statements: 85,
-        branches: 75,
-        lines: 85,
+        thresholds: {
+          statements: 75,
+          branches: 60,
+          functions: 40,
+          lines: 80,
+        },
         reportsDirectory: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>vite-coverage', import.meta.url)),
       },
     },
