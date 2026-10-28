@@ -49,8 +49,8 @@ export default defineComponent({
           updatingHealth.value = false;
         })
         .catch(error => {
-          if (error.status === 503) {
-            healthData.value = healthService.transformHealthData(error.error);
+          if (error.response?.status === 503) {
+            healthData.value = healthService.transformHealthData(error.response.data);
           }
           updatingHealth.value = false;
         });
