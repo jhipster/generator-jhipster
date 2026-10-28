@@ -47,14 +47,6 @@ describe('DataUtils Service', () => {
     expect(result).toBe('11.25 bytes');
   });
 
-  it('should clear input entity', () => {
-    const entity = { field: 'key', value: 'value' };
-    dataUtilsService.clearInputImage(entity, null, 'field', 'value', 1);
-
-    expect(entity.field).toBeNull();
-    expect(entity.value).toBeNull();
-  });
-
   it('should open file', () => {
     window.open = vi.fn().mockReturnValue({});
     const objectURL = 'blob:http://localhost:9000/xxx';

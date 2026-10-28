@@ -50,23 +50,6 @@ const useDataUtils = () => ({
     openFile(data, contentType, blobType);
   },
 
-  /**
-   * Method to clear the input
-   */
-  clearInputImage(entity, elementRef, field, fieldContentType, idInput) {
-    if (entity && field && fieldContentType) {
-      if (Object.hasOwn(entity, field)) {
-        entity[field] = null;
-      }
-      if (Object.hasOwn(entity, fieldContentType)) {
-        entity[fieldContentType] = null;
-      }
-      if (elementRef && idInput && elementRef.nativeElement.querySelector(`#${idInput}`)) {
-        elementRef.nativeElement.querySelector(`#${idInput}`).value = null;
-      }
-    }
-  },
-
   setFileData(event, entity, field, isImage) {
     if (event?.target.files?.[0]) {
       const file = event.target.files[0];

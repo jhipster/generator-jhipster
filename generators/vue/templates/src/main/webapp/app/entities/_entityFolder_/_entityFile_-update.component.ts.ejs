@@ -244,8 +244,9 @@ export default defineComponent({
         if (Object.prototype.hasOwnProperty.call(this.<%- entityInstance %>, fieldContentType)) {
           this.<%- entityInstance %>[fieldContentType] = null;
         }
-        if (idInput) {
-          (<any>this).$refs[idInput] = null;
+        const input = this.$refs[idInput] as HTMLInputElement | undefined;
+        if (input) {
+          input.value = '';
         }
       }
     },
