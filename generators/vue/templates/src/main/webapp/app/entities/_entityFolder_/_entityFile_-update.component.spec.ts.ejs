@@ -184,6 +184,47 @@ describe('Component Tests', () => {
         // THEN
         expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>Sample);
       });
+<%_ const dateTimeField = fields.find(field => !field.id && ['Instant', 'ZonedDateTime'].includes(field.fieldType)); _%>
+<%_ if (dateTimeField) { _%>
+
+      it('Should convert a date time', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue({ ...<%- entityInstance %>Sample, <%- dateTimeField.fieldName %>: '2019-10-15T11:42:02Z' });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue([<%- entityInstance %>Sample]);
+
+        // WHEN
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%- entityInstance %>.<%- dateTimeField.fieldName %>).toEqual(new Date('2019-10-15T11:42:02Z'));
+      });
+
+      it('Should keep an empty date time', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue({ ...<%- entityInstance %>Sample, <%- dateTimeField.fieldName %>: null });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue([<%- entityInstance %>Sample]);
+
+        // WHEN
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%- entityInstance %>.<%- dateTimeField.fieldName %>).toBeNull();
+      });
+<%_ } _%>
     });
 
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>

@@ -89,7 +89,9 @@ export default defineComponent({
 <%_ for (field of fields.filter(field => !field.id)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-        res.<%- fieldName %> = new Date(res.<%- fieldName %>);
+        if (res.<%- fieldName %>) {
+          res.<%- fieldName %> = new Date(res.<%- fieldName %>);
+        }
   <%_ } _%>
 <%_ } _%>
         <%- entityInstance %>.value = res;
