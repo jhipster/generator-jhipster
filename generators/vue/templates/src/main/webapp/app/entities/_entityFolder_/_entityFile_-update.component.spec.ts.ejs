@@ -305,6 +305,36 @@ describe('Component Tests', () => {
       });
     });
 
+<%_ if (builtInUserManagement) { _%>
+    describe('Login validation', () => {
+      it.each(['jhi', 'jhi@pster.net', 'jhi+tag@pster.net', 'jhi.pster@mail.pster.net'])('Should accept the login %s', async login => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.<%- entityInstance %>.login = login;
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.v$.login.$invalid).toBe(false);
+      });
+
+      it('Should reject a login with invalid characters', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.<%- entityInstance %>.login = 'jhi pster';
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.v$.login.$invalid).toBe(true);
+      });
+    });
+
+<%_ } _%>
     describe('Errors and defaults', () => {
       it('Should show the error of a failed load', async () => {
         // GIVEN
