@@ -19,7 +19,7 @@
 
 import type BaseGenerator from '../../generators/base/generator.ts';
 import { buildMutateDataForProperty } from '../utils/derived-property.ts';
-import type { MutateDataFunction } from '../utils/object.ts';
+import { type MutateDataFunction, finalizeDefault } from '../utils/object.ts';
 
 import type { JHipsterConfigs, JHipsterEntityConfigs } from './index.ts';
 
@@ -82,12 +82,7 @@ export const getCommandDefaultMutations = (
     __override__: false as any,
   };
   for (const [key, def] of scopeConfigs) {
-    mutations[key] = (context: any, { delayMarker }) => {
-      if (delayMarker) {
-        return delayMarker;
-      }
-      return typeof def.default === 'function' ? def.default(context) : def.default;
-    };
+    mutations[key] = finalizeDefault((context: any) => (typeof def.default === 'function' ? def.default(context) : def.default));
   }
   return mutations;
 };
