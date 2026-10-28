@@ -346,7 +346,7 @@ export function createAuthorityEntity(
     relationships: [],
     fields: customAuthorityData.fields ?? [],
     builtInAuthority: true,
-    skipClient: !application.backendTypeSpringBoot || application.clientFrameworkReact || application.clientFrameworkVue,
+    skipClient: !application.backendTypeSpringBoot || application.clientFrameworkReact,
     searchEngine: 'no',
     service: 'no',
     dto: 'no',
