@@ -137,7 +137,7 @@ export const files = asWriteFilesSection({
     },
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss'],
+      templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss'],
     },
     // login
     {

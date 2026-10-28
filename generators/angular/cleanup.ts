@@ -404,4 +404,7 @@ export default asWritingTask<AngularEntity, AngularApplication>(function cleanup
     this.removeFile(`${application.clientSrcDir}app/shared/pagination/item-count.component.spec.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/pagination/item-count.component.ts`);
   }
+  if (control.isJhipsterVersionLessThan('9.5.0')) {
+    this.removeFile(`${application.clientSrcDir}app/home/home.scss`);
+  }
 });
