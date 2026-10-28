@@ -33,10 +33,16 @@ import { useLocation, useNavigate } from 'react-router';
 const accountMenuItemsAuthenticated = () => (
   <>
 <%_ if (generateUserManagement) { _%>
-    <MenuItem icon="wrench" to="/account/settings" data-cy="settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
-    <MenuItem icon="lock" to="/account/password" data-cy="passwordItem"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
+    <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
+      <Translate contentKey="global.menu.account.settings">Settings</Translate>
+    </MenuItem>
+    <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
+      <Translate contentKey="global.menu.account.password">Password</Translate>
+    </MenuItem>
   <%_ if (authenticationTypeSession) { _%>
-    <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
+    <MenuItem icon="cloud" to="/account/sessions">
+      <Translate contentKey="global.menu.account.sessions">Sessions</Translate>
+    </MenuItem>
   <%_ } _%>
 <%_ } _%>
     <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
@@ -70,9 +76,13 @@ const accountMenuItems = () => {
 <%_ } else { _%>
 const accountMenuItems = () => (
   <>
-    <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
+    <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login">
+      <Translate contentKey="global.menu.account.login">Sign in</Translate>
+    </MenuItem>
   <%_ if (generateUserManagement) { _%>
-    <MenuItem icon="user-plus" to="/account/register" data-cy="register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
+    <MenuItem icon="user-plus" to="/account/register" data-cy="register">
+      <Translate contentKey="global.menu.account.register">Register</Translate>
+    </MenuItem>
   <%_ } _%>
   </>
 );

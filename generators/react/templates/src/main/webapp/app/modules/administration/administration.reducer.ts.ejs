@@ -39,18 +39,18 @@ const initialState = {
   threadDump: [],
   configuration: {
     configProps: {} as any,
-    env: {} as any
+    env: {} as any,
   },
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
   tracker: {
-    activities: [] as { sessionId: string; page: string }[]
+    activities: [] as { sessionId: string; page: string }[],
   },
 <%_ } _%>
-  totalItems: 0
+  totalItems: 0,
 };
 
-export type AdministrationState =  Readonly<typeof initialState>;
+export type AdministrationState = Readonly<typeof initialState>;
 
 // Actions
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -184,7 +184,7 @@ export const AdministrationSlice = createSlice({
         state => {
           state.errorMessage = null;
           state.loading = true;
-        }
+        },
       )
       .addMatcher(
         isRejected(

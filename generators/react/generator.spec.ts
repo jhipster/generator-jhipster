@@ -167,7 +167,7 @@ describe(`generator - ${clientFramework}`, () => {
                 '  threadDump: [],\n' +
                 '  configuration: {\n' +
                 '    configProps: {} as any,\n' +
-                '    env: {} as any\n' +
+                '    env: {} as any,\n' +
                 '  },',
             );
 
