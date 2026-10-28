@@ -18,7 +18,9 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { shallowMount } from '@vue/test-utils';
+import { defineComponent, h } from 'vue';
+
+import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import Logs from './logs.vue';
@@ -87,5 +89,61 @@ describe('Logs Component', () => {
       expect(logs.orderProp).toEqual('dummy-order');
       expect(logs.reverse).toBe(true);
     });
+  });
+});
+
+describe('Logs view', () => {
+  // eslint-disable-next-line vue/one-component-per-file
+  const buttonStub = defineComponent({
+    setup(_props, { slots }) {
+      return () => h('button', slots.default?.());
+    },
+  });
+  // eslint-disable-next-line vue/one-component-per-file
+  const contentStub = defineComponent({
+    setup(_props, { slots }) {
+      return () => h('div', slots.default?.());
+    },
+  });
+
+  it('should list the loggers and change their level', async () => {
+    // GIVEN
+    const levels = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'];
+    const loggers = Object.fromEntries(levels.map(level => [`logger.${level}`, { effectiveLevel: level }]));
+    vi.spyOn(axios, 'get').mockResolvedValue({ data: { loggers } });
+    const post = vi.spyOn(axios, 'post').mockResolvedValue({});
+    const wrapper = shallowMount(Logs, {
+      global: {
+        stubs: {
+          'jhi-sort-indicator': true,
+          BButton: buttonStub,
+          BButtonGroup: contentStub,
+        },
+      },
+    });
+    await flushPromises();
+
+    // WHEN
+    for (const element of wrapper.findAll('th, button')) {
+      await element.trigger('click');
+    }
+    await wrapper.find('input').setValue('logger.info');
+    await flushPromises();
+
+    // THEN
+    expect(post).toHaveBeenCalledTimes(levels.length * levels.length);
+    expect(wrapper.vm.filteredLoggers).toEqual([{ name: 'logger.INFO', level: 'INFO' }]);
+  });
+
+  it('should use the default service', async () => {
+    // GIVEN
+    const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: { loggers: {} } });
+
+    // WHEN
+    shallowMount(Logs, { global: { stubs: { 'jhi-sort-indicator': true, BButton: true, BButtonGroup: true } } });
+    await flushPromises();
+
+    // THEN
+    expect(get).toHaveBeenCalledWith('management/loggers');
   });
 });
