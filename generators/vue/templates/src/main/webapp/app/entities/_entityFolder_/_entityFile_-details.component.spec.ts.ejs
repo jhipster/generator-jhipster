@@ -18,6 +18,9 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+<%_ if (builtInUserManagement) { _%>
+import { ref } from 'vue';
+<%_ } _%>
 import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
@@ -84,6 +87,9 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
+<%_ if (builtInUserManagement) { _%>
+          currentUsername: ref('admin'),
+<%_ } _%>
         },
       };
     });

@@ -1,15 +1,18 @@
+<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement) && !field.hidden && !(builtInUserManagement && field.readonly)); _%>
 <template>
     <div class="d-flex justify-content-center">
         <div class="col-8">
             <form name="editForm" novalidate @submit.prevent="save()" >
                 <h2 id="<%- i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">{{ t$('<%- i18nKeyPrefix %>.home.createOrEditLabel') }}</h2>
                 <div>
+<%_ if (!builtInUserManagement) { _%>
                     <div class="mb-3" v-if="<%- entityInstance %>.<%- primaryKey.name %>">
                         <label for="id">{{ t$('global.field.id') }}</label>
                         <input type="text" class="form-control" id="id" name="<%- primaryKey.name %>"
                                v-model="<%- entityInstance %>.<%- primaryKey.name %>" readonly />
                     </div>
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ } _%>
+<%_ for (field of formFields) { _%>
   <%_ const { fieldName, fieldType, fieldTypeBlobContent } = field;
       const fieldInputClass = field.fieldTypeBoolean ? 'form-check-input' : 'form-control';
       const translationKey = `${i18nKeyPrefix}.${fieldName}`;
@@ -18,7 +21,11 @@
   <%_ if (!field.fieldTypeBoolean) { _%>
                         <label class="form-control-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (field.clientConstantsAsValues) { _%>
+                        <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
+                            <option v-for="value of <%- fieldName %>Values" :key="value" :value="value">{{ value }}</option>
+                        </select>
+  <%_ } else if (field.fieldIsEnum) { _%>
                         <select class="form-select" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
                             <option v-for="<%- field.enumInstance %> in <%- field.enumInstance %>Values" :key="<%- field.enumInstance %>" :value="<%- field.enumInstance %>" :label="t$('<%- enumPrefix %>.'+<%- field.enumInstance %>)">{{ <%- field.enumInstance %> }}</option>

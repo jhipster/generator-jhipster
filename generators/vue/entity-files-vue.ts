@@ -71,7 +71,7 @@ export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, Clie
     source.addEntitiesToClient({
       application,
       entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
-        entity => !entity.builtInUser && !entity.embedded,
+        entity => !entity.builtInUser && !entity.builtInUserManagement && !entity.embedded,
       ),
     });
   },

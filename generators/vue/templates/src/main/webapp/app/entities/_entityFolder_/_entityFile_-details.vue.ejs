@@ -4,13 +4,15 @@
             <div v-if="<%- entityInstance %>">
                 <h2 class="jh-entity-heading" data-cy="<%- entityInstance %>DetailsHeading"><span>{{ t$('<%- i18nKeyPrefix %>.detail.title') }}</span> {{<%- entityInstance %>.<%- primaryKey.name %>}}</h2>
                 <dl class="row-md jh-entity-details">
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of fields.filter(field => !field.id && !field.hidden)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
                     <dt>
                         <span>{{ t$('<%- i18nKeyPrefix %>.<%- fieldName %>') }}</span>
                     </dt>
                     <dd>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (field.clientConstantsAsValues) { _%>
+                        <span>{{ <%- entityInstance %>.<%- fieldName %><%- field.collection ? '?.join(\', \')' : '' %> }}</span>
+  <%_ } else if (field.fieldIsEnum) { _%>
                         <span><% if (enableTranslation) { %>{{ t$('<%- frontendAppName %>.<%- fieldType %>.' + <%- entityInstance %>.<%- fieldName %>) }}<% } else { %>{{ <%- entityInstance %>.<%- fieldName %> }}<% } %></span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%- entityInstance %>.<%- fieldName %>">
@@ -75,7 +77,7 @@
                         <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.edit') }}</span>
                     </button>
                     </router-link>
-                <b-button v-if="<%- entityInstance %>.<%- primaryKey.name %>" @click="prepareRemove(<%- entityInstance %>)" variant="danger" data-cy="entityDeleteButton">
+                <b-button v-if="<%- entityInstance %>.<%- primaryKey.name %>" @click="prepareRemove(<%- entityInstance %>)" variant="danger"<% if (builtInUserManagement) { %> :disabled="username === <%- entityInstance %>.login"<% } %> data-cy="entityDeleteButton">
                     <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
                 </b-button>
 <%_ } _%>

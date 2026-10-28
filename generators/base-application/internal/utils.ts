@@ -224,7 +224,7 @@ export function createUserManagementEntity(
   const userManagement = {
     ...user,
     name: 'UserManagement',
-    skipClient: !application.clientFrameworkAngular,
+    skipClient: !application.clientFrameworkAngular && !application.clientFrameworkVue,
     skipServer: true,
     changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).UserManagement,
     clientRootFolder: 'admin',
@@ -241,7 +241,7 @@ export function createUserManagementEntity(
   };
 
   mutateData(userManagement, {
-    entityPage: ({ skipClient }) => (skipClient && !application.clientFrameworkAngular ? 'admin/user-management' : undefined),
+    entityPage: ({ skipClient }) => (skipClient || application.clientFrameworkVue ? 'admin/user-management' : undefined),
   });
 
   mutateFields(userManagement.fields!, [
@@ -285,7 +285,8 @@ export function createUserManagementEntity(
     ]);
   }
 
-  if (application.generateBuiltInAuthorityEntity) {
+  // The Vue client has no Authority entity, the authorities are a string array there.
+  if (application.generateBuiltInAuthorityEntity && !application.clientFrameworkVue) {
     addOrExtendRelationships(userManagement.relationships!, [
       {
         otherEntityName: 'Authority',
@@ -300,7 +301,7 @@ export function createUserManagementEntity(
     ]);
   }
 
-  if (!application.generateBuiltInAuthorityEntity && application.clientFrameworkAngular) {
+  if ((!application.generateBuiltInAuthorityEntity && application.clientFrameworkAngular) || application.clientFrameworkVue) {
     // Without an Authority entity the server exposes the authorities as a string array, expose it as a constants backed enum collection.
     addOrExtendFields(userManagement.fields!, [
       {
