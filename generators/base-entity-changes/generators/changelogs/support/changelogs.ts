@@ -50,8 +50,15 @@ const diffItems = (before: Record<string, any>[] = [], after: Record<string, any
   };
 };
 
-/** The properties of a relationship whose change recreates it: its foreign key or its join table. */
-const RECREATING_RELATIONSHIP_PROPERTIES = ['relationshipType', 'otherEntityName', 'relationshipSide'];
+/**
+ * The properties of a relationship whose change recreates it, its foreign key or its join table: the id one is part of the
+ * primary key of its entity.
+ */
+const RECREATING_RELATIONSHIP_PROPERTIES = ['relationshipType', 'otherEntityName', 'relationshipSide', 'id'];
+
+/** A property of a relationship, declared by itself or in its options, where the `.jhipster` files declare most of them. */
+const relationshipProperty = (relationship: Record<string, any>, property: string) =>
+  relationship[property] ?? relationship.options?.[property];
 
 /**
  * The changed relationships split into the ones to recreate, changed in their type, their other entity or their side, and
@@ -61,10 +68,18 @@ const splitChangedRelationships = (before: Record<string, any>[] = [], after: Re
   const beforeByName = new Map(before.map(relationship => [relationship.relationshipName as string, relationship]));
   const afterByName = new Map(after.map(relationship => [relationship.relationshipName as string, relationship]));
   const recreated = changed.filter(name =>
-    RECREATING_RELATIONSHIP_PROPERTIES.some(property => beforeByName.get(name)![property] !== afterByName.get(name)![property]),
+    RECREATING_RELATIONSHIP_PROPERTIES.some(
+      property => relationshipProperty(beforeByName.get(name)!, property) !== relationshipProperty(afterByName.get(name)!, property),
+    ),
   );
   return { recreated, optionsChanged: changed.filter(name => !recreated.includes(name)) };
 };
+
+/** The properties of an entity, its fields and its relationships aside, that differ between two of its states. */
+const changedEntityProperties = (before: EntityConfig, after: EntityConfig): string[] =>
+  [...new Set([...Object.keys(before), ...Object.keys(after)])].filter(
+    property => property !== 'fields' && property !== 'relationships' && !isDeepStrictEqual(before[property], after[property]),
+  );
 
 /**
  * An entity as its \`.jhipster\` file declares it, its changelog date in its annotations, where the bootstrap of the
@@ -165,6 +180,7 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
         entity,
       });
     } else if (!isDeepStrictEqual(normalizeEntity(last.entity!), entity)) {
+      const changedProperties = changedEntityProperties(normalizeEntity(last.entity!), entity);
       const fields = diffItems(last.entity!.fields, entity.fields, 'fieldName');
       const relationships = diffItems(last.entity!.relationships, entity.relationships, 'relationshipName');
       const changedRelationships = splitChangedRelationships(last.entity!.relationships, entity.relationships, relationships.changed);
@@ -173,6 +189,7 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
         entityName: name,
         changelogDate: nextChangelogDate(generator, last),
         entity,
+        changedProperties,
         addedFields: fields.added,
         removedFields: fields.removed,
         changedFields: fields.changed,

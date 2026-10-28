@@ -143,6 +143,7 @@ describe(`generator - ${generator}`, () => {
         addedFields: ['total'],
         removedFields: ['note'],
         changedFields: ['code'],
+        changedProperties: [],
         addedRelationships: [],
         removedRelationships: [],
         recreatedRelationships: [],
@@ -152,7 +153,7 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with relationships changed after its changelog', () => {
+  describe('with relationships and properties changed after its changelog', () => {
     const customer = { name: 'Customer', changelogDate: '20200101000000', fields: [], relationships: [] };
     const relationship = (relationshipName: string, options: Record<string, any> = {}) => ({
       relationshipName,
@@ -171,7 +172,9 @@ describe(`generator - ${generator}`, () => {
             relationships: [
               relationship('buyer', { relationshipType: 'one-to-one' as const }),
               relationship('seller', { options: { onDelete: 'CASCADE' } }),
+              relationship('owner', { options: { id: true } }),
             ],
+            documentation: 'The orders of a customer',
           },
         ])
         .withYoRcConfig('objects', {
@@ -187,14 +190,19 @@ describe(`generator - ${generator}`, () => {
             operation: 'create',
             entityName: 'Order',
             changelogDate: '20200101000100',
-            entity: { ...order, relationships: [relationship('buyer'), relationship('seller')] },
+            entity: { ...order, relationships: [relationship('buyer'), relationship('seller'), relationship('owner')] },
           },
         });
     });
 
     it('tells the relationships to recreate from the ones changed only in their options', () => {
       const update = Object.values(changelogObjects()).find(object => object.operation === 'update');
-      expect(update).toMatchObject({ recreatedRelationships: ['buyer'], optionsChangedRelationships: ['seller'] });
+      expect(update).toMatchObject({ recreatedRelationships: ['buyer', 'owner'], optionsChangedRelationships: ['seller'] });
+    });
+
+    it('tells the other properties of the entity that changed', () => {
+      const update = Object.values(changelogObjects()).find(object => object.operation === 'update');
+      expect(update).toMatchObject({ changedProperties: ['documentation'] });
     });
   });
 
