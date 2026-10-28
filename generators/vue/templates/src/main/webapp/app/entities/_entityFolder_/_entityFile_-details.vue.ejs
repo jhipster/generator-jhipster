@@ -36,10 +36,21 @@
                     </dd>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>
-  <%_ if (relationship.persistableRelationship) { _%>
+  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
                     <dt>
-                        <span>{{ t$('<%- i18nKeyPrefix %>.<%- relationshipName %>') }}</span>
+                        <span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span>
+                    </dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            <li v-for="<%- relationshipFieldName %> in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>">
+                                <span class="badge bg-info">{{ <%- relationshipFieldName %> }}</span>
+                            </li>
+                        </ul>
+                    </dd>
+  <%_ } else if (relationship.persistableRelationship) { _%>
+                    <dt>
+                        <span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span>
                     </dt>
                     <dd>
     <%_ if (relationship.otherEntityUser) { _%>
@@ -53,11 +64,11 @@
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
-                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </span>
       <%_ } else { _%>
                         <div v-if="<%- `${entityInstance}.${relationshipFieldName}` %>">
-                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </div>
       <%_ } _%>
     <%_ } _%>

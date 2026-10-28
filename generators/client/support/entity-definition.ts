@@ -112,11 +112,16 @@ const generateEntityClientFields = (
     let fieldName: string;
     const nullable = !relationship.relationshipRequired;
     const { relationshipType } = relationship;
+    // A relationship serialized as the primary keys of the other entity, like the authorities of the user management.
+    const otherEntityType =
+      relationship.relationshipSerializePrimaryKeyOnly && clientFramework === VUE ?
+        getTypescriptKeyType(relationship.otherEntity.primaryKey!)
+      : `I${relationship.otherEntity.entityAngularName}`;
     if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-      fieldType = `I${relationship.otherEntity.entityAngularName}[]`;
+      fieldType = `${otherEntityType}[]`;
       fieldName = relationship.relationshipFieldNamePlural;
     } else {
-      fieldType = `I${relationship.otherEntity.entityAngularName}`;
+      fieldType = otherEntityType;
       fieldName = relationship.relationshipFieldName;
     }
     if (nullable) {

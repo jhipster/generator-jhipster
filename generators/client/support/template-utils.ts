@@ -62,6 +62,8 @@ export const generateEntityClientImports = (
   const relevantRelationships = filterRelevantRelationships(relationships);
 
   relevantRelationships.forEach(relationship => {
+    // A relationship serialized as the primary keys of the other entity needs no type of it.
+    if (relationship.relationshipSerializePrimaryKeyOnly && clientFramework === VUE) return;
     const importType = `I${relationship.otherEntity.entityAngularName}`;
     let importPath: string;
     const prefix = clientFramework === VUE ? '@' : 'app';

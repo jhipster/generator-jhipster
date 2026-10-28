@@ -118,7 +118,7 @@
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { otherEntityName, relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = relationship;
-      const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+      const translationKey = relationship.propertyTranslationKey;
   _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="mb-3">
@@ -136,7 +136,7 @@
                     <div class="mb-3">
                         <label for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
                         <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
-                            <option :value="getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
+                            <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } _%>

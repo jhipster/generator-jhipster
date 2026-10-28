@@ -50,9 +50,11 @@
                     <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- field.fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${field.fieldName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- field.fieldName %>"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
+                    <th scope="col"><span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span></th>
+  <%_ } else if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
     <%_ const fieldName = `.${relationship.otherEntityField}`; _%>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- relationship.relationshipName + fieldName %>"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + fieldName %>')"<% } %>><span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- relationship.relationshipName + fieldName %>"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
@@ -96,8 +98,14 @@
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>
-  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
+  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
+                    <td>
+                        <div v-for="<%- relationshipFieldName %> in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>">
+                            <span class="badge bg-info">{{ <%- relationshipFieldName %> }}</span>
+                        </div>
+                    </td>
+  <%_ } else if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
@@ -110,11 +118,11 @@
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- primaryKey.name %>">{{i > 0 ? ', ' : ''}}
-                            <router-link class="form-control-static" :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link class="form-control-static" :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </span>
       <%_ } else { _%>
                         <div v-if="<%- `${entityInstance}.${relationshipFieldName}` %>">
-                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </div>
       <%_ } _%>
     <%_ } _%>

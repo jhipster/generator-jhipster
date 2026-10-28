@@ -4098,36 +4098,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/admin/metrics/metrics.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/user-management/user-management-edit.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-edit.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-view.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management-view.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.vue": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/app.component.ts": {
     "stateCleared": "modified",
   },
@@ -4210,6 +4180,39 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/authority/authority.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management-details.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management-details.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management-details.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management-update.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entities-menu.component.ts": {
@@ -4434,6 +4437,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/model/admin/authority.model.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/model/admin/user-management.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
@@ -4587,6 +4593,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     {
       "application": "Application[jhipster]",
       "entities": [
+        "Entity[UserManagement]",
         "Entity[Authority]",
         "Entity[Simple]",
         "Entity[Microservice]",
