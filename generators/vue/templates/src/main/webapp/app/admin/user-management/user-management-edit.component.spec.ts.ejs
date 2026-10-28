@@ -126,6 +126,30 @@ describe('UserManagementEdit Component', () => {
     });
   });
 
+  describe('validation', () => {
+    it.each(['jhi', 'jhi@pster.net', 'jhi+tag@pster.net', 'jhi.pster@mail.pster.net'])('Should accept the login %s', async login => {
+      axiosStub.get.mockResolvedValue({ data: [] });
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+
+      userManagementEdit.userAccount.login = login;
+      await userManagementEdit.$nextTick();
+
+      expect(userManagementEdit.v$.userAccount.login.$invalid).toBe(false);
+    });
+
+    it('Should reject a login with invalid characters', async () => {
+      axiosStub.get.mockResolvedValue({ data: [] });
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+
+      userManagementEdit.userAccount.login = 'jhi pster';
+      await userManagementEdit.$nextTick();
+
+      expect(userManagementEdit.v$.userAccount.login.$invalid).toBe(true);
+    });
+  });
+
   describe('save', () => {
     it('Should call update service on save for existing user', async () => {
       // GIVEN

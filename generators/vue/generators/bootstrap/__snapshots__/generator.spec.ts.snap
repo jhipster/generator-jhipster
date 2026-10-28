@@ -186,7 +186,7 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "userManagement": Any<Object>,
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
   "withAdminUi": true,
 }

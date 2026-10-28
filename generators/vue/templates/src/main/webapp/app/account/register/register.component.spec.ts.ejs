@@ -70,6 +70,20 @@ describe('Register Component', () => {
     expect(register.registerAccount.email).toBeUndefined();
   });
 
+  it.each(['jhi', 'jhi@pster.net', 'jhi+tag@pster.net', 'jhi.pster@mail.pster.net'])('should accept the login %s', async login => {
+    register.registerAccount.login = login;
+    await register.$nextTick();
+
+    expect(register.v$.registerAccount.login.$invalid).toBe(false);
+  });
+
+  it('should reject a login with invalid characters', async () => {
+    register.registerAccount.login = 'jhi pster';
+    await register.$nextTick();
+
+    expect(register.v$.registerAccount.login.$invalid).toBe(true);
+  });
+
   it('should open login modal when asked to', () => {
     const login = useLoginModal();
     register.showLogin();
