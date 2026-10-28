@@ -21,8 +21,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+<%_ if (anyFieldIsDateDerived) { _%>
+import dayjs from 'dayjs';
+<%_ } _%>
 
 import AlertService from '@/shared/alert/alert.service';
+import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/testing/stubs';
 
 import <%- entityAngularName %>Details from './<%- entityFileName %>-details.vue';
 
@@ -37,15 +42,8 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock, push: routerPushMock }),
 }));
 
-const <%- entityInstance %>Sample = { <%- primaryKey.name %>: <%- tsKeyId %> };
+const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
 
-const bModalStub = {
-  render: () => {},
-  methods: {
-    hide: () => {},
-    show: () => {},
-  },
-};
 
 describe('Component Tests', () => {
   let alertService: AlertService;
@@ -78,9 +76,10 @@ describe('Component Tests', () => {
 
       mountOptions = {
         stubs: {
-          bModal: bModalStub as any,
+          bModal: bModalStub,
+          'b-button': bButtonStub,
           'font-awesome-icon': true,
-          'router-link': true,
+          'router-link': routerLinkStub,
         },
         provide: {
           alertService,
@@ -145,5 +144,93 @@ describe('Component Tests', () => {
       });
     });
 <%_ } _%>
+
+    describe('Actions', () => {
+      it('Should handle the actions of the details', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+<%_ if (!readOnly) { _%>
+        <%- entityInstance %>ServiceStub.delete.mockResolvedValue({});
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+        vi.stubGlobal('atob', () => '');
+        vi.spyOn(globalThis, 'open').mockReturnValue(null);
+<%_ } _%>
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- tsKeyId %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        await triggerAll(wrapper, 'button, a', 'click');
+        await flushPromises();
+
+        // THEN
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
+<%_ if (!readOnly) { _%>
+        expect(<%- entityInstance %>ServiceStub.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
+<%_ } _%>
+      });
+    });
+
+    describe('Errors and defaults', () => {
+      it('Should show the error of a failed load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockRejectedValue({ response: { status: 404 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- tsKeyId %>,
+          },
+        };
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledWith({ status: 404 });
+      });
+<%_ if (!readOnly) { _%>
+
+      it('Should show the error of a failed removal', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.delete.mockRejectedValue({ response: { status: 500 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        const comp = wrapper.vm;
+
+        // WHEN
+        comp.prepareRemove(<%- entityInstance %>Sample);
+        await comp.remove<%- entityAngularName %>();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledWith({ status: 500 });
+      });
+<%_ } _%>
+
+      it('Should use the default service', async () => {
+        // GIVEN
+        const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: <%- entityInstance %>Sample });
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- tsKeyId %>,
+          },
+        };
+
+        // WHEN
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: { alertService } } });
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.<%- entityInstance %>).toMatchObject(<%- entityInstance %>Sample);
+        expect(get).toHaveBeenCalled();
+        get.mockRestore();
+      });
+    });
   });
 });

@@ -26,8 +26,9 @@ import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
 
 import { useAlertService } from '@/shared/alert/alert.service';
-<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
-import { useDateFormat } from '@/shared/composables'
+<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
+<%_ if (composables.length > 0) { _%>
+import { <%- composables.join(', ') %> } from '@/shared/composables';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
@@ -163,35 +164,21 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
-    const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
-    const removeEntity = ref<any>(null);
-    const prepareRemove = (instance: I<%- entityAngularName %>) => {
-      removeId.value = instance.<%- primaryKey.name %>;
-      removeEntity.value.show();
-    };
-    const closeDialog = () => {
-      removeEntity.value.hide();
-    };
-    const remove<%- entityAngularName %> = async () => {
-      try {
-        await <%- entityInstance %>Service().delete(removeId.value);
+    const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
+      alertService,
+      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>,
+      remove: id => <%- entityInstance %>Service().delete(id),
   <%_ if (enableTranslation) { _%>
-        const message = t$('<%- i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
+      removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
   <%_ } else { _%>
-        const message = `A <%- entityAngularName %> is deleted with identifier ${removeId.value}`;
+      removedMessage: id => `A <%- entityAngularName %> is deleted with identifier ${id}`,
   <%_ } _%>
-        alertService.showInfo(message, { variant: 'danger' });
-        removeId.value = null;
   <%_ if (paginationInfiniteScroll) { _%>
-        clear();
+      onRemoved: () => clear(),
   <%_ } else { _%>
-        retrieve<%- entityAngularName %>s();
+      onRemoved: () => retrieve<%- entityAngularName %>s(),
   <%_ } _%>
-        closeDialog();
-      } catch (error) {
-        alertService.showHttpError(error.response);
-      }
-    };
+    });
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
 
@@ -268,6 +255,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
       currentSearch,
+      search,
 <%_ } _%>
 <%_ if (!readOnly) { _%>
       removeId,

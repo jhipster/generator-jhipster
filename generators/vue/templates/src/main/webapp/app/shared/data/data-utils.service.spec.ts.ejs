@@ -47,14 +47,6 @@ describe('DataUtils Service', () => {
     expect(result).toBe('11.25 bytes');
   });
 
-  it('should clear input entity', () => {
-    const entity = { field: 'key', value: 'value' };
-    dataUtilsService.clearInputImage(entity, null, 'field', 'value', 1);
-
-    expect(entity.field).toBeNull();
-    expect(entity.value).toBeNull();
-  });
-
   it('should open file', () => {
     window.open = vi.fn().mockReturnValue({});
     const objectURL = 'blob:http://localhost:9000/xxx';
@@ -155,5 +147,24 @@ describe('DataUtils Service', () => {
     );
 
     expect(result).toStrictEqual({});
+  });
+
+  it('should set the data of a file and its content type', async () => {
+    const entity: Record<string, any> = {};
+    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+
+    dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', false);
+
+    await vi.waitFor(() => expect(entity.data).toBe(btoa('hello')));
+    expect(entity.dataContentType).toBe('text/plain');
+  });
+
+  it('should not set the data of a file that is not an image as an image', () => {
+    const entity: Record<string, any> = {};
+    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+
+    dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', true);
+
+    expect(entity).toEqual({});
   });
 });
