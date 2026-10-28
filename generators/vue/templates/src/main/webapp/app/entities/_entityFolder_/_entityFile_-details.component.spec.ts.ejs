@@ -21,6 +21,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
+<%_ if (anyFieldIsDateDerived) { _%>
+import dayjs from 'dayjs';
+<%_ } _%>
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -37,7 +40,7 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock, push: routerPushMock }),
 }));
 
-const <%- entityInstance %>Sample = { <%- primaryKey.name %>: <%- tsKeyId %> };
+const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
 
 const bModalStub = {
   render: () => {},

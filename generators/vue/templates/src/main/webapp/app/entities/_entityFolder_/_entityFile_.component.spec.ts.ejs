@@ -20,10 +20,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { type MountingOptions, shallowMount } from '@vue/test-utils';
+<%_ if (anyFieldIsDateDerived) { _%>
+import dayjs from 'dayjs';
+<%_ } _%>
 
 import AlertService from '@/shared/alert/alert.service';
 
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';
+
+const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
 
 type <%- entityAngularName %>ComponentType = InstanceType<typeof <%- entityAngularName %>>;
 
@@ -86,7 +91,7 @@ describe('Component Tests', () => {
     describe('Mount', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
 
         // WHEN
         const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
@@ -126,7 +131,7 @@ describe('Component Tests', () => {
 
       it('should load a page', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
 
         // WHEN
         comp.page = 2;
@@ -152,7 +157,7 @@ describe('Component Tests', () => {
         comp.page = 2;
         await comp.$nextTick();
         <%- entityInstance %>ServiceStub.retrieve.mockReset();
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
 
         // WHEN
         comp.clear();
