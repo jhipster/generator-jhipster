@@ -20,17 +20,20 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type RouteLocation } from 'vue-router';
 
-import { type MountingOptions, shallowMount } from '@vue/test-utils';
+import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
 
 import AlertService from '@/shared/alert/alert.service';
+import { contentStub, triggerAll } from '@/shared/testing/stubs';
 <%_ if (anyFieldIsTimeDerived) { _%>
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
 
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
+import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)
@@ -80,8 +83,8 @@ describe('Component Tests', () => {
       mountOptions = {
         stubs: {
           'font-awesome-icon': true,
-          'b-input-group': true,
-          'b-input-group-prepend': true,
+          'b-input-group': contentStub,
+          'b-input-group-prepend': contentStub,
           'b-form-datepicker': true,
           'b-form-input': true,
         },
@@ -256,6 +259,103 @@ describe('Component Tests', () => {
         await comp.$nextTick();
 
         expect(routerGoMock).toHaveBeenCalledWith(-1);
+      });
+    });
+
+    describe('Form', () => {
+<%_ if (fields.some(field => !field.id && field.fieldValidationRequired)) { _%>
+      it('Should show the validation errors', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.v$.$touch();
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.v$.$invalid).toBe(true);
+        expect(wrapper.findAll('.text-danger').length).toBeGreaterThan(0);
+      });
+
+<%_ } _%>
+      it('Should edit and save the entity from the form', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.update.mockResolvedValue(<%- entityInstance %>Sample);
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await flushPromises();
+
+        // WHEN
+        await triggerAll(wrapper, 'input:not([type="file"]), textarea', 'input');
+        await triggerAll(wrapper, 'input, select', 'change');
+        await triggerAll(wrapper, 'button[type="button"]', 'click');
+        await wrapper.find('form').trigger('submit');
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.update).toHaveBeenCalled();
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
+      });
+    });
+
+    describe('Errors and defaults', () => {
+      it('Should show the error of a failed load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockRejectedValue({ response: { status: 404 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledWith({ status: 404 });
+      });
+
+      it('Should show the error of a failed save', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.update.mockRejectedValue({ response: { status: 500 } });
+        <%- entityInstance %>ServiceStub.create.mockRejectedValue({ response: { status: 500 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.<%- entityInstance %> = <%- entityInstance %>Sample;
+        comp.save();
+        await flushPromises();
+        comp.<%- entityInstance %> = {};
+        comp.save();
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledTimes(2);
+        expect(comp.isSaving).toBe(false);
+      });
+
+      it('Should use the default services', async () => {
+        // GIVEN
+        const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
+
+        // WHEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: { ...mountOptions, provide: { alertService } } });
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.<%- entityInstance %>Service()).toBeInstanceOf(<%- entityAngularName %>Service);
+        get.mockRestore();
       });
     });
   });

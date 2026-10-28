@@ -119,6 +119,7 @@ export const vueFiles = asWriteFilesSection({
         'shared/sort/jhi-sort-indicator.vue',
         'shared/sort/sorts.ts',
         'shared/sort/sorts.spec.ts',
+        'shared/testing/stubs.ts',
         'shared/data/data-utils.service.ts',
         'shared/data/data-utils.service.spec.ts',
         'shared/jhi-item-count.component.ts',
