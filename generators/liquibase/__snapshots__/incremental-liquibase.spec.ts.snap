@@ -421,6 +421,10 @@ exports[`generator - app - --incremental-changelog when adding a field with cons
         Added the field constraints for entity Customer.
     -->
     <changeSet id="20200102000100-fields-constraints" author="jhipster">
+        <!-- The existing rows need a value for the required columns added, filled by a changelog before this one -->
+        <preConditions onFail="HALT" onFailMessage="Fill foo of the existing rows of customer before adding their not null constraints">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM customer WHERE foo IS NULL</sqlCheck>
+        </preConditions>
         <addNotNullConstraint tableName="customer"
             columnName="foo"
             columnDataType="varchar(255)"/>
