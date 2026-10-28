@@ -112,6 +112,7 @@ export const vueFiles = asWriteFilesSection({
         'shared/composables/index.ts',
         'shared/composables/validation.ts',
         'shared/computables/arrays.ts',
+        'shared/computables/arrays.spec.ts',
         'shared/computables/index.ts',
         'shared/sort/jhi-sort-indicator.component.ts',
         'shared/sort/jhi-sort-indicator.vue',
