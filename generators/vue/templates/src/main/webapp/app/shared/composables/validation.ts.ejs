@@ -28,5 +28,6 @@ export const useValidation = () => {
     maxLength: (message: string, ...args: Parameters<typeof maxLength>) => helpers.withMessage(message, maxLength(...args)),
     minValue: (message: string, ...args: Parameters<typeof minValue>) => helpers.withMessage(message, minValue(...args)),
     maxValue: (message: string, ...args: Parameters<typeof maxValue>) => helpers.withMessage(message, maxValue(...args)),
+    pattern: (message: string, pattern: RegExp) => helpers.withMessage(message, helpers.regex(pattern)),
   };
 };

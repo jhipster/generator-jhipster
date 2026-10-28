@@ -44,6 +44,7 @@ import type {
   Config as VueConfig,
   Entity as VueEntity,
   Features as VueFeatures,
+  Field as VueField,
   Options as VueOptions,
   Source as VueSource,
 } from './types.ts';
@@ -261,6 +262,22 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareField({ field }) {
+        mutateData(field as VueField, {
+          // Single-quoted string literal content of a RegExp.
+          fieldValidateRulesPatternVue: ({ fieldValidateRulesPattern }) =>
+            fieldValidateRulesPattern?.replace(/\\\\/g, '\\').replace(/\\/g, '\\\\').replace(/'/g, "\\'"),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
   get postPreparingEachEntity() {

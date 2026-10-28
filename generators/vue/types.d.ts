@@ -25,9 +25,14 @@ import type {
 
 import type { VueAddedApplicationProperties } from './application.ts';
 
-export type { Config, Features, Field, Options, Relationship, Source } from '../client/types.d.ts';
+export type { Config, Features, Options, Relationship, Source } from '../client/types.d.ts';
 
-export interface Entity<F extends ClientField = ClientField, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
+export type Field = ClientField & {
+  /** The validation pattern of the field, as the content of a single-quoted string. */
+  fieldValidateRulesPatternVue?: string;
+};
+
+export interface Entity<F extends ClientField = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
   /** The authorities of the routes that change the entity, as a list of string literals. */
   entityVueAuthorities?: string;
   /** The authorities of the routes that read the entity, as a list of string literals. */
