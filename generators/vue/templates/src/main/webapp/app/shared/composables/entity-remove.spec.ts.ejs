@@ -1,0 +1,73 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+
+import AlertService from '@/shared/alert/alert.service';
+
+import { useEntityRemove } from './entity-remove';
+
+describe('useEntityRemove', () => {
+  const setup = (remove = vi.fn().mockResolvedValue({})) => {
+    const alertService = new AlertService({ i18n: { t: vi.fn() } as any, toast: { create: vi.fn() } as any });
+    vi.spyOn(alertService, 'showInfo').mockImplementation(() => {});
+    vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+    const onRemoved = vi.fn();
+    const entityRemove = useEntityRemove({
+      alertService,
+      getId: (instance: { id: number }) => instance.id,
+      remove,
+      removedMessage: id => `removed ${id}`,
+      onRemoved,
+    });
+    entityRemove.removeEntity.value = { show: vi.fn(), hide: vi.fn() };
+    return { alertService, onRemoved, remove, ...entityRemove };
+  };
+
+  it('should open the dialog for the instance', () => {
+    const { prepareRemove, removeId, removeEntity } = setup();
+
+    prepareRemove({ id: 123 });
+
+    expect(removeId.value).toBe(123);
+    expect(removeEntity.value.show).toHaveBeenCalled();
+  });
+
+  it('should remove the instance', async () => {
+    const { alertService, confirmRemove, onRemoved, prepareRemove, remove, removeEntity, removeId } = setup();
+    prepareRemove({ id: 123 });
+
+    await confirmRemove();
+
+    expect(remove).toHaveBeenCalledWith(123);
+    expect(alertService.showInfo).toHaveBeenCalledWith('removed 123', { variant: 'danger' });
+    expect(removeId.value).toBeNull();
+    expect(removeEntity.value.hide).toHaveBeenCalled();
+    expect(onRemoved).toHaveBeenCalled();
+  });
+
+  it('should show the error of a failed removal', async () => {
+    const { alertService, confirmRemove, onRemoved, prepareRemove } = setup(vi.fn().mockRejectedValue({ response: { status: 500 } }));
+    prepareRemove({ id: 123 });
+
+    await confirmRemove();
+
+    expect(alertService.showHttpError).toHaveBeenCalledWith({ status: 500 });
+    expect(onRemoved).not.toHaveBeenCalled();
+  });
+});

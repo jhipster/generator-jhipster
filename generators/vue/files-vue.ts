@@ -109,6 +109,8 @@ export const vueFiles = asWriteFilesSection({
         'core/ribbon/ribbon.component.ts',
         'core/ribbon/ribbon.component.spec.ts',
         'shared/composables/date-format.ts',
+        'shared/composables/entity-remove.ts',
+        'shared/composables/entity-remove.spec.ts',
         'shared/composables/index.ts',
         'shared/composables/validation.ts',
         'shared/computables/arrays.ts',
