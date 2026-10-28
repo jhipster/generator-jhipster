@@ -157,6 +157,9 @@ export default defineComponent({
     <%_ if (field.fieldValidationMax) { _%>
         max: validations.maxValue(t$('entity.validation.max', { max: <%- field.fieldValidateRulesMax %> }).toString(), <%- field.fieldValidateRulesMax %>),
     <%_ } _%>
+    <%_ if (field.fieldValidationPattern) { _%>
+        pattern: validations.pattern(t$('<%- builtInUserManagement && field.fieldName === 'login' ? 'entity.validation.patternLogin' : 'entity.validation.pattern' %>', { pattern: '<%- field.fieldNameHumanized %>' }).toString(), new RegExp('<%- field.fieldValidateRulesPatternVue %>')),
+    <%_ } _%>
   <%_ } _%>
       },
 <%_ } _%>

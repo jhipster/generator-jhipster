@@ -16,10 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Application as ClientApplication } from '../client/types.d.ts';
+import type { Application as ClientApplication, Field as ClientField } from '../client/types.d.ts';
 
 import type { VueAddedApplicationProperties } from './application.ts';
 
-export type { Config, Entity, Features, Field, Options, Relationship, Source } from '../client/types.d.ts';
+export type { Config, Entity, Features, Options, Relationship, Source } from '../client/types.d.ts';
+
+export type Field = ClientField & {
+  /** The validation pattern of the field, as the content of a single-quoted string. */
+  fieldValidateRulesPatternVue?: string;
+};
 
 export type Application = ClientApplication & VueAddedApplicationProperties;
