@@ -416,4 +416,27 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+  describe('nextTimestamp', () => {
+    // A future timestamp, the next one is a second after it.
+    const last = Math.floor((Date.now() + 86_400_000) / 1000) * 1000;
+
+    it('should store the timestamp as lastChangelogTimestamp', async () => {
+      const generator = await helpers.instantiateDummyGenerator(BaseGenerator);
+      generator.jhipsterConfig.lastChangelogTimestamp = last;
+
+      generator.nextTimestamp();
+
+      expect(generator.config.get('lastChangelogTimestamp')).toBe(last + 1000);
+    });
+
+    it('should continue after the lastLiquibaseTimestamp of a project and replace it', async () => {
+      const generator = await helpers.instantiateDummyGenerator(BaseGenerator);
+      generator.config.set('lastLiquibaseTimestamp', last);
+
+      generator.nextTimestamp();
+
+      expect(generator.config.get('lastChangelogTimestamp')).toBe(last + 1000);
+      expect(generator.config.get('lastLiquibaseTimestamp')).toBeUndefined();
+    });
+  });
 });
