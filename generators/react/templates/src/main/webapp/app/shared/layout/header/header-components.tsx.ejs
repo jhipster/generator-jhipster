@@ -23,18 +23,10 @@ import { NavLink as Link } from 'react-router';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import logo from '/content/images/logo-jhipster.png';
-
-export const BrandIcon = props => (
-  <div {...props} className="brand-icon">
-    <img src={logo} alt="Logo" />
-  </div>
-);
-
 export const Brand = () => (
-<NavbarBrand as={Link} to="/" className="brand-logo">
-  <BrandIcon />
-  <span className="brand-title"><Translate contentKey="global.title"><%- capitalizedBaseName %></Translate></span>
+<NavbarBrand as={Link} to="/" className="logo">
+  <span className="logo-img" />{' '}
+  <span className="navbar-title"><Translate contentKey="global.title"><%- capitalizedBaseName %></Translate></span>{' '}
   <span className="navbar-version">{VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`}</span>
 </NavbarBrand>
 );

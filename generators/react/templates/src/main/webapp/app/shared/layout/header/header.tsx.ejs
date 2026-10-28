@@ -20,6 +20,7 @@ import './header.scss';
 
 import { useEffect, useRef } from 'react';
 import {
+  Container,
   Nav,
   Navbar,
 } from 'react-bootstrap';
@@ -94,9 +95,10 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar ref={loadingBarRef} className="loading-bar" color="#009cd8" />
-      <Navbar data-cy="navbar" data-bs-theme="<%- reactBootstrapBsTheme %>" expand="md" fixed="top" className="<% if (clientThemeNone) { %>jh-navbar<% } else { %>bg-<%- reactBootstrapVariant %><% } %>" collapseOnSelect>
-        <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
+      <Navbar data-cy="navbar" data-bs-theme="<%- reactBootstrapBsTheme %>" expand="md" className="<%- clientThemeNone ? 'jh-navbar ' : '' %>bg-<%- reactBootstrapVariant %>" collapseOnSelect>
+        <Container fluid>
         <Brand />
+        <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
         <Navbar.Collapse id="header-tabs">
           <Nav className="ms-auto">
             <Home />
@@ -109,6 +111,7 @@ const Header = (props: IHeaderProps) => {
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
         </Navbar.Collapse>
+        </Container>
       </Navbar>
     </div>
   );
