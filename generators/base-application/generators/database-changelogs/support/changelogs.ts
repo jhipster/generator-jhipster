@@ -19,9 +19,9 @@
 import { existsSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 
-import type BaseApplicationGenerator from '../../../../base-application/index.ts';
-import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../../../base-application/support/constants.ts';
-import { getEntitiesFromDir } from '../../../../base-application/support/index.ts';
+import type BaseApplicationGenerator from '../../../index.ts';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../../support/constants.ts';
+import { getEntitiesFromDir } from '../../../support/index.ts';
 import type { ChangelogOperation, EntityChangelogObject } from '../types.ts';
 
 /** The name of the custom object of the changelogs, the one a generator using them declares in its \`customObjects\` feature. */
@@ -34,13 +34,13 @@ export const CHANGELOGS_CUSTOM_OBJECT = 'changelogs';
 export const changelogsCustomObject = { name: CHANGELOGS_CUSTOM_OBJECT, before: 'default' };
 
 /** The changelogs of the application, shared by the generators using them. */
-const CONTEXT_DATA_CHANGELOGS_KEY = 'jhipster:base-entity-changes:changelogs';
+const CONTEXT_DATA_CHANGELOGS_KEY = 'jhipster:base-application:database-changelogs';
 /** The names of the changelogs of the changes this generation brings, shared like the changelogs. */
-const CONTEXT_DATA_NEW_CHANGELOGS_KEY = 'jhipster:base-entity-changes:new-changelogs';
+const CONTEXT_DATA_NEW_CHANGELOGS_KEY = 'jhipster:base-application:database-new-changelogs';
 /** The previous states of the entities the changelogs of this generation change, shared like the changelogs. */
-const CONTEXT_DATA_PREVIOUS_ENTITIES_KEY = 'jhipster:base-entity-changes:previous-entities';
+const CONTEXT_DATA_PREVIOUS_ENTITIES_KEY = 'jhipster:base-application:database-previous-entities';
 /** Whether the application had changelogs before this generation, shared like the changelogs. */
-const CONTEXT_DATA_FORMER_CHANGELOGS_KEY = 'jhipster:base-entity-changes:former-changelogs';
+const CONTEXT_DATA_FORMER_CHANGELOGS_KEY = 'jhipster:base-application:database-former-changelogs';
 
 type Generator = BaseApplicationGenerator<any, any, any, any, any, any, any>;
 

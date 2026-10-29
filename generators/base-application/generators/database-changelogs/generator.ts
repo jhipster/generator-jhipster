@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.ts';
+import BaseApplicationGenerator from '../../index.ts';
 
 import { CHANGELOGS_CUSTOM_OBJECT, changelogsCustomObject, getEntityChangelogs } from './support/index.ts';
 import type { EntityChangelogObject } from './types.ts';
@@ -25,7 +25,7 @@ import type { EntityChangelogObject } from './types.ts';
  * Records the changelogs of the entities of an application as objects of type \`changelog\` (see
  * getEntityChangelogs), and gives them as the \`changelogs\` custom object to the generators composing this one.
  */
-export default class ChangelogsGenerator extends BaseApplicationGenerator {
+export default class DatabaseChangelogsGenerator extends BaseApplicationGenerator {
   declare readonly customObjectNames: readonly ['changelogs'];
 
   constructor(args: any, options: any, features: any) {

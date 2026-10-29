@@ -258,22 +258,16 @@ describe(`generator - ${generator}`, () => {
     const customer = { name: 'Customer', changelogDate: '20200101000000', fields: [], relationships: [] };
 
     before(async () => {
-      await helpers
-        .runJHipster(generator)
-        // An application with a backend: the server prepares the database of its entities.
-        .onGenerator(async generator => {
-          await (generator as Generator).dependsOnBootstrap('server');
-        })
-        .withJHipsterConfig({ databaseType: 'sql', prodDatabaseType: 'postgresql' }, [
-          customer,
-          {
-            ...order,
-            fields: [{ fieldName: 'code', fieldType: 'String', fieldValidateRules: ['required', 'unique'] }],
-            relationships: [
-              { relationshipName: 'customers', otherEntityName: 'customer', relationshipType: 'many-to-many', relationshipSide: 'left' },
-            ],
-          } as any,
-        ]);
+      await helpers.runJHipster(generator).withJHipsterConfig({ databaseType: 'sql', prodDatabaseType: 'postgresql' }, [
+        customer,
+        {
+          ...order,
+          fields: [{ fieldName: 'code', fieldType: 'String', fieldValidateRules: ['required', 'unique'] }],
+          relationships: [
+            { relationshipName: 'customers', otherEntityName: 'customer', relationshipType: 'many-to-many', relationshipSide: 'left' },
+          ],
+        } as any,
+      ]);
     });
 
     it('records the entity at the final properties of its database', () => {

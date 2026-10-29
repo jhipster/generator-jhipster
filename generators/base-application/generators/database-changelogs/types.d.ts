@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { ApplicationObjectConfig } from '../../../base-application/objects.ts';
+import type { ApplicationObjectConfig } from '../../objects.ts';
 
 /** What a changelog does to its entity: creates it, changes it or removes it. */
 export type ChangelogOperation = 'create' | 'update' | 'remove';
