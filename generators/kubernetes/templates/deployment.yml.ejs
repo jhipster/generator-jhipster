@@ -104,9 +104,12 @@ spec:
 <%_ } _%>
 <%_ if (app.serviceDiscoveryConsul) { _%>
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul.<%- kubernetesNamespace %>.svc.cluster.local
+          value: consul-ui.<%- kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
   <%_ if (istio) { _%>
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
