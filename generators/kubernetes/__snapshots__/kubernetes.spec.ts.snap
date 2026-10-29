@@ -11741,6 +11741,7 @@ metadata:
 data:
   on-start.sh: |
     script_name=\${0##*/}
+    local_uri="mongodb://localhost:$PORT/admin?serverSelectionTimeoutMS=2000"
 
     log() {
         local msg="$1"
@@ -11756,7 +11757,24 @@ data:
             args='force: true'
         fi
         log "Shutting down MongoDB ($args)..."
-        mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "db.shutdownServer({$args})"
+        mongosh --norc "$local_uri" "\${admin_creds[@]}" --eval "db.shutdownServer({$args})"
+    }
+
+    wait_for_state() {
+        local state="$1"
+        local state_name="$2"
+        local attempts=0
+        log "Waiting for replica to reach $state_name state..."
+        until [[ $(mongosh --norc "$local_uri" "\${admin_creds[@]}" --quiet --eval "rs.status().myState") == "$state" ]]; do
+            attempts=$((attempts + 1))
+            if [[ $attempts -ge 120 ]]; then
+                log "Replica didn't reach $state_name state after $attempts attempts. Exiting prematurely."
+                shutdown_mongo
+                exit 1
+            fi
+            sleep 1
+        done
+        log "✓ Replica reached $state_name state."
     }
 
     my_hostname=$(hostname)
@@ -11771,54 +11789,13 @@ data:
         peers=("\${peers[@]}" "$line")
     done
 
-    # Generate the ca cert
-    ca_crt=/data/configdb/tls.crt
-    if [ -f "$ca_crt"  ]; then
-        log "Generating certificate"
-        ca_key=/data/configdb/tls.key
-        pem=/work-dir/mongo.pem
-        ssl_args=(--ssl --sslCAFile "$ca_crt" --sslPEMKeyFile "$pem")
-
-    # Move into /work-dir
-    pushd /work-dir
-
-    cat >openssl.cnf <<EOL
-    [req]
-    req_extensions = v3_req
-    distinguished_name = req_distinguished_name
-    [req_distinguished_name]
-    [ v3_req ]
-    basicConstraints = CA:FALSE
-    keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-    subjectAltName = @alt_names
-    [alt_names]
-    DNS.1 = $(echo -n "$my_hostname" | sed s/-[0-9]*$//)
-    DNS.2 = $my_hostname
-    DNS.3 = $service_name
-    DNS.4 = localhost
-    DNS.5 = 127.0.0.1
-    EOL
-
-        # Generate the certs
-        openssl genrsa -out mongo.key 2048
-        openssl req -new -key mongo.key -out mongo.csr -subj "/CN=$my_hostname" -config openssl.cnf
-        openssl x509 -req -in mongo.csr \\
-            -CA "$ca_crt" -CAkey "$ca_key" -CAcreateserial \\
-            -out mongo.crt -days 3650 -extensions v3_req -extfile openssl.cnf
-
-        rm mongo.csr
-        cat mongo.crt mongo.key > $pem
-        rm mongo.key mongo.crt
-    fi
-
-
     log "Peers: \${peers[*]}"
 
     log "Starting a MongoDB instance..."
     mongod --config /data/configdb/mongod.conf --dbpath="$DATA_PATH" --replSet="$REPLICA_SET" --port=$PORT "\${auth_args[@]}" --bind_ip=0.0.0.0 >> /work-dir/log.txt 2>&1 &
 
     log "Waiting for MongoDB to be ready..."
-    until mongo "\${ssl_args[@]}" --eval "db.adminCommand('ping')"; do
+    until mongosh --norc "$local_uri" --eval "db.adminCommand('ping')"; do
         log "Retrying..."
         sleep 2
     done
@@ -11827,23 +11804,20 @@ data:
 
     # try to find a master and add yourself to its replica set.
     for peer in "\${peers[@]}"; do
-        if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.isMaster()" | grep '"ismaster" : true'; then
+        peer_uri="mongodb://$peer/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+        if mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep -qx true; then
             log "Found master: $peer"
-            log "Adding myself ($service_name) to replica set..."
-            if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.add('$service_name')" | grep 'Quorum check failed'; then
-                log 'Quorum check failed, unable to join replicaset. Exiting prematurely.'
+            log "Joining the replica set as $service_name..."
+            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "rs.conf().members.some(m => m.host.split(':')[0] === '$service_name')" | grep -qx true \\
+                && ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
+                log 'Unable to join the replica set. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
             fi
 
             sleep 3
 
-            log 'Waiting for replica to reach SECONDARY state...'
-            until printf '.' && [[ $(mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '2' ]]; do
-                sleep 1
-            done
-
-            log '✓ Replica reached SECONDARY state.'
+            wait_for_state 2 SECONDARY
 
             shutdown_mongo "60"
             log "Good bye."
@@ -11852,18 +11826,13 @@ data:
     done
 
     # else initiate a replica set with yourself.
-    if mongo "\${ssl_args[@]}" --eval "rs.status()" | grep "no replset config has been received"; then
+    if mongosh --norc "$local_uri" --eval "rs.status()" 2>&1 | grep -q "no replset config has been received"; then
         log "Initiating a new replica set with myself ($service_name)..."
-        mongo "\${ssl_args[@]}" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
+        mongosh --norc "$local_uri" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
 
         sleep 3
 
-        log 'Waiting for replica to reach PRIMARY state...'
-        until printf '.' && [[ $(mongo "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '1' ]]; do
-            sleep 1
-        done
-
-        log '✓ Replica reached PRIMARY state.'
+        wait_for_state 1 PRIMARY
 
         log "Done."
     fi
@@ -11933,6 +11902,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           volumeMounts:
             - name: workdir
               mountPath: /work-dir
@@ -11958,6 +11929,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           ports:
             - name: peer
               containerPort: 27017
@@ -11970,11 +11943,8 @@ spec:
             - --port=$(PORT)
             - --bind_ip=0.0.0.0
           livenessProbe:
-            exec:
-              command:
-                - mongo
-                - --eval
-                - "db.adminCommand('ping')"
+            tcpSocket:
+              port: peer
             initialDelaySeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
@@ -11983,11 +11953,13 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
+                - --norc
+                - --quiet
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: 5
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             failureThreshold: 3
             periodSeconds: 10
             successThreshold: 1
@@ -13338,6 +13310,7 @@ metadata:
 data:
   on-start.sh: |
     script_name=\${0##*/}
+    local_uri="mongodb://localhost:$PORT/admin?serverSelectionTimeoutMS=2000"
 
     log() {
         local msg="$1"
@@ -13353,7 +13326,24 @@ data:
             args='force: true'
         fi
         log "Shutting down MongoDB ($args)..."
-        mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "db.shutdownServer({$args})"
+        mongosh --norc "$local_uri" "\${admin_creds[@]}" --eval "db.shutdownServer({$args})"
+    }
+
+    wait_for_state() {
+        local state="$1"
+        local state_name="$2"
+        local attempts=0
+        log "Waiting for replica to reach $state_name state..."
+        until [[ $(mongosh --norc "$local_uri" "\${admin_creds[@]}" --quiet --eval "rs.status().myState") == "$state" ]]; do
+            attempts=$((attempts + 1))
+            if [[ $attempts -ge 120 ]]; then
+                log "Replica didn't reach $state_name state after $attempts attempts. Exiting prematurely."
+                shutdown_mongo
+                exit 1
+            fi
+            sleep 1
+        done
+        log "✓ Replica reached $state_name state."
     }
 
     my_hostname=$(hostname)
@@ -13368,54 +13358,13 @@ data:
         peers=("\${peers[@]}" "$line")
     done
 
-    # Generate the ca cert
-    ca_crt=/data/configdb/tls.crt
-    if [ -f "$ca_crt"  ]; then
-        log "Generating certificate"
-        ca_key=/data/configdb/tls.key
-        pem=/work-dir/mongo.pem
-        ssl_args=(--ssl --sslCAFile "$ca_crt" --sslPEMKeyFile "$pem")
-
-    # Move into /work-dir
-    pushd /work-dir
-
-    cat >openssl.cnf <<EOL
-    [req]
-    req_extensions = v3_req
-    distinguished_name = req_distinguished_name
-    [req_distinguished_name]
-    [ v3_req ]
-    basicConstraints = CA:FALSE
-    keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-    subjectAltName = @alt_names
-    [alt_names]
-    DNS.1 = $(echo -n "$my_hostname" | sed s/-[0-9]*$//)
-    DNS.2 = $my_hostname
-    DNS.3 = $service_name
-    DNS.4 = localhost
-    DNS.5 = 127.0.0.1
-    EOL
-
-        # Generate the certs
-        openssl genrsa -out mongo.key 2048
-        openssl req -new -key mongo.key -out mongo.csr -subj "/CN=$my_hostname" -config openssl.cnf
-        openssl x509 -req -in mongo.csr \\
-            -CA "$ca_crt" -CAkey "$ca_key" -CAcreateserial \\
-            -out mongo.crt -days 3650 -extensions v3_req -extfile openssl.cnf
-
-        rm mongo.csr
-        cat mongo.crt mongo.key > $pem
-        rm mongo.key mongo.crt
-    fi
-
-
     log "Peers: \${peers[*]}"
 
     log "Starting a MongoDB instance..."
     mongod --config /data/configdb/mongod.conf --dbpath="$DATA_PATH" --replSet="$REPLICA_SET" --port=$PORT "\${auth_args[@]}" --bind_ip=0.0.0.0 >> /work-dir/log.txt 2>&1 &
 
     log "Waiting for MongoDB to be ready..."
-    until mongo "\${ssl_args[@]}" --eval "db.adminCommand('ping')"; do
+    until mongosh --norc "$local_uri" --eval "db.adminCommand('ping')"; do
         log "Retrying..."
         sleep 2
     done
@@ -13424,23 +13373,20 @@ data:
 
     # try to find a master and add yourself to its replica set.
     for peer in "\${peers[@]}"; do
-        if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.isMaster()" | grep '"ismaster" : true'; then
+        peer_uri="mongodb://$peer/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+        if mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep -qx true; then
             log "Found master: $peer"
-            log "Adding myself ($service_name) to replica set..."
-            if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.add('$service_name')" | grep 'Quorum check failed'; then
-                log 'Quorum check failed, unable to join replicaset. Exiting prematurely.'
+            log "Joining the replica set as $service_name..."
+            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "rs.conf().members.some(m => m.host.split(':')[0] === '$service_name')" | grep -qx true \\
+                && ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
+                log 'Unable to join the replica set. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
             fi
 
             sleep 3
 
-            log 'Waiting for replica to reach SECONDARY state...'
-            until printf '.' && [[ $(mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '2' ]]; do
-                sleep 1
-            done
-
-            log '✓ Replica reached SECONDARY state.'
+            wait_for_state 2 SECONDARY
 
             shutdown_mongo "60"
             log "Good bye."
@@ -13449,18 +13395,13 @@ data:
     done
 
     # else initiate a replica set with yourself.
-    if mongo "\${ssl_args[@]}" --eval "rs.status()" | grep "no replset config has been received"; then
+    if mongosh --norc "$local_uri" --eval "rs.status()" 2>&1 | grep -q "no replset config has been received"; then
         log "Initiating a new replica set with myself ($service_name)..."
-        mongo "\${ssl_args[@]}" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
+        mongosh --norc "$local_uri" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
 
         sleep 3
 
-        log 'Waiting for replica to reach PRIMARY state...'
-        until printf '.' && [[ $(mongo "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '1' ]]; do
-            sleep 1
-        done
-
-        log '✓ Replica reached PRIMARY state.'
+        wait_for_state 1 PRIMARY
 
         log "Done."
     fi
@@ -13530,6 +13471,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           volumeMounts:
             - name: workdir
               mountPath: /work-dir
@@ -13555,6 +13498,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           ports:
             - name: peer
               containerPort: 27017
@@ -13567,11 +13512,8 @@ spec:
             - --port=$(PORT)
             - --bind_ip=0.0.0.0
           livenessProbe:
-            exec:
-              command:
-                - mongo
-                - --eval
-                - "db.adminCommand('ping')"
+            tcpSocket:
+              port: peer
             initialDelaySeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
@@ -13580,11 +13522,13 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
+                - --norc
+                - --quiet
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: 5
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             failureThreshold: 3
             periodSeconds: 10
             successThreshold: 1
@@ -19198,6 +19142,7 @@ metadata:
 data:
   on-start.sh: |
     script_name=\${0##*/}
+    local_uri="mongodb://localhost:$PORT/admin?serverSelectionTimeoutMS=2000"
 
     log() {
         local msg="$1"
@@ -19213,7 +19158,24 @@ data:
             args='force: true'
         fi
         log "Shutting down MongoDB ($args)..."
-        mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "db.shutdownServer({$args})"
+        mongosh --norc "$local_uri" "\${admin_creds[@]}" --eval "db.shutdownServer({$args})"
+    }
+
+    wait_for_state() {
+        local state="$1"
+        local state_name="$2"
+        local attempts=0
+        log "Waiting for replica to reach $state_name state..."
+        until [[ $(mongosh --norc "$local_uri" "\${admin_creds[@]}" --quiet --eval "rs.status().myState") == "$state" ]]; do
+            attempts=$((attempts + 1))
+            if [[ $attempts -ge 120 ]]; then
+                log "Replica didn't reach $state_name state after $attempts attempts. Exiting prematurely."
+                shutdown_mongo
+                exit 1
+            fi
+            sleep 1
+        done
+        log "✓ Replica reached $state_name state."
     }
 
     my_hostname=$(hostname)
@@ -19228,54 +19190,13 @@ data:
         peers=("\${peers[@]}" "$line")
     done
 
-    # Generate the ca cert
-    ca_crt=/data/configdb/tls.crt
-    if [ -f "$ca_crt"  ]; then
-        log "Generating certificate"
-        ca_key=/data/configdb/tls.key
-        pem=/work-dir/mongo.pem
-        ssl_args=(--ssl --sslCAFile "$ca_crt" --sslPEMKeyFile "$pem")
-
-    # Move into /work-dir
-    pushd /work-dir
-
-    cat >openssl.cnf <<EOL
-    [req]
-    req_extensions = v3_req
-    distinguished_name = req_distinguished_name
-    [req_distinguished_name]
-    [ v3_req ]
-    basicConstraints = CA:FALSE
-    keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-    subjectAltName = @alt_names
-    [alt_names]
-    DNS.1 = $(echo -n "$my_hostname" | sed s/-[0-9]*$//)
-    DNS.2 = $my_hostname
-    DNS.3 = $service_name
-    DNS.4 = localhost
-    DNS.5 = 127.0.0.1
-    EOL
-
-        # Generate the certs
-        openssl genrsa -out mongo.key 2048
-        openssl req -new -key mongo.key -out mongo.csr -subj "/CN=$my_hostname" -config openssl.cnf
-        openssl x509 -req -in mongo.csr \\
-            -CA "$ca_crt" -CAkey "$ca_key" -CAcreateserial \\
-            -out mongo.crt -days 3650 -extensions v3_req -extfile openssl.cnf
-
-        rm mongo.csr
-        cat mongo.crt mongo.key > $pem
-        rm mongo.key mongo.crt
-    fi
-
-
     log "Peers: \${peers[*]}"
 
     log "Starting a MongoDB instance..."
     mongod --config /data/configdb/mongod.conf --dbpath="$DATA_PATH" --replSet="$REPLICA_SET" --port=$PORT "\${auth_args[@]}" --bind_ip=0.0.0.0 >> /work-dir/log.txt 2>&1 &
 
     log "Waiting for MongoDB to be ready..."
-    until mongo "\${ssl_args[@]}" --eval "db.adminCommand('ping')"; do
+    until mongosh --norc "$local_uri" --eval "db.adminCommand('ping')"; do
         log "Retrying..."
         sleep 2
     done
@@ -19284,23 +19205,20 @@ data:
 
     # try to find a master and add yourself to its replica set.
     for peer in "\${peers[@]}"; do
-        if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.isMaster()" | grep '"ismaster" : true'; then
+        peer_uri="mongodb://$peer/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+        if mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep -qx true; then
             log "Found master: $peer"
-            log "Adding myself ($service_name) to replica set..."
-            if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.add('$service_name')" | grep 'Quorum check failed'; then
-                log 'Quorum check failed, unable to join replicaset. Exiting prematurely.'
+            log "Joining the replica set as $service_name..."
+            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "rs.conf().members.some(m => m.host.split(':')[0] === '$service_name')" | grep -qx true \\
+                && ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
+                log 'Unable to join the replica set. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
             fi
 
             sleep 3
 
-            log 'Waiting for replica to reach SECONDARY state...'
-            until printf '.' && [[ $(mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '2' ]]; do
-                sleep 1
-            done
-
-            log '✓ Replica reached SECONDARY state.'
+            wait_for_state 2 SECONDARY
 
             shutdown_mongo "60"
             log "Good bye."
@@ -19309,18 +19227,13 @@ data:
     done
 
     # else initiate a replica set with yourself.
-    if mongo "\${ssl_args[@]}" --eval "rs.status()" | grep "no replset config has been received"; then
+    if mongosh --norc "$local_uri" --eval "rs.status()" 2>&1 | grep -q "no replset config has been received"; then
         log "Initiating a new replica set with myself ($service_name)..."
-        mongo "\${ssl_args[@]}" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
+        mongosh --norc "$local_uri" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
 
         sleep 3
 
-        log 'Waiting for replica to reach PRIMARY state...'
-        until printf '.' && [[ $(mongo "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '1' ]]; do
-            sleep 1
-        done
-
-        log '✓ Replica reached PRIMARY state.'
+        wait_for_state 1 PRIMARY
 
         log "Done."
     fi
@@ -19390,6 +19303,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           volumeMounts:
             - name: workdir
               mountPath: /work-dir
@@ -19415,6 +19330,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           ports:
             - name: peer
               containerPort: 27017
@@ -19427,11 +19344,8 @@ spec:
             - --port=$(PORT)
             - --bind_ip=0.0.0.0
           livenessProbe:
-            exec:
-              command:
-                - mongo
-                - --eval
-                - "db.adminCommand('ping')"
+            tcpSocket:
+              port: peer
             initialDelaySeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
@@ -19440,11 +19354,13 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
+                - --norc
+                - --quiet
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: 5
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             failureThreshold: 3
             periodSeconds: 10
             successThreshold: 1
