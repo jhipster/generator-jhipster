@@ -151,6 +151,19 @@ describe(`generator - ${generator}`, () => {
       });
       expect(update.changelogDate > '20200101000100').toBe(true);
     });
+
+    it('keeps the entity in the last changelog only', () => {
+      const objects = changelogObjects();
+      expect(objects['20200101000100_Order']).not.toHaveProperty('entity');
+      const update = Object.values(objects).find(object => object.operation === 'update');
+      expect(update.entity).toMatchObject({ fields: changed.fields });
+    });
+
+    it('gives the previous state to the changelog of this generation', () => {
+      const update = (result.generator as Generator).changelogs.find(changelog => changelog.operation === 'update');
+      expect(update?.previousEntity).toMatchObject({ fields: [...order.fields, { fieldName: 'note', fieldType: 'String' }] });
+      expect(Object.values(changelogObjects()).find(object => object.operation === 'update')).not.toHaveProperty('previousEntity');
+    });
   });
 
   describe('with relationships and properties changed after its changelog', () => {

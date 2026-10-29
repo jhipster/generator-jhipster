@@ -30,8 +30,13 @@ export type EntityChangelogObject = ApplicationObjectConfig & {
   changelogDate: string;
   entityName: string;
   operation: ChangelogOperation;
-  /** The entity as the changelog leaves it, as its `.jhipster` file declares it; none for a removal. */
+  /**
+   * The entity as the changelog leaves it, as its `.jhipster` file declares it: the last changelog of the entity only,
+   * the state the next one compares to, the changelogs being written once; none for a removal.
+   */
   entity?: Record<string, any>;
+  /** The entity before the changelog, the entity of the changelog before it: an update or a removal of this generation only, never recorded. */
+  previousEntity?: Record<string, any>;
   /** The properties of the table of the entity the changelog changes, its fields and its relationships aside, like entityTableName: an update only. */
   changedProperties?: string[];
   /** The fields and the relationships the changelog adds, removes or changes in the database schema, by name: an update only. */

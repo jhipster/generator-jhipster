@@ -30,6 +30,8 @@ export const CHANGELOGS_CUSTOM_OBJECT = 'changelogs';
 const CONTEXT_DATA_CHANGELOGS_KEY = 'jhipster:base-entity-changes:changelogs';
 /** The names of the changelogs of the changes this generation brings, shared like the changelogs. */
 const CONTEXT_DATA_NEW_CHANGELOGS_KEY = 'jhipster:base-entity-changes:new-changelogs';
+/** The previous states of the entities the changelogs of this generation change, shared like the changelogs. */
+const CONTEXT_DATA_PREVIOUS_ENTITIES_KEY = 'jhipster:base-entity-changes:previous-entities';
 /** Whether the application had changelogs before this generation, shared like the changelogs. */
 const CONTEXT_DATA_FORMER_CHANGELOGS_KEY = 'jhipster:base-entity-changes:former-changelogs';
 
@@ -172,6 +174,24 @@ const record = (
   }
 };
 
+/** The previous states of the entities, by the name of the changelog of this generation changing them. */
+const previousEntities = (generator: Generator): Map<string, EntityConfig> =>
+  generator.getContextData<Map<string, EntityConfig>>(CONTEXT_DATA_PREVIOUS_ENTITIES_KEY, { factory: () => new Map() });
+
+/**
+ * Records a changelog changing an entity after its last one. The changelogs are written once, so only the last
+ * changelog of an entity keeps the entity, the state the next changelog compares to: the last one gives its entity to
+ * the new one, as its previous state, for this generation only.
+ */
+const recordAfter = (generator: Generator, last: EntityChangelogObject, changelog: Omit<EntityChangelogObject, 'type'>): void => {
+  if (last.entity) {
+    const { entity, ...lastWithoutEntity } = last;
+    generator.setObjectConfig(changelogName(last), lastWithoutEntity);
+    previousEntities(generator).set(changelogName(changelog), entity);
+  }
+  record(generator, changelog);
+};
+
 /** The date of a changelog after the last one of its entity, a changelog after the ones it changes. */
 const nextChangelogDate = (generator: Generator, last: EntityChangelogObject): string => {
   let changelogDate = generator.nextTimestamp();
@@ -240,7 +260,7 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
       const fields = diffItems(before.fields, after.fields, 'fieldName');
       const relationships = diffItems(before.relationships, after.relationships, 'relationshipName');
       const changedRelationships = splitChangedRelationships(before.relationships, after.relationships, relationships.changed);
-      record(generator, {
+      recordAfter(generator, last, {
         operation: 'update',
         entityName: name,
         changelogDate: nextChangelogDate(generator, last),
@@ -260,11 +280,14 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
   const entityNames = new Set(entities.map(({ name }: { name: string }) => name));
   for (const [name, last] of lastChangelogs) {
     if (last.operation !== 'remove' && !entityNames.has(name)) {
-      record(generator, { operation: 'remove', entityName: name, changelogDate: nextChangelogDate(generator, last) });
+      recordAfter(generator, last, { operation: 'remove', entityName: name, changelogDate: nextChangelogDate(generator, last) });
     }
   }
 
-  return findChangelogs(generator);
+  return findChangelogs(generator).map(changelog => {
+    const previousEntity = previousEntities(generator).get(changelogName(changelog));
+    return previousEntity ? { ...changelog, previousEntity } : changelog;
+  });
 };
 
 /**
