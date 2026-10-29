@@ -1,4 +1,5 @@
 @echo off
+<%_ const pm = nodePackageManager === 'pnpm' ? 'pnpm' : 'npm'; _%>
 
 setlocal
 
@@ -7,13 +8,17 @@ set NPMW_DIR=%~dp0
 <%_ if (buildToolMaven) { _%>
 set NODE_EXE=^"^"
 set NODE_PATH=%NPMW_DIR%target\node\
-set NPM_EXE=^"%NPMW_DIR%target\node\npm.cmd^"
-set INSTALL_NPM_COMMAND=^"%NPMW_DIR%mvnw.cmd^" -Pwebapp frontend:install-node-and-npm@install-node-and-npm
+set NPM_EXE=^"%NPMW_DIR%target\node\<%- pm %>.cmd^"
+set INSTALL_NPM_COMMAND=^"%NPMW_DIR%mvnw.cmd^" -Pwebapp frontend:install-node-and-<%- pm %>@install-node-and-<%- pm %>
 <%_ } else if (buildToolGradle) { _%>
 set NODE_EXE=^"%NPMW_DIR%build\node\bin\node.exe^"
 set NODE_PATH=%NPMW_DIR%build\node\bin\
+  <%_ if (pm === 'pnpm') { _%>
+set NPM_EXE=^"%NPMW_DIR%build\node\lib\node_modules\pnpm\bin\pnpm.mjs^"
+  <%_ } else { _%>
 set NPM_EXE=^"%NPMW_DIR%build\node\lib\node_modules\npm\bin\npm-cli.js^"
-set INSTALL_NPM_COMMAND=^"%NPMW_DIR%gradlew.bat^" npmSetup --no-daemon
+  <%_ } _%>
+set INSTALL_NPM_COMMAND=^"%NPMW_DIR%gradlew.bat^" <%- pm %>Setup --no-daemon
 <%_ } _%>
 
 if not exist %NPM_EXE% (
@@ -27,5 +32,5 @@ if exist %NODE_EXE% (
   Rem execute local npm, whilst adding local npm location to the PATH for this CMD session
   endlocal & echo "%PATH%"|find /i "%NODE_PATH%;">nul || set "PATH=%NODE_PATH%;%PATH%" & call %NPM_EXE% %*
 ) else (
-  call npm %*
+  call <%- pm %> %*
 )

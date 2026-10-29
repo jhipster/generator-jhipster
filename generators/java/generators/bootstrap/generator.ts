@@ -42,7 +42,9 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
         applicationDefaults(
           {
             __override__: false,
-            useNpmWrapper: ({ clientFramework }) => (clientFramework ?? 'no') !== 'no',
+            // The npm wrapper runs the npm or pnpm the build tool installs.
+            useNpmWrapper: ({ clientFramework, nodePackageManager }) =>
+              (clientFramework ?? 'no') !== 'no' && ['npm', 'pnpm'].includes(nodePackageManager ?? 'npm'),
           },
           {
             __override__: true,

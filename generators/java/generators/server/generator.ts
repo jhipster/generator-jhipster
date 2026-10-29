@@ -47,7 +47,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
 
         const { buildTool } = application;
         if (buildTool === 'maven') {
-          const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
+          const pm = application.nodePackageManager === 'pnpm' ? 'pnpm' : 'npm';
+          const excludeWebapp = application.skipClient ? '' : ` -Dskip.installnode${pm} -Dskip.${pm}`;
           scriptsStorage.set({
             'app:start': './mvnw -ntp --batch-mode',
             'backend:info': './mvnw --version',

@@ -62,5 +62,19 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with pnpm', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withJHipsterConfig({ clientFramework: 'angular', nodePackageManager: 'pnpm' });
+    });
+
+    it('should use the npm wrapper', () => {
+      expect(result.application).toMatchObject({ useNpmWrapper: true, nodePackageManagerCommand: './npmw' });
+    });
+  });
+
   testBootstrapEntities(generator, { skipClient: true });
 });

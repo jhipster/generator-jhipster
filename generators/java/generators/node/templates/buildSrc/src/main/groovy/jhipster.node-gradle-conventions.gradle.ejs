@@ -1,3 +1,4 @@
+<%_ const pm = nodePackageManager === 'pnpm' ? 'pnpm' : 'npm'; _%>
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -8,18 +9,18 @@ plugins {
 if (project.hasProperty("nodeInstall")) {
     node {
         version = "<%- nodeVersion %>"
-        npmVersion = "<%- nodeDependencies.npm %>"
+        <%- pm %>Version = "<%- nodeDependencies[pm] %>"
         download = true
     }
 
-    // Link local node and npm to a fixed location for npmw.
+    // Link local node and <%- pm %> to a fixed location for npmw.
     // They are linked instead of copied, because a copy dereferences symlinks, and bin/npm and
     // bin/npx must stay symlinks to lib/node_modules/npm/bin/*-cli.js: as plain extension-less
     // files they are resolved against the wrong directory, and parsed as ESM since the closest
     // package.json is the project one, which declares "type": "module".
     def isWindows = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows")
     def nodeDir = tasks.named("nodeSetup").flatMap { it.nodeDir }
-    def npmDir = tasks.named("npmSetup").flatMap { it.npmDir }
+    def <%- pm %>Dir = tasks.named("<%- pm %>Setup").flatMap { it.<%- pm %>Dir }
     def fixedNodeDir = layout.buildDirectory.dir("node")
 
     // Link (in the fixed location) to target pairs, relative targets being resolved from the link
@@ -28,20 +29,30 @@ if (project.hasProperty("nodeInstall")) {
         def links = [:]
         if (isWindows) {
             links[fixed.resolve("bin/node.exe")] = nodeDir.get().file("node.exe").asFile.toPath()
+<%_ if (pm === 'pnpm') { _%>
+            links[fixed.resolve("bin/pnpm.cmd")] = pnpmDir.get().file("pnpm.cmd").asFile.toPath()
+            links[fixed.resolve("lib/node_modules/pnpm")] = pnpmDir.get().dir("node_modules/pnpm").asFile.toPath()
+<%_ } else { _%>
             links[fixed.resolve("bin/npm.cmd")] = npmDir.get().file("npm.cmd").asFile.toPath()
             links[fixed.resolve("bin/npx.cmd")] = npmDir.get().file("npx.cmd").asFile.toPath()
             links[fixed.resolve("lib/node_modules/npm")] = npmDir.get().dir("node_modules/npm").asFile.toPath()
+<%_ } _%>
         } else {
             links[fixed.resolve("bin/node")] = nodeDir.get().file("bin/node").asFile.toPath()
+<%_ if (pm === 'pnpm') { _%>
+            links[fixed.resolve("bin/pnpm")] = Path.of("../lib/node_modules/pnpm/bin/pnpm.mjs")
+            links[fixed.resolve("lib/node_modules/pnpm")] = pnpmDir.get().dir("lib/node_modules/pnpm").asFile.toPath()
+<%_ } else { _%>
             links[fixed.resolve("bin/npm")] = Path.of("../lib/node_modules/npm/bin/npm-cli.js")
             links[fixed.resolve("bin/npx")] = Path.of("../lib/node_modules/npm/bin/npx-cli.js")
             links[fixed.resolve("lib/node_modules/npm")] = npmDir.get().dir("lib/node_modules/npm").asFile.toPath()
+<%_ } _%>
         }
         links
     }
 
     def linkNode = tasks.register("linkNode") {
-        description = "Link the local node and npm installations to a fixed location for npmw."
+        description = "Link the local node and <%- pm %> installations to a fixed location for npmw."
         onlyIf {
             nodeLinks().any { link, target -> !Files.isSymbolicLink(link) || Files.readSymbolicLink(link) != target }
         }
@@ -58,11 +69,11 @@ if (project.hasProperty("nodeInstall")) {
         }
     }
     tasks.named("nodeSetup").configure { finalizedBy(linkNode) }
-    tasks.named("npmSetup").configure { finalizedBy(linkNode) }
+    tasks.named("<%- pm %>Setup").configure { finalizedBy(linkNode) }
 }
 
 <%_ if (!skipClient) { _%>
-def webapp_test = tasks.register('webapp_test', NpmTask) {
+def webapp_test = tasks.register('webapp_test', <%- pm === 'pnpm' ? 'PnpmTask' : 'NpmTask' %>) {
     inputs.property('appVersion', project.version)
     inputs.files("build.gradle")
         .withPropertyName('build.gradle')
@@ -88,7 +99,7 @@ def webapp_test = tasks.register('webapp_test', NpmTask) {
         .withPropertyName("coverage-result")
   <%_ } _%>
 
-    dependsOn(npmInstall, compileTestJava)
+    dependsOn(<%- pm %>Install, compileTestJava)
     args = ["run", "webapp:test"]
 }
 

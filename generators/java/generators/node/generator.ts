@@ -113,16 +113,19 @@ export default class NodeGenerator extends JavaApplicationGenerator {
           },
         ]);
 
-        source.addGradleProperty!({ property: 'nodeInstall', comment: 'Install and use a local version of node and npm.' });
+        const pm = application.nodePackageManager === 'pnpm' ? 'pnpm' : 'npm';
+        source.addGradleProperty!({ property: 'nodeInstall', comment: `Install and use a local version of node and ${pm}.` });
       },
       frontendMavenPlugin({ application, source }) {
         if (!application.buildToolMaven) return;
         const { javaDependencies, nodeDependencies, nodeWebappBuildTarget, nodeVersion } = application;
+        // The package manager the frontend-maven-plugin installs and runs: npm, or pnpm.
+        const pm = application.nodePackageManager === 'pnpm' ? 'pnpm' : 'npm';
 
         source.addMavenDefinition!({
           properties: [
             { property: 'node.version', value: `v${nodeVersion}` },
-            { property: 'npm.version', value: nodeDependencies.npm },
+            { property: `${pm}.version`, value: nodeDependencies[pm] },
             {
               property: 'frontend-maven-plugin.version',
               value: javaDependencies['frontend-maven-plugin'],
@@ -145,7 +148,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
               additionalContent: `<configuration>
     <installDirectory>target</installDirectory>
     <nodeVersion>\${node.version}</nodeVersion>
-    <npmVersion>\${npm.version}</npmVersion>
+    <${pm}Version>\${${pm}.version}</${pm}Version>
 </configuration>`,
             },
             {
@@ -227,7 +230,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
                           </goals>
                           <configuration>
                               <target>
-                                  <condition property="skip.npm" value="true" else="false" >
+                                  <condition property="skip.${pm}" value="true" else="false" >
                                       <and>
                                           <available file="checksums.csv" filepath="\${project.build.directory}" />
                                           <available file="checksums.csv.old" filepath="\${project.build.directory}" />
@@ -248,21 +251,21 @@ export default class NodeGenerator extends JavaApplicationGenerator {
               additionalContent: `
                   <executions>
                       <execution>
-                          <id>install-node-and-npm</id>
+                          <id>install-node-and-${pm}</id>
                           <goals>
-                              <goal>install-node-and-npm</goal>
+                              <goal>install-node-and-${pm}</goal>
                           </goals>
                       </execution>
                       <execution>
-                          <id>npm install</id>
+                          <id>${pm} install</id>
                           <goals>
-                              <goal>npm</goal>
+                              <goal>${pm}</goal>
                           </goals>
                       </execution>
                       <execution>
                           <id>webapp build dev</id>
                           <goals>
-                              <goal>npm</goal>
+                              <goal>${pm}</goal>
                           </goals>
                           <phase>generate-resources</phase>
                           <configuration>
@@ -270,7 +273,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
                               <environmentVariables>
                                   <APP_VERSION>\${project.version}</APP_VERSION>
                               </environmentVariables>
-                              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                              <${pm}InheritsProxyConfigFromMaven>false</${pm}InheritsProxyConfigFromMaven>
                           </configuration>
                       </execution>
                   </executions>`,
@@ -282,32 +285,32 @@ export default class NodeGenerator extends JavaApplicationGenerator {
               additionalContent: `
                   <executions>
                       <execution>
-                          <id>install-node-and-npm</id>
+                          <id>install-node-and-${pm}</id>
                           <goals>
-                              <goal>install-node-and-npm</goal>
+                              <goal>install-node-and-${pm}</goal>
                           </goals>
                       </execution>
                       <execution>
-                          <id>npm install</id>
+                          <id>${pm} install</id>
                           <goals>
-                              <goal>npm</goal>
+                              <goal>${pm}</goal>
                           </goals>
                       </execution>
                       <execution>
                           <id>webapp build test</id>
                           <goals>
-                              <goal>npm</goal>
+                              <goal>${pm}</goal>
                           </goals>
                           <phase>test</phase>
                           <configuration>
                               <arguments>run webapp:test</arguments>
-                              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                              <${pm}InheritsProxyConfigFromMaven>false</${pm}InheritsProxyConfigFromMaven>
                           </configuration>
                       </execution>
                       <execution>
                           <id>webapp build prod</id>
                           <goals>
-                              <goal>npm</goal>
+                              <goal>${pm}</goal>
                           </goals>
                           <phase>generate-resources</phase>
                           <configuration>
@@ -315,7 +318,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
                               <environmentVariables>
                                   <APP_VERSION>\${project.version}</APP_VERSION>
                               </environmentVariables>
-                              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                              <${pm}InheritsProxyConfigFromMaven>false</${pm}InheritsProxyConfigFromMaven>
                           </configuration>
                       </execution>
                   </executions>`,
@@ -335,7 +338,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
       customInstallTask: async (preferredPm, defaultInstallTask) => {
         const { buildTool } = this.jhipsterConfigWithDefaults;
         if (
-          (preferredPm && preferredPm !== 'npm') ||
+          (preferredPm && !['npm', 'pnpm'].includes(preferredPm)) ||
           (this.jhipsterConfig as any).skipClient ||
           (buildTool !== 'gradle' && buildTool !== 'maven')
         ) {

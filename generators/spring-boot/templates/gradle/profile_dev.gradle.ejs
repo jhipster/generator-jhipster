@@ -45,7 +45,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-def webapp = tasks.register('webapp', NpmTask) {
+def webapp = tasks.register('webapp', <%- nodePackageManager === 'pnpm' ? 'PnpmTask' : 'NpmTask' %>) {
     inputs.property('appVersion', project.version)
     inputs.files("build.gradle")
         .withPropertyName('build.gradle')
@@ -62,7 +62,7 @@ def webapp = tasks.register('webapp', NpmTask) {
     outputs.dir(layout.buildDirectory.dir("<%- relativeDir(temporaryDir, clientDistDir) %>"))
         .withPropertyName("webapp-build-dir")
 
-    dependsOn(npmInstall)
+    dependsOn(<%- nodePackageManager === 'pnpm' ? 'pnpmInstall' : 'npmInstall' %>)
 
     args = ["run", "<%- nodeWebappBuildTarget %>"]
     environment = [APP_VERSION: project.version]
