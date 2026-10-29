@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { useEffect, useState } from 'react';
-import { Badge, Button, Row } from 'react-bootstrap';
+import { Badge, Button, Col, Row } from 'react-bootstrap';
 import { TextFormat, Translate } from 'react-jhipster';
 import { Link, useParams } from 'react-router';
 
@@ -48,7 +48,8 @@ export const UserManagementDetail = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
-    <div>
+    <Row className="justify-content-center">
+      <Col md="8">
       <h2 data-cy="userManagementDetailsHeading">
         <Translate contentKey="userManagement.detail.title">User</Translate> [<strong>{user.login}</strong>]
       </h2>
@@ -114,7 +115,8 @@ export const UserManagementDetail = () => {
         </span>
       </Button>
       {showDeleteDialog ? <UserManagementDeleteDialog onClose={() => setShowDeleteDialog(false)} /> : null}
-    </div>
+      </Col>
+    </Row>
   );
 };
 
