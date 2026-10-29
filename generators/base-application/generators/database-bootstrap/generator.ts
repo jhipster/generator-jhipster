@@ -50,8 +50,17 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
-      prepareDatabase({ applicationDefaults }) {
+      prepareDatabase({ application, applicationDefaults }) {
+        // The database configuration is declared by the generator of the backend, which differs from blueprint to
+        // blueprint: the properties the preparation of the database reads, derived here when it does not give them.
+        if (application.databaseType === databaseTypes.SQL) {
+          (application as { prodDatabaseType?: string }).prodDatabaseType ??= databaseTypes.POSTGRESQL;
+        }
         applicationDefaults({
+          databaseTypeAny: ({ databaseType }) => Boolean(databaseType) && databaseType !== databaseTypes.NO,
+          databaseTypeSql: ({ databaseType }) => databaseType === databaseTypes.SQL,
+          databaseTypeCassandra: ({ databaseType }) => databaseType === databaseTypes.CASSANDRA,
+          databaseTypeNeo4j: ({ databaseType }) => databaseType === databaseTypes.NEO4J,
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
           // The port of a relational database depends on its vendor, the one of another database on its type.
           prodDatabasePort: (data, { undefinedMarker }) =>
@@ -93,7 +102,7 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipForDatabase({ application, entity, relationship }) {
-        prepareRelationshipForDatabase({ application: application as any, entity: entity as any, relationship });
+        prepareRelationshipForDatabase({ application, entity: entity as any, relationship });
       },
     });
   }

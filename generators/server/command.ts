@@ -104,6 +104,45 @@ const command = {
       },
       scope: 'none',
     },
+    databaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
+      scope: 'storage',
+    },
+    devDatabaseType: {
+      description: 'Development database',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql', 'h2Disk', 'h2Memory'],
+      scope: 'storage',
+    },
+    prodDatabaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
+      scope: 'storage',
+    },
   },
   field: {
     types: {
@@ -112,7 +151,7 @@ const command = {
       DateTime: { validations: ['required', 'unique'], deprecated: 'use Instant, which it is migrated to' },
     },
   },
-  import: ['common', 'jhipster:base-application:database-bootstrap', 'spring-boot'],
+  import: ['common', 'spring-boot'],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;
