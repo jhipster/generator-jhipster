@@ -147,11 +147,13 @@ spec:
 <%_ if (app.prodDatabaseTypePostgresql) { _%>
         - name: SPRING_DATASOURCE_URL
           value: <%- app.kubernetesDatasourceJdbcUrl %>
-        - name: SPRING_DATASOURCE_USERNAME
-          value: <%- app.baseName %>
   <%_ if (app.reactive) { _%>
+        - name: SPRING_R2DBC_USERNAME
+          value: <%- app.baseName %>
         - name: SPRING_R2DBC_PASSWORD
   <%_ } else { _%>
+        - name: SPRING_DATASOURCE_USERNAME
+          value: <%- app.baseName %>
         - name: SPRING_DATASOURCE_PASSWORD
   <%_ } _%>
           valueFrom:
