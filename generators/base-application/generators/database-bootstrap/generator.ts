@@ -65,12 +65,10 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntityForDatabase({ application, entity }) {
-        // The database and the table of the entity, which every generator writing its database reads.
-        mutateData(entity as DatabaseEntity & { databaseType?: string; prodDatabaseType?: string }, {
+      prepareEntityForDatabase({ entity }) {
+        // The table of the entity, which every generator writing its database reads.
+        mutateData(entity as DatabaseEntity, {
           __override__: false,
-          databaseType: application.databaseType,
-          prodDatabaseType: application.prodDatabaseType,
           entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
         });
       },
