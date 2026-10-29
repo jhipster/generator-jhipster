@@ -53,7 +53,7 @@ data:
             args='force: true'
         fi
         log "Shutting down MongoDB ($args)..."
-        mongo admin "${admin_creds[@]}" "${ssl_args[@]}" --eval "db.shutdownServer({$args})"
+        mongosh admin "${admin_creds[@]}" "${ssl_args[@]}" --eval "db.shutdownServer({$args})"
     }
 
     my_hostname=$(hostname)
@@ -74,7 +74,7 @@ data:
         log "Generating certificate"
         ca_key=/data/configdb/tls.key
         pem=/work-dir/mongo.pem
-        ssl_args=(--ssl --sslCAFile "$ca_crt" --sslPEMKeyFile "$pem")
+        ssl_args=(--tls --tlsCAFile "$ca_crt" --tlsCertificateKeyFile "$pem")
 
     # Move into /work-dir
     pushd /work-dir
@@ -115,7 +115,7 @@ data:
     mongod --config /data/configdb/mongod.conf --dbpath="$DATA_PATH" --replSet="$REPLICA_SET" --port=$PORT "${auth_args[@]}" --bind_ip=0.0.0.0 >> /work-dir/log.txt 2>&1 &
 
     log "Waiting for MongoDB to be ready..."
-    until mongo "${ssl_args[@]}" --eval "db.adminCommand('ping')"; do
+    until mongosh "${ssl_args[@]}" --eval "db.adminCommand('ping')"; do
         log "Retrying..."
         sleep 2
     done
@@ -124,10 +124,10 @@ data:
 
     # try to find a master and add yourself to its replica set.
     for peer in "${peers[@]}"; do
-        if mongo admin --host "$peer" "${admin_creds[@]}" "${ssl_args[@]}" --eval "rs.isMaster()" | grep '"ismaster" : true'; then
+        if mongosh admin --host "$peer" "${admin_creds[@]}" "${ssl_args[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep true; then
             log "Found master: $peer"
             log "Adding myself ($service_name) to replica set..."
-            if mongo admin --host "$peer" "${admin_creds[@]}" "${ssl_args[@]}" --eval "rs.add('$service_name')" | grep 'Quorum check failed'; then
+            if mongosh admin --host "$peer" "${admin_creds[@]}" "${ssl_args[@]}" --eval "rs.add('$service_name')" 2>&1 | grep 'Quorum check failed'; then
                 log 'Quorum check failed, unable to join replicaset. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
@@ -136,7 +136,7 @@ data:
             sleep 3
 
             log 'Waiting for replica to reach SECONDARY state...'
-            until printf '.' && [[ $(mongo admin "${admin_creds[@]}" "${ssl_args[@]}" --quiet --eval "rs.status().myState") == '2' ]]; do
+            until printf '.' && [[ $(mongosh admin "${admin_creds[@]}" "${ssl_args[@]}" --quiet --eval "rs.status().myState") == '2' ]]; do
                 sleep 1
             done
 
@@ -149,14 +149,14 @@ data:
     done
 
     # else initiate a replica set with yourself.
-    if mongo "${ssl_args[@]}" --eval "rs.status()" | grep "no replset config has been received"; then
+    if mongosh "${ssl_args[@]}" --eval "rs.status()" 2>&1 | grep "no replset config has been received"; then
         log "Initiating a new replica set with myself ($service_name)..."
-        mongo "${ssl_args[@]}" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
+        mongosh "${ssl_args[@]}" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
 
         sleep 3
 
         log 'Waiting for replica to reach PRIMARY state...'
-        until printf '.' && [[ $(mongo "${ssl_args[@]}" --quiet --eval "rs.status().myState") == '1' ]]; do
+        until printf '.' && [[ $(mongosh "${ssl_args[@]}" --quiet --eval "rs.status().myState") == '1' ]]; do
             sleep 1
         done
 
@@ -273,7 +273,8 @@ spec:
           livenessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
+                - --quiet
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: 30
@@ -284,11 +285,12 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
+                - --quiet
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: 5
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             failureThreshold: 3
             periodSeconds: 10
             successThreshold: 1
