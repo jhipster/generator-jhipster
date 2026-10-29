@@ -18,7 +18,7 @@ else
   exec <%- nodePackageManager %> "$@"
 fi
 
-<%_ if (nodePackageManager === 'pnpm') { _%>
+<%_ if (nodePackageManagerPnpm) { _%>
 NPM_EXE="$repodir/pnpm/bin/pnpm.mjs"
 <%_ } else { _%>
 NPM_EXE="$repodir/npm/bin/npm-cli.js"

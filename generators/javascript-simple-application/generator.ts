@@ -109,7 +109,7 @@ export default class JavascriptGenerator extends JavascriptSimpleApplicationGene
       },
       pnpmWorkspace({ application }) {
         // The settings of pnpm, at the root of the repository: a monorepository writes its own.
-        if (application.nodePackageManager !== 'pnpm' || application.monorepository) return;
+        if (!application.nodePackageManagerPnpm || application.monorepository) return;
         // Like npm, skip the build scripts of the dependencies not approved in allowBuilds instead of failing.
         this.writeDestinationYaml('pnpm-workspace.yaml', { strictDepBuilds: false });
       },

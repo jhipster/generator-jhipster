@@ -253,7 +253,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             cypress: true,
           },
         });
-        if (application.nodePackageManager === 'pnpm' && !application.monorepository) {
+        if (application.nodePackageManagerPnpm && !application.monorepository) {
           this.mergeDestinationYaml('pnpm-workspace.yaml', { allowBuilds: { cypress: true } });
         }
       },
