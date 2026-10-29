@@ -83,6 +83,11 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
       generateSecrets() {
         this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
         this.jhipsterConfig.dbRandomPassword ??= this.options.reproducibleTests ? 'SECRET-PASSWORD' : randomBytes(30).toString('hex');
+        // Consul needs a base64 encoded key of 32 bytes
+        this.jhipsterConfig.consulGossipKey ??= (
+          this.options.reproducibleTests ?
+            Buffer.from('SECRET-GOSSIP-KEY'.padEnd(32, '-'))
+          : randomBytes(32)).toString('base64');
       },
     });
   }

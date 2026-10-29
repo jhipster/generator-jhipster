@@ -155,6 +155,8 @@ describe('generator - Knative', () => {
       it('creates expected registry files and content', () => {
         runResult.assertFile(expectedFiles.consulregistry);
         runResult.assertFileContent('./knative/registry-knative/consul.yml', /-bootstrap-expect=3/);
+        runResult.assertFileContent('./knative/registry-knative/consul.yml', /-encrypt=\$\(GOSSIP_KEY\)/);
+        runResult.assertFileContent('./knative/registry-knative/consul.yml', /name: consul-gossip-key\n/);
       });
       it('creates expected gateway files and content', () => {
         runResult.assertFile(expectedFiles.jhgate);

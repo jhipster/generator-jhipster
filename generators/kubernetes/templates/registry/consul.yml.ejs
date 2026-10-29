@@ -36,6 +36,18 @@
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: <%- kubernetesNamespace %>
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: <%- Buffer.from(consulGossipKey).toString('base64') %>
+---
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: consul-headless
@@ -169,6 +181,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=<%- consulReplicas %>
             - -retry-join=consul-headless.<%- kubernetesNamespace %>.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -176,6 +190,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"

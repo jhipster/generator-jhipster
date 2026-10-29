@@ -8,6 +8,7 @@ exports[`generator - Kubernetes Kafka application should match files snapshot 1`
     "appsFolders": [
       "09-kafka"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",
@@ -468,6 +469,7 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
       "02-mysql",
       "03-psql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -1212,6 +1214,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -1341,6 +1355,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -1348,6 +1364,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -1429,6 +1450,7 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -1894,6 +1916,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -2023,6 +2057,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -2030,6 +2066,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -2108,6 +2149,7 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -5408,6 +5450,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -5537,6 +5591,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -5544,6 +5600,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -5622,6 +5683,7 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -8836,6 +8898,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -8965,6 +9039,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -8972,6 +9048,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9051,6 +9132,7 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
       "01-gateway",
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -9677,6 +9759,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -9806,6 +9900,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -9813,6 +9909,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9894,6 +9995,7 @@ exports[`generator - Kubernetes gateway with istio routing should match files sn
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -10649,6 +10751,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -10780,6 +10894,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -10787,6 +10903,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -10889,6 +11010,7 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
       "11-mssql"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -12645,6 +12767,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -12774,6 +12908,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -12781,6 +12917,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -12877,6 +13018,7 @@ exports[`generator - Kubernetes mongodb microservice with a clustered database s
     "clusteredDbApps": [
       "04-mongo"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -13533,6 +13675,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -13662,6 +13816,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -13669,6 +13825,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -13745,6 +13906,7 @@ exports[`generator - Kubernetes monolith application should match files snapshot
     "appsFolders": [
       "08-monolith"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",
@@ -14212,6 +14374,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -17328,6 +17491,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -17457,6 +17632,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -17464,6 +17641,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -17542,6 +17724,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -17986,6 +18169,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -18115,6 +18310,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -18122,6 +18319,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -18206,6 +18408,7 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
       "11-mssql"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -19962,6 +20165,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -20091,6 +20306,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -20098,6 +20315,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -20191,6 +20413,7 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "gateway",
     "deploymentType": "kubernetes",
@@ -20638,6 +20861,18 @@ spec:
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
 apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: consul-headless
@@ -20767,6 +21002,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -20774,6 +21011,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -20853,6 +21095,7 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",
