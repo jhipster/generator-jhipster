@@ -31,7 +31,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   workspacesConfig!: Record<string, any>;
 
   readonly workspaces!: boolean;
-  readonly generateApplications!: () => Promise<void>;
+  /** Generates the applications, with the options the workspaces decide for them. */
+  readonly generateApplications!: (options: { nodePackageManager?: string }) => Promise<void>;
   readonly generateWith!: string;
   readonly entrypointGenerator!: string;
 
@@ -81,6 +82,18 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders])];
         delete this.workspacesConfig.packages;
       },
+      configurePackageManager() {
+        if (!this.generateWorkspaces) return;
+
+        // Decided before the applications are composed, which use it: the one of an existing application, else pnpm.
+        this.workspacesConfig.nodePackageManager ??=
+          this.options.nodePackageManager ??
+          this.appsFolders
+            .map(appFolder => this.readDestinationJSON(this.destinationPath(appFolder, '.yo-rc.json')) as any)
+            .find(yoRc => yoRc?.['generator-jhipster']?.nodePackageManager)?.['generator-jhipster'].nodePackageManager ??
+          'pnpm';
+        this.env.options.nodePackageManager = this.workspacesConfig.nodePackageManager;
+      },
     });
   }
 
@@ -104,7 +117,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         }
 
         if (typeof this.generateApplications === 'function') {
-          await this.generateApplications();
+          // The applications run in environments of their own, which do not share the options of this one.
+          await this.generateApplications({ nodePackageManager: this.workspacesConfig.nodePackageManager });
         } else {
           for (const appName of this.appsFolders) {
             await this.composeWithJHipster(this.entrypointGenerator ?? this.generateWith, {
@@ -148,17 +162,10 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      configurePackageManager({ applications }) {
-        if (this.workspacesConfig.nodePackageManager || !this.generateWorkspaces) return;
-
-        this.workspacesConfig.nodePackageManager =
-          this.options.nodePackageManager ?? applications.find(app => app.nodePackageManager)?.nodePackageManager ?? 'npm';
-      },
       loadConfig() {
         if (!this.generateWorkspaces) return;
 
         this.dockerCompose = this.workspacesConfig.dockerCompose;
-        this.env.options.nodePackageManager = this.workspacesConfig.nodePackageManager;
       },
     });
   }
@@ -302,7 +309,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get workspacesNodePackageManager(): string {
-    return this.workspacesConfig.nodePackageManager ?? 'npm';
+    return this.workspacesConfig.nodePackageManager ?? 'pnpm';
   }
 
   get pnpm(): boolean {

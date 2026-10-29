@@ -48,7 +48,7 @@ describe(`generator - ${generator}`, () => {
 
       result.assertJsonFileContent('package.json', {
         scripts: {
-          'ci:e2e:prepare': 'npm run docker-compose',
+          'ci:e2e:prepare': 'pnpm run docker-compose',
           'ci:e2e:teardown': 'docker compose -f docker-compose/docker-compose.yml down -v',
         },
       });
@@ -64,7 +64,7 @@ describe(`generator - ${generator}`, () => {
         .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
         .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' });
 
-      result.assertJsonFileContent('package.json', { workspaces: { packages: ['gateway', 'mobile'] } });
+      result.assertFileContent('pnpm-workspace.yaml', /packages:\n {2}- gateway\n {2}- mobile\n/);
     });
   });
 
@@ -79,6 +79,37 @@ describe(`generator - ${generator}`, () => {
 
       result.assertJsonFileContent('package.json', {
         scripts: {
+          'docker:build': 'concurrently pnpm:docker:build:gateway pnpm:docker:build:micro1',
+          'docker:build:gateway': 'pnpm --filter ./gateway --if-present run docker:build',
+        },
+      });
+    });
+  });
+
+  describe('with npm', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'], nodePackageManager: 'npm' })
+        .withJHipsterConfig({ baseName: 'workspaces' })
+        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
+        .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' })
+        .withFiles({ 'gateway/package.json': { allowScripts: { cypress: true }, overrides: { foo: '1.0.0' } } });
+    });
+
+    it('writes the workspaces, the overrides and the approved scripts to package.json', () => {
+      result.assertNoFile('pnpm-workspace.yaml');
+      result.assertJsonFileContent('package.json', {
+        workspaces: { packages: ['gateway', 'micro1'] },
+        overrides: { foo: '1.0.0' },
+        allowScripts: { cypress: true },
+      });
+    });
+
+    it('runs the scripts of the workspaces with npm', () => {
+      result.assertJsonFileContent('package.json', {
+        scripts: {
+          'ci:backend:test': 'npm run ci:backend:test --workspaces --if-present',
           'docker:build': 'concurrently npm:docker:build:gateway npm:docker:build:micro1',
           'docker:build:gateway': 'npm run docker:build --workspace gateway --if-present',
         },
@@ -86,11 +117,27 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with pnpm', () => {
+  describe('with an application using npm', () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'], nodePackageManager: 'pnpm' })
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
+        .withJHipsterConfig({ baseName: 'workspaces' })
+        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway', nodePackageManager: 'npm' })
+        .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' });
+    });
+
+    it('keeps npm', () => {
+      result.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { nodePackageManager: 'npm' } });
+      result.assertNoFile('pnpm-workspace.yaml');
+    });
+  });
+
+  describe('with defaults', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
         .withJHipsterConfig({ baseName: 'workspaces' })
         .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
         .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' })
