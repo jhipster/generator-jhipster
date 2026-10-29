@@ -51,7 +51,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
       loadConfig() {
         // Generate workspaces file if workspace option is passed, or if workspace option is omitted and monorepository is enabled, or if regenerating.
         this.generateWorkspaces =
-          (this.workspaces ?? (this.jhipsterConfig as GitConfig).monorepository) || Boolean(this.packageJson?.get('workspaces'));
+          (this.workspaces ?? (this.jhipsterConfig as GitConfig).monorepository) ||
+          Boolean(this.packageJson?.get('workspaces')) ||
+          this.fs.exists(this.destinationPath('pnpm-workspace.yaml'));
 
         // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
         this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
@@ -187,16 +189,27 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
         const findDependencyVersion = (dependency: string): string | undefined =>
           applications.find(app => app.nodeDependencies[dependency])?.nodeDependencies[dependency];
-        this.packageJson.merge({
-          workspaces: {
+        if (this.pnpm) {
+          // pnpm reads the workspace packages, the overrides and the approved builds from pnpm-workspace.yaml.
+          this.writeDestinationYaml('pnpm-workspace.yaml', {
             packages: this.appsFolders,
-          },
+            // Like npm, skip the build scripts of the dependencies not approved in allowBuilds instead of failing.
+            strictDepBuilds: false,
+          });
+        } else {
+          this.packageJson.merge({
+            workspaces: {
+              packages: this.appsFolders,
+            },
+          });
+        }
+        this.packageJson.merge({
           devDependencies: {
             concurrently: findDependencyVersion('concurrently')!,
           },
           scripts: {
-            'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
-            'ci:e2e:run': 'npm run e2e:headless --workspaces --if-present',
+            'ci:e2e:package': `${this.runInWorkspaces('ci:docker:build')} && ${this.runInWorkspaces('java:docker')}`,
+            'ci:e2e:run': this.runInWorkspaces('e2e:headless'),
             ...this.getOtherScripts(),
             ...this.createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'docker:build'),
             ...this.createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
@@ -226,10 +239,18 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
               }
               return obj;
             };
-            this.packageJson.merge({ overrides: replaceOverrides(overrides) });
+            if (this.pnpm) {
+              this.mergeDestinationYaml('pnpm-workspace.yaml', { overrides: replaceOverrides(overrides) });
+            } else {
+              this.packageJson.merge({ overrides: replaceOverrides(overrides) });
+            }
           }
           if (allowScripts) {
-            this.packageJson.merge({ allowScripts });
+            if (this.pnpm) {
+              this.mergeDestinationYaml('pnpm-workspace.yaml', { allowBuilds: allowScripts });
+            } else {
+              this.packageJson.merge({ allowScripts });
+            }
           }
         }
 
@@ -252,7 +273,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     if (this.dockerCompose) {
       return {
         'docker-compose': 'docker compose -f docker-compose/docker-compose.yml up --wait',
-        'ci:e2e:prepare': 'npm run docker-compose',
+        'ci:e2e:prepare': `${this.workspacesNodePackageManager} run docker-compose`,
         'ci:e2e:teardown': 'docker compose -f docker-compose/docker-compose.yml down -v',
       };
     }
@@ -263,16 +284,34 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     const scriptsList = scripts.flatMap(script => {
       const packageScripts = this.appsFolders.map(packageName => [
         `${script}:${packageName}`,
-        `npm run ${script} --workspace ${packageName} --if-present`,
+        this.pnpm ?
+          `pnpm --filter ./${packageName} --if-present run ${script}`
+        : `npm run ${script} --workspace ${packageName} --if-present`,
       ]);
-      packageScripts.push([script, `concurrently ${this.appsFolders.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
+      packageScripts.push([
+        script,
+        `concurrently ${this.appsFolders.map(packageName => `${this.workspacesNodePackageManager}:${script}:${packageName}`).join(' ')}`,
+      ]);
       return packageScripts;
     });
     return Object.fromEntries(scriptsList);
   }
 
   createWorkspacesScript(...scripts: string[]) {
-    return Object.fromEntries(scripts.map(script => [script, `npm run ${script} --workspaces --if-present`]));
+    return Object.fromEntries(scripts.map(script => [script, this.runInWorkspaces(script)]));
+  }
+
+  get workspacesNodePackageManager(): string {
+    return this.workspacesConfig.nodePackageManager ?? 'npm';
+  }
+
+  get pnpm(): boolean {
+    return this.workspacesNodePackageManager === 'pnpm';
+  }
+
+  /** Runs the script in each workspace that has it, one after the other. */
+  runInWorkspaces(script: string): string {
+    return this.pnpm ? `pnpm -r --workspace-concurrency=1 --if-present run ${script}` : `npm run ${script} --workspaces --if-present`;
   }
 
   override get directoryPath(): string {
