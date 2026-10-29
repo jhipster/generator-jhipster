@@ -32,16 +32,13 @@ If you want to deploy using skaffold binary, then run
 ```
 skaffold run [or] skaffold deploy
 ```
-<%_
-const postgresqlDatabases = !kubernetesUseDynamicStorage
-  ? []
-  : [
+<%_ const postgresqlDatabases = kubernetesUseDynamicStorage ? [
       ...appConfigs
         .filter(app => app.prodDatabaseTypePostgresql)
         .map(app => ({ name: `${app.baseName.toLowerCase()}-postgresql`, file: `${app.baseName.toLowerCase()}-k8s/${app.baseName.toLowerCase()}-postgresql.yml` })),
-      ...(useKeycloak ? [{ name: 'keycloak-postgresql', file: 'keycloak-k8s/keycloak-postgresql.yml' }] : []),
-    ];
-const namespaceOption = kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}`;
+      ...useKeycloak ? [{ name: 'keycloak-postgresql', file: 'keycloak-k8s/keycloak-postgresql.yml' }] : [],
+    ] : [];
+    const namespaceOption = kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}`;
 _%>
 <%_ if (postgresqlDatabases.length > 0) { _%>
 
