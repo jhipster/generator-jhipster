@@ -100,7 +100,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: consul
       app: consul
-  replicas: <%= consulReplicas %>
+  replicas: <%- consulReplicas %>
   serviceName: consul-headless
   podManagementPolicy: Parallel
   updateStrategy:
@@ -167,7 +167,7 @@ spec:
             - -bind=0.0.0.0
             - -advertise=$(POD_IP)
             - -client=0.0.0.0
-            - -bootstrap-expect=<%= consulReplicas %>
+            - -bootstrap-expect=<%- consulReplicas %>
             - -retry-join=consul-headless.<%- kubernetesNamespace %>.svc.cluster.local
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
