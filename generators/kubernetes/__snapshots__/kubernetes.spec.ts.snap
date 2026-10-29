@@ -11719,8 +11719,9 @@ data:
         peer_uri="mongodb://$peer/admin?directConnection=true&serverSelectionTimeoutMS=2000"
         if mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep -qx true; then
             log "Found master: $peer"
-            log "Adding myself ($service_name) to replica set..."
-            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
+            log "Joining the replica set as $service_name..."
+            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "rs.conf().members.some(m => m.host.split(':')[0] === '$service_name')" | grep -qx true \\
+                && ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
                 log 'Unable to join the replica set. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
@@ -13285,8 +13286,9 @@ data:
         peer_uri="mongodb://$peer/admin?directConnection=true&serverSelectionTimeoutMS=2000"
         if mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep -qx true; then
             log "Found master: $peer"
-            log "Adding myself ($service_name) to replica set..."
-            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
+            log "Joining the replica set as $service_name..."
+            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "rs.conf().members.some(m => m.host.split(':')[0] === '$service_name')" | grep -qx true \\
+                && ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
                 log 'Unable to join the replica set. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
@@ -19088,8 +19090,9 @@ data:
         peer_uri="mongodb://$peer/admin?directConnection=true&serverSelectionTimeoutMS=2000"
         if mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep -qx true; then
             log "Found master: $peer"
-            log "Adding myself ($service_name) to replica set..."
-            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
+            log "Joining the replica set as $service_name..."
+            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "rs.conf().members.some(m => m.host.split(':')[0] === '$service_name')" | grep -qx true \\
+                && ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
                 log 'Unable to join the replica set. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
