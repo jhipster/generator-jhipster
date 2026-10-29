@@ -24,6 +24,12 @@
         Added the field constraints for entity <%- entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-fields-constraints" author="jhipster">
+  <%_ if (requiredAddedColumnNames.length > 0) { _%>
+        <!-- The existing rows need a value for the required columns added, filled by a changelog before this one -->
+        <preConditions onFail="HALT" onFailMessage="Fill <%- requiredAddedColumnNames.join(', ') %> of the existing rows of <%- entityTableName %> before adding their not null constraints">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM <%- entityTableName %> WHERE <%- requiredAddedColumnNames.map(columnName => `${columnName} IS NULL`).join(' OR ') %></sqlCheck>
+        </preConditions>
+  <%_ } _%>
   <%_ for (field of addedFields) { _%>
     <%_ if (field.unique) { _%>
         <addUniqueConstraint tableName="<%- entityTableName %>"
