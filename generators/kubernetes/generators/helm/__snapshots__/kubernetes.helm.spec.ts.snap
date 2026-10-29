@@ -274,6 +274,8 @@ spec:
           value: prod
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://samplekafka-mysql.default.svc.cluster.local:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://samplekafka-mysql.default.svc.cluster.local:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: KAFKA_CONSUMER_KEY_DESERIALIZER
@@ -528,8 +530,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -540,18 +542,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -567,8 +561,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -661,8 +653,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -680,36 +670,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -723,10 +702,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -740,7 +721,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -909,6 +890,8 @@ spec:
           value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -1395,8 +1378,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -1407,18 +1390,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -1434,8 +1409,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -1528,8 +1501,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -1547,36 +1518,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -1590,10 +1550,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -1607,7 +1569,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -1769,12 +1731,12 @@ spec:
         # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
           value: 3m
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -2033,8 +1995,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -2045,18 +2007,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -2072,8 +2026,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -2166,8 +2118,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -2185,36 +2135,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -2228,10 +2167,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -2245,7 +2186,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -2412,12 +2353,12 @@ spec:
         # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
           value: 3m
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -2590,6 +2531,8 @@ spec:
           value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -2843,8 +2786,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -2855,18 +2798,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -2882,8 +2817,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -2978,8 +2911,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -2997,36 +2928,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -3040,10 +2960,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -3057,7 +2979,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -3363,12 +3285,12 @@ spec:
           value: jhgate
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -3718,8 +3640,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -3730,18 +3652,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -3757,8 +3671,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -3851,8 +3763,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -3870,36 +3780,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -3913,10 +3812,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -3930,7 +3831,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -4112,12 +4013,12 @@ spec:
         # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
           value: 3m
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -4290,13 +4191,15 @@ spec:
           value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: msmariadb-mariadb
               key: mariadb-root-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -4635,6 +4538,8 @@ spec:
           value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -5166,6 +5071,8 @@ spec:
           value: prod
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://samplemysql-mysql.default.svc.cluster.local:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://samplemysql-mysql.default.svc.cluster.local:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_ELASTICSEARCH_REST_URIS
@@ -5525,8 +5432,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -5537,18 +5444,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -5564,8 +5463,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -5658,8 +5555,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -5677,36 +5572,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -5720,10 +5604,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -5737,7 +5623,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -8197,6 +8083,8 @@ spec:
           value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
@@ -8442,8 +8330,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -8454,18 +8342,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -8481,8 +8361,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -8575,8 +8453,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -8594,36 +8470,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -8637,10 +8502,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -8654,7 +8521,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -8819,6 +8686,8 @@ spec:
           value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -9062,8 +8931,8 @@ spec:
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -9074,18 +8943,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: jhipsternamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -9101,8 +8962,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -9195,8 +9054,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -9214,36 +9071,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.jhipsternamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -9257,10 +9103,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -9274,7 +9122,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -9437,12 +9285,12 @@ spec:
         # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
           value: 3m
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS

@@ -154,7 +154,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected registry files and content', () => {
         runResult.assertFile(expectedFiles.consulregistry);
-        runResult.assertFileContent('./knative/registry-knative/consul.yml', /a 24 chars base64 encoded string/);
+        runResult.assertFileContent('./knative/registry-knative/consul.yml', /-bootstrap-expect=3/);
       });
       it('creates expected gateway files and content', () => {
         runResult.assertFile(expectedFiles.jhgate);
@@ -339,6 +339,46 @@ describe('generator - Knative', () => {
       });
       it('create the apply script', () => {
         runResult.assertFile(expectedFiles.applyScript);
+      });
+    });
+
+    describe('reactive postgresql microservice', () => {
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspaceApplicationAtFolder('reactive-psql', {
+            applicationType: 'microservice',
+            baseName: 'msreactivepsql',
+            prodDatabaseType: 'postgresql',
+            reactive: true,
+            serverPort: 8081,
+          })
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
+          .withOptions({
+            askAnswered: true,
+          })
+          .withAnswers({
+            deploymentApplicationType: 'microservice',
+            directoryPath: '../',
+            chosenApps: ['reactive-psql'],
+            dockerRepositoryName: 'jhipster',
+            dockerPushCommand: 'docker push',
+            kubernetesNamespace: 'default',
+            jhipsterConsole: false,
+            clusteredDbApps: [],
+            generatorType: 'k8s',
+            istio: true,
+          });
+      });
+      it('should match service snapshot', function () {
+        expect(runResult.getSnapshot('**/msreactivepsql-service.yml')).toMatchSnapshot();
+      });
+      it('sets the r2dbc username and no jdbc datasource', () => {
+        runResult.assertFileContent('./knative/msreactivepsql-knative/msreactivepsql-service.yml', /SPRING_R2DBC_USERNAME/);
+        runResult.assertNoFileContent('./knative/msreactivepsql-knative/msreactivepsql-service.yml', /SPRING_DATASOURCE_/);
       });
     });
 

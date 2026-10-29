@@ -7,9 +7,14 @@
     },
     {
       "name": "vue-default-additional",
-      "app-sample": "vue-default",
+      "job-name": "vue-default-additional",
       "entity": "none",
-      "jdl-entity": "custom-id"
+      "app-sample": "vue-default",
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "removeNeedles": true,
+        "e2eTls": true
+      }
     },
     {
       "name": "vue-noi18n-mysql-ws-oauth2",

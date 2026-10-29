@@ -18,6 +18,9 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+<%_ if (builtInUserManagement) { _%>
+import { ref } from 'vue';
+<%_ } _%>
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
@@ -46,6 +49,9 @@ describe('Component Tests', () => {
       <%- entityInstance %>ServiceStub = {
         retrieve: vi.fn(),
         delete: vi.fn(),
+<%_ if (builtInUserManagement) { _%>
+        update: vi.fn().mockResolvedValue({}),
+<%_ } _%>
       };
       <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {} });
 
@@ -79,6 +85,9 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
+<%_ if (builtInUserManagement) { _%>
+          currentUsername: ref('admin'),
+<%_ } _%>
         },
       };
     });
@@ -223,6 +232,26 @@ describe('Component Tests', () => {
       });
     });
 
+<%_ if (builtInUserManagement) { _%>
+    describe('Activation', () => {
+      it('Should update the activation of the user and reload the list', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        const comp = wrapper.vm;
+        await flushPromises();
+
+        // WHEN
+        await comp.setActive(<%- entityInstance %>Sample, false);
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.update).toHaveBeenCalledWith({ ...<%- entityInstance %>Sample, activated: false });
+        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(2);
+      });
+    });
+
+<%_ } _%>
     describe('Errors and defaults', () => {
       it('Should show the error of a failed load', async () => {
         // GIVEN

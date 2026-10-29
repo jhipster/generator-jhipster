@@ -57,19 +57,18 @@ export const MetricsPage = () => {
 
   return (
     <div>
-      <h2 id="metrics-page-heading" data-cy="metricsPageHeading">
-        <Translate contentKey="metrics.title">Application Metrics</Translate>
-      </h2>
-      <p>
-        <Button onClick={getMetrics} color={`btn ${isFetching ? 'btn-danger' : 'btn-primary'}`} disabled={isFetching}>
+      <h2>
+        <span id="metrics-page-heading" data-cy="metricsPageHeading">
+          <Translate contentKey="metrics.title">Application Metrics</Translate>
+        </span>
+        <Button onClick={getMetrics} variant="primary" className="float-end" disabled={isFetching}>
           <FontAwesomeIcon icon={faSync} />
           &nbsp;
-          <Translate component="span" contentKey="health.refresh.button">
+          <Translate component="span" contentKey="metrics.refresh.button">
             Refresh
           </Translate>
         </Button>
-      </p>
-      <hr />
+      </h2>
 
       <Row>
         <Col sm="12">

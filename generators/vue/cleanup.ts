@@ -114,5 +114,17 @@ export default asWritingTask<ClientEntity, ClientApplication>(async function cle
       [application.authenticationTypeJwt, `${application.clientSrcDir}app/account/login.service.ts`],
       [application.authenticationTypeJwt, `${application.clientSrcDir}app/account/login.service.spec.ts`],
     ],
+    '9.5.0': [
+      `${application.clientSrcDir}app/admin/user-management/user-management.vue`,
+      `${application.clientSrcDir}app/admin/user-management/user-management.component.ts`,
+      `${application.clientSrcDir}app/admin/user-management/user-management.component.spec.ts`,
+      `${application.clientSrcDir}app/admin/user-management/user-management-view.vue`,
+      `${application.clientSrcDir}app/admin/user-management/user-management-view.component.ts`,
+      `${application.clientSrcDir}app/admin/user-management/user-management-view.component.spec.ts`,
+      `${application.clientSrcDir}app/admin/user-management/user-management-edit.vue`,
+      `${application.clientSrcDir}app/admin/user-management/user-management-edit.component.ts`,
+      `${application.clientSrcDir}app/admin/user-management/user-management-edit.component.spec.ts`,
+      `${application.clientSrcDir}app/admin/user-management/user-management.service.ts`,
+    ],
   });
 });

@@ -134,7 +134,7 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
+      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /-bootstrap-expect=3/);
       runResult.assertNoFile('./kubernetes/registry-k8s/consul-destination-rule.yml');
     });
     it('creates expected gateway files and content', () => {
@@ -188,6 +188,48 @@ describe('generator - Kubernetes', () => {
         './kubernetes/mspsql-k8s/mspsql-postgresql.yml',
         `postgresql-password: ${Buffer.from('given-password').toString('base64')}`,
       );
+    });
+  });
+
+  describe('reactive postgresql microservice', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspaceApplicationAtFolder('reactive-psql', {
+          applicationType: 'microservice',
+          baseName: 'msreactivepsql',
+          prodDatabaseType: 'postgresql',
+          reactive: true,
+          serverPort: 8081,
+        })
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps: ['reactive-psql'],
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+    it('should match deployment snapshot', function () {
+      expect(runResult.getSnapshot('**/msreactivepsql-deployment.yml')).toMatchSnapshot();
+    });
+    it('sets the r2dbc username and no jdbc datasource', () => {
+      runResult.assertFileContent('./kubernetes/msreactivepsql-k8s/msreactivepsql-deployment.yml', /SPRING_R2DBC_USERNAME/);
+      runResult.assertNoFileContent('./kubernetes/msreactivepsql-k8s/msreactivepsql-deployment.yml', /SPRING_DATASOURCE_/);
     });
   });
 
