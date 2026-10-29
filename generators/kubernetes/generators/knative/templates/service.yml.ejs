@@ -83,7 +83,7 @@ spec:
                   name: jwt-secret
                   key: secret
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
+<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql || app.prodDatabaseTypeMssql) { _%>
   <%_ if (app.reactive) { _%>
             - name: SPRING_R2DBC_URL
               value: <%- app.kubernetesR2dbcUrl %>
@@ -95,12 +95,12 @@ spec:
             - name: SPRING_DATASOURCE_USERNAME
               value: <%- app.prodDatabaseUsername %>
   <%_ } _%>
-  <%_ if (app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
+  <%_ if (app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql || app.prodDatabaseTypeMssql) { _%>
             - name: <%- app.reactive ? 'SPRING_R2DBC_PASSWORD' : 'SPRING_DATASOURCE_PASSWORD' %>
               valueFrom:
                 secretKeyRef:
                   name: <%- app.baseName.toLowerCase() %>-<%- app.prodDatabaseType %>
-                  key: <%- app.prodDatabaseTypeMariadb ? 'mariadb-root-password' : 'postgresql-password' %>
+                  key: <%- app.prodDatabaseTypeMariadb ? 'mariadb-root-password' : `${app.prodDatabaseType}-password` %>
   <%_ } _%>
             - name: SPRING_LIQUIBASE_URL
               value: <%- app.kubernetesJdbcUrl %>

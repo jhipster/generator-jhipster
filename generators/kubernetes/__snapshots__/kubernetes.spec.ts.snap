@@ -12117,6 +12117,17 @@ spec:
           value: consul-headless.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: SA
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmssqldb-mssql
+              key: mssql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -12161,6 +12172,17 @@ spec:
     requests:
       storage: 2Gi
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: msmssqldb-mssql
+  namespace: default
+  labels:
+    app: msmssqldb-mssql
+type: Opaque
+data:
+  mssql-password: U0VDUkVULVBBU1NXT1JELUFhMQ==
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12176,39 +12198,55 @@ spec:
       labels:
         app: msmssqldb-mssql
     spec:
+      securityContext:
+        # the mssql user of the image, so that it can write to the volume
+        fsGroup: 10001
       volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
       - name: data
         persistentVolumeClaim:
           claimName: msmssqldb-mssql-pvc
       containers:
-      - name: mysql
+      - name: mssql
         image: mssql-placeholder
         env:
         - name: MSSQL_PID
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
+        - name: MSSQL_DATABASE
+          value: msmssqldb
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
-              key: SA_PASSWORD
+              name: msmssqldb-mssql
+              key: mssql-password
+        # SQL Server doesn't create a database at startup, so create the one of the application once the server accepts connections
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          /opt/mssql/bin/sqlservr &
+          until /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "SELECT 1" -o /dev/null; do kill -0 $! || exit 1; sleep 2; done
+          /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "IF DB_ID('$MSSQL_DATABASE') IS NULL CREATE DATABASE [$MSSQL_DATABASE]"
+          wait
         ports:
         - containerPort: 1433
+        readinessProbe:
+          exec:
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DATABASE]" -o /dev/null']
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
-        - name: mssqldb
+        - name: data
           mountPath: /var/opt/mssql
         resources:
+          # SQL Server doesn't start with less than 2000 MB of memory
           requests:
-            memory: "512Mi"
+            memory: "2Gi"
             cpu: "500m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
-
 ---
 apiVersion: v1
 kind: Service
@@ -12219,22 +12257,7 @@ spec:
   selector:
     app: msmssqldb-mssql
   ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: LoadBalancer
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: mssql-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 8Gi
+  - port: 1433
 ",
     "stateCleared": "modified",
   },
@@ -19574,6 +19597,17 @@ spec:
           value: consul-headless.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: SA
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmssqldb-mssql
+              key: mssql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -19618,6 +19652,17 @@ spec:
     requests:
       storage: 2Gi
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: msmssqldb-mssql
+  namespace: default
+  labels:
+    app: msmssqldb-mssql
+type: Opaque
+data:
+  mssql-password: U0VDUkVULVBBU1NXT1JELUFhMQ==
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19633,39 +19678,55 @@ spec:
       labels:
         app: msmssqldb-mssql
     spec:
+      securityContext:
+        # the mssql user of the image, so that it can write to the volume
+        fsGroup: 10001
       volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
       - name: data
         persistentVolumeClaim:
           claimName: msmssqldb-mssql-pvc
       containers:
-      - name: mysql
+      - name: mssql
         image: mssql-placeholder
         env:
         - name: MSSQL_PID
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
+        - name: MSSQL_DATABASE
+          value: msmssqldb
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
-              key: SA_PASSWORD
+              name: msmssqldb-mssql
+              key: mssql-password
+        # SQL Server doesn't create a database at startup, so create the one of the application once the server accepts connections
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          /opt/mssql/bin/sqlservr &
+          until /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "SELECT 1" -o /dev/null; do kill -0 $! || exit 1; sleep 2; done
+          /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "IF DB_ID('$MSSQL_DATABASE') IS NULL CREATE DATABASE [$MSSQL_DATABASE]"
+          wait
         ports:
         - containerPort: 1433
+        readinessProbe:
+          exec:
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DATABASE]" -o /dev/null']
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
-        - name: mssqldb
+        - name: data
           mountPath: /var/opt/mssql
         resources:
+          # SQL Server doesn't start with less than 2000 MB of memory
           requests:
-            memory: "512Mi"
+            memory: "2Gi"
             cpu: "500m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
-
 ---
 apiVersion: v1
 kind: Service
@@ -19676,22 +19737,7 @@ spec:
   selector:
     app: msmssqldb-mssql
   ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: LoadBalancer
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: mssql-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 8Gi
+  - port: 1433
 ",
     "stateCleared": "modified",
   },

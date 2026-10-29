@@ -689,6 +689,11 @@ describe('generator - Kubernetes', () => {
     it('creates expected mssql files', () => {
       runResult.assertFile(expectedFiles.msmssqldb);
     });
+    it('connects the mssql app to its database with the password of the mssql secret', () => {
+      runResult.assertFileContent(expectedFiles.msmssqldb[0], /SPRING_DATASOURCE_URL\n\s+value: jdbc:sqlserver:\/\/msmssqldb-mssql\./);
+      runResult.assertFileContent(expectedFiles.msmssqldb[0], /name: msmssqldb-mssql\n\s+key: mssql-password/);
+      runResult.assertFileContent(expectedFiles.msmssqldb[1], /kind: Secret\nmetadata:\n\s+name: msmssqldb-mssql\n/);
+    });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
     });
