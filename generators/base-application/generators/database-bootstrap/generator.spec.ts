@@ -67,6 +67,32 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with entities, without a backend generator', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withJHipsterConfig({ databaseType: 'sql' }, [
+          { name: 'Customer', changelogDate: '20200101000000', fields: [], relationships: [] },
+          {
+            name: 'CustomerOrder',
+            changelogDate: '20200101000100',
+            fields: [{ fieldName: 'orderCode', fieldType: 'String' }],
+            relationships: [
+              { relationshipName: 'customers', otherEntityName: 'customer', relationshipType: 'many-to-many', relationshipSide: 'left' },
+            ],
+          },
+        ]);
+    });
+
+    it('should prepare the table, the columns and the join table of an entity', () => {
+      const entity = result.entities!.CustomerOrder as Record<string, any>;
+      expect(entity.entityTableName).toBe('customer_order');
+      expect(entity.fields.find((field: Record<string, any>) => field.fieldName === 'orderCode').columnName).toBe('order_code');
+      expect(entity.relationships[0].joinTable.name).toBe('rel_customer_order__customers');
+    });
+  });
+
   describe('with a prefix of its own', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withJHipsterConfig({ jhiPrefix: 'myPrefix' });

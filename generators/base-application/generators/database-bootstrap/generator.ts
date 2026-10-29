@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
@@ -28,7 +29,7 @@ import {
   prepareFieldForDatabase,
   prepareRelationshipForDatabase,
 } from './support/index.ts';
-import type { Application as DatabaseApplication } from './types.d.ts';
+import type { Application as DatabaseApplication, DatabaseEntity } from './types.d.ts';
 
 /**
  * Prepares the application and its entities for the database it uses, whichever it is: the properties a generator writing
@@ -57,6 +58,20 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
             (data.databaseType === databaseTypes.SQL ?
               databaseData[data.prodDatabaseType]?.defaultPort
             : getDatabaseTypeData(data.databaseType).defaultPort) ?? undefinedMarker,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntityForDatabase({ application, entity }) {
+        // The database and the table of the entity, which every generator writing its database reads.
+        mutateData(entity as DatabaseEntity & { databaseType?: string; prodDatabaseType?: string }, {
+          __override__: false,
+          databaseType: application.databaseType,
+          prodDatabaseType: application.prodDatabaseType,
+          entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
         });
       },
     });
