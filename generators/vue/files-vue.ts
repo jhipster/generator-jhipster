@@ -78,6 +78,12 @@ export const vueFiles = asWriteFilesSection({
         'test-setup.ts',
       ],
     },
+    {
+      // The routes of a microfrontend load remotes.
+      condition: ctx => !ctx.microfrontend,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['router/index.spec.ts'],
+    },
   ],
   i18n: [
     {
@@ -252,8 +258,10 @@ export const entitiesFiles = {
       templates: [
         'entities/entities.component.ts',
         'entities/entities.vue',
+        'entities/entities.component.spec.ts',
         'entities/entities-menu.component.ts',
         'entities/entities-menu.vue',
+        'entities/entities-menu.spec.ts',
         'router/entities.ts',
       ],
     },

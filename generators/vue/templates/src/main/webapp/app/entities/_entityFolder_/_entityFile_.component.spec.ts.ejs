@@ -34,6 +34,20 @@ import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/te
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';
 
 const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+<%_ const relationshipsWithValues = relationships.filter(relationship => !relationship.otherEntity.embedded); _%>
+<%_ for (const otherEntity of new Set(relationshipsWithValues.map(relationship => relationship.otherEntity))) { _%>
+const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
+<%_ } _%>
+const <%- entityInstance %>SampleWithRelationships = {
+  ...<%- entityInstance %>Sample,
+<%_ for (const relationship of relationshipsWithValues) { _%>
+  <%_ if (relationship.collection) { _%>
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option],
+  <%_ } else { _%>
+  <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
+  <%_ } _%>
+<%_ } _%>
+};
 
 type <%- entityAngularName %>ComponentType = InstanceType<typeof <%- entityAngularName %>>;
 
@@ -95,12 +109,12 @@ describe('Component Tests', () => {
     describe('Mount', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>SampleWithRelationships] });
 
         // WHEN
         const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
         const comp = wrapper.vm;
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledOnce();

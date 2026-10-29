@@ -21,7 +21,7 @@ import { computed } from 'vue';
 import { type Router } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
-import { shallowMount } from '@vue/test-utils';
+import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 
 <%_ if (generateUserManagement) { _%>
 import { useLoginModal } from '@/account/login-modal';
@@ -30,6 +30,7 @@ import { useLoginModal } from '@/account/login-modal';
 import type LoginService from '@/account/login.service';
 <%_ } _%>
 import { createRouter } from '@/router';
+import { slotsStub } from '@/shared/testing/stubs';
 import { useStore } from '@/store';
 
 import JhiNavbar from './jhi-navbar.vue';
@@ -46,6 +47,7 @@ const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
 
 describe('JhiNavbar', () => {
+  let wrapper: VueWrapper<JhiNavbarComponentType>;
   let jhiNavbar: JhiNavbarComponentType;
 <%_ if (authenticationUsesCsrf) { _%>
   let loginService: LoginService;
@@ -64,19 +66,19 @@ describe('JhiNavbar', () => {
 <%_ if (authenticationUsesCsrf) { _%>
     loginService = { login: vi.fn(), logout: vi.fn() };
 <%_ } _%>
-    const wrapper = shallowMount(JhiNavbar, {
+    wrapper = shallowMount(JhiNavbar, {
       global: {
         plugins: [pinia, router],
         stubs: {
           'font-awesome-icon': true,
-          'b-navbar': true,
-          'b-navbar-nav': true,
-          'b-dropdown-item': true,
-          'b-collapse': true,
-          'b-nav-item': true,
-          'b-nav-item-dropdown': true,
-          'b-navbar-toggle': true,
-          'b-navbar-brand': true,
+          'b-navbar': slotsStub,
+          'b-navbar-nav': slotsStub,
+          'b-dropdown-item': slotsStub,
+          'b-collapse': slotsStub,
+          'b-nav-item': slotsStub,
+          'b-nav-item-dropdown': slotsStub,
+          'b-navbar-toggle': slotsStub,
+          'b-navbar-brand': slotsStub,
         },
         provide: {
 <%_ if (authenticationUsesCsrf) { _%>
@@ -187,4 +189,29 @@ describe('JhiNavbar', () => {
     expect(jhiNavbar.isActiveLanguage('foo')).toBeTruthy();
   });
 <%_ } _%>
+
+  it('should render the menus of an authenticated user', async () => {
+    store.setAuthentication({ login: 'test' });
+    store.setActiveProfiles(['api-docs']);
+    await flushPromises();
+
+    expect(wrapper.find('#entity-menu').exists()).toBe(true);
+    expect(wrapper.find('#admin-menu').exists()).toBe(true);
+    expect(wrapper.find('#logout').exists()).toBe(true);
+    expect(wrapper.find('#login').exists()).toBe(false);
+  });
+
+  it('should log in from the menu of an anonymous user', async () => {
+    store.logout();
+    await flushPromises();
+
+    expect(wrapper.find('#entity-menu').exists()).toBe(false);
+    await wrapper.find('#login').trigger('click');
+
+<%_ if (authenticationTypeOauth2) { _%>
+    expect(loginService.login).toHaveBeenCalled();
+<%_ } else { _%>
+    expect(login.showLogin).toHaveBeenCalled();
+<%_ } _%>
+  });
 });
