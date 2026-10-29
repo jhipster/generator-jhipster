@@ -75,11 +75,64 @@ const splitChangedRelationships = (before: Record<string, any>[] = [], after: Re
   return { recreated, optionsChanged: changed.filter(name => !recreated.includes(name)) };
 };
 
-/** The properties of an entity, its fields and its relationships aside, that differ between two of its states. */
+/** The properties of an entity, its fields and its relationships aside, that record a changelog: its table. */
+const ENTITY_CHANGELOG_PROPERTIES = ['entityTableName', 'embedded', 'skipServer', 'microserviceName'];
+/** The properties of a field that record a changelog: its column, its type, its constraints and its default value. */
+const FIELD_CHANGELOG_PROPERTIES = [
+  'fieldName',
+  'fieldType',
+  'fieldValues',
+  'fieldTypeBlobContent',
+  'id',
+  'fieldValidateRulesMaxlength',
+  'defaultValue',
+  'defaultValueComputed',
+];
+/** The validations of a field that record a changelog, the ones its column declares. */
+const FIELD_CHANGELOG_VALIDATIONS = ['required', 'unique', 'maxlength'];
+/** The properties of a relationship that record a changelog: its foreign key or join table and their constraints. */
+const RELATIONSHIP_CHANGELOG_PROPERTIES = [
+  'relationshipName',
+  'relationshipType',
+  'otherEntityName',
+  'otherEntityRelationshipName',
+  'relationshipSide',
+  'id',
+  'onDelete',
+  'onUpdate',
+];
+
+/** The properties of an item that record a changelog, the ones given, undefined ones aside. */
+const pickProperties = (item: Record<string, any>, properties: string[], get = (property: string) => item[property]) =>
+  Object.fromEntries(properties.map(property => [property, get(property)]).filter(([, value]) => value !== undefined));
+
+/**
+ * An entity as the changelogs compare it: the properties that record a changelog only, the database schema of the
+ * entity, its transient fields aside, which have no column.
+ */
+const changelogProjection = (entity: EntityConfig): EntityConfig => ({
+  ...pickProperties(entity, ENTITY_CHANGELOG_PROPERTIES),
+  fields: (entity.fields ?? [])
+    .filter(field => !field.transient)
+    .map(field => {
+      const validations = (field.fieldValidateRules ?? []).filter((rule: string) => FIELD_CHANGELOG_VALIDATIONS.includes(rule));
+      return {
+        ...pickProperties(field, FIELD_CHANGELOG_PROPERTIES),
+        ...(validations.length > 0 ? { fieldValidateRules: validations.toSorted() } : {}),
+      };
+    }),
+  relationships: (entity.relationships ?? []).map(relationship => {
+    const validations = (relationship.relationshipValidateRules ?? []).includes('required') ? { required: true } : {};
+    return {
+      ...pickProperties(relationship, RELATIONSHIP_CHANGELOG_PROPERTIES, property => relationshipProperty(relationship, property)),
+      ...validations,
+    };
+  }),
+});
+
+/** The properties of an entity that record a changelog, its fields and its relationships aside, that differ between two of its states. */
 const changedEntityProperties = (before: EntityConfig, after: EntityConfig): string[] =>
-  [...new Set([...Object.keys(before), ...Object.keys(after)])].filter(
-    property => property !== 'fields' && property !== 'relationships' && !isDeepStrictEqual(before[property], after[property]),
-  );
+  ENTITY_CHANGELOG_PROPERTIES.filter(property => !isDeepStrictEqual(before[property], after[property]));
 
 /**
  * An entity as its \`.jhipster\` file declares it, its changelog date in its annotations, where the bootstrap of the
@@ -179,11 +232,14 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
         changelogDate: last ? nextChangelogDate(generator, last) : changelogDateOf(generator, entity),
         entity,
       });
-    } else if (!isDeepStrictEqual(normalizeEntity(last.entity!), entity)) {
-      const changedProperties = changedEntityProperties(normalizeEntity(last.entity!), entity);
-      const fields = diffItems(last.entity!.fields, entity.fields, 'fieldName');
-      const relationships = diffItems(last.entity!.relationships, entity.relationships, 'relationshipName');
-      const changedRelationships = splitChangedRelationships(last.entity!.relationships, entity.relationships, relationships.changed);
+    } else if (!isDeepStrictEqual(changelogProjection(last.entity!), changelogProjection(entity))) {
+      // Only a change of the database schema records a changelog; the changelog keeps the whole entity.
+      const before = changelogProjection(last.entity!);
+      const after = changelogProjection(entity);
+      const changedProperties = changedEntityProperties(before, after);
+      const fields = diffItems(before.fields, after.fields, 'fieldName');
+      const relationships = diffItems(before.relationships, after.relationships, 'relationshipName');
+      const changedRelationships = splitChangedRelationships(before.relationships, after.relationships, relationships.changed);
       record(generator, {
         operation: 'update',
         entityName: name,
