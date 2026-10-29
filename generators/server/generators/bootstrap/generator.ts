@@ -30,7 +30,6 @@ import type { Application as SpringDataRelationalApplication } from '../../../sp
 import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,
-  hibernateSnakeCase,
   loadRequiredConfigDerivedProperties,
   prepareField as prepareServerFieldForTemplates,
   preparePostEntityServerDerivedProperties,
@@ -139,8 +138,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
           entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
-          entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
-
           persistClass: ({ entityClass, entitySuffix }) => `${entityClass}${entitySuffix ?? ''}`,
           persistInstance: ({ entityInstance, entitySuffix }) => `${entityInstance}${entitySuffix ?? ''}`,
           // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
@@ -205,9 +202,9 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           if (entity.primaryKey) {
             entity.resetFakerSeed!(`${application.baseName}post-prepare-server`);
             entity.primaryKey.javaSampleValues ??= [
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 1),
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 2),
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, entity.faker!.number.int({ min: 10, max: 100 })),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType, 1),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType, 2),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType, entity.faker!.number.int({ min: 10, max: 100 })),
             ];
           }
         }

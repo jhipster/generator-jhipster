@@ -145,7 +145,7 @@ describe('command - describe command', () => {
   describe('findConfigOwners', () => {
     it('should find the config owners', () => {
       const owners = findConfigOwners('databaseType');
-      expect(owners.owners.map(({ owner }) => owner)).toEqual(['server', 'spring-boot']);
+      expect(owners.owners.map(({ owner }) => owner)).toEqual(['base-application:database-bootstrap', 'spring-boot']);
       expect(findConfigOwners('unknown').owners).toEqual([]);
     });
 
@@ -161,7 +161,11 @@ describe('command - describe command', () => {
       } as any;
 
       const owners = findConfigOwners('databaseType', { store });
-      expect(owners.owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server', 'server', 'spring-boot']);
+      expect(owners.owners.map(({ owner }) => owner)).toEqual([
+        'jhipster-foo:server',
+        'base-application:database-bootstrap',
+        'spring-boot',
+      ]);
       expect(findConfigOwners('blueprintOnly', { store }).owners.map(({ owner }) => owner)).toEqual(['jhipster-foo:server']);
       // Without a store, only the jhipster generators.
       expect(findConfigOwners('blueprintOnly').owners).toEqual([]);

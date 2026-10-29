@@ -17,9 +17,50 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/types.ts';
+import { ALPHANUMERIC_PATTERN } from '../../../../lib/constants/jdl.ts';
 
 const command = {
-  configs: {},
+  configs: {
+    databaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
+      scope: 'storage',
+    },
+    devDatabaseType: {
+      description: 'Development database',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql', 'h2Disk', 'h2Memory'],
+      scope: 'storage',
+    },
+    prodDatabaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
+      scope: 'storage',
+    },
+  },
   import: [],
 } as const satisfies JHipsterCommandDefinition;
 
