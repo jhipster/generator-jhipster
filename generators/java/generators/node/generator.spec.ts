@@ -79,12 +79,11 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig({ nodePackageManager: 'pnpm' })
-        .withFiles({ npmw: '', 'npmw.cmd': '' })
         .withMockedJHipsterGenerators()
         .withMockedSource();
     });
 
-    it('should write the pnpm wrapper in place of the npm one', () => {
+    it('should write the pnpm wrapper', () => {
       result.assertFile(['pnpmw', 'pnpmw.cmd']);
       result.assertNoFile(['npmw', 'npmw.cmd']);
     });

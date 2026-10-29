@@ -111,7 +111,7 @@ const command = {
       scope: 'generator',
     },
     nodePackageManager: {
-      description: 'Force an unsupported client package manager',
+      description: 'Node.js package manager of the application',
       cli: {
         type: String,
       },
@@ -120,6 +120,7 @@ const command = {
         tokenType: 'NAME',
         tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
+      choices: ['npm', 'pnpm'],
       scope: 'storage',
     },
     ignoreErrors: {

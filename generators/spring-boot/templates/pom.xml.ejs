@@ -490,8 +490,8 @@
                                                 <artifactId>frontend-maven-plugin</artifactId>
                                                 <versionRange>${frontend-maven-plugin.version}</versionRange>
                                                 <goals>
-                                                    <goal>install-node-and-<%- nodePackageManager === 'pnpm' ? 'pnpm' : 'npm' %></goal>
-                                                    <goal><%- nodePackageManager === 'pnpm' ? 'pnpm' : 'npm' %></goal>
+                                                    <goal>install-node-and-<%- nodePackageManager %></goal>
+                                                    <goal><%- nodePackageManager %></goal>
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
