@@ -1,5 +1,142 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`generator - vue gateway with microfrontends should merge the gateway translations after the microfrontend translations 1`] = `
+{
+  "src/main/webapp/app/locale/translation.service.spec.ts": {
+    "contents": "import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createI18n } from 'vue-i18n';
+
+import { loadRemote } from '@module-federation/enhanced/runtime';
+import axios from 'axios';
+
+import TranslationService from './translation.service';
+
+vi.mock('@module-federation/enhanced/runtime', () => ({
+  loadRemote: vi.fn(),
+}));
+
+describe('Translation Service test suite', () => {
+  let i18n: ReturnType<typeof createI18n>;
+  let translationService: TranslationService;
+
+  beforeEach(() => {
+    i18n = createI18n({
+      legacy: false,
+      missingWarn: false,
+      fallbackWarn: false,
+    });
+    translationService = new TranslationService(i18n.global);
+    vi.mocked(loadRemote).mockReset();
+    vi.mocked(loadRemote).mockImplementation((remote: string) => {
+      if (remote === 'jhipster/i18n-en') {
+        return Promise.resolve({ default: { global: { title: 'Jhipster' } } });
+      }
+      if (remote === 'blog/i18n-en') {
+        return Promise.resolve().then(() => ({
+          default: {
+            global: { title: 'Blog' },
+            blogApp: { title: 'Blog' },
+          },
+        }));
+      }
+      return Promise.reject(new Error(\`Unexpected remote: \${remote}\`));
+    });
+  });
+
+  it('should refresh translation for en', async () => {
+    await translationService.refreshTranslation('en');
+
+    expect(i18n.global.getLocaleMessage('en')).toMatchObject({
+      global: { title: 'Jhipster' },
+      blogApp: { title: 'Blog' },
+    });
+  });
+
+  it('should not reload an already loaded language', async () => {
+    await translationService.refreshTranslation('en');
+    const setLocaleMessageSpy = vi.spyOn(i18n.global, 'setLocaleMessage');
+    const mergeLocaleMessageSpy = vi.spyOn(i18n.global, 'mergeLocaleMessage');
+
+    await translationService.refreshTranslation('en');
+
+    expect(setLocaleMessageSpy).not.toHaveBeenCalled();
+    expect(mergeLocaleMessageSpy).not.toHaveBeenCalled();
+  });
+
+  it('should set locale', () => {
+    translationService.setLocale('en');
+
+    expect(i18n.global.locale.value).toBe('en');
+    expect(axios.defaults.headers.common['Accept-Language']).toBe('en');
+    expect(document.querySelector('html')?.getAttribute('lang')).toBe('en');
+  });
+
+  it('should check if language is supported', () => {
+    expect(translationService.isLanguageSupported('en')).toBe(true);
+    expect(translationService.isLanguageSupported('unknown')).toBe(false);
+  });
+});
+",
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/locale/translation.service.ts": {
+    "contents": "import { type Composer } from 'vue-i18n';
+
+import { loadRemote } from '@module-federation/enhanced/runtime';
+import axios from 'axios';
+import dayjs from 'dayjs';
+
+import languages from '@/shared/config/languages';
+
+export default class TranslationService {
+  private readonly i18n: Composer;
+  private readonly languages = languages();
+  private readonly loadedLanguages: Set<string> = new Set();
+
+  constructor(i18n: Composer) {
+    this.i18n = i18n;
+  }
+
+  async refreshTranslation(newLanguage: string) {
+    if (this.i18n && !this.loadedLanguages.has(newLanguage)) {
+      this.i18n.setLocaleMessage(newLanguage, {});
+      // Load translations exposed by microfrontend
+      // const translations = await import(\`../../i18n/\${newLanguage}/\${newLanguage}.js\`);
+      // this.i18n.setLocaleMessage(newLanguage, translations.default);
+
+      const remoteTranslations = await Promise.all([
+        loadRemote<any>(\`blog/i18n-\${newLanguage}\`),
+        loadRemote<any>(\`jhipster/i18n-\${newLanguage}\`),
+      ]);
+      for (const remoteTranslation of remoteTranslations) {
+        this.i18n.mergeLocaleMessage(newLanguage, remoteTranslation.default);
+      }
+
+      this.loadedLanguages.add(newLanguage);
+    }
+  }
+
+  setLocale(lang: string) {
+    dayjs.locale(lang);
+    this.i18n.locale.value = lang;
+    axios.defaults.headers.common['Accept-Language'] = lang;
+    document.querySelector('html').setAttribute('lang', lang);
+  }
+
+  isLanguageSupported(lang: string) {
+    return Boolean(this.languages[lang]);
+  }
+
+  getLocalStoreLanguage(): string | null {
+    return localStorage.getItem('currentLanguage');
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
@@ -1457,6 +1594,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/locale/translation.service.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/locale/translation.service.ts": {
@@ -3251,6 +3391,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/locale/translation.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/locale/translation.service.ts": {
     "stateCleared": "modified",
   },
@@ -4254,6 +4397,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/locale/translation.service.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/locale/translation.service.ts": {

@@ -1,0 +1,110 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createI18n } from 'vue-i18n';
+
+<%_ if (microfrontend) { _%>
+import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
+<%_ } _%>
+import axios from 'axios';
+
+import TranslationService from './translation.service';
+
+<%_ if (microfrontend) { _%>
+vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
+  loadRemote: vi.fn(),
+}));
+<%_ } else { _%>
+vi.mock('../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({
+  default: { global: { title: '<%- capitalizedBaseName %>' } },
+}));
+<%_ } _%>
+
+describe('Translation Service test suite', () => {
+  let i18n: ReturnType<typeof createI18n>;
+  let translationService: TranslationService;
+
+  beforeEach(() => {
+    i18n = createI18n({
+      legacy: false,
+      missingWarn: false,
+      fallbackWarn: false,
+    });
+    translationService = new TranslationService(i18n.global);
+<%_ if (microfrontend) { _%>
+    vi.mocked(loadRemote).mockReset();
+    vi.mocked(loadRemote).mockImplementation((remote: string) => {
+  <%_ for (const remote of microfrontends) { _%>
+    <%_ if (remote.self) { _%>
+      if (remote === '<%- remote.moduleFederationName %>/i18n-<%- nativeLanguage %>') {
+        return Promise.resolve({ default: { global: { title: '<%- remote.capitalizedBaseName %>' } } });
+      }
+    <%_ } else { _%>
+      if (remote === '<%- remote.moduleFederationName %>/i18n-<%- nativeLanguage %>') {
+        return Promise.resolve().then(() => ({
+          default: {
+            global: { title: '<%- remote.capitalizedBaseName %>' },
+            <%- remote.moduleFederationName %>App: { title: '<%- remote.capitalizedBaseName %>' },
+          },
+        }));
+      }
+    <%_ } _%>
+  <%_ } _%>
+      return Promise.reject(new Error(`Unexpected remote: ${remote}`));
+    });
+<%_ } _%>
+  });
+
+  it('should refresh translation for <%- nativeLanguage %>', async () => {
+    await translationService.refreshTranslation('<%- nativeLanguage %>');
+
+    expect(i18n.global.getLocaleMessage('<%- nativeLanguage %>')).toMatchObject({
+      global: { title: '<%- capitalizedBaseName %>' },
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ for (const remote of microfrontends.filter(remote => !remote.self)) { _%>
+      <%- remote.moduleFederationName %>App: { title: '<%- remote.capitalizedBaseName %>' },
+  <%_ } _%>
+<%_ } _%>
+    });
+  });
+
+  it('should not reload an already loaded language', async () => {
+    await translationService.refreshTranslation('<%- nativeLanguage %>');
+    const setLocaleMessageSpy = vi.spyOn(i18n.global, 'setLocaleMessage');
+    const mergeLocaleMessageSpy = vi.spyOn(i18n.global, 'mergeLocaleMessage');
+
+    await translationService.refreshTranslation('<%- nativeLanguage %>');
+
+    expect(setLocaleMessageSpy).not.toHaveBeenCalled();
+    expect(mergeLocaleMessageSpy).not.toHaveBeenCalled();
+  });
+
+  it('should set locale', () => {
+    translationService.setLocale('<%- nativeLanguage %>');
+
+    expect(i18n.global.locale.value).toBe('<%- nativeLanguage %>');
+    expect(axios.defaults.headers.common['Accept-Language']).toBe('<%- nativeLanguage %>');
+    expect(document.querySelector('html')?.getAttribute('lang')).toBe('<%- nativeLanguage %>');
+  });
+
+  it('should check if language is supported', () => {
+    expect(translationService.isLanguageSupported('<%- nativeLanguage %>')).toBe(true);
+    expect(translationService.isLanguageSupported('unknown')).toBe(false);
+  });
+});
