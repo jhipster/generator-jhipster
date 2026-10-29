@@ -13,7 +13,7 @@ if (project.hasProperty("nodeInstall")) {
         download = true
     }
 
-    // Link local node and <%- pm %> to a fixed location for npmw.
+    // Link local node and <%- pm %> to a fixed location for <%- pm %>w.
     // They are linked instead of copied, because a copy dereferences symlinks, and bin/npm and
     // bin/npx must stay symlinks to lib/node_modules/npm/bin/*-cli.js: as plain extension-less
     // files they are resolved against the wrong directory, and parsed as ESM since the closest
@@ -52,7 +52,7 @@ if (project.hasProperty("nodeInstall")) {
     }
 
     def linkNode = tasks.register("linkNode") {
-        description = "Link the local node and <%- pm %> installations to a fixed location for npmw."
+        description = "Link the local node and <%- pm %> installations to a fixed location for <%- pm %>w."
         onlyIf {
             nodeLinks().any { link, target -> !Files.isSymbolicLink(link) || Files.readSymbolicLink(link) != target }
         }

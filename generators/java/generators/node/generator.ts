@@ -77,12 +77,23 @@ export default class NodeGenerator extends JavaApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      cleanupWrapper({ application }) {
+        if (!application.useNpmWrapper) return;
+        // An application that changed its package manager keeps only the wrapper of the new one.
+        const otherWrapper = application.nodePackageManager === 'pnpm' ? 'npmw' : 'pnpmw';
+        this.removeFile(otherWrapper);
+        this.removeFile(`${otherWrapper}.cmd`);
+      },
       async writing({ application }) {
         await this.writeFiles({
           blocks: [
             {
               condition: (ctx: any) => ctx.useNpmWrapper,
-              templates: ['npmw', 'npmw.cmd'],
+              // The wrapper is named after the package manager it runs: npmw or pnpmw.
+              templates: [
+                { file: 'npmw', renameTo: (ctx: any) => `${ctx.nodePackageManager === 'pnpm' ? 'pnpm' : 'npm'}w` },
+                { file: 'npmw.cmd', renameTo: (ctx: any) => `${ctx.nodePackageManager === 'pnpm' ? 'pnpm' : 'npm'}w.cmd` },
+              ],
             },
             {
               condition: () => application.buildToolGradle,
@@ -346,7 +357,8 @@ export default class NodeGenerator extends JavaApplicationGenerator {
           return;
         }
 
-        const npmCommand = isWin32 ? 'npmw' : './npmw';
+        const wrapper = this.jhipsterConfigWithDefaults.nodePackageManager === 'pnpm' ? 'pnpmw' : 'npmw';
+        const npmCommand = isWin32 ? wrapper : `./${wrapper}`;
         try {
           await this.spawn(npmCommand, ['install'], { preferLocal: true, stdio: 'inherit' });
         } catch (error: unknown) {

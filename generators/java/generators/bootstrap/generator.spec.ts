@@ -71,8 +71,8 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({ clientFramework: 'angular', nodePackageManager: 'pnpm' });
     });
 
-    it('should use the npm wrapper', () => {
-      expect(result.application).toMatchObject({ useNpmWrapper: true, nodePackageManagerCommand: './npmw' });
+    it('should use the pnpm wrapper', () => {
+      expect(result.application).toMatchObject({ useNpmWrapper: true, nodePackageManagerCommand: './pnpmw' });
     });
   });
 

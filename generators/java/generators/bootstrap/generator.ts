@@ -48,7 +48,8 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
           },
           {
             __override__: true,
-            nodePackageManagerCommand: data => (data.useNpmWrapper ? './npmw' : data.nodePackageManagerCommand),
+            nodePackageManagerCommand: data =>
+              data.useNpmWrapper ? `./${data.nodePackageManager === 'pnpm' ? 'pnpmw' : 'npmw'}` : data.nodePackageManagerCommand,
           },
           mutateApplicationPreparing,
         );
