@@ -77,7 +77,7 @@
                     </button>
                     </router-link>
                 <b-button v-if="<%- entityInstance %>.<%- primaryKey.name %>" @click="prepareRemove(<%- entityInstance %>)" variant="danger" data-cy="entityDeleteButton">
-                    <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+                    <font-awesome-icon icon="trash"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
                 </b-button>
 <%_ } _%>
             </div>

@@ -26,7 +26,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync<%- jpaMetamodelFiltering && paginationPagination ? ', faTimes' : '' %>, faTrash } from '@fortawesome/free-solid-svg-icons';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
@@ -101,7 +101,7 @@ describe('<%- entityAngularName %> Management Component', () => {
         routerNavigateSpy = vi.spyOn(comp.router, 'navigate');
 
     const library = TestBed.inject(FaIconLibrary);
-    library.addIcons(faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync, faTimes);
+    library.addIcons(faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync<%- jpaMetamodelFiltering && paginationPagination ? ', faTimes' : '' %>, faTrash);
     httpMock = TestBed.inject(HttpTestingController);
   });
 

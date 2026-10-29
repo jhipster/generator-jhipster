@@ -29,7 +29,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
       type="submit"
       class="btn btn-danger"
     >
-      <fa-icon icon="times" />&nbsp;<span>Delete</span>
+      <fa-icon icon="trash" />&nbsp;<span>Delete</span>
     </button>
   </div>
 </form>
@@ -223,7 +223,7 @@ export class UserManagementDeleteDialog {
         [disabled]="!currentAccount() || currentAccount()?.login === userManagementRef.login"
         data-cy="entityDeleteButton"
       >
-        <fa-icon icon="times" />&nbsp;<span>Delete</span>
+        <fa-icon icon="trash" />&nbsp;<span>Delete</span>
       </button>
     </div>
     }
@@ -246,7 +246,7 @@ import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
   faArrowLeft,
   faPencilAlt,
-  faTimes,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 import { of } from "rxjs";
@@ -286,7 +286,7 @@ describe("UserManagement Management Detail Component", () => {
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
 
-    library.addIcons(faTimes);
+    library.addIcons(faTrash);
   });
 
   beforeEach(() => {
@@ -549,7 +549,7 @@ export class UserManagementDetail {
                 [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
                 data-cy="entityDeleteButton"
               >
-                <fa-icon icon="times" />
+                <fa-icon icon="trash" />
                 <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
@@ -610,7 +610,7 @@ import {
   faSortDown,
   faSortUp,
   faSync,
-  faTimes,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 import { Subject, of } from "rxjs";
@@ -673,7 +673,7 @@ describe("UserManagement Management Component", () => {
       faSortDown,
       faSortUp,
       faSync,
-      faTimes,
+      faTrash,
     );
     httpMock = TestBed.inject(HttpTestingController);
   });
