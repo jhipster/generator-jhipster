@@ -92,7 +92,7 @@ export default defineComponent({
     const filterNaN = (input: any): any => (isNaN(input) ? 0 : input);
     const formatNumber1 = (value: any): any => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
     const formatNumber2 = (value: any): any =>
-      new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+      new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value);
     const convertMillisecondsToDuration = ms => {
       const times = {
         year: 31557600000,
