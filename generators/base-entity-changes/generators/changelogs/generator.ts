@@ -18,7 +18,7 @@
  */
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 
-import { CHANGELOGS_CUSTOM_OBJECT, getEntityChangelogs } from './support/index.ts';
+import { CHANGELOGS_CUSTOM_OBJECT, changelogsCustomObject, getEntityChangelogs } from './support/index.ts';
 import type { EntityChangelogObject } from './types.ts';
 
 /**
@@ -29,7 +29,7 @@ export default class ChangelogsGenerator extends BaseApplicationGenerator {
   declare readonly customObjectNames: readonly ['changelogs'];
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { ...features, customObjects: [{ name: CHANGELOGS_CUSTOM_OBJECT }] });
+    super(args, options, { ...features, customObjects: [changelogsCustomObject] });
   }
 
   async beforeQueue() {
@@ -37,6 +37,8 @@ export default class ChangelogsGenerator extends BaseApplicationGenerator {
       await this.composeWithBlueprints();
     }
     await this.dependsOnBootstrap('base-application');
+    // The changelogs record the entities at the final properties of their database.
+    await this.dependsOnJHipster('jhipster:base-application:database-bootstrap');
   }
 
   get [BaseApplicationGenerator.objectPriority(CHANGELOGS_CUSTOM_OBJECT, 'loading')]() {

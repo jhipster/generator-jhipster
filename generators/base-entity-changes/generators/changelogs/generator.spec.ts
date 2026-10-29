@@ -37,6 +37,13 @@ const order = {
 const changelogObjects = (): Record<string, any> =>
   (result.fs.readJSON(join(result.cwd, '.yo-rc.json')) as { objects?: Record<string, any> } | undefined)?.objects ?? {};
 
+/** Generates again, with the entities given changed. */
+const generateAgain = (entities: Record<string, any>[]) =>
+  result
+    .create(`jhipster:${generator}`)
+    .withFiles(Object.fromEntries(entities.map(entity => [`.jhipster/${entity.name}.json`, entity])))
+    .run();
+
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
 
@@ -60,7 +67,12 @@ describe(`generator - ${generator}`, () => {
         operation: 'create',
         entityName: 'Order',
         changelogDate: '20200101000100',
-        entity: { fields: [{ fieldName: 'code', fieldType: 'String' }] },
+        entity: {
+          fields: [
+            { fieldName: 'id', fieldType: 'Long', id: true },
+            { fieldName: 'code', fieldType: 'String' },
+          ],
+        },
       });
     });
   });
@@ -112,21 +124,8 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withJHipsterConfig({}, [changed])
-        .withYoRcConfig('objects', {
-          '20200101000100_Order': {
-            type: 'changelog',
-            operation: 'create',
-            entityName: 'Order',
-            changelogDate: '20200101000100',
-            entity: {
-              name: 'Order',
-              changelogDate: '20200101000100',
-              fields: [...order.fields, { fieldName: 'note', fieldType: 'String' }],
-              relationships: [],
-            },
-          },
-        });
+        .withJHipsterConfig({}, [{ ...order, fields: [...order.fields, { fieldName: 'note', fieldType: 'String' }] }]);
+      await generateAgain([changed]);
     });
 
     it('tells the application had changelogs', () => {
@@ -152,16 +151,17 @@ describe(`generator - ${generator}`, () => {
       expect(update.changelogDate > '20200101000100').toBe(true);
     });
 
-    it('keeps the entity in the last changelog only', () => {
+    it('keeps the entity in the last changelog only, at its final properties', () => {
       const objects = changelogObjects();
       expect(objects['20200101000100_Order']).not.toHaveProperty('entity');
       const update = Object.values(objects).find(object => object.operation === 'update');
-      expect(update.entity).toMatchObject({ fields: changed.fields });
+      expect(update.entity.fields.map((field: Record<string, any>) => field.fieldName)).toEqual(['id', 'code', 'total']);
+      expect(update.entity.fields[0]).toMatchObject({ fieldName: 'id', id: true });
     });
 
     it('gives the previous state to the changelog of this generation', () => {
       const update = (result.generator as Generator).changelogs.find(changelog => changelog.operation === 'update');
-      expect(update?.previousEntity).toMatchObject({ fields: [...order.fields, { fieldName: 'note', fieldType: 'String' }] });
+      expect(update?.previousEntity?.fields.map((field: Record<string, any>) => field.fieldName)).toEqual(['id', 'code', 'note']);
       expect(Object.values(changelogObjects()).find(object => object.operation === 'update')).not.toHaveProperty('previousEntity');
     });
   });
@@ -180,33 +180,20 @@ describe(`generator - ${generator}`, () => {
         .runJHipster(generator)
         .withJHipsterConfig({}, [
           customer,
-          {
-            ...order,
-            relationships: [
-              relationship('buyer', { relationshipType: 'one-to-one' as const }),
-              relationship('seller', { options: { onDelete: 'CASCADE' } }),
-              relationship('owner', { options: { id: true } }),
-            ],
-            entityTableName: 'customer_order',
-            documentation: 'The orders of a customer',
-          } as any,
-        ])
-        .withYoRcConfig('objects', {
-          '20200101000000_Customer': {
-            type: 'changelog',
-            operation: 'create',
-            entityName: 'Customer',
-            changelogDate: '20200101000000',
-            entity: customer,
-          },
-          '20200101000100_Order': {
-            type: 'changelog',
-            operation: 'create',
-            entityName: 'Order',
-            changelogDate: '20200101000100',
-            entity: { ...order, relationships: [relationship('buyer'), relationship('seller'), relationship('owner')] },
-          },
-        });
+          { ...order, relationships: [relationship('buyer'), relationship('seller'), relationship('owner')] },
+        ]);
+      await generateAgain([
+        {
+          ...order,
+          relationships: [
+            relationship('buyer', { relationshipType: 'one-to-one' }),
+            relationship('seller', { options: { onDelete: 'CASCADE' } }),
+            relationship('owner', { options: { id: true } }),
+          ],
+          entityTableName: 'customer_order',
+          documentation: 'The orders of a customer',
+        },
+      ]);
     });
 
     it('tells the relationships to recreate from the ones changed only in their options', () => {
@@ -229,43 +216,25 @@ describe(`generator - ${generator}`, () => {
     };
 
     before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .withJHipsterConfig({}, [
-          customer,
-          {
-            ...recorded,
-            pagination: 'pagination',
-            dto: 'mapstruct',
-            documentation: 'The orders',
-            fields: [
-              {
-                ...recorded.fields[0],
-                fieldValidateRules: ['required', 'minlength'],
-                fieldValidateRulesMinlength: 2,
-                documentation: 'A code',
-              },
-              { fieldName: 'label', fieldType: 'String', transient: true },
-            ],
-            relationships: [{ ...recorded.relationships[0], otherEntityField: 'name' }],
-          } as any,
-        ])
-        .withYoRcConfig('objects', {
-          '20200101000000_Customer': {
-            type: 'changelog',
-            operation: 'create',
-            entityName: 'Customer',
-            changelogDate: '20200101000000',
-            entity: customer,
-          },
-          '20200101000100_Order': {
-            type: 'changelog',
-            operation: 'create',
-            entityName: 'Order',
-            changelogDate: '20200101000100',
-            entity: recorded,
-          },
-        });
+      await helpers.runJHipster(generator).withJHipsterConfig({}, [customer, recorded as any]);
+      await generateAgain([
+        {
+          ...recorded,
+          pagination: 'pagination',
+          dto: 'mapstruct',
+          documentation: 'The orders',
+          fields: [
+            {
+              ...recorded.fields[0],
+              fieldValidateRules: ['required', 'minlength'],
+              fieldValidateRulesMinlength: 2,
+              documentation: 'A code',
+            },
+            { fieldName: 'label', fieldType: 'String', transient: true },
+          ],
+          relationships: [{ ...recorded.relationships[0], otherEntityField: 'name' }],
+        },
+      ]);
     });
 
     it('records no changelog', () => {
@@ -275,23 +244,54 @@ describe(`generator - ${generator}`, () => {
 
   describe('with a column constraint changed after its changelog', () => {
     before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .withJHipsterConfig({}, [{ ...order, fields: [{ fieldName: 'code', fieldType: 'String', fieldValidateRules: ['unique'] }] }])
-        .withYoRcConfig('objects', {
-          '20200101000100_Order': {
-            type: 'changelog',
-            operation: 'create',
-            entityName: 'Order',
-            changelogDate: '20200101000100',
-            entity: order,
-          },
-        });
+      await helpers.runJHipster(generator).withJHipsterConfig({}, [order]);
+      await generateAgain([{ ...order, fields: [{ fieldName: 'code', fieldType: 'String', fieldValidateRules: ['unique'] }] }]);
     });
 
     it('records a changelog of the changed field', () => {
       const update = Object.values(changelogObjects()).find(object => object.operation === 'update');
       expect(update).toMatchObject({ changedFields: ['code'], addedFields: [], removedFields: [] });
+    });
+  });
+
+  describe('with a relational database', () => {
+    const customer = { name: 'Customer', changelogDate: '20200101000000', fields: [], relationships: [] };
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        // An application with a backend: the server prepares the database of its entities.
+        .onGenerator(async generator => {
+          await (generator as Generator).dependsOnBootstrap('server');
+        })
+        .withJHipsterConfig({ databaseType: 'sql', prodDatabaseType: 'postgresql' }, [
+          customer,
+          {
+            ...order,
+            fields: [{ fieldName: 'code', fieldType: 'String', fieldValidateRules: ['required', 'unique'] }],
+            relationships: [
+              { relationshipName: 'customers', otherEntityName: 'customer', relationshipType: 'many-to-many', relationshipSide: 'left' },
+            ],
+          } as any,
+        ]);
+    });
+
+    it('records the entity at the final properties of its database', () => {
+      const { entity } = changelogObjects()['20200101000100_Order'];
+      expect(entity.entityTableName).toBe('order');
+      expect(entity.fields[1]).toMatchObject({
+        fieldName: 'code',
+        columnName: 'code',
+        columnRequired: true,
+        unique: true,
+        uniqueConstraintName: 'ux_order__code',
+      });
+      expect(entity.relationships[0]).toMatchObject({
+        relationshipName: 'customers',
+        ownerSide: true,
+        joinTable: { name: 'rel_order__customers' },
+      });
+      expect(entity.relationships[0].joinTable.joinColumns).toEqual([{ name: 'order_id', referencedColumnName: 'id' }]);
     });
   });
 

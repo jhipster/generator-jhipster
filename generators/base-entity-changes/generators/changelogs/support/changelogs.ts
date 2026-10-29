@@ -16,15 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 
 import type BaseApplicationGenerator from '../../../../base-application/index.ts';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../../../base-application/support/constants.ts';
 import { getEntitiesFromDir } from '../../../../base-application/support/index.ts';
 import type { ChangelogOperation, EntityChangelogObject } from '../types.ts';
 
 /** The name of the custom object of the changelogs, the one a generator using them declares in its \`customObjects\` feature. */
 export const CHANGELOGS_CUSTOM_OBJECT = 'changelogs';
+
+/**
+ * The custom object of the changelogs, the one a generator using them declares in its \`customObjects\` feature: loaded
+ * before the default priority, once the entities are prepared, the changelogs keeping their final properties.
+ */
+export const changelogsCustomObject = { name: CHANGELOGS_CUSTOM_OBJECT, before: 'default' };
 
 /** The changelogs of the application, shared by the generators using them. */
 const CONTEXT_DATA_CHANGELOGS_KEY = 'jhipster:base-entity-changes:changelogs';
@@ -56,9 +63,9 @@ const diffItems = (before: Record<string, any>[] = [], after: Record<string, any
  * The properties of a relationship whose change recreates it, its foreign key or its join table: the id one is part of the
  * primary key of its entity.
  */
-const RECREATING_RELATIONSHIP_PROPERTIES = ['relationshipType', 'otherEntityName', 'relationshipSide', 'id'];
+const RECREATING_RELATIONSHIP_PROPERTIES = ['relationshipType', 'otherEntityName', 'ownerSide', 'columnName', 'joinTable', 'id'];
 
-/** A property of a relationship, declared by itself or in its options, where the `.jhipster` files declare most of them. */
+/** A property of a relationship, declared by itself or in its options, where the entities declare some of them. */
 const relationshipProperty = (relationship: Record<string, any>, property: string) =>
   relationship[property] ?? relationship.options?.[property];
 
@@ -79,27 +86,36 @@ const splitChangedRelationships = (before: Record<string, any>[] = [], after: Re
 
 /** The properties of an entity, its fields and its relationships aside, that record a changelog: its table. */
 const ENTITY_CHANGELOG_PROPERTIES = ['entityTableName', 'embedded', 'skipServer', 'microserviceName'];
-/** The properties of a field that record a changelog: its column, its type, its constraints and its default value. */
+/**
+ * The properties of a field that record a changelog, as the database bootstrap prepares them: its column, its type, its
+ * constraints and its default value.
+ */
 const FIELD_CHANGELOG_PROPERTIES = [
   'fieldName',
+  'columnName',
   'fieldType',
   'fieldValues',
   'fieldTypeBlobContent',
   'id',
-  'fieldValidateRulesMaxlength',
+  'columnRequired',
+  'unique',
+  'uniqueConstraintName',
   'defaultValue',
   'defaultValueComputed',
 ];
-/** The validations of a field that record a changelog, the ones its column declares. */
-const FIELD_CHANGELOG_VALIDATIONS = ['required', 'unique', 'maxlength'];
-/** The properties of a relationship that record a changelog: its foreign key or join table and their constraints. */
+/**
+ * The properties of a relationship that record a changelog, as the database bootstrap prepares them: its foreign key or
+ * join table and their constraints.
+ */
 const RELATIONSHIP_CHANGELOG_PROPERTIES = [
   'relationshipName',
   'relationshipType',
   'otherEntityName',
   'otherEntityRelationshipName',
-  'relationshipSide',
+  'ownerSide',
+  'columnName',
   'id',
+  'columnRequired',
   'onDelete',
   'onUpdate',
 ];
@@ -108,45 +124,45 @@ const RELATIONSHIP_CHANGELOG_PROPERTIES = [
 const pickProperties = (item: Record<string, any>, properties: string[], get = (property: string) => item[property]) =>
   Object.fromEntries(properties.map(property => [property, get(property)]).filter(([, value]) => value !== undefined));
 
+/** A join table as a changelog records it: its name and its columns, which the database bootstrap gives as getters. */
+const joinTableProjection = (joinTable?: Record<string, any>) =>
+  joinTable ?
+    {
+      joinTable: {
+        name: joinTable.name,
+        joinColumns: joinTable.joinColumns.map(({ name, referencedColumnName }: Record<string, string>) => ({
+          name,
+          referencedColumnName,
+        })),
+        inverseJoinColumns: joinTable.inverseJoinColumns.map(({ name, referencedColumnName }: Record<string, string>) => ({
+          name,
+          referencedColumnName,
+        })),
+      },
+    }
+  : {};
+
 /**
- * An entity as the changelogs compare it: the properties that record a changelog only, the database schema of the
- * entity, its transient fields aside, which have no column.
+ * An entity as a changelog records it: the final properties of the entity the database bootstrap prepares that record a
+ * changelog only, the database schema of the entity, its transient fields aside, which have no column.
  */
 const changelogProjection = (entity: EntityConfig): EntityConfig => ({
   ...pickProperties(entity, ENTITY_CHANGELOG_PROPERTIES),
   fields: (entity.fields ?? [])
     .filter(field => !field.transient)
-    .map(field => {
-      const validations = (field.fieldValidateRules ?? []).filter((rule: string) => FIELD_CHANGELOG_VALIDATIONS.includes(rule));
-      return {
-        ...pickProperties(field, FIELD_CHANGELOG_PROPERTIES),
-        ...(validations.length > 0 ? { fieldValidateRules: validations.toSorted() } : {}),
-      };
-    }),
-  relationships: (entity.relationships ?? []).map(relationship => {
-    const validations = (relationship.relationshipValidateRules ?? []).includes('required') ? { required: true } : {};
-    return {
-      ...pickProperties(relationship, RELATIONSHIP_CHANGELOG_PROPERTIES, property => relationshipProperty(relationship, property)),
-      ...validations,
-    };
-  }),
+    .map(field => ({
+      ...pickProperties(field, FIELD_CHANGELOG_PROPERTIES),
+      ...(field.fieldValidateRules?.includes('maxlength') ? { maxlength: field.fieldValidateRulesMaxlength } : {}),
+    })),
+  relationships: (entity.relationships ?? []).map(relationship => ({
+    ...pickProperties(relationship, RELATIONSHIP_CHANGELOG_PROPERTIES, property => relationshipProperty(relationship, property)),
+    ...joinTableProjection(relationship.joinTable),
+  })),
 });
 
 /** The properties of an entity that record a changelog, its fields and its relationships aside, that differ between two of its states. */
 const changedEntityProperties = (before: EntityConfig, after: EntityConfig): string[] =>
   ENTITY_CHANGELOG_PROPERTIES.filter(property => !isDeepStrictEqual(before[property], after[property]));
-
-/**
- * An entity as its \`.jhipster\` file declares it, its changelog date in its annotations, where the bootstrap of the
- * application moves it: an entity compares the same before and after the bootstrap writes it.
- */
-const normalizeEntity = (definition: EntityConfig): EntityConfig => {
-  const { changelogDate, ...entity } = structuredClone(definition);
-  if (changelogDate !== undefined) {
-    entity.annotations = { changelogDate: String(changelogDate), ...entity.annotations };
-  }
-  return entity;
-};
 
 const findChangelogs = (generator: Generator): EntityChangelogObject[] =>
   (generator.findObjects('changelog') as unknown as EntityChangelogObject[]).toSorted((a, b) =>
@@ -207,31 +223,39 @@ const changelogDateOf = (generator: Generator, entity: EntityConfig): string =>
     entity.annotations?.incrementalChangelogDate ?? entity.annotations?.changelogDate ?? entity.changelogDate ?? generator.nextTimestamp(),
   );
 
-/** The entities as the \`.jhipster\` files on the disk declare them, before this generation writes them. */
-const formerEntities = (generator: Generator): { name: string; definition: EntityConfig }[] =>
-  getEntitiesFromDir(generator.getEntitiesConfigPath())
-    .map(name => ({ name, path: generator.getEntityConfigPath(name) }))
-    .filter(({ path }) => existsSync(path))
-    .map(({ name, path }) => ({ name, definition: JSON.parse(readFileSync(path, 'utf8')) as EntityConfig }))
-    .filter(({ definition }) => !definition.builtIn);
+/** The names of the entities the \`.jhipster\` files on the disk declare, before this generation writes them. */
+const formerEntityNames = (generator: Generator): string[] =>
+  getEntitiesFromDir(generator.getEntitiesConfigPath()).filter(name => existsSync(generator.getEntityConfigPath(name)));
+
+/** The entities of the application, prepared, the built-in ones aside. */
+const preparedEntities = (generator: Generator): Map<string, EntityConfig> => {
+  const entities = generator.getContextData<Map<string, EntityConfig>>(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, { factory: () => new Map() });
+  if (entities.size === 0 && generator.getExistingEntities().length > 0) {
+    throw new Error(
+      `The entity changelogs are read before the entities are prepared: declare the custom object with changelogsCustomObject`,
+    );
+  }
+  return new Map([...entities].filter(([, entity]) => !entity.builtIn));
+};
 
 const formerChangelogs = (generator: Generator): boolean =>
   generator.getContextData<boolean>(CONTEXT_DATA_FORMER_CHANGELOGS_KEY, { factory: () => findChangelogs(generator).length > 0 });
 
 const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
+  const entities = new Map(
+    [...preparedEntities(generator)].map(([name, prepared]) => [name, { prepared, entity: changelogProjection(prepared) }]),
+  );
   if (!formerChangelogs(generator)) {
-    // A project without changelogs: the ones creating its entities, as its files on the disk declare them.
-    for (const { name, definition } of formerEntities(generator)) {
-      record(
-        generator,
-        {
-          operation: 'create',
-          entityName: name,
-          changelogDate: changelogDateOf(generator, definition),
-          entity: normalizeEntity(definition),
-        },
-        { existing: true },
-      );
+    // A project without changelogs: the ones creating the entities its files on the disk declare, at their current state.
+    for (const name of formerEntityNames(generator)) {
+      const current = entities.get(name);
+      if (current) {
+        record(
+          generator,
+          { operation: 'create', entityName: name, changelogDate: changelogDateOf(generator, current.prepared), entity: current.entity },
+          { existing: true },
+        );
+      }
     }
   }
 
@@ -240,26 +264,23 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
     lastChangelogs.set(changelog.entityName, changelog);
   }
 
-  const entities = generator.getExistingEntities().filter(({ definition }: { definition: EntityConfig }) => !definition.builtIn);
-  for (const { name, definition } of entities as { name: string; definition: EntityConfig }[]) {
-    const entity = normalizeEntity(definition);
+  for (const [name, { prepared, entity }] of entities) {
     const last = lastChangelogs.get(name);
     if (!last || last.operation === 'remove') {
       // An entity created again after its removal gets a date after its former changelogs.
       record(generator, {
         operation: 'create',
         entityName: name,
-        changelogDate: last ? nextChangelogDate(generator, last) : changelogDateOf(generator, entity),
+        changelogDate: last ? nextChangelogDate(generator, last) : changelogDateOf(generator, prepared),
         entity,
       });
-    } else if (!isDeepStrictEqual(changelogProjection(last.entity!), changelogProjection(entity))) {
-      // Only a change of the database schema records a changelog; the changelog keeps the whole entity.
-      const before = changelogProjection(last.entity!);
-      const after = changelogProjection(entity);
-      const changedProperties = changedEntityProperties(before, after);
-      const fields = diffItems(before.fields, after.fields, 'fieldName');
-      const relationships = diffItems(before.relationships, after.relationships, 'relationshipName');
-      const changedRelationships = splitChangedRelationships(before.relationships, after.relationships, relationships.changed);
+    } else if (!isDeepStrictEqual(last.entity, entity)) {
+      // Only a change of the database schema records a changelog.
+      const before = last.entity!;
+      const changedProperties = changedEntityProperties(before, entity);
+      const fields = diffItems(before.fields, entity.fields, 'fieldName');
+      const relationships = diffItems(before.relationships, entity.relationships, 'relationshipName');
+      const changedRelationships = splitChangedRelationships(before.relationships, entity.relationships, relationships.changed);
       recordAfter(generator, last, {
         operation: 'update',
         entityName: name,
@@ -277,9 +298,8 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
     }
   }
 
-  const entityNames = new Set(entities.map(({ name }: { name: string }) => name));
   for (const [name, last] of lastChangelogs) {
-    if (last.operation !== 'remove' && !entityNames.has(name)) {
+    if (last.operation !== 'remove' && !entities.has(name)) {
       recordAfter(generator, last, { operation: 'remove', entityName: name, changelogDate: nextChangelogDate(generator, last) });
     }
   }
@@ -293,13 +313,14 @@ const recordChangelogs = (generator: Generator): EntityChangelogObject[] => {
 /**
  * The changelogs of the entities of an application, sorted by date, as objects of type \`changelog\` (see
  * EntityChangelogObject): the ones of this generation recorded first, by the first generator asking for them, the others
- * getting the same ones. A changelog is recorded for each change of an entity, never changed once recorded, so a
- * changelog written from them is the same whatever the files of the project. An entity is compared to the entity of its
- * last changelog; a project without changelogs gets the ones creating its entities, as its \`.jhipster\` files on the
- * disk declare them, first. A generator using them writes incremental changelogs.
+ * getting the same ones. A changelog is recorded for each change of the database schema of an entity, never changed
+ * once recorded, so a changelog written from them is the same whatever the files of the project. An entity, at the final
+ * properties of the prepared one, is compared to the entity of its last changelog; a project without changelogs gets the
+ * ones creating the entities its \`.jhipster\` files on the disk declare, at their current state, first. A generator using
+ * them writes incremental changelogs.
  *
- * A generator using them declares the custom object (\`customObjects: [{ name: CHANGELOGS_CUSTOM_OBJECT }]\`) and gives
- * them from its \`changelogs\` getter: \`get changelogs() { return getEntityChangelogs(this); }\`.
+ * A generator using them declares the custom object (\`customObjects: [changelogsCustomObject]\`), loaded once the
+ * entities are prepared, and gives them from its \`changelogs\` getter: \`get changelogs() { return getEntityChangelogs(this); }\`.
  */
 export const getEntityChangelogs = (generator: Generator): EntityChangelogObject[] =>
   generator.getContextData<EntityChangelogObject[]>(CONTEXT_DATA_CHANGELOGS_KEY, { factory: () => recordChangelogs(generator) });
