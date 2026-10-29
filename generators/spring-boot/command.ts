@@ -24,8 +24,8 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TY
 import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
 import { cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { createBase64Secret, createReproducibleBase64Secret, createReproducibleSecret, createSecret } from '../../lib/utils/secret.ts';
-import databaseBootstrapCommand from '../base-application/generators/database-bootstrap/command.ts';
 import commonCommand from '../common/command.ts';
+import serverCommand from '../server/command.ts';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
 
 import cacheCommand from './generators/cache/command.ts';
@@ -197,7 +197,7 @@ const command = {
       scope: 'storage',
     },
     databaseType: {
-      ...databaseBootstrapCommand.configs.databaseType,
+      ...serverCommand.configs.databaseType,
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         type: 'select',
         message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
@@ -224,7 +224,7 @@ const command = {
       }),
     },
     prodDatabaseType: {
-      ...databaseBootstrapCommand.configs.prodDatabaseType,
+      ...serverCommand.configs.prodDatabaseType,
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => (answers.databaseType ?? config.databaseType) === SQL,
         type: 'select',
@@ -233,7 +233,7 @@ const command = {
       }),
     },
     devDatabaseType: {
-      ...databaseBootstrapCommand.configs.devDatabaseType,
+      ...serverCommand.configs.devDatabaseType,
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => (answers.databaseType ?? config.databaseType) === SQL,
         type: 'select',
