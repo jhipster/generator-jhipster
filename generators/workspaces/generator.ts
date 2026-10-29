@@ -85,14 +85,15 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
       configurePackageManager() {
         if (!this.generateWorkspaces) return;
 
-        // Decided before the applications are composed, which use it: the one of an existing application, else pnpm.
+        // Decided before the applications are composed, which use it: the one given or of an existing application, else npm.
         this.workspacesConfig.nodePackageManager ??=
           this.options.nodePackageManager ??
           this.appsFolders
             .map(appFolder => this.readDestinationJSON(this.destinationPath(appFolder, '.yo-rc.json')) as any)
-            .find(yoRc => yoRc?.['generator-jhipster']?.nodePackageManager)?.['generator-jhipster'].nodePackageManager ??
-          'pnpm';
-        this.env.options.nodePackageManager = this.workspacesConfig.nodePackageManager;
+            .find(yoRc => yoRc?.['generator-jhipster']?.nodePackageManager)?.['generator-jhipster'].nodePackageManager;
+        if (this.workspacesConfig.nodePackageManager) {
+          this.env.options.nodePackageManager = this.workspacesConfig.nodePackageManager;
+        }
       },
     });
   }
@@ -118,7 +119,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
         if (typeof this.generateApplications === 'function') {
           // The applications run in environments of their own, which do not share the options of this one.
-          await this.generateApplications({ nodePackageManager: this.workspacesConfig.nodePackageManager });
+          const { nodePackageManager } = this.workspacesConfig;
+          await this.generateApplications(nodePackageManager ? { nodePackageManager } : {});
         } else {
           for (const appName of this.appsFolders) {
             await this.composeWithJHipster(this.entrypointGenerator ?? this.generateWith, {
@@ -203,8 +205,6 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
             // Like npm, skip the build scripts of the dependencies not approved in allowBuilds instead of failing.
             strictDepBuilds: false,
           });
-          // The version of pnpm the applications install, which pnpm and corepack switch to.
-          this.packageJson.merge({ packageManager: `pnpm@${findDependencyVersion('pnpm')!}` });
         } else {
           this.packageJson.merge({
             workspaces: {
@@ -212,6 +212,10 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
             },
           });
         }
+        // The package manager and its version the applications install, which corepack switches to.
+        this.packageJson.merge({
+          packageManager: `${this.workspacesNodePackageManager}@${findDependencyVersion(this.workspacesNodePackageManager)!}`,
+        });
         this.packageJson.merge({
           devDependencies: {
             concurrently: findDependencyVersion('concurrently')!,
@@ -311,7 +315,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   get workspacesNodePackageManager(): string {
-    return this.workspacesConfig.nodePackageManager ?? 'pnpm';
+    return this.workspacesConfig.nodePackageManager ?? 'npm';
   }
 
   get pnpm(): boolean {

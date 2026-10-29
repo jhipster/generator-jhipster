@@ -48,7 +48,7 @@ describe(`generator - ${generator}`, () => {
 
       result.assertJsonFileContent('package.json', {
         scripts: {
-          'ci:e2e:prepare': 'pnpm run docker-compose',
+          'ci:e2e:prepare': 'npm run docker-compose',
           'ci:e2e:teardown': 'docker compose -f docker-compose/docker-compose.yml down -v',
         },
       });
@@ -64,7 +64,7 @@ describe(`generator - ${generator}`, () => {
         .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
         .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' });
 
-      result.assertFileContent('pnpm-workspace.yaml', /packages:\n {2}- gateway\n {2}- mobile\n/);
+      result.assertJsonFileContent('package.json', { workspaces: { packages: ['gateway', 'mobile'] } });
     });
   });
 
@@ -79,18 +79,18 @@ describe(`generator - ${generator}`, () => {
 
       result.assertJsonFileContent('package.json', {
         scripts: {
-          'docker:build': 'concurrently pnpm:docker:build:gateway pnpm:docker:build:micro1',
-          'docker:build:gateway': 'pnpm --filter ./gateway --if-present run docker:build',
+          'docker:build': 'concurrently npm:docker:build:gateway npm:docker:build:micro1',
+          'docker:build:gateway': 'npm run docker:build --workspace gateway --if-present',
         },
       });
     });
   });
 
-  describe('with npm', () => {
+  describe('with defaults', () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'], nodePackageManager: 'npm' })
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
         .withJHipsterConfig({ baseName: 'workspaces' })
         .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
         .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' })
@@ -106,6 +106,10 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    it('declares the npm version of the applications as the package manager', () => {
+      result.assertJsonFileContent('package.json', { packageManager: 'npm@NPM_VERSION' });
+    });
+
     it('runs the scripts of the workspaces with npm', () => {
       result.assertJsonFileContent('package.json', {
         scripts: {
@@ -117,27 +121,11 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with an application using npm', () => {
+  describe('with pnpm', () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
-        .withJHipsterConfig({ baseName: 'workspaces' })
-        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway', nodePackageManager: 'npm' })
-        .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' });
-    });
-
-    it('keeps npm', () => {
-      result.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { nodePackageManager: 'npm' } });
-      result.assertNoFile('pnpm-workspace.yaml');
-    });
-  });
-
-  describe('with defaults', () => {
-    before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'], nodePackageManager: 'pnpm' })
         .withJHipsterConfig({ baseName: 'workspaces' })
         .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
         .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' })
@@ -167,6 +155,22 @@ describe(`generator - ${generator}`, () => {
           'docker:build:gateway': 'pnpm --filter ./gateway --if-present run docker:build',
         },
       });
+    });
+  });
+
+  describe('with an application using pnpm', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'micro1'] })
+        .withJHipsterConfig({ baseName: 'workspaces' })
+        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway', nodePackageManager: 'pnpm' })
+        .withWorkspaceApplicationAtFolder('micro1', { baseName: 'micro1', applicationType: 'microservice' });
+    });
+
+    it('keeps pnpm', () => {
+      result.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { nodePackageManager: 'pnpm' } });
+      result.assertFile('pnpm-workspace.yaml');
     });
   });
 });
