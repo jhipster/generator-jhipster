@@ -27,10 +27,15 @@
 @import 'bootswatch/dist/<%- clientTheme %>/bootswatch';
 <%_ } _%>
 body {
-<%_ if (clientThemeNone) { _%>
-  background: #fafafa;
-<%_ } _%>
   margin: 0;
+}
+
+body,
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 300;
 }
 
 a {
@@ -55,10 +60,6 @@ a {
     height: calc(100% - 40px);
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem;
-    .card {
-      padding: 1rem;
-    }
     .view-routes {
       height: 100%;
       > div {
@@ -108,6 +109,16 @@ Generic styles
 }
 
 /* other generic styles */
+
+.footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.jh-card {
+  padding: 1.5%;
+  margin-top: 20px;
+  border: none;
+}
 
 .title {
   font-size: 1.25em;

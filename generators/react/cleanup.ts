@@ -90,4 +90,7 @@ export default asWritingTask<ClientEntity, ClientApplication>(function cleanupOl
     this.removeFile('jest.conf.js');
     this.removeFile('tsconfig.test.json');
   }
+  if (control.isJhipsterVersionLessThan('9.5.0')) {
+    this.removeFile(`${application.clientSrcDir}app/shared/layout/footer/footer.scss`);
+  }
 });

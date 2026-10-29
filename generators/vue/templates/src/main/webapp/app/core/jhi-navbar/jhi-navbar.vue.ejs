@@ -19,8 +19,7 @@
 <template>
   <b-navbar data-cy="navbar" toggleable="md" variant="<%- vueBootstrapVariant %>" data-bs-theme="<%- vueBootstrapBsTheme %>">
     <b-navbar-brand class="logo" to="/">
-      <span class="logo-img"></span>
-      <span class="navbar-title">{{ t$('global.title') }}</span> <span class="navbar-version">{{ version }}</span>
+      <span class="logo-img"></span>&nbsp;<span class="navbar-title">{{ t$('global.title') }}</span>&nbsp;<span class="navbar-version">{{ version }}</span>
     </b-navbar-brand>
     <b-navbar-toggle class="jh-navbar-toggler d-lg-none" target="header-tabs" aria-expanded="false" aria-label="Toggle navigation">
       <font-awesome-icon icon="bars" />
@@ -196,12 +195,20 @@
 .navbar-version {
   font-size: 0.65em;
 <%_ if (clientThemeNone) { _%>
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.55);
 <%_ } _%>
 }
 
-.navbar .navbar-nav .nav-item {
-  margin-right: 0.5rem;
+.navbar {
+  padding: 0.2rem 1rem;
+}
+
+.navbar :deep(a.nav-link) {
+  font-weight: 400;
+}
+
+.navbar :deep(.navbar-nav .nav-item) {
+  margin-left: 0.5em;
 }
 
 @media screen and (min-width: 768px) {
@@ -216,31 +223,16 @@
   }
 }
 
-.navbar-title {
-  display: inline-block;
-  color: white;
-}
 
 /* ==========================================================================
   Logo styles
   ========================================================================== */
-.navbar-brand.logo {
-  padding: 0 7px;
-}
-
-.logo .logo-img {
+.logo-img {
   height: 45px;
+  width: 45px;
   display: inline-block;
   vertical-align: middle;
-  width: 45px;
-}
-
-.logo-img {
-  height: 100%;
   background: url('<%- clientBundlerRsbuild ? '@' : '/' %>content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
-  width: 100%;
-  filter: drop-shadow(0 0 0.05rem white);
-  margin: 0 5px;
 }
 </style>
