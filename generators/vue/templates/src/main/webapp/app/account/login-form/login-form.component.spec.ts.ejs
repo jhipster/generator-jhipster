@@ -201,4 +201,17 @@ describe('LoginForm Component', () => {
     expect(loginForm.rememberMe).toBe(false);
     expect(axiosStub.post).toHaveBeenCalled();
   });
+
+  it('should go back after logging in from the forbidden page', async () => {
+    // GIVEN
+    route.path = '/forbidden';
+    axiosStub.post.mockResolvedValue({ headers: {} });
+
+    // WHEN
+    await loginForm.doLogin();
+    await flushPromises();
+
+    // THEN
+    expect(routerGoMock).toHaveBeenCalledWith(-1);
+  });
 });

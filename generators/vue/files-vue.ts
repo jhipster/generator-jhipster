@@ -45,7 +45,7 @@ export const vueFiles = asWriteFilesSection({
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationTemplatesBlock(),
-      templates: ['index.ts', 'core/error/error-loading.vue'],
+      templates: ['index.ts', 'core/error/error-loading.vue', 'core/error/error-loading.spec.ts'],
     },
   ],
   sass: [
@@ -73,23 +73,23 @@ export const vueFiles = asWriteFilesSection({
         'shared/config/store/account-store.ts',
         'store.ts',
         'router/index.ts',
+        'router/index.spec.ts',
         'router/admin.ts',
         'router/pages.ts',
         'test-setup.ts',
       ],
-    },
-    {
-      // The routes of a microfrontend load remotes.
-      condition: ctx => !ctx.microfrontend,
-      ...clientApplicationTemplatesBlock(),
-      templates: ['router/index.spec.ts'],
     },
   ],
   i18n: [
     {
       condition: generator => generator.enableTranslation,
       ...clientApplicationTemplatesBlock(),
-      templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts', 'shared/config/languages.ts'],
+      templates: [
+        'locale/translation.service.ts',
+        'shared/config/store/translation-store.ts',
+        'shared/config/store/translation-store.spec.ts',
+        'shared/config/languages.ts',
+      ],
     },
     clientRootTemplatesBlock({
       condition: ctx => ctx.enableTranslation && ctx.enableI18nRTL,
@@ -115,10 +115,12 @@ export const vueFiles = asWriteFilesSection({
         'core/ribbon/ribbon.component.ts',
         'core/ribbon/ribbon.component.spec.ts',
         'shared/composables/date-format.ts',
+        'shared/composables/date-format.spec.ts',
         'shared/composables/entity-remove.ts',
         'shared/composables/entity-remove.spec.ts',
         'shared/composables/index.ts',
         'shared/composables/validation.ts',
+        'shared/composables/validation.spec.ts',
         'shared/computables/arrays.ts',
         'shared/computables/arrays.spec.ts',
         'shared/computables/index.ts',
@@ -132,6 +134,10 @@ export const vueFiles = asWriteFilesSection({
         'shared/jhi-item-count.component.ts',
         'shared/jhi-item-count.vue',
         'shared/model/user.model.ts',
+        'shared/model/user.model.spec.ts',
+        'shared/jhipster/data-utils.spec.ts',
+        'shared/jhipster/headers.spec.ts',
+        'shared/jhipster/link-header.spec.ts',
       ],
     },
   ],
@@ -148,6 +154,7 @@ export const vueFiles = asWriteFilesSection({
         'account/login-form/login-form.component.ts',
         'account/login-form/login-form.component.spec.ts',
         'account/login-modal.ts',
+        'account/login-modal.spec.ts',
         'router/account.ts',
       ],
     },
@@ -246,7 +253,7 @@ export const vueFiles = asWriteFilesSection({
     {
       condition: generator => generator.generateBuiltInUserEntity,
       ...clientApplicationTemplatesBlock(),
-      templates: ['entities/user/user.service.ts'],
+      templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts'],
     },
   ],
 });

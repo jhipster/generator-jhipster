@@ -29,6 +29,10 @@ describe('DataUtils Service', () => {
     dataUtilsService = useDataUtils();
   });
 
+  it('should abbreviate no text to an empty text', () => {
+    expect(dataUtilsService.abbreviate(undefined)).toBe('');
+  });
+
   it('should not abbreviate text shorter than 30 characters', () => {
     const result = dataUtilsService.abbreviate('JHipster JHipster');
 
@@ -164,6 +168,15 @@ describe('DataUtils Service', () => {
     const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
 
     dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', true);
+
+    expect(entity).toEqual({});
+  });
+
+  it('should not set the data without a file', () => {
+    const entity: Record<string, any> = {};
+
+    dataUtilsService.setFileData({ target: { files: [] } }, entity, 'data', false);
+    dataUtilsService.setFileData(undefined, entity, 'data', false);
 
     expect(entity).toEqual({});
   });

@@ -46,6 +46,13 @@ type JhiNavbarComponentType = InstanceType<typeof JhiNavbar>;
 const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
 
+<%_ if (enableTranslation) { _%>
+// Two languages show the menu of the languages.
+vi.mock('@/shared/config/languages', () => ({
+  default: () => ({ en: { name: 'English' }, fr: { name: 'Français' } }),
+}));
+
+<%_ } _%>
 describe('JhiNavbar', () => {
   let wrapper: VueWrapper<JhiNavbarComponentType>;
   let jhiNavbar: JhiNavbarComponentType;
@@ -135,24 +142,20 @@ describe('JhiNavbar', () => {
 
   it('logout should clear credentials and return to the home page when no provider URL is returned', async () => {
     store.setAuthentication({ login: 'test' });
-<%_ if (authenticationTypeOauth2) { _%>
     await router.push('/forbidden');
-<%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
     (loginService.logout as any).mockReturnValue(Promise.resolve({}));
 <%_ } _%>
+    await flushPromises();
 
-    await jhiNavbar.logout();
+    await wrapper.find('#logout').trigger('click');
+    await flushPromises();
 
-<%_ if (authenticationTypeJwt) { _%>
-    expect(jhiNavbar.authenticated).toBeFalsy();
-<%_ } else { _%>
+<%_ if (authenticationUsesCsrf) { _%>
     expect(loginService.logout).toHaveBeenCalled();
-  <%_ if (authenticationTypeOauth2) { _%>
+<%_ } _%>
     expect(jhiNavbar.authenticated).toBeFalsy();
     expect(router.currentRoute.value.path).toBe('/');
-  <%_ } _%>
-<%_ } _%>
   });
 <%_ if (authenticationTypeOauth2) { _%>
 
@@ -167,7 +170,30 @@ describe('JhiNavbar', () => {
     expect(loginService.logout).toHaveBeenCalled();
     expect(routerPushSpy).not.toHaveBeenCalled();
   });
+
+  it('logout should navigate with router to a relative url', async () => {
+    store.setAuthentication({ login: 'test' });
+    (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl: '/forbidden' } }));
+
+    await jhiNavbar.logout();
+
+    expect(router.currentRoute.value.path).toBe('/forbidden');
+  });
 <%_ } _%>
+
+  it('logout should stay at the home page', async () => {
+    store.setAuthentication({ login: 'test' });
+<%_ if (authenticationUsesCsrf) { _%>
+    (loginService.logout as any).mockReturnValue(Promise.resolve({}));
+<%_ } _%>
+    await router.push('/');
+    const routerPushSpy = vi.spyOn(router, 'push');
+
+    await jhiNavbar.logout();
+
+    expect(routerPushSpy).not.toHaveBeenCalled();
+    expect(jhiNavbar.authenticated).toBeFalsy();
+  });
 
   it('should determine active route', async () => {
     await router.push('/forbidden');
@@ -199,6 +225,20 @@ describe('JhiNavbar', () => {
     expect(wrapper.find('#admin-menu').exists()).toBe(true);
     expect(wrapper.find('#logout').exists()).toBe(true);
     expect(wrapper.find('#login').exists()).toBe(false);
+<%_ if (enableTranslation) { _%>
+
+    // The items of the languages, after the content of the button.
+    await wrapper.findAll('#languagesnavBarDropdown > div')[0].trigger('click');
+    expect(changeLanguage).toHaveBeenCalledWith('en');
+<%_ } _%>
+  });
+
+  it('should default to the native language', () => {
+    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as any);
+    const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], provide: { accountService<%- authenticationUsesCsrf ? ', loginService' : '' %> } } });
+
+    expect(navbar.vm.currentLanguage).toBe('<%- nativeLanguage %>');
+    language.mockRestore();
   });
 
   it('should log in from the menu of an anonymous user', async () => {

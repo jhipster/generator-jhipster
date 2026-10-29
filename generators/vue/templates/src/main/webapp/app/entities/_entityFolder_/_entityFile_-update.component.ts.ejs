@@ -230,12 +230,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (relationshipsContainManyToOne) { _%>
 
-    const getSelected = (selectedVals, option, pkField = 'id') => {
-      if (selectedVals) {
-        return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
-      }
-      return option;
-    };
+    const getSelected = (selectedVals, option, pkField = 'id') => selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
 <%_ } _%>
 
     return {
