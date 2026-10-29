@@ -156,6 +156,18 @@ kubectl scale statefulset jhipster-registry --replicas 3<%- kubernetesNamespaceD
   _%>
 ## Consul
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the `consul-gossip-key` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart `consul-config-loader` to load your configuration again and your apps to register them again:
+
+```
+kubectl delete statefulset consul<%- namespaceOption %>
+kubectl get pvc -o name<%- namespaceOption %> | grep '/data-consul-' | xargs kubectl delete<%- namespaceOption %>
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul<%- namespaceOption %>
+kubectl rollout restart <%- consulClients.map(client => `deployment/${client}`).join(' ') %><%- namespaceOption %>
+```
+
 ### Before going to production
 
 The gossip traffic between the Consul servers is encrypted with the key of the `consul-gossip-key` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that `consul-config-loader` stores in Consul, and register or deregister services.

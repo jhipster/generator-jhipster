@@ -573,6 +573,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ## Consul
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/msmysql deployment/mspsql deployment/consul-config-loader
+\`\`\`
+
 ### Before going to production
 
 The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
@@ -1595,6 +1607,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ## Consul
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+\`\`\`
+
 ### Before going to production
 
 The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
@@ -2371,6 +2395,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 ## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+\`\`\`
 
 ### Before going to production
 
@@ -5964,6 +6000,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ## Consul
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+\`\`\`
+
 ### Before going to production
 
 The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
@@ -9453,6 +9501,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ## Consul
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/consul-config-loader
+\`\`\`
+
 ### Before going to production
 
 The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
@@ -10372,6 +10432,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 ## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+\`\`\`
 
 ### Before going to production
 
@@ -11475,6 +11547,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 ## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb deployment/consul-config-loader
+\`\`\`
 
 ### Before going to production
 
@@ -13513,6 +13597,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ## Consul
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/msmongodb deployment/consul-config-loader
+\`\`\`
+
 ### Before going to production
 
 The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
@@ -14950,6 +15046,18 @@ kubectl get svc jhipster-grafana -n mynamespace
 
 
 ## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep '/data-consul-' | xargs kubectl delete -n mynamespace
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/msmysql deployment/consul-config-loader -n mynamespace
+\`\`\`
 
 ### Before going to production
 
@@ -18335,6 +18443,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ## Consul
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep '/data-consul-' | xargs kubectl delete -n mynamespace
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/msmysql deployment/consul-config-loader -n mynamespace
+\`\`\`
+
 ### Before going to production
 
 The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
@@ -19110,6 +19230,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 ## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb deployment/consul-config-loader
+\`\`\`
 
 ### Before going to production
 
@@ -21148,6 +21280,18 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 ## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep '/data-consul-' | xargs kubectl delete -n jhipsternamespace
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul -n jhipsternamespace
+kubectl rollout restart deployment/jhgate deployment/consul-config-loader -n jhipsternamespace
+\`\`\`
 
 ### Before going to production
 
