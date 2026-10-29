@@ -191,6 +191,9 @@ export default class PlaywrightGenerator extends BaseApplicationGenerator<Playwr
             '@playwright/test': true,
           },
         });
+        if (application.nodePackageManager === 'pnpm' && !application.monorepository) {
+          this.mergeDestinationYaml('pnpm-workspace.yaml', { allowBuilds: { '@playwright/test': true } });
+        }
       },
       playwrightSchematics({ application }) {
         const { dasherizedBaseName, clientRootDir } = application;
