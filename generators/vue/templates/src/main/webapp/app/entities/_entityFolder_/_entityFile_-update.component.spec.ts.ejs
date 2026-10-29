@@ -242,7 +242,14 @@ describe('Component Tests', () => {
 
       it('Should load an entity without values', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.find.mockResolvedValue({ <%- primaryKey.name %>: <%- tsKeyId %> });
+        // The server gives null for a collection without values.
+        const entityWithoutValues = {
+          <%- primaryKey.name %>: <%- tsKeyId %>,
+<%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat().filter(relationship => relationship.collection)) { _%>
+          <%- relationship.relationshipFieldNamePlural %>: null,
+<%_ } _%>
+        };
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(entityWithoutValues);
 
         // WHEN
         route = {
@@ -255,7 +262,7 @@ describe('Component Tests', () => {
         await flushPromises();
 
         // THEN
-        expect(comp.<%- entityInstance %>).toEqual({ <%- primaryKey.name %>: <%- tsKeyId %> });
+        expect(comp.<%- entityInstance %>).toEqual(entityWithoutValues);
       });
     });
 
