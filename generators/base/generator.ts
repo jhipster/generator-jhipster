@@ -314,7 +314,7 @@ export default class BaseGenerator<
   }
 
   /**
-   * Generate a timestamp to be used by Liquibase changelogs.
+   * Generate the changelog date of an entity, after the last one given, stored as `lastChangelogTimestamp`.
    */
   nextTimestamp(): string {
     if (this.features.uniqueGlobally) {
@@ -322,7 +322,8 @@ export default class BaseGenerator<
     }
     // Milliseconds are ignored for changelogDate.
     const toSeconds = (time: number) => Math.floor(time / 1000) * 1000;
-    const { lastLiquibaseTimestamp = 0 } = this.jhipsterConfig;
+    // lastLiquibaseTimestamp is its former name, read from the projects that have it.
+    const { lastChangelogTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp ?? 0 } = this.jhipsterConfig;
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let next: number;
     if (this.options.reproducible || creationTimestamp) {
@@ -330,7 +331,7 @@ export default class BaseGenerator<
       const previous = this.getContextData<Date>(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
         factory: () =>
           new Date(
-            Math.max(new Date(creationTimestamp ?? this.config.get('creationTimestamp') ?? Date.now()).getTime(), lastLiquibaseTimestamp),
+            Math.max(new Date(creationTimestamp ?? this.config.get('creationTimestamp') ?? Date.now()).getTime(), lastChangelogTimestamp),
           ),
       });
       next = toSeconds(previous.getTime()) + 60_000;
@@ -338,9 +339,10 @@ export default class BaseGenerator<
     } else {
       // The stored timestamp can be in the future, after a reproducible run.
       const now = toSeconds(Date.now());
-      next = lastLiquibaseTimestamp >= now ? toSeconds(lastLiquibaseTimestamp) + 1000 : now;
+      next = lastChangelogTimestamp >= now ? toSeconds(lastChangelogTimestamp) + 1000 : now;
     }
-    this.jhipsterConfig.lastLiquibaseTimestamp = next;
+    this.jhipsterConfig.lastChangelogTimestamp = next;
+    this.config.delete('lastLiquibaseTimestamp');
     return formatDateForChangelog(new Date(next));
   }
 
