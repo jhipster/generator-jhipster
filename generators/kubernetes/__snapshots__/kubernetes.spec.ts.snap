@@ -1171,8 +1171,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -1183,18 +1183,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -1210,8 +1202,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -1301,8 +1291,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -1324,12 +1312,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -1346,10 +1340,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -1857,8 +1853,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -1869,18 +1865,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -1896,8 +1884,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -1987,8 +1973,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -2010,12 +1994,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -2032,10 +2022,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -5355,8 +5347,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -5367,18 +5359,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -5394,8 +5378,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -5485,8 +5467,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -5508,12 +5488,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -5530,10 +5516,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -8767,8 +8755,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -8779,18 +8767,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -8806,8 +8786,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -8897,8 +8875,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -8920,12 +8896,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -8942,10 +8924,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -9610,8 +9594,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -9622,18 +9606,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -9649,8 +9625,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -9740,8 +9714,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -9763,12 +9735,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9785,10 +9763,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -10586,8 +10566,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -10598,18 +10578,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -10625,8 +10597,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -10718,8 +10688,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -10741,12 +10709,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -10763,10 +10737,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -12590,8 +12566,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -12602,18 +12578,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -12629,8 +12597,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -12720,8 +12686,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -12743,12 +12707,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -12765,10 +12735,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -13510,8 +13482,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -13522,18 +13494,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -13549,8 +13513,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -13640,8 +13602,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -13663,12 +13623,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -13685,10 +13651,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -17305,8 +17273,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -17317,18 +17285,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -17344,8 +17304,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -17435,8 +17393,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -17458,12 +17414,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -17480,10 +17442,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -17965,8 +17929,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -17977,18 +17941,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -18004,8 +17960,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -18095,8 +18049,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -18118,12 +18070,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -18140,10 +18098,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -19949,8 +19909,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -19961,18 +19921,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -19988,8 +19940,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -20079,8 +20029,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -20102,12 +20050,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -20124,10 +20078,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -20629,8 +20585,8 @@ spec:
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -20641,18 +20597,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: jhipsternamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -20668,8 +20616,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -20759,8 +20705,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -20782,12 +20726,18 @@ spec:
             - agent
             - -server
             - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
-            - -datacenter=dc1
-            - -domain=consul
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -20804,10 +20754,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
