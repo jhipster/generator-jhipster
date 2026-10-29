@@ -16,11 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const lowercaseBaseName = app.baseName.toLowerCase();
-  // SQL Server rejects passwords without 3 of the 4 character categories, and the random password is lowercase hex
-  const mssqlPassword = `${dbRandomPassword}-Aa1`;
-  const sqlcmd = '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b';
+<%_ const lowercaseBaseName = app.baseName.toLowerCase();
+    // SQL Server rejects passwords without 3 of the 4 character categories, and the random password is lowercase hex
+    const mssqlPassword = `${dbRandomPassword}-Aa1`;
+    const sqlcmd = '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b';
 _%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
 apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
