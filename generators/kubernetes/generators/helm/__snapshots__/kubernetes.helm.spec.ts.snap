@@ -274,6 +274,8 @@ spec:
           value: prod
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://samplekafka-mysql.default.svc.cluster.local:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://samplekafka-mysql.default.svc.cluster.local:3306/samplekafka?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: KAFKA_CONSUMER_KEY_DESERIALIZER
@@ -903,6 +905,8 @@ spec:
           value: "8500"
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -1754,12 +1758,12 @@ spec:
           value: consul-headless.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -2391,12 +2395,12 @@ spec:
           value: consul-headless.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -2566,6 +2570,8 @@ spec:
           value: "8500"
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -3315,12 +3321,12 @@ spec:
           value: jhgate
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -4058,12 +4064,12 @@ spec:
           value: consul-headless.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -4233,13 +4239,15 @@ spec:
           value: "8500"
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: msmariadb-mariadb
               key: mariadb-root-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -4572,6 +4580,8 @@ spec:
           value: "8500"
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -5100,6 +5110,8 @@ spec:
           value: prod
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://samplemysql-mysql.default.svc.cluster.local:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://samplemysql-mysql.default.svc.cluster.local:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_ELASTICSEARCH_REST_URIS
@@ -8125,6 +8137,8 @@ spec:
           value: "8500"
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
@@ -8741,6 +8755,8 @@ spec:
           value: "8500"
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
         - name: SPRING_LIQUIBASE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -9353,12 +9369,12 @@ spec:
           value: consul-headless.jhipsternamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: SPRING_LIQUIBASE_URL
-          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
