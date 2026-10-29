@@ -18,6 +18,7 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import axios from 'axios';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
@@ -33,16 +34,17 @@ import {
   <%_ } _%>
 } from '@/shared/composables/date-format';
 <%_ } _%>
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 import { <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+
+import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 
 const error = {
   response: {
     status: null,
     data: {
-      type: null
-    }
-  }
+      type: null,
+    },
+  },
 };
 
 const axiosStub = {
@@ -232,9 +234,9 @@ describe('Service Tests', () => {
       });
 
       it('should not partial update a <%- entityAngularName %>', async () => {
-          axiosStub.patch.mockRejectedValue(error);
+        axiosStub.patch.mockRejectedValue(error);
 
-          await expect(service.partialUpdate({})).rejects.toMatchObject(error);
+        await expect(service.partialUpdate({})).rejects.toMatchObject(error);
       });
 
 <%_ } _%>

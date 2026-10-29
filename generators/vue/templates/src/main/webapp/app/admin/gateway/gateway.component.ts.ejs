@@ -16,10 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, inject, ref, type Ref, onMounted } from 'vue';
+import { type Ref, defineComponent, inject, onMounted, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
+
 import GatewayService from './gateway.service';
 
 export default defineComponent({
@@ -43,7 +44,7 @@ export default defineComponent({
               ) {
                 serviceInstance.instanceInfo = { status: 'UP' };
               } else {
-                serviceInstance.instanceInfo = { status: 'DOWN'} ;
+                serviceInstance.instanceInfo = { status: 'DOWN' };
               }
             }
             return serviceInstance;
@@ -55,7 +56,7 @@ export default defineComponent({
 <%_ } _%>
         updatingRoutes.value = false;
       });
-    }
+    };
 
     onMounted(() => {
       refresh();

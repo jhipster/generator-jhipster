@@ -90,7 +90,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing() {
+      preparing() {
         if (!this.skipGit) {
           // Force write .yo-rc.json to disk, it's used to check if the application is regenerated
           this.jhipsterConfig.monorepository ??= undefined;

@@ -17,30 +17,33 @@
  limitations under the License.
 -%>
 import { ReducersMapObject } from '@reduxjs/toolkit';
-import loadingBar from 'app/shared/reducers/loading-bar';
 
-<%_ if (enableTranslation) { _%>
-import locale from './locale';
+<%_ if (applicationTypeMonolith) { _%>
+import entitiesReducers from 'app/entities/reducers';
 <%_ } _%>
-import authentication from './authentication';
-import applicationProfile from './application-profile';
-
-import administration from 'app/modules/administration/administration.reducer';
 <%_ if (generateUserManagement) { _%>
-import userManagement from 'app/modules/administration/user-management/user-management.reducer';
-import register from 'app/modules/account/register/register.reducer';
 import activate from 'app/modules/account/activate/activate.reducer';
 import password from 'app/modules/account/password/password.reducer';
-import settings from 'app/modules/account/settings/settings.reducer';
 import passwordReset from 'app/modules/account/password-reset/password-reset.reducer';
+import register from 'app/modules/account/register/register.reducer';
   <%_ if (authenticationTypeSession) { _%>
 import sessions from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
-<%_ } else if (authenticationTypeOauth2) { _%>
-import userManagement from './user-management';
+import settings from 'app/modules/account/settings/settings.reducer';
 <%_ } _%>
-<%_ if (applicationTypeMonolith) { _%>
-import entitiesReducers from 'app/entities/reducers';
+import administration from 'app/modules/administration/administration.reducer';
+<%_ if (generateUserManagement) { _%>
+import userManagement from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } _%>
+import loadingBar from 'app/shared/reducers/loading-bar';
+
+import applicationProfile from './application-profile';
+import authentication from './authentication';
+<%_ if (enableTranslation) { _%>
+import locale from './locale';
+<%_ } _%>
+<%_ if (!generateUserManagement && authenticationTypeOauth2) { _%>
+import userManagement from './user-management';
 <%_ } _%>
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 

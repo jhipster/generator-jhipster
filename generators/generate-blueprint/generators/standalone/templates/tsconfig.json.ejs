@@ -3,7 +3,7 @@
   "include": [".blueprint/**/*.ts", "./cli", "./generators", "*.ts"],
   "compilerOptions": {
     /* Language and Environment */
-    "target": "ES2025" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "target": "ES<%- ecmaVersion %>" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "types": ["node"],
 
     /* Modules */

@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { getPageNumberFromLinkHeader } from '@/shared/jhipster/link-header';
 import { type BlobType, byteSize, openFile, toBase64 } from '@/shared/jhipster/data-utils';
+import { getPageNumberFromLinkHeader } from '@/shared/jhipster/link-header';
 
 /**
  * A composable utility for data.
@@ -50,23 +50,6 @@ const useDataUtils = () => ({
     openFile(data, contentType, blobType);
   },
 
-  /**
-   * Method to clear the input
-   */
-  clearInputImage(entity, elementRef, field, fieldContentType, idInput) {
-    if (entity && field && fieldContentType) {
-      if (Object.hasOwn(entity, field)) {
-        entity[field] = null;
-      }
-      if (Object.hasOwn(entity, fieldContentType)) {
-        entity[fieldContentType] = null;
-      }
-      if (elementRef && idInput && elementRef.nativeElement.querySelector(`#${idInput}`)) {
-        elementRef.nativeElement.querySelector(`#${idInput}`).value = null;
-      }
-    }
-  },
-
   setFileData(event, entity, field, isImage) {
     if (event?.target.files?.[0]) {
       const file = event.target.files[0];
@@ -78,26 +61,6 @@ const useDataUtils = () => ({
         entity[`${field}ContentType`] = file.type;
       });
     }
-  },
-
-  /**
-   * Method to download file
-   */
-  downloadFile(contentType, data, fileName) {
-    const byteCharacters = atob(data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], {
-      type: contentType,
-    });
-    const tempLink = document.createElement('a');
-    tempLink.href = window.URL.createObjectURL(blob);
-    tempLink.download = fileName;
-    tempLink.target = '_blank';
-    tempLink.click();
   },
 
   /**

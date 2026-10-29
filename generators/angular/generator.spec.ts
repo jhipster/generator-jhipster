@@ -229,6 +229,25 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('service worker', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ clientFramework })
+        .withSharedApplication({ getWebappTranslation: () => 'translated-value' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should build the service worker that app.config.ts can enable', () => {
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/app.config.ts`, "provideServiceWorker('ngsw-worker.js'");
+      runResult.assertFile('ngsw-config.json');
+      runResult.assertJsonFileContent('angular.json', {
+        projects: { jhipster: { architect: { build: { configurations: { production: { serviceWorker: 'ngsw-config.json' } } } } } },
+      });
+    });
+  });
+
   describe('enableTranslation: false', () => {
     before(async () => {
       await helpers

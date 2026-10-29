@@ -18,12 +18,14 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed } from 'vue';
-import { shallowMount } from '@vue/test-utils';
+
 import { createTestingPinia } from '@pinia/testing';
+import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 import { useLoginModal } from '@/account/login-modal';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+
 import Register from './register.vue';
 
 type RegisterComponentType = InstanceType<typeof Register>;
@@ -66,6 +68,20 @@ describe('Register Component', () => {
     expect(register.registerAccount.login).toBeUndefined();
     expect(register.registerAccount.password).toBeUndefined();
     expect(register.registerAccount.email).toBeUndefined();
+  });
+
+  it.each(['jhi', 'jhi@pster.net', 'jhi+tag@pster.net', 'jhi.pster@mail.pster.net'])('should accept the login %s', async login => {
+    register.registerAccount.login = login;
+    await register.$nextTick();
+
+    expect(register.v$.registerAccount.login.$invalid).toBe(false);
+  });
+
+  it('should reject a login with invalid characters', async () => {
+    register.registerAccount.login = 'jhi pster';
+    await register.$nextTick();
+
+    expect(register.v$.registerAccount.login.$invalid).toBe(true);
   });
 
   it('should open login modal when asked to', () => {

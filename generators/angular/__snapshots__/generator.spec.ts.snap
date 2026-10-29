@@ -29,7 +29,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
       type="submit"
       class="btn btn-danger"
     >
-      <fa-icon icon="times" />&nbsp;<span>Delete</span>
+      <fa-icon icon="trash" />&nbsp;<span>Delete</span>
     </button>
   </div>
 </form>
@@ -102,13 +102,14 @@ describe("UserManagement Management Delete Component", () => {
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.ts": {
     "contents": "import { Component, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
+
+import { ITEM_DELETED_EVENT } from "app/config";
 import { AlertError } from "app/shared/alert";
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
-import { ITEM_DELETED_EVENT } from "app/config";
 
 @Component({
   templateUrl: "./user-management-delete-dialog.html",
@@ -222,7 +223,7 @@ export class UserManagementDeleteDialog {
         [disabled]="!currentAccount() || currentAccount()?.login === userManagementRef.login"
         data-cy="entityDeleteButton"
       >
-        <fa-icon icon="times" />&nbsp;<span>Delete</span>
+        <fa-icon icon="trash" />&nbsp;<span>Delete</span>
       </button>
     </div>
     }
@@ -235,20 +236,19 @@ export class UserManagementDeleteDialog {
     "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import {
+  Router,
   provideRouter,
   withComponentInputBinding,
-  Router,
 } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
+
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
   faArrowLeft,
   faPencilAlt,
-  faTimes,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
-
 import { of } from "rxjs";
 
 import { ITEM_DELETED_EVENT } from "app/config";
@@ -286,7 +286,7 @@ describe("UserManagement Management Detail Component", () => {
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
 
-    library.addIcons(faTimes);
+    library.addIcons(faTrash);
   });
 
   beforeEach(() => {
@@ -341,21 +341,21 @@ describe("UserManagement Management Detail Component", () => {
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
     "contents": "import { Component, inject, input } from "@angular/core";
-import { Router } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
-import { filter, tap } from "rxjs";
-import { RouterLink } from "@angular/router";
-import { AccountService } from "app/core/auth";
+import { Router, RouterLink } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { filter, tap } from "rxjs";
+
+import { ITEM_DELETED_EVENT } from "app/config";
+import { AccountService } from "app/core/auth";
 import { Alert, AlertError } from "app/shared/alert";
 import {
   DurationPipe,
-  FormatMediumDatetimePipe,
   FormatMediumDatePipe,
+  FormatMediumDatetimePipe,
 } from "app/shared/date";
 import { IUserManagement } from "../user-management.model";
-import { ITEM_DELETED_EVENT } from "app/config";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
@@ -549,7 +549,7 @@ export class UserManagementDetail {
                 [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
                 data-cy="entityDeleteButton"
               >
-                <fa-icon icon="times" />
+                <fa-icon icon="trash" />
                 <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
@@ -595,8 +595,8 @@ export class UserManagementDetail {
   vi,
 } from "vitest";
 import {
-  provideHttpClientTesting,
   HttpTestingController,
+  provideHttpClientTesting,
 } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute, convertToParamMap } from "@angular/router";
@@ -610,10 +610,10 @@ import {
   faSortDown,
   faSortUp,
   faSync,
-  faTimes,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { of, Subject } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { Subject, of } from "rxjs";
 
 import { sampleWithRequiredData } from "../user-management.test-samples";
 import { UserManagementService } from "../service/user-management.service";
@@ -673,7 +673,7 @@ describe("UserManagement Management Component", () => {
       faSortDown,
       faSortUp,
       faSync,
-      faTimes,
+      faTrash,
     );
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -844,18 +844,18 @@ describe("UserManagement Management Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
-    "contents": "import {
+    "contents": "import { HttpHeaders } from "@angular/common/http";
+import {
   Component,
+  WritableSignal,
   computed,
   effect,
   inject,
   linkedSignal,
   signal,
-  WritableSignal,
   untracked,
 } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { HttpHeaders } from "@angular/common/http";
 import {
   ActivatedRoute,
   Data,
@@ -863,37 +863,38 @@ import {
   Router,
   RouterLink,
 } from "@angular/router";
-import { combineLatest, filter, tap, map } from "rxjs";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
-import { AlertError, Alert } from "app/shared/alert";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
+import { combineLatest, filter, map, tap } from "rxjs";
+
 import {
-  sortStateSignal,
-  SortDirective,
-  SortByDirective,
-  type SortState,
-  SortService,
-} from "app/shared/sort";
+  DEFAULT_SORT_DATA,
+  ITEMS_PER_PAGE,
+  ITEM_DELETED_EVENT,
+  PAGE_HEADER,
+  SORT,
+  TOTAL_COUNT_RESPONSE_HEADER,
+} from "app/config";
+import { AccountService } from "app/core/auth";
+import { Alert, AlertError } from "app/shared/alert";
 import {
   DurationPipe,
-  FormatMediumDatetimePipe,
   FormatMediumDatePipe,
+  FormatMediumDatetimePipe,
 } from "app/shared/date";
-import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
 import { ItemCount } from "app/shared/pagination";
-import { IUserManagement } from "../user-management.model";
 import {
-  ITEMS_PER_PAGE,
-  PAGE_HEADER,
-  TOTAL_COUNT_RESPONSE_HEADER,
-  SORT,
-  ITEM_DELETED_EVENT,
-  DEFAULT_SORT_DATA,
-} from "app/config";
-import { UserManagementService } from "../service/user-management.service";
-import { AccountService } from "app/core/auth";
+  SortByDirective,
+  SortDirective,
+  SortService,
+  type SortState,
+  sortStateSignal,
+} from "app/shared/sort";
+import { IUserManagement } from "../user-management.model";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
+import { UserManagementService } from "../service/user-management.service";
 
 @Component({
   selector: "jhi-user-management",
@@ -1052,15 +1053,15 @@ export class UserManagement {
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
     "contents": "import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
 import {
-  ActivatedRouteSnapshot,
   ActivatedRoute,
+  ActivatedRouteSnapshot,
   Router,
   convertToParamMap,
 } from "@angular/router";
+
 import { lastValueFrom, of, throwError } from "rxjs";
 
 import { UserManagementService } from "../service/user-management.service";
@@ -1185,7 +1186,7 @@ describe("UserManagement routing resolve service", () => {
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
 
-import { catchError, EMPTY, Observable, of } from "rxjs";
+import { EMPTY, Observable, catchError, of } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1218,18 +1219,18 @@ export default userManagementResolve;
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { TestBed } from "@angular/core/testing";
 import {
-  provideHttpClientTesting,
   HttpTestingController,
+  provideHttpClientTesting,
 } from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
 
 import { IUserManagement } from "../user-management.model";
 import {
-  sampleWithRequiredData,
+  sampleWithFullData,
   sampleWithNewData,
   sampleWithPartialData,
-  sampleWithFullData,
+  sampleWithRequiredData,
 } from "../user-management.test-samples";
 
 import {
@@ -1472,13 +1473,13 @@ describe("UserManagement Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { serverApiUrl } from "app/config";
-import { computed, inject, Service, signal } from "@angular/core";
-import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+    "contents": "import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
+import { Service, computed, inject, signal } from "@angular/core";
 
 import dayjs from "dayjs/esm";
+import { map, Observable } from "rxjs";
 
+import { serverApiUrl } from "app/config";
 import { createRequestOption } from "app/core/request";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
@@ -1680,8 +1681,8 @@ export class UserManagementService extends UserManagementsService {
 import { TestBed } from "@angular/core/testing";
 
 import {
-  sampleWithRequiredData,
   sampleWithNewData,
+  sampleWithRequiredData,
 } from "../user-management.test-samples";
 
 import { UserManagementFormService } from "./user-management-form.service";
@@ -1775,9 +1776,10 @@ describe("UserManagement Form Service", () => {
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
     "contents": "import { Service } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import dayjs from "dayjs/esm";
+
 import { DATE_TIME_FORMAT } from "app/config";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 
@@ -2112,10 +2114,10 @@ export class UserManagementFormService {
           type="button"
           id="cancel-save"
           data-cy="entityCreateCancelButton"
-          class="btn btn-secondary"
+          class="btn btn-info"
           (click)="previousState()"
         >
-          <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
+          <fa-icon icon="arrow-left" />&nbsp;<span>Back</span>
         </button>
 
         <button
@@ -2140,12 +2142,13 @@ import { HttpResponse } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-import { of, Subject, from } from "rxjs";
+
+import { Subject, from, of } from "rxjs";
+
+import { IUserManagement } from "../user-management.model";
+import { UserManagementService } from "../service/user-management.service";
 
 import { UserManagementFormService } from "./user-management-form.service";
-import { UserManagementService } from "../service/user-management.service";
-import { IUserManagement } from "../user-management.model";
-
 import { UserManagementUpdate } from "./user-management-update";
 
 describe("UserManagement Management Update Component", () => {
@@ -2266,22 +2269,23 @@ describe("UserManagement Management Update Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { Component, computed, inject, signal, OnInit } from "@angular/core";
-import { HttpResponse } from "@angular/common/http";
+    "contents": "import { HttpResponse } from "@angular/common/http";
+import { Component, OnInit, computed, inject, signal } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { finalize, map, Observable } from "rxjs";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { AlertError } from "app/shared/alert";
-import { ReactiveFormsModule } from "@angular/forms";
+import { Observable, finalize, map } from "rxjs";
 
-import {
-  UserManagementFormService,
-  UserManagementFormGroup,
-} from "./user-management-form.service";
+import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
+import { AlertError } from "app/shared/alert";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
-import { AuthorityService } from "app/entities/admin/authority/service/authority.service";
+
+import {
+  UserManagementFormGroup,
+  UserManagementFormService,
+} from "./user-management-form.service";
 
 @Component({
   selector: "jhi-user-management-update",
@@ -2369,6 +2373,7 @@ export class UserManagementUpdate implements OnInit {
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
     "contents": "import dayjs from "dayjs/esm";
+
 import { IAuthority } from "app/entities/admin/authority/authority.model";
 
 export interface IUserManagement {
@@ -2395,9 +2400,10 @@ export type NewUserManagement = Omit<IUserManagement, "login"> & {
   "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
     "contents": "import { Routes } from "@angular/router";
 
-import { userRouteAccessService } from "app/core/auth";
-import UserManagementResolve from "./route/user-management-routing-resolve.service";
 import { ASC } from "app/config";
+import { userRouteAccessService } from "app/core/auth";
+
+import UserManagementResolve from "./route/user-management-routing-resolve.service";
 
 const userManagementRoute: Routes = [
   {
@@ -2816,7 +2822,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -3200,9 +3206,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3210,6 +3213,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.route.ts": {
@@ -3883,7 +3889,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": Any<Object>,
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -4483,9 +4489,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4493,6 +4496,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.route.ts": {
@@ -5200,7 +5206,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -5578,9 +5584,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -5588,6 +5591,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.route.ts": {
@@ -6276,7 +6282,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -6798,9 +6804,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -6808,6 +6811,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {
@@ -7501,7 +7507,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -8278,9 +8284,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -8288,6 +8291,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {
@@ -8993,7 +8999,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -9359,9 +9365,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -9369,6 +9372,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {
@@ -10040,7 +10046,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -10406,9 +10412,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -10416,6 +10419,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {

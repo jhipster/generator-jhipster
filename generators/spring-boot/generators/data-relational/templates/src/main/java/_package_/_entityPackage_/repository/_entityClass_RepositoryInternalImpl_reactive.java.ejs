@@ -95,7 +95,7 @@ class <%- entityClass %>RepositoryInternalImpl extends AbstractR2dbcRepository<<
 <%_ if (joinTableRelationships.length > 0) { _%>
 
   <%_ for (const rel of joinTableRelationships) { _%>
-    private static final JoinTable<<%- persistClass %>> <%- joinTableConstant(rel) %> = new JoinTable<>("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>", <%- entityInstance %> -> <%- entityInstance %>.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>).toList());
+    private static final JoinTable<<%- persistClass %>> <%- joinTableConstant(rel) %> = new JoinTable<>("<%- rel.joinTable.name %>", "<%- rel.joinTable.joinColumns[0].name %>", "<%- rel.joinColumnNames[0] %>", <%- entityInstance %> -> <%- entityInstance %>.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>).toList());
   <%_ } _%>
 
     private static final List<JoinTable<<%- persistClass %>>> JOIN_TABLES = List.of(<%- joinTableRelationships.map(joinTableConstant).join(', ') %>);

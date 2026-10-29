@@ -16,24 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { githubSamplesGroupOf } from '../../../lib/ci/github-group.ts';
+import { getGithubSamplesGroupSync, getGithubSamplesGroupsSync } from '../../../lib/ci/github-group.ts';
 import type { GitHubMatrixGroup } from '../../../lib/ci/index.ts';
-import databaseChangelog from '../samples/database-changelog.ts';
-import devserver from '../samples/devserver.ts';
-import dockerComposeIntegration from '../samples/docker-compose-integration.ts';
-import generateBlueprint from '../samples/generate-blueprint.ts';
-import graalvm from '../samples/graalvm.ts';
+import { githubSamplesGroupFolder } from '../../constants.ts';
 
 /**
- * The samples groups defined by code (`samples/<group>.ts`), imported statically so they are read synchronously, each
- * sample tagged with its group like `getGithubSamplesGroup` does. A spec checks it lists every group of the folder.
+ * The samples groups of the `samples` folder, read synchronously (this module is loaded with require, so it cannot await
+ * the import of each group), each sample tagged with its group: a new group is a new file of that folder, listed nowhere
+ * else.
  */
 export const samplesGroups: Record<string, GitHubMatrixGroup> = Object.fromEntries(
-  Object.entries({
-    'database-changelog': databaseChangelog,
-    devserver,
-    'docker-compose-integration': dockerComposeIntegration,
-    'generate-blueprint': generateBlueprint,
-    graalvm,
-  }).map(([group, samples]) => [group, githubSamplesGroupOf(group, samples)]),
+  getGithubSamplesGroupsSync(githubSamplesGroupFolder).map(group => [
+    group,
+    getGithubSamplesGroupSync(githubSamplesGroupFolder, group).samples,
+  ]),
 );

@@ -1,9 +1,10 @@
 import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type {
-  Entity as BaseApplicationEntity,
-  Field as BaseApplicationField,
-  Relationship as BaseApplicationRelationship,
-} from '../base-application/types.d.ts';
+  DatabaseEntity,
+  DatabaseField,
+  DatabaseProperty,
+  DatabaseRelationship,
+} from '../base-application/generators/database-bootstrap/types.d.ts';
 import type {
   Config as BaseEntityChangesConfig,
   Entity as BaseEntityChangesEntity,
@@ -37,32 +38,17 @@ export type LiquibaseSourceType = BaseEntityChangesSource & {
 
 export type Source = LiquibaseSourceType & JavaSource;
 
-export type DatabaseProperty = {
-  columnName?: string;
-  columnRequired?: boolean;
-  nullable?: boolean;
-};
+/**
+ * @deprecated moved to `jhipster:base-application:database-bootstrap`; import them from
+ * `generators/base-application/generators/database-bootstrap/types.d.ts`.
+ */
+export type {
+  DatabaseEntity,
+  DatabaseField,
+  DatabaseProperty,
+  DatabaseRelationship,
+} from '../base-application/generators/database-bootstrap/types.d.ts';
 
-export type DatabaseField = BaseApplicationField & DatabaseProperty;
-
-export interface DatabaseRelationship extends BaseApplicationRelationship, DatabaseProperty {
-  shouldWriteJoinTable?: boolean;
-
-  joinTable?: {
-    name: string;
-    constraintName?: string;
-    otherConstraintName?: string;
-  };
-
-  joinColumnNames?: string[];
-}
-
-export interface DatabaseEntity<
-  F extends DatabaseField = DatabaseField,
-  R extends DatabaseRelationship = DatabaseRelationship,
-> extends BaseApplicationEntity<F, R> {
-  entityTableName: string;
-}
 type Property = {
   liquibaseGenerateFakeData?: boolean;
 } & DatabaseProperty;

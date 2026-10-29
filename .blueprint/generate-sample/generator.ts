@@ -96,7 +96,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
 
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async copySample() {
+      copySample() {
         if (extname(this.sampleName) === '.jdl') {
           this.copyTemplate(`samples/${this.sampleName}`, this.sampleName);
         } else {

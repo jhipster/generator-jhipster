@@ -28,75 +28,82 @@
 
     const componentName = entityAngularName;
 _%>
-import { Component, computed, effect, inject, linkedSignal, signal, WritableSignal, untracked } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
-import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import {
-  combineLatest,
-<%_ if (!readOnly) { _%>
-  filter,
-  tap,
+import { Component, WritableSignal, computed, effect, inject, linkedSignal, signal, untracked } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+<%_ if (searchEngineAny) { _%>
+import { FormsModule } from '@angular/forms';
 <%_ } _%>
-  map,
-} from 'rxjs';
+import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
-
-import { AlertError, Alert } from 'app/shared/alert';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-<%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
+<%_ if (paginationPagination) { _%>
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 <%_ } _%>
 <%_ if (angularEntityListRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
-import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
-import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-<%_ if (paginationPagination) { _%>
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
-import { ItemCount } from 'app/shared/pagination';
+<%_ if (paginationInfiniteScroll) { _%>
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
-<%_ if (searchEngineAny) { _%>
-import { FormsModule } from '@angular/forms';
-<%_ } _%>
-import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import {
+  combineLatest,
+<%_ if (!readOnly) { _%>
+  filter,
+<%_ } _%>
+  map,
+<%_ if (!readOnly) { _%>
+  tap,
+<%_ } _%>
+} from 'rxjs';
+
+import {
+  DEFAULT_SORT_DATA,
 <%_ if (!paginationNo) { _%>
   ITEMS_PER_PAGE,
-  <%_ if (paginationPagination) { _%>
-  PAGE_HEADER,
-  TOTAL_COUNT_RESPONSE_HEADER,
-  <%_ } _%>
 <%_ } _%>
-  SORT,
 <%_ if (!readOnly) { _%>
   ITEM_DELETED_EVENT,
 <%_ } _%>
-  DEFAULT_SORT_DATA
+<%_ if (paginationPagination) { _%>
+  PAGE_HEADER,
+<%_ } _%>
+  SORT,
+<%_ if (paginationPagination) { _%>
+  TOTAL_COUNT_RESPONSE_HEADER,
+<%_ } _%>
 } from 'app/config';
-import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%_ if (builtInUserManagement) { _%>
 import { AccountService } from 'app/core/auth';
-<%_ } _%>
-<%_ if (!readOnly) { _%>
-import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import { <%- [anyFieldIsBlobDerived ? 'DataUtils' : undefined, paginationInfiniteScroll ? 'ParseLinks' : undefined].filter(Boolean).join(', ') %> } from 'app/core/util';
 <%_ } _%>
+import { Alert, AlertError } from 'app/shared/alert';
+import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+import { Filter, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-import { Filter, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+<%_ if (paginationPagination) { _%>
+import { ItemCount } from 'app/shared/pagination';
 <%_ } _%>
+import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+<%_ if (!readOnly) { _%>
+import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
+<%_ } _%>
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
 @Component({
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>',

@@ -17,7 +17,9 @@
  limitations under the License.
 -%>
 import { fileURLToPath } from 'node:url'
-import { mergeConfig, defineConfig } from 'vitest/config';
+
+import { defineConfig, mergeConfig } from 'vitest/config';
+
 import viteConfig from './vite.config.ts'
 
 export default mergeConfig(
@@ -34,9 +36,12 @@ export default mergeConfig(
       },
       coverage: {
         provider: 'v8',
-        statements: 85,
-        branches: 75,
-        lines: 85,
+        thresholds: {
+          statements: 70,
+          branches: 55,
+          functions: 40,
+          lines: 70,
+        },
         reportsDirectory: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>vite-coverage', import.meta.url)),
       },
     },

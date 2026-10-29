@@ -18,11 +18,16 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
-import { shallowMount } from '@vue/test-utils';
+
 <%_ if (!authenticationTypeOauth2) { _%>
 import { createTestingPinia } from '@pinia/testing';
+<%_ } _%>
+import { shallowMount } from '@vue/test-utils';
+
+<%_ if (!authenticationTypeOauth2) { _%>
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
+
 import Home from './home.vue';
 
 type HomeComponentType = InstanceType<typeof Home>;

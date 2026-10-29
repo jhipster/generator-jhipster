@@ -73,4 +73,28 @@ describe(`generator - ${generator}`, () => {
 `);
     });
   });
+
+  for (const [clientFramework, testResult, coverage] of [
+    ['angular', 'TESTS-results-sonar-vitest.xml', 'outputs.file("build/test-results/lcov.info")'],
+    ['react', 'TESTS-results-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],
+    ['vue', 'TESTS-results-vitest.xml', 'outputs.dir("build/vite-coverage/")'],
+  ] as const) {
+    describe(`with gradle build tool and ${clientFramework}`, () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ clientFramework })
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withGradleBuildTool();
+      });
+
+      it('should declare the files written by Vitest as webapp_test outputs', () => {
+        const file = 'buildSrc/src/main/groovy/jhipster.node-gradle-conventions.gradle';
+        result.assertFileContent(file, `outputs.file("build/test-results/${testResult}")`);
+        result.assertFileContent(file, coverage);
+        result.assertNoFileContent(file, 'TESTS-results-jest.xml');
+      });
+    });
+  }
 });

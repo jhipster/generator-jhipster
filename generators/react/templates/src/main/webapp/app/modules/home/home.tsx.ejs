@@ -20,17 +20,19 @@ import './home.scss';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import { useEffect } from 'react';
+<%_ } _%>
+import { Alert, Col, Row } from 'react-bootstrap';
+import { Translate } from 'react-jhipster';
+<%_ if (authenticationTypeOauth2) { _%>
 import { useLocation, useNavigate } from 'react-router';
 <%_ } else { _%>
 import { Link } from 'react-router';
 <%_ } _%>
-import { Translate } from 'react-jhipster';
-import { Row, Col, Alert } from 'react-bootstrap';
 
-<%_ if (authenticationTypeOauth2) { _%>
-import { getLoginUrl, REDIRECT_URL } from 'app/shared/util/url-utils';
-<%_ } _%>
 import { useAppSelector } from 'app/config/store';
+<%_ if (authenticationTypeOauth2) { _%>
+import { REDIRECT_URL, getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
 
 export const Home = () => {
   const account = useAppSelector(state => state.authentication.account);
@@ -53,7 +55,7 @@ export const Home = () => {
         <span className="hipster rounded" />
       </Col>
       <Col md="9">
-        <h1 className="display-4"><Translate contentKey="home.title">Welcome, <%- hipsterName %>!</Translate></h1>
+        <h1 className="display-4"><Translate contentKey="home.title">Welcome, <%- hipsterName %>!</Translate> (<%- humanizedBaseName %>)</h1>
         <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
         {
           (account?.login) ? (

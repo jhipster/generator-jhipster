@@ -16,30 +16,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, LOCALE_ID, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
+import { NavigationError, Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap/datepicker';
+import { environment } from 'environments/environment';
+
+import { authExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
 <%_ if (authenticationTypeJwt) { _%>
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
 import { errorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
 import { notificationInterceptor } from 'app/core/interceptor/notification.interceptor';
-import { authExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
 
 import './config/dayjs';
-<%_ if (enableTranslation) { _%>
-import { provideTranslation, FindLanguageFromKeyPipe } from 'app/shared/language';
-<%_ } _%>
 <%_ if (enableTranslation && microfrontend) { _%>
 import { provideMicrofrontendTranslation } from 'app/core/microfrontend/microfrontend-translation.loader';
 <%_ } _%>
-import { environment } from 'environments/environment';
+<%_ if (enableTranslation) { _%>
+import { FindLanguageFromKeyPipe, provideTranslation } from 'app/shared/language';
+<%_ } _%>
+
+import { AppPageTitleStrategy } from './app-page-title-strategy';
 import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
-import { AppPageTitleStrategy } from './app-page-title-strategy';
 
 const routerFeatures: RouterFeatures[] = [
   withComponentInputBinding(),

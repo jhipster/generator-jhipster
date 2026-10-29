@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount } from '@vue/test-utils';
+
+import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import Configuration from './configuration.vue';
@@ -89,5 +90,45 @@ describe('Configuration Component', () => {
       expect(configuration.orderProp).toBe('prefix');
       expect(configuration.reverse).toBe(!rev);
     });
+  });
+});
+
+describe('Configuration view', () => {
+  it('should list the configuration, sort it and filter it', async () => {
+    // GIVEN
+    vi.spyOn(axios, 'get').mockImplementation((url?: string) =>
+      Promise.resolve({
+        data:
+          url === 'management/env'
+            ? { propertySources: [{ name: 'source', properties: { key1: { value: 'value1' } } }] }
+            : {
+                contexts: {
+                  bootstrap: { beans: {} },
+                  jhipsterVue: {
+                    beans: {
+                      b: { prefix: 'B', properties: { key2: 'value2' } },
+                      a: { prefix: 'A', properties: { key3: 'value3' } },
+                      a2: { prefix: 'A' },
+                    },
+                  },
+                },
+              },
+      }),
+    );
+    const wrapper = shallowMount(Configuration, { global: { stubs: { 'jhi-sort-indicator': true } } });
+    await flushPromises();
+
+    // WHEN
+    for (const element of wrapper.findAll('th')) {
+      await element.trigger('click');
+    }
+    await wrapper.find('input').setValue('b');
+
+    // THEN
+    expect(wrapper.vm.configuration.map(({ prefix }) => prefix)).toEqual(['A', 'A', 'B']);
+    expect(wrapper.vm.configKeys).toEqual([['key3'], ['key2']]);
+    expect(wrapper.vm.allConfiguration).toEqual({ source: [{ key: 'key1', val: 'value1' }] });
+    expect(wrapper.vm.filteredConfiguration).toEqual([expect.objectContaining({ prefix: 'B' })]);
+    expect(wrapper.text()).toContain('value2');
   });
 });

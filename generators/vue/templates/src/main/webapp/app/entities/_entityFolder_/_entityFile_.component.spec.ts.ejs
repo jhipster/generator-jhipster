@@ -18,20 +18,22 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount, type MountingOptions } from '@vue/test-utils';
+
+import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+<%_ if (anyFieldIsDateDerived) { _%>
+import dayjs from 'dayjs';
+<%_ } _%>
+
+import AlertService from '@/shared/alert/alert.service';
+import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/testing/stubs';
 
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';
-import AlertService from '@/shared/alert/alert.service';
+
+const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
 
 type <%- entityAngularName %>ComponentType = InstanceType<typeof <%- entityAngularName %>>;
 
-const bModalStub = {
-  render: () => {},
-  methods: {
-    hide: () => {},
-    show: () => {}
-  }
-};
 
 describe('Component Tests', () => {
   let alertService: AlertService;
@@ -62,14 +64,14 @@ describe('Component Tests', () => {
           jhiItemCount: true,
           bPagination: true,
 <%_ } _%>
-          bModal: bModalStub as any,
+          bModal: bModalStub,
           'font-awesome-icon': true,
           'b-badge': true,
 <%_ if (!paginationNo) { _%>
           'jhi-sort-indicator': true,
 <%_ } _%>
-          'b-button': true,
-          'router-link': true,
+          'b-button': bButtonStub,
+          'router-link': routerLinkStub,
         },
         directives: {
           'b-modal': {},
@@ -77,14 +79,14 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
-        }
+        },
       };
     });
 
     describe('Mount', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
 
         // WHEN
         const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
@@ -124,7 +126,7 @@ describe('Component Tests', () => {
 
       it('should load a page', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
 
         // WHEN
         comp.page = 2;
@@ -150,7 +152,7 @@ describe('Component Tests', () => {
         comp.page = 2;
         await comp.$nextTick();
         <%- entityInstance %>ServiceStub.retrieve.mockReset();
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
 
         // WHEN
         comp.clear();
@@ -193,6 +195,61 @@ describe('Component Tests', () => {
         expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(1);
       });
 <%_ } _%>
+    });
+
+    describe('Actions', () => {
+      it('Should handle the actions of the list', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
+<%_ if (!readOnly) { _%>
+        <%- entityInstance %>ServiceStub.delete.mockResolvedValue({});
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+        vi.stubGlobal('atob', () => '');
+        vi.spyOn(globalThis, 'open').mockReturnValue(null);
+<%_ } _%>
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        await triggerAll(wrapper, 'button, th, a', 'click');
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.retrieve.mock.calls.length).toBeGreaterThan(1);
+<%_ if (!readOnly) { _%>
+        expect(<%- entityInstance %>ServiceStub.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
+<%_ } _%>
+      });
+    });
+
+    describe('Errors and defaults', () => {
+      it('Should show the error of a failed load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.retrieve.mockRejectedValue({ response: { status: 500 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledWith({ status: 500 });
+      });
+
+      it('Should use the default service', async () => {
+        // GIVEN
+        const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
+
+        // WHEN
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: { alertService } } });
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.<%- entityInstancePlural %>).toEqual([]);
+        expect(get).toHaveBeenCalled();
+        get.mockRestore();
+      });
     });
   });
 });

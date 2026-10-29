@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Service } from "@angular/core";
+import { Service, inject } from "@angular/core";
 import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from "@angular/router";
+
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from "@ngx-translate/core";
 <%_ } _%>

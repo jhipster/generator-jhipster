@@ -59,23 +59,11 @@ processResources {
 <%_ } _%>
     inputs.property('version', version)
     inputs.property('springProfiles', springProfiles)
-    filesMatching("**/application.yml") {
+    filesMatching("config/**/*.yml") {
         filter {
-            it.replace("@project.version@", version)
-        }
-<%_ if (!serviceDiscoveryAny) { _%>
-        filter {
-            it.replace("@spring.profiles.active@", springProfiles)
-        }
-<%_ } _%>
-    }
-<%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
-    filesMatching("**/bootstrap.yml") {
-        filter {
-            it.replace("@spring.profiles.active@", springProfiles)
+            it.replace("@project.version@", version).replace("@spring.profiles.active@", springProfiles)
         }
     }
-<%_ } _%>
 }
 
 def integrationTest = tasks.register('integrationTest', Test) {

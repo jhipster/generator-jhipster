@@ -30,6 +30,7 @@ export * from './prepare-entity.ts';
 export * from './prepare-field.ts';
 export { default as prepareRelationship } from './prepare-relationship.ts';
 export * from './relationship.ts';
+export * from './required-relationships.ts';
 export * from './task-type-inference.ts';
 export * from '../../base/support/timestamp.ts';
 export * from './update-application-entities-transform.ts';

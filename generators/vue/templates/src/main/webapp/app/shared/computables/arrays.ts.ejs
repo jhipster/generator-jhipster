@@ -40,9 +40,9 @@ export const orderBy = (array: any[], opts: OrderByOptions) => {
   const { orderByProp, reverse = false } = opts;
   let sorted: any[];
   if (array.some(el => typeof el[orderByProp] === 'string')) {
-    sorted = array.sort((a, b) => compareString(asString(a), asString(b)));
+    sorted = array.sort((a, b) => compareString(asString(a[orderByProp]), asString(b[orderByProp])));
   } else {
-    sorted = array.sort((a, b) => compareAny(a, b));
+    sorted = array.sort((a, b) => compareAny(a[orderByProp], b[orderByProp]));
   }
   if (reverse) {
     return sorted.slice().reverse();
@@ -57,7 +57,7 @@ const filterObject = (val: any, opts: FilterByOptions): boolean => {
   if (typeof val === 'string') {
     return val.toLocaleLowerCase().startsWith(filterByTerm);
   }
-  if (typeof val === 'object') {
+  if (val !== null && typeof val === 'object') {
     if (filterMaxDepth < 0) return false;
     for (const value of Object.values(val)) {
       if (filterObject(value, { filterByTerm, filterMaxDepth: filterMaxDepth - 1 })) return true;

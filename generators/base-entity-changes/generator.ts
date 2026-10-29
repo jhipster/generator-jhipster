@@ -175,11 +175,11 @@ export default abstract class BaseEntityChangesGenerator<
       const newFieldNames: string[] = newFields.filter(field => !field.id).map(field => field.fieldName);
 
       // Calculate new fields
-      const addedFieldNames = newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName));
-      const addedFields = newFields.filter(field => addedFieldNames.includes(field.fieldName));
+      const addedFieldNames = new Set(newFieldNames.filter(fieldName => !oldFieldNames.includes(fieldName)));
+      const addedFields = newFields.filter(field => addedFieldNames.has(field.fieldName));
       // Calculate removed fields
-      const removedFieldNames = oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName));
-      const removedFields = oldFields.filter(field => removedFieldNames.includes(field.fieldName));
+      const removedFieldNames = new Set(oldFieldNames.filter(fieldName => !newFieldNames.includes(fieldName)));
+      const removedFields = oldFields.filter(field => removedFieldNames.has(field.fieldName));
 
       const oldRelationships = oldConfig.relationships || [];
 
@@ -226,7 +226,7 @@ export default abstract class BaseEntityChangesGenerator<
 
       // find the old fields that have not been deleted anyway or otherwise where the default value is different on the same new field
       const removedDefaultValueFields = oldFieldsWithDefaultValues
-        .filter(oldField => !removedFieldNames.includes(oldField.fieldName))
+        .filter(oldField => !removedFieldNames.has(oldField.fieldName))
         .filter(oldField => {
           // field was not removed, so check its default value
           const newField = newFields.find(field => field.fieldName === oldField.fieldName);
@@ -235,7 +235,7 @@ export default abstract class BaseEntityChangesGenerator<
 
       // find the new fields that have not been added newly anyway or otherwise where the old field had a different default value
       const addedDefaultValueFields = newFieldsWithDefaultValues
-        .filter(newField => !addedFieldNames.includes(newField.fieldName))
+        .filter(newField => !addedFieldNames.has(newField.fieldName))
         .filter(newField => {
           // field was not added newly, so check its default value
           const oldField = oldFields.find(field => field.fieldName === newField.fieldName);

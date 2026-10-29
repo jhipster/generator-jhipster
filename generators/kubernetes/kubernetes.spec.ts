@@ -134,7 +134,7 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
+      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /-bootstrap-expect=3/);
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
@@ -187,6 +187,48 @@ describe('generator - Kubernetes', () => {
         './kubernetes/mspsql-k8s/mspsql-postgresql.yml',
         `postgresql-password: ${Buffer.from('given-password').toString('base64')}`,
       );
+    });
+  });
+
+  describe('reactive postgresql microservice', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspaceApplicationAtFolder('reactive-psql', {
+          applicationType: 'microservice',
+          baseName: 'msreactivepsql',
+          prodDatabaseType: 'postgresql',
+          reactive: true,
+          serverPort: 8081,
+        })
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps: ['reactive-psql'],
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+    it('should match deployment snapshot', function () {
+      expect(runResult.getSnapshot('**/msreactivepsql-deployment.yml')).toMatchSnapshot();
+    });
+    it('sets the r2dbc username and no jdbc datasource', () => {
+      runResult.assertFileContent('./kubernetes/msreactivepsql-k8s/msreactivepsql-deployment.yml', /SPRING_R2DBC_USERNAME/);
+      runResult.assertNoFileContent('./kubernetes/msreactivepsql-k8s/msreactivepsql-deployment.yml', /SPRING_DATASOURCE_/);
     });
   });
 
@@ -829,6 +871,90 @@ describe('generator - Kubernetes', () => {
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
+    });
+  });
+
+  describe('kubectl check', () => {
+    const kubectlCalls = () =>
+      runResult
+        .spawnStub!.mock.calls.map(({ arguments: [method, command, options] }: { arguments: [string, string, unknown] }) => ({
+          method,
+          command,
+          options,
+        }))
+        .filter(({ command }: { command: string }) => command.startsWith('kubectl version'));
+    const kubectlWarnings = () =>
+      (runResult.env.adapter.log as any).warn.mock.calls
+        .map(({ arguments: [message] }: { arguments: [string] }) => message)
+        .filter((message: string) => message.includes('kubectl'));
+
+    describe('with kubectl installed', () => {
+      before(async () => {
+        const chosenApps = ['01-gateway'];
+
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        await helpers.runJHipsterDeployment(GENERATOR_KUBERNETES).withSpawnMock().withOptions({ skipChecks: false }).withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps,
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+      });
+      it('asks kubectl for its client version only, without failing the generator', () => {
+        expect(kubectlCalls()).toEqual([
+          { method: 'spawnCommand', command: 'kubectl version --client', options: { reject: false, stdio: 'pipe' } },
+        ]);
+      });
+      it('does not warn', () => {
+        expect(kubectlWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with kubectl missing', () => {
+      before(async () => {
+        const chosenApps = ['01-gateway'];
+
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES)
+          .withSpawnMock((method: string, command: string) =>
+            method === 'spawnCommand' && command.startsWith('kubectl version') ?
+              Promise.resolve({ exitCode: undefined, stdout: '', stderr: 'spawn kubectl ENOENT' })
+            : Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }),
+          )
+          .withOptions({ skipChecks: false })
+          .withAnswers({
+            deploymentApplicationType: 'microservice',
+            directoryPath: '../',
+            chosenApps,
+            dockerRepositoryName: 'jhipster',
+            dockerPushCommand: 'docker push',
+            kubernetesNamespace: 'default',
+            kubernetesServiceType: 'LoadBalancer',
+            clusteredDbApps: [],
+            kubernetesUseDynamicStorage: true,
+            kubernetesStorageClassName: '',
+          });
+      });
+      it('warns that kubectl is missing and where to install it', () => {
+        expect(kubectlWarnings()).toEqual([
+          'kubectl is not installed on your computer or does not run.\nMake sure you have kubectl installed. Read https://kubernetes.io/docs/tasks/tools/\n',
+        ]);
+      });
     });
   });
 

@@ -36,7 +36,6 @@
             </div>
         </div>
 <%_ } _%>
-        <br/>
         <div class="alert alert-warning" v-if="!isFetching && <%- entityInstancePlural %>?.length === 0">
             <span>{{ t$('<%- i18nKeyPrefix %>.home.notFound') }}</span>
         </div>
@@ -144,7 +143,7 @@
                                    variant="danger"
                                    class="btn btn-sm"
                                    data-cy="entityDeleteButton">
-                                <font-awesome-icon icon="times"></font-awesome-icon>
+                                <font-awesome-icon icon="trash"></font-awesome-icon>
                                 <span class="d-none d-md-inline">{{ t$('entity.action.delete') }}</span>
                             </b-button>
 <%_ } _%>
@@ -160,17 +159,19 @@
             </table>
         </div>
 <%_ if (!readOnly) { _%>
-        <b-modal ref="removeEntity" id="removeEntity" >
+        <b-modal ref="removeEntity" id="removeEntity" title-tag="h4">
             <template #title>
                 <span id="<%- i18nKeyPrefix %>.delete.question" data-cy="<%- entityInstance %>DeleteDialogHeading">{{ t$('entity.delete.title') }}</span>
             </template>
-            <div class="modal-body">
-                <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
-            </div>
+            <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
             <template #footer>
                 <div>
-                    <button type="button" class="btn btn-secondary" @click="closeDialog()">{{ t$('entity.action.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">{{ t$('entity.action.delete') }}</button>
+                    <button type="button" class="btn btn-secondary" @click="closeDialog()">
+                        <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.cancel') }}</span>
+                    </button>
+                    <button type="button" class="btn btn-danger" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">
+                        <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+                    </button>
                 </div>
             </template>
         </b-modal>

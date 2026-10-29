@@ -16,20 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import axios from 'axios';
+
 import administration, {
+<%_ if (withAdminUi) { _%>
+  getConfigurations,
+  getEnv,
+<%_ } _%>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   getGatewayRoutes,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
+  getLoggers,
   getSystemHealth,
   getSystemMetrics,
   getSystemThreadDump,
-  getLoggers,
-  getConfigurations,
-  getEnv,
   setLoggers,
   <%_ if (communicationSpringWebsocket) { _%>
   websocketActivityMessage,
@@ -91,7 +94,7 @@ describe('Administration reducer tests', () => {
           getSystemMetrics.pending.type,
           getSystemThreadDump.pending.type,
           getConfigurations.pending.type,
-          getEnv.pending.type
+          getEnv.pending.type,
 <%_ } _%>
         ],
         {},
@@ -144,7 +147,7 @@ describe('Administration reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        gateway: { routes: payload.data }
+        gateway: { routes: payload.data },
       });
     });
   <%_ } _%>
@@ -234,7 +237,7 @@ describe('Administration reducer tests', () => {
       const toTest = administration(undefined, websocketActivityMessage(payload));
 
       expect(toTest).toMatchObject({
-        tracker: { activities: [payload] }
+        tracker: { activities: [payload] },
       });
     });
 
@@ -245,7 +248,7 @@ describe('Administration reducer tests', () => {
       const secondState = administration(firstState, websocketActivityMessage(secondPayload));
 
       expect(secondState).toMatchObject({
-        tracker: { activities: [secondPayload] }
+        tracker: { activities: [secondPayload] },
       });
     });
 
@@ -256,7 +259,7 @@ describe('Administration reducer tests', () => {
       const secondState = administration(firstState, websocketActivityMessage(secondPayload));
 
       expect(secondState).toMatchObject({
-        tracker: { activities: [] }
+        tracker: { activities: [] },
       });
     });
   });

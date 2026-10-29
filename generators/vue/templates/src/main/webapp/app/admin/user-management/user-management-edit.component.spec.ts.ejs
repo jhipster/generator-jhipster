@@ -18,12 +18,14 @@
 -%>
 <%_ const tsKeyId = user.primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount, type MountingOptions } from '@vue/test-utils';
-import axios from 'axios';
 import { type RouteLocation } from 'vue-router';
+
+import { type MountingOptions, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
 
 import AlertService from '@/shared/alert/alert.service';
 import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
+
 import UserManagementEdit from './user-management-edit.vue';
 
 type UserManagementEditComponentType = InstanceType<typeof UserManagementEdit>;
@@ -93,7 +95,7 @@ describe('UserManagementEdit Component', () => {
 
       // THEN
 <%_ if (generateBuiltInAuthorityEntity) { _%>
-      expect(axiosStub.get).toHaveBeenCalledWith('api/authorities')
+      expect(axiosStub.get).toHaveBeenCalledWith('api/authorities');
 <%_ } _%>
       expect(axiosStub.get).toHaveBeenCalledWith('api/admin/users/' + <%- tsKeyId %>);
     });
@@ -121,6 +123,30 @@ describe('UserManagementEdit Component', () => {
 <%_ } else { _%>
       expect(axiosStub.get).not.toHaveBeenCalled();
 <%_ } _%>
+    });
+  });
+
+  describe('validation', () => {
+    it.each(['jhi', 'jhi@pster.net', 'jhi+tag@pster.net', 'jhi.pster@mail.pster.net'])('Should accept the login %s', async login => {
+      axiosStub.get.mockResolvedValue({ data: [] });
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+
+      userManagementEdit.userAccount.login = login;
+      await userManagementEdit.$nextTick();
+
+      expect(userManagementEdit.v$.userAccount.login.$invalid).toBe(false);
+    });
+
+    it('Should reject a login with invalid characters', async () => {
+      axiosStub.get.mockResolvedValue({ data: [] });
+      const wrapper = shallowMount(UserManagementEdit, { global: mountOptions });
+      const userManagementEdit: UserManagementEditComponentType = wrapper.vm;
+
+      userManagementEdit.userAccount.login = 'jhi pster';
+      await userManagementEdit.$nextTick();
+
+      expect(userManagementEdit.v$.userAccount.login.$invalid).toBe(true);
     });
   });
 

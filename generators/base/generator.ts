@@ -33,7 +33,7 @@ import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import type { EditorMetadata } from '../base-core/api.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { CustomObjectsOf, GenericTask } from '../base-core/types.ts';
+import type { CustomObjectsOf, GenericTask, TaskGroup } from '../base-core/types.ts';
 import { isDockerComposeAvailable } from '../docker/support/check-docker.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
@@ -176,7 +176,7 @@ export default class BaseGenerator<
   /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
    */
-  delegateTasksToBlueprint<TaskGroupType>(tasksGetter: () => TaskGroupType): TaskGroupType {
+  delegateTasksToBlueprint<TaskGroupType extends TaskGroup<PropertyKey>>(tasksGetter: () => TaskGroupType): TaskGroupType {
     return this.delegateToBlueprint ? ({} as TaskGroupType) : tasksGetter();
   }
 
@@ -314,7 +314,7 @@ export default class BaseGenerator<
   }
 
   /**
-   * Generate a timestamp to be used by Liquibase changelogs.
+   * Generate the changelog date of an entity, after the last one given, stored as `lastChangelogTimestamp`.
    */
   nextTimestamp(): string {
     if (this.features.uniqueGlobally) {
@@ -322,7 +322,8 @@ export default class BaseGenerator<
     }
     // Milliseconds are ignored for changelogDate.
     const toSeconds = (time: number) => Math.floor(time / 1000) * 1000;
-    const { lastLiquibaseTimestamp = 0 } = this.jhipsterConfig;
+    // lastLiquibaseTimestamp is its former name, read from the projects that have it.
+    const { lastChangelogTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp ?? 0 } = this.jhipsterConfig;
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let next: number;
     if (this.options.reproducible || creationTimestamp) {
@@ -330,7 +331,7 @@ export default class BaseGenerator<
       const previous = this.getContextData<Date>(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
         factory: () =>
           new Date(
-            Math.max(new Date(creationTimestamp ?? this.config.get('creationTimestamp') ?? Date.now()).getTime(), lastLiquibaseTimestamp),
+            Math.max(new Date(creationTimestamp ?? this.config.get('creationTimestamp') ?? Date.now()).getTime(), lastChangelogTimestamp),
           ),
       });
       next = toSeconds(previous.getTime()) + 60_000;
@@ -338,9 +339,10 @@ export default class BaseGenerator<
     } else {
       // The stored timestamp can be in the future, after a reproducible run.
       const now = toSeconds(Date.now());
-      next = lastLiquibaseTimestamp >= now ? toSeconds(lastLiquibaseTimestamp) + 1000 : now;
+      next = lastChangelogTimestamp >= now ? toSeconds(lastChangelogTimestamp) + 1000 : now;
     }
-    this.jhipsterConfig.lastLiquibaseTimestamp = next;
+    this.jhipsterConfig.lastChangelogTimestamp = next;
+    this.config.delete('lastLiquibaseTimestamp');
     return formatDateForChangelog(new Date(next));
   }
 
@@ -395,7 +397,7 @@ export default class BaseGenerator<
    */
   asInitializingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InitializingTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['InitializingTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -411,9 +413,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PromptingTaskParam']>> {
+  asPromptingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -431,7 +431,7 @@ export default class BaseGenerator<
    */
   asConfiguringTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -447,9 +447,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ComposingTaskParam']>> {
+  asComposingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -467,7 +465,7 @@ export default class BaseGenerator<
    */
   asComposingComponentTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ComposingTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -484,9 +482,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['LoadingTaskParam']>> {
+  asLoadingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -505,7 +501,7 @@ export default class BaseGenerator<
    */
   asComposingBootstrapTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingBootstrapTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['ComposingBootstrapTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -521,9 +517,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PreparingTaskParam']>> {
+  asPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -541,7 +535,7 @@ export default class BaseGenerator<
    */
   asPostPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostPreparingTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostPreparingTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -557,9 +551,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asDefaultTaskGroup<const T extends Record<string, GenericTask<this, Tasks['DefaultTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['DefaultTaskParam']>> {
+  asDefaultTaskGroup<const T extends Record<string, GenericTask<this, Tasks['DefaultTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -575,9 +567,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>> {
+  asWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -595,7 +585,7 @@ export default class BaseGenerator<
    */
   asPostWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostWritingTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -605,8 +595,8 @@ export default class BaseGenerator<
    */
   asWritingObjectsTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam'] & CustomObjectsOf<this>>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>> {
-    return taskGroup as unknown as Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>>;
+  ): TaskGroup<keyof T> {
+    return taskGroup;
   }
 
   /**
@@ -615,8 +605,8 @@ export default class BaseGenerator<
    */
   asPostWritingObjectsTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostWritingTaskParam'] & CustomObjectsOf<this>>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>> {
-    return taskGroup as unknown as Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>>;
+  ): TaskGroup<keyof T> {
+    return taskGroup;
   }
 
   /**
@@ -631,9 +621,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InstallTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['InstallTaskParam']>> {
+  asInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InstallTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -651,7 +639,7 @@ export default class BaseGenerator<
    */
   asPostInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostInstallTaskParam']>>>(
     taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['PostInstallTaskParam']>> {
+  ): TaskGroup<keyof T> {
     return taskGroup;
   }
 
@@ -667,9 +655,7 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asEndTaskGroup<const T extends Record<string, GenericTask<this, Tasks['EndTaskParam']>>>(
-    taskGroup: T,
-  ): Record<keyof T, GenericTask<any, Tasks['EndTaskParam']>> {
+  asEndTaskGroup<const T extends Record<string, GenericTask<this, Tasks['EndTaskParam']>>>(taskGroup: T): TaskGroup<keyof T> {
     return taskGroup;
   }
 

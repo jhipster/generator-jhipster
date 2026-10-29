@@ -119,18 +119,18 @@ New priorities will have as first argument relevant resources to the priority/ta
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-The implementation will require changes to `yeoman-generator` in order to allow tasks arguments and extract tasks to execute them for more than once (each entity/language).
+The implementation will require changes to `yeoman-generator` in order to allow tasks arguments and extract tasks to execute them more than once (each entity/language).
 
 As advantages, we can list:
 
 - Fewer generators.
-- Remove some duplicated codes from entity related generators.
+- Remove some duplicated code from entity related generators.
 
 ## Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
 
-- A more granular implementation is required? `configuringEachEntityField`, others?
+- Is a more granular implementation required? `configuringEachEntityField`, others?
 
 ## Implementation
 

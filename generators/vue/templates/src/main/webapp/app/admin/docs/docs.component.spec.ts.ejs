@@ -16,6 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-.footer {
-  height: 50px;
-}
+import { describe, expect, it } from 'vitest';
+
+import { shallowMount } from '@vue/test-utils';
+
+import Docs from './docs.vue';
+
+describe('Docs Component', () => {
+  it('should show the API documentation', () => {
+    // WHEN
+    const wrapper = shallowMount(Docs);
+
+    // THEN
+    expect(wrapper.find('iframe').attributes('src')).toBe('/swagger-ui/index.html');
+  });
+});

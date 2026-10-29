@@ -49,6 +49,30 @@ export const foo = 'bar';
 `);
     });
 
+    it('should order an import block needing more than one lint of fixes', async () => {
+      const modules = Array.from({ length: 30 }, (_, index) => `module${String(index).padStart(2, '0')}`);
+      const file = {
+        path: 'foo.ts',
+        contents: Buffer.from(`${modules
+          .toReversed()
+          .map(module => `import { ${module} } from '${module}';`)
+          .join('\n')}
+
+export const foo = [${modules.join(', ')}];
+`),
+      };
+      setModifiedFileState(file);
+      await pipeline(
+        Readable.from([file]),
+        await createESLintTransform(),
+        transform(() => undefined),
+      );
+      expect(file.contents.toString()).toBe(`${modules.map(module => `import { ${module} } from '${module}';`).join('\n')}
+
+export const foo = [${modules.join(', ')}];
+`);
+    });
+
     it('should remove the useless path segments of a relative import of a file not on disk', async () => {
       const file = {
         path: '/not-on-disk/src/module/auth.module.ts',

@@ -16,17 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { <%- enableTranslation ? 'beforeAll, ' : '' %>describe, expect, it, vi } from 'vitest';
 import type { JSX } from 'react';
-import { MemoryRouter, Route, Routes } from 'react-router';
-import { render } from '@testing-library/react';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
+import { MemoryRouter, Route, Routes } from 'react-router';
+
 import { configureStore } from '@reduxjs/toolkit';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { <%- enableTranslation ? 'beforeAll, ' : '' %>describe, expect, it, vi } from 'vitest';
 
 import { Authority } from 'app/shared/jhipster/constants';
+
 import PrivateRoute, { hasAnyAuthority } from './private-route';
 
 const TestComp = () => <div>Test</div>;

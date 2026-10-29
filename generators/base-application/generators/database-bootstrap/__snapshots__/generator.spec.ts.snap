@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - base-application:database-bootstrap with defaults options should write no file of its own 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

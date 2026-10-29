@@ -16,12 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (authenticationTypeJwt) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
+
 import { configureStore, createReducer } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
@@ -58,7 +59,7 @@ describe('Authentication reducer tests', () => {
         loginSuccess: false,
         loginError: false, // Errors returned from server side
 <%_ } _%>
-        redirectMessage: null
+        redirectMessage: null,
       });
       expect(isAccountEmpty(toTest)).toBe(true);
     });
@@ -131,7 +132,7 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         loading: false,
         isAuthenticated: false,
-        errorMessage: error.message
+        errorMessage: error.message,
       });
       expect(isAccountEmpty(toTest)).toBe(true);
     });
@@ -184,7 +185,7 @@ describe('Authentication reducer tests', () => {
       const toTest = authentication({ ...initialState, isAuthenticated: true }, clearAuth());
       expect(toTest).toMatchObject({
         loading: false,
-        isAuthenticated: false
+        isAuthenticated: false,
       });
     });
   });

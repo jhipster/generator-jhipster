@@ -20,44 +20,52 @@
               <span>{{ key }}</span> {{ formatNumber1(entry.used / 1048576) }}M
             </span>
             <div>Committed : {{ formatNumber1(entry.committed / 1048576) }}M</div>
-            <b-progress v-if="entry.max !== -1" variant="success" animated :max="entry.max" striped>
-              <b-progress-bar :value="entry.used" :label="formatNumber1((entry.used * 100) / entry.max) + '%'"> </b-progress-bar>
+            <b-progress v-if="entry.max !== -1" :max="entry.max">
+              <b-progress-bar variant="success" striped :value="entry.used" :label="formatNumber1((entry.used * 100) / entry.max) + '%'"> </b-progress-bar>
             </b-progress>
           </div>
         </div>
       </div>
       <div class="col-md-4">
         <h4>{{ t$('metrics.jvm.threads.title') }}</h4>
-        <span><span>{{ t$('metrics.jvm.threads.runnable') }}</span> {{ threadStats.threadDumpRunnable }}</span>
-        <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
-          <b-progress-bar
+        <span
+          ><span>{{ t$('metrics.jvm.threads.runnable') }}</span> {{ threadStats.threadDumpRunnable }}</span
+        >
+        <b-progress :max="threadStats.threadDumpAll">
+          <b-progress-bar variant="success" striped
             :value="threadStats.threadDumpRunnable"
             :label="formatNumber1((threadStats.threadDumpRunnable * 100) / threadStats.threadDumpAll) + '%'"
           >
           </b-progress-bar>
         </b-progress>
 
-        <span><span>{{ t$('metrics.jvm.threads.timedwaiting') }}</span> ({{ threadStats.threadDumpTimedWaiting }})</span>
-        <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
-          <b-progress-bar
+        <span
+          ><span>{{ t$('metrics.jvm.threads.timedwaiting') }}</span> ({{ threadStats.threadDumpTimedWaiting }})</span
+        >
+        <b-progress :max="threadStats.threadDumpAll">
+          <b-progress-bar variant="warning" striped
             :value="threadStats.threadDumpTimedWaiting"
             :label="formatNumber1((threadStats.threadDumpTimedWaiting * 100) / threadStats.threadDumpAll) + '%'"
           >
           </b-progress-bar>
         </b-progress>
 
-        <span><span>{{ t$('metrics.jvm.threads.waiting') }}</span> ({{ threadStats.threadDumpWaiting }})</span>
-        <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
-          <b-progress-bar
+        <span
+          ><span>{{ t$('metrics.jvm.threads.waiting') }}</span> ({{ threadStats.threadDumpWaiting }})</span
+        >
+        <b-progress :max="threadStats.threadDumpAll">
+          <b-progress-bar variant="warning" striped
             :value="threadStats.threadDumpWaiting"
             :label="formatNumber1((threadStats.threadDumpWaiting * 100) / threadStats.threadDumpAll) + '%'"
           >
           </b-progress-bar>
         </b-progress>
 
-        <span><span>{{ t$('metrics.jvm.threads.blocked') }}</span> ({{ threadStats.threadDumpBlocked }})</span>
-        <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
-          <b-progress-bar
+        <span
+          ><span>{{ t$('metrics.jvm.threads.blocked') }}</span> ({{ threadStats.threadDumpBlocked }})</span
+        >
+        <b-progress :max="threadStats.threadDumpAll">
+          <b-progress-bar variant="danger" striped
             :value="threadStats.threadDumpBlocked"
             :label="formatNumber1((threadStats.threadDumpBlocked * 100) / threadStats.threadDumpAll) + '%'"
           >
@@ -65,11 +73,13 @@
         </b-progress>
 
         <span
-          >Total: {{ threadStats.threadDumpAll }}
-          <a class="hand" @click="openModal()">
-            <font-awesome-icon icon="eye"></font-awesome-icon>
-          </a>
-        </span>
+          >Total: {{ threadStats.threadDumpAll }}</span
+        >
+        <div>
+          <button class="hand btn btn-primary btn-sm" @click="openModal()">
+            <span>Expand</span>
+          </button>
+        </div>
       </div>
       <div class="col-md-4">
         <h4>System</h4>
@@ -85,8 +95,8 @@
           <div class="col-md-9">Process CPU usage</div>
           <div class="col-md-3 text-end">{{ formatNumber2(100 * metrics.processMetrics['process.cpu.usage']) }} %</div>
         </div>
-        <b-progress variant="success" :max="100" striped>
-          <b-progress-bar
+        <b-progress :max="100">
+          <b-progress-bar variant="success" striped
             :value="100 * metrics.processMetrics['process.cpu.usage']"
             :label="formatNumber1(100 * metrics.processMetrics['process.cpu.usage']) + '%'"
           >
@@ -96,8 +106,8 @@
           <div class="col-md-9">System CPU usage</div>
           <div class="col-md-3 text-end">{{ formatNumber2(100 * metrics.processMetrics['system.cpu.usage']) }} %</div>
         </div>
-        <b-progress variant="success" :max="100" striped>
-          <b-progress-bar
+        <b-progress :max="100">
+          <b-progress-bar variant="success" striped
             :value="100 * metrics.processMetrics['system.cpu.usage']"
             :label="formatNumber1(100 * metrics.processMetrics['system.cpu.usage']) + '%'"
           >
@@ -130,8 +140,8 @@
             GC Live Data Size/GC Max Data Size ({{ formatNumber1(metrics.garbageCollector['jvm.gc.live.data.size'] / 1048576) }}M /
             {{ formatNumber1(metrics.garbageCollector['jvm.gc.max.data.size'] / 1048576) }}M)
           </span>
-          <b-progress variant="success" :max="metrics.garbageCollector['jvm.gc.max.data.size']" striped>
-            <b-progress-bar
+          <b-progress :max="metrics.garbageCollector['jvm.gc.max.data.size']">
+            <b-progress-bar variant="success" striped
               :value="metrics.garbageCollector['jvm.gc.live.data.size']"
               :label="
                 formatNumber2(
@@ -149,8 +159,8 @@
             GC Memory Promoted/GC Memory Allocated ({{ formatNumber1(metrics.garbageCollector['jvm.gc.memory.promoted'] / 1048576) }}M /
             {{ formatNumber1(metrics.garbageCollector['jvm.gc.memory.allocated'] / 1048576) }}M)
           </span>
-          <b-progress variant="success" :max="metrics.garbageCollector['jvm.gc.memory.allocated']" striped>
-            <b-progress-bar
+          <b-progress :max="metrics.garbageCollector['jvm.gc.memory.allocated']">
+            <b-progress-bar variant="success" striped
               :value="metrics.garbageCollector['jvm.gc.memory.promoted']"
               :label="
                 formatNumber2(
@@ -222,8 +232,8 @@
         <tr v-for="(entry, key) of metrics['http.server.requests']['percode']" :key="key">
           <td>{{ key }}</td>
           <td>
-            <b-progress variant="success" animated :max="metrics['http.server.requests']['all'].count" striped>
-              <b-progress-bar :value="entry.count" :label="formatNumber1(entry.count)"></b-progress-bar>
+            <b-progress :max="metrics['http.server.requests']['all'].count">
+              <b-progress-bar variant="success" striped :value="entry.count" :label="formatNumber1(entry.count)"></b-progress-bar>
             </b-progress>
           </td>
           <td class="text-end">

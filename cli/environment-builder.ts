@@ -152,12 +152,12 @@ export default class EnvironmentBuilder {
     this.localBlueprintExists =
       !this.disableBlueprints && this.localBlueprintPath !== this.devBlueprintPath && existsSync(this.localBlueprintPath);
 
-    await this._lookupJHipster({ onlyMissing: true });
-    await this._lookupLocalBlueprint();
-    await this._lookupDevBlueprint();
+    this._lookupJHipster({ onlyMissing: true });
+    this._lookupLocalBlueprint();
+    this._lookupDevBlueprint();
     this._loadBlueprints(blueprints);
-    await this._lookups(lookups);
-    await this._lookupBlueprints();
+    this._lookups(lookups);
+    this._lookupBlueprints();
     await this._loadSharedOptions();
     return this;
   }
@@ -181,16 +181,16 @@ export default class EnvironmentBuilder {
       .join(',');
   }
 
-  async updateJHipsterGenerators() {
-    await this._lookupJHipster();
-    await this._lookupDevBlueprint();
+  updateJHipsterGenerators() {
+    this._lookupJHipster();
+    this._lookupDevBlueprint();
   }
 
   /**
    * @private
    * Lookup current jhipster generators.
    */
-  async _lookupJHipster({ onlyMissing = false }: { onlyMissing?: boolean } = {}) {
+  _lookupJHipster({ onlyMissing = false }: { onlyMissing?: boolean } = {}) {
     // Register jhipster generators, a clone of the jhipster store has them.
     if (!onlyMissing || !this.store.getPackagesNS().includes('jhipster')) {
       this.resolver.lookupJHipster();
@@ -229,7 +229,7 @@ export default class EnvironmentBuilder {
     return this;
   }
 
-  async _lookupLocalBlueprint(): Promise<this> {
+  _lookupLocalBlueprint(): this {
     if (this.localBlueprintExists) {
       // A `.blueprint` folder is named after the local blueprint, even with a package name of its own.
       const missing = this.resolver.lookupBlueprints([localBlueprintNamespace], {
@@ -245,7 +245,7 @@ export default class EnvironmentBuilder {
     return this;
   }
 
-  async _lookupDevBlueprint(): Promise<this> {
+  _lookupDevBlueprint(): this {
     if (this.devBlueprintPath) {
       // Looked up again for the generators it creates, see `updateJHipsterGenerators`.
       this.resolver.lookupBlueprints([devBlueprintNamespace], {
@@ -259,7 +259,7 @@ export default class EnvironmentBuilder {
     return this;
   }
 
-  async _lookups(lookups: Parameters<Environment['lookup']>[0][] = []): Promise<this> {
+  _lookups(lookups: Parameters<Environment['lookup']>[0][] = []): this {
     for (const lookup of lookups) {
       this.resolver.lookup(lookup);
     }
@@ -288,7 +288,7 @@ export default class EnvironmentBuilder {
    * @private
    * Lookup current loaded blueprints.
    */
-  async _lookupBlueprints(options: Pick<LookupBlueprintsOptions, 'localOnly' | 'npmPaths'> = {}) {
+  _lookupBlueprints(options: Pick<LookupBlueprintsOptions, 'localOnly' | 'npmPaths'> = {}) {
     const blueprints = Object.keys(this._blueprintsWithVersion);
     // The blueprints are declared by their package name.
     this.resolver.lookupBlueprints(blueprints.map(packageNameToNamespace), {
@@ -301,7 +301,7 @@ export default class EnvironmentBuilder {
   /**
    * Lookup for generators.
    */
-  async lookupGenerators(generators: string[], options: Parameters<Environment['lookup']>[0] = {}): Promise<this> {
+  lookupGenerators(generators: string[], options: Parameters<Environment['lookup']>[0] = {}): this {
     this.resolver.lookup({ filterPaths: true, ...options, packagePatterns: generators });
     return this;
   }

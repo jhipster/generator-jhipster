@@ -310,7 +310,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -362,6 +362,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/account/login-modal.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.component.ts": {
@@ -571,10 +574,19 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/composables/entity-remove.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/composables/entity-remove.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/computables/arrays.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/computables/arrays.ts": {
@@ -653,6 +665,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/testing/stubs.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shims-vue.d.ts": {
@@ -1141,7 +1156,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -1199,6 +1214,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/configuration/configuration.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.component.ts": {
@@ -1468,10 +1486,19 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/composables/entity-remove.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/composables/entity-remove.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/computables/arrays.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/computables/arrays.ts": {
@@ -1556,6 +1583,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/testing/stubs.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shims-vue.d.ts": {
@@ -2062,7 +2092,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -2120,6 +2150,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/account/login-modal.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/docs/docs.component.ts": {
@@ -2323,10 +2356,19 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/composables/entity-remove.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/composables/entity-remove.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/computables/arrays.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/computables/arrays.ts": {
@@ -2405,6 +2447,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/testing/stubs.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shims-vue.d.ts": {
@@ -2906,7 +2951,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -2970,6 +3015,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
@@ -3230,10 +3278,19 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/composables/entity-remove.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/composables/entity-remove.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/computables/arrays.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/computables/arrays.ts": {
@@ -3318,6 +3375,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/testing/stubs.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shims-vue.d.ts": {
@@ -3809,7 +3869,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -3933,6 +3993,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
@@ -4223,10 +4286,19 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/composables/entity-remove.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/composables/entity-remove.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/computables/arrays.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/computables/arrays.ts": {
@@ -4311,6 +4383,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/testing/stubs.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shims-vue.d.ts": {
@@ -4805,7 +4880,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -4851,6 +4926,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
@@ -5045,10 +5123,19 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/composables/entity-remove.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/composables/entity-remove.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/computables/arrays.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/computables/arrays.ts": {
@@ -5127,6 +5214,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/testing/stubs.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shims-vue.d.ts": {
@@ -5622,7 +5712,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "vueBootstrapBsTheme": "dark",
   "vueBootstrapVariant": "dark",
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -5680,6 +5770,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/login.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/docs/docs.component.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
@@ -5877,10 +5970,19 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/composables/entity-remove.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/composables/entity-remove.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/computables/arrays.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/computables/arrays.ts": {
@@ -5959,6 +6061,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/testing/stubs.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shims-vue.d.ts": {

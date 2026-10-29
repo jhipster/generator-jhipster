@@ -16,10 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type BToastProps, useToast } from 'bootstrap-vue-next';
 <%_ if (enableTranslation) { _%>
 import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
+
+import { type BToastProps, useToast } from 'bootstrap-vue-next';
+
 import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 
 export const useAlertService = () => {
@@ -105,7 +107,7 @@ export default class AlertService {
 <%_ } _%>
         if (message.errorMessage) {
           errorMessage = message.errorMessage;
-        } else if (data.message) {
+        } else if (data?.message) {
 <%_ if (enableTranslation) { _%>
           errorMessage = this.i18n.t(data.message).toString();
 <%_ } else { _%>
@@ -123,9 +125,9 @@ export default class AlertService {
 
       default:
 <%_ if (enableTranslation) { _%>
-        errorMessage = this.i18n.t(data.message).toString();
+        errorMessage = this.i18n.t(data?.message ?? 'error.http.500').toString();
 <%_ } else { _%>
-        errorMessage = data.message;
+        errorMessage = data?.message ?? 'Internal server error.';
 <%_ } _%>
     }
     this.showError(errorMessage!);

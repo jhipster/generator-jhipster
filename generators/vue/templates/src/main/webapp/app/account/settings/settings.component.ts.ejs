@@ -16,14 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, type ComputedRef, defineComponent, inject, ref, type Ref } from 'vue';
+import { type ComputedRef, type Ref, computed, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
-import languages from '@/shared/config/languages';
 <%_ } _%>
+
 import { useVuelidate } from '@vuelidate/core'
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import axios from 'axios';
+
+<%_ if (enableTranslation) { _%>
+import languages from '@/shared/config/languages';
+<%_ } _%>
 import { EMAIL_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 import { useStore } from '@/store';
 

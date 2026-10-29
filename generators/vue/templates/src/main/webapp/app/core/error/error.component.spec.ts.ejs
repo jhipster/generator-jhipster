@@ -18,14 +18,15 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { type Ref, ref } from 'vue';
-import { shallowMount, type ComponentMountingOptions } from '@vue/test-utils';
 import { type RouteLocation } from 'vue-router';
+
 import { createTestingPinia } from '@pinia/testing';
+import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 
 <%_ if (generateUserManagement) { _%>
 import { useLoginModal } from '@/account/login-modal';
-
 <%_ } _%>
+
 import Error from './error.vue';
 
 type ErrorComponentType = InstanceType<typeof Error>;

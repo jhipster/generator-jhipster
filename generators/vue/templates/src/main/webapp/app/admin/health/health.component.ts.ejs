@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, inject, ref, type Ref } from 'vue';
+import { type Ref, defineComponent, inject, onMounted, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import HealthService from './health.service';
 import <%- jhiPrefixCapitalized %>HealthModal from './health-modal.vue';
+import HealthService from './health.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Health',
@@ -36,50 +36,49 @@ export default defineComponent({
     const currentHealth: Ref = ref(null);
     const updatingHealth = ref(false);
 
+    const healthModal = ref<any>(null);
+
+    const baseName = (name: any): any => healthService.getBaseName(name);
+    const getBadgeClass = (statusState: any): string => (statusState === 'UP' ? 'bg-success' : 'bg-danger');
+    const refresh = (): void => {
+      updatingHealth.value = true;
+      healthService
+        .checkHealth()
+        .then(res => {
+          healthData.value = healthService.transformHealthData(res.data);
+          updatingHealth.value = false;
+        })
+        .catch(error => {
+          if (error.response?.status === 503) {
+            healthData.value = healthService.transformHealthData(error.response.data);
+          }
+          updatingHealth.value = false;
+        });
+    };
+    const showHealth = (health: any): void => {
+      currentHealth.value = health;
+      healthModal.value.show();
+    };
+    const subSystemName = (name: string): string => healthService.getSubSystemName(name);
+
+    onMounted(() => {
+      refresh();
+    });
+
     return {
       healthService,
       healthData,
       currentHealth,
       updatingHealth,
+      healthModal,
+      baseName,
+      getBadgeClass,
+      refresh,
+      showHealth,
+      subSystemName,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
     };
-  },
-  mounted(): void {
-    this.refresh();
-  },
-  methods: {
-    baseName(name: any): any {
-      return this.healthService.getBaseName(name);
-    },
-    getBadgeClass(statusState: any): string {
-      if (statusState === 'UP') {
-        return 'bg-success';
-      }
-      return 'bg-danger';
-    },
-    refresh(): void {
-      this.updatingHealth = true;
-      this.healthService
-        .checkHealth()
-        .then(res => {
-          this.healthData = this.healthService.transformHealthData(res.data);
-          this.updatingHealth = false;
-        })
-        .catch(error => {
-          if (error.status === 503) {
-            this.healthData = this.healthService.transformHealthData(error.error);
-          }
-          this.updatingHealth = false;
-        });
-    },
-    showHealth(health: any): void {
-      this.currentHealth = health;
-      (this.$refs.healthModal as any).show();
-    },
-    subSystemName(name: string): string {
-      return this.healthService.getSubSystemName(name);
-    },
   },
 });

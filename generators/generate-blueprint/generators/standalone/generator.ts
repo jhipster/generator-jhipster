@@ -21,7 +21,7 @@ import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 
 import { getPackageRoot } from '../../../../lib/index.ts';
-import { BLUEPRINT_API_VERSION } from '../../../generator-constants.ts';
+import { BLUEPRINT_API_VERSION, ECMASCRIPT_VERSION } from '../../../generator-constants.ts';
 import { GENERATE_SNAPSHOTS } from '../../constants.ts';
 import { GenerateBlueprintBaseGenerator } from '../../generator.ts';
 
@@ -54,10 +54,11 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing({ applicationDefaults }) {
+      preparing({ applicationDefaults }) {
         applicationDefaults({
           blueprintCliName: data => `cli.c${data.javascriptBlueprint ? 'j' : 't'}s`,
           typescriptEslint: data => !data.javascriptBlueprint,
+          ecmaVersion: ECMASCRIPT_VERSION,
         });
       },
     });

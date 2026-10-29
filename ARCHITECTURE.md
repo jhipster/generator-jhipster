@@ -48,7 +48,7 @@ Initial generator information.
 
 ```ts
 get [Generator.INITIALIZING]() {
-  return this.asInitializingTaskGroup() {
+  return this.asInitializingTaskGroup({
     sayHelloTask() {
       this.log.info('Welcome to your generator');
     },
@@ -60,7 +60,7 @@ get [Generator.INITIALIZING]() {
       this.parseJHipsterArguments(command.arguments);
       this.parseJHipsterConfigs(command.configs);
     },
-  }
+  });
 }
 ```
 
@@ -70,11 +70,11 @@ Prompt for configuration.
 
 ```ts
 get [Generator.PROMPTING]() {
-  return this.asPromptingTaskGroup() {
+  return this.asPromptingTaskGroup({
     async prompting() {
       await this.prompt(this.prepareQuestions(command.configs));
     },
-  }
+  });
 }
 ```
 
@@ -84,14 +84,14 @@ Check and fix configurations:
 
 ```ts
 get [Generator.CONFIGURING]() {
-  return this.asConfiguringTaskGroup() {
+  return this.asConfiguringTaskGroup({
     checkConfig() {
       if (this.jhipsterConfigWithDefaults.reactive && this.jhipsterConfigWithDefaults.cacheProvider !== 'no') {
-        this.log.warn("Reactive applications doesn't support cache. Disabling");
+        this.log.warn("Reactive applications don't support cache. Disabling");
         this.jhipsterConfig.cacheProvider = 'no';
       }
     },
-  }
+  });
 }
 ```
 
@@ -101,13 +101,13 @@ Compose with other generators:
 
 ```ts
 get [Generator.COMPOSING]() {
-  return this.asComposingTaskGroup() {
+  return this.asComposingTaskGroup({
     async composing() {
       if (this.jhipsterConfigWithDefaults.clientFramework === 'angular') {
         await this.composeWithJHipster('angular');
       }
     },
-  }
+  });
 }
 ```
 
@@ -117,12 +117,12 @@ Load configuration:
 
 ```ts
 get [Generator.LOADING]() {
-  return this.asLoadingTaskGroup() {
+  return this.asLoadingTaskGroup({
     loading({ application }) {
       application.myCustomConfig = this.jhipsterConfig.myCustomConfig;
       application.myBlueprintCustomConfig = this.blueprintConfig.myBlueprintCustomConfig;
     },
-  }
+  });
 }
 ```
 
@@ -132,13 +132,13 @@ Generate properties to improve understanding:
 
 ```ts
 get [Generator.PREPARING]() {
-  return this.asPreparingTaskGroup() {
+  return this.asPreparingTaskGroup({
     preparing({ application }) {
       application.myCustomConfigFoo = this.jhipsterConfig.myCustomConfig === 'foo';
       application.myCustomConfigBar = this.jhipsterConfig.myCustomConfig === 'bar';
       application.myCustomConfigNo = !this.jhipsterConfig.myCustomConfig || this.jhipsterConfig.myCustomConfig === 'no';
     },
-  }
+  });
 }
 ```
 
@@ -245,20 +245,20 @@ Configure and check entity's configuration:
 
 ```ts
 get [Generator.CONFIGURING_EACH_ENTITY]() {
-  return this.asConfiguringEachEntityTaskGroup() {
+  return this.asConfiguringEachEntityTaskGroup({
     configuring({ application, entityConfig }) {
       if (application.searchEngineNo && entityConfig.searchEngine && entityConfig.searchEngine !== 'no') {
         this.log.warn("Search engine cannot be enabled at entity because it's disabled at application");
         entityConfig.searchEngine = 'no';
       }
     },
-  }
+  });
 }
 ```
 
 #### Loading entities (base-application)
 
-Usually empty the entire entity configuration is loaded by default.
+Usually empty: the entire entity configuration is loaded by default.
 
 #### Preparing each entity (base-application)
 
@@ -266,11 +266,11 @@ Generate properties to improve understanding at the entity level:
 
 ```ts
 get [Generator.PREPARING_EACH_ENTITY]() {
-  return this.asPreparingEachEntityTaskGroup() {
+  return this.asPreparingEachEntityTaskGroup({
     preparing({ application, entity }) {
       entity.dtoMapstruct = entity.dto === 'mapstruct';
     },
-  }
+  });
 }
 ```
 
@@ -280,11 +280,11 @@ Generate properties to improve understanding at the field level:
 
 ```ts
 get [Generator.PREPARING_EACH_ENTITY_FIELD]() {
-  return this.asPreparingEachEntityFieldTaskGroup() {
+  return this.asPreparingEachEntityFieldTaskGroup({
     preparing({ application, entity, field }) {
       field.technologyFieldTypeIntegerMap = field.fieldType === 'Integer';
     },
-  }
+  });
 }
 ```
 
@@ -294,25 +294,25 @@ Generate properties to improve understanding at the relationship level:
 
 ```ts
 get [Generator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-  return this.asPreparingEachEntityRelationshipTaskGroup() {
+  return this.asPreparingEachEntityRelationshipTaskGroup({
     preparing({ application, entity, relationship }) {
       relationship.technologyRelationshipDbName = relationship.relationshipTypeOneToOne ? 'foo' : 'bar';
     },
-  };
+  });
 }
 ```
 
 #### Default (yeoman)
 
-Generate properties to improve understanding that depends on others' properties:
+Generate properties to improve understanding that depend on others' properties:
 
 ```ts
 get [Generator.DEFAULT]() {
-  return this.asDefaultTaskGroup() {
+  return this.asDefaultTaskGroup({
     preparing({ application, entities }) {
       application.hasEntityFieldInteger = entities.some(entity => entity.fields.some(field => field.fieldTypeInteger));
     },
-  };
+  });
 }
 ```
 
@@ -410,12 +410,12 @@ Print generator result and info:
 
 ```ts
 get [Generator.END]() {
-  return this.asEndTaskGroup() {
+  return this.asEndTaskGroup({
     preparing({ application }) {
       this.log.success('Tech application generated successfully');
       this.log.log(`Start the application running 'npm run start:app'`);
     },
-  };
+  });
 }
 ```
 
@@ -435,9 +435,9 @@ Examples:
 
 More information can be found at:
 
-[Extending and customizing](https://www.jhipster.tech/modules/extending-and-customizing/)
-[Creating a stand alone Blueprint](https://www.jhipster.tech/modules/creating-a-module/)
-[Creating a blueprint](https://www.jhipster.tech/modules/creating-a-blueprint/)
+- [Extending and customizing](https://www.jhipster.tech/modules/extending-and-customizing/)
+- [Creating a stand alone Blueprint](https://www.jhipster.tech/modules/creating-a-module/)
+- [Creating a blueprint](https://www.jhipster.tech/modules/creating-a-blueprint/)
 
 ### Blueprint scope
 

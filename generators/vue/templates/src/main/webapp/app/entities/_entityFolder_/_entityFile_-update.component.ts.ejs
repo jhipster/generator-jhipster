@@ -16,18 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { type Ref, computed, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
+
 import { useVuelidate } from '@vuelidate/core'
 
+import { useAlertService } from '@/shared/alert/alert.service';
+import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
-import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)
@@ -58,6 +59,11 @@ export default defineComponent({
     const alertService = inject('alertService', () => useAlertService(), true);
 
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref(new <%- entityAngularName %>());
+<%_ if (relationshipsContainManyToOne) { _%>
+  <%_ for (const relationship of relationships.filter(relationship => relationship.collection && relationship.persistableRelationship)) { _%>
+    <%- entityInstance %>.value.<%- relationship.relationshipFieldNamePlural %> = [];
+  <%_ } _%>
+<%_ } _%>
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
     const userService = inject('userService', () => new UserService());
@@ -88,7 +94,9 @@ export default defineComponent({
 <%_ for (field of fields.filter(field => !field.id)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-        res.<%- fieldName %> = new Date(res.<%- fieldName %>);
+        if (res.<%- fieldName %>) {
+          res.<%- fieldName %> = new Date(res.<%- fieldName %>);
+        }
   <%_ } _%>
 <%_ } _%>
         <%- entityInstance %>.value = res;
@@ -163,11 +171,68 @@ export default defineComponent({
     const v$ = useVuelidate(validationRules, <%- entityInstance %> as any);
     v$.value.$validate();
 
+    const save = async () => {
+      isSaving.value = true;
+      try {
+        if (<%- entityInstance %>.value.<%- primaryKey.name %>) {
+          const param = await <%- entityInstance %>Service().update(<%- entityInstance %>.value);
+          alertService.showInfo(
+<%_ if (enableTranslation) { _%>
+            t$('<%- i18nAlertHeaderPrefix %>.updated', { param: param.<%- primaryKey.name %> }),
+<%_ } else { _%>
+            `A <%- entityAngularName %> is updated with identifier ${param.<%- primaryKey.name %>}`,
+<%_ } _%>
+          );
+        } else {
+          const param = await <%- entityInstance %>Service().create(<%- entityInstance %>.value);
+          alertService.showSuccess(
+<%_ if (enableTranslation) { _%>
+            t$('<%- i18nAlertHeaderPrefix %>.created', { param: param.<%- primaryKey.name %> }).toString(),
+<%_ } else { _%>
+            `A <%- entityAngularName %> is created with identifier ${param.<%- primaryKey.name %>}`,
+<%_ } _%>
+          );
+        }
+        previousState();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      } finally {
+        isSaving.value = false;
+      }
+    };
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+
+    const clearInputImage = (field: string, fieldContentType: string, idInput: string) => {
+      <%- entityInstance %>.value[field] = null;
+      <%- entityInstance %>.value[fieldContentType] = null;
+      const input = document.getElementById(idInput) as HTMLInputElement | null;
+      if (input) {
+        input.value = '';
+      }
+    };
+<%_ } _%>
+<%_ if (relationshipsContainManyToOne) { _%>
+
+    const getSelected = (selectedVals, option, pkField = 'id') => {
+      if (selectedVals) {
+        return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
+      }
+      return option;
+    };
+<%_ } _%>
+
     return {
       <%- entityInstance %>Service,
       alertService,
       <%- entityInstance %>,
       previousState,
+      save,
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+      clearInputImage,
+<%_ } _%>
+<%_ if (relationshipsContainManyToOne) { _%>
+      getSelected,
+<%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
       <%- enumField.enumInstance %>Values,
 <%_ } _%>
@@ -187,76 +252,5 @@ export default defineComponent({
       t$,
 <%_ } _%>
     };
-  },
-  created(): void {
-<%_ if (relationshipsContainManyToOne) { _%>
-  <%_ for (relationship of relationships) { _%>
-    <%_ if (relationship.collection && relationship.persistableRelationship) { _%>
-      <%_ const { relationshipFieldNamePlural } = relationship; _%>
-    this.<%- entityInstance %>.<%- relationshipFieldNamePlural %> = [];
-    <%_ } _%>
-  <%_ } _%>
-<%_ } _%>
-  },
-  methods: {
-    save() : void {
-      this.isSaving = true;
-    if (this.<%- entityInstance %>.<%- primaryKey.name %>) {
-        this.<%- entityInstance %>Service().update(this.<%- entityInstance %>).then((param) => {
-          this.isSaving = false;
-          this.previousState();
-          this.alertService.showInfo(
-<%_ if (enableTranslation) { _%>
-            this.t$('<%- i18nAlertHeaderPrefix %>.updated', { 'param' : param.<%- primaryKey.name %> })
-<%_ } else { _%>
-            `A <%- entityAngularName %> is updated with identifier ${param.<%- primaryKey.name %>}`
-<%_ } _%>
-          );
-        }).catch(error => {
-            this.isSaving = false;
-            this.alertService.showHttpError(error.response);
-        });
-      } else {
-        this.<%- entityInstance %>Service().create(this.<%- entityInstance %>).then((param) => {
-          this.isSaving = false;
-          this.previousState();
-          this.alertService.showSuccess(
-<%_ if (enableTranslation) { _%>
-            this.t$('<%- i18nAlertHeaderPrefix %>.created', { param: param.<%- primaryKey.name %> }).toString()
-<%_ } else { _%>
-            `A <%- entityAngularName %> is created with identifier ${param.<%- primaryKey.name %>}`
-<%_ } _%>
-          );
-        }).catch(error => {
-            this.isSaving = false;
-            this.alertService.showHttpError(error.response);
-        });
-      }
-    },
-
-<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
-    clearInputImage(field, fieldContentType, idInput) : void {
-      if (this.<%- entityInstance %> && field && fieldContentType) {
-        if (Object.prototype.hasOwnProperty.call(this.<%- entityInstance %>, field)) {
-          this.<%- entityInstance %>[field] = null;
-        }
-        if (Object.prototype.hasOwnProperty.call(this.<%- entityInstance %>, fieldContentType)) {
-          this.<%- entityInstance %>[fieldContentType] = null;
-        }
-        if (idInput) {
-          (<any>this).$refs[idInput] = null;
-        }
-      }
-    },
-
-<%_ } _%>
-<%_ if (relationshipsContainManyToOne) { _%>
-    getSelected(selectedVals, option, pkField = 'id') : any {
-      if (selectedVals) {
-        return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
-      }
-      return option;
-    },
-<%_ } _%>
   },
 });

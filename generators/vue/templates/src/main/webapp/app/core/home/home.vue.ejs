@@ -4,7 +4,7 @@
       <span class="hipster img-fluid rounded"></span>
     </div>
     <div class="col-md-9">
-      <h1 class="display-4">{{ t$('home.title') }}</h1>
+      <h1 class="display-4">{{ t$('home.title') }} (<%- humanizedBaseName %>)</h1>
       <p class="lead">{{ t$('home.subtitle') }}</p>
 
       <div>
@@ -23,9 +23,7 @@
 <%_ if (generateUserManagement) { _%>
         <div class="alert alert-warning" v-if="!authenticated">
           <span>{{ t$('global.messages.info.register.noaccount') }}</span>
-          <router-link class="alert-link ms-1" to="/register"
-            >{{ t$('global.messages.info.register.link') }}</router-link
-          >
+          <router-link class="alert-link ms-1" to="/register">{{ t$('global.messages.info.register.link') }}</router-link>
         </div>
 <%_ } _%>
       </div>

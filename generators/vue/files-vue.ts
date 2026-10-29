@@ -109,14 +109,18 @@ export const vueFiles = asWriteFilesSection({
         'core/ribbon/ribbon.component.ts',
         'core/ribbon/ribbon.component.spec.ts',
         'shared/composables/date-format.ts',
+        'shared/composables/entity-remove.ts',
+        'shared/composables/entity-remove.spec.ts',
         'shared/composables/index.ts',
         'shared/composables/validation.ts',
         'shared/computables/arrays.ts',
+        'shared/computables/arrays.spec.ts',
         'shared/computables/index.ts',
         'shared/sort/jhi-sort-indicator.component.ts',
         'shared/sort/jhi-sort-indicator.vue',
         'shared/sort/sorts.ts',
         'shared/sort/sorts.spec.ts',
+        'shared/testing/stubs.ts',
         'shared/data/data-utils.service.ts',
         'shared/data/data-utils.service.spec.ts',
         'shared/jhi-item-count.component.ts',
@@ -181,7 +185,7 @@ export const vueFiles = asWriteFilesSection({
   adminModule: [
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts'],
+      templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts', 'admin/docs/docs.component.spec.ts'],
     },
     {
       ...clientApplicationTemplatesBlock(),

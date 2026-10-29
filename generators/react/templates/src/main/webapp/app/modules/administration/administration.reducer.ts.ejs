@@ -16,18 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
 import { createAsyncThunk, createSlice, isPending, isRejected } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { AppThunk } from 'app/config/store';
+import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
   loading: false,
   errorMessage: null as string | null,
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   gateway: {
-    routes: []
+    routes: [],
   },
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -39,18 +39,18 @@ const initialState = {
   threadDump: [],
   configuration: {
     configProps: {} as any,
-    env: {} as any
+    env: {} as any,
   },
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
   tracker: {
-    activities: [] as { sessionId: string; page: string }[]
+    activities: [] as { sessionId: string; page: string }[],
   },
 <%_ } _%>
-  totalItems: 0
+  totalItems: 0,
 };
 
-export type AdministrationState =  Readonly<typeof initialState>;
+export type AdministrationState = Readonly<typeof initialState>;
 
 // Actions
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -113,7 +113,9 @@ export const AdministrationSlice = createSlice({
 <%_ if (communicationSpringWebsocket) { _%>
     websocketActivityMessage(state, action) {
       // filter out activities from the same session
-      const uniqueActivities = state.tracker.activities.filter((activity: { sessionId: string }) => activity.sessionId !== action.payload.sessionId);
+      const uniqueActivities = state.tracker.activities.filter(
+        (activity: { sessionId: string }) => activity.sessionId !== action.payload.sessionId,
+      );
       // remove any activities with the page of logout
       const activities = [...uniqueActivities, action.payload].filter((activity: { page: string }) => activity.page !== 'logout');
       state.tracker = { activities };
@@ -127,7 +129,7 @@ export const AdministrationSlice = createSlice({
       .addCase(getGatewayRoutes.fulfilled, (state, action) => {
         state.loading = false;
         state.gateway = {
-          routes: action.payload.data
+          routes: action.payload.data,
         };
       })
   <%_ } _%>
@@ -182,7 +184,7 @@ export const AdministrationSlice = createSlice({
         state => {
           state.errorMessage = null;
           state.loading = true;
-        }
+        },
       )
       .addMatcher(
         isRejected(

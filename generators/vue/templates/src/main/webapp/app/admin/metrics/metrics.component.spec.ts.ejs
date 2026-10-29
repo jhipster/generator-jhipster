@@ -17,11 +17,14 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { shallowMount } from '@vue/test-utils';
+
+import { defineComponent, h } from 'vue';
+
+import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import Metrics from './metrics.vue';
 import MetricsService from './metrics.service';
+import Metrics from './metrics.vue';
 
 type MetricsComponentType = InstanceType<typeof Metrics>;
 
@@ -284,6 +287,93 @@ describe('Metrics Component', () => {
     it('should return if a variable is NaN', () => {
       expect(metricsComponent.filterNaN(1)).toBe(1);
       expect(metricsComponent.filterNaN('test')).toBe(0);
+    });
+  });
+
+  describe('view', () => {
+    const show = vi.fn();
+    const contentStub = defineComponent({
+      setup(_props, { slots }) {
+        return () => h('div', [slots.title?.(), slots.default?.(), slots.footer?.()]);
+      },
+      methods: {
+        show,
+      },
+    });
+
+    it('should render the metrics and handle its actions', async () => {
+      // GIVEN
+      const threads = ['RUNNABLE', 'WAITING', 'TIMED_WAITING', 'BLOCKED', 'NEW'].map(threadState => ({ threadState }));
+      axiosStub.get.mockImplementation((url?: string) =>
+        Promise.resolve({ data: url === 'management/threaddump' ? { threads } : response }),
+      );
+      const wrapper = shallowMount(Metrics, {
+        global: {
+          stubs: {
+            bModal: contentStub,
+            bProgress: contentStub,
+            'font-awesome-icon': true,
+            'metrics-modal': true,
+          },
+          provide: {
+            metricsService: new MetricsService(),
+          },
+        },
+      });
+      await flushPromises();
+
+      // WHEN
+      for (const element of wrapper.findAll('button, a')) {
+        await element.trigger('click');
+      }
+      await flushPromises();
+
+      // THEN
+      expect(wrapper.vm.threadStats).toEqual({
+        threadDumpRunnable: 1,
+        threadDumpWaiting: 1,
+        threadDumpTimedWaiting: 1,
+        threadDumpBlocked: 1,
+        threadDumpAll: 4,
+      });
+      expect(show).toHaveBeenCalled();
+    });
+
+    it('should keep updating when the thread dump fails', async () => {
+      // GIVEN
+      axiosStub.get.mockImplementation((url?: string) =>
+        url === 'management/threaddump' ? Promise.reject(new Error('failed')) : Promise.resolve({ data: response }),
+      );
+
+      // WHEN
+      await metricsComponent.refresh();
+      await flushPromises();
+
+      // THEN
+      expect(metricsComponent.updatingMetrics).toBe(true);
+    });
+
+    it('should keep updating when the metrics fail', async () => {
+      // GIVEN
+      axiosStub.get.mockRejectedValue(new Error('failed'));
+
+      // WHEN
+      await metricsComponent.refresh();
+
+      // THEN
+      expect(metricsComponent.updatingMetrics).toBe(true);
+    });
+
+    it('should use the default service', async () => {
+      // GIVEN
+      axiosStub.get.mockResolvedValue({ data: response });
+
+      // WHEN
+      shallowMount(Metrics, { global: { stubs: { bModal: true, bProgress: true, 'font-awesome-icon': true, 'metrics-modal': true } } });
+      await flushPromises();
+
+      // THEN
+      expect(axiosStub.get).toHaveBeenCalledWith('management/jhimetrics');
     });
   });
 });

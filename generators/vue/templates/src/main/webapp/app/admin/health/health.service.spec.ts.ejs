@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { beforeEach, describe, expect, it } from 'vitest';
+
 import HealthService from './health.service';
 
 describe('Health Service', () => {
@@ -259,5 +260,27 @@ describe('Health Service', () => {
       ];
       expect(healthService.transformHealthData(data)).toEqual(expected);
     });
+  });
+});
+
+describe('Health Service names', () => {
+  const healthService = new HealthService();
+
+  it('should give no name without a name', () => {
+    expect(healthService.getBaseName(undefined)).toBeUndefined();
+    expect(healthService.getSubSystemName(undefined)).toBeUndefined();
+  });
+
+  it('should give the module name of a path and a name', () => {
+    expect(healthService.getModuleName('path', 'name')).toBe('path.name');
+    expect(healthService.getModuleName('path', '')).toBe('path');
+    expect(healthService.getModuleName(null, 'name')).toBe('name');
+    expect(healthService.getModuleName(null, '')).toBe('');
+  });
+
+  it('should keep the null details of a health object', () => {
+    expect(healthService.transformHealthData({ components: { db: { status: 'UP', validationQuery: null } } })).toEqual([
+      { name: 'db', status: 'UP', details: { validationQuery: null }, error: undefined },
+    ]);
   });
 });

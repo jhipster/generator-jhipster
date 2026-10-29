@@ -12,7 +12,7 @@ Here are the most important steps.
 
 Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhipster) and click on the "fork" button. You can then clone your own fork of the project, and start working on it.
 
-[Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
+[Please read the GitHub forking documentation for more information](https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo)
 
 ### Set `jhipster` command to use the cloned project
 
@@ -81,7 +81,7 @@ jhipster --with-entities
 You should see your changes reflected in the generated project.
 
 Note: The generated project might not build properly in case the generator is using a
-snapshot version of [jhipster/jhipster-bom](https://github.com/jhipster/jhipster-bom). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+snapshot version of [jhipster/jhipster-bom](https://github.com/jhipster/jhipster-bom). This issue is mentioned in https://github.com/jhipster/generator-jhipster/issues/9571. In
 this case, clone the jhipster/jhipster-bom project and build it using:
 
 ```shell script
@@ -96,7 +96,7 @@ or on Windows:
 
 ### Use a text editor
 
-As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [VSCode](https://code.visualstudio.com/) or [IntelliJ IDEA](https://www.jetbrains.com/idea/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
+As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDEs will not work correctly. We recommend you use a text editor like [VSCode](https://code.visualstudio.com/) or [IntelliJ IDEA](https://www.jetbrains.com/idea/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
 
 ### Use a debugger
 
@@ -148,7 +148,7 @@ Fixing lint and prettier errors
 
 ## Generating and testing samples
 
-Sample generating is provided by `generator-jhipster` local blueprint which we will refer as `dev blueprint`.
+Sample generating is provided by `generator-jhipster` local blueprint which we will refer to as `dev blueprint`.
 The dev blueprint is enabled by running jhipster in JIT mode (executing `./bin/jhipster.cjs` file relative to this file).
 
 ### Generating samples using dev blueprint
@@ -163,7 +163,7 @@ Daily builds samples are prefixed with `daily-`.
 
 A common samples folder will be used if `--global` option is used like `jhipster generate-sample ng-default --global`.
 At first execution a prompt will ask for the samples folder, the chosen value will be reused at next executions.
-At samples folder, a `jhipster-samples.code-workspace` is generated. It provides a single vscode workspace for `generator-jhipster` and samples generated at the samples folder. It's very used for quick looks.
+At samples folder, a `jhipster-samples.code-workspace` is generated. It provides a single vscode workspace for `generator-jhipster` and samples generated at the samples folder. It's very useful for quick looks.
 
 ### Testing samples
 
@@ -186,7 +186,7 @@ List of commands being in the package.json scripts section of the generated samp
 ### Development Containers
 
 A container is built using Java, Node, and npm as recommended by `generator-jhipster`.
-Once up, you should have the stack maintainers recommends.
+Once up, you should have the stack the maintainers recommend.
 
 ### Execution shortcuts
 
@@ -196,7 +196,7 @@ Shortcuts are provided to easily generate integration tests samples.
 - select the sample's GitHub workflow.
 - run the shortcut.
 - select the sample.
-- sample is generated at `../jhipster-samples/` folder relative the `generator-jhipster` folder.
+- sample is generated at `../jhipster-samples/` folder relative to the `generator-jhipster` folder.
 
 Some daily builds samples are available too.
 
@@ -211,8 +211,8 @@ For simple code (few lines), logic can be embedded in the main file but if logic
 
 Sub templates should be named with the `ejs` extension because it's the default one, it enables editors to apply correct syntax highlighting and it enables us to use a very concise syntax:
 
-    <%- include('../common/field_validators', {field, reactive}); -%>
+    <%- include('../../_partials_entity_/save_user_snapshot_template') -%>
 
-This statement means that [_PersistClass_.java.jhi.jakarta_validation.ejs](generators/java/generators/domain/templates/src/main/java/_package_/_entityPackage_/domain/_persistClass_.java.jhi.jakarta_validation.ejs) template includes [field_validators.ejs](generators/java/generators/domain/templates/_global_partials_entity_/field_validators.ejs) sub template.
+This statement means that the [`_entityClass_Resource.java.ejs`](generators/spring-boot/templates/src/main/java/_package_/_entityPackage_/web/rest/_entityClass_Resource.java.ejs) template includes the [`save_user_snapshot_template.ejs`](generators/spring-boot/templates/src/main/java/_package_/_entityPackage_/_partials_entity_/save_user_snapshot_template.ejs) sub template.
 
 Sub templates can be unit tested.

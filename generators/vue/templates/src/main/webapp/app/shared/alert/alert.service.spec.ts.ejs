@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
 
 import AlertService from './alert.service';
@@ -233,5 +234,29 @@ describe('Alert Service test suite', () => {
       title: 'Error',
       variant: 'danger',
     });
+  });
+
+  it('should show error toast when http status != 400,404 without a body', () => {
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockReturnValueOnce('Internal server error.');
+
+<%_ } _%>
+    // WHEN
+    alertService.showHttpError({ status: 500, data: '' });
+
+    // THEN
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith('error.http.500');
+<%_ } _%>
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'Internal server error.', variant: 'danger' }));
+  });
+
+  it('should show error toast when http status = 400 without a body', () => {
+    // WHEN
+    alertService.showHttpError({ status: 400, headers: {} });
+
+    // THEN
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ title: 'Error', variant: 'danger' }));
   });
 });
