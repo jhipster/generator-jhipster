@@ -65,12 +65,13 @@ export const <%- entityReactName %>Detail = () => {
 <%_ } _%>
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   return (
-    <Row>
+    <Row className="justify-content-center">
       <Col md="8">
         <h2 data-cy="<%- entityInstance %>DetailsHeading">
           <Translate contentKey="<%- i18nKeyPrefix %>.detail.title"><%- entityNameCapitalized %></Translate>
         </h2>
-          <dl className="jh-entity-details">
+        <hr />
+          <dl className="row-md jh-entity-details">
 <%_ for (field of fields) { _%>
   <%_ const { fieldName, fieldNameHumanized } = field; _%>
             <dt>

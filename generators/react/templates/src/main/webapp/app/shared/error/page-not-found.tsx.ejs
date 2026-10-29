@@ -16,15 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Alert } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
 
 const PageNotFound = () => {
   return (
     <div>
-      <Alert variant="danger">
-        <Translate contentKey="error.http.404">The page does not exist.</Translate>
-      </Alert>
+      <Row>
+        <Col md="4">
+          <span className="hipster img-fluid rounded" />
+        </Col>
+        <Col md="8">
+          <h1>
+            <Translate contentKey="error.title">Error page!</Translate>
+          </h1>
+          <Alert variant="danger">
+            <Translate contentKey="error.http.404">The page does not exist.</Translate>
+          </Alert>
+        </Col>
+      </Row>
     </div>
   );
 };
