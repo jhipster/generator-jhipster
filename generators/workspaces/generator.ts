@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
+import { existsSync, readFileSync } from 'node:fs';
 
 import { packageJson } from '../../lib/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
@@ -86,11 +88,19 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (!this.generateWorkspaces) return;
 
         // Decided before the applications are composed, which use it: the one given or of an existing application, else npm.
+        // A configuration not in the mem-fs is read from the disk: loaded in the mem-fs of this environment, it would stay there
+        // as it was before the applications, generated in environments of their own, write it.
+        const readApplicationConfig = (yoRcFile: string): any => {
+          if (this.env.sharedFs.existsInMemory(yoRcFile)) return this.readDestinationJSON(yoRcFile);
+          return existsSync(yoRcFile) ? JSON.parse(readFileSync(yoRcFile, 'utf-8')) : undefined;
+        };
         this.workspacesConfig.nodePackageManager ??=
           this.options.nodePackageManager ??
           this.appsFolders
-            .map(appFolder => this.readDestinationJSON(this.destinationPath(appFolder, '.yo-rc.json')) as any)
-            .find(yoRc => yoRc?.['generator-jhipster']?.nodePackageManager)?.['generator-jhipster'].nodePackageManager;
+            .map(
+              appFolder => readApplicationConfig(this.destinationPath(appFolder, '.yo-rc.json'))?.[GENERATOR_JHIPSTER]?.nodePackageManager,
+            )
+            .find(Boolean);
         if (this.workspacesConfig.nodePackageManager) {
           this.env.options.nodePackageManager = this.workspacesConfig.nodePackageManager;
         }
