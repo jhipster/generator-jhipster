@@ -52,6 +52,20 @@ export const triggerAll = async (wrapper: VueWrapper<any>, selector: string, eve
   }
 };
 
+/** A component rendering all its slots, like a b-nav-item-dropdown with its button content. */
+export const slotsStub = defineComponent({
+  setup(_props, { slots }) {
+    return () => h('div', Object.values(slots).map(slot => slot?.()));
+  },
+});
+
+/** A b-form rendering a form with its content. */
+export const bFormStub = defineComponent({
+  setup(_props, { slots }) {
+    return () => h('form', slots.default?.());
+  },
+});
+
 /** A component rendering its content only, like a b-input-group. */
 export const contentStub = defineComponent({
   setup(_props, { slots }) {

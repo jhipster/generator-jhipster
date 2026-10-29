@@ -46,6 +46,20 @@ vi.mock('vue-router', () => ({
 }));
 
 const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+<%_ const relationshipsWithValues = relationships.filter(relationship => !relationship.otherEntity.embedded); _%>
+<%_ for (const otherEntity of new Set(relationshipsWithValues.map(relationship => relationship.otherEntity))) { _%>
+const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
+<%_ } _%>
+const <%- entityInstance %>SampleWithRelationships = {
+  ...<%- entityInstance %>Sample,
+<%_ for (const relationship of relationshipsWithValues) { _%>
+  <%_ if (relationship.collection) { _%>
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option],
+  <%_ } else { _%>
+  <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
+  <%_ } _%>
+<%_ } _%>
+};
 
 
 describe('Component Tests', () => {
@@ -97,7 +111,7 @@ describe('Component Tests', () => {
     describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>SampleWithRelationships);
         route = {
           params: {
             <%- entityInstance %>Id: '' + <%- tsKeyId %>,
@@ -106,10 +120,10 @@ describe('Component Tests', () => {
         const wrapper = shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
         const comp = wrapper.vm;
         // WHEN
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
-        expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>Sample);
+        expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>SampleWithRelationships);
       });
     });
 

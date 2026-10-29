@@ -52,6 +52,21 @@ vi.mock('vue-router', () => ({
 }));
 
 const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+<%_ for (const [{ otherEntity }] of allRelationshipsThatNeedSelectOptions) { _%>
+const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
+<%_ } _%>
+<%_ if (allRelationshipsThatNeedSelectOptions.length > 0) { _%>
+const <%- entityInstance %>SampleWithRelationships = {
+  ...<%- entityInstance %>Sample,
+  <%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat()) { _%>
+    <%_ if (relationship.collection) { _%>
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option],
+    <%_ } else { _%>
+  <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
+    <%_ } _%>
+  <%_ } _%>
+};
+<%_ } _%>
 
 describe('Component Tests', () => {
   let mountOptions: MountingOptions<<%- entityAngularName %>UpdateComponentType>['global'];
@@ -69,7 +84,11 @@ describe('Component Tests', () => {
         update: vi.fn(),
         create: vi.fn(),
       };
+<%_ if (allRelationshipsThatNeedSelectOptions.some(([relationship]) => relationship.otherEntity.entityAngularName === entityAngularName)) { _%>
+      <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ data: [<%- entityInstance %>Option] });
+<%_ } else { _%>
       <%- entityInstance %>ServiceStub.retrieve.mockResolvedValueOnce([]);
+<%_ } _%>
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
@@ -94,11 +113,11 @@ describe('Component Tests', () => {
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntityUser && generateBuiltInUserEntity) { _%>
           userService: () => ({
-            retrieve: vi.fn().mockResolvedValue({}),
+            retrieve: vi.fn().mockResolvedValue({ data: [<%- relationship.otherEntity.entityInstance %>Option] }),
           }),
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
             <%- relationship.otherEntity.entityInstance %>Service: () => ({
-                retrieve: vi.fn().mockResolvedValue({}),
+                retrieve: vi.fn().mockResolvedValue({ data: [<%- relationship.otherEntity.entityInstance %>Option] }),
               }),
   <%_ } _%>
 <%_ } _%>
@@ -272,7 +291,7 @@ describe('Component Tests', () => {
     });
 
     describe('Form', () => {
-<%_ if (fields.some(field => !field.id && field.fieldValidationRequired)) { _%>
+<%_ if (fields.some(field => !field.id && field.fieldValidationRequired) || allRelationshipsThatNeedSelectOptions.flat().some(relationship => relationship.relationshipValidate && relationship.relationshipRequired)) { _%>
       it('Should show the validation errors', async () => {
         // GIVEN
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
@@ -290,7 +309,7 @@ describe('Component Tests', () => {
 <%_ } _%>
       it('Should edit and save the entity from the form', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %><%- allRelationshipsThatNeedSelectOptions.length > 0 ? 'SampleWithRelationships' : 'Sample' %>);
         <%- entityInstance %>ServiceStub.update.mockResolvedValue(<%- entityInstance %>Sample);
         route = {
           params: {
