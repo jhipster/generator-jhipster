@@ -96,10 +96,14 @@ jobs:
           maven-cache: true
           gradle-cache: ${{ matrix.gradle-cache }}
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
-      # Workspaces are managed by pnpm, at the version the generated applications use
+      # Workspaces are managed by pnpm, at the version the packageManager of the generated workspace declares.
+      # Corepack is installed from npm, as Node.js no longer bundles it.
       - name: 'SETUP: pnpm'
         if: matrix.workspaces == 'true'
-        run: npm install -g pnpm@$(node -p "require('./generator-jhipster/generators/common/resources/package.json').devDependencies.pnpm")
+        run: |
+          npm install -g corepack
+          corepack enable pnpm
+          echo "COREPACK_ENABLE_DOWNLOAD_PROMPT=0" >> $GITHUB_ENV
       # Fail git operations on line ending mismatches, and make sure that JHipster generates crlf line endings on Windows correctly.
       - run: |
           git config --global core.autocrlf false

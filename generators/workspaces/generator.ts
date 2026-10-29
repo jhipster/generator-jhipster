@@ -203,6 +203,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
             // Like npm, skip the build scripts of the dependencies not approved in allowBuilds instead of failing.
             strictDepBuilds: false,
           });
+          // The version of pnpm the applications install, which pnpm and corepack switch to.
+          this.packageJson.merge({ packageManager: `pnpm@${findDependencyVersion('pnpm')!}` });
         } else {
           this.packageJson.merge({
             workspaces: {

@@ -155,6 +155,10 @@ describe(`generator - ${generator}`, () => {
       expect(packageJson).not.toHaveProperty('allowScripts');
     });
 
+    it('declares the pnpm version of the applications as the package manager', () => {
+      result.assertJsonFileContent('package.json', { packageManager: 'pnpm@PNPM_VERSION' });
+    });
+
     it('runs the scripts of the workspaces with pnpm', () => {
       result.assertJsonFileContent('package.json', {
         scripts: {
