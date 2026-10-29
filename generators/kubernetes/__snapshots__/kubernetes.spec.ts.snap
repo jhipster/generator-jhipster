@@ -1320,36 +1320,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -1380,7 +1363,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -2023,36 +2006,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -2083,7 +2049,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -5538,36 +5504,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -5598,7 +5547,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -8967,36 +8916,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -9027,7 +8959,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -9827,36 +9759,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -9887,7 +9802,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -10822,36 +10737,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -10882,7 +10780,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -12841,36 +12739,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -12901,7 +12782,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -13778,36 +13659,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -13838,7 +13702,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -17590,36 +17454,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -17650,7 +17497,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -18267,36 +18114,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -18327,7 +18157,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -20268,36 +20098,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -20328,7 +20141,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -20965,36 +20778,19 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            - -datacenter=dc1
+            - -domain=consul
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.jhipsternamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -21025,7 +20821,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
