@@ -2,12 +2,13 @@
     <div class="d-flex justify-content-center">
         <div class="col-8">
             <div v-if="<%- entityInstance %>">
-                <h2 class="jh-entity-heading" data-cy="<%- entityInstance %>DetailsHeading"><span>{{ t$('<%- i18nKeyPrefix %>.detail.title') }}</span> {{<%- entityInstance %>.<%- primaryKey.name %>}}</h2>
+                <h2 class="jh-entity-heading" data-cy="<%- entityInstance %>DetailsHeading"><span>{{ t$('<%- i18nKeyPrefix %>.detail.title') }}</span></h2>
+                <hr />
                 <dl class="row-md jh-entity-details">
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of fields) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
                     <dt>
-                        <span>{{ t$('<%- i18nKeyPrefix %>.<%- fieldName %>') }}</span>
+                        <span>{{ t$('<%- field.propertyTranslationKey %>') }}</span>
                     </dt>
                     <dd>
   <%_ if (field.fieldIsEnum) { _%>
@@ -83,17 +84,19 @@
         </div>
     </div>
 <%_ if (!readOnly) { _%>
-    <b-modal ref="removeEntity" id="removeEntity">
+    <b-modal ref="removeEntity" id="removeEntity" title-tag="h4">
         <template #title>
             <span id="<%- i18nKeyPrefix %>.delete.question" data-cy="<%- entityInstance %>DeleteDialogHeading">{{ t$('entity.delete.title') }}</span>
         </template>
-        <div class="modal-body">
-            <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
-        </div>
+        <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
         <template #footer>
             <div>
-                <button type="button" class="btn btn-secondary" @click="closeDialog()">{{ t$('entity.action.cancel') }}</button>
-                <button type="button" class="btn btn-primary" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">{{ t$('entity.action.delete') }}</button>
+                <button type="button" class="btn btn-secondary" @click="closeDialog()">
+                    <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.cancel') }}</span>
+                </button>
+                <button type="button" class="btn btn-danger" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">
+                    <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+                </button>
             </div>
         </template>
     </b-modal>
