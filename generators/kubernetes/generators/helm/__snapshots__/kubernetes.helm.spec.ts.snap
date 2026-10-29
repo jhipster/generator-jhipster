@@ -579,6 +579,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -589,7 +592,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -879,9 +882,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -1051,9 +1057,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
         - name: SPRING_DATASOURCE_USERNAME
@@ -1418,6 +1427,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -1428,7 +1440,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -1713,9 +1725,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -2029,6 +2044,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -2039,7 +2057,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -2329,9 +2347,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -2502,9 +2523,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -2741,6 +2765,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "helm/csvc-helm/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -2793,6 +2835,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -2803,7 +2848,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -3228,9 +3273,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -3641,6 +3689,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -3651,7 +3702,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -3956,9 +4007,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -4129,9 +4183,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
         - name: SPRING_DATASOURCE_USERNAME
@@ -4305,9 +4362,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_MONGODB_URI
           value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -4470,9 +4530,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -4642,9 +4705,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
         - name: SPRING_DATASOURCE_USERNAME
@@ -5415,6 +5481,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -5425,7 +5494,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -8006,9 +8075,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.mynamespace.svc.cluster.local
+          value: consul-ui.mynamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -8307,6 +8379,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -8317,7 +8392,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -8603,9 +8678,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.mynamespace.svc.cluster.local
+          value: consul-ui.mynamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -8902,6 +8980,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -8912,7 +8993,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -9198,9 +9279,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.jhipsternamespace.svc.cluster.local
+          value: consul-ui.jhipsternamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME

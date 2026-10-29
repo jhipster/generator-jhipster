@@ -154,6 +154,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -206,6 +224,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -216,7 +237,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -677,9 +698,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -953,9 +977,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -1205,6 +1232,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -1257,6 +1302,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -1267,7 +1315,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -1768,9 +1816,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -2015,6 +2066,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -2067,6 +2136,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -2077,7 +2149,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -2591,9 +2663,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -2793,9 +2868,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -3037,6 +3115,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -3089,6 +3185,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -3099,7 +3198,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -3600,9 +3699,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -3857,6 +3959,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -3909,6 +4029,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -3919,7 +4042,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -4472,9 +4595,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -4674,9 +4800,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -4884,9 +5013,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -5079,9 +5211,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -5355,9 +5490,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -5657,6 +5795,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -5709,6 +5865,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -5719,7 +5878,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -8513,9 +8672,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -8767,6 +8929,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -8819,6 +8999,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -8829,7 +9012,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -9278,9 +9461,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -9530,6 +9716,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: jhipsternamespace
+spec:
+  host: consul-ui.jhipsternamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -9582,6 +9786,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -9592,7 +9799,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -10094,9 +10301,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.jhipsternamespace.svc.cluster.local
+              value: consul-ui.jhipsternamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -10537,9 +10747,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -10820,9 +11033,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -10962,6 +11178,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -11014,6 +11248,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -11024,7 +11261,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -11537,9 +11774,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -11699,6 +11939,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -11751,6 +12009,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -11761,7 +12022,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -12277,9 +12538,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -12504,9 +12768,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -12639,6 +12906,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -12691,6 +12976,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -12701,7 +12989,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -13214,9 +13502,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -13376,6 +13667,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -13428,6 +13737,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -13438,7 +13750,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -13967,9 +14279,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -14213,9 +14528,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -14651,9 +14969,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -14865,9 +15186,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -15058,9 +15382,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -15341,9 +15668,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -15483,6 +15813,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -15535,6 +15883,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -15545,7 +15896,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -18721,9 +19072,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -18866,6 +19220,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -18918,6 +19290,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -18928,7 +19303,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -19415,9 +19790,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -19558,6 +19936,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -19610,6 +20006,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -19620,7 +20019,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -20133,9 +20532,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.jhipsternamespace.svc.cluster.local
+              value: consul-ui.jhipsternamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -20304,6 +20706,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: jhipsternamespace
+spec:
+  host: consul-ui.jhipsternamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -20356,6 +20776,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -20366,7 +20789,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -20547,9 +20970,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
