@@ -228,22 +228,6 @@ export const vueFiles = asWriteFilesSection({
       ],
     },
     {
-      condition: generator => generator.generateUserManagement,
-      ...clientApplicationTemplatesBlock(),
-      templates: [
-        'admin/user-management/user-management.vue',
-        'admin/user-management/user-management.component.ts',
-        'admin/user-management/user-management.component.spec.ts',
-        'admin/user-management/user-management-view.vue',
-        'admin/user-management/user-management-view.component.ts',
-        'admin/user-management/user-management-view.component.spec.ts',
-        'admin/user-management/user-management-edit.vue',
-        'admin/user-management/user-management-edit.component.ts',
-        'admin/user-management/user-management-edit.component.spec.ts',
-        'admin/user-management/user-management.service.ts',
-      ],
-    },
-    {
       condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
       ...clientApplicationTemplatesBlock(),
       templates: [
