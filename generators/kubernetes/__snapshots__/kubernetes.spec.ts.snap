@@ -523,7 +523,7 @@ skaffold run [or] skaffold deploy
 
 ### Upgrading PostgreSQL databases deployed by an older JHipster version
 
-PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their volume holds the data of an older PostgreSQL version, and PostgreSQL 18 refuses to start with it until it's upgraded.
 
 Before applying the new manifests, dump each database from its current deployment:
 
@@ -2201,7 +2201,7 @@ skaffold run [or] skaffold deploy
 
 ### Upgrading PostgreSQL databases deployed by an older JHipster version
 
-PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their volume holds the data of an older PostgreSQL version, and PostgreSQL 18 refuses to start with it until it's upgraded.
 
 Before applying the new manifests, dump each database from its current deployment:
 
@@ -5736,7 +5736,7 @@ skaffold run [or] skaffold deploy
 
 ### Upgrading PostgreSQL databases deployed by an older JHipster version
 
-PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their volume holds the data of an older PostgreSQL version, and PostgreSQL 18 refuses to start with it until it's upgraded.
 
 Before applying the new manifests, dump each database from its current deployment:
 
@@ -11074,7 +11074,7 @@ skaffold run [or] skaffold deploy
 
 ### Upgrading PostgreSQL databases deployed by an older JHipster version
 
-PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their volume holds the data of an older PostgreSQL version, and PostgreSQL 18 refuses to start with it until it's upgraded.
 
 Before applying the new manifests, dump each database from its current deployment:
 
@@ -18521,7 +18521,7 @@ skaffold run [or] skaffold deploy
 
 ### Upgrading PostgreSQL databases deployed by an older JHipster version
 
-PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their volume holds the data of an older PostgreSQL version, and PostgreSQL 18 refuses to start with it until it's upgraded.
 
 Before applying the new manifests, dump each database from its current deployment:
 
