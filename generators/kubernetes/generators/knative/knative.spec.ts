@@ -342,6 +342,46 @@ describe('generator - Knative', () => {
       });
     });
 
+    describe('reactive postgresql microservice', () => {
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspaceApplicationAtFolder('reactive-psql', {
+            applicationType: 'microservice',
+            baseName: 'msreactivepsql',
+            prodDatabaseType: 'postgresql',
+            reactive: true,
+            serverPort: 8081,
+          })
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
+          .withOptions({
+            askAnswered: true,
+          })
+          .withAnswers({
+            deploymentApplicationType: 'microservice',
+            directoryPath: '../',
+            chosenApps: ['reactive-psql'],
+            dockerRepositoryName: 'jhipster',
+            dockerPushCommand: 'docker push',
+            kubernetesNamespace: 'default',
+            jhipsterConsole: false,
+            clusteredDbApps: [],
+            generatorType: 'k8s',
+            istio: true,
+          });
+      });
+      it('should match service snapshot', function () {
+        expect(runResult.getSnapshot('**/msreactivepsql-service.yml')).toMatchSnapshot();
+      });
+      it('sets the r2dbc username and no jdbc datasource', () => {
+        runResult.assertFileContent('./knative/msreactivepsql-knative/msreactivepsql-service.yml', /SPRING_R2DBC_USERNAME/);
+        runResult.assertNoFileContent('./knative/msreactivepsql-knative/msreactivepsql-service.yml', /SPRING_DATASOURCE_/);
+      });
+    });
+
     describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
       before(async () => {
         const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
