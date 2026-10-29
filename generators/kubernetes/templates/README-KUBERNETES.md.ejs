@@ -150,10 +150,10 @@ kubectl scale statefulset jhipster-registry --replicas 3<%- kubernetesNamespaceD
 ```
 <%_ } _%>
 
-<%_ if (serviceDiscoveryConsul) {
-  const namespaceOption = kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}`;
-  const consulClients = [...appConfigs.filter(app => app.serviceDiscoveryConsul).map(app => app.baseName.toLowerCase()), 'consul-config-loader'];
-_%>
+<%_ if (serviceDiscoveryConsul) { _%>
+  <%_ const namespaceOption = kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}`;
+      const consulClients = [...appConfigs.filter(app => app.serviceDiscoveryConsul).map(app => app.baseName.toLowerCase()), 'consul-config-loader'];
+  _%>
 ## Consul
 
 ### Before going to production
