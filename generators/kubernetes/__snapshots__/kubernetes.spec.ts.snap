@@ -521,6 +521,26 @@ If you want to deploy using skaffold binary, then run
 skaffold run [or] skaffold deploy
 \`\`\`
 
+### Upgrading PostgreSQL databases deployed by an older JHipster version
+
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+
+Before applying the new manifests, dump each database from its current deployment:
+
+\`\`\`
+kubectl exec deploy/mspsql-postgresql -- sh -c 'pg_dumpall --no-role-passwords -U "$POSTGRES_USER"' > mspsql-postgresql.sql
+\`\`\`
+
+Then apply only the new database manifests, wait for the databases to be ready, and restore the dumps before deploying the applications (errors about roles or databases that already exist can be ignored):
+
+\`\`\`
+kubectl apply -f mspsql-k8s/mspsql-postgresql.yml
+kubectl rollout status deploy/mspsql-postgresql
+kubectl exec -i deploy/mspsql-postgresql -- sh -c 'psql -U "$POSTGRES_USER" -d postgres' < mspsql-postgresql.sql
+\`\`\`
+
+If you prefer to upgrade the data files in place, run [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html) on the old data, which stays at the root of the \`postgres\` directory of the volume. Once the data is migrated, you can delete the old files from the volume.
+
 ## Exploring your services
 
 
@@ -2178,6 +2198,26 @@ If you want to deploy using skaffold binary, then run
 \`\`\`
 skaffold run [or] skaffold deploy
 \`\`\`
+
+### Upgrading PostgreSQL databases deployed by an older JHipster version
+
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+
+Before applying the new manifests, dump each database from its current deployment:
+
+\`\`\`
+kubectl exec deploy/keycloak-postgresql -- sh -c 'pg_dumpall --no-role-passwords -U "$POSTGRES_USER"' > keycloak-postgresql.sql
+\`\`\`
+
+Then apply only the new database manifests, wait for the databases to be ready, and restore the dumps before deploying the applications (errors about roles or databases that already exist can be ignored):
+
+\`\`\`
+kubectl apply -f keycloak-k8s/keycloak-postgresql.yml
+kubectl rollout status deploy/keycloak-postgresql
+kubectl exec -i deploy/keycloak-postgresql -- sh -c 'psql -U "$POSTGRES_USER" -d postgres' < keycloak-postgresql.sql
+\`\`\`
+
+If you prefer to upgrade the data files in place, run [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html) on the old data, which stays at the root of the \`postgres\` directory of the volume. Once the data is migrated, you can delete the old files from the volume.
 
 ## Exploring your services
 
@@ -5693,6 +5733,26 @@ If you want to deploy using skaffold binary, then run
 \`\`\`
 skaffold run [or] skaffold deploy
 \`\`\`
+
+### Upgrading PostgreSQL databases deployed by an older JHipster version
+
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+
+Before applying the new manifests, dump each database from its current deployment:
+
+\`\`\`
+kubectl exec deploy/keycloak-postgresql -- sh -c 'pg_dumpall --no-role-passwords -U "$POSTGRES_USER"' > keycloak-postgresql.sql
+\`\`\`
+
+Then apply only the new database manifests, wait for the databases to be ready, and restore the dumps before deploying the applications (errors about roles or databases that already exist can be ignored):
+
+\`\`\`
+kubectl apply -f keycloak-k8s/keycloak-postgresql.yml
+kubectl rollout status deploy/keycloak-postgresql
+kubectl exec -i deploy/keycloak-postgresql -- sh -c 'psql -U "$POSTGRES_USER" -d postgres' < keycloak-postgresql.sql
+\`\`\`
+
+If you prefer to upgrade the data files in place, run [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html) on the old data, which stays at the root of the \`postgres\` directory of the volume. Once the data is migrated, you can delete the old files from the volume.
 
 ## Exploring your services
 
@@ -11011,6 +11071,26 @@ If you want to deploy using skaffold binary, then run
 \`\`\`
 skaffold run [or] skaffold deploy
 \`\`\`
+
+### Upgrading PostgreSQL databases deployed by an older JHipster version
+
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+
+Before applying the new manifests, dump each database from its current deployment:
+
+\`\`\`
+kubectl exec deploy/mspsql-postgresql -- sh -c 'pg_dumpall --no-role-passwords -U "$POSTGRES_USER"' > mspsql-postgresql.sql
+\`\`\`
+
+Then apply only the new database manifests, wait for the databases to be ready, and restore the dumps before deploying the applications (errors about roles or databases that already exist can be ignored):
+
+\`\`\`
+kubectl apply -f mspsql-k8s/mspsql-postgresql.yml
+kubectl rollout status deploy/mspsql-postgresql
+kubectl exec -i deploy/mspsql-postgresql -- sh -c 'psql -U "$POSTGRES_USER" -d postgres' < mspsql-postgresql.sql
+\`\`\`
+
+If you prefer to upgrade the data files in place, run [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html) on the old data, which stays at the root of the \`postgres\` directory of the volume. Once the data is migrated, you can delete the old files from the volume.
 
 ## Exploring your services
 
@@ -18438,6 +18518,26 @@ If you want to deploy using skaffold binary, then run
 \`\`\`
 skaffold run [or] skaffold deploy
 \`\`\`
+
+### Upgrading PostgreSQL databases deployed by an older JHipster version
+
+PostgreSQL 18 keeps its data in \`/var/lib/postgresql/18/docker\`, so the PostgreSQL volumes are mounted at \`/var/lib/postgresql\` instead of \`/var/lib/postgresql/data\`. If you deployed these databases with an older JHipster version, their data is still on the volume, but PostgreSQL 18 doesn't use it: it starts a new, empty database next to it.
+
+Before applying the new manifests, dump each database from its current deployment:
+
+\`\`\`
+kubectl exec deploy/mspsql-postgresql -- sh -c 'pg_dumpall --no-role-passwords -U "$POSTGRES_USER"' > mspsql-postgresql.sql
+\`\`\`
+
+Then apply only the new database manifests, wait for the databases to be ready, and restore the dumps before deploying the applications (errors about roles or databases that already exist can be ignored):
+
+\`\`\`
+kubectl apply -f mspsql-k8s/mspsql-postgresql.yml
+kubectl rollout status deploy/mspsql-postgresql
+kubectl exec -i deploy/mspsql-postgresql -- sh -c 'psql -U "$POSTGRES_USER" -d postgres' < mspsql-postgresql.sql
+\`\`\`
+
+If you prefer to upgrade the data files in place, run [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html) on the old data, which stays at the root of the \`postgres\` directory of the volume. Once the data is migrated, you can delete the old files from the volume.
 
 ## Exploring your services
 
