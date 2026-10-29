@@ -700,7 +700,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -880,7 +880,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -1249,6 +1249,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -1581,7 +1602,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -1944,6 +1965,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -2368,7 +2410,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -5467,6 +5509,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -5823,7 +5886,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -8896,6 +8959,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -9228,7 +9312,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -9491,7 +9575,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -9748,6 +9832,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -10225,7 +10330,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
@@ -10749,6 +10854,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -11114,7 +11240,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -11394,7 +11520,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -11594,7 +11720,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_MONGODB_URI
@@ -12026,7 +12152,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -12221,7 +12347,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -12401,7 +12527,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -12762,6 +12888,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -13189,7 +13336,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_MONGODB_URI
@@ -13699,6 +13846,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -17226,7 +17394,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.mynamespace.svc.cluster.local
+          value: consul.mynamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -17511,6 +17679,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -17923,7 +18112,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.mynamespace.svc.cluster.local
+          value: consul.mynamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -18188,6 +18377,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -18541,7 +18751,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -18821,7 +19031,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -19021,7 +19231,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_MONGODB_URI
@@ -19453,7 +19663,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -19648,7 +19858,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -19828,7 +20038,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -20197,6 +20407,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -20541,7 +20772,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.jhipsternamespace.svc.cluster.local
+          value: consul.jhipsternamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         - name: SPRING_DATASOURCE_URL
@@ -20886,6 +21117,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500

@@ -235,6 +235,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -1301,6 +1322,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -2120,6 +2162,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -3163,6 +3226,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -3992,6 +4076,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -5799,6 +5904,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -8934,6 +9060,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -9706,6 +9853,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -11157,6 +11325,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -11903,6 +12092,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -12864,6 +13074,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -13610,6 +13841,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -15752,6 +16004,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -19160,6 +19433,27 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -19861,6 +20155,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -20624,6 +20939,27 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: None
+  ports:
+    - name: http
+      port: 8500
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: consul
+    app: consul
+---
+# Apps register through the Consul agent API, and only the server that received a registration can remove it.
+# Session affinity sends all of a pod's connections, including the deregistration at shutdown, to the same server.
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+spec:
+  type: ClusterIP
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
