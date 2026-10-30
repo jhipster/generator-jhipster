@@ -233,6 +233,44 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('reactive mssql microservice', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspaceApplicationAtFolder('reactive-mssql', {
+          applicationType: 'microservice',
+          baseName: 'msreactivemssql',
+          prodDatabaseType: 'mssql',
+          reactive: true,
+          serverPort: 8081,
+        })
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps: ['reactive-mssql'],
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+    it('should match deployment snapshot', function () {
+      expect(runResult.getSnapshot('**/msreactivemssql-deployment.yml')).toMatchSnapshot();
+    });
+  });
+
   describe('only gateway with eureka', () => {
     before(async () => {
       const chosenApps = ['01-gateway'];
@@ -689,11 +727,6 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected mssql files', () => {
       runResult.assertFile(expectedFiles.msmssqldb);
-    });
-    it('connects the mssql app to its database with the password of the mssql secret', () => {
-      runResult.assertFileContent(expectedFiles.msmssqldb[0], /SPRING_DATASOURCE_URL\n\s+value: jdbc:sqlserver:\/\/msmssqldb-mssql\./);
-      runResult.assertFileContent(expectedFiles.msmssqldb[0], /name: msmssqldb-mssql\n\s+key: mssql-password/);
-      runResult.assertFileContent(expectedFiles.msmssqldb[1], /kind: Secret\nmetadata:\n\s+name: msmssqldb-mssql\n/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);

@@ -829,6 +829,38 @@ describe('generator - Knative', () => {
       });
     });
 
+    describe('mssql microservice', () => {
+      before(async () => {
+        const chosenApps = ['11-mssql'];
+
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+
+        await helpers
+          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
+          .withOptions({
+            askAnswered: true,
+          })
+          .withAnswers({
+            deploymentApplicationType: 'microservice',
+            directoryPath: '../',
+            chosenApps,
+            dockerRepositoryName: 'jhipster',
+            dockerPushCommand: 'docker push',
+            kubernetesNamespace: 'default',
+            jhipsterConsole: false,
+            clusteredDbApps: [],
+            generatorType: 'helm',
+            istio: false,
+          });
+      });
+      it('should match service snapshot', function () {
+        expect(runResult.getSnapshot('**/msmssqldb-service.yml')).toMatchSnapshot();
+      });
+    });
+
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
       before(async () => {
         const chosenApps = ['02-mysql'];

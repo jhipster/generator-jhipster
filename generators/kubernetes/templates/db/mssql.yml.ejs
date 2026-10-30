@@ -19,7 +19,6 @@
 <%_ const lowercaseBaseName = app.baseName.toLowerCase();
     // SQL Server rejects passwords without 3 of the 4 character categories, and the random password is lowercase hex
     const mssqlPassword = `${dbRandomPassword}-Aa1`;
-    const sqlcmd = '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b';
 _%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
 apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
@@ -56,6 +55,9 @@ metadata:
   namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
+  # the ReadWriteOnce volume can't be shared with a second SQL Server pod during a rolling update
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: <%- lowercaseBaseName %>-mssql
@@ -71,6 +73,7 @@ spec:
       securityContext:
         # the mssql user of the image, so that it can write to the volume
         fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
       - name: data
 <%_ if (kubernetesUseDynamicStorage) { _%>
@@ -87,26 +90,19 @@ spec:
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
-        - name: MSSQL_DATABASE
+        # the image creates this database when it starts with an empty data directory
+        - name: MSSQL_DB
           value: <%- lowercaseBaseName %>
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
               name: <%- lowercaseBaseName %>-mssql
               key: mssql-password
-        # SQL Server doesn't create a database at startup, so create the one of the application once the server accepts connections
-        command: ["/bin/bash", "-c"]
-        args:
-        - |
-          /opt/mssql/bin/sqlservr &
-          until <%- sqlcmd %> -Q "SELECT 1" -o /dev/null; do kill -0 $! || exit 1; sleep 2; done
-          <%- sqlcmd %> -Q "IF DB_ID('$MSSQL_DATABASE') IS NULL CREATE DATABASE [$MSSQL_DATABASE]"
-          wait
         ports:
         - containerPort: 1433
         readinessProbe:
           exec:
-            command: ["/bin/bash", "-c", '<%- sqlcmd %> -Q "USE [$MSSQL_DATABASE]" -o /dev/null']
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DB]" -o /dev/null']
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5

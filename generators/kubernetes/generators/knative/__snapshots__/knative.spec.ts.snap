@@ -5594,6 +5594,88 @@ spec:
 }
 `;
 
+exports[`generator - Knative Using Helm generator type mssql microservice should match service snapshot 1`] = `
+{
+  "knative/msmssqldb-knative/templates/msmssqldb-service.yml": {
+    "contents": "apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: msmssqldb
+  namespace: default
+spec:
+  template:
+    metadata:
+      labels:
+        app: msmssqldb
+        version: "v1"
+  runLatest:
+    configuration:
+      revisionTemplate:
+        metadata:
+          name: msmssqldb-knative
+          annotations:
+            # this prevents from scale to zero
+            autoscaling.knative.dev/minScale: "1"
+          labels:
+            app: msmssqldb
+            version: "v1"
+        spec:
+          containers:
+          - name: msmssqldb-app
+            image: jhipster/msmssqldb
+            env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: consul-ui.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+              value: "false"
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+              value: msmssqldb
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+              value: msmssqldb
+            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+              value: "x-request-id,x-ot-span-context"
+            - name: JAVA_OPTS
+              value: " -Xmx256m -Xms256m"
+            - name: SERVER_SHUTDOWN
+              value: graceful
+            resources:
+              requests:
+                memory: "512Mi"
+                cpu: "500m"
+              limits:
+                memory: "1Gi"
+                cpu: "1"
+            ports:
+            - containerPort: 8081
+            readinessProbe:
+              httpGet:
+                path: /management/health/readiness
+              initialDelaySeconds: 20
+              periodSeconds: 15
+              failureThreshold: 6
+              timeoutSeconds: 5
+            livenessProbe:
+              httpGet:
+                path: /management/health/liveness
+              initialDelaySeconds: 120
+              timeoutSeconds: 5
+  traffic:
+    - tag: latest
+      percent: 100
+      latestRevision: true
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
   "knative/.yo-rc.json": {
@@ -15095,6 +15177,9 @@ metadata:
   namespace: default
 spec:
   replicas: 1
+  # the ReadWriteOnce volume can't be shared with a second SQL Server pod during a rolling update
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: msmssqldb-mssql
@@ -15108,6 +15193,7 @@ spec:
       securityContext:
         # the mssql user of the image, so that it can write to the volume
         fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
       - name: data
         emptyDir: {}
@@ -15119,26 +15205,19 @@ spec:
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
-        - name: MSSQL_DATABASE
+        # the image creates this database when it starts with an empty data directory
+        - name: MSSQL_DB
           value: msmssqldb
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
               name: msmssqldb-mssql
               key: mssql-password
-        # SQL Server doesn't create a database at startup, so create the one of the application once the server accepts connections
-        command: ["/bin/bash", "-c"]
-        args:
-        - |
-          /opt/mssql/bin/sqlservr &
-          until /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "SELECT 1" -o /dev/null; do kill -0 $! || exit 1; sleep 2; done
-          /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "IF DB_ID('$MSSQL_DATABASE') IS NULL CREATE DATABASE [$MSSQL_DATABASE]"
-          wait
         ports:
         - containerPort: 1433
         readinessProbe:
           exec:
-            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DATABASE]" -o /dev/null']
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DB]" -o /dev/null']
           initialDelaySeconds: 10
           periodSeconds: 10
           timeoutSeconds: 5

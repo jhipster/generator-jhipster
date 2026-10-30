@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ // The SQL Server manifests aren't generated for Helm charts
+    const mssqlDeployed = app.prodDatabaseTypeMssql && !generatorTypeHelm;
+_%>
 apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
@@ -62,6 +65,9 @@ spec:
 <%_ } _%>
 <%_ if (app.prodDatabaseTypePostgresql) { _%>
                   rt=$(nc -z -w 1 <%- app.baseName.toLowerCase() %>-postgresql 5432)
+<%_ } _%>
+<%_ if (mssqlDeployed) { _%>
+                  rt=$(nc -z -w 1 <%- app.baseName.toLowerCase() %>-mssql 1433)
 <%_ } _%>
 <%_ if (app.databaseTypeMongodb) { _%>
                   rt=$(nc -z -w 1 <%- app.baseName.toLowerCase() %>-mongodb 27017)
@@ -126,7 +132,7 @@ spec:
               name: jwt-secret
               key: secret
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql || app.prodDatabaseTypeMssql) { _%>
+<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql || mssqlDeployed) { _%>
   <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_URL
           value: <%- app.kubernetesR2dbcUrl %>
