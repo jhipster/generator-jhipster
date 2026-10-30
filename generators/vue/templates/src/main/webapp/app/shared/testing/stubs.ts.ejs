@@ -52,6 +52,18 @@ export const triggerAll = async (wrapper: VueWrapper<any>, selector: string, eve
   }
 };
 
+/** Sets each value, in turn, on every input of a view the selector matches, rendering the validation of each one. */
+export const setAllValues = async (wrapper: VueWrapper<any>, selector: string, values: string[]) => {
+  for (const value of values) {
+    for (const element of wrapper.findAll(selector) as DOMWrapper<HTMLInputElement>[]) {
+      await element.setValue(value);
+    }
+  }
+};
+
+/** Values failing the required, the minimum length, the pattern, the email and the maximum length validations, then a valid one. */
+export const formValues = ['', 'x', ' x', 'x'.repeat(300), 'jhi@pster.net'];
+
 /** A component rendering all its slots, like a b-nav-item-dropdown with its button content. */
 export const slotsStub = defineComponent({
   setup(_props, { slots }) {
@@ -70,5 +82,15 @@ export const bFormStub = defineComponent({
 export const contentStub = defineComponent({
   setup(_props, { slots }) {
     return () => h('div', slots.default?.());
+  },
+});
+
+/** An input bound by v-model, like a b-form-input or a b-form-datepicker. */
+export const modelInputStub = defineComponent({
+  props: { modelValue: { type: null, default: undefined } },
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    return () =>
+      h('input', { value: props.modelValue, onInput: (event: Event) => emit('update:modelValue', (event.target as HTMLInputElement).value) });
   },
 });

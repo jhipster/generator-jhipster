@@ -275,6 +275,17 @@ describe('Service Tests', () => {
         });
       });
 
+<%_ if (searchEngineAny) { _%>
+      it('should search the <%- entityAngularName %>', async () => {
+        axiosStub.get.mockResolvedValue({ data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+
+        const res = await service.search('query'<%- paginationNo ? '' : ', { sort: {}, page: 0, size: 10 }' %>);
+
+        expect(res.data).toEqual([{ <%- primaryKey.name %>: <%- tsKeyId %> }]);
+        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=query'));
+      });
+
+<%_ } _%>
       it('should not return a list of <%- entityAngularName %>', async () => {
         axiosStub.get.mockRejectedValue(error);
 

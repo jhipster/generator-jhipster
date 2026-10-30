@@ -25,6 +25,7 @@ import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
+import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
@@ -54,7 +55,7 @@ const <%- entityInstance %>SampleWithRelationships = {
   ...<%- entityInstance %>Sample,
 <%_ for (const relationship of relationshipsWithValues) { _%>
   <%_ if (relationship.collection) { _%>
-  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option],
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option, { <%- relationship.otherEntity.primaryKey.name %>: <%- relationship.otherEntity.primaryKey.tsSampleValues[1] %> }],
   <%_ } else { _%>
   <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
   <%_ } _%>
@@ -243,7 +244,7 @@ describe('Component Tests', () => {
         };
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: { alertService } } });
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: {}, plugins: [createBootstrap()] } });
         await flushPromises();
 
         // THEN

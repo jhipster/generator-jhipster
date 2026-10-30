@@ -39,6 +39,10 @@ export type Field = ClientField & {
   vueFieldClientConstant?: VueFieldClientConstant;
   /** The validation pattern of the field, as the content of a single-quoted string. */
   fieldValidateRulesPatternVue?: string;
+  /** Whether the client validates the field with a rule some value fails. */
+  vueClientValidation?: boolean;
+  /** A TypeScript expression of a value failing a validation of the field other than required. */
+  vueInvalidValue?: string;
 };
 
 export interface Entity<F extends ClientField = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {

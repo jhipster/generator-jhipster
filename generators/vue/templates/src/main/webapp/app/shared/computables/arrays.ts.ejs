@@ -16,12 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const compareString = (a: string, b: string): number => {
-  if (b == null) return 1;
-  if (a == null) return -1;
-
-  return a.localeCompare(b);
-};
+const compareString = (a: string, b: string): number => a.localeCompare(b);
 
 const asString = (val): string => (typeof val === 'string' ? val : `${val}`);
 

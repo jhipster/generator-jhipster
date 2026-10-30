@@ -22,11 +22,13 @@ import { ref } from 'vue';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { createTestingPinia } from '@pinia/testing';
 <%_ } _%>
-import { shallowMount } from '@vue/test-utils';
+import { type VueWrapper, shallowMount } from '@vue/test-utils';
 
 <%_ if (!authenticationTypeOauth2) { _%>
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
+
+import { routerLinkStub } from '@/shared/testing/stubs';
 
 import Home from './home.vue';
 
@@ -34,6 +36,7 @@ type HomeComponentType = InstanceType<typeof Home>;
 
 describe('Home', () => {
   let home: HomeComponentType;
+  let wrapper: VueWrapper<HomeComponentType>;
   let authenticated;
   let currentUsername;
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -46,13 +49,13 @@ describe('Home', () => {
   beforeEach(() => {
     authenticated = ref(false);
     currentUsername = ref('');
-    const wrapper = shallowMount(Home, {
+    wrapper = shallowMount(Home, {
       global: {
 <%_ if (!authenticationTypeOauth2) { _%>
         plugins: [createTestingPinia()],
 <%_ } _%>
         stubs: {
-          'router-link': true,
+          'router-link': routerLinkStub,
         },
         provide: {
 <%_ if (authenticationTypeOauth2) { _%>
@@ -89,6 +92,16 @@ describe('Home', () => {
     expect(loginService.login).toHaveBeenCalled();
 <%_ } else { _%>
     home.showLogin();
+    expect(login.showLogin).toHaveBeenCalled();
+<%_ } _%>
+  });
+
+  it('should log in from the link of the page', async () => {
+    await wrapper.find('a.alert-link').trigger('click');
+
+<%_ if (authenticationTypeOauth2) { _%>
+    expect(loginService.login).toHaveBeenCalled();
+<%_ } else { _%>
     expect(login.showLogin).toHaveBeenCalled();
 <%_ } _%>
   });

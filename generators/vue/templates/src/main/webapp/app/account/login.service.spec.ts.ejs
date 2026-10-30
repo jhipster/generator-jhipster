@@ -51,6 +51,14 @@ describe('Login Service test suite', () => {
     expect(loc.href).toBe('//localhost/oauth2/authorization/oidc');
   });
 
+  it('should build url for login under a context path', () => {
+    const loc = { href: '', hostname: 'localhost', pathname: '/app' };
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/app/oauth2/authorization/oidc');
+  });
+
   it('should build url for login with loc.pathname equals to /forbidden', () => {
     const loc = { href: '', hostname: 'localhost', pathname: '/forbidden' };
 
