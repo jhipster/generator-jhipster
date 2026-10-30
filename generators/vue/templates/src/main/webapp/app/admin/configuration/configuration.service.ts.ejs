@@ -18,10 +18,27 @@
 -%>
 import axios from 'axios';
 
+/** A bean of the configuration properties endpoint. */
+export interface ConfigurationBean {
+  prefix: string;
+  properties?: Record<string, unknown>;
+}
+
+interface ConfigProps {
+  contexts: Record<string, { beans: Record<string, ConfigurationBean> }>;
+}
+
+interface Env {
+  propertySources: { name: string; properties: Record<string, { value: unknown }> }[];
+}
+
+/** The properties of each property source of the environment endpoint. */
+export type EnvConfiguration = Record<string, { key: string; val: unknown }[]>;
+
 export default class ConfigurationService {
-  async loadConfiguration(): Promise<any> {
-    const res = await axios.get('management/configprops');
-    const properties: any[] = Object.values(this.getConfigPropertiesObjects(res.data));
+  async loadConfiguration(): Promise<ConfigurationBean[]> {
+    const res = await axios.get<ConfigProps>('management/configprops');
+    const properties = Object.values(this.getConfigPropertiesObjects(res.data));
     properties.sort((propertyA, propertyB) => {
       const comparePrefix = propertyA.prefix < propertyB.prefix ? -1 : 1;
       return propertyA.prefix === propertyB.prefix ? 0 : comparePrefix;
@@ -29,19 +46,19 @@ export default class ConfigurationService {
     return properties;
   }
 
-  async loadEnvConfiguration(): Promise<any> {
-    const res = await axios.get<any>('management/env');
+  async loadEnvConfiguration(): Promise<EnvConfiguration> {
+    const res = await axios.get<Env>('management/env');
     return Object.fromEntries(
       res.data.propertySources.map(({ name, properties }) => [
         name,
-        Object.entries(properties).map(([key, property]: [string, any]) => ({ key, val: property.value })),
+        Object.entries(properties).map(([key, property]) => ({ key, val: property.value })),
       ]),
     );
   }
 
-  private getConfigPropertiesObjects(res): any {
+  private getConfigPropertiesObjects(res: ConfigProps): Record<string, ConfigurationBean> {
     // The ApplicationContext ID, not a bootstrap one: the baseName for an application, baseName-1 for a microservice.
     const contextKey = Object.keys(res.contexts).find(key => !key.startsWith('bootstrap') || key === '<%- baseName %>');
-    return res.contexts[contextKey].beans;
+    return res.contexts[contextKey as string].beans;
   }
 }

@@ -161,7 +161,7 @@ describe('Register Component', () => {
   it('should show the errors of the form and register with the browser language', async () => {
     // GIVEN
     axiosStub.post.mockResolvedValue(undefined);
-    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as any);
+    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
     const wrapper = shallowMount(Register, { global: { plugins: [createTestingPinia()] } });
 
     // WHEN

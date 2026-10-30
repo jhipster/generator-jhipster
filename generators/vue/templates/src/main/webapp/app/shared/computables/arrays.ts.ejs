@@ -18,26 +18,28 @@
 -%>
 const compareString = (a: string, b: string): number => a.localeCompare(b);
 
-const asString = (val): string => (typeof val === 'string' ? val : `${val}`);
+const asString = (val: unknown): string => (typeof val === 'string' ? val : `${val}`);
 
-const compareAny = (a, b): number => {
+const compareAny = (a: unknown, b: unknown): number => {
   if (b == null) return 1;
   if (a == null) return -1;
 
-  return a - b;
+  return (a as number) - (b as number);
 };
+
+const property = (el: object, prop: string): unknown => (el as Record<string, unknown>)[prop];
 
 export type OrderByOptions = { orderByProp: string; reverse?: boolean };
 
-export const orderBy = (array: any[], opts: OrderByOptions) => {
+export const orderBy = <T extends object>(array: T[] | undefined, opts: OrderByOptions): T[] | undefined => {
   if (!Array.isArray(array)) return array;
 
   const { orderByProp, reverse = false } = opts;
-  let sorted: any[];
-  if (array.some(el => typeof el[orderByProp] === 'string')) {
-    sorted = array.sort((a, b) => compareString(asString(a[orderByProp]), asString(b[orderByProp])));
+  let sorted: T[];
+  if (array.some(el => typeof property(el, orderByProp) === 'string')) {
+    sorted = array.sort((a, b) => compareString(asString(property(a, orderByProp)), asString(property(b, orderByProp))));
   } else {
-    sorted = array.sort((a, b) => compareAny(a[orderByProp], b[orderByProp]));
+    sorted = array.sort((a, b) => compareAny(property(a, orderByProp), property(b, orderByProp)));
   }
   if (reverse) {
     return sorted.slice().reverse();
@@ -47,7 +49,7 @@ export const orderBy = (array: any[], opts: OrderByOptions) => {
 
 export type FilterByOptions = { filterByTerm: string; filterMaxDepth?: number };
 
-const filterObject = (val: any, opts: FilterByOptions): boolean => {
+const filterObject = (val: unknown, opts: FilterByOptions): boolean => {
   const { filterByTerm, filterMaxDepth = 2 } = opts;
   if (typeof val === 'string') {
     return val.toLocaleLowerCase().startsWith(filterByTerm);
@@ -62,10 +64,11 @@ const filterObject = (val: any, opts: FilterByOptions): boolean => {
   return `${val}`.toLocaleLowerCase().startsWith(filterByTerm);
 };
 
-export const filterBy = (array: any, opts: FilterByOptions) => {
+export const filterBy = <T>(array: T[] | undefined, opts: FilterByOptions): T[] | undefined => {
   return Array.isArray(array) && opts.filterByTerm
     ? array.filter(el => filterObject(el, { ...opts, filterByTerm: opts.filterByTerm.toLocaleLowerCase() }))
     : array;
 };
 
-export const orderAndFilterBy = (array: any, opts: FilterByOptions & OrderByOptions) => orderBy(filterBy(array, opts), opts);
+export const orderAndFilterBy = <T extends object>(array: T[] | undefined, opts: FilterByOptions & OrderByOptions): T[] | undefined =>
+  orderBy(filterBy(array, opts), opts);

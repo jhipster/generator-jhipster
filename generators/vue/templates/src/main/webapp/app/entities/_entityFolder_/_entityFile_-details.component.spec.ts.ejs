@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (builtInUserManagement) { _%>
 import { ref } from 'vue';
 <%_ } _%>
@@ -71,7 +71,7 @@ describe('Component Tests', () => {
   });
 
   describe('<%- entityAngularName %> Management Detail Component', () => {
-    let <%- entityInstance %>ServiceStub: any;
+    let <%- entityInstance %>ServiceStub: Record<string, Mock>;
     let mountOptions: MountingOptions<<%- entityAngularName %>DetailsComponentType>['global'];
 
     beforeEach(() => {
@@ -85,11 +85,11 @@ describe('Component Tests', () => {
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-        i18n: { t: vi.fn() } as any,
+        i18n: { t: vi.fn() },
 <%_ } _%>
         toast: {
           create: vi.fn(),
-        } as any,
+        },
       });
 
       mountOptions = {

@@ -24,7 +24,7 @@ import dayjs from 'dayjs';
 
 import { DATE_TIME_LONG_FORMAT, useDateFormat } from './date-format';
 
-const withSetup = (entityRef?: Ref<Record<string, any>>) => {
+const withSetup = (entityRef?: Ref<Record<string, unknown>>) => {
   let dateFormat: ReturnType<typeof useDateFormat>;
   mount(
     defineComponent({
@@ -58,16 +58,16 @@ describe('useDateFormat', () => {
   });
 
   it('should update the date time fields of an entity', () => {
-    const entity = ref<Record<string, any>>({});
-    const dateFormat = withSetup(entity) as any;
+    const entity = ref<Record<string, unknown>>({});
+    const dateFormat = withSetup(entity);
 
-    dateFormat.updateInstantField('instant', { target: { value: '2019-10-15T11:42' } });
-    dateFormat.updateZonedDateTimeField('zoned', { target: { value: '2019-10-15T11:42' } });
+    dateFormat.updateInstantField!('instant', { target: { value: '2019-10-15T11:42' } });
+    dateFormat.updateZonedDateTimeField!('zoned', { target: { value: '2019-10-15T11:42' } });
     expect(entity.value.instant).toEqual(dayjs('2019-10-15T11:42', DATE_TIME_LONG_FORMAT));
     expect(entity.value.zoned).toEqual(dayjs('2019-10-15T11:42', DATE_TIME_LONG_FORMAT));
 
-    dateFormat.updateInstantField('instant', { target: { value: '' } });
-    dateFormat.updateZonedDateTimeField('zoned', {});
+    dateFormat.updateInstantField!('instant', { target: { value: '' } });
+    dateFormat.updateZonedDateTimeField!('zoned', {});
     expect(entity.value.instant).toBeNull();
     expect(entity.value.zoned).toBeNull();
   });

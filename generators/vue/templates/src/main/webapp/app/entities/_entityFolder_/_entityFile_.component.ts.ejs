@@ -90,7 +90,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
 
-    const sort = (): Array<any> => {
+    const sort = (): string[] => {
       const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
       if (propOrder.value !== 'id') {
         result.push('id');

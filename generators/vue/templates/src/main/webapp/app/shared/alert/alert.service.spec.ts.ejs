@@ -39,11 +39,11 @@ describe('Alert Service test suite', () => {
     toastStub = vi.fn();
     alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-      i18n: { t: translationStub } as any,
+      i18n: { t: translationStub },
 <%_ } _%>
       toast: {
         create: toastStub,
-      } as any,
+      },
     });
   });
 

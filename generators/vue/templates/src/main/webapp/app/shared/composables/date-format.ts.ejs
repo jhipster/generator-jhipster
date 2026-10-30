@@ -30,7 +30,7 @@ export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
 
 export const DATE_TIME_LONG_FORMAT = 'YYYY-MM-DDTHH:mm';
 
-export const useDateFormat = ({ entityRef }: { entityRef?: Ref<Record<string, any>> } = {}) => {
+export const useDateFormat = <T extends object>({ entityRef }: { entityRef?: Ref<T> } = {}) => {
   const formatDate = value => (value ? dayjs(value).format(DATE_TIME_FORMAT) : '');
   const dateFormatUtils = {
     convertDateTimeFromServer: (date: Date): string => (date && dayjs(date).isValid() ? dayjs(date).format(DATE_TIME_LONG_FORMAT) : null),
@@ -41,21 +41,24 @@ export const useDateFormat = ({ entityRef }: { entityRef?: Ref<Record<string, an
     formatDateShort: formatDate,
 <%_ } _%>
   };
-  const entityUtils = entityRef
+  const entityUtils: {
+    updateInstantField?: (field: string, event: { target?: { value?: string } | null }) => void;
+    updateZonedDateTimeField?: (field: string, event: { target?: { value?: string } | null }) => void;
+  } = entityRef
     ? {
         ...dateFormatUtils,
-        updateInstantField: (field: string, event: any) => {
+        updateInstantField: (field: string, event: { target?: { value?: string } | null }) => {
           if (event.target?.value) {
-            entityRef.value[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
+            (entityRef.value as Record<string, unknown>)[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
           } else {
-            entityRef.value[field] = null;
+            (entityRef.value as Record<string, unknown>)[field] = null;
           }
         },
-        updateZonedDateTimeField: (field: string, event: any) => {
+        updateZonedDateTimeField: (field: string, event: { target?: { value?: string } | null }) => {
           if (event.target?.value) {
-            entityRef.value[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
+            (entityRef.value as Record<string, unknown>)[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
           } else {
-            entityRef.value[field] = null;
+            (entityRef.value as Record<string, unknown>)[field] = null;
           }
         },
       }

@@ -18,6 +18,8 @@
 -%>
 import { describe, expect, it } from 'vitest';
 
+import { type ValidationRuleWithParams } from '@vuelidate/core';
+
 import { useValidation } from './validation';
 
 describe('useValidation', () => {
@@ -33,7 +35,7 @@ describe('useValidation', () => {
     ['minValue', validations.minValue('message', 2), 1, 2],
     ['maxValue', validations.maxValue('message', 1), 2, 1],
     ['pattern', validations.pattern('message', /^a+$/), 'b', 'aa'],
-  ])('should validate %s with its message', (_name, validator: any, invalid, valid) => {
+  ])('should validate %s with its message', (_name, validator: ValidationRuleWithParams, invalid, valid) => {
     expect(validator.$message).toBe('message');
     expect(validator.$validator(invalid, {}, {})).toBe(false);
     expect(validator.$validator(valid, {}, {})).toBe(true);

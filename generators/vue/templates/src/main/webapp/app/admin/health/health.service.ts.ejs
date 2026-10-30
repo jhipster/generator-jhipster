@@ -18,15 +18,31 @@
 -%>
 import axios, { type AxiosPromise } from 'axios';
 
+/** A health indicator of the health endpoint: its status and its details or its sub-indicators. */
+export type HealthObject = { status: string } & Record<string, unknown>;
+
+export interface Health {
+  status: string;
+  components?: Record<string, unknown>;
+}
+
+/** A row of the health page. */
+export interface HealthData {
+  name: string;
+  status?: unknown;
+  error?: unknown;
+  details?: Record<string, unknown>;
+}
+
 export default class HealthService {
   separator = '.';
 
-  checkHealth(): AxiosPromise<any> {
+  checkHealth(): AxiosPromise<Health> {
     return axios.get('management/health');
   }
 
-  transformHealthData(data: any): any {
-    const response = [];
+  transformHealthData(data: Partial<Health>): HealthData[] {
+    const response: HealthData[] = [];
     this.flattenHealthData(response, null, data.components);
     return response;
   }
@@ -47,14 +63,14 @@ export default class HealthService {
     }
   }
 
-  addHealthObject(result: any, isLeaf: boolean, healthObject: any, name: string) {
-    const healthData = {
+  addHealthObject(result: HealthData[], isLeaf: boolean, healthObject: HealthObject, name: string): HealthData {
+    const healthData: HealthData = {
       name,
       details: undefined,
       error: undefined,
     };
 
-    const details = {};
+    const details: Record<string, unknown> = {};
     let hasDetails = false;
 
     for (const [key, value] of Object.entries(healthObject)) {
@@ -78,7 +94,7 @@ export default class HealthService {
     return healthData;
   }
 
-  flattenHealthData(result: any, path: any, data: any): any {
+  flattenHealthData(result: HealthData[], path: string | null, data: Record<string, unknown> | undefined): HealthData[] {
     for (const [key, value] of Object.entries(data ?? {})) {
       if (this.isHealthObject(value)) {
         if (this.hasSubSystem(value)) {
@@ -92,7 +108,7 @@ export default class HealthService {
     return result;
   }
 
-  getModuleName(path: any, name: string) {
+  getModuleName(path: string | null, name: string): string {
     if (path && name) {
       return path + this.separator + name;
     } else if (path) {
@@ -103,11 +119,11 @@ export default class HealthService {
     return '';
   }
 
-  hasSubSystem(healthObject: any): any {
-    return Object.values(healthObject).some((value: any) => value?.status);
+  hasSubSystem(healthObject: HealthObject): boolean {
+    return Object.values(healthObject).some(value => (value as { status?: unknown } | null | undefined)?.status);
   }
 
-  isHealthObject(healthObject: any): any {
+  isHealthObject(healthObject: unknown): healthObject is HealthObject {
     return typeof healthObject === 'object' && healthObject !== null && Object.hasOwn(healthObject, 'status');
   }
 }

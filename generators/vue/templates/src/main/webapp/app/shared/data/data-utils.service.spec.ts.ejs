@@ -154,7 +154,7 @@ describe('DataUtils Service', () => {
   });
 
   it('should set the data of a file and its content type', async () => {
-    const entity: Record<string, any> = {};
+    const entity: Record<string, unknown> = {};
     const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
 
     dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', false);
@@ -164,7 +164,7 @@ describe('DataUtils Service', () => {
   });
 
   it('should not set the data of a file that is not an image as an image', () => {
-    const entity: Record<string, any> = {};
+    const entity: Record<string, unknown> = {};
     const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
 
     dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', true);
@@ -173,7 +173,7 @@ describe('DataUtils Service', () => {
   });
 
   it('should not set the data without a file', () => {
-    const entity: Record<string, any> = {};
+    const entity: Record<string, unknown> = {};
 
     dataUtilsService.setFileData({ target: { files: [] } }, entity, 'data', false);
     dataUtilsService.setFileData(undefined, entity, 'data', false);

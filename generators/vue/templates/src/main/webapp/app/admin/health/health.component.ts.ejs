@@ -22,7 +22,7 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import <%- jhiPrefixCapitalized %>HealthModal from './health-modal.vue';
-import HealthService from './health.service';
+import HealthService, { type HealthData } from './health.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Health',
@@ -32,14 +32,14 @@ export default defineComponent({
   setup() {
     const healthService = inject('healthService', () => new HealthService(), true);
 
-    const healthData: Ref = ref(null);
-    const currentHealth: Ref = ref(null);
+    const healthData: Ref<HealthData[] | null> = ref(null);
+    const currentHealth: Ref<HealthData | null> = ref(null);
     const updatingHealth = ref(false);
 
-    const healthModal = ref<any>(null);
+    const healthModal = ref<{ show: () => void } | null>(null);
 
-    const baseName = (name: any): any => healthService.getBaseName(name);
-    const getBadgeClass = (statusState: any): string => (statusState === 'UP' ? 'bg-success' : 'bg-danger');
+    const baseName = (name: string): string => healthService.getBaseName(name);
+    const getBadgeClass = (statusState: unknown): string => (statusState === 'UP' ? 'bg-success' : 'bg-danger');
     const refresh = (): void => {
       updatingHealth.value = true;
       healthService
@@ -55,9 +55,9 @@ export default defineComponent({
           updatingHealth.value = false;
         });
     };
-    const showHealth = (health: any): void => {
+    const showHealth = (health: HealthData): void => {
       currentHealth.value = health;
-      healthModal.value.show();
+      healthModal.value?.show();
     };
     const subSystemName = (name: string): string => healthService.getSubSystemName(name);
 

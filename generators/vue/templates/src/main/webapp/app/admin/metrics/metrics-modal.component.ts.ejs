@@ -23,16 +23,18 @@ import { useI18n } from 'vue-i18n';
 
 import { filterBy } from '@/shared/computables';
 
+import { type Thread } from './metrics.service';
+
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>MetricsModal',
   props: {
     threadDump: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<Thread[]>,
       default: () => [],
     },
   },
   setup(props) {
-    const threadDumpFilter: Ref = ref('');
+    const threadDumpFilter: Ref<string> = ref('');
     const filteredThreadDump = computed(() => filterBy(props.threadDump, { filterByTerm: threadDumpFilter.value }));
 
     const threadDumpData = computed(() => {

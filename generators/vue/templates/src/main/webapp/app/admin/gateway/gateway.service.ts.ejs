@@ -16,12 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
+
+export interface ServiceInstance {
+  healthService?: { checks: { status: string }[] };
+  instanceInfo?: { status: string };
+  [key: string]: unknown;
+}
+
+export interface GatewayRoute {
+  path: string;
+  serviceId: string;
+  serviceInstances: ServiceInstance[];
+}
 
 export default class GatewayService {
-  findAll(): Promise<any> {
+  findAll(): Promise<AxiosResponse<GatewayRoute[]>> {
     return new Promise(resolve => {
-      axios.get('api/gateway/routes').then(res => {
+      axios.get<GatewayRoute[]>('api/gateway/routes').then(res => {
         resolve(res);
       });
     });
