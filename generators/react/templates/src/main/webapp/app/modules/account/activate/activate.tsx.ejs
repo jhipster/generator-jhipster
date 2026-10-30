@@ -17,11 +17,12 @@
  limitations under the License.
 -%>
 import { useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router';
-import { Row, Col, Alert } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
+import { Link, useSearchParams } from 'react-router';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+
 import { activateAction, reset } from './activate.reducer';
 
 const successAlert = (

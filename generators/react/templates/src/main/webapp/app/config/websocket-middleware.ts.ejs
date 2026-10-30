@@ -16,23 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import SockJS from 'sockjs-client';
-
-import Stomp from 'webstomp-client';
-import { Observable } from 'rxjs';
 <%_ if (!authenticationTypeSession) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
+import { Observable } from 'rxjs';
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client';
+
 import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
-import { getAccount<%- authenticationTypeJwt ? ', logoutSession' : ',logoutServer' %> } from 'app/shared/reducers/authentication';
-<%_ if (authenticationTypeJwt) { _%>
-import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+<%_ if (authenticationTypeJwt || authenticationUsesCsrf) { _%>
+import { <%- [authenticationTypeJwt ? 'AUTHENTICATION_TOKEN_KEY' : undefined, authenticationUsesCsrf ? 'CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME' : undefined].filter(Boolean).join(', ') %> } from 'app/shared/jhipster/constants';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
-import { CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN_COOKIE_NAME } from 'app/shared/jhipster/constants';
 import { encodeCsrfToken } from 'app/shared/jhipster/encode-csrf-token';
 <%_ } _%>
+import { getAccount<%- authenticationTypeJwt ? ', logoutSession' : ',logoutServer' %> } from 'app/shared/reducers/authentication';
 <%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>

@@ -18,30 +18,32 @@
 -%>
 import { Suspense, lazy<%- communicationSpringWebsocket ? ', useEffect' : '' %> } from 'react';
 import { Route<%- communicationSpringWebsocket ? ', useLocation' : '' %> } from 'react-router';
+
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 import { loadRemote } from '@module-federation/runtime';
 <%_ } _%>
 
-<%_ if (authenticationTypeOauth2) { _%>
-import LoginRedirect from 'app/modules/login/login-redirect';
-<%_ } else { _%>
-import Login from 'app/modules/login/login';
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
-import Register from 'app/modules/account/register/register';
-import Activate from 'app/modules/account/activate/activate';
-import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
-import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
-<%_ } _%>
-import Logout from 'app/modules/login/logout';
-import Home from 'app/modules/home/home';
-import EntitiesRoutes from 'app/entities/routes';
-import PrivateRoute from 'app/shared/auth/private-route';
-import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
-import { Authority } from 'app/shared/jhipster/constants';
 <%_ if (communicationSpringWebsocket) { _%>
 import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
+import EntitiesRoutes from 'app/entities/routes';
+<%_ if (generateUserManagement) { _%>
+import Activate from 'app/modules/account/activate/activate';
+import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
+import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
+import Register from 'app/modules/account/register/register';
+<%_ } _%>
+import Home from 'app/modules/home/home';
+<%_ if (!authenticationTypeOauth2) { _%>
+import Login from 'app/modules/login/login';
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import LoginRedirect from 'app/modules/login/login-redirect';
+<%_ } _%>
+import Logout from 'app/modules/login/logout';
+import PrivateRoute from 'app/shared/auth/private-route';
+import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
+import { Authority } from 'app/shared/jhipster/constants';
 
 const loading = <div>loading ...</div>;
 <%_ if (generateUserManagement) { _%>

@@ -104,9 +104,12 @@ spec:
 <%_ } _%>
 <%_ if (app.serviceDiscoveryConsul) { _%>
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.<%- kubernetesNamespace %>.svc.cluster.local
+          value: consul-ui.<%- kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
   <%_ if (istio) { _%>
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
@@ -123,47 +126,27 @@ spec:
               name: jwt-secret
               key: secret
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb) { _%>
-        - name: SPRING_DATASOURCE_URL
-          value: <%- app.kubernetesJdbcUrl %>
-        - name: SPRING_LIQUIBASE_URL
-          value: <%- app.kubernetesJdbcUrl %>
+<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
   <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_URL
           value: <%- app.kubernetesR2dbcUrl %>
-  <%_ } _%>
-<%_ } _%>
-<%_ if (app.prodDatabaseTypeMariadb) { _%>
-  <%_ if (app.reactive) { _%>
-        - name: SPRING_R2DBC_PASSWORD
+        - name: SPRING_R2DBC_USERNAME
+          value: <%- app.prodDatabaseUsername %>
   <%_ } else { _%>
-        - name: SPRING_DATASOURCE_PASSWORD
-  <%_ } _%>
-          valueFrom:
-            secretKeyRef:
-              name: <%- app.baseName.toLowerCase() %>-mariadb
-              key: mariadb-root-password
-<%_ } _%>
-<%_ if (app.prodDatabaseTypePostgresql) { _%>
         - name: SPRING_DATASOURCE_URL
           value: <%- app.kubernetesDatasourceJdbcUrl %>
         - name: SPRING_DATASOURCE_USERNAME
-          value: <%- app.baseName %>
-  <%_ if (app.reactive) { _%>
-        - name: SPRING_R2DBC_PASSWORD
-  <%_ } else { _%>
-        - name: SPRING_DATASOURCE_PASSWORD
+          value: <%- app.prodDatabaseUsername %>
   <%_ } _%>
+  <%_ if (app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
+        - name: <%- app.reactive ? 'SPRING_R2DBC_PASSWORD' : 'SPRING_DATASOURCE_PASSWORD' %>
           valueFrom:
             secretKeyRef:
-              name: <%- app.baseName.toLowerCase() %>-postgresql
-              key: postgresql-password
+              name: <%- app.baseName.toLowerCase() %>-<%- app.prodDatabaseType %>
+              key: <%- app.prodDatabaseTypeMariadb ? 'mariadb-root-password' : 'postgresql-password' %>
+  <%_ } _%>
         - name: SPRING_LIQUIBASE_URL
           value: <%- app.kubernetesJdbcUrl %>
-  <%_ if (app.reactive) { _%>
-        - name: SPRING_R2DBC_URL
-          value: <%- app.kubernetesR2dbcUrl %>
-  <%_ } _%>
 <%_ } _%>
 <%_ if (app.databaseTypeMongodb) { _%>
         - name: SPRING_MONGODB_URI

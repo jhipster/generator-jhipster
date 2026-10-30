@@ -29,6 +29,10 @@ describe('DataUtils Service', () => {
     dataUtilsService = useDataUtils();
   });
 
+  it('should abbreviate no text to an empty text', () => {
+    expect(dataUtilsService.abbreviate(undefined)).toBe('');
+  });
+
   it('should not abbreviate text shorter than 30 characters', () => {
     const result = dataUtilsService.abbreviate('JHipster JHipster');
 
@@ -45,14 +49,6 @@ describe('DataUtils Service', () => {
     const result = dataUtilsService.byteSize('JHipster rocks!');
 
     expect(result).toBe('11.25 bytes');
-  });
-
-  it('should clear input entity', () => {
-    const entity = { field: 'key', value: 'value' };
-    dataUtilsService.clearInputImage(entity, null, 'field', 'value', 1);
-
-    expect(entity.field).toBeNull();
-    expect(entity.value).toBeNull();
   });
 
   it('should open file', () => {
@@ -155,5 +151,33 @@ describe('DataUtils Service', () => {
     );
 
     expect(result).toStrictEqual({});
+  });
+
+  it('should set the data of a file and its content type', async () => {
+    const entity: Record<string, unknown> = {};
+    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+
+    dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', false);
+
+    await vi.waitFor(() => expect(entity.data).toBe(btoa('hello')));
+    expect(entity.dataContentType).toBe('text/plain');
+  });
+
+  it('should not set the data of a file that is not an image as an image', () => {
+    const entity: Record<string, unknown> = {};
+    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
+
+    dataUtilsService.setFileData({ target: { files: [file] } }, entity, 'data', true);
+
+    expect(entity).toEqual({});
+  });
+
+  it('should not set the data without a file', () => {
+    const entity: Record<string, unknown> = {};
+
+    dataUtilsService.setFileData({ target: { files: [] } }, entity, 'data', false);
+    dataUtilsService.setFileData(undefined, entity, 'data', false);
+
+    expect(entity).toEqual({});
   });
 });

@@ -192,7 +192,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      async dockerServices({ application, source }) {
+      dockerServices({ application, source }) {
         if (application.dockerServices.includes('cassandra')) {
           const serviceName = application.databaseType!;
           if (application.databaseMigrationLoader) {
@@ -322,7 +322,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
   get end() {
     return this.asEndTaskGroup({
-      async dockerComposeUp({ control }) {
+      dockerComposeUp({ control }) {
         if (!this.skipChecks && !control.environmentHasDockerCompose) {
           this.log('');
           this.log.warn(

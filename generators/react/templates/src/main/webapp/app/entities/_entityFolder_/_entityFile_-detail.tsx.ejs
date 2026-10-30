@@ -20,8 +20,7 @@ import { useEffect
 <%_ if (!readOnly) { _%>
 , useState
 <%_ } _%> } from 'react';
-import { Link, useParams } from 'react-router';
-import { Button, <%- anyFieldHasDocumentation ? 'OverlayTrigger, Tooltip, ' : '' %>Row, Col } from 'react-bootstrap';
+import { Button, Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, ' : '' %>Row<%- anyFieldHasDocumentation ? ', Tooltip' : '' %> } from 'react-bootstrap';
 import {
   Translate,
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -31,23 +30,25 @@ import {
   TextFormat
 <%_ } _%>
 } from 'react-jhipster';
-<%_ if (anyFieldHasFileBasedContentType) { _%>
-import { openFile } from 'app/shared/jhipster/data-utils';
-<%_ } _%>
+import { Link, useParams } from 'react-router';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 <%_ if (anyFieldIsDateDerived) { _%>
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ } _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 <%_ if (anyFieldIsDuration) { _%>
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
-import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+import { openFile } from 'app/shared/jhipster/data-utils';
+<%_ } _%>
 
-import { getEntity } from './<%- entityFileName %>.reducer';
 <%_ if (!readOnly) { _%>
 import <%- entityReactName %>DeleteDialog from './<%- entityFileName %>-delete-dialog';
 <%_ } _%>
+import { getEntity } from './<%- entityFileName %>.reducer';
 
 export const <%- entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
@@ -64,12 +65,13 @@ export const <%- entityReactName %>Detail = () => {
 <%_ } _%>
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   return (
-    <Row>
+    <Row className="justify-content-center">
       <Col md="8">
         <h2 data-cy="<%- entityInstance %>DetailsHeading">
           <Translate contentKey="<%- i18nKeyPrefix %>.detail.title"><%- entityNameCapitalized %></Translate>
         </h2>
-          <dl className="jh-entity-details">
+        <hr />
+          <dl className="row-md jh-entity-details">
 <%_ for (field of fields) { _%>
   <%_ const { fieldName, fieldNameHumanized } = field; _%>
             <dt>

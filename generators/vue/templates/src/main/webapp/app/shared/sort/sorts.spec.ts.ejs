@@ -26,4 +26,10 @@ describe('Sort', () => {
 
     expect(result).toBe('');
   });
+
+  it('should build the query of the pagination, a parameter for each value', () => {
+    const result = buildPaginationQueryOpts({ page: 1, size: 20, sort: ['name,asc', 'id'] });
+
+    expect(result).toBe('page=1&size=20&sort=name,asc&sort=id');
+  });
 });

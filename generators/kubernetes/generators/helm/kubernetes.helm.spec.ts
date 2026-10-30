@@ -563,6 +563,9 @@ describe('generator - Kubernetes Helm', () => {
       runResult.assertFile(expectedFiles.jhgate);
       runResult.assertFile(expectedFiles.csvcfiles);
     });
+    it('pins each app to one Consul server with a destination rule', () => {
+      runResult.assertFileContent('./helm/csvc-helm/templates/consul-destination-rule.yml', /useSourceIp: true/);
+    });
     it('creates expected routing gateway and istio files', () => {
       runResult.assertFile(expectedFiles.jhgategateway);
     });

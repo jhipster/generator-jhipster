@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 
 import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
 <%_ if (!paginationNo) { _%>
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
+import buildPaginationQueryOpts, { type PaginationQuery } from '@/shared/sort/sorts';
 <%_ } _%>
 
 const baseApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>';
@@ -31,12 +31,11 @@ const baseSearchApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search?query=
 export default class <%- entityAngularName %>Service {
 <%_ if (searchEngineAny) { _%>
   <%_ if (paginationNo) { _%>
-  async search(query): Promise<any> {
-    const res = await axios.get(`${baseSearchApiUrl}${query}`);
-    return res.data;
+  search(query): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+    return axios.get(`${baseSearchApiUrl}${query}`);
   }
   <%_ } else { _%>
-  search(query, paginationQuery): Promise<any> {
+  search(query, paginationQuery): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
     return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`);
   }
   <%_ } _%>
@@ -47,12 +46,12 @@ export default class <%- entityAngularName %>Service {
     return res.data;
   }
 
-  retrieve(<%- paginationNo ? '' : 'paginationQuery?: any' %>) : Promise<any> {
+  retrieve(<%- paginationNo ? '' : 'paginationQuery?: PaginationQuery' %>) : Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
     return axios.get(baseApiUrl<%- paginationNo ? '' : ' + `?${buildPaginationQueryOpts(paginationQuery)}` ' %>);
   }
 <%_ if (!readOnly) { _%>
 
-  delete(<%- primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<any> {
+  delete(<%- primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<AxiosResponse<void>> {
     return axios.delete(`${baseApiUrl}/${<%- primaryKey.name %>}`);
   }
 

@@ -18,17 +18,27 @@
 -%>
 import axios from 'axios';
 
-export default class ConfigurationService {
-  async loadConfiguration(): Promise<any> {
-    const res = await axios.get('management/configprops');
-    const properties = [];
-    const propertiesObject = this.getConfigPropertiesObjects(res.data);
-    for (const key in propertiesObject) {
-      if (Object.hasOwn(propertiesObject, key)) {
-        properties.push(propertiesObject[key]);
-      }
-    }
+/** A bean of the configuration properties endpoint. */
+export interface ConfigurationBean {
+  prefix: string;
+  properties?: Record<string, unknown>;
+}
 
+interface ConfigProps {
+  contexts: Record<string, { beans: Record<string, ConfigurationBean> }>;
+}
+
+interface Env {
+  propertySources: { name: string; properties: Record<string, { value: unknown }> }[];
+}
+
+/** The properties of each property source of the environment endpoint. */
+export type EnvConfiguration = Record<string, { key: string; val: unknown }[]>;
+
+export default class ConfigurationService {
+  async loadConfiguration(): Promise<ConfigurationBean[]> {
+    const res = await axios.get<ConfigProps>('management/configprops');
+    const properties = Object.values(this.getConfigPropertiesObjects(res.data));
     properties.sort((propertyA, propertyB) => {
       const comparePrefix = propertyA.prefix < propertyB.prefix ? -1 : 1;
       return propertyA.prefix === propertyB.prefix ? 0 : comparePrefix;
@@ -36,38 +46,19 @@ export default class ConfigurationService {
     return properties;
   }
 
-  async loadEnvConfiguration(): Promise<any> {
-    const res = await axios.get<any>('management/env');
-    const properties = {};
-    const propertySources = res.data.propertySources;
-
-    for (const propertyObject of propertySources) {
-      const name = propertyObject.name;
-      const detailProperties = propertyObject.properties;
-      const vals = [];
-      for (const keyDetail in detailProperties) {
-        if (Object.hasOwn(detailProperties, keyDetail)) {
-          vals.push({ key: keyDetail, val: detailProperties[keyDetail].value });
-        }
-      }
-      properties[name] = vals;
-    }
-    return properties;
+  async loadEnvConfiguration(): Promise<EnvConfiguration> {
+    const res = await axios.get<Env>('management/env');
+    return Object.fromEntries(
+      res.data.propertySources.map(({ name, properties }) => [
+        name,
+        Object.entries(properties).map(([key, property]) => ({ key, val: property.value })),
+      ]),
+    );
   }
 
-  private getConfigPropertiesObjects(res): any {
-    // This code is for Spring Boot 2
-    if (res.contexts !== undefined) {
-      for (const key in res.contexts) {
-        // If the key is not bootstrap, it will be the ApplicationContext ID
-        // For default app, it is baseName
-        // For microservice, it is baseName-1
-        if (!key.startsWith('bootstrap')) {
-          return res.contexts[key].beans;
-        }
-      }
-    }
-    // by default, use the default ApplicationContext ID
-    return res['contexts']['<%- baseName %>']['beans'];
+  private getConfigPropertiesObjects(res: ConfigProps): Record<string, ConfigurationBean> {
+    // The ApplicationContext ID, not a bootstrap one: the baseName for an application, baseName-1 for a microservice.
+    const contextKey = Object.keys(res.contexts).find(key => !key.startsWith('bootstrap') || key === '<%- baseName %>');
+    return res.contexts[contextKey as string].beans;
   }
 }

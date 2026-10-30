@@ -666,8 +666,17 @@ ${classProperties
             [application.applicationTypeMicroservice && application.microfrontend, `${application.srcMainResources}static/index.html`],
             `${application.javaPackageSrcDir}config/JacksonConfiguration.java`,
           ],
-          '9.4.1': [`${application.srcMainResources}config/tls/keystore.p12`],
         });
+        if (control.isJhipsterVersionLessThan('9.4.1')) {
+          // The sample KeyStore was renamed: the one of the project is kept, under its new name.
+          const oldKeyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+          const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore-samples.p12`);
+          if (this.fs.exists(oldKeyStoreFile) && !this.fs.exists(keyStoreFile)) {
+            this.fs.move(oldKeyStoreFile, keyStoreFile);
+          } else {
+            this.removeFile(oldKeyStoreFile);
+          }
+        }
       },
       resetFakeDataSeed() {
         this.resetEntitiesFakeData('server');

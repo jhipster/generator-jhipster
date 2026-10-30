@@ -17,10 +17,13 @@
  limitations under the License.
 -%>
 import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { defineComponent } from 'vue';
+
+import { mount } from '@vue/test-utils';
 
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
 
-import AlertService from './alert.service';
+import AlertService, { useAlertService } from './alert.service';
 
 describe('Alert Service test suite', () => {
 <%_ if (enableTranslation) { _%>
@@ -36,11 +39,11 @@ describe('Alert Service test suite', () => {
     toastStub = vi.fn();
     alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-      i18n: { t: translationStub } as any,
+      i18n: { t: translationStub },
 <%_ } _%>
       toast: {
         create: toastStub,
-      } as any,
+      },
     });
   });
 
@@ -234,5 +237,80 @@ describe('Alert Service test suite', () => {
       title: 'Error',
       variant: 'danger',
     });
+  });
+
+  it('should show error toast when http status != 400,404 without a body', () => {
+<%_ if (enableTranslation) { _%>
+    // GIVEN
+    translationStub.mockReturnValueOnce('Internal server error.');
+
+<%_ } _%>
+    // WHEN
+    alertService.showHttpError({ status: 500, data: '' });
+
+    // THEN
+<%_ if (enableTranslation) { _%>
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith('error.http.500');
+<%_ } _%>
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'Internal server error.', variant: 'danger' }));
+  });
+
+  it('should show error toast when http status = 400 without a body', () => {
+    // WHEN
+    alertService.showHttpError({ status: 400, headers: {} });
+
+    // THEN
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ title: 'Error', variant: 'danger' }));
+  });
+
+  it('should show the error message of the headers when http status = 400', () => {
+    // WHEN
+    alertService.showHttpError({ status: 400, headers: { [MESSAGE_ERROR_HEADER_NAME]: 'An error message' } });
+
+    // THEN
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'An error message', variant: 'danger' }));
+  });
+<%_ if (enableTranslation) { _%>
+
+  it('should show the error key of the headers when http status = 400', () => {
+    // GIVEN
+    translationStub.mockReturnValueOnce('An error');
+
+    // WHEN
+    alertService.showHttpError({ status: 400, headers: { [MESSAGE_ERROR_HEADER_NAME]: 'error.key' } });
+
+    // THEN
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith('error.key');
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'An error', variant: 'danger' }));
+  });
+<%_ } _%>
+
+  it('should show a validation error when http status = 400 with field errors', () => {
+    // WHEN
+    alertService.showHttpError({ status: 400, headers: {}, data: { fieldErrors: [{ field: 'name' }] } });
+
+    // THEN
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'Validation error', variant: 'danger' }));
+  });
+
+  it('should need the toasts of BootstrapVue', () => {
+    expect(() =>
+      mount(
+        defineComponent({
+          setup() {
+            useAlertService();
+            return () => null;
+          },
+        }),
+      ),
+    ).toThrow();
+  });
+
+  it('should show a success toast', () => {
+    // WHEN
+    alertService.showSuccess('Saved');
+
+    // THEN
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'Saved', title: 'Success', variant: 'success' }));
   });
 });

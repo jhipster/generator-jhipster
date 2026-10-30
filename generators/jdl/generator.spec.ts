@@ -580,7 +580,7 @@ describe(`generator - ${generator}`, () => {
             'generator-jhipster': {
               baseName: 'jhipster',
               creationTimestamp: 1577836800000,
-              lastLiquibaseTimestamp: 1577836860000,
+              lastChangelogTimestamp: 1577836860000,
               languages: ['en', 'fr'],
               testFrameworks: ['cypress'],
             },
@@ -602,7 +602,7 @@ describe(`generator - ${generator}`, () => {
       runResult.assertJsonFileContent('.yo-rc.json', {
         'generator-jhipster': {
           creationTimestamp: 1577836800000,
-          lastLiquibaseTimestamp: 1577836860000,
+          lastChangelogTimestamp: 1577836860000,
           languages: ['pt'],
           testFrameworks: ['cypress'],
         },

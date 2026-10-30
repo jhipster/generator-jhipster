@@ -38,7 +38,7 @@ export default class LoginService {
   }
 <%_ } _%>
 
-  async logout(): Promise<AxiosResponse<any>> {
+  async logout(): Promise<AxiosResponse<{ logoutUrl?: string }>> {
     return axios.post('api/logout');
   }
 }

@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, computed, defineComponent, inject, ref } from 'vue';
+import { type Ref, computed, defineComponent, inject, onMounted, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
 
-import ConfigurationService from './configuration.service';
+import ConfigurationService, { type ConfigurationBean, type EnvConfiguration } from './configuration.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Configuration',
@@ -32,9 +32,9 @@ export default defineComponent({
 
     const orderProp = ref('prefix');
     const reverse = ref(false);
-    const allConfiguration: Ref = ref({});
-    const configuration: Ref<any[]> = ref([]);
-    const configKeys: Ref<any[]> = ref([]);
+    const allConfiguration: Ref<EnvConfiguration> = ref({});
+    const configuration: Ref<ConfigurationBean[]> = ref([]);
+    const configKeys: Ref<string[][]> = ref([]);
     const filtered = ref('');
 
     const filteredConfiguration = computed(() =>
@@ -45,6 +45,33 @@ export default defineComponent({
       }),
     );
 
+    const init = (): void => {
+      configurationService.loadConfiguration().then(res => {
+        configuration.value = res;
+
+        for (const config of configuration.value) {
+          if (config.properties !== undefined) {
+            configKeys.value.push(Object.keys(config.properties));
+          }
+        }
+      });
+
+      configurationService.loadEnvConfiguration().then(res => {
+        allConfiguration.value = res;
+      });
+    };
+
+    const changeOrder = (prop: string): void => {
+      orderProp.value = prop;
+      reverse.value = !reverse.value;
+    };
+
+    const keys = (dict: object | undefined): string[] => (dict === undefined ? [] : Object.keys(dict));
+
+    onMounted(() => {
+      init();
+    });
+
     return {
       configurationService,
       orderProp,
@@ -54,36 +81,12 @@ export default defineComponent({
       configKeys,
       filtered,
       filteredConfiguration,
+      init,
+      changeOrder,
+      keys,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
     };
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init(): void {
-      this.configurationService.loadConfiguration().then(res => {
-        this.configuration = res;
-
-        for (const config of this.configuration) {
-          if (config.properties !== undefined) {
-            this.configKeys.push(Object.keys(config.properties));
-          }
-        }
-      });
-
-      this.configurationService.loadEnvConfiguration().then(res => {
-        this.allConfiguration = res;
-      });
-    },
-    changeOrder(prop: string): void {
-      this.orderProp = prop;
-      this.reverse = !this.reverse;
-    },
-    keys(dict: any): string[] {
-      return dict === undefined ? [] : Object.keys(dict);
-    },
   },
 });

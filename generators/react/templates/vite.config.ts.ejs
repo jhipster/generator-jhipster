@@ -16,20 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { fileURLToPath, URL } from 'node:url';
 import path from 'node:path';
-import { defineConfig, normalizePath } from 'vite';
+import { URL, fileURLToPath } from 'node:url';
+
+<%_ if (microfrontend) { _%>
+import { federation } from '@module-federation/vite';
+<%_ } _%>
 import react from '@vitejs/plugin-react';
+import { defineConfig, normalizePath } from 'vite';
 <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ } _%>
-<%_ if (microfrontend) { _%>
-import { federation } from '@module-federation/vite';
 
+<%_ if (microfrontend) { _%>
 import federationConfig from './module-federation.config.ts';
 <%_ } _%>
 <%_ if (buildToolUnknown) { _%>
-
 import packageJson from './package.json' with { type: 'json' };
 <%_ } _%>
 

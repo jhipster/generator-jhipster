@@ -15,7 +15,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "messageHeaderNameParam": "x-basenameapp-params",
   "microfrontend": "clientFrameworkAny",
   "microfrontends": [],
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "withAdminUi": false,
 }
 `;

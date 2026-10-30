@@ -75,7 +75,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing({ application, applicationDefaults }) {
+      preparing({ application, applicationDefaults }) {
         applicationDefaults({
           springDataDescription: ({ reactive }) => `Spring Data ${reactive ? 'R2DBC' : 'JPA'}`,
           springBootBaseRepositoryClass: ({ reactive }) => (reactive ? 'R2dbcRepository' : 'JpaRepository'),
@@ -356,12 +356,12 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           publicMethods: ['com.zaxxer.hikari.HikariDataSource.class'],
         });
       },
-      async nativeMavenBuildTool({ application, source }) {
+      nativeMavenBuildTool({ application, source }) {
         if (!application.buildToolMaven || !application.graalvmSupport) return;
 
         source.addMavenProperty!({ property: 'spring.h2.console.enabled', value: 'true' });
       },
-      async nativeGradleBuildTool({ application, source }) {
+      nativeGradleBuildTool({ application, source }) {
         if (!application.buildToolGradle || !application.graalvmSupport) return;
 
         const { reactive, javaManagedProperties } = application;
@@ -375,7 +375,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           });
         }
       },
-      async blockHound({ application, source }) {
+      blockHound({ application, source }) {
         if (!application.reactive) return;
 
         if (application.prodDatabaseTypeMariadb) {
@@ -428,7 +428,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
-      async jsonFilter({ application, entities, source }) {
+      jsonFilter({ application, entities, source }) {
         if (application.reactive || !application.graalvmSupport) return;
         for (const entity of entities.filter(({ builtIn, builtInUser, embedded }) => builtInUser || (!builtIn && !embedded))) {
           source.editJavaFile!(`${application.srcMainJava}/${entity.entityAbsoluteFolder}/domain/${entity.entityClass}.java`, {

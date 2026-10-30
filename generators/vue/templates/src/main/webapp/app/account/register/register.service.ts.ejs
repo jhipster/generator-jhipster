@@ -16,10 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
+
+export interface Registration {
+  login?: string;
+  email?: string;
+  password?: string;
+  langKey?: string;
+}
 
 export default class RegisterService {
-  processRegistration(account: any): Promise<any> {
+  processRegistration(account: Registration): Promise<AxiosResponse<void>> {
     return axios.post('api/register', account);
   }
 }

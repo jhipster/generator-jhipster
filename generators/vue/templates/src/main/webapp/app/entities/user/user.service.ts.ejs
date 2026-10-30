@@ -16,12 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
+
+import { type IUser } from '@/shared/model/user.model';
 
 const baseApiUrl = 'api/users';
 
 export default class UserService {
-  retrieve(): Promise<any> {
+  retrieve(): Promise<AxiosResponse<IUser[]>> {
     return axios.get(baseApiUrl);
   }
 }

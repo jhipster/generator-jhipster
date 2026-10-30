@@ -29,7 +29,7 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
       type="submit"
       class="btn btn-danger"
     >
-      <fa-icon icon="times" />&nbsp;<span>Delete</span>
+      <fa-icon icon="trash" />&nbsp;<span>Delete</span>
     </button>
   </div>
 </form>
@@ -223,7 +223,7 @@ export class UserManagementDeleteDialog {
         [disabled]="!currentAccount() || currentAccount()?.login === userManagementRef.login"
         data-cy="entityDeleteButton"
       >
-        <fa-icon icon="times" />&nbsp;<span>Delete</span>
+        <fa-icon icon="trash" />&nbsp;<span>Delete</span>
       </button>
     </div>
     }
@@ -246,7 +246,7 @@ import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
   faArrowLeft,
   faPencilAlt,
-  faTimes,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 import { of } from "rxjs";
@@ -286,7 +286,7 @@ describe("UserManagement Management Detail Component", () => {
     library.addIcons(faArrowLeft);
     library.addIcons(faPencilAlt);
 
-    library.addIcons(faTimes);
+    library.addIcons(faTrash);
   });
 
   beforeEach(() => {
@@ -549,7 +549,7 @@ export class UserManagementDetail {
                 [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
                 data-cy="entityDeleteButton"
               >
-                <fa-icon icon="times" />
+                <fa-icon icon="trash" />
                 <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
@@ -610,7 +610,7 @@ import {
   faSortDown,
   faSortUp,
   faSync,
-  faTimes,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 import { Subject, of } from "rxjs";
@@ -673,7 +673,7 @@ describe("UserManagement Management Component", () => {
       faSortDown,
       faSortUp,
       faSync,
-      faTimes,
+      faTrash,
     );
     httpMock = TestBed.inject(HttpTestingController);
   });
@@ -2114,10 +2114,10 @@ export class UserManagementFormService {
           type="button"
           id="cancel-save"
           data-cy="entityCreateCancelButton"
-          class="btn btn-secondary"
+          class="btn btn-info"
           (click)="previousState()"
         >
-          <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
+          <fa-icon icon="arrow-left" />&nbsp;<span>Back</span>
         </button>
 
         <button
@@ -2822,7 +2822,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -3206,9 +3206,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3216,6 +3213,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.route.ts": {
@@ -3889,7 +3889,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": Any<Object>,
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -4489,9 +4489,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4499,6 +4496,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.route.ts": {
@@ -5206,7 +5206,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "clientRoot/src/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -5584,9 +5584,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -5594,6 +5591,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/error/error.route.ts": {
@@ -6282,7 +6282,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -6804,9 +6804,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -6814,6 +6811,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {
@@ -7507,7 +7507,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -8284,9 +8284,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -8294,6 +8291,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {
@@ -8999,7 +8999,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -9365,9 +9365,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -9375,6 +9372,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {
@@ -10046,7 +10046,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -10412,9 +10412,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/home/home.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.scss": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/home/home.spec.ts": {
     "stateCleared": "modified",
   },
@@ -10422,6 +10419,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/error/error.route.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/error/error.route.ts": {

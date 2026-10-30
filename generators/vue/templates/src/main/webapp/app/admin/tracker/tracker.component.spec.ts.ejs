@@ -16,14 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type Router, createMemoryHistory, createRouter } from 'vue-router';
 
-import { shallowMount } from '@vue/test-utils';
+import { type VueWrapper, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import { Subject, type Subscription } from 'rxjs';
 
 import <%- jhiPrefixCapitalized %>Tracker from './tracker.vue';
+import { type TrackerActivity } from './tracker.service';
 
 type <%- jhiPrefixCapitalized %>TrackerComponentType = InstanceType<typeof <%- jhiPrefixCapitalized %>Tracker>;
 
@@ -34,17 +35,17 @@ const axiosStub = {
 };
 
 describe('<%- jhiPrefixCapitalized %>Tracker', () => {
-  let wrapper: any;
+  let wrapper: VueWrapper<<%- jhiPrefixCapitalized %>TrackerComponentType>;
   let trackerView: <%- jhiPrefixCapitalized %>TrackerComponentType;
 
-  let subject: Subject<any>;
+  let subject: Subject<Partial<TrackerActivity>>;
   let subscription: Subscription;
   let subscriptionSpy;
-  let trackerServiceStub: any;
+  let trackerServiceStub: { subscribe: Mock; sendActivity: Mock };
 
   beforeEach(() => {
     axiosStub.get.mockResolvedValue({ data: {} });
-    subject = new Subject<any>();
+    subject = new Subject<Partial<TrackerActivity>>();
     trackerServiceStub = {
       subscribe: vi.fn().mockImplementation(observer => {
         subscription = subject.subscribe(observer);

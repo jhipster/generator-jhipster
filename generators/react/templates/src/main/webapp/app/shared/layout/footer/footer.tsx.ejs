@@ -16,20 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import './footer.scss';
-
 import { Translate } from 'react-jhipster';
-import { Col, Row } from 'react-bootstrap';
 
 const Footer = () => (
-  <div className="footer page-content">
-    <Row>
-      <Col md="12">
-        <p>
-          <Translate contentKey="footer">Your footer</Translate>
-        </p>
-      </Col>
-    </Row>
+  <div className="footer">
+    <p>
+      <Translate contentKey="footer">Your footer</Translate>
+    </p>
   </div>
 );
 

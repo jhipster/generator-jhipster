@@ -35,5 +35,5 @@ export const mutateApplication = {
   /**
    * https://bootstrap-vue-next.github.io/bootstrap-vue-next/docs/components/navbar.html#comp-reference-bnavbar-properties
    */
-  vueBootstrapVariant: ({ clientThemeVariant }) => clientThemeVariant ?? 'dark',
+  vueBootstrapVariant: ({ clientThemeNone, clientThemeVariant }) => (clientThemeNone ? 'dark' : (clientThemeVariant ?? 'dark')),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<VueApplication>, VueAddedApplicationProperties>;

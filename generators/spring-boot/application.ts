@@ -26,11 +26,11 @@ type SpringBootLoadingAddedApplicationProperties = {
 };
 
 type SpringBootPreparingAddedApplicationProperties = {
-  springDataDescription?: string | undefined;
+  springDataDescription?: string;
   // Used in docker generator in migration container, can be moved to cassandra generator once loader data migration is removed.
   cassandraKeyspaceName: string | undefined;
-  springBootBaseRepositoryClass?: string | undefined;
-  springBootBaseRepositoryImport?: string | undefined;
+  springBootBaseRepositoryClass?: string;
+  springBootBaseRepositoryImport?: string;
 };
 
 export type SpringBootAddedApplicationProperties = SpringBootLoadingAddedApplicationProperties &

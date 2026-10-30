@@ -72,14 +72,17 @@ const generateEntityClientFields = (
   if (!embedded && primaryKey) {
     const tsKeyType = getTypescriptKeyType(primaryKey);
     if (clientFramework === VUE) {
-      variablesWithTypes.push(`id?: ${tsKeyType}`);
+      variablesWithTypes.push(`${primaryKey.name}?: ${tsKeyType}`);
     }
   }
   fields.forEach(field => {
     const { fieldType, fieldName } = field;
     const nullable = !field.id && (field as DatabaseProperty).nullable;
     let tsType = 'any';
-    if (field.fieldIsEnum) {
+    if (field.fieldIsEnum && field.clientConstantsAsValues && clientFramework === VUE) {
+      // The values of the field are client constants, no enum is generated.
+      tsType = 'string';
+    } else if (field.fieldIsEnum) {
       tsType = `keyof typeof ${fieldType}`;
     } else if (fieldType === TYPE_BOOLEAN) {
       tsType = 'boolean';
@@ -92,6 +95,9 @@ const generateEntityClientFields = (
       }
     } else if (([TYPE_LOCAL_DATE, TYPE_INSTANT, TYPE_ZONED_DATE_TIME] as string[]).includes(fieldType)) {
       tsType = customDateType;
+    }
+    if (field.collection && clientFramework === VUE) {
+      tsType = tsType.includes(' ') ? `(${tsType})[]` : `${tsType}[]`;
     }
     if (nullable) {
       tsType += ' | null';
@@ -106,11 +112,16 @@ const generateEntityClientFields = (
     let fieldName: string;
     const nullable = !relationship.relationshipRequired;
     const { relationshipType } = relationship;
+    // A relationship serialized as the primary keys of the other entity, like the authorities of the user management.
+    const otherEntityType =
+      relationship.relationshipSerializePrimaryKeyOnly && clientFramework === VUE ?
+        getTypescriptKeyType(relationship.otherEntity.primaryKey!)
+      : `I${relationship.otherEntity.entityAngularName}`;
     if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-      fieldType = `I${relationship.otherEntity.entityAngularName}[]`;
+      fieldType = `${otherEntityType}[]`;
       fieldName = relationship.relationshipFieldNamePlural;
     } else {
-      fieldType = `I${relationship.otherEntity.entityAngularName}`;
+      fieldType = otherEntityType;
       fieldName = relationship.relationshipFieldName;
     }
     if (nullable) {

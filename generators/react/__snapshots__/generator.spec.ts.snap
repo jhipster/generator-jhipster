@@ -1,5 +1,73 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`generator - react gateway with microfrontends should share application modules with the dev server too 1`] = `
+{
+  "module-federation.config.ts": {
+    "contents": "import { fileURLToPath } from 'node:url';
+
+import type { createModuleFederationConfig } from '@module-federation/sdk';
+
+import packageJson from './package.json' with { type: 'json' };
+
+// Microfrontend API, should match across gateway and microservices.
+const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+// Application modules are not installed packages, \`import\` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
+const shareMappings = (...mappings: string[]) =>
+  Object.fromEntries(
+    mappings.map(map => [
+      map,
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(\`./src/main/webapp/\${map}\`, import.meta.url)),
+      },
+    ]),
+  );
+
+const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
+  Object.fromEntries(
+    Object.entries(packageJson.dependencies)
+      .filter(([dependency]) => !skipList.includes(dependency))
+      .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
+  );
+
+const applicationModules = shareMappings(
+  'app/config/constants',
+  'app/config/store',
+  'app/shared/error/error-boundary-routes',
+  'app/shared/layout/menus/menu-components',
+  'app/shared/layout/menus/menu-item',
+  'app/shared/reducers',
+  // \`app/shared/reducers/locale\` is not shared: its \`registerTranslations\` loads the translations of the application
+  // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
+  'app/shared/reducers/reducer.utils',
+  'app/shared/util/date-utils',
+  'app/shared/util/entity-utils',
+);
+
+export default {
+  name: 'jhipster',
+  exposes: {
+    // jhipster-needle-expose
+  },
+  filename: 'remoteEntry.js',
+  shareScope: 'default',
+  shared: {
+    ...shareDependencies(),
+    ...applicationModules,
+  },
+  dts: false,
+  manifest: true,
+} as const satisfies Parameters<typeof createModuleFederationConfig>[0];
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
@@ -310,7 +378,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -545,9 +613,6 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/footer/footer.tsx": {
@@ -1092,7 +1157,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": Any<Object>,
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -1342,9 +1407,6 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/footer/footer.tsx": {
@@ -1613,7 +1675,7 @@ exports[`generator - react microfrontend translations should keep the translatio
     "contents": "import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
-import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
+import locale, { addTranslationSourcePrefix, loaded, setLocale, updateLocale } from 'app/shared/reducers/locale';
 
 vi.mock('../../../i18n/en/en.js', () => ({ default: { key: 'value', global: { title: 'Microfrontend' } } }));
 
@@ -1747,11 +1809,11 @@ describe('Locale reducer tests', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/reducers/locale.ts": {
-    "contents": "import dayjs from 'dayjs';
-import merge from 'deepmerge';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+    "contents": "import { TranslatorContext } from 'react-jhipster';
 
-import { TranslatorContext } from 'react-jhipster';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
+import merge from 'deepmerge';
 
 const initialState = {
   currentLocale: '',
@@ -2163,7 +2225,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "clientRoot/src/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -2404,9 +2466,6 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/layout/footer/footer.tsx": {
@@ -2656,6 +2715,81 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
       },
     },
   ],
+}
+`;
+
+exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should not share application modules with the dev server 1`] = `
+{
+  "clientRoot/module-federation.config.ts": {
+    "contents": "import { fileURLToPath } from 'node:url';
+
+import type { createModuleFederationConfig } from '@module-federation/sdk';
+
+import packageJson from './package.json' with { type: 'json' };
+
+// Microfrontend API, should match across gateway and microservices.
+const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+// Application modules are not installed packages, \`import\` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
+const shareMappings = (...mappings: string[]) =>
+  Object.fromEntries(
+    mappings.map(map => [
+      map,
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(\`./src/\${map}\`, import.meta.url)),
+      },
+    ]),
+  );
+
+const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
+  Object.fromEntries(
+    Object.entries(packageJson.dependencies)
+      .filter(([dependency]) => !skipList.includes(dependency))
+      .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
+  );
+
+const applicationModules = shareMappings(
+  'app/config/constants',
+  'app/config/store',
+  'app/shared/error/error-boundary-routes',
+  'app/shared/layout/menus/menu-components',
+  'app/shared/layout/menus/menu-item',
+  'app/shared/reducers',
+  // \`app/shared/reducers/locale\` is not shared: its \`registerTranslations\` loads the translations of the application
+  // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
+  'app/shared/reducers/reducer.utils',
+  'app/shared/util/date-utils',
+  'app/shared/util/entity-utils',
+);
+
+const development = process.env.NODE_ENV !== 'production';
+
+export default {
+  name: 'jhipster',
+  exposes: {
+    './entities-menu': './app/entities/menu',
+    './entities-routes': './app/entities/routes',
+    // jhipster-needle-expose
+  },
+  filename: 'remoteEntry.js',
+  shareScope: 'default',
+  shared: {
+    ...shareDependencies(),
+    // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
+    // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build
+    // from the dev server. Share them unconditionally once the fix is released.
+    ...(development ? {} : applicationModules),
+  },
+  dts: false,
+  manifest: true,
+} as const satisfies Parameters<typeof createModuleFederationConfig>[0];
+",
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -2958,7 +3092,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -3214,9 +3348,6 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/footer/footer.tsx": {
@@ -3481,6 +3612,81 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
       },
     },
   ],
+}
+`;
+
+exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should not share application modules with the dev server 1`] = `
+{
+  "module-federation.config.ts": {
+    "contents": "import { fileURLToPath } from 'node:url';
+
+import type { createModuleFederationConfig } from '@module-federation/sdk';
+
+import packageJson from './package.json' with { type: 'json' };
+
+// Microfrontend API, should match across gateway and microservices.
+const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+// Application modules are not installed packages, \`import\` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
+const shareMappings = (...mappings: string[]) =>
+  Object.fromEntries(
+    mappings.map(map => [
+      map,
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(\`./src/main/webapp/\${map}\`, import.meta.url)),
+      },
+    ]),
+  );
+
+const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
+  Object.fromEntries(
+    Object.entries(packageJson.dependencies)
+      .filter(([dependency]) => !skipList.includes(dependency))
+      .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
+  );
+
+const applicationModules = shareMappings(
+  'app/config/constants',
+  'app/config/store',
+  'app/shared/error/error-boundary-routes',
+  'app/shared/layout/menus/menu-components',
+  'app/shared/layout/menus/menu-item',
+  'app/shared/reducers',
+  // \`app/shared/reducers/locale\` is not shared: its \`registerTranslations\` loads the translations of the application
+  // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
+  'app/shared/reducers/reducer.utils',
+  'app/shared/util/date-utils',
+  'app/shared/util/entity-utils',
+);
+
+const development = process.env.NODE_ENV !== 'production';
+
+export default {
+  name: 'jhipster',
+  exposes: {
+    './entities-menu': './app/entities/menu',
+    './entities-routes': './app/entities/routes',
+    // jhipster-needle-expose
+  },
+  filename: 'remoteEntry.js',
+  shareScope: 'default',
+  shared: {
+    ...shareDependencies(),
+    // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
+    // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build
+    // from the dev server. Share them unconditionally once the fix is released.
+    ...(development ? {} : applicationModules),
+  },
+  dts: false,
+  manifest: true,
+} as const satisfies Parameters<typeof createModuleFederationConfig>[0];
+",
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -3785,7 +3991,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": true,
   "withGeneratedFlag": undefined,
@@ -4107,9 +4313,6 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/footer/footer.tsx": {
@@ -4669,7 +4872,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -4898,9 +5101,6 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/footer/footer.tsx": {
@@ -5461,7 +5661,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": undefined,
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
-  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": true,
   "withAdminUi": false,
   "withGeneratedFlag": undefined,
@@ -5693,9 +5893,6 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/layout/footer/footer.tsx": {

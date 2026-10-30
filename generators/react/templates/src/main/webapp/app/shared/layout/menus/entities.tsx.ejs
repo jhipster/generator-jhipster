@@ -20,10 +20,12 @@
 import { Suspense, lazy } from 'react';
 <%_ } _%>
 import { translate } from 'react-jhipster';
-import { NavDropdown } from './menu-components';
+
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 import { loadRemote } from '@module-federation/runtime';
 <%_ } _%>
+
+import { NavDropdown } from './menu-components';
 <%_ if (microfrontend) { _%>
 
 const EntitiesMenuItems = lazy(() => import('app/entities/menu').catch(() => import('app/shared/error/error-loading')));

@@ -32,7 +32,7 @@ export default class BootstrapGenerator extends BlueprintGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      async loading({ applicationDefaults }) {
+      loading({ applicationDefaults }) {
         applicationDefaults({ commands: () => [] });
       },
     });
@@ -44,7 +44,7 @@ export default class BootstrapGenerator extends BlueprintGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing({ applicationDefaults }) {
+      preparing({ applicationDefaults }) {
         applicationDefaults(defaultConfig(), {
           blueprintsPath: data => (data.localBlueprint ? '.blueprint/' : 'generators/'),
           blueprintMjsExtension: data => (data.js ? 'js' : 'mjs'),

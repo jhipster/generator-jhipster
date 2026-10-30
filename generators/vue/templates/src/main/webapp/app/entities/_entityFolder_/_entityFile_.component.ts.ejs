@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
+import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -26,8 +26,9 @@ import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
 
 import { useAlertService } from '@/shared/alert/alert.service';
-<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
-import { useDateFormat } from '@/shared/composables'
+<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
+<%_ if (composables.length > 0) { _%>
+import { <%- composables.join(', ') %> } from '@/shared/composables';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
@@ -50,6 +51,9 @@ export default defineComponent({
 <%_ } _%>
     const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
     const alertService = inject('alertService', () => useAlertService(), true);
+<%_ if (builtInUserManagement) { _%>
+    const username = inject<ComputedRef<string>>('currentUsername');
+<%_ } _%>
 
 <%_ if (searchEngineAny) { _%>
     const currentSearch = ref('');
@@ -70,21 +74,23 @@ export default defineComponent({
 
     const isFetching = ref(false);
 
+<%_ if (searchEngineAny || !paginationNo) { _%>
     const clear = () => {
-<%_ if (searchEngineAny) { _%>
+  <%_ if (searchEngineAny) { _%>
       currentSearch.value = '';
-<%_ } _%>
-<%_ if (!paginationNo) { _%>
+  <%_ } _%>
+  <%_ if (!paginationNo) { _%>
       page.value = 1;
-<%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
+  <%_ } _%>
+  <%_ if (paginationInfiniteScroll) { _%>
       links.value = {};
       <%- entityInstancePlural %>.value = [];
-<%_ } _%>
+  <%_ } _%>
     };
+<%_ } _%>
 <%_ if (!paginationNo) { _%>
 
-    const sort = (): Array<any> => {
+    const sort = (): string[] => {
       const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
       if (propOrder.value !== 'id') {
         result.push('id');
@@ -163,38 +169,35 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
-    const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
-    const removeEntity = ref<any>(null);
-    const prepareRemove = (instance: I<%- entityAngularName %>) => {
-      removeId.value = instance.<%- primaryKey.name %>;
-      removeEntity.value.show();
-    };
-    const closeDialog = () => {
-      removeEntity.value.hide();
-    };
-    const remove<%- entityAngularName %> = async () => {
-      try {
-        await <%- entityInstance %>Service().delete(removeId.value);
+    const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
+      alertService,
+      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>,
+      remove: id => <%- entityInstance %>Service().delete(id),
   <%_ if (enableTranslation) { _%>
-        const message = t$('<%- i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
+      removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
   <%_ } else { _%>
-        const message = `A <%- entityAngularName %> is deleted with identifier ${removeId.value}`;
+      removedMessage: id => `A <%- entityAngularName %> is deleted with identifier ${id}`,
   <%_ } _%>
-        alertService.showInfo(message, { variant: 'danger' });
-        removeId.value = null;
   <%_ if (paginationInfiniteScroll) { _%>
-        clear();
+      onRemoved: () => clear(),
   <%_ } else { _%>
-        retrieve<%- entityAngularName %>s();
+      onRemoved: () => retrieve<%- entityAngularName %>s(),
   <%_ } _%>
-        closeDialog();
+    });
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+
+  <%_ if (builtInUserManagement) { _%>
+    const setActive = async (<%- entityInstance %>: I<%- entityAngularName %>, activated: boolean) => {
+      try {
+        await <%- entityInstance %>Service().update({ ...<%- entityInstance %>, activated });
+        handleSyncList();
       } catch (error) {
         alertService.showHttpError(error.response);
       }
     };
-<%_ } _%>
-<%_ if (!paginationNo) { _%>
 
+  <%_ } _%>
     const changeOrder = (newOrder: string) => {
       if (propOrder.value === newOrder) {
         reverse.value = !reverse.value;
@@ -233,7 +236,7 @@ export default defineComponent({
     watchEffect(() => {
       if (links.value.next) {
         intersectionObserver.resume();
-      } else if (intersectionObserver.isActive) {
+      } else if (intersectionObserver.isActive.value) {
         intersectionObserver.pause();
       }
     });
@@ -258,16 +261,23 @@ export default defineComponent({
 <%_ } _%>
 
     return {
+<%_ if (builtInUserManagement) { _%>
+      username,
+      setActive,
+<%_ } _%>
       <%- entityInstancePlural %>,
       handleSyncList,
       isFetching,
       retrieve<%- entityAngularName %>s,
+<%_ if (searchEngineAny || !paginationNo) { _%>
       clear,
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
       currentSearch,
+      search,
 <%_ } _%>
 <%_ if (!readOnly) { _%>
       removeId,

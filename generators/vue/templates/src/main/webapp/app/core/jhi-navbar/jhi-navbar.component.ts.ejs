@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>defineComponent, inject, ref } from 'vue';
+import { <%- microfrontend ? 'type Component, ' : '' %>type Ref, computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -53,7 +53,7 @@ export default defineComponent({
 <%_ if (microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
     '<%- remote.moduleFederationName %>-menu': defineAsyncComponent(() => {
-      return loadRemote<any>('<%- remote.moduleFederationName %>/entities-menu')
+      return (loadRemote<{ default: Component }>('<%- remote.moduleFederationName %>/entities-menu') as Promise<{ default: Component }>)
         .catch(() => import('@/core/error/error-loading.vue'));
     }),
   <%_ } _%>
@@ -82,7 +82,7 @@ export default defineComponent({
     const store = useStore();
 
     const version = `v${APP_VERSION}`;
-    const hasAnyAuthorityValues: Ref = ref({});
+    const hasAnyAuthorityValues: Ref<Record<string, boolean>> = ref({});
 
     const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
     const inProduction = computed(() => store.activeProfiles.includes('prod'));
@@ -144,7 +144,7 @@ export default defineComponent({
     };
   },
   methods: {
-    hasAnyAuthority(authorities: any): boolean {
+    hasAnyAuthority(authorities: string): boolean {
       this.accountService.hasAnyAuthorityAndCheckAuth(authorities).then(value => {
         if (this.hasAnyAuthorityValues[authorities] !== value) {
           this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };

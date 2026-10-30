@@ -21,7 +21,8 @@ import { computed } from 'vue';
 import { type Router } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
-import { shallowMount } from '@vue/test-utils';
+import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
+import { type AxiosResponse } from 'axios';
 
 <%_ if (generateUserManagement) { _%>
 import { useLoginModal } from '@/account/login-modal';
@@ -30,6 +31,7 @@ import { useLoginModal } from '@/account/login-modal';
 import type LoginService from '@/account/login.service';
 <%_ } _%>
 import { createRouter } from '@/router';
+import { slotsStub } from '@/shared/testing/stubs';
 import { useStore } from '@/store';
 
 import JhiNavbar from './jhi-navbar.vue';
@@ -45,7 +47,15 @@ type JhiNavbarComponentType = InstanceType<typeof JhiNavbar>;
 const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
 
+<%_ if (enableTranslation) { _%>
+// Two languages show the menu of the languages.
+vi.mock('@/shared/config/languages', () => ({
+  default: () => ({ en: { name: 'English' }, fr: { name: 'Français' } }),
+}));
+
+<%_ } _%>
 describe('JhiNavbar', () => {
+  let wrapper: VueWrapper<JhiNavbarComponentType>;
   let jhiNavbar: JhiNavbarComponentType;
 <%_ if (authenticationUsesCsrf) { _%>
   let loginService: LoginService;
@@ -64,19 +74,19 @@ describe('JhiNavbar', () => {
 <%_ if (authenticationUsesCsrf) { _%>
     loginService = { login: vi.fn(), logout: vi.fn() };
 <%_ } _%>
-    const wrapper = shallowMount(JhiNavbar, {
+    wrapper = shallowMount(JhiNavbar, {
       global: {
         plugins: [pinia, router],
         stubs: {
           'font-awesome-icon': true,
-          'b-navbar': true,
-          'b-navbar-nav': true,
-          'b-dropdown-item': true,
-          'b-collapse': true,
-          'b-nav-item': true,
-          'b-nav-item-dropdown': true,
-          'b-navbar-toggle': true,
-          'b-navbar-brand': true,
+          'b-navbar': slotsStub,
+          'b-navbar-nav': slotsStub,
+          'b-dropdown-item': slotsStub,
+          'b-collapse': slotsStub,
+          'b-nav-item': slotsStub,
+          'b-nav-item-dropdown': slotsStub,
+          'b-navbar-toggle': slotsStub,
+          'b-navbar-brand': slotsStub,
         },
         provide: {
 <%_ if (authenticationUsesCsrf) { _%>
@@ -133,31 +143,27 @@ describe('JhiNavbar', () => {
 
   it('logout should clear credentials and return to the home page when no provider URL is returned', async () => {
     store.setAuthentication({ login: 'test' });
-<%_ if (authenticationTypeOauth2) { _%>
     await router.push('/forbidden');
-<%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
-    (loginService.logout as any).mockReturnValue(Promise.resolve({}));
+    vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
 <%_ } _%>
+    await flushPromises();
 
-    await jhiNavbar.logout();
+    await wrapper.find('#logout').trigger('click');
+    await flushPromises();
 
-<%_ if (authenticationTypeJwt) { _%>
-    expect(jhiNavbar.authenticated).toBeFalsy();
-<%_ } else { _%>
+<%_ if (authenticationUsesCsrf) { _%>
     expect(loginService.logout).toHaveBeenCalled();
-  <%_ if (authenticationTypeOauth2) { _%>
+<%_ } _%>
     expect(jhiNavbar.authenticated).toBeFalsy();
     expect(router.currentRoute.value.path).toBe('/');
-  <%_ } _%>
-<%_ } _%>
   });
 <%_ if (authenticationTypeOauth2) { _%>
 
   it('logout should not navigate with router for external url', async () => {
     store.setAuthentication({ login: 'test' });
     const logoutUrl = 'http://keycloak:9080/logout';
-    (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl } }));
+    vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl } } as AxiosResponse);
     const routerPushSpy = vi.spyOn(router, 'push');
 
     await jhiNavbar.logout();
@@ -165,7 +171,30 @@ describe('JhiNavbar', () => {
     expect(loginService.logout).toHaveBeenCalled();
     expect(routerPushSpy).not.toHaveBeenCalled();
   });
+
+  it('logout should navigate with router to a relative url', async () => {
+    store.setAuthentication({ login: 'test' });
+    vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl: '/forbidden' } } as AxiosResponse);
+
+    await jhiNavbar.logout();
+
+    expect(router.currentRoute.value.path).toBe('/forbidden');
+  });
 <%_ } _%>
+
+  it('logout should stay at the home page', async () => {
+    store.setAuthentication({ login: 'test' });
+<%_ if (authenticationUsesCsrf) { _%>
+    vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
+<%_ } _%>
+    await router.push('/');
+    const routerPushSpy = vi.spyOn(router, 'push');
+
+    await jhiNavbar.logout();
+
+    expect(routerPushSpy).not.toHaveBeenCalled();
+    expect(jhiNavbar.authenticated).toBeFalsy();
+  });
 
   it('should determine active route', async () => {
     await router.push('/forbidden');
@@ -187,4 +216,43 @@ describe('JhiNavbar', () => {
     expect(jhiNavbar.isActiveLanguage('foo')).toBeTruthy();
   });
 <%_ } _%>
+
+  it('should render the menus of an authenticated user', async () => {
+    store.setAuthentication({ login: 'test' });
+    store.setActiveProfiles(['api-docs']);
+    await flushPromises();
+
+    expect(wrapper.find('#entity-menu').exists()).toBe(true);
+    expect(wrapper.find('#admin-menu').exists()).toBe(true);
+    expect(wrapper.find('#logout').exists()).toBe(true);
+    expect(wrapper.find('#login').exists()).toBe(false);
+<%_ if (enableTranslation) { _%>
+
+    // The items of the languages, after the content of the button.
+    await wrapper.findAll('#languagesnavBarDropdown > div')[0].trigger('click');
+    expect(changeLanguage).toHaveBeenCalledWith('en');
+<%_ } _%>
+  });
+
+  it('should default to the native language', () => {
+    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
+    const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], provide: { accountService<%- authenticationUsesCsrf ? ', loginService' : '' %> } } });
+
+    expect(navbar.vm.currentLanguage).toBe('<%- nativeLanguage %>');
+    language.mockRestore();
+  });
+
+  it('should log in from the menu of an anonymous user', async () => {
+    store.logout();
+    await flushPromises();
+
+    expect(wrapper.find('#entity-menu').exists()).toBe(false);
+    await wrapper.find('#login').trigger('click');
+
+<%_ if (authenticationTypeOauth2) { _%>
+    expect(loginService.login).toHaveBeenCalled();
+<%_ } else { _%>
+    expect(login.showLogin).toHaveBeenCalled();
+<%_ } _%>
+  });
 });

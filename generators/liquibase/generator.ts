@@ -241,7 +241,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get default() {
     return this.asDefaultTaskGroup({
-      async calculateChangelogs({ application, entities, entityChanges }) {
+      calculateChangelogs({ application, entities, entityChanges }) {
         if (!application.databaseTypeSql || this.options.skipDbChangelog || !entityChanges) {
           return;
         }
@@ -710,6 +710,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       addedRelationships,
       removedRelationships,
       hasFieldConstraint,
+      requiredAddedColumnNames,
       hasRelationshipConstraint,
       shouldWriteAnyRelationship,
       relationshipsToRecreateForeignKeysOnly,
@@ -726,6 +727,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       fields: addedFields,
       allFields,
       hasFieldConstraint,
+      requiredAddedColumnNames,
       addedRelationships,
       removedRelationships,
       relationships: addedRelationships,
@@ -977,6 +979,15 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       entityChanges.hasFieldConstraint = entityChanges.addedFields.some(
         field => field.unique || (field.columnRequired && !field.liquibaseDefaultValueAttributeValue) || field.shouldCreateContentType,
       );
+      // The required columns added without a default value: the existing rows have none, Liquibase stops at their constraints.
+      entityChanges.requiredAddedColumnNames = entityChanges.addedFields
+        .filter(field => field.columnRequired && !field.liquibaseDefaultValueAttributeValue)
+        .flatMap(field => (field.shouldCreateContentType ? [field.columnName!, `${field.columnName}_content_type`] : [field.columnName!]));
+      if (entityChanges.requiredAddedColumnNames.length > 0) {
+        this.log.warn(
+          `The required columns ${entityChanges.requiredAddedColumnNames.join(', ')} added to ${entity.entityTableName} have no value in its existing rows: fill them in a changelog before ${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}.xml, Liquibase stops at it otherwise.`,
+        );
+      }
       entityChanges.hasDefaultValueChange =
         entityChanges.addedDefaultValueFields.length > 0 || entityChanges.removedDefaultValueFields.length > 0;
       entityChanges.hasRelationshipConstraint = entityChanges.addedRelationships.some(
