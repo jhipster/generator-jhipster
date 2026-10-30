@@ -36,7 +36,7 @@
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
     "@vitest/eslint-plugin": "1.6.28",
-    "autoprefixer": "10.6.1",
+    "autoprefixer": "10.6.2",
     "eslint": "10.13.0",
     "globals": "17.13.0",
     "happy-dom": "21.0.4",
