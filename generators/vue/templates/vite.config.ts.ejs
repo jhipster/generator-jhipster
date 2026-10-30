@@ -90,7 +90,8 @@ const config = defineConfig({
   },
   define: {
     SERVER_API_URL: '"/"',
-    APP_VERSION: `"${process.env.APP_VERSION ? process.env.APP_VERSION : 'DEV'}"`,
+    // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
+    VERSION: JSON.stringify(process.env.APP_VERSION || 'DEV'),
   },
   server: {
     host: true,
