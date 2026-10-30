@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'expect-node';
+import { before, describe, expect, fn, it } from 'expect-node';
 
 import { defaultHelpers as helpers, runResult } from '#testing';
 
@@ -575,72 +575,127 @@ describe('generator - Kubernetes Helm', () => {
   });
   describe('helm check', () => {
     const chosenApps = ['01-gateway'];
-    const answers = {
-      deploymentApplicationType: 'microservice',
-      directoryPath: '../',
-      chosenApps,
-      adminPassword: 'meetup',
-      dockerRepositoryName: 'jhipsterrepository',
-      dockerPushCommand: 'docker push',
-      kubernetesNamespace: 'jhipsternamespace',
-      jhipsterConsole: false,
-      kubernetesServiceType: 'LoadBalancer',
-      clusteredDbApps: [],
-    };
+    let spawnStub: ReturnType<typeof fn>;
+    const helmCalls = () =>
+      spawnStub.mock.calls
+        .map(([method, command, options]) => ({ method, command, options }))
+        .filter(({ command }) => command.startsWith('helm '));
     const helmWarnings = () =>
       (runResult.env.adapter.log as any).warn.mock.calls
         .map(({ arguments: [message] }: { arguments: [string] }) => message)
         .filter((message: string) => message.includes('helm'));
+    const helmDebugMessages = () =>
+      (runResult.env.adapter.log as any).debug.mock.calls
+        .map(({ arguments: [message] }: { arguments: [string] }) => message)
+        .filter((message: string) => message.startsWith('helm '));
+    const runWithHelm = async (helm: () => unknown) => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
 
-    describe('with helm installed', () => {
-      const helmCalls: { command: string; options: unknown }[] = [];
-
-      before(async () => {
-        await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
-          .withWorkspacesSamples(...chosenApps)
-          .withGenerateWorkspaceApplications();
-
-        await helpers
-          .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
-          .withSpawnMock((_method: string, command: string, options: unknown) => {
-            if (command.startsWith('helm ')) {
-              helmCalls.push({ command, options });
-              return Promise.resolve({ exitCode: 0, stdout: 'version.BuildInfo{Version:"v3.16.1", GoVersion:"go1.22.7"}', stderr: '' });
-            }
-            return Promise.resolve({ exitCode: 0, stdout: '', stderr: '' });
-          })
-          .withOptions({ skipChecks: false })
-          .withAnswers(answers);
+      spawnStub = fn((method: string, command: string) => {
+        if (method === 'spawnCommand' && command.startsWith('helm ')) {
+          return helm();
+        }
+        const result = { exitCode: 0, stdout: '', stderr: '' };
+        return method.endsWith('Sync') ? result : Promise.resolve(result);
       });
-      it('asks helm for its client version without a shell pipeline', () => {
-        expect(helmCalls).toEqual([{ command: 'helm version --client', options: { reject: false, stdio: 'pipe' } }]);
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
+        .withSpawnMock({ stub: spawnStub })
+        .withOptions({ skipChecks: false })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+        });
+    };
+
+    describe('with helm 3 installed', () => {
+      before(async () => {
+        await runWithHelm(() => Promise.resolve({ exitCode: 0, stdout: 'v3.16.1+g5a5449d', stderr: '' }));
+      });
+      it('asks helm for its short version without a shell pipeline', () => {
+        expect(helmCalls()).toEqual([
+          { method: 'spawnCommand', command: 'helm version --short', options: { reject: false, stdio: 'pipe' } },
+        ]);
+      });
+      it('logs the version found at debug level', () => {
+        expect(helmDebugMessages()).toEqual(['helm version --short: v3.16.1+g5a5449d']);
       });
       it('does not warn', () => {
         expect(helmWarnings()).toEqual([]);
       });
     });
 
+    describe('with helm 4 installed', () => {
+      before(async () => {
+        await runWithHelm(() => Promise.resolve({ exitCode: 0, stdout: 'v4.0.0+g99cd196', stderr: '' }));
+      });
+      it('does not warn', () => {
+        expect(helmWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with a future helm 10 installed', () => {
+      before(async () => {
+        await runWithHelm(() => Promise.resolve({ exitCode: 0, stdout: 'v10.0.0+g0000000', stderr: '' }));
+      });
+      it('does not warn', () => {
+        expect(helmWarnings()).toEqual([]);
+      });
+    });
+
+    describe('with helm 2.11 installed', () => {
+      before(async () => {
+        await runWithHelm(() => Promise.resolve({ exitCode: 0, stdout: 'Client: v2.11.0+g2e55dbe', stderr: '' }));
+      });
+      it('warns that helm is too old', () => {
+        expect(helmWarnings()).toEqual([
+          'helm 2.11 is installed, but helm 2.12 or later is required.\nUpgrade helm. Read https://helm.sh/docs/intro/install/\n',
+        ]);
+      });
+    });
+
     describe('with helm missing', () => {
       before(async () => {
-        await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
-          .withWorkspacesSamples(...chosenApps)
-          .withGenerateWorkspaceApplications();
-
-        await helpers
-          .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
-          .withSpawnMock((_method: string, command: string) =>
-            command.startsWith('helm ') ?
-              Promise.resolve({ exitCode: undefined, stdout: '', stderr: 'spawn helm ENOENT' })
-            : Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }),
-          )
-          .withOptions({ skipChecks: false })
-          .withAnswers(answers);
+        await runWithHelm(() =>
+          Promise.resolve({
+            exitCode: undefined,
+            stdout: '',
+            stderr: '',
+            code: 'ENOENT',
+            shortMessage: 'Command failed with ENOENT: helm version --short\nspawn helm ENOENT',
+          }),
+        );
       });
       it('warns that helm is missing and where to install it', () => {
         expect(helmWarnings()).toEqual([
-          'helm 2.12 or later is not installed on your computer or does not run.\nMake sure you have helm installed. Read https://helm.sh/docs/intro/install/\n',
+          'helm is not installed on your computer or does not run.\nMake sure you have helm 2.12 or later installed. Read https://helm.sh/docs/intro/install/\n',
+        ]);
+      });
+      it('logs why helm did not run at debug level', () => {
+        expect(helmDebugMessages()).toEqual(['helm version --short: Command failed with ENOENT: helm version --short\nspawn helm ENOENT']);
+      });
+    });
+
+    describe('when helm cannot be spawned', () => {
+      before(async () => {
+        await runWithHelm(() => {
+          throw new Error("EACCES: permission denied, mkdir '/deployment'");
+        });
+      });
+      it('warns instead of failing the generator', () => {
+        expect(helmWarnings()).toEqual([
+          'helm is not installed on your computer or does not run.\nMake sure you have helm 2.12 or later installed. Read https://helm.sh/docs/intro/install/\n',
         ]);
       });
     });

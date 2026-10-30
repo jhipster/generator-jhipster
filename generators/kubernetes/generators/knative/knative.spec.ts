@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'expect-node';
+import { before, describe, expect, fn, it } from 'expect-node';
 
 import { defaultHelpers as helpers, runResult } from '#testing';
 
@@ -929,86 +929,113 @@ describe('generator - Knative', () => {
   });
   describe('knative check', () => {
     const chosenApps = ['01-gateway'];
-    const answers = {
-      deploymentApplicationType: 'microservice',
-      directoryPath: '../',
-      chosenApps,
-      adminPassword: 'meetup',
-      dockerRepositoryName: 'jhipsterrepository',
-      dockerPushCommand: 'docker push',
-      kubernetesNamespace: 'jhipsternamespace',
-      jhipsterConsole: false,
-      clusteredDbApps: [],
-      generatorType: 'k8s',
-      istio: true,
-    };
-    const knativeCommand = 'kubectl get deployments --namespace knative-serving --output name';
-    const knativeWarnings = () =>
+    const knativeCommand = 'kubectl api-resources --api-group=serving.knative.dev --output=name --request-timeout=5s';
+    let spawnStub: ReturnType<typeof fn>;
+    const spawnCalls = (prefix: string) =>
+      spawnStub.mock.calls
+        .map(([method, command, options]) => ({ method, command, options }))
+        .filter(({ command }) => command.startsWith(prefix));
+    const warnings = (text: string) =>
       (runResult.env.adapter.log as any).warn.mock.calls
         .map(({ arguments: [message] }: { arguments: [string] }) => message)
-        .filter((message: string) => message.includes('Knative Serving'));
+        .filter((message: string) => message.includes(text));
+    const runWithKubectl = async (kubectl: () => unknown, { generatorType = 'k8s' } = {}) => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      spawnStub = fn((method: string, command: string) => {
+        if (method === 'spawnCommand' && command === knativeCommand) {
+          return kubectl();
+        }
+        if (method === 'spawnCommand' && command.startsWith('helm ')) {
+          return Promise.resolve({ exitCode: 0, stdout: 'v3.16.1+g5a5449d', stderr: '' });
+        }
+        const result = { exitCode: 0, stdout: '', stderr: '' };
+        return method.endsWith('Sync') ? result : Promise.resolve(result);
+      });
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
+        .withSpawnMock({ stub: spawnStub })
+        .withOptions({ skipChecks: false })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          clusteredDbApps: [],
+          generatorType,
+          istio: true,
+          ingressDomain: 'example.com',
+        });
+    };
 
     describe('with Knative Serving installed', () => {
-      const knativeCalls: { command: string; options: unknown }[] = [];
-
       before(async () => {
-        await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
-          .withWorkspacesSamples(...chosenApps)
-          .withGenerateWorkspaceApplications();
-
-        await helpers
-          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
-          .withSpawnMock((_method: string, command: string, options: unknown) => {
-            if (command === knativeCommand) {
-              knativeCalls.push({ command, options });
-              return Promise.resolve({ exitCode: 0, stdout: 'deployment.apps/activator\ndeployment.apps/controller\n', stderr: '' });
-            }
-            if (command.startsWith('helm ')) {
-              return Promise.resolve({ exitCode: 0, stdout: 'version.BuildInfo{Version:"v3.16.1"}', stderr: '' });
-            }
-            return Promise.resolve({ exitCode: 0, stdout: '', stderr: '' });
-          })
-          .withOptions({ skipChecks: false })
-          .withAnswers(answers);
+        await runWithKubectl(() =>
+          Promise.resolve({ exitCode: 0, stdout: 'configurations.serving.knative.dev\nroutes.serving.knative.dev\n', stderr: '' }),
+        );
       });
-      it('lists the Knative Serving deployments without a shell pipeline', () => {
-        expect(knativeCalls).toEqual([{ command: knativeCommand, options: { reject: false, stdio: 'pipe' } }]);
+      it('asks the API discovery for Knative Serving with a timeout, without a shell pipeline', () => {
+        expect(spawnCalls('kubectl api-resources')).toEqual([
+          { method: 'spawnCommand', command: knativeCommand, options: { reject: false, stdio: 'pipe' } },
+        ]);
+      });
+      it('does not check helm for the k8s generator type', () => {
+        expect(spawnCalls('helm ')).toEqual([]);
       });
       it('does not warn', () => {
-        expect(knativeWarnings()).toEqual([]);
+        expect(warnings('Knative Serving')).toEqual([]);
       });
     });
 
     describe('with Knative Serving missing', () => {
       before(async () => {
-        await helpers
-          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
-          .withWorkspacesSamples(...chosenApps)
-          .withGenerateWorkspaceApplications();
-
-        await helpers
-          .runJHipsterDeployment(GENERATOR_KUBERNETES_KNATIVE)
-          .withSpawnMock((_method: string, command: string) => {
-            if (command === knativeCommand) {
-              return Promise.resolve({
-                exitCode: 1,
-                stdout: '',
-                stderr: 'Error from server (NotFound): namespaces "knative-serving" not found',
-              });
-            }
-            if (command.startsWith('helm ')) {
-              return Promise.resolve({ exitCode: 0, stdout: 'version.BuildInfo{Version:"v3.16.1"}', stderr: '' });
-            }
-            return Promise.resolve({ exitCode: 0, stdout: '', stderr: '' });
-          })
-          .withOptions({ skipChecks: false })
-          .withAnswers(answers);
+        await runWithKubectl(() => Promise.resolve({ exitCode: 0, stdout: '', stderr: '' }));
       });
       it('warns that Knative Serving is missing and where to install it', () => {
-        expect(knativeWarnings()).toEqual([
-          'Knative Serving was not found in your current Kubernetes cluster.\nMake sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
+        expect(warnings('Knative Serving')).toEqual([
+          'Knative Serving is not installed in your current Kubernetes cluster.\nMake sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
         ]);
+      });
+    });
+
+    describe('with an unreachable cluster', () => {
+      before(async () => {
+        await runWithKubectl(() =>
+          Promise.resolve({
+            exitCode: 1,
+            stdout: '',
+            stderr: 'Unable to connect to the server: context deadline exceeded',
+            shortMessage: 'Command failed with exit code 1: kubectl api-resources',
+          }),
+        );
+      });
+      it('warns that Knative Serving could not be checked', () => {
+        expect(warnings('Knative Serving')).toEqual([
+          'Unable to check whether Knative Serving is installed: kubectl could not query your current Kubernetes cluster.\nMake sure the current kubectl context is the cluster you deploy to, with Knative and Istio installed. Read https://knative.dev/docs/install/\n',
+        ]);
+      });
+    });
+
+    describe('with the helm generator type', () => {
+      before(async () => {
+        await runWithKubectl(() => Promise.resolve({ exitCode: 0, stdout: 'services.serving.knative.dev\n', stderr: '' }), {
+          generatorType: 'helm',
+        });
+      });
+      it('checks helm', () => {
+        expect(spawnCalls('helm ')).toEqual([
+          { method: 'spawnCommand', command: 'helm version --short', options: { reject: false, stdio: 'pipe' } },
+        ]);
+      });
+      it('does not warn', () => {
+        expect(warnings('helm')).toEqual([]);
       });
     });
   });
