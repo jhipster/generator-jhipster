@@ -8,7 +8,6 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
     "appsFolders": [
       "09-kafka"
     ],
-    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",
@@ -430,6 +429,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql deployment/mspsql
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -548,6 +564,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -1298,6 +1318,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -1416,6 +1453,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -1935,6 +1976,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -2053,6 +2111,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -2728,6 +2790,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -2864,6 +2943,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -3620,6 +3703,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -3738,6 +3838,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -4964,7 +5068,6 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
     "appsFolders": [
       "08-monolith"
     ],
-    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",
@@ -5383,6 +5486,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql -n mynamespace
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -5551,6 +5671,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -8351,6 +8475,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql -n mynamespace
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -8469,6 +8610,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -8972,6 +9117,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 bash helm-upgrade.sh (or) ./helm-upgrade.sh
 \`\`\`
 
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead of running \`helm-upgrade.sh\` alone. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n jhipsternamespace
+bash helm-upgrade.sh
+kubectl rollout status statefulset/consul -n jhipsternamespace
+kubectl rollout restart deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout status deployment/consul-config-loader -n jhipsternamespace
+until kubectl exec consul-0 -n jhipsternamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate -n jhipsternamespace
+\`\`\`
+
+\`helm-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
+
 For Kubernetes specific information, refer to the \`kubernetes\` sub-generator Readme instructions.
 
 ### Backlogs to be covered
@@ -9090,6 +9252,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:

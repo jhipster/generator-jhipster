@@ -8,7 +8,6 @@ exports[`generator - Kubernetes Kafka application should match files snapshot 1`
     "appsFolders": [
       "09-kafka"
     ],
-    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",
@@ -575,19 +574,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/msmysql deployment/mspsql deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql deployment/mspsql
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -1290,6 +1297,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -1618,19 +1629,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -2068,6 +2087,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -2413,19 +2436,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -5678,6 +5709,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -6023,19 +6058,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -9202,6 +9245,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -9530,19 +9577,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/jhgate deployment/msmysql deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -10143,6 +10198,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -10471,19 +10530,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/jhgate deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -11230,6 +11297,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -11611,19 +11682,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -13342,6 +13421,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -13681,19 +13764,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/msmongodb deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmongodb
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -14326,6 +14417,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -14561,7 +14656,6 @@ exports[`generator - Kubernetes monolith application should match files snapshot
     "appsFolders": [
       "08-monolith"
     ],
-    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",
@@ -15137,19 +15231,27 @@ kubectl get svc jhipster-grafana -n mynamespace
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul -n mynamespace
-kubectl get pvc -o name -n mynamespace | grep '/data-consul-' | xargs kubectl delete -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul -n mynamespace
-kubectl rollout restart deployment/msmysql deployment/consul-config-loader -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql -n mynamespace
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -18218,6 +18320,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -18539,19 +18645,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul -n mynamespace
-kubectl get pvc -o name -n mynamespace | grep '/data-consul-' | xargs kubectl delete -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul -n mynamespace
-kubectl rollout restart deployment/msmysql deployment/consul-config-loader -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql -n mynamespace
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -18972,6 +19086,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -19333,19 +19451,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul
-kubectl get pvc -o name | grep '/data-consul-' | xargs kubectl delete
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul
-kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb deployment/consul-config-loader
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -21064,6 +21190,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -21404,19 +21534,27 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 ### Upgrading a Consul cluster deployed by an older JHipster version
 
-The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again and your apps to register them again:
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
 
 \`\`\`
 kubectl delete statefulset consul -n jhipsternamespace
-kubectl get pvc -o name -n jhipsternamespace | grep '/data-consul-' | xargs kubectl delete -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n jhipsternamespace
+kubectl delete secret gossip-key --ignore-not-found -n jhipsternamespace
 kubectl apply -f registry-k8s/
 kubectl rollout status statefulset/consul -n jhipsternamespace
-kubectl rollout restart deployment/jhgate deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout restart deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout status deployment/consul-config-loader -n jhipsternamespace
+until kubectl exec consul-0 -n jhipsternamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate -n jhipsternamespace
 \`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
 
 ### Before going to production
 
-The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services.
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
 
 This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
 
@@ -21836,6 +21974,10 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -22074,7 +22216,6 @@ exports[`generator - Kubernetes only gateway with eureka should match files snap
     "appsFolders": [
       "01-gateway"
     ],
-    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "monolith",
     "deploymentType": "kubernetes",

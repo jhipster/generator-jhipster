@@ -35,6 +35,10 @@
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with `consul keyring`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
 apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:

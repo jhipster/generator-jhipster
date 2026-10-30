@@ -136,8 +136,6 @@ describe('generator - Kubernetes', () => {
       runResult.assertFile(expectedFiles.consulregistry);
       runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /-bootstrap-expect=3/);
       runResult.assertNoFile('./kubernetes/registry-k8s/consul-destination-rule.yml');
-      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /-encrypt=\$\(GOSSIP_KEY\)/);
-      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /name: consul-gossip-key\n/);
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
@@ -192,6 +190,73 @@ describe('generator - Kubernetes', () => {
       );
     });
   });
+
+  describe('a gateway with the consul gossip key given', () => {
+    const consulGossipKey = Buffer.from('given-consul-gossip-key'.padEnd(32, '-')).toString('base64');
+    before(async () => {
+      const chosenApps = ['01-gateway'];
+
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+          consulGossipKey,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'gateway',
+          directoryPath: '../',
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+
+    it('should store it instead of generating one', () => {
+      runResult.assertJsonFileContent('./kubernetes/.yo-rc.json', { 'generator-jhipster': { consulGossipKey } });
+    });
+
+    it('should deploy the consul servers with it', () => {
+      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', `gossip-key: ${Buffer.from(consulGossipKey).toString('base64')}`);
+    });
+  });
+
+  for (const consulGossipKey of ['', 'not-a-key', Buffer.from('too-short').toString('base64')]) {
+    describe(`a gateway with the invalid consul gossip key '${consulGossipKey}'`, () => {
+      const chosenApps = ['01-gateway'];
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+      });
+
+      it('should fail with a message showing how to generate one', async () => {
+        await expect(
+          helpers
+            .runJHipsterDeployment(GENERATOR_KUBERNETES)
+            .withSpawnMock()
+            .withFiles({
+              'kubernetes/.yo-rc.json': {
+                'generator-jhipster': { deploymentType: 'kubernetes', appsFolders: chosenApps, consulGossipKey },
+              },
+            }),
+        ).rejects.toThrow('consulGossipKey must be a base64 encoded key of 16, 24 or 32 bytes');
+      });
+    });
+  }
 
   describe('reactive postgresql microservice', () => {
     before(async () => {
@@ -273,6 +338,9 @@ describe('generator - Kubernetes', () => {
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.eurekaregistry);
       runResult.assertFileContent('./kubernetes/registry-k8s/jhipster-registry.yml', /bWVldHVw/);
+    });
+    it('should not generate a consul gossip key', () => {
+      runResult.assertNoFileContent('./kubernetes/.yo-rc.json', 'consulGossipKey');
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
