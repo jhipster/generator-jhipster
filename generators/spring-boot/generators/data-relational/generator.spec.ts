@@ -27,6 +27,7 @@ import { shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  createJHipsterConfigFiles,
   defaultHelpers as helpers,
   extendFilteredMatrix,
   extendMatrix,
@@ -35,7 +36,7 @@ import {
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
-const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
+const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE, MONGODB } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 
@@ -133,4 +134,22 @@ describe(`generator - ${databaseType}`, () => {
       });
     });
   }
+
+  describe('development database the sql generators do not support', () => {
+    it('should throw with the database data of the development database', async () => {
+      await expect(
+        helpers
+          .runJHipster('jhipster:spring-boot:data-relational')
+          .withFiles(
+            createJHipsterConfigFiles({
+              ...commonConfig,
+              prodDatabaseType: POSTGRESQL,
+              devDatabaseType: MONGODB,
+            }),
+          )
+          .withMockedSource()
+          .withMockedJHipsterGenerators({ except: ['jhipster:java:domain'] }),
+      ).rejects.toThrow('Database data not found for database mongodb');
+    });
+  });
 });
