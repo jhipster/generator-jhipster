@@ -25,6 +25,13 @@ import axios from 'axios';
 
 import { useStore } from '@/store';
 
+interface Session {
+  series: string;
+  tokenDate: string;
+  ipAddress: string;
+  userAgent: string;
+}
+
 export default defineComponent({
   name: 'Sessions',
   setup() {
@@ -32,7 +39,7 @@ export default defineComponent({
 
     const success: Ref<string> = ref(null);
     const error: Ref<string> = ref(null);
-    const sessions: Ref<any[]> = ref([]);
+    const sessions: Ref<Session[]> = ref([]);
 
     const authenticated = computed(() => store.authenticated);
     const username = computed(() => store.account?.login ?? '');
@@ -53,12 +60,12 @@ export default defineComponent({
   },
   methods: {
     retrieveSessions() {
-      return axios.get('api/account/sessions').then(response => {
+      return axios.get<Session[]>('api/account/sessions').then(response => {
         this.error = null;
         this.sessions = response.data;
       });
     },
-    invalidate(session) {
+    invalidate(session: string) {
       return axios
         .delete(`api/account/sessions/${session}`)
         .then(() => {

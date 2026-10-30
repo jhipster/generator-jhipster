@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 /* eslint-disable vue/one-component-per-file */
-import { type DOMWrapper, type VueWrapper } from '@vue/test-utils';
+import { type BaseWrapper, type DOMWrapper } from '@vue/test-utils';
 import { defineComponent, h } from 'vue';
 
 /** A b-modal rendering its title, body and footer, to test the dialogs of a view. */
@@ -46,14 +46,14 @@ export const routerLinkStub = defineComponent({
 });
 
 /** Triggers an event on every element of a view the selector matches, one at a time. */
-export const triggerAll = async (wrapper: VueWrapper<any>, selector: string, event: string) => {
+export const triggerAll = async (wrapper: BaseWrapper<Node>, selector: string, event: string) => {
   for (const element of wrapper.findAll(selector) as DOMWrapper<Element>[]) {
     await element.trigger(event);
   }
 };
 
 /** Sets each value, in turn, on every input of a view the selector matches, rendering the validation of each one. */
-export const setAllValues = async (wrapper: VueWrapper<any>, selector: string, values: string[]) => {
+export const setAllValues = async (wrapper: BaseWrapper<Node>, selector: string, values: string[]) => {
   for (const value of values) {
     for (const element of wrapper.findAll(selector) as DOMWrapper<HTMLInputElement>[]) {
       await element.setValue(value);

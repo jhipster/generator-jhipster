@@ -22,6 +22,7 @@ import { type Router } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
 import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
+import { type AxiosResponse } from 'axios';
 
 <%_ if (generateUserManagement) { _%>
 import { useLoginModal } from '@/account/login-modal';
@@ -144,7 +145,7 @@ describe('JhiNavbar', () => {
     store.setAuthentication({ login: 'test' });
     await router.push('/forbidden');
 <%_ if (authenticationUsesCsrf) { _%>
-    (loginService.logout as any).mockReturnValue(Promise.resolve({}));
+    vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
 <%_ } _%>
     await flushPromises();
 
@@ -162,7 +163,7 @@ describe('JhiNavbar', () => {
   it('logout should not navigate with router for external url', async () => {
     store.setAuthentication({ login: 'test' });
     const logoutUrl = 'http://keycloak:9080/logout';
-    (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl } }));
+    vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl } } as AxiosResponse);
     const routerPushSpy = vi.spyOn(router, 'push');
 
     await jhiNavbar.logout();
@@ -173,7 +174,7 @@ describe('JhiNavbar', () => {
 
   it('logout should navigate with router to a relative url', async () => {
     store.setAuthentication({ login: 'test' });
-    (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl: '/forbidden' } }));
+    vi.mocked(loginService.logout).mockResolvedValue({ data: { logoutUrl: '/forbidden' } } as AxiosResponse);
 
     await jhiNavbar.logout();
 
@@ -184,7 +185,7 @@ describe('JhiNavbar', () => {
   it('logout should stay at the home page', async () => {
     store.setAuthentication({ login: 'test' });
 <%_ if (authenticationUsesCsrf) { _%>
-    (loginService.logout as any).mockReturnValue(Promise.resolve({}));
+    vi.mocked(loginService.logout).mockResolvedValue({} as AxiosResponse);
 <%_ } _%>
     await router.push('/');
     const routerPushSpy = vi.spyOn(router, 'push');
@@ -234,7 +235,7 @@ describe('JhiNavbar', () => {
   });
 
   it('should default to the native language', () => {
-    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as any);
+    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
     const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], provide: { accountService<%- authenticationUsesCsrf ? ', loginService' : '' %> } } });
 
     expect(navbar.vm.currentLanguage).toBe('<%- nativeLanguage %>');

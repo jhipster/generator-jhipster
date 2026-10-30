@@ -24,7 +24,7 @@ import { useEntityRemove } from './entity-remove';
 
 describe('useEntityRemove', () => {
   const setup = (remove = vi.fn().mockResolvedValue({})) => {
-    const alertService = new AlertService({ i18n: { t: vi.fn() } as any, toast: { create: vi.fn() } as any });
+    const alertService = new AlertService({ <%- enableTranslation ? 'i18n: { t: vi.fn() }, ' : '' %>toast: { create: vi.fn() } });
     vi.spyOn(alertService, 'showInfo').mockImplementation(() => {});
     vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
     const onRemoved = vi.fn();
@@ -45,7 +45,7 @@ describe('useEntityRemove', () => {
     prepareRemove({ id: 123 });
 
     expect(removeId.value).toBe(123);
-    expect(removeEntity.value.show).toHaveBeenCalled();
+    expect(removeEntity.value?.show).toHaveBeenCalled();
   });
 
   it('should remove the instance', async () => {
@@ -57,7 +57,7 @@ describe('useEntityRemove', () => {
     expect(remove).toHaveBeenCalledWith(123);
     expect(alertService.showInfo).toHaveBeenCalledWith('removed 123', { variant: 'danger' });
     expect(removeId.value).toBeNull();
-    expect(removeEntity.value.hide).toHaveBeenCalled();
+    expect(removeEntity.value?.hide).toHaveBeenCalled();
     expect(onRemoved).toHaveBeenCalled();
   });
 

@@ -24,7 +24,7 @@ import { useI18n } from 'vue-i18n';
 import { useDateFormat } from '@/shared/composables'
 
 import <%- jhiPrefixCapitalized %>MetricsModal from './metrics-modal.vue';
-import MetricsService from './metrics.service';
+import MetricsService, { type Metrics, type Thread } from './metrics.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Metrics',
@@ -35,12 +35,12 @@ export default defineComponent({
     const { formatDate } = useDateFormat();
     const metricsService = inject('metricsService', () => new MetricsService(), true);
 
-    const metrics: Ref = ref({});
-    const threadData: Ref = ref(null);
-    const threadStats: Ref = ref({});
+    const metrics: Ref<Metrics> = ref({});
+    const threadData: Ref<Thread[] | null> = ref(null);
+    const threadStats: Ref<Record<string, number>> = ref({});
     const updatingMetrics = ref(true);
 
-    const metricsModal = ref<any>(null);
+    const metricsModal = ref<{ show: () => void } | null>(null);
 
     const refresh = () =>
       metricsService
@@ -87,14 +87,14 @@ export default defineComponent({
         });
 
     const openModal = (): void => {
-      metricsModal.value.show();
+      metricsModal.value?.show();
     };
-    const filterNaN = (input: any): any => (isNaN(input) ? 0 : input);
-    const formatNumber1 = (value: any): any => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
-    const formatNumber2 = (value: any): any =>
+    const filterNaN = (input: number): number => (isNaN(input) ? 0 : input);
+    const formatNumber1 = (value: number): string => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
+    const formatNumber2 = (value: number): string =>
       new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value);
-    const convertMillisecondsToDuration = ms => {
-      const times = {
+    const convertMillisecondsToDuration = (ms: number): string => {
+      const times: Record<string, number> = {
         year: 31557600000,
         month: 2629746000,
         day: 86400000,
@@ -115,9 +115,9 @@ export default defineComponent({
       }
       return time_string;
     };
-    const isObjectExisting = (metricsValue: any, key: string): boolean => metricsValue?.[key];
-    const isObjectExistingAndNotEmpty = (metricsValue: any, key: string): boolean =>
-      isObjectExisting(metricsValue, key) && JSON.stringify(metricsValue[key]) !== '{}';
+    const isObjectExisting = (metricsValue: Record<string, unknown> | undefined, key: string): boolean => Boolean(metricsValue?.[key]);
+    const isObjectExistingAndNotEmpty = (metricsValue: Record<string, unknown> | undefined, key: string): boolean =>
+      isObjectExisting(metricsValue, key) && JSON.stringify(metricsValue?.[key]) !== '{}';
 
     onMounted(() => {
       refresh();

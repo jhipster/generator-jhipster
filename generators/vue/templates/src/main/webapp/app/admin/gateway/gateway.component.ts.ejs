@@ -21,14 +21,14 @@ import { type Ref, defineComponent, inject, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import GatewayService from './gateway.service';
+import GatewayService, { type GatewayRoute } from './gateway.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>GatewayComponent',
   setup() {
     const gatewayService = inject('gatewayService', () => new GatewayService(), true);
 
-    const gatewayRoutes: Ref<any[]> = ref([]);
+    const gatewayRoutes: Ref<GatewayRoute[]> = ref([]);
     const updatingRoutes = ref(false);
 
     const refresh = () => {
@@ -39,7 +39,7 @@ export default defineComponent({
           gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
             if (serviceInstance.healthService?.checks) {
               if (
-                serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
+                serviceInstance.healthService.checks.filter(check => check.status === 'PASSING').length ===
                 serviceInstance.healthService.checks.length
               ) {
                 serviceInstance.instanceInfo = { status: 'UP' };

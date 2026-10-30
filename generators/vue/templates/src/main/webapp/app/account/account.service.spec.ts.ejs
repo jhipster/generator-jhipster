@@ -58,7 +58,7 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and do not retrieve account', async () => {
-    axiosStub.get.mockImplementation((...args: any[]) => {
+    axiosStub.get.mockImplementation((...args: unknown[]) => {
       if (args[0] === 'management/info') {
         return Promise.resolve({ status: 200, data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } });
       }
@@ -89,7 +89,7 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and retrieve profiles if already logged in before but exception occurred and should be logged out', async () => {
-    axiosStub.get.mockImplementation((...args: any[]) => {
+    axiosStub.get.mockImplementation((...args: unknown[]) => {
       if (args[0] === 'api/account') return Promise.reject(new Error());
       return Promise.resolve({});
     });

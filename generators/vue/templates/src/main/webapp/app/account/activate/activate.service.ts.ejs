@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios, { type AxiosInstance } from 'axios';
+import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 
 export default class ActivateService {
   private readonly axios: AxiosInstance;
@@ -25,7 +25,7 @@ export default class ActivateService {
     this.axios = axios;
   }
 
-  activateAccount(key: string): Promise<any> {
+  activateAccount(key: string): Promise<AxiosResponse<void>> {
     return this.axios.get(`api/activate?key=${key}`);
   }
 }

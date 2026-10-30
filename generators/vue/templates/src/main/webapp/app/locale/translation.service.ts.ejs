@@ -47,8 +47,8 @@ export default class TranslationService {
 
       await Promise.all([
   <%_ for (const remote of microfrontends) { _%>
-        loadRemote<any>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`)
-          .then(<%- remote.moduleFederationName %>Translations => this.i18n.mergeLocaleMessage(newLanguage, <%- remote.moduleFederationName %>Translations.default)),
+        loadRemote<{ default: Parameters<Composer['mergeLocaleMessage']>[1] }>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`)
+          .then(<%- remote.moduleFederationName %>Translations => this.i18n.mergeLocaleMessage(newLanguage, <%- remote.moduleFederationName %>Translations!.default)),
   <%_ } _%>
       ]);
 <%_ } _%>

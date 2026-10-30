@@ -39,9 +39,9 @@ export const useAlertService = () => {
 };
 
 export default class AlertService {
-  private readonly toast: ReturnType<typeof useToast>;
+  private readonly toast: Pick<ReturnType<typeof useToast>, 'create'>;
 <%_ if (enableTranslation) { _%>
-  private readonly i18n: Composer;
+  private readonly i18n: Pick<Composer, 't'>;
 <%_ } _%>
 
   constructor({
@@ -50,9 +50,9 @@ export default class AlertService {
     i18n,
 <%_ } _%>
   }: {
-    toast: ReturnType<typeof useToast>;
+    toast: Pick<ReturnType<typeof useToast>, 'create'>;
 <%_ if (enableTranslation) { _%>
-    i18n: Composer,
+    i18n: Pick<Composer, 't'>,
 <%_ } _%>
   }) {
     this.toast = toast;
@@ -87,7 +87,9 @@ export default class AlertService {
     });
   }
 
-  showHttpError({ data, status, headers }: any) {
+  showHttpError({ data: body, status, headers }: { data?: unknown; status: number; headers?: Record<string, unknown> }) {
+    // The body of an error of the server, a problem detail.
+    const data = body as { message?: string; fieldErrors?: unknown } | undefined;
     let errorMessage: string | null = null;
     switch (status) {
       case 0:
@@ -95,7 +97,7 @@ export default class AlertService {
         break;
 
       case 400: {
-        const message = getMessageFromHeaders(headers);
+        const message = getMessageFromHeaders(headers!);
 <%_ if (enableTranslation) { _%>
         if (message.errorKey && message.param) {
           errorMessage = this.i18n.t(message.errorKey, { entityName: this.i18n.t(`global.menu.entities.${message.param}`) }).toString();

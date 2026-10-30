@@ -23,7 +23,7 @@ import { useI18n } from 'vue-i18n';
 
 import { orderAndFilterBy } from '@/shared/computables';
 
-import ConfigurationService from './configuration.service';
+import ConfigurationService, { type ConfigurationBean, type EnvConfiguration } from './configuration.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Configuration',
@@ -32,9 +32,9 @@ export default defineComponent({
 
     const orderProp = ref('prefix');
     const reverse = ref(false);
-    const allConfiguration: Ref = ref({});
-    const configuration: Ref<any[]> = ref([]);
-    const configKeys: Ref<any[]> = ref([]);
+    const allConfiguration: Ref<EnvConfiguration> = ref({});
+    const configuration: Ref<ConfigurationBean[]> = ref([]);
+    const configKeys: Ref<string[][]> = ref([]);
     const filtered = ref('');
 
     const filteredConfiguration = computed(() =>
@@ -66,7 +66,7 @@ export default defineComponent({
       reverse.value = !reverse.value;
     };
 
-    const keys = (dict: any): string[] => (dict === undefined ? [] : Object.keys(dict));
+    const keys = (dict: object | undefined): string[] => (dict === undefined ? [] : Object.keys(dict));
 
     onMounted(() => {
       init();

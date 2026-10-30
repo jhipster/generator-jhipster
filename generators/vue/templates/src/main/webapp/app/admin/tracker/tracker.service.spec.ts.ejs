@@ -16,10 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { type Ref, ref } from 'vue';
-import { type Router, createMemoryHistory, createRouter } from 'vue-router';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Component, type Ref, ref } from 'vue';
+import { type RouteLocationNormalizedLoaded, type Router, createMemoryHistory, createRouter } from 'vue-router';
 
+import { type RxStomp } from '@stomp/rx-stomp';
 import { shallowMount } from '@vue/test-utils';
 import { Subject } from 'rxjs';
 
@@ -28,19 +29,19 @@ import { useTrackerService } from './tracker.service';
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
-  let TrackerApp: any;
+  let TrackerApp: Component;
   let authenticated: Ref<boolean>;
 
-  let mockStomp: any;
+  let mockStomp: { publish: Mock; watch: Mock; configure: Mock; activate: Mock; deactivate: Mock; connectionState$: Subject<number> };
   let router: Router;
 
   beforeEach(() => {
     router = createRouter({ history: createMemoryHistory(), routes: [] });
-    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
+    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as RouteLocationNormalizedLoaded);
     router.afterEach = vi.fn();
     authenticated = ref(false);
 
-    const watch$ = new Subject<any>();
+    const watch$ = new Subject<unknown>();
 
     mockStomp = {
       publish: vi.fn(),
@@ -48,7 +49,7 @@ describe('Tracker Service', () => {
       configure: vi.fn(),
       activate: vi.fn(),
       deactivate: vi.fn(),
-      connectionState$: new Subject<any>(),
+      connectionState$: new Subject<number>(),
     };
 
     TrackerApp = {
@@ -57,7 +58,7 @@ describe('Tracker Service', () => {
         <div></div>
       `,
       setup() {
-        trackerService = useTrackerService({ stomp: mockStomp });
+        trackerService = useTrackerService({ stomp: mockStomp as unknown as RxStomp });
         trackerService['buildUrl'] = () => '';
       },
     };
@@ -94,7 +95,7 @@ describe('Tracker Service', () => {
 
   it('Should send activity on connected', async () => {
     // GIVEN
-    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as any);
+    vi.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/admin' } as RouteLocationNormalizedLoaded);
     const wrapper = shallowMount(TrackerApp, {
       global: {
         plugins: [router],
