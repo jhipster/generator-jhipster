@@ -706,8 +706,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -985,8 +988,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql
+              value: mspsql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: mspsql
             - name: SPRING_DATASOURCE_URL
@@ -1824,8 +1830,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -2671,8 +2680,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -2876,8 +2888,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -3707,8 +3722,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -4603,8 +4621,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -4808,8 +4829,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmariadb
+              value: msmariadb.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmariadb
             - name: SPRING_DATASOURCE_URL
@@ -5021,8 +5045,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmongodb
+              value: msmongodb.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmongodb
             - name: SPRING_MONGODB_URI
@@ -5219,8 +5246,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -5498,8 +5528,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql
+              value: mspsql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: mspsql
             - name: SPRING_DATASOURCE_URL
@@ -8680,8 +8713,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -9469,8 +9505,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -10309,8 +10348,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.jhipsternamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -10755,8 +10797,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -11041,8 +11086,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql
+              value: mspsql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: mspsql
             - name: SPRING_DATASOURCE_URL
@@ -11782,8 +11830,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -12546,8 +12597,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -12776,8 +12830,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -13510,8 +13567,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -14287,8 +14347,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -14536,8 +14599,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmariadb
+              value: msmariadb.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmariadb
             - name: SPRING_DATASOURCE_URL
@@ -14977,8 +15043,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmongodb
+              value: msmongodb.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmongodb
             - name: SPRING_MONGODB_URI
@@ -15194,8 +15263,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmssqldb
+              value: msmssqldb.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmssqldb
             - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -15390,8 +15462,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -15676,8 +15751,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql
+              value: mspsql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: mspsql
             - name: SPRING_DATASOURCE_URL
@@ -19080,8 +19158,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -19798,8 +19879,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql
+              value: msmysql.mynamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msmysql
             - name: SPRING_DATASOURCE_URL
@@ -20540,8 +20624,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate
+              value: jhgate.jhipsternamespace.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: jhgate
             - name: SPRING_R2DBC_URL
@@ -20978,8 +21065,11 @@ spec:
               value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msreactivepsql
+              value: msreactivepsql.default.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: msreactivepsql
             - name: SPRING_R2DBC_URL
