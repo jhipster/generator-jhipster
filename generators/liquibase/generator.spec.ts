@@ -26,9 +26,50 @@ import { defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
+const getLiquibaseMavenPlugin = (): string => {
+  const pom = runResult.fs.read(`${runResult.cwd}/pom.xml`);
+  const plugin = /<plugin>\s*<groupId>org\.liquibase<\/groupId>\s*<artifactId>liquibase-maven-plugin<\/artifactId>[\s\S]*?<\/plugin>/.exec(
+    pom,
+  )?.[0];
+  if (!plugin) throw new Error('liquibase-maven-plugin not found in pom.xml');
+  return plugin;
+};
+
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('with maven', () => {
+    before(async () => {
+      await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'maven', skipClient: true });
+    });
+
+    it('should match the liquibase-maven-plugin snapshot', () => {
+      expect(getLiquibaseMavenPlugin()).toMatchSnapshot();
+    });
+    it('should add the hibernate extension with hibernate pinned to the application version', () => {
+      const plugin = getLiquibaseMavenPlugin();
+      expect(plugin).toContain('<artifactId>liquibase-hibernate7</artifactId>');
+      expect(plugin).toMatch(/<artifactId>hibernate-core<\/artifactId>\s*<version>\$\{hibernate.version\}<\/version>/);
+      expect(plugin).toMatch(/<artifactId>hibernate-envers<\/artifactId>\s*<version>\$\{hibernate.version\}<\/version>/);
+    });
+  });
+
+  describe('with maven and a reactive application', () => {
+    before(async () => {
+      await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'maven', skipClient: true, reactive: true });
+    });
+
+    it('should match the liquibase-maven-plugin snapshot', () => {
+      expect(getLiquibaseMavenPlugin()).toMatchSnapshot();
+    });
+    it('should not add the hibernate extension, which needs JPA entities', () => {
+      const plugin = getLiquibaseMavenPlugin();
+      expect(plugin).not.toContain('liquibase-hibernate');
+      expect(plugin).not.toContain('hibernate-core');
+      expect(plugin).not.toContain('hibernate-envers');
+    });
+  });
 
   describe('with gradle', () => {
     before(async () => {

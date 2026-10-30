@@ -31,6 +31,7 @@ export default function mavenPluginContent({
   password,
   hibernateDialect,
   defaultSchemaName = '',
+  addLiquibaseHibernate = false,
 }: {
   backendTypeSpringBoot: boolean;
   hibernateNamingPhysicalStrategy?: string;
@@ -45,6 +46,8 @@ export default function mavenPluginContent({
   password: string;
   hibernateDialect: string;
   defaultSchemaName?: string;
+  /** Adds the liquibase-hibernate extension, which reads the JPA entities, with Hibernate pinned to the application's version. */
+  addLiquibaseHibernate?: boolean;
 }): string {
   // prettier-ignore
   return `
@@ -66,12 +69,22 @@ export default function mavenPluginContent({
         <groupId>org.liquibase</groupId>
         <artifactId>liquibase-core</artifactId>
         <version>\${liquibase.version}</version>
-      </dependency>
+      </dependency>${addLiquibaseHibernate ? `
       <dependency>
         <groupId>org.liquibase.ext</groupId>
         <artifactId>liquibase-hibernate7</artifactId>
         <version>\${liquibase.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.hibernate.orm</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>\${hibernate.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate.orm</groupId>
+        <artifactId>hibernate-envers</artifactId>
+        <version>\${hibernate.version}</version>
+      </dependency>` : ''}
       <dependency>
         <groupId>jakarta.persistence</groupId>
         <artifactId>jakarta.persistence-api</artifactId>

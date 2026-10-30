@@ -499,6 +499,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 hibernateDialect: liquibasePluginHibernateDialect!,
                 defaultSchemaName: application.liquibaseDefaultSchemaName,
+                addLiquibaseHibernate: application.databaseTypeSql && !application.reactive,
                 // eslint-disable-next-line no-template-curly-in-string
                 url: '${liquibase-plugin.url}',
                 // eslint-disable-next-line no-template-curly-in-string
