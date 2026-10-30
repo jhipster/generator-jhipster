@@ -316,4 +316,24 @@ describe(`generator - ${clientFramework}`, () => {
       );
     });
   });
+
+  describe('gateway with microfrontends', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({
+          ...commonConfig,
+          applicationType: 'gateway',
+          enableTranslation: true,
+          microfrontends: [{ baseName: 'blog' }],
+        })
+        .withSharedApplication({ gatewayServicesApiAvailable: true, getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should merge the gateway translations after the microfrontend translations', () => {
+      expect(runResult.getSnapshot('**/app/locale/translation.service*.ts')).toMatchSnapshot();
+    });
+  });
 });

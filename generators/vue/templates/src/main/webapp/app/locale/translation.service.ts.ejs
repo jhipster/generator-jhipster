@@ -45,12 +45,14 @@ export default class TranslationService {
       <%- exposeMicrofrontend ? '// ' : '' %>this.i18n.setLocaleMessage(newLanguage, translations.default);
 <%_ if (microfrontend) { _%>
 
-      await Promise.all([
-  <%_ for (const remote of microfrontends) { _%>
-        loadRemote<any>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`)
-          .then(<%- remote.moduleFederationName %>Translations => this.i18n.mergeLocaleMessage(newLanguage, <%- remote.moduleFederationName %>Translations.default)),
+      const remoteTranslations = await Promise.all([
+  <%_ for (const remote of [...microfrontends.filter(remote => !remote.self), ...microfrontends.filter(remote => remote.self)]) { _%>
+        loadRemote<any>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`),
   <%_ } _%>
       ]);
+      for (const remoteTranslation of remoteTranslations) {
+        this.i18n.mergeLocaleMessage(newLanguage, remoteTranslation.default);
+      }
 <%_ } _%>
 
       this.loadedLanguages.add(newLanguage);
