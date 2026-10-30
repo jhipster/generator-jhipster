@@ -18,7 +18,7 @@
 -%>
 import axios, { type AxiosResponse } from 'axios';
 
-import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 <%_ if (!paginationNo) { _%>
 import buildPaginationQueryOpts, { type PaginationQuery } from '@/shared/sort/sorts';
 <%_ } _%>

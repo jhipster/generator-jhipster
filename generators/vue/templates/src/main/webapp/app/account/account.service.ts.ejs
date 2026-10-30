@@ -18,10 +18,10 @@
 -%>
 import axios from 'axios';
 
+import { type IUser } from '@/entities/user/user.model';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { type IUser } from '@/shared/model/user.model';
 import { type AccountStore } from '@/store';
 
 export default class AccountService {

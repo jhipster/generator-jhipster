@@ -43,14 +43,14 @@ _%>
 
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
+import { type IUser } from '@/entities/user/user.model';
 import UserService from '@/entities/user/user.service';
-import { type IUser } from '@/shared/model/user.model';
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 import <%- relationship.otherEntity.entityAngularName %>Service from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
-import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/shared/model/<%- relationship.otherEntity.entityModelFileName %>.model';
+import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/entities/<%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.model';
   <%_ } _%>
 <%_ } _%>
-import { type I<%- entityAngularName %>, <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import { type I<%- entityAngularName %>, <%- entityAngularName %> } from './<%- entityFileName %>.model';
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 <%_ for (const constantImport of new Set(clientConstantFields.map(field => field.vueFieldClientConstant.vueConstantImport))) { _%>
 <%- constantImport %>
