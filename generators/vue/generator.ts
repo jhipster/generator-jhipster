@@ -254,7 +254,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             );
 
             const menuItem = `<b-dropdown-item to="/${entityPage}"${entity.adminEntity ? ' active-class="active"' : ''}>
-  <font-awesome-icon icon="asterisk" />
+  <font-awesome-icon icon="${entity.builtInUserManagement ? 'users' : 'asterisk'}" />
   <span>${enableTranslation ? `{{ $t('${entityTranslationKeyMenuPath}') }}` : entityNameHumanized}</span>
 </b-dropdown-item>`;
             // Admin entities, like the authorities, go to the admin menu.
