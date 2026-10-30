@@ -531,14 +531,14 @@ cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
 fi
-helm uninstall msmysql 2>/dev/null
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-helm uninstall mspsql 2>/dev/null
+helm uninstall mspsql --namespace default 2>/dev/null
 helm dep up ./mspsql-\${suffix}
 helm install mspsql  ./mspsql-\${suffix} --replace --namespace default
 ",
@@ -1584,11 +1584,11 @@ cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
 fi
-helm uninstall jhgate 2>/dev/null
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
 ",
@@ -2401,14 +2401,14 @@ cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
 fi
-helm uninstall jhgate 2>/dev/null
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-helm uninstall msmysql 2>/dev/null
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
 ",
@@ -3425,11 +3425,11 @@ cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
 fi
-helm uninstall jhgate 2>/dev/null
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
 ",
@@ -4252,23 +4252,23 @@ cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
 fi
-helm uninstall jhgate 2>/dev/null
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-helm uninstall msmysql 2>/dev/null
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-helm uninstall mspsql 2>/dev/null
+helm uninstall mspsql --namespace default 2>/dev/null
 helm dep up ./mspsql-\${suffix}
 helm install mspsql  ./mspsql-\${suffix} --replace --namespace default
-helm uninstall msmongodb 2>/dev/null
+helm uninstall msmongodb --namespace default 2>/dev/null
 helm dep up ./msmongodb-\${suffix}
 helm install msmongodb  ./msmongodb-\${suffix} --replace --namespace default
-helm uninstall msmariadb 2>/dev/null
+helm uninstall msmariadb --namespace default 2>/dev/null
 helm dep up ./msmariadb-\${suffix}
 helm install msmariadb  ./msmariadb-\${suffix} --replace --namespace default
 ",
@@ -8385,11 +8385,11 @@ suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace mynamespace istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace mynamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
 fi
-helm uninstall msmysql 2>/dev/null
+helm uninstall msmysql --namespace mynamespace 2>/dev/null
 helm dep up ./msmysql-\${suffix}
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
 ",
@@ -9157,11 +9157,11 @@ suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace mynamespace istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace mynamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
 fi
-helm uninstall msmysql 2>/dev/null
+helm uninstall msmysql --namespace mynamespace 2>/dev/null
 helm dep up ./msmysql-\${suffix}
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
 ",
@@ -9927,11 +9927,11 @@ suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace jhipsternamespace istio-injection=enabled
 if [ -d "\${cs}-\${suffix}" ]; then
-helm uninstall \${cs} 2>/dev/null
+helm uninstall \${cs} --namespace jhipsternamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace jhipsternamespace
 fi
-helm uninstall jhgate 2>/dev/null
+helm uninstall jhgate --namespace jhipsternamespace 2>/dev/null
 helm dep up ./jhgate-\${suffix}
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace jhipsternamespace
 ",

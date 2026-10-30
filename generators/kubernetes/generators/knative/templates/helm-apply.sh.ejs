@@ -28,12 +28,12 @@ kubectl apply -f namespace.yml
 kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled
 <%_ } _%>
 if [ -d "${cs}-${suffix}" ]; then
-helm uninstall ${cs} 2>/dev/null
+helm uninstall ${cs} --namespace <%- kubernetesNamespace %> 2>/dev/null
 helm dep up ./${cs}-${suffix}
 helm install ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetesNamespace %>
 fi
 <%_ for (const appConfig of appConfigs) { _%>
-helm uninstall <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
+helm uninstall <%- appConfig.baseName.toLowerCase() %> --namespace <%- kubernetesNamespace %> 2>/dev/null
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>-${suffix}
 helm install <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --replace --namespace <%- kubernetesNamespace %>
 <%_ } _%>
