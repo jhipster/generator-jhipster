@@ -236,11 +236,7 @@ export const files = asWriteFilesSection({
     },
     {
       ...clientApplicationTemplatesBlock(),
-      templates: [
-        'shared/layout/header/header.scss',
-        'shared/layout/footer/footer.scss',
-        'shared/layout/password/password-strength-bar.scss',
-      ],
+      templates: ['shared/layout/header/header.scss', 'shared/layout/password/password-strength-bar.scss'],
     },
   ],
   microfrontend: [

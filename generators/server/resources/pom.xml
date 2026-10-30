@@ -12,7 +12,7 @@
         <blockhound-junit-platform.version>1.0.18.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
         <gatling.version>3.16.0</gatling.version>
-        <jackson-databind-nullable.version>0.2.12</jackson-databind-nullable.version>
+        <jackson-databind-nullable.version>0.2.13</jackson-databind-nullable.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <micrometer-context-propagation.version>1.2.1</micrometer-context-propagation.version>
         <picocli.version>4.7.7</picocli.version>
@@ -23,7 +23,7 @@
         <frontend-maven-plugin.version>2.0.2</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.21.12</gatling-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <modernizer-maven-plugin.version>3.5.0</modernizer-maven-plugin.version>

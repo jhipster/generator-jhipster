@@ -17,17 +17,21 @@
  limitations under the License.
 -%>
 import { useEffect, useState } from 'react';
+import { Badge, Button, Col, Row } from 'react-bootstrap';
+import { TextFormat, Translate } from 'react-jhipster';
 import { Link, useParams } from 'react-router';
-import { Button, Row, Badge } from 'react-bootstrap';
-import { Translate, TextFormat } from 'react-jhipster';
+
+import { faArrowLeft, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
-<%- enableTranslation ? 'import { languages } from \'app/config/translation\';' : '' %>
-import { getUser } from './user-management.reducer';
-import UserManagementDeleteDialog from './user-management-delete-dialog';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ if (enableTranslation) { _%>
+import { languages } from 'app/config/translation';
+<%_ } _%>
+
+import UserManagementDeleteDialog from './user-management-delete-dialog';
+import { getUser } from './user-management.reducer';
 
 export const UserManagementDetail = () => {
   const dispatch = useAppDispatch();
@@ -44,7 +48,8 @@ export const UserManagementDetail = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
-    <div>
+    <Row className="justify-content-center">
+      <Col md="8">
       <h2 data-cy="userManagementDetailsHeading">
         <Translate contentKey="userManagement.detail.title">User</Translate> [<strong>{user.login}</strong>]
       </h2>
@@ -98,6 +103,13 @@ export const UserManagementDetail = () => {
         </span>
       </Button>
       &nbsp;
+      <Button as={Link as any} to={`/admin/user-management/${user.login}/edit`} replace variant="primary">
+        <FontAwesomeIcon icon={faPencilAlt} />{' '}
+        <span className="d-none d-md-inline">
+          <Translate contentKey="entity.action.edit">Edit</Translate>
+        </span>
+      </Button>
+      &nbsp;
       <Button
         onClick={() => setShowDeleteDialog(true)}
         variant="danger"
@@ -110,7 +122,8 @@ export const UserManagementDetail = () => {
         </span>
       </Button>
       {showDeleteDialog ? <UserManagementDeleteDialog onClose={() => setShowDeleteDialog(false)} /> : null}
-    </div>
+      </Col>
+    </Row>
   );
 };
 

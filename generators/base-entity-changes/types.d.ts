@@ -31,6 +31,8 @@ export type BaseChangelogData<E extends BaseApplicationEntity = BaseApplicationE
   removedDefaultValueFields: E['fields'];
   addedDefaultValueFields: E['fields'];
   hasFieldConstraint: boolean;
+  /** The required columns added without a default value, the existing rows have no value for. */
+  requiredAddedColumnNames: string[];
   hasDefaultValueChange: boolean;
   hasRelationshipConstraint: boolean;
   shouldWriteAnyRelationship: boolean;

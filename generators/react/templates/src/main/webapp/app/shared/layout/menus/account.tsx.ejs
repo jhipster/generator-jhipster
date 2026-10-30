@@ -16,27 +16,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import MenuItem from 'app/shared/layout/menus/menu-item';
 <%_ if (authenticationTypeOauth2) { _%>
 import { DropdownItem } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 <%_ } _%>
 import { Translate, translate } from 'react-jhipster';
-<%_ if (authenticationTypeOauth2) { _%>
-import { getLoginUrl } from 'app/shared/util/url-utils';
-<%_ } _%>
-import { NavDropdown } from './menu-components';
 <%_ if (authenticationTypeOauth2) { _%>
 import { useLocation, useNavigate } from 'react-router';
 <%_ } _%>
 
+<%_ if (authenticationTypeOauth2) { _%>
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+<%_ } _%>
+
+import MenuItem from 'app/shared/layout/menus/menu-item';
+<%_ if (authenticationTypeOauth2) { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
+
+import { NavDropdown } from './menu-components';
+
 const accountMenuItemsAuthenticated = () => (
   <>
 <%_ if (generateUserManagement) { _%>
-    <MenuItem icon="wrench" to="/account/settings" data-cy="settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
-    <MenuItem icon="lock" to="/account/password" data-cy="passwordItem"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
+    <MenuItem icon="wrench" to="/account/settings" data-cy="settings">
+      <Translate contentKey="global.menu.account.settings">Settings</Translate>
+    </MenuItem>
+    <MenuItem icon="lock" to="/account/password" data-cy="passwordItem">
+      <Translate contentKey="global.menu.account.password">Password</Translate>
+    </MenuItem>
   <%_ if (authenticationTypeSession) { _%>
-    <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
+    <MenuItem icon="cloud" to="/account/sessions">
+      <Translate contentKey="global.menu.account.sessions">Sessions</Translate>
+    </MenuItem>
   <%_ } _%>
 <%_ } _%>
     <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
@@ -70,9 +81,13 @@ const accountMenuItems = () => {
 <%_ } else { _%>
 const accountMenuItems = () => (
   <>
-    <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
+    <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login">
+      <Translate contentKey="global.menu.account.login">Sign in</Translate>
+    </MenuItem>
   <%_ if (generateUserManagement) { _%>
-    <MenuItem icon="user-plus" to="/account/register" data-cy="register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
+    <MenuItem icon="user-plus" to="/account/register" data-cy="register">
+      <Translate contentKey="global.menu.account.register">Register</Translate>
+    </MenuItem>
   <%_ } _%>
   </>
 );

@@ -77,6 +77,9 @@ resources:
 - <%- registryOut %>/consul.yml
 - <%- registryOut %>/consul-config-loader.yml
 - <%- registryOut %>/application-configmap.yml
+  <%_ if (istio) { _%>
+- <%- registryOut %>/consul-destination-rule.yml
+  <%_ } _%>
 <%_ } _%>
 <%_ if (istio) { _%>
   <%_ const istioOut = 'istio'.concat('-', suffix); _%>

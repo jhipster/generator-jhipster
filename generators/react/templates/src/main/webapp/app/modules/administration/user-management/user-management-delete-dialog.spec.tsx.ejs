@@ -17,13 +17,14 @@
  limitations under the License.
 -%>
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
+
 import { configureStore } from '@reduxjs/toolkit';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
-import { deleteUser, getUser } from './user-management.reducer';
 import UserManagementDeleteDialog from './user-management-delete-dialog';
+import { deleteUser, getUser } from './user-management.reducer';
 
 vi.mock('./user-management.reducer', () => ({
   __esModule: true,

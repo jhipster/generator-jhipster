@@ -80,7 +80,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async writing() {
+      writing() {
         this.writeDestination(`${this.springBootDependenciesFile}.pom`, this.pomContent);
         this.writeDestinationJSON(`${this.springBootDependenciesFile}.json`, this.springBootJson);
       },

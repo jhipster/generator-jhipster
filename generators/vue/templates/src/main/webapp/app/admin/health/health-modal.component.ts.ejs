@@ -16,53 +16,51 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, inject } from 'vue';
+import { type PropType, defineComponent, inject } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import HealthService from './health.service';
+import HealthService, { type HealthData } from './health.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>HealthModal',
   props: {
     currentHealth: {
-      type: Object,
+      type: Object as PropType<HealthData>,
       default: () => ({}),
     },
   },
-  setup() {
+  setup(props) {
     const healthService = inject('healthService', () => new HealthService(), true);
 
-    return {
-      healthService,
-<%_ if (enableTranslation) { _%>
-      t$: useI18n().t,
-<%_ } _%>
-    };
-  },
-  methods: {
-    baseName(name: string): any {
-      return this.healthService.getBaseName(name);
-    },
-    subSystemName(name: string): any {
-      return this.healthService.getSubSystemName(name);
-    },
-    readableValue(value: any): string {
-      if (this.currentHealth.name === 'diskSpace') {
+    const baseName = (name: string): string => healthService.getBaseName(name);
+    const subSystemName = (name: string): string => healthService.getSubSystemName(name);
+    const readableValue = (value: unknown): string => {
+      if (props.currentHealth.name === 'diskSpace') {
         // Should display storage space in a human-readable unit
-        const val = value / 1073741824;
+        const val = Number(value) / 1073741824;
         if (val > 1) {
           // Value
           return `${val.toFixed(2)} GB`;
         }
-        return `${(value / 1048576).toFixed(2)} MB`;
+        return `${(Number(value) / 1048576).toFixed(2)} MB`;
       }
 
       if (typeof value === 'object') {
         return JSON.stringify(value);
       }
-      return value.toString();
-    },
+      return String(value);
+    };
+
+    return {
+      healthService,
+      baseName,
+      subSystemName,
+      readableValue,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
   },
 });

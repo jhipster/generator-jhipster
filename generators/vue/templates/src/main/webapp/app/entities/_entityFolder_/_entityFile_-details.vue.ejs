@@ -2,15 +2,18 @@
     <div class="d-flex justify-content-center">
         <div class="col-8">
             <div v-if="<%- entityInstance %>">
-                <h2 class="jh-entity-heading" data-cy="<%- entityInstance %>DetailsHeading"><span>{{ t$('<%- i18nKeyPrefix %>.detail.title') }}</span> {{<%- entityInstance %>.<%- primaryKey.name %>}}</h2>
+                <h2 class="jh-entity-heading" data-cy="<%- entityInstance %>DetailsHeading"><span>{{ t$('<%- i18nKeyPrefix %>.detail.title') }}</span></h2>
+                <hr />
                 <dl class="row-md jh-entity-details">
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of fields.filter(field => !field.hidden)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
                     <dt>
-                        <span>{{ t$('<%- i18nKeyPrefix %>.<%- fieldName %>') }}</span>
+                        <span>{{ t$('<%- field.propertyTranslationKey %>') }}</span>
                     </dt>
                     <dd>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (field.clientConstantsAsValues) { _%>
+                        <span>{{ <%- entityInstance %>.<%- fieldName %><%- field.collection ? '?.join(\', \')' : '' %> }}</span>
+  <%_ } else if (field.fieldIsEnum) { _%>
                         <span><% if (enableTranslation) { %>{{ t$('<%- frontendAppName %>.<%- fieldType %>.' + <%- entityInstance %>.<%- fieldName %>) }}<% } else { %>{{ <%- entityInstance %>.<%- fieldName %> }}<% } %></span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%- entityInstance %>.<%- fieldName %>">
@@ -34,10 +37,21 @@
                     </dd>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>
-  <%_ if (relationship.persistableRelationship) { _%>
+  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
                     <dt>
-                        <span>{{ t$('<%- i18nKeyPrefix %>.<%- relationshipName %>') }}</span>
+                        <span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span>
+                    </dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            <li v-for="<%- relationshipFieldName %> in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>">
+                                <span class="badge bg-info">{{ <%- relationshipFieldName %> }}</span>
+                            </li>
+                        </ul>
+                    </dd>
+  <%_ } else if (relationship.persistableRelationship) { _%>
+                    <dt>
+                        <span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span>
                     </dt>
                     <dd>
     <%_ if (relationship.otherEntityUser) { _%>
@@ -51,11 +65,11 @@
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
-                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </span>
       <%_ } else { _%>
                         <div v-if="<%- `${entityInstance}.${relationshipFieldName}` %>">
-                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </div>
       <%_ } _%>
     <%_ } _%>
@@ -75,25 +89,27 @@
                         <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.edit') }}</span>
                     </button>
                     </router-link>
-                <b-button v-if="<%- entityInstance %>.<%- primaryKey.name %>" @click="prepareRemove(<%- entityInstance %>)" variant="danger" data-cy="entityDeleteButton">
-                    <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+                <b-button v-if="<%- entityInstance %>.<%- primaryKey.name %>" @click="prepareRemove(<%- entityInstance %>)" variant="danger"<% if (builtInUserManagement) { %> :disabled="username === <%- entityInstance %>.login"<% } %> data-cy="entityDeleteButton">
+                    <font-awesome-icon icon="trash"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
                 </b-button>
 <%_ } _%>
             </div>
         </div>
     </div>
 <%_ if (!readOnly) { _%>
-    <b-modal ref="removeEntity" id="removeEntity">
+    <b-modal ref="removeEntity" id="removeEntity" title-tag="h4">
         <template #title>
             <span id="<%- i18nKeyPrefix %>.delete.question" data-cy="<%- entityInstance %>DeleteDialogHeading">{{ t$('entity.delete.title') }}</span>
         </template>
-        <div class="modal-body">
-            <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
-        </div>
+        <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
         <template #footer>
             <div>
-                <button type="button" class="btn btn-secondary" @click="closeDialog()">{{ t$('entity.action.cancel') }}</button>
-                <button type="button" class="btn btn-primary" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">{{ t$('entity.action.delete') }}</button>
+                <button type="button" class="btn btn-secondary" @click="closeDialog()">
+                    <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.cancel') }}</span>
+                </button>
+                <button type="button" class="btn btn-danger" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">
+                    <font-awesome-icon icon="trash"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+                </button>
             </div>
         </template>
     </b-modal>

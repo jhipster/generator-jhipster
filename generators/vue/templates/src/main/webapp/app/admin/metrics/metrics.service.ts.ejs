@@ -18,12 +18,22 @@
 -%>
 import axios, { type AxiosPromise } from 'axios';
 
+/** The metrics of the jhimetrics endpoint, by group. */
+export type Metrics = Record<string, unknown>;
+
+/** A thread of the thread dump endpoint. */
+export interface Thread {
+  threadName: string;
+  threadState: string;
+  [key: string]: unknown;
+}
+
 export default class MetricsService {
-  getMetrics(): AxiosPromise<any> {
+  getMetrics(): AxiosPromise<Metrics> {
     return axios.get('management/jhimetrics');
   }
 
-  retrieveThreadDump(): AxiosPromise<any> {
+  retrieveThreadDump(): AxiosPromise<{ threads: Thread[] }> {
     return axios.get('management/threaddump');
   }
 }

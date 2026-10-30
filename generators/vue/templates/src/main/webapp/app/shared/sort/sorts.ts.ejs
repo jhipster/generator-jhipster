@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export default function buildPaginationQueryOpts(paginationQuery) {
+export type PaginationQuery = Record<string, unknown>;
+
+export default function buildPaginationQueryOpts(paginationQuery?: PaginationQuery): string {
   if (paginationQuery) {
     return Object.entries(paginationQuery)
       .map(([paramName, paramValue]) => {

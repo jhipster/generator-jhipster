@@ -18,7 +18,9 @@
 -%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { shallowMount } from '@vue/test-utils';
+import { defineComponent, h } from 'vue';
+
+import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import HealthService from './health.service';
@@ -107,5 +109,55 @@ describe('Health Component', () => {
       await health.$nextTick();
       expect(health.updatingHealth).toEqual(false);
     });
+    it('should show the health data of a 503 on refreshing health data', async () => {
+      // GIVEN
+      const data = { status: 'DOWN', components: { db: { status: 'DOWN' } } };
+      axiosStub.get.mockRejectedValue({ response: { status: 503, data } });
+
+      // WHEN
+      health.refresh();
+      await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
+
+      // THEN
+      expect(health.healthData).toEqual(new HealthService().transformHealthData(data));
+      expect(health.healthData).toContainEqual(expect.objectContaining({ name: 'db', status: 'DOWN' }));
+    });
+  });
+});
+
+describe('Health view', () => {
+  const show = vi.fn();
+  const modalStub = defineComponent({
+    setup(_props, { slots }) {
+      return () => h('div', [slots.title?.(), slots.default?.()]);
+    },
+    methods: {
+      show,
+    },
+  });
+
+  it('should list the health of the components and show their details', async () => {
+    // GIVEN
+    const get = vi.spyOn(axios, 'get').mockResolvedValue({
+      data: { components: { db: { status: 'UP', details: { database: 'H2' } }, mail: { status: 'DOWN', error: 'failed' }, ping: { status: 'UP' } } },
+    });
+    const wrapper = shallowMount(Health, {
+      global: {
+        stubs: { bModal: modalStub, 'font-awesome-icon': true, 'health-modal': true },
+      },
+    });
+    await flushPromises();
+
+    // WHEN
+    for (const element of wrapper.findAll('button, a')) {
+      await element.trigger('click');
+    }
+    await flushPromises();
+
+    // THEN
+    expect(get).toHaveBeenCalledTimes(2);
+    expect(show).toHaveBeenCalledTimes(2);
+    expect(wrapper.vm.currentHealth).toEqual(expect.objectContaining({ name: 'mail' }));
+    expect(wrapper.find('#showHealthLabel').exists()).toBe(true);
   });
 });

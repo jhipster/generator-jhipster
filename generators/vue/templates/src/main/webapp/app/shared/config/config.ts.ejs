@@ -111,7 +111,7 @@ export function initFortAwesome(vue: App) {
   );
 }
 <%_ if (enableTranslation) { _%>
-export function initI18N(opts: any = {}) {
+export function initI18N(opts: Parameters<typeof createI18n>[0] = {}) {
   return createI18n({
     missingWarn: false,
     fallbackWarn: false,

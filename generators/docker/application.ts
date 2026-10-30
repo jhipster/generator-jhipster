@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, finalizeDefault } from '../../lib/utils/object.ts';
 import { JAVA_DOCKER_DIR } from '../generator-constants.ts';
 
 import type { Application as DockerApplication, DockerComposeFile } from './types.ts';
@@ -66,9 +66,10 @@ export const mutateApplicationPreparing = {
   dockerServicesDir: JAVA_DOCKER_DIR,
   dockerDeploymentServicePrefix: ({ lowercaseBaseName }) => `${lowercaseBaseName}-`,
   // Delayed, so an application preparing its own command keeps it; the server port is prepared by then.
-  dockerApplicationHealthcheckCommand: ({ serverPort }, { delayMarker }) =>
-    delayMarker ??
-    String.raw`bash -c 'exec 3<>/dev/tcp/127.0.0.1/${serverPort}; printf "GET /management/health HTTP/1.0\r\nHost: localhost\r\n\r\n" >&3; grep -q "\"status\":\"UP\"" <&3'`,
+  dockerApplicationHealthcheckCommand: finalizeDefault(
+    ({ serverPort }: DockerApplication) =>
+      String.raw`bash -c 'exec 3<>/dev/tcp/127.0.0.1/${serverPort}; printf "GET /management/health HTTP/1.0\r\nHost: localhost\r\n\r\n" >&3; grep -q "\"status\":\"UP\"" <&3'`,
+  ),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<DockerApplication>,
   DockerAddedApplicationPreparingProperties

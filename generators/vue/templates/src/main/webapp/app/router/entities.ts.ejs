@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import {Authority} from "@/shared/jhipster/constants";
 const Entities = () => import('@/entities/entities.vue');
 
 <%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
@@ -39,27 +38,27 @@ export default
         path: '<%- entity.entityFileName %>',
         name: '<%- entity.entityAngularName %>',
         component: <%- entity.entityAngularName %>,
-        meta: { authorities: [Authority.USER] },
+        meta: { authorities: [<%- entity.entityVueReadAuthorities %>] },
       },
   <%_ if (!entity.readOnly) { _%>
       {
         path: '<%- entity.entityFileName %>/new',
         name: '<%- entity.entityAngularName %>Create',
         component: <%- entity.entityAngularName %>Update,
-        meta: { authorities: [Authority.USER] },
+        meta: { authorities: [<%- entity.entityVueAuthorities %>] },
       },
       {
         path: '<%- entity.entityFileName %>/:<%- entity.entityInstance %>Id/edit',
         name: '<%- entity.entityAngularName %>Edit',
         component: <%- entity.entityAngularName %>Update,
-        meta: { authorities: [Authority.USER] },
+        meta: { authorities: [<%- entity.entityVueAuthorities %>] },
       },
   <%_ } _%>
       {
         path: '<%- entity.entityFileName %>/:<%- entity.entityInstance %>Id/view',
         name: '<%- entity.entityAngularName %>View',
         component: <%- entity.entityAngularName %>Details,
-        meta: { authorities: [Authority.USER] },
+        meta: { authorities: [<%- entity.entityVueReadAuthorities %>] },
       },
 <%_ } _%>
       // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

@@ -17,25 +17,30 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type RouteLocation } from 'vue-router';
 
-import { type MountingOptions, shallowMount } from '@vue/test-utils';
-<%_ if (anyFieldIsTimeDerived) { _%>
+import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+import { createBootstrap } from 'bootstrap-vue-next';
+<%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
 
 import AlertService from '@/shared/alert/alert.service';
+import { contentStub, modelInputStub, triggerAll } from '@/shared/testing/stubs';
 <%_ if (anyFieldIsTimeDerived) { _%>
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
 
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
+import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
+    const invalidValueFields = fields.filter(field => field.vueInvalidValue && (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
 _%>
 
 type <%- entityAngularName %>UpdateComponentType = InstanceType<typeof <%- entityAngularName %>Update>;
@@ -48,7 +53,22 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock }),
 }));
 
-const <%- entityInstance %>Sample = { <%- primaryKey.name %>: <%- tsKeyId %> };
+const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+<%_ for (const [{ otherEntity }] of allRelationshipsThatNeedSelectOptions) { _%>
+const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
+<%_ } _%>
+<%_ if (allRelationshipsThatNeedSelectOptions.length > 0) { _%>
+const <%- entityInstance %>SampleWithRelationships = {
+  ...<%- entityInstance %>Sample,
+  <%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat()) { _%>
+    <%_ if (relationship.collection) { _%>
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option],
+    <%_ } else { _%>
+  <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
+    <%_ } _%>
+  <%_ } _%>
+};
+<%_ } _%>
 
 describe('Component Tests', () => {
   let mountOptions: MountingOptions<<%- entityAngularName %>UpdateComponentType>['global'];
@@ -56,7 +76,7 @@ describe('Component Tests', () => {
 
   describe('<%- entityAngularName %> Management Update Component', () => {
     let comp: <%- entityAngularName %>UpdateComponentType;
-    let <%- entityInstance %>ServiceStub: any;
+    let <%- entityInstance %>ServiceStub: Record<string, Mock>;
 
     beforeEach(() => {
       route = {};
@@ -66,24 +86,28 @@ describe('Component Tests', () => {
         update: vi.fn(),
         create: vi.fn(),
       };
+<%_ if (allRelationshipsThatNeedSelectOptions.some(([relationship]) => relationship.otherEntity.entityAngularName === entityAngularName)) { _%>
+      <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ data: [<%- entityInstance %>Option] });
+<%_ } else { _%>
       <%- entityInstance %>ServiceStub.retrieve.mockResolvedValueOnce([]);
+<%_ } _%>
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-        i18n: { t: vi.fn() } as any,
+        i18n: { t: vi.fn() },
 <%_ } _%>
         toast: {
           create: vi.fn(),
-        } as any,
+        },
       });
 
       mountOptions = {
         stubs: {
           'font-awesome-icon': true,
-          'b-input-group': true,
-          'b-input-group-prepend': true,
-          'b-form-datepicker': true,
-          'b-form-input': true,
+          'b-input-group': contentStub,
+          'b-input-group-prepend': contentStub,
+          'b-form-datepicker': modelInputStub,
+          'b-form-input': modelInputStub,
         },
         provide: {
           alertService,
@@ -91,11 +115,11 @@ describe('Component Tests', () => {
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntityUser && generateBuiltInUserEntity) { _%>
           userService: () => ({
-            retrieve: vi.fn().mockResolvedValue({}),
+            retrieve: vi.fn().mockResolvedValue({ data: [<%- relationship.otherEntity.entityInstance %>Option] }),
           }),
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
             <%- relationship.otherEntity.entityInstance %>Service: () => ({
-                retrieve: vi.fn().mockResolvedValue({}),
+                retrieve: vi.fn().mockResolvedValue({ data: [<%- relationship.otherEntity.entityInstance %>Option] }),
               }),
   <%_ } _%>
 <%_ } _%>
@@ -133,6 +157,15 @@ describe('Component Tests', () => {
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
+<%_ if (!builtInUserManagement && fields.some(field => field.id && !field.autoGenerate && !field.hidden)) { _%>
+        // The primary key is given by the user: the route tells an existing entity.
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+<%_ } _%>
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         comp.<%- entityInstance %> = <%- entityInstance %>Sample;
@@ -184,8 +217,80 @@ describe('Component Tests', () => {
         // THEN
         expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>Sample);
       });
+<%_ const dateTimeField = fields.find(field => !field.id && ['Instant', 'ZonedDateTime'].includes(field.fieldType)); _%>
+<%_ if (dateTimeField) { _%>
+
+      it('Should convert a date time', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue({ ...<%- entityInstance %>Sample, <%- dateTimeField.fieldName %>: '2019-10-15T11:42:02Z' });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue([<%- entityInstance %>Sample]);
+
+        // WHEN
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%- entityInstance %>.<%- dateTimeField.fieldName %>).toEqual(new Date('2019-10-15T11:42:02Z'));
+      });
+<%_ } _%>
+
+      it('Should load an entity without values', async () => {
+        // GIVEN
+        // The server gives null for a collection without values.
+        const entityWithoutValues = {
+          <%- primaryKey.name %>: <%- tsKeyId %>,
+<%_ for (const relationship of allRelationshipsThatNeedSelectOptions.flat().filter(relationship => relationship.collection)) { _%>
+          <%- relationship.relationshipFieldNamePlural %>: null,
+<%_ } _%>
+        };
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(entityWithoutValues);
+
+        // WHEN
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await flushPromises();
+
+        // THEN
+        expect(comp.<%- entityInstance %>).toEqual(entityWithoutValues);
+      });
     });
 
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+  <%_ const { fieldName } = fields.find(field => field.blobContentTypeImage); _%>
+    describe('clearInputImage', () => {
+      it('Should clear the image and its content type', async () => {
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.<%- entityInstance %>.<%- fieldName %> = 'AAAA';
+        comp.<%- entityInstance %>.<%- fieldName %>ContentType = 'image/png';
+        await comp.$nextTick();
+
+        const input = document.createElement('input');
+        input.id = 'file_<%- fieldName %>';
+        input.value = 'image.png';
+        document.body.append(input);
+
+        comp.clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>');
+
+        expect(comp.<%- entityInstance %>.<%- fieldName %>).toBeNull();
+        expect(comp.<%- entityInstance %>.<%- fieldName %>ContentType).toBeNull();
+        expect(input.value).toBe('');
+        input.remove();
+      });
+    });
+
+<%_ } _%>
     describe('Previous state', () => {
       it('Should go previous state', async () => {
         <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
@@ -197,6 +302,180 @@ describe('Component Tests', () => {
         await comp.$nextTick();
 
         expect(routerGoMock).toHaveBeenCalledWith(-1);
+      });
+    });
+
+    describe('Form', () => {
+<%_ if (fields.some(field => !field.id && field.fieldValidationRequired) || allRelationshipsThatNeedSelectOptions.flat().some(relationship => relationship.relationshipValidate && relationship.relationshipRequired)) { _%>
+      it('Should show the validation errors', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.v$.$touch();
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.v$.$invalid).toBe(true);
+        expect(wrapper.findAll('.text-danger').length).toBeGreaterThan(0);
+      });
+
+<%_ } _%>
+<%_ if (invalidValueFields.length > 0) { _%>
+      it('Should show the errors of invalid values', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        Object.assign(comp.<%- entityInstance %>, {
+  <%_ for (const field of invalidValueFields) { _%>
+          <%- field.fieldName %>: <%- field.vueInvalidValue %>,
+  <%_ } _%>
+        });
+        comp.v$.$touch();
+        await comp.$nextTick();
+
+        // THEN
+  <%_ for (const field of invalidValueFields) { _%>
+        expect(comp.v$.<%- field.fieldName %>.$invalid).toBe(true);
+  <%_ } _%>
+        expect(wrapper.findAll('.text-danger').length).toBeGreaterThanOrEqual(<%- invalidValueFields.length %>);
+      });
+
+<%_ } _%>
+      it('Should edit and save the entity from the form', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %><%- allRelationshipsThatNeedSelectOptions.length > 0 ? 'SampleWithRelationships' : 'Sample' %>);
+        <%- entityInstance %>ServiceStub.update.mockResolvedValue(<%- entityInstance %>Sample);
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+        await flushPromises();
+<%_ if (fields.some(field => field.blobContentTypeAny)) { _%>
+        vi.stubGlobal('atob', () => '');
+        const open = vi.spyOn(globalThis, 'open').mockReturnValue(null);
+<%_ } _%>
+
+        // WHEN
+        await triggerAll(wrapper, 'input:not([type="file"]), textarea', 'input');
+        await triggerAll(wrapper, 'input, select', 'change');
+<%_ if (fields.some(field => field.blobContentTypeAny)) { _%>
+        await triggerAll(wrapper, 'a', 'click');
+<%_ } _%>
+        await triggerAll(wrapper, 'button[type="button"]', 'click');
+        await wrapper.find('form').trigger('submit');
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.update).toHaveBeenCalled();
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
+<%_ if (fields.some(field => field.blobContentTypeAny)) { _%>
+        expect(open).toHaveBeenCalled();
+<%_ } _%>
+      });
+    });
+
+<%_ if (builtInUserManagement) { _%>
+    describe('Login validation', () => {
+      it.each(['jhi', 'jhi@pster.net', 'jhi+tag@pster.net', 'jhi.pster@mail.pster.net'])('Should accept the login %s', async login => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.<%- entityInstance %>.login = login;
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.v$.login.$invalid).toBe(false);
+      });
+
+      it('Should reject a login with invalid characters', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.<%- entityInstance %>.login = 'jhi pster';
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.v$.login.$invalid).toBe(true);
+      });
+    });
+
+<%_ } _%>
+    describe('Errors and defaults', () => {
+      it('Should show the error of a failed load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockRejectedValue({ response: { status: 404 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        route = {
+          params: {
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
+          },
+        };
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledWith({ status: 404 });
+      });
+
+      it('Should show the error of a failed save', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.update.mockRejectedValue({ response: { status: 500 } });
+        <%- entityInstance %>ServiceStub.create.mockRejectedValue({ response: { status: 500 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        comp = wrapper.vm;
+
+        // WHEN
+        comp.<%- entityInstance %> = <%- entityInstance %>Sample;
+        comp.save();
+        await flushPromises();
+        comp.<%- entityInstance %> = {};
+        comp.save();
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledTimes(2);
+        expect(comp.isSaving).toBe(false);
+      });
+
+      it('Should use the default services', async () => {
+        // GIVEN
+        const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
+
+        // WHEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: { ...mountOptions, provide: {}, plugins: [createBootstrap()] } });
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.<%- entityInstance %>Service()).toBeInstanceOf(<%- entityAngularName %>Service);
+        expect(wrapper.vm.alertService).toBeInstanceOf(AlertService);
+        expect(wrapper.vm.currentLanguage).toBe(navigator.language);
+        get.mockRestore();
+      });
+
+      it('Should default to the native language', () => {
+        // GIVEN
+        const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
+
+        // WHEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+
+        // THEN
+        expect(wrapper.vm.currentLanguage).toBe('<%- nativeLanguage %>');
+        language.mockRestore();
       });
     });
   });

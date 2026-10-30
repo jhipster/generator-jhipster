@@ -47,6 +47,24 @@ const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
 
+const applicationModules = shareMappings(
+  'app/config/constants',
+  'app/config/store',
+  'app/shared/error/error-boundary-routes',
+  'app/shared/layout/menus/menu-components',
+  'app/shared/layout/menus/menu-item',
+  'app/shared/reducers',
+  // `app/shared/reducers/locale` is not shared: its `registerTranslations` loads the translations of the application
+  // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
+  'app/shared/reducers/reducer.utils',
+  'app/shared/util/date-utils',
+  'app/shared/util/entity-utils',
+);
+
+<%_ if (applicationTypeMicroservice) { _%>
+const development = process.env.NODE_ENV !== 'production';
+
+<%_ } _%>
 export default {
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
@@ -61,19 +79,14 @@ export default {
   shared: {
     // Stateless libraries stay bundled with each application, so their versions may differ between the gateway and microfrontends.
     ...shareDependencies({ skipList: ['deepmerge', 'react-infinite-scroll-component'] }),
-    ...shareMappings(
-      'app/config/constants',
-      'app/config/store',
-      'app/shared/error/error-boundary-routes',
-      'app/shared/layout/menus/menu-components',
-      'app/shared/layout/menus/menu-item',
-      'app/shared/reducers',
-      // `app/shared/reducers/locale` is not shared: its `registerTranslations` loads the translations of the application
-      // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
-      'app/shared/reducers/reducer.utils',
-      'app/shared/util/date-utils',
-      'app/shared/util/entity-utils',
-    ),
+<%_ if (applicationTypeMicroservice) { _%>
+    // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
+    // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build
+    // from the dev server. Share them unconditionally once the fix is released.
+    ...(development ? {} : applicationModules),
+<%_ } else { _%>
+    ...applicationModules,
+<%_ } _%>
   },
   dts: false,
   manifest: true,

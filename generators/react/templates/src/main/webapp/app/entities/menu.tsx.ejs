@@ -21,10 +21,12 @@ import { useEffect } from 'react';
 <%_ } _%>
 import { Translate } from 'react-jhipster';<%- hasNonBuiltInEntity ? '' : ' // eslint-disable-line' %>
 
+<%_ if (applicationTypeMicroservice && enableTranslation) { _%>
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ } _%>
 import MenuItem from 'app/shared/layout/menus/menu-item';<%- hasNonBuiltInEntity ? '' : ' // eslint-disable-line' %>
 <%_ if (applicationTypeMicroservice && enableTranslation) { _%>
 import { addTranslationSourcePrefix, registerTranslations } from 'app/shared/reducers/locale';
-import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 // Register the microfrontend translations before the menu is rendered by the host application.
 await registerTranslations();

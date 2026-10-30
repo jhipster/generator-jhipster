@@ -1,0 +1,43 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it } from 'vitest';
+
+import { type ValidationRuleWithParams } from '@vuelidate/core';
+
+import { useValidation } from './validation';
+
+describe('useValidation', () => {
+  const validations = useValidation();
+
+  it.each([
+    ['required', validations.required('message'), '', 'value'],
+    ['decimal', validations.decimal('message'), 'a', '1.5'],
+    ['integer', validations.integer('message'), '1.5', '1'],
+    ['sameAs', validations.sameAs('message', 'value'), 'other', 'value'],
+    ['minLength', validations.minLength('message', 2), 'a', 'ab'],
+    ['maxLength', validations.maxLength('message', 1), 'ab', 'a'],
+    ['minValue', validations.minValue('message', 2), 1, 2],
+    ['maxValue', validations.maxValue('message', 1), 2, 1],
+    ['pattern', validations.pattern('message', /^a+$/), 'b', 'aa'],
+  ])('should validate %s with its message', (_name, validator: ValidationRuleWithParams, invalid, valid) => {
+    expect(validator.$message).toBe('message');
+    expect(validator.$validator(invalid, {}, {})).toBe(false);
+    expect(validator.$validator(valid, {}, {})).toBe(true);
+  });
+});

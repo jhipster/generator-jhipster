@@ -3,7 +3,7 @@
     "ejs-lint": "2.0.1",
     "eslint": "10.13.0",
     "globals": "17.13.0",
-    "typescript-eslint": "8.72.0",
+    "typescript-eslint": "8.72.1",
     "vitest": "5.0.5"
   },
   "packageManager": "npm@12"

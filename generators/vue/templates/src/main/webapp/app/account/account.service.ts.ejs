@@ -21,6 +21,7 @@ import axios from 'axios';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
+import { type IUser } from '@/shared/model/user.model';
 import { type AccountStore } from '@/store';
 
 export default class AccountService {
@@ -36,7 +37,7 @@ export default class AccountService {
 
   async retrieveProfiles(): Promise<boolean> {
     try {
-      const res = await axios.get<any>('management/info');
+      const res = await axios.get<{ activeProfiles?: string[]; 'display-ribbon-on-profiles'?: string }>('management/info');
       if (res.data?.activeProfiles) {
         this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
         this.store.setActiveProfiles(res.data.activeProfiles);
@@ -49,7 +50,7 @@ export default class AccountService {
 
   async retrieveAccount(): Promise<boolean> {
     try {
-      const response = await axios.get<any>('api/account');
+      const response = await axios.get<IUser>('api/account');
       if (response.status === 200 && response.data?.login) {
         const account = response.data;
         this.store.setAuthentication(account);
@@ -82,7 +83,7 @@ export default class AccountService {
     await promise;
   }
 
-  async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
+  async hasAnyAuthorityAndCheckAuth(authorities: string | string[]): Promise<boolean> {
     if (typeof authorities === 'string') {
       authorities = [authorities];
     }

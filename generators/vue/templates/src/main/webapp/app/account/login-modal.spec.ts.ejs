@@ -16,6 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-.footer {
-  height: 50px;
-}
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { createPinia, setActivePinia } from 'pinia';
+
+import { useLoginModal } from './login-modal';
+
+describe('useLoginModal', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+  });
+
+  it('should show and hide the login', () => {
+    const loginModal = useLoginModal();
+
+    loginModal.showLogin();
+    expect(loginModal.loginModalOpen).toBe(true);
+
+    loginModal.hideLogin();
+    expect(loginModal.loginModalOpen).toBe(false);
+  });
+});

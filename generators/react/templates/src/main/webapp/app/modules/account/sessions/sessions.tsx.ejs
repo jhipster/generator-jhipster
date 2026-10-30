@@ -17,11 +17,12 @@
  limitations under the License.
 -%>
 import { useEffect } from 'react';
-import { Alert, Table, Button } from 'react-bootstrap';
+import { Alert, Button, Table } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
 
-import { getSession } from 'app/shared/reducers/authentication';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { getSession } from 'app/shared/reducers/authentication';
+
 import { findAll, invalidateSession } from './sessions.reducer';
 
 export const SessionsPage = () => {

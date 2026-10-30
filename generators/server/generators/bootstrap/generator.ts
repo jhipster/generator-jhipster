@@ -30,7 +30,6 @@ import type { Application as SpringDataRelationalApplication } from '../../../sp
 import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,
-  hibernateSnakeCase,
   loadRequiredConfigDerivedProperties,
   prepareField as prepareServerFieldForTemplates,
   preparePostEntityServerDerivedProperties,
@@ -86,7 +85,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           prodDatabasePassword: undefined,
         });
       },
-      async loadDockerDependencies({ application }) {
+      loadDockerDependencies({ application }) {
         loadDockerDependenciesTask.call(this, { context: application });
       },
       checkSuffix({ application }) {
@@ -103,7 +102,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
-      async loadDockerDependencies({ application }) {
+      loadDockerDependencies({ application }) {
         loadDockerElasticsearchVersion.call(this, {
           dockerContainers: application.dockerContainers,
         });
@@ -139,8 +138,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           entitySuffix: application.entitySuffix ?? '',
           dtoSuffix: application.dtoSuffix ?? 'DTO',
           entityClassPlural: ({ entityNamePlural }) => upperFirst(entityNamePlural),
-          entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
-
           persistClass: ({ entityClass, entitySuffix }) => `${entityClass}${entitySuffix ?? ''}`,
           persistInstance: ({ entityInstance, entitySuffix }) => `${entityInstance}${entitySuffix ?? ''}`,
           // Even if dto is not used, we need to generate the dtoClass and dtoInstance is added to avoid errors in rendered relationships templates. The resulting class will not exist then.
@@ -199,7 +196,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get default() {
     return this.asDefaultTaskGroup({
-      async postPreparingEntity({ application, entities }) {
+      postPreparingEntity({ application, entities }) {
         if (!application.backendTypeJavaAny) return;
         for (const entity of entities) {
           if (entity.primaryKey) {

@@ -23,16 +23,18 @@ import { useI18n } from 'vue-i18n';
 
 import { filterBy } from '@/shared/computables';
 
+import { type Thread } from './metrics.service';
+
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>MetricsModal',
   props: {
     threadDump: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<Thread[]>,
       default: () => [],
     },
   },
   setup(props) {
-    const threadDumpFilter: Ref = ref('');
+    const threadDumpFilter: Ref<string> = ref('');
     const filteredThreadDump = computed(() => filterBy(props.threadDump, { filterByTerm: threadDumpFilter.value }));
 
     const threadDumpData = computed(() => {
@@ -60,17 +62,7 @@ export default defineComponent({
       return data;
     });
 
-    return {
-      threadDumpFilter,
-      threadDumpData,
-      filteredThreadDump,
-<%_ if (enableTranslation) { _%>
-      t$: useI18n().t,
-<%_ } _%>
-    };
-  },
-  methods: {
-    getBadgeClass(threadState: string): string {
+    const getBadgeClass = (threadState: string): string => {
       if (threadState === 'RUNNABLE') {
         return 'bg-success';
       } else if (threadState === 'WAITING') {
@@ -81,6 +73,16 @@ export default defineComponent({
         return 'bg-danger';
       }
       return '';
-    },
+    };
+
+    return {
+      threadDumpFilter,
+      threadDumpData,
+      filteredThreadDump,
+      getBadgeClass,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
   },
 });

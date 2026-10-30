@@ -16,21 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, computed, defineComponent, inject, ref } from 'vue';
+import { type Ref, computed, defineComponent, inject, onMounted, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
 
-import LogsService from './logs.service';
+import LogsService, { type Level, type LoggersResponse } from './logs.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Logs',
   setup() {
     const logsService = inject('logsService', () => new LogsService(), true);
 
-    const loggers: Ref<any[]> = ref([]);
+    const loggers: Ref<{ name: string; level: Level }[]> = ref([]);
     const filtered = ref('');
     const orderProp = ref('name');
     const reverse = ref(false);
@@ -42,6 +42,34 @@ export default defineComponent({
       }),
     );
 
+    const extractLoggers = (response: { data?: LoggersResponse }): void => {
+      loggers.value = [];
+      if (response.data) {
+        for (const key of Object.keys(response.data.loggers)) {
+          const logger = response.data.loggers[key];
+          loggers.value.push({ name: key, level: logger.effectiveLevel });
+        }
+      }
+    };
+    const init = (): void => {
+      logsService.findAll().then(response => {
+        extractLoggers(response);
+      });
+    };
+    const updateLevel = (name: string, level: string): void => {
+      logsService.changeLevel(name, level).then(() => {
+        init();
+      });
+    };
+    const changeOrder = (prop: string): void => {
+      orderProp.value = prop;
+      reverse.value = !reverse.value;
+    };
+
+    onMounted(() => {
+      init();
+    });
+
     return {
       logsService,
       loggers,
@@ -49,37 +77,13 @@ export default defineComponent({
       orderProp,
       reverse,
       filteredLoggers,
+      init,
+      updateLevel,
+      changeOrder,
+      extractLoggers,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>
     };
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init(): void {
-      this.logsService.findAll().then(response => {
-        this.extractLoggers(response);
-      });
-    },
-    updateLevel(name: string, level: string): void {
-      this.logsService.changeLevel(name, level).then(() => {
-        this.init();
-      });
-    },
-    changeOrder(orderProp: string): void {
-      this.orderProp = orderProp;
-      this.reverse = !this.reverse;
-    },
-    extractLoggers(response) {
-      this.loggers = [];
-      if (response.data) {
-        for (const key of Object.keys(response.data.loggers)) {
-          const logger = response.data.loggers[key];
-          this.loggers.push({ name: key, level: logger.effectiveLevel });
-        }
-      }
-    },
   },
 });

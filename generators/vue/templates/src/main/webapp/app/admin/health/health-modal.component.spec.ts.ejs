@@ -106,3 +106,24 @@ describe('Health Modal Component for diskSpace', () => {
     });
   });
 });
+
+describe('Health Modal view', () => {
+  it('should show the details and the error of a health', () => {
+    // WHEN
+    const wrapper = shallowMount(HealthModal, {
+      props: { currentHealth: { name: 'db', details: { details: { database: 'H2' } }, error: 'failed' } },
+    });
+
+    // THEN
+    expect(wrapper.text()).toContain('H2');
+    expect(wrapper.text()).toContain('failed');
+  });
+
+  it('should show nothing without a health', () => {
+    // WHEN
+    const wrapper = shallowMount(HealthModal);
+
+    // THEN
+    expect(wrapper.vm.currentHealth).toEqual({});
+  });
+});

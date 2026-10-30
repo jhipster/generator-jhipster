@@ -64,6 +64,15 @@ export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; a
   return trackerService;
 };
 
+/** An activity of a user, sent by the tracker. */
+export interface TrackerActivity {
+  sessionId: string;
+  userLogin: string;
+  ipAddress: string;
+  page: string;
+  time: string;
+}
+
 export default class TrackerService {
   status = ref<'open' | 'connecting' | 'closing' | 'closed'>('closed');
   private rxStomp: RxStomp;
@@ -152,10 +161,10 @@ export default class TrackerService {
     });
   }
 
-  subscribe(observer) {
+  subscribe(observer: (activity: TrackerActivity) => void) {
     return this.rxStomp
       .watch(DESTINATION_TRACKER)
-      .pipe(map(imessage => JSON.parse(imessage.body)))
+      .pipe(map(imessage => JSON.parse(imessage.body) as TrackerActivity))
       .subscribe(observer);
   }
 }

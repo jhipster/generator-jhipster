@@ -18,7 +18,12 @@
  */
 
 import { getFrontendAppName } from '../../lib/utils/basename.ts';
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import {
+  type MutateDataParam,
+  type MutateDataPropertiesWithRequiredProperties,
+  finalizeDefault,
+  finalizeDefaultOrUndefined,
+} from '../../lib/utils/object.ts';
 import { startCase } from '../../lib/utils/string-utils.ts';
 import { LOGIN_REGEX_JS } from '../generator-constants.ts';
 
@@ -27,6 +32,7 @@ import type { Application as ClientApplication, Entity as ClientEntity } from '.
 
 export type ClientAddedApplicationProperties = {
   clientI18nDir: string;
+  /** The pattern of a login, the source of a regular expression literal. */
   webappLoginRegExp: string;
   clientThemeNone: boolean;
   clientThemeAny: boolean;
@@ -62,7 +68,8 @@ export type ClientAddedApplicationProperties = {
 export const mutateApplication = {
   __override__: false,
   clientI18nDir: ctx => `${ctx.clientSrcDir}i18n/`,
-  webappLoginRegExp: LOGIN_REGEX_JS,
+  // LOGIN_REGEX_JS is escaped for a string literal.
+  webappLoginRegExp: LOGIN_REGEX_JS.replaceAll('\\\\', '\\'),
   frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
   microfrontend: (ctx, { data }) => {
     if (ctx.applicationTypeMicroservice) {
@@ -73,8 +80,8 @@ export const mutateApplication = {
     }
     return false;
   },
-  microfrontends: ({ microfrontend }, { delayMarker, undefinedMarker }) => delayMarker ?? (microfrontend ? [] : undefinedMarker),
-  exposeMicrofrontend: (_, { delayMarker }) => delayMarker ?? false,
+  microfrontends: finalizeDefaultOrUndefined(({ microfrontend }: ClientApplication) => (microfrontend ? [] : undefined)),
+  exposeMicrofrontend: finalizeDefault(() => false),
   clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,

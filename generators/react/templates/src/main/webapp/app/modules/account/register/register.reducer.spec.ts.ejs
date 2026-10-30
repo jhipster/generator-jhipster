@@ -17,12 +17,13 @@
  limitations under the License.
 -%>
 
-import axios from 'axios';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { configureStore } from '@reduxjs/toolkit';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
+
+import { configureStore } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 import register, { handleRegister, reset } from './register.reducer';
 
@@ -72,9 +73,9 @@ describe('Creating account tests', () => {
       ...initialState,
       registrationSuccess: true,
 <%_ if (enableTranslation) { _%>
-      successMessage: 'register.messages.success'
+      successMessage: 'register.messages.success',
 <%_ } else { _%>
-      successMessage: 'Registration saved! Please check your email for confirmation.'
+      successMessage: 'Registration saved! Please check your email for confirmation.',
 <%_ } _%>
     });
   });
