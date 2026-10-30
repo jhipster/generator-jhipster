@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: serving.knative.dev/v1alpha1
+apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: <%- app.baseName.toLowerCase() %>
@@ -24,155 +24,147 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: <%- app.baseName.toLowerCase() %>
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: <%- app.baseName.toLowerCase() %>-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: <%- app.baseName.toLowerCase() %>
-            version: "v1"
-        spec:
-          containers:
-          - name: <%- app.baseName.toLowerCase() %>-app
-            image: <%- app.targetImageName %>
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
+    spec:
+      containers:
+      - name: <%- app.baseName.toLowerCase() %>-app
+        image: <%- app.targetImageName %>
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
 <%_ if (app.serviceDiscoveryEureka) { _%>
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: http://admin:${jhipster.registry.password}@jhipster-registry.<%- kubernetesNamespace %>.svc.cluster.local:8761/config
-            - name: JHIPSTER_REGISTRY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: registry-secret
-                  key: registry-admin-password
-            - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-              value: http://admin:${jhipster.registry.password}@jhipster-registry.<%- kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.<%- kubernetesNamespace %>.svc.cluster.local:8761/config
+        - name: JHIPSTER_REGISTRY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: registry-secret
+              key: registry-admin-password
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.<%- kubernetesNamespace %>.svc.cluster.local:8761/eureka/
   <%_ if (istio) { _%>
-            - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
-              value: "false"
-            - name: EUREKA_INSTANCE_HOSTNAME
-              value: <%- app.baseName.toLowerCase() %>
+        - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+          value: "false"
+        - name: EUREKA_INSTANCE_HOSTNAME
+          value: <%- app.baseName.toLowerCase() %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (app.serviceDiscoveryConsul) { _%>
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.<%- kubernetesNamespace %>.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.<%- kubernetesNamespace %>.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
   <%_ if (istio) { _%>
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: <%- app.baseName.toLowerCase() %>
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: <%- app.baseName.toLowerCase() %>
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: <%- app.baseName.toLowerCase() %>
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: <%- app.baseName.toLowerCase() %>
   <%_ } _%>
 <%_ } _%>
 <%_ if (!app.serviceDiscoveryAny && app.authenticationTypeJwt) { _%>
-            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: secret
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: secret
 <%_ } _%>
 <%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
   <%_ if (app.reactive) { _%>
-            - name: SPRING_R2DBC_URL
-              value: <%- app.kubernetesR2dbcUrl %>
-            - name: SPRING_R2DBC_USERNAME
-              value: <%- app.prodDatabaseUsername %>
+        - name: SPRING_R2DBC_URL
+          value: <%- app.kubernetesR2dbcUrl %>
+        - name: SPRING_R2DBC_USERNAME
+          value: <%- app.prodDatabaseUsername %>
   <%_ } else { _%>
-            - name: SPRING_DATASOURCE_URL
-              value: <%- app.kubernetesDatasourceJdbcUrl %>
-            - name: SPRING_DATASOURCE_USERNAME
-              value: <%- app.prodDatabaseUsername %>
+        - name: SPRING_DATASOURCE_URL
+          value: <%- app.kubernetesDatasourceJdbcUrl %>
+        - name: SPRING_DATASOURCE_USERNAME
+          value: <%- app.prodDatabaseUsername %>
   <%_ } _%>
   <%_ if (app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
-            - name: <%- app.reactive ? 'SPRING_R2DBC_PASSWORD' : 'SPRING_DATASOURCE_PASSWORD' %>
-              valueFrom:
-                secretKeyRef:
-                  name: <%- app.baseName.toLowerCase() %>-<%- app.prodDatabaseType %>
-                  key: <%- app.prodDatabaseTypeMariadb ? 'mariadb-root-password' : 'postgresql-password' %>
+        - name: <%- app.reactive ? 'SPRING_R2DBC_PASSWORD' : 'SPRING_DATASOURCE_PASSWORD' %>
+          valueFrom:
+            secretKeyRef:
+              name: <%- app.baseName.toLowerCase() %>-<%- app.prodDatabaseType %>
+              key: <%- app.prodDatabaseTypeMariadb ? 'mariadb-root-password' : 'postgresql-password' %>
   <%_ } _%>
-            - name: SPRING_LIQUIBASE_URL
-              value: <%- app.kubernetesJdbcUrl %>
+        - name: SPRING_LIQUIBASE_URL
+          value: <%- app.kubernetesJdbcUrl %>
 <%_ } _%>
 <%_ if (app.databaseTypeMongodb) { _%>
-            - name: SPRING_MONGODB_URI
-              value: "mongodb://<%- Array.from({ length: app.dbPeerCount }, (_, i) => `${app.baseName.toLowerCase()}-${app.databaseType}-${i}.${app.baseName.toLowerCase()}-${app.databaseType}.${kubernetesNamespace}:27017`).join(',') %>/<%- app.baseName %>"
+        - name: SPRING_MONGODB_URI
+          value: "mongodb://<%- Array.from({ length: app.dbPeerCount }, (_, i) => `${app.baseName.toLowerCase()}-${app.databaseType}-${i}.${app.baseName.toLowerCase()}-${app.databaseType}.${kubernetesNamespace}:27017`).join(',') %>/<%- app.baseName %>"
 <%_ } _%>
 <%_ if (app.databaseTypeCouchbase) { _%>
-            - name: SPRING_COUCHBASE_CONNECTION_STRING
-              value: "<%- Array.from({ length: app.dbPeerCount }, (_, i) => `${app.baseName.toLowerCase()}-${app.databaseType}-${i}.${app.baseName.toLowerCase()}-${app.databaseType}`).join(',') %>"
-            - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME
-              value: <%- app.baseName.toLowerCase() %>
+        - name: SPRING_COUCHBASE_CONNECTION_STRING
+          value: "<%- Array.from({ length: app.dbPeerCount }, (_, i) => `${app.baseName.toLowerCase()}-${app.databaseType}-${i}.${app.baseName.toLowerCase()}-${app.databaseType}`).join(',') %>"
+        - name: JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME
+          value: <%- app.baseName.toLowerCase() %>
 <%_ } _%>
 <%_ if (app.searchEngineElasticsearch) { _%>
-            - name: SPRING_ELASTICSEARCH_REST_URIS
-              value: http://<%- app.baseName.toLowerCase() %>-elasticsearch.<%- kubernetesNamespace %>.svc.cluster.local:9200
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://<%- app.baseName.toLowerCase() %>-elasticsearch.<%- kubernetesNamespace %>.svc.cluster.local:9200
 <%_ } _%>
 <%_ if (app.messageBrokerKafka) { _%>
-            - name: KAFKA_CONSUMER_KEY_DESERIALIZER
-              value: 'org.apache.kafka.common.serialization.StringDeserializer'
-            - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
-              value: 'org.apache.kafka.common.serialization.StringDeserializer'
-            - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
-              value: 'jhipster-kafka.<%- kubernetesNamespace %>.svc.cluster.local:9092'
-            - name: KAFKA_CONSUMER_GROUP_ID
-              value: '<%- app.baseName.toLowerCase() %>'
-            - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
-              value: 'earliest'
-            - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
-              value: 'jhipster-kafka.<%- kubernetesNamespace %>.svc.cluster.local:9092'
-            - name: KAFKA_PRODUCER_KEY_DESERIALIZER
-              value: 'org.apache.kafka.common.serialization.StringDeserializer'
-            - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
-              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+        - name: KAFKA_CONSUMER_KEY_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
+        - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
+        - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+          value: 'jhipster-kafka.<%- kubernetesNamespace %>.svc.cluster.local:9092'
+        - name: KAFKA_CONSUMER_GROUP_ID
+          value: '<%- app.baseName.toLowerCase() %>'
+        - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
+          value: 'earliest'
+        - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+          value: 'jhipster-kafka.<%- kubernetesNamespace %>.svc.cluster.local:9092'
+        - name: KAFKA_PRODUCER_KEY_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
+        - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
 <%_ } _%>
 <%_ if (monitoringPrometheus) { _%>
-            - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
-              value: 'true'
+        - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
+          value: 'true'
 <%_ } _%>
 <%_ if (deploymentApplicationTypeMicroservice) { _%>
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
 <%_ } _%>
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: <%- app.serverPort %>
-            readinessProbe:
-              httpGet:
-                path: <%- app.applicationTypeMicroservice && !app.serviceDiscoveryAny ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: <%- app.applicationTypeMicroservice && !app.serviceDiscoveryAny ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: <%- app.serverPort %>
+        readinessProbe:
+          httpGet:
+            path: <%- app.applicationTypeMicroservice && !app.serviceDiscoveryAny ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: <%- app.applicationTypeMicroservice && !app.serviceDiscoveryAny ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
