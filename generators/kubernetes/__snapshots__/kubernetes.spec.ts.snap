@@ -10928,7 +10928,7 @@ exports[`generator - Kubernetes gateway with istio routing should match spawn ca
   ],
   [
     "spawnCommandSync",
-    "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
+    "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath={.status.loadBalancer.ingress[0].ip} --request-timeout=5s",
     {
       "stdio": "pipe",
     },
