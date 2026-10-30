@@ -387,6 +387,32 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('runtime dependencies', () => {
+    for (const enableTranslation of [true, false]) {
+      describe(`with enableTranslation ${enableTranslation}`, () => {
+        before(async () => {
+          await helpers
+            .runJHipster(generator)
+            .withJHipsterConfig({ ...commonConfig, skipServer: true, enableTranslation })
+            .withSharedApplication({ getWebappTranslation: () => 'translations' })
+            .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+        });
+
+        it('should list the libraries imported by application code as dependencies', () => {
+          const { dependencies = {}, devDependencies = {} } = runResult.fs.readJSON(`${runResult.cwd}/package.json`) as {
+            dependencies?: Record<string, string>;
+            devDependencies?: Record<string, string>;
+          };
+          const { nodeDependencies } = runResult.application!;
+          expect(dependencies['react-infinite-scroll-component']).toBe(nodeDependencies['react-infinite-scroll-component']);
+          expect(dependencies.deepmerge).toBe(enableTranslation ? nodeDependencies.deepmerge : undefined);
+          expect(devDependencies['react-infinite-scroll-component']).toBeUndefined();
+          expect(devDependencies.deepmerge).toBeUndefined();
+        });
+      });
+    }
+  });
+
   describe('microfrontend translations', () => {
     before(async () => {
       await helpers

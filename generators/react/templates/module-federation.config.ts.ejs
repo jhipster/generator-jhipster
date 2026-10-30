@@ -59,7 +59,8 @@ export default {
   filename: 'remoteEntry.js',
   shareScope: 'default',
   shared: {
-    ...shareDependencies(),
+    // Stateless libraries stay bundled with each application, so their versions may differ between the gateway and microfrontends.
+    ...shareDependencies({ skipList: ['deepmerge', 'react-infinite-scroll-component'] }),
     ...shareMappings(
       'app/config/constants',
       'app/config/store',
