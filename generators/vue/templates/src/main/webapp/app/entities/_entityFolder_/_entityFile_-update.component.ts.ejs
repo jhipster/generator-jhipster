@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
+    const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
+_%>
 import { type Ref, computed, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
@@ -47,6 +51,9 @@ import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/share
 <%_ } _%>
 import { type I<%- entityAngularName %>, <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+<%_ for (const constantImport of new Set(clientConstantFields.map(field => field.vueFieldClientConstant.vueConstantImport))) { _%>
+<%- constantImport %>
+<%_ } _%>
 <%_ const enumImports = entityClientEnumImports; _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
@@ -80,11 +87,18 @@ export default defineComponent({
 <%_ for (const enumField of enumTypeFields) { _%>
     const <%- enumField.enumInstance %>Values: Ref<string[]> = ref(Object.keys(<%- enumField.fieldType %>));
 <%_ } _%>
+<%_ for (const field of clientConstantFields) { _%>
+    const <%- field.fieldName %>Values: string[] = <%- field.vueFieldClientConstant.vueConstantValues %>;
+<%_ } _%>
     const isSaving = ref(false);
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
     const route = useRoute();
     const router = useRouter();
+<%_ if (userProvidedPrimaryKey) { _%>
+    // The primary key is given by the user: an entity is updated when the route has it.
+    const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
+<%_ } _%>
 
     const previousState = () => router.go(-1);
 
@@ -136,7 +150,7 @@ export default defineComponent({
 <%_ } _%>
     const validations = useValidation();
     const validationRules = {
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of formFields) { _%>
       <%- field.fieldName %>:  {
   <%_ if (field.fieldValidate) { _%>
     <%_ if (field.fieldValidationRequired) { _%>
@@ -157,6 +171,9 @@ export default defineComponent({
     <%_ if (field.fieldValidationMax) { _%>
         max: validations.maxValue(t$('entity.validation.max', { max: <%- field.fieldValidateRulesMax %> }).toString(), <%- field.fieldValidateRulesMax %>),
     <%_ } _%>
+    <%_ if (field.fieldValidationPattern) { _%>
+        pattern: validations.pattern(t$('<%- builtInUserManagement && field.fieldName === 'login' ? 'entity.validation.patternLogin' : 'entity.validation.pattern' %>', { pattern: '<%- field.fieldNameHumanized %>' }).toString(), new RegExp('<%- field.fieldValidateRulesPatternVue %>')),
+    <%_ } _%>
   <%_ } _%>
       },
 <%_ } _%>
@@ -174,7 +191,7 @@ export default defineComponent({
     const save = async () => {
       isSaving.value = true;
       try {
-        if (<%- entityInstance %>.value.<%- primaryKey.name %>) {
+        if (<% if (userProvidedPrimaryKey) { %>isUpdate.value<% } else { %><%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %><% } %>) {
           const param = await <%- entityInstance %>Service().update(<%- entityInstance %>.value);
           alertService.showInfo(
 <%_ if (enableTranslation) { _%>
@@ -213,12 +230,8 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (relationshipsContainManyToOne) { _%>
 
-    const getSelected = (selectedVals, option, pkField = 'id') => {
-      if (selectedVals) {
-        return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
-      }
-      return option;
-    };
+    // The server gives null for a collection without values.
+    const getSelected = (selectedVals, option, pkField = 'id') => selectedVals?.find(value => option[pkField] === value[pkField]) ?? option;
 <%_ } _%>
 
     return {
@@ -227,6 +240,9 @@ export default defineComponent({
       <%- entityInstance %>,
       previousState,
       save,
+<%_ if (userProvidedPrimaryKey) { _%>
+      isUpdate,
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
       clearInputImage,
 <%_ } _%>
@@ -235,6 +251,9 @@ export default defineComponent({
 <%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
       <%- enumField.enumInstance %>Values,
+<%_ } _%>
+<%_ for (const field of clientConstantFields) { _%>
+      <%- field.fieldName %>Values,
 <%_ } _%>
       isSaving,
       currentLanguage,

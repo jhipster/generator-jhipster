@@ -1,15 +1,21 @@
+<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    // A primary key the user gives, like the name of an authority, is a field of the form, read only once created.
+    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
+_%>
 <template>
     <div class="d-flex justify-content-center">
         <div class="col-8">
             <form name="editForm" novalidate @submit.prevent="save()" >
                 <h2 id="<%- i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">{{ t$('<%- i18nKeyPrefix %>.home.createOrEditLabel') }}</h2>
                 <div>
+<%_ if (!builtInUserManagement && !userProvidedPrimaryKey) { _%>
                     <div class="mb-3" v-if="<%- entityInstance %>.<%- primaryKey.name %>">
                         <label for="id">{{ t$('global.field.id') }}</label>
                         <input type="text" class="form-control" id="id" name="<%- primaryKey.name %>"
                                v-model="<%- entityInstance %>.<%- primaryKey.name %>" readonly />
                     </div>
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ } _%>
+<%_ for (field of formFields) { _%>
   <%_ const { fieldName, fieldType, fieldTypeBlobContent } = field;
       const fieldInputClass = field.fieldTypeBoolean ? 'form-check-input' : 'form-control';
       const translationKey = `${i18nKeyPrefix}.${fieldName}`;
@@ -18,7 +24,11 @@
   <%_ if (!field.fieldTypeBoolean) { _%>
                         <label class="form-control-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
-  <%_ if (field.fieldIsEnum) { _%>
+  <%_ if (field.clientConstantsAsValues) { _%>
+                        <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
+                            <option v-for="value of <%- fieldName %>Values" :key="value" :value="value">{{ value }}</option>
+                        </select>
+  <%_ } else if (field.fieldIsEnum) { _%>
                         <select class="form-select" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
                             <option v-for="<%- field.enumInstance %> in <%- field.enumInstance %>Values" :key="<%- field.enumInstance %>" :value="<%- field.enumInstance %>" :label="t$('<%- enumPrefix %>.'+<%- field.enumInstance %>)">{{ <%- field.enumInstance %> }}</option>
@@ -88,7 +98,7 @@
                             :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %>></textarea>
     <%_ } else { _%>
                         <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %>/>
+                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<%- field.htmlInputType === 'number' ? '.number' : '' %>="v$.<%- fieldName %>.$model" <%- field.fieldValidate && field.fieldValidateRules.includes('required') ? ' required' : '' %><%- (field.id && userProvidedPrimaryKey) ? ' :readonly="isUpdate"' : '' %>/>
       <%_ if (field.fieldTypeBinary) { _%>
                         <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
                             v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />
@@ -98,7 +108,7 @@
   <%_ if (field.fieldTypeBoolean) { _%>
                         <label class="form-check-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
-  <%_ if (field.fieldValidate) { _%>
+  <%_ if (field.vueClientValidation) { _%>
                         <div v-if="v$.<%- fieldName %>.$anyDirty && v$.<%- fieldName %>.$invalid">
                             <small
                                class="form-text text-danger"
@@ -111,7 +121,7 @@
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ const { otherEntityName, relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = relationship;
-      const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+      const translationKey = relationship.propertyTranslationKey;
   _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="mb-3">
@@ -129,7 +139,7 @@
                     <div class="mb-3">
                         <label for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
                         <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
-                            <option :value="getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
+                            <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } _%>

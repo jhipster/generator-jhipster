@@ -154,11 +154,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -169,18 +187,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -196,8 +206,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -216,6 +224,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -226,7 +237,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -289,8 +300,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -308,36 +317,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -351,10 +349,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -368,7 +368,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -698,9 +698,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -974,9 +977,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -1226,11 +1232,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -1241,18 +1265,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -1268,8 +1284,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -1288,6 +1302,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -1298,7 +1315,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -1361,8 +1378,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -1380,36 +1395,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -1423,10 +1427,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -1440,7 +1446,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -1810,9 +1816,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -2057,11 +2066,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -2072,18 +2099,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -2099,8 +2118,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -2119,6 +2136,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -2129,7 +2149,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -2192,8 +2212,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -2211,36 +2229,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -2254,10 +2261,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -2271,7 +2280,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -2654,9 +2663,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -2856,9 +2868,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -3100,11 +3115,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -3115,18 +3148,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -3142,8 +3167,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -3162,6 +3185,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -3172,7 +3198,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -3235,8 +3261,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -3254,36 +3278,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -3297,10 +3310,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -3314,7 +3329,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -3684,9 +3699,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -3941,11 +3959,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -3956,18 +3992,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -3983,8 +4011,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -4003,6 +4029,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -4013,7 +4042,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -4076,8 +4105,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -4095,36 +4122,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -4138,10 +4154,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -4155,7 +4173,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -4577,9 +4595,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -4779,9 +4800,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -4989,9 +5013,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -5184,9 +5211,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -5460,9 +5490,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -5762,11 +5795,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -5777,18 +5828,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -5804,8 +5847,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -5824,6 +5865,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -5834,7 +5878,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -5897,8 +5941,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -5916,36 +5958,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -5959,10 +5990,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -5976,7 +6009,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -8639,9 +8672,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -8893,11 +8929,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -8908,18 +8962,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -8935,8 +8981,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -8955,6 +8999,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -8965,7 +9012,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -9028,8 +9075,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -9047,36 +9092,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -9090,10 +9124,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -9107,7 +9143,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -9425,9 +9461,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -9677,11 +9716,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/csvc-knative/templates/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: jhipsternamespace
+spec:
+  host: consul-ui.jhipsternamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/csvc-knative/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -9692,18 +9749,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: jhipsternamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -9719,8 +9768,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -9739,6 +9786,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -9749,7 +9799,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -9812,8 +9862,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -9831,36 +9879,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.jhipsternamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -9874,10 +9911,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -9891,7 +9930,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -10262,9 +10301,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.jhipsternamespace.svc.cluster.local
+              value: consul-ui.jhipsternamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -10705,9 +10747,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -10988,9 +11033,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -11130,11 +11178,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -11145,18 +11211,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -11172,8 +11230,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -11192,6 +11248,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -11202,7 +11261,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -11265,8 +11324,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -11284,36 +11341,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -11327,10 +11373,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -11344,7 +11392,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -11726,9 +11774,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -11888,11 +11939,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -11903,18 +11972,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -11930,8 +11991,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -11950,6 +12009,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -11960,7 +12022,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -12023,8 +12085,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -12042,36 +12102,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -12085,10 +12134,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -12102,7 +12153,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -12487,9 +12538,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -12714,9 +12768,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -12849,11 +12906,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -12864,18 +12939,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -12891,8 +12958,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -12911,6 +12976,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -12921,7 +12989,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -12984,8 +13052,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -13003,36 +13069,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -13046,10 +13101,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -13063,7 +13120,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -13445,9 +13502,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -13607,11 +13667,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -13622,18 +13700,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -13649,8 +13719,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -13669,6 +13737,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -13679,7 +13750,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -13742,8 +13813,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -13761,36 +13830,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -13804,10 +13862,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -13821,7 +13881,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -14219,9 +14279,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -14465,9 +14528,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -14601,6 +14667,7 @@ metadata:
 data:
   on-start.sh: |
     script_name=\${0##*/}
+    local_uri="mongodb://localhost:$PORT/admin?serverSelectionTimeoutMS=2000"
 
     log() {
         local msg="$1"
@@ -14616,7 +14683,24 @@ data:
             args='force: true'
         fi
         log "Shutting down MongoDB ($args)..."
-        mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "db.shutdownServer({$args})"
+        mongosh --norc "$local_uri" "\${admin_creds[@]}" --eval "db.shutdownServer({$args})"
+    }
+
+    wait_for_state() {
+        local state="$1"
+        local state_name="$2"
+        local attempts=0
+        log "Waiting for replica to reach $state_name state..."
+        until [[ $(mongosh --norc "$local_uri" "\${admin_creds[@]}" --quiet --eval "rs.status().myState") == "$state" ]]; do
+            attempts=$((attempts + 1))
+            if [[ $attempts -ge 120 ]]; then
+                log "Replica didn't reach $state_name state after $attempts attempts. Exiting prematurely."
+                shutdown_mongo
+                exit 1
+            fi
+            sleep 1
+        done
+        log "✓ Replica reached $state_name state."
     }
 
     my_hostname=$(hostname)
@@ -14631,54 +14715,13 @@ data:
         peers=("\${peers[@]}" "$line")
     done
 
-    # Generate the ca cert
-    ca_crt=/data/configdb/tls.crt
-    if [ -f "$ca_crt"  ]; then
-        log "Generating certificate"
-        ca_key=/data/configdb/tls.key
-        pem=/work-dir/mongo.pem
-        ssl_args=(--ssl --sslCAFile "$ca_crt" --sslPEMKeyFile "$pem")
-
-    # Move into /work-dir
-    pushd /work-dir
-
-    cat >openssl.cnf <<EOL
-    [req]
-    req_extensions = v3_req
-    distinguished_name = req_distinguished_name
-    [req_distinguished_name]
-    [ v3_req ]
-    basicConstraints = CA:FALSE
-    keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-    subjectAltName = @alt_names
-    [alt_names]
-    DNS.1 = $(echo -n "$my_hostname" | sed s/-[0-9]*$//)
-    DNS.2 = $my_hostname
-    DNS.3 = $service_name
-    DNS.4 = localhost
-    DNS.5 = 127.0.0.1
-    EOL
-
-        # Generate the certs
-        openssl genrsa -out mongo.key 2048
-        openssl req -new -key mongo.key -out mongo.csr -subj "/CN=$my_hostname" -config openssl.cnf
-        openssl x509 -req -in mongo.csr \\
-            -CA "$ca_crt" -CAkey "$ca_key" -CAcreateserial \\
-            -out mongo.crt -days 3650 -extensions v3_req -extfile openssl.cnf
-
-        rm mongo.csr
-        cat mongo.crt mongo.key > $pem
-        rm mongo.key mongo.crt
-    fi
-
-
     log "Peers: \${peers[*]}"
 
     log "Starting a MongoDB instance..."
     mongod --config /data/configdb/mongod.conf --dbpath="$DATA_PATH" --replSet="$REPLICA_SET" --port=$PORT "\${auth_args[@]}" --bind_ip=0.0.0.0 >> /work-dir/log.txt 2>&1 &
 
     log "Waiting for MongoDB to be ready..."
-    until mongo "\${ssl_args[@]}" --eval "db.adminCommand('ping')"; do
+    until mongosh --norc "$local_uri" --eval "db.adminCommand('ping')"; do
         log "Retrying..."
         sleep 2
     done
@@ -14687,23 +14730,20 @@ data:
 
     # try to find a master and add yourself to its replica set.
     for peer in "\${peers[@]}"; do
-        if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.isMaster()" | grep '"ismaster" : true'; then
+        peer_uri="mongodb://$peer/admin?directConnection=true&serverSelectionTimeoutMS=2000"
+        if mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "db.hello().isWritablePrimary" | grep -qx true; then
             log "Found master: $peer"
-            log "Adding myself ($service_name) to replica set..."
-            if mongo admin --host "$peer" "\${admin_creds[@]}" "\${ssl_args[@]}" --eval "rs.add('$service_name')" | grep 'Quorum check failed'; then
-                log 'Quorum check failed, unable to join replicaset. Exiting prematurely.'
+            log "Joining the replica set as $service_name..."
+            if ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --quiet --eval "rs.conf().members.some(m => m.host.split(':')[0] === '$service_name')" | grep -qx true \\
+                && ! mongosh --norc "$peer_uri" "\${admin_creds[@]}" --eval "rs.add('$service_name')"; then
+                log 'Unable to join the replica set. Exiting prematurely.'
                 shutdown_mongo
                 exit 1
             fi
 
             sleep 3
 
-            log 'Waiting for replica to reach SECONDARY state...'
-            until printf '.' && [[ $(mongo admin "\${admin_creds[@]}" "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '2' ]]; do
-                sleep 1
-            done
-
-            log '✓ Replica reached SECONDARY state.'
+            wait_for_state 2 SECONDARY
 
             shutdown_mongo "60"
             log "Good bye."
@@ -14712,18 +14752,13 @@ data:
     done
 
     # else initiate a replica set with yourself.
-    if mongo "\${ssl_args[@]}" --eval "rs.status()" | grep "no replset config has been received"; then
+    if mongosh --norc "$local_uri" --eval "rs.status()" 2>&1 | grep -q "no replset config has been received"; then
         log "Initiating a new replica set with myself ($service_name)..."
-        mongo "\${ssl_args[@]}" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
+        mongosh --norc "$local_uri" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
 
         sleep 3
 
-        log 'Waiting for replica to reach PRIMARY state...'
-        until printf '.' && [[ $(mongo "\${ssl_args[@]}" --quiet --eval "rs.status().myState") == '1' ]]; do
-            sleep 1
-        done
-
-        log '✓ Replica reached PRIMARY state.'
+        wait_for_state 1 PRIMARY
 
         log "Done."
     fi
@@ -14795,6 +14830,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           volumeMounts:
             - name: workdir
               mountPath: /work-dir
@@ -14820,6 +14857,8 @@ spec:
               value: /data/db
             - name: PORT
               value: "27017"
+            - name: DO_NOT_TRACK
+              value: "1"
           ports:
             - name: peer
               containerPort: 27017
@@ -14832,11 +14871,8 @@ spec:
             - --port=$(PORT)
             - --bind_ip=0.0.0.0
           livenessProbe:
-            exec:
-              command:
-                - mongo
-                - --eval
-                - "db.adminCommand('ping')"
+            tcpSocket:
+              port: peer
             initialDelaySeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
@@ -14845,11 +14881,13 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
+                - mongosh
+                - --norc
+                - --quiet
                 - --eval
                 - "db.adminCommand('ping')"
             initialDelaySeconds: 5
-            timeoutSeconds: 1
+            timeoutSeconds: 5
             failureThreshold: 3
             periodSeconds: 10
             successThreshold: 1
@@ -14931,9 +14969,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -15157,9 +15198,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -15361,9 +15405,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -15644,9 +15691,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -15786,11 +15836,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -15801,18 +15869,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: default
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -15828,8 +15888,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -15848,6 +15906,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -15858,7 +15919,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -15921,8 +15982,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -15940,36 +15999,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.default.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.default.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -15983,10 +16031,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -16000,7 +16050,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -19045,9 +19095,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -19190,11 +19243,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -19205,18 +19276,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -19232,8 +19295,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -19252,6 +19313,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -19262,7 +19326,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -19325,8 +19389,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -19344,36 +19406,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -19387,10 +19438,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -19404,7 +19457,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -19760,9 +19813,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.mynamespace.svc.cluster.local
+              value: consul-ui.mynamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -19903,11 +19959,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: mynamespace
+spec:
+  host: consul-ui.mynamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -19918,18 +19992,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: mynamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -19945,8 +20011,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -19965,6 +20029,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -19975,7 +20042,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -20038,8 +20105,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -20057,36 +20122,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.mynamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -20100,10 +20154,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -20117,7 +20173,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -20499,9 +20555,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.jhipsternamespace.svc.cluster.local
+              value: consul-ui.jhipsternamespace.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -20670,11 +20729,29 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "knative/registry-knative/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: jhipsternamespace
+spec:
+  host: consul-ui.jhipsternamespace.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "knative/registry-knative/consul.yml": {
     "contents": "# Consul HA cluster
 #
-# Based on https://artifacthub.io/packages/helm/bitnami/consul
-# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+# Runs the official hashicorp/consul image as a StatefulSet of Consul servers,
+# configured like the server StatefulSet of HashiCorp's Consul Helm chart (https://github.com/hashicorp/consul-k8s)
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
 # You can setup temporary access to it on localhost:8500 by running :
@@ -20685,18 +20762,10 @@ spec:
 #
 # To scale your Consul cluster :
 #   kubectl patch statefulset/consul -n yourNamespace -p '{"spec":{"replicas": 5}}'
+# Keep -bootstrap-expect at the initial number of servers, it's only used to bootstrap the cluster.
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gossip-key
-  namespace: jhipsternamespace
-type: Opaque
-data:
-  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -20712,8 +20781,6 @@ spec:
     - name: http
       protocol: TCP
       port: 8500
-    - name: rpc
-      port: 8400
     - name: serflan-tcp
       protocol: TCP
       port: 8301
@@ -20732,6 +20799,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -20742,7 +20812,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -20805,8 +20875,6 @@ spec:
           ports:
             - name: http
               containerPort: 8500
-            - name: rpc
-              containerPort: 8400
             - name: serflan-tcp
               protocol: "TCP"
               containerPort: 8301
@@ -20824,36 +20892,25 @@ spec:
             requests:
               cpu: "100m"
               memory: "512Mi"
+          args:
+            - agent
+            - -server
+            - -ui
+            - -bind=0.0.0.0
+            - -advertise=$(POD_IP)
+            - -client=0.0.0.0
+            - -bootstrap-expect=3
+            - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
+            - "-hcl=performance { raft_multiplier = 1 }"
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: CONSUL_NODE_NAME
+            - name: POD_IP
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
-            - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.jhipsternamespace.svc.cluster.local"
-            - name: CONSUL_DISABLE_KEYRING_FILE
+                  fieldPath: status.podIP
+            # the image's entrypoint changes data directory ownership with su-exec, which needs root
+            - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
-            - name: CONSUL_BOOTSTRAP_EXPECT
-              value: "3"
-            - name: CONSUL_RAFT_MULTIPLIER
-              value: "1"
-            - name: CONSUL_DOMAIN
-              value: "consul"
-            - name: CONSUL_DATACENTER
-              value: "dc1"
-            - name: CONSUL_UI
-              value: "true"
-            - name: CONSUL_HTTP_PORT_NUMBER
-              value: "8500"
-            - name: CONSUL_DNS_PORT_NUMBER
-              value: "8600"
-            - name: CONSUL_RPC_PORT_NUMBER
-              value: "8400"
-            - name: CONSUL_SERF_LAN_PORT_NUMBER
-              value: "8301"
-          envFrom:
           livenessProbe:
             exec:
               command:
@@ -20867,10 +20924,12 @@ spec:
             successThreshold: 1
             failureThreshold: 6
           readinessProbe:
+            # ready once the cluster has elected a leader, peers join through the headless service before that
             exec:
               command:
-                - consul
-                - members
+                - sh
+                - -c
+                - curl -sf http://127.0.0.1:8500/v1/status/leader | grep -q '[0-9]'
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
@@ -20884,7 +20943,7 @@ spec:
                   - leave
           volumeMounts:
             - name: data
-              mountPath: /bitnami/consul
+              mountPath: /consul/data
       volumes:
   volumeClaimTemplates:
     - metadata:
@@ -20934,9 +20993,12 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: prod
             - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul.default.svc.cluster.local
+              value: consul-ui.default.svc.cluster.local
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "8500"
+            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+              value: 3m
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME

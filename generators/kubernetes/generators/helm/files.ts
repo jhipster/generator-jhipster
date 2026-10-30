@@ -141,6 +141,11 @@ export const deploymentKubernetesFiles = (suffix = '') =>
         renameTo: () => `csvc-${suffix}/templates/application-configmap.yml`,
         templates: ['registry/application-configmap.yml'],
       },
+      {
+        condition: data => data.serviceDiscoveryTypeConsul && data.istio,
+        renameTo: () => `csvc-${suffix}/templates/consul-destination-rule.yml`,
+        templates: ['istio/consul-destination-rule.yml'],
+      },
     ],
     istio: [
       {

@@ -18,10 +18,14 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+<%_ if (builtInUserManagement) { _%>
+import { ref } from 'vue';
+<%_ } _%>
 import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
+import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
@@ -43,6 +47,20 @@ vi.mock('vue-router', () => ({
 }));
 
 const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+<%_ const relationshipsWithValues = relationships.filter(relationship => !relationship.otherEntity.embedded); _%>
+<%_ for (const otherEntity of new Set(relationshipsWithValues.map(relationship => relationship.otherEntity))) { _%>
+const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
+<%_ } _%>
+const <%- entityInstance %>SampleWithRelationships = {
+  ...<%- entityInstance %>Sample,
+<%_ for (const relationship of relationshipsWithValues) { _%>
+  <%_ if (relationship.collection) { _%>
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option, { <%- relationship.otherEntity.primaryKey.name %>: <%- relationship.otherEntity.primaryKey.tsSampleValues[1] %> }],
+  <%_ } else { _%>
+  <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
+  <%_ } _%>
+<%_ } _%>
+};
 
 
 describe('Component Tests', () => {
@@ -84,6 +102,9 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
+<%_ if (builtInUserManagement) { _%>
+          currentUsername: ref('admin'),
+<%_ } _%>
         },
       };
     });
@@ -91,7 +112,7 @@ describe('Component Tests', () => {
     describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>SampleWithRelationships);
         route = {
           params: {
             <%- entityInstance %>Id: '' + <%- tsKeyId %>,
@@ -100,10 +121,10 @@ describe('Component Tests', () => {
         const wrapper = shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
         const comp = wrapper.vm;
         // WHEN
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
-        expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>Sample);
+        expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>SampleWithRelationships);
       });
     });
 
@@ -223,7 +244,7 @@ describe('Component Tests', () => {
         };
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: { alertService } } });
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: {}, plugins: [createBootstrap()] } });
         await flushPromises();
 
         // THEN

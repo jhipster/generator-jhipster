@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
+import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -51,6 +51,9 @@ export default defineComponent({
 <%_ } _%>
     const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
     const alertService = inject('alertService', () => useAlertService(), true);
+<%_ if (builtInUserManagement) { _%>
+    const username = inject<ComputedRef<string>>('currentUsername');
+<%_ } _%>
 
 <%_ if (searchEngineAny) { _%>
     const currentSearch = ref('');
@@ -71,18 +74,20 @@ export default defineComponent({
 
     const isFetching = ref(false);
 
+<%_ if (searchEngineAny || !paginationNo) { _%>
     const clear = () => {
-<%_ if (searchEngineAny) { _%>
+  <%_ if (searchEngineAny) { _%>
       currentSearch.value = '';
-<%_ } _%>
-<%_ if (!paginationNo) { _%>
+  <%_ } _%>
+  <%_ if (!paginationNo) { _%>
       page.value = 1;
-<%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
+  <%_ } _%>
+  <%_ if (paginationInfiniteScroll) { _%>
       links.value = {};
       <%- entityInstancePlural %>.value = [];
-<%_ } _%>
+  <%_ } _%>
     };
+<%_ } _%>
 <%_ if (!paginationNo) { _%>
 
     const sort = (): Array<any> => {
@@ -182,6 +187,17 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
 
+  <%_ if (builtInUserManagement) { _%>
+    const setActive = async (<%- entityInstance %>: I<%- entityAngularName %>, activated: boolean) => {
+      try {
+        await <%- entityInstance %>Service().update({ ...<%- entityInstance %>, activated });
+        handleSyncList();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+  <%_ } _%>
     const changeOrder = (newOrder: string) => {
       if (propOrder.value === newOrder) {
         reverse.value = !reverse.value;
@@ -220,7 +236,7 @@ export default defineComponent({
     watchEffect(() => {
       if (links.value.next) {
         intersectionObserver.resume();
-      } else if (intersectionObserver.isActive) {
+      } else if (intersectionObserver.isActive.value) {
         intersectionObserver.pause();
       }
     });
@@ -245,11 +261,17 @@ export default defineComponent({
 <%_ } _%>
 
     return {
+<%_ if (builtInUserManagement) { _%>
+      username,
+      setActive,
+<%_ } _%>
       <%- entityInstancePlural %>,
       handleSyncList,
       isFetching,
       retrieve<%- entityAngularName %>s,
+<%_ if (searchEngineAny || !paginationNo) { _%>
       clear,
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>

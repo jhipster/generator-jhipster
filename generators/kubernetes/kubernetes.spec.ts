@@ -134,7 +134,8 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.consulregistry);
-      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /a 24 chars base64 encoded string/);
+      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', /-bootstrap-expect=3/);
+      runResult.assertNoFile('./kubernetes/registry-k8s/consul-destination-rule.yml');
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
@@ -1005,6 +1006,9 @@ describe('generator - Kubernetes', () => {
     });
     it('creates expected service gateway files', () => {
       runResult.assertFile(expectedFiles.jhgate);
+    });
+    it('pins each app to one Consul server with a destination rule', () => {
+      runResult.assertFileContent('./kubernetes/registry-k8s/consul-destination-rule.yml', /useSourceIp: true/);
     });
     it('creates expected routing gateway and istio files', () => {
       runResult.assertFile(expectedFiles.jhgategateway);

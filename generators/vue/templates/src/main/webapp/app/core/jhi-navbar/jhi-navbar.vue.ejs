@@ -73,16 +73,11 @@
               <span class="no-bold">{{ t$('global.menu.admin.main') }}</span>
             </span>
           </template>
+          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           <b-dropdown-item to="/admin/gateway" active-class="active">
             <font-awesome-icon icon="road" />
             <span>{{ t$('global.menu.admin.gateway') }}</span>
-          </b-dropdown-item>
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
-          <b-dropdown-item to="/admin/user-management" active-class="active">
-            <font-awesome-icon icon="users" />
-            <span>{{ t$('global.menu.admin.userManagement') }}</span>
           </b-dropdown-item>
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>

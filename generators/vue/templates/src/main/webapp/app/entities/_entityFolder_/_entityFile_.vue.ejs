@@ -1,3 +1,4 @@
+<%_ const listFields = fields.filter(field => !field.id && !field.hidden && !field.hideListView); _%>
 <template>
     <div>
         <h2 id="page-heading" data-cy="<%- entityNameCapitalized %>Heading">
@@ -43,14 +44,16 @@
             <table class="table table-striped" aria-describedby="<%- entityInstancePlural %>">
                 <thead>
                 <tr>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- primaryKey.name %>')"<% } %>><span>{{ t$('global.field.id') }}</span><%- paginationNo ? '' : ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="id"></jhi-sort-indicator>' %></th>
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- primaryKey.name %>')"<% } %>><span>{{ t$('<%- primaryKey.name === 'id' ? 'global.field.id' : `${i18nKeyPrefix}.${primaryKey.name}` %>') }}</span><%- paginationNo ? '' : ` <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="${primaryKey.name}"></jhi-sort-indicator>` %></th>
+<%_ for (field of listFields) { _%>
                     <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- field.fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${field.fieldName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- field.fieldName %>"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
+                    <th scope="col"><span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span></th>
+  <%_ } else if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
     <%_ const fieldName = `.${relationship.otherEntityField}`; _%>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- relationship.relationshipName + fieldName %>"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + fieldName %>')"<% } %>><span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- relationship.relationshipName + fieldName %>"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
@@ -62,7 +65,7 @@
                     <td>
                         <router-link :to="{name: '<%- entityAngularName %>View', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}">{{<%- entityInstance %>.<%- primaryKey.name %>}}</router-link>
                     </td>
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of listFields) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
@@ -76,6 +79,13 @@
                         <a v-if="<%- entityInstance %>.<%- fieldName %>" @click="openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a>
                         <span v-if="<%- entityInstance %>.<%- fieldName %>">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
                     </td>
+  <%_ } else if (builtInUserManagement && fieldName === 'activated') { _%>
+                    <td>
+                        <button class="btn btn-danger btn-sm deactivated" @click="setActive(<%- entityInstance %>, true)" v-if="!<%- entityInstance %>.activated">{{ t$('<%- i18nKeyPrefix %>.deactivated') }}</button>
+                        <button class="btn btn-success btn-sm" @click="setActive(<%- entityInstance %>, false)" v-else :disabled="username === <%- entityInstance %>.login">{{ t$('<%- i18nKeyPrefix %>.activated') }}</button>
+                    </td>
+  <%_ } else if (field.clientConstantsAsValues) { _%>
+                    <td>{{ <%- entityInstance %>.<%- fieldName %><%- field.collection ? '?.join(\', \')' : '' %> }}</td>
   <%_ } else if (field.fieldIsEnum) { _%>
                     <td><% if (enableTranslation) { %>{{ t$('<%- frontendAppName %>.<%- fieldType %>.' + <%- entityInstance %>.<%- fieldName %>) }}<% } else { %>{{ <%- entityInstance %>.<%- fieldName %> }}<% } %></td>
   <%_ } else if (field.fieldTypeDuration) { _%>
@@ -87,8 +97,14 @@
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>
-  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
+  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship; _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
+                    <td>
+                        <div v-for="<%- relationshipFieldName %> in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>">
+                            <span class="badge bg-info">{{ <%- relationshipFieldName %> }}</span>
+                        </div>
+                    </td>
+  <%_ } else if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
@@ -101,11 +117,11 @@
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- primaryKey.name %>">{{i > 0 ? ', ' : ''}}
-                            <router-link class="form-control-static" :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link class="form-control-static" :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </span>
       <%_ } else { _%>
                         <div v-if="<%- `${entityInstance}.${relationshipFieldName}` %>">
-                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
+                            <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- `${entityInstance}.${relationshipFieldName}` %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
                         </div>
       <%_ } _%>
     <%_ } _%>
@@ -142,6 +158,9 @@
                             <b-button @click="prepareRemove(<%- entityInstance %>)"
                                    variant="danger"
                                    class="btn btn-sm"
+  <%_ if (builtInUserManagement) { _%>
+                                   :disabled="username === <%- entityInstance %>.login"
+  <%_ } _%>
                                    data-cy="entityDeleteButton">
                                 <font-awesome-icon icon="trash"></font-awesome-icon>
                                 <span class="d-none d-md-inline">{{ t$('entity.action.delete') }}</span>
@@ -170,7 +189,7 @@
                         <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.cancel') }}</span>
                     </button>
                     <button type="button" class="btn btn-danger" id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" @click="remove<%- entityAngularName %>">
-                        <font-awesome-icon icon="times"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
+                        <font-awesome-icon icon="trash"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.delete') }}</span>
                     </button>
                 </div>
             </template>

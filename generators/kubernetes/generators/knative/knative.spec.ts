@@ -154,7 +154,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected registry files and content', () => {
         runResult.assertFile(expectedFiles.consulregistry);
-        runResult.assertFileContent('./knative/registry-knative/consul.yml', /a 24 chars base64 encoded string/);
+        runResult.assertFileContent('./knative/registry-knative/consul.yml', /-bootstrap-expect=3/);
       });
       it('creates expected gateway files and content', () => {
         runResult.assertFile(expectedFiles.jhgate);
@@ -519,6 +519,9 @@ describe('generator - Knative', () => {
       });
       it('creates expected service gateway files', () => {
         runResult.assertFile(expectedFiles.jhgate);
+      });
+      it('pins each app to one Consul server with a destination rule', () => {
+        runResult.assertFileContent('./knative/registry-knative/consul-destination-rule.yml', /useSourceIp: true/);
       });
       it('creates expected routing gateway and istio files', () => {
         runResult.assertFile(expectedFiles.jhgategateway);
@@ -912,6 +915,9 @@ describe('generator - Knative', () => {
       it('creates expected service gateway files', () => {
         runResult.assertFile(helmExpectedFiles.jhgate);
         runResult.assertFile(helmExpectedFiles.csvcfiles);
+      });
+      it('pins each app to one Consul server with a destination rule', () => {
+        runResult.assertFileContent('./knative/csvc-knative/templates/consul-destination-rule.yml', /useSourceIp: true/);
       });
       it('creates expected routing gateway and istio files', () => {
         runResult.assertFile(helmExpectedFiles.jhgategateway);

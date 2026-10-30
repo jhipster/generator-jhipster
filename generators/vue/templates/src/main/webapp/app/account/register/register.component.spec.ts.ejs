@@ -20,11 +20,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed } from 'vue';
 
 import { createTestingPinia } from '@pinia/testing';
-import { shallowMount } from '@vue/test-utils';
+import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import { useLoginModal } from '@/account/login-modal';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+import { formValues, setAllValues } from '@/shared/testing/stubs';
 
 import Register from './register.vue';
 
@@ -155,5 +156,29 @@ describe('Register Component', () => {
     expect(register.errorEmailExists).toBeNull();
     expect(register.errorUserExists).toBeNull();
     expect(register.error).toBe('ERROR');
+  });
+
+  it('should show the errors of the form and register with the browser language', async () => {
+    // GIVEN
+    axiosStub.post.mockResolvedValue(undefined);
+    const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as any);
+    const wrapper = shallowMount(Register, { global: { plugins: [createTestingPinia()] } });
+
+    // WHEN
+    await setAllValues(wrapper, 'input', formValues);
+    await wrapper.find('a.alert-link').trigger('click');
+    await wrapper.find('form').trigger('submit');
+    await flushPromises();
+
+    // THEN
+    expect(useLoginModal().showLogin).toHaveBeenCalled();
+    expect(axiosStub.post).toHaveBeenCalledWith('api/register', {
+      email: 'jhi@pster.net',
+      langKey: '<%- nativeLanguage %>',
+      login: 'jhi@pster.net',
+      password: 'jhi@pster.net',
+    });
+    expect(wrapper.vm.success).toBe(true);
+    language.mockRestore();
   });
 });
