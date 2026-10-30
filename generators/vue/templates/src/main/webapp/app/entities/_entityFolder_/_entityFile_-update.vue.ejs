@@ -108,7 +108,7 @@ _%>
   <%_ if (field.fieldTypeBoolean) { _%>
                         <label class="form-check-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
-  <%_ if (field.fieldValidate) { _%>
+  <%_ if (field.vueClientValidation) { _%>
                         <div v-if="v$.<%- fieldName %>.$anyDirty && v$.<%- fieldName %>.$invalid">
                             <small
                                class="form-text text-danger"

@@ -20,12 +20,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { type RouteLocation } from 'vue-router';
 
 import { createTestingPinia } from '@pinia/testing';
-import { type MountingOptions, shallowMount } from '@vue/test-utils';
+import { type MountingOptions, type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
+import { bFormStub, slotsStub } from '@/shared/testing/stubs';
 import { useStore } from '@/store';
 import AccountService from '../account.service';
 
@@ -46,6 +47,7 @@ const axiosStub = {
 };
 
 describe('LoginForm Component', () => {
+  let wrapper: VueWrapper<LoginFormComponentType>;
   let loginForm: LoginFormComponentType;
 
   beforeEach(() => {
@@ -58,20 +60,20 @@ describe('LoginForm Component', () => {
 
     const globalOptions: MountingOptions<LoginFormComponentType>['global'] = {
       stubs: {
-        'b-alert': true,
-        'b-button': true,
-        'b-form': true,
-        'b-form-input': true,
-        'b-form-group': true,
-        'b-form-checkbox': true,
-        'b-link': true,
+        'b-alert': slotsStub,
+        'b-button': slotsStub,
+        'b-form': bFormStub,
+        'b-form-input': slotsStub,
+        'b-form-group': slotsStub,
+        'b-form-checkbox': slotsStub,
+        'b-link': slotsStub,
       },
       plugins: [pinia],
       provide: {
         accountService: new AccountService(store),
       },
     };
-    const wrapper = shallowMount(LoginForm, { global: globalOptions });
+    wrapper = shallowMount(LoginForm, { global: globalOptions });
 
     loginForm = wrapper.vm;
   });
@@ -182,4 +184,34 @@ describe('LoginForm Component', () => {
   });
 <%_ } _%>
 
+  it('should log in with the values of the form', async () => {
+    // GIVEN
+    axiosStub.post.mockRejectedValue(new Error());
+
+    // WHEN
+    wrapper.findComponent('#username').vm.$emit('update:modelValue', 'login');
+    wrapper.findComponent('#password').vm.$emit('update:modelValue', 'pwd');
+    wrapper.findComponent('#rememberMe').vm.$emit('update:modelValue', false);
+    await wrapper.find('form').trigger('submit');
+    await flushPromises();
+
+    // THEN
+    expect(loginForm.login).toBe('login');
+    expect(loginForm.password).toBe('pwd');
+    expect(loginForm.rememberMe).toBe(false);
+    expect(axiosStub.post).toHaveBeenCalled();
+  });
+
+  it('should go back after logging in from the forbidden page', async () => {
+    // GIVEN
+    route.path = '/forbidden';
+    axiosStub.post.mockResolvedValue({ headers: {} });
+
+    // WHEN
+    await loginForm.doLogin();
+    await flushPromises();
+
+    // THEN
+    expect(routerGoMock).toHaveBeenCalledWith(-1);
+  });
 });

@@ -16,30 +16,48 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { shallowMount } from '@vue/test-utils';
+import { flushPromises, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
 
-import GatewayService from './gateway.service';
 import Gateway from './gateway.vue';
 
-describe('Gateway Component', () => {
-  let wrapper;
+const routes = [
+  { path: '/services/a/**', serviceId: 'a', serviceInstances: [] },
+  {
+    path: '/services/b/**',
+    serviceId: 'b',
+    serviceInstances: [
+      { uri: 'http://b1', metadata: { zone: 'one' }, healthService: { checks: [{ status: 'PASSING' }] }, instanceInfo: { status: 'UP' } },
+      { uri: 'http://b2', metadata: {}, healthService: { checks: [{ status: 'PASSING' }, { status: 'CRITICAL' }] }, instanceInfo: { status: 'DOWN' } },
+      { uri: 'http://b3', metadata: {} },
+    ],
+  },
+];
 
-  beforeEach(() => {
-    const gatewayService = new GatewayService();
-    vi.spyOn(gatewayService, 'findAll').mockResolvedValue({ data: [] });
-    wrapper = shallowMount(Gateway, {
+describe('Gateway Component', () => {
+  it('should list the routes and their instances, refreshing them', async () => {
+    // GIVEN
+    const get = vi.spyOn(axios, 'get').mockImplementation(async () => ({ data: structuredClone(routes) }));
+    const wrapper = shallowMount(Gateway, {
       global: {
         stubs: {
           'font-awesome-icon': true,
         },
-        provide: { gatewayService },
       },
     });
-  });
+    await flushPromises();
 
-  it('should be a Vue instance', () => {
+    // WHEN
+    await wrapper.find('button').trigger('click');
+    await flushPromises();
+
+    // THEN
     expect(wrapper.find('#gateway-page-heading').exists()).toBe(true);
+    expect(get).toHaveBeenCalledTimes(2);
+    expect(wrapper.vm.gatewayRoutes[1].serviceInstances.map(instance => instance.instanceInfo?.status)).toEqual(['UP', 'DOWN', undefined]);
+    expect(wrapper.text()).toContain('http://b1');
+    get.mockRestore();
   });
 });

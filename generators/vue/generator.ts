@@ -76,6 +76,39 @@ export class VueApplicationGenerator extends BaseApplicationGenerator<
   VueFeatures
 > {}
 
+/** Whether the client validates the field with a rule some value fails: the blob sizes are not validated, a minimum length of one or less fails no value. */
+const hasClientValidation = (field: Field): boolean =>
+  Boolean(
+    field.fieldValidate &&
+    (field.fieldValidationRequired ||
+      (field.fieldValidationMinLength && Number(field.fieldValidateRulesMinlength) > 1) ||
+      field.fieldValidationMaxLength ||
+      field.fieldTypeInteger ||
+      field.fieldTypeLong ||
+      field.fieldValidationMin ||
+      field.fieldValidationMax ||
+      field.fieldValidationPattern),
+  );
+
+/** A TypeScript expression of a value failing a validation of the field other than required, which an empty value fails. */
+const invalidValue = (field: Field): string | undefined => {
+  if (field.fieldValidationMaxLength) return `'x'.repeat(${Number(field.fieldValidateRulesMaxlength) + 1})`;
+  if (field.fieldValidationMinLength && Number(field.fieldValidateRulesMinlength) > 1) return "'x'";
+  if (field.fieldValidationMin) return `${Number(field.fieldValidateRulesMin) - 1}`;
+  if (field.fieldValidationMax) return `${Number(field.fieldValidateRulesMax) + 1}`;
+  if (field.fieldTypeInteger || field.fieldTypeLong) return '0.5';
+  if (field.fieldValidationPattern) {
+    try {
+      const pattern = new RegExp(field.fieldValidateRulesPattern!);
+      const value = ['\n', '!', ' ', 'x', '0'].find(value => !pattern.test(value));
+      return value === undefined ? undefined : JSON.stringify(value);
+    } catch {
+      // A pattern JavaScript does not parse.
+    }
+  }
+  return undefined;
+};
+
 export default class VueGenerator extends VueApplicationGenerator {
   constructor(args?: string[], options?: VueOptions, features?: VueFeatures) {
     super(args, options, { ...features, loadCommand: ['jhipster:server'] });
@@ -254,7 +287,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             );
 
             const menuItem = `<b-dropdown-item to="/${entityPage}"${entity.adminEntity ? ' active-class="active"' : ''}>
-  <font-awesome-icon icon="asterisk" />
+  <font-awesome-icon icon="${entity.builtInUserManagement ? 'users' : 'asterisk'}" />
   <span>${enableTranslation ? `{{ $t('${entityTranslationKeyMenuPath}') }}` : entityNameHumanized}</span>
 </b-dropdown-item>`;
             // Admin entities, like the authorities, go to the admin menu.
@@ -303,6 +336,15 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      prepareFieldValidation({ entity }) {
+        for (const field of entity.fields) {
+          mutateData(field, {
+            __override__: false,
+            vueClientValidation: () => hasClientValidation(field),
+            vueInvalidValue: () => (field.fieldValidate ? invalidValue(field) : undefined),
+          });
+        }
+      },
       prepareEntityModel({ entity }) {
         const fieldsWithoutId = entity.fields.filter(field => !field.id);
         // The authorities of the routes, like Angular: ROLE_USER when the entity declares none.
@@ -385,7 +427,6 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             `${application.clientSrcDir}app/config/error.constants.ts`,
             `${application.clientSrcDir}app/shared/security/authority.ts`,
           ],
-          '9.0.1': [`${application.clientSrcDir}app/entities/entities-menu.spec.ts`],
           '9.3.1': [
             // Webpack support was removed
             'webpack/package.json',

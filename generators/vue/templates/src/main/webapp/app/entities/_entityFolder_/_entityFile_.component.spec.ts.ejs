@@ -24,6 +24,7 @@ import { ref } from 'vue';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
+import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
@@ -34,9 +35,36 @@ import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/te
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';
 
 const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+<%_ const relationshipsWithValues = relationships.filter(relationship => !relationship.otherEntity.embedded); _%>
+<%_ for (const otherEntity of new Set(relationshipsWithValues.map(relationship => relationship.otherEntity))) { _%>
+const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
+<%_ } _%>
+const <%- entityInstance %>SampleWithRelationships = {
+  ...<%- entityInstance %>Sample,
+<%_ for (const relationship of relationshipsWithValues) { _%>
+  <%_ if (relationship.collection) { _%>
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option, { <%- relationship.otherEntity.primaryKey.name %>: <%- relationship.otherEntity.primaryKey.tsSampleValues[1] %> }],
+  <%_ } else { _%>
+  <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
+  <%_ } _%>
+<%_ } _%>
+};
 
 type <%- entityAngularName %>ComponentType = InstanceType<typeof <%- entityAngularName %>>;
+<%_ if (paginationInfiniteScroll) { _%>
 
+const intersection = vi.hoisted(() => ({
+  callback: undefined as unknown as (entries: Partial<IntersectionObserverEntry>[]) => void,
+  observer: { isActive: { value: true }, pause: vi.fn(), resume: vi.fn() },
+}));
+
+vi.mock('@vueuse/core', () => ({
+  useIntersectionObserver: (_target: unknown, callback: typeof intersection.callback) => {
+    intersection.callback = callback;
+    return intersection.observer;
+  },
+}));
+<%_ } _%>
 
 describe('Component Tests', () => {
   let alertService: AlertService;
@@ -95,12 +123,12 @@ describe('Component Tests', () => {
     describe('Mount', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>SampleWithRelationships] });
 
         // WHEN
         const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
         const comp = wrapper.vm;
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledOnce();
@@ -118,6 +146,62 @@ describe('Component Tests', () => {
         expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
           sort: ['id,asc'],
         });
+      });
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+
+      it('should change the page from the pagination', async () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        wrapper.findComponent({ name: 'b-pagination' }).vm.$emit('update:modelValue', 2);
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.page).toBe(2);
+      });
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+
+      it('should load the next page when the end of the list is visible', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: { link: '<http://localhost/api?page=1&size=20>; rel="next"' }, data: [<%- entityInstance %>Sample] });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+        expect(intersection.observer.resume).toHaveBeenCalled();
+
+        // WHEN
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [] });
+        intersection.callback([{ isIntersecting: true }]);
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.page).toBe(2);
+        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(2);
+        expect(intersection.observer.pause).toHaveBeenCalled();
+      });
+
+      it('should not load a page while the list is fetched or the end is not visible', async () => {
+        // GIVEN
+        intersection.observer.isActive.value = false;
+        intersection.observer.pause.mockClear();
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        intersection.callback([{ isIntersecting: false }]);
+        wrapper.vm.isFetching = true;
+        intersection.callback([{ isIntersecting: true }]);
+        wrapper.vm.<%- entityInstancePlural %> = [<%- entityInstance %>Sample];
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.page).toBe(1);
+        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledOnce();
+        expect(intersection.observer.pause).not.toHaveBeenCalled();
+        intersection.observer.isActive.value = true;
       });
 <%_ } _%>
     });
@@ -173,6 +257,21 @@ describe('Component Tests', () => {
         expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
       });
 
+  <%_ if (paginationPagination) { _%>
+      it('should reset the page when the order changes', async () => {
+        // GIVEN
+        comp.page = 2;
+        await comp.$nextTick();
+
+        // WHEN
+        comp.changeOrder('name');
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.page).toEqual(1);
+      });
+
+  <%_ } _%>
       it('should calculate the sort attribute for a non-id attribute', async () => {
         // WHEN
         comp.propOrder = 'name';
@@ -206,10 +305,47 @@ describe('Component Tests', () => {
 <%_ } _%>
     });
 
+<%_ if (searchEngineAny) { _%>
+    describe('Search', () => {
+      it('Should search the <%- entityInstancePlural %> and clear the search', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.search = vi.fn().mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [] });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        await wrapper.find('#currentSearch').setValue('query');
+        await wrapper.find('#launch-search').trigger('click');
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.search).toHaveBeenCalledWith('query'<%- paginationNo ? '' : ', expect.anything()' %>);
+        expect(wrapper.vm.<%- entityInstancePlural %>).toContainEqual(expect.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
+
+        // WHEN
+        await wrapper.find('form').trigger('submit');
+        await wrapper.find('#clear-search').trigger('click');
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.currentSearch).toBe('');
+        expect(<%- entityInstance %>ServiceStub.search).toHaveBeenCalledTimes(2);
+      });
+    });
+
+<%_ } _%>
     describe('Actions', () => {
       it('Should handle the actions of the list', async () => {
         // GIVEN
+<%_ if (builtInUserManagement) { _%>
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({
+          headers: {},
+          data: [<%- entityInstance %>Sample, { ...<%- entityInstance %>Sample, login: 'other', activated: !<%- entityInstance %>Sample.activated }],
+        });
+<%_ } else { _%>
         <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
+<%_ } _%>
 <%_ if (!readOnly) { _%>
         <%- entityInstance %>ServiceStub.delete.mockResolvedValue({});
 <%_ } _%>
@@ -222,12 +358,17 @@ describe('Component Tests', () => {
 
         // WHEN
         await triggerAll(wrapper, 'button, th, a', 'click');
+<%_ if (!paginationNo) { _%>
+        // A second click on a column reverses its order.
+        await triggerAll(wrapper, 'th', 'click');
+<%_ } _%>
         await flushPromises();
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.retrieve.mock.calls.length).toBeGreaterThan(1);
 <%_ if (!readOnly) { _%>
-        expect(<%- entityInstance %>ServiceStub.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
+        // The last entity of the list is deleted.
+        expect(<%- entityInstance %>ServiceStub.delete).toHaveBeenCalledWith(<%- builtInUserManagement ? "'other'" : tsKeyId %>);
 <%_ } _%>
       });
     });
@@ -271,7 +412,7 @@ describe('Component Tests', () => {
         const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: { alertService } } });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: {}, plugins: [createBootstrap()] } });
         await flushPromises();
 
         // THEN

@@ -124,6 +124,27 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.memFs.get(join(runResult.cwd, keyStoreFile)).editorMetadata).toMatchObject({ writeOnce: true });
       });
     });
+
+    describe('with the KeyStore of a project generated before 9.4.1', () => {
+      const oldKeyStoreFile = 'src/main/resources/config/tls/keystore.p12';
+
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ skipClient: true, jhipsterVersion: '9.4.0' })
+          .commitFiles()
+          .doInDir(cwd => {
+            mkdirSync(join(cwd, dirname(oldKeyStoreFile)), { recursive: true });
+            writeFileSync(join(cwd, oldKeyStoreFile), 'existing');
+          })
+          .withOptions({ fakeKeytool: false });
+      });
+
+      it('should move it to the new name', () => {
+        runResult.assertFileContent(keyStoreFile, /^existing$/);
+        runResult.assertNoFile(oldKeyStoreFile);
+      });
+    });
   });
 
   describe('with jwt', () => {

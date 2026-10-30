@@ -74,18 +74,20 @@ export default defineComponent({
 
     const isFetching = ref(false);
 
+<%_ if (searchEngineAny || !paginationNo) { _%>
     const clear = () => {
-<%_ if (searchEngineAny) { _%>
+  <%_ if (searchEngineAny) { _%>
       currentSearch.value = '';
-<%_ } _%>
-<%_ if (!paginationNo) { _%>
+  <%_ } _%>
+  <%_ if (!paginationNo) { _%>
       page.value = 1;
-<%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
+  <%_ } _%>
+  <%_ if (paginationInfiniteScroll) { _%>
       links.value = {};
       <%- entityInstancePlural %>.value = [];
-<%_ } _%>
+  <%_ } _%>
     };
+<%_ } _%>
 <%_ if (!paginationNo) { _%>
 
     const sort = (): Array<any> => {
@@ -234,7 +236,7 @@ export default defineComponent({
     watchEffect(() => {
       if (links.value.next) {
         intersectionObserver.resume();
-      } else if (intersectionObserver.isActive) {
+      } else if (intersectionObserver.isActive.value) {
         intersectionObserver.pause();
       }
     });
@@ -267,7 +269,9 @@ export default defineComponent({
       handleSyncList,
       isFetching,
       retrieve<%- entityAngularName %>s,
+<%_ if (searchEngineAny || !paginationNo) { _%>
       clear,
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>

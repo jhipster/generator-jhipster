@@ -1,0 +1,84 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it<%- microfrontend ? ', vi' : '' %> } from 'vitest';
+
+import router from './index';
+<%_ if (microfrontend) { _%>
+
+const remotes = vi.hoisted(() => {
+  let release: () => void;
+  const loaded = new Promise<void>(resolve => {
+    release = resolve;
+  });
+  return { loaded, release: () => release(), fail: false };
+});
+
+vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
+  loadRemote: async (id: string) => {
+    await remotes.loaded;
+    if (remotes.fail) {
+      throw new Error(`${id} is down`);
+    }
+    const remote = id.split('/')[0];
+    return { default: { path: `/${remote}`, name: `${remote}-entities`, component: { render: () => null } } };
+  },
+}));
+<%_ } _%>
+
+describe('Router', () => {
+<%_ if (microfrontend) { _%>
+  it('should navigate to a route of a remote once loaded', async () => {
+    const navigation = router.push('/<%- microfrontends[0].moduleFederationName %>');
+    remotes.release();
+    await navigation;
+
+    expect(router.currentRoute.value.name).toBe('<%- microfrontends[0].moduleFederationName %>-entities');
+  });
+
+<%_ } _%>
+  it('should load the component of every route', async () => {
+    for (const route of router.getRoutes()) {
+      for (const component of Object.values(route.components ?? {})) {
+        // Lazy routes give a function importing the module of the component.
+        const loaded = typeof component === 'function' ? (await (component as () => Promise<{ default: unknown }>)()).default : component;
+        expect({ path: route.path, loaded }).toEqual({ path: route.path, loaded: expect.anything() });
+      }
+    }
+  });
+
+  it('should redirect an unknown route to the not found page', async () => {
+    await router.push('/an-unknown-route');
+
+    expect(router.currentRoute.value.name).toBe('NotFound');
+  });
+<%_ if (microfrontend) { _%>
+
+  it('should log the remotes failing to load', async () => {
+    remotes.fail = true;
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.resetModules();
+
+    const { lazyRoutes } = await import('./index');
+    await lazyRoutes;
+
+    expect(log).toHaveBeenCalledTimes(<%- microfrontends.length %>);
+    log.mockRestore();
+  });
+<%_ } _%>
+});

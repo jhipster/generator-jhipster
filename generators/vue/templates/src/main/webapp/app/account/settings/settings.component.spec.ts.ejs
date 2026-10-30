@@ -19,10 +19,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createTestingPinia } from '@pinia/testing';
-import { shallowMount } from '@vue/test-utils';
+import { type VueWrapper, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import { EMAIL_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+import { formValues, setAllValues } from '@/shared/testing/stubs';
 import { useStore } from '@/store';
 
 import Settings from './settings.vue';
@@ -40,6 +41,7 @@ const axiosStub = {
 
 describe('Settings Component', () => {
   let settings: SettingsComponentType;
+  let wrapper: VueWrapper<SettingsComponentType>;
   const account = {
     firstName: 'John',
     lastName: 'Doe',
@@ -51,7 +53,7 @@ describe('Settings Component', () => {
     axiosStub.post.mockReset();
 
     store.setAuthentication(account);
-    const wrapper = shallowMount(Settings, {
+    wrapper = shallowMount(Settings, {
       global: {
         plugins: [pinia],
       },
@@ -127,5 +129,22 @@ describe('Settings Component', () => {
     expect(settings.errorEmailExists).toEqual('ERROR');
     expect(settings.error).toBeNull();
     expect(settings.success).toBeNull();
+  });
+
+  it('should show the errors of the form and save it', async () => {
+    // GIVEN
+    axiosStub.post.mockResolvedValue({});
+    store.setAuthentication({ ...account, login: 'jhi' });
+    await settings.$nextTick();
+
+    // WHEN
+    await setAllValues(wrapper, 'input', formValues);
+    await wrapper.find('form').trigger('submit');
+    await flushPromises();
+
+    // THEN
+    expect(wrapper.find('#settings-title').exists()).toBe(true);
+    expect(axiosStub.post).toHaveBeenCalledWith('api/account', expect.objectContaining({ firstName: 'jhi@pster.net', email: 'jhi@pster.net' }));
+    expect(settings.success).toBe('OK');
   });
 });
