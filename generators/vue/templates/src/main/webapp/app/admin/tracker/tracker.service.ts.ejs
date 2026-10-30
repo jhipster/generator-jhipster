@@ -88,9 +88,8 @@ export default class TrackerService {
   set stomp(rxStomp) {
     this.rxStomp = rxStomp;
     this.rxStomp.configure({
-      debug: (msg: string): void => {
-        console.log(new Date(), msg);
-      },
+      // eslint-disable-next-line no-console
+      debug: (msg: string): void => console.log(new Date(), msg),
     });
 
     this.rxStomp.connectionState$.subscribe(state => {

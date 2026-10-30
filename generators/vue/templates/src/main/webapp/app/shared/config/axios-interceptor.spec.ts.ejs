@@ -41,7 +41,7 @@ describe('Axios interceptor', () => {
 <%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'auth');
 <%_ } _%>
-    const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
+    const result = setupAxiosConfig.onRequestSuccess({});
 
 <%_ if (authenticationTypeJwt) { _%>
     expect(result.headers.Authorization).toBe('Bearer auth');
@@ -53,7 +53,7 @@ describe('Axios interceptor', () => {
 <%_ if (authenticationTypeJwt) { _%>
     sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'auth');
 <%_ } _%>
-    const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
+    const result = setupAxiosConfig.onRequestSuccess({});
 
 <%_ if (authenticationTypeJwt) { _%>
     expect(result.headers.Authorization).toBe('Bearer auth');
