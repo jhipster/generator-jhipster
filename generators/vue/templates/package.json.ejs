@@ -88,7 +88,8 @@
     "vite": null,
     "vitest": "<%- nodeDependencies.vitest %>",
     "vite-plugin-static-copy": null,
-    "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>"
+    "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>",
+    "vue-tsc": "<%- nodeDependencies['vue-tsc'] %>"
   },
   "engines": {
     "node": ">=<%- nodeVersion %>"
@@ -104,9 +105,10 @@
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
     "serve": "<%- nodePackageManager %> run start --",
     "start": "<%- nodePackageManager %> run webapp:dev --",
-    "pretest": "<%- nodePackageManager %> run lint",
+    "pretest": "<%- nodePackageManager %> run lint && <%- nodePackageManager %> run type-check",
     "test": "<%- nodePackageManager %> run vitest-run --",
     "test:watch": "<%- nodePackageManager %> run vitest",
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json",
     "vitest-run": "vitest --run --coverage",
     "vitest": "vitest",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
