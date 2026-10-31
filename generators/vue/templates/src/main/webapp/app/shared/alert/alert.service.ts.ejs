@@ -87,7 +87,9 @@ export default class AlertService {
     });
   }
 
-  showHttpError({ data: body, status, headers }: { data?: unknown; status: number; headers?: Record<string, unknown> }) {
+  showHttpError(response?: { data?: unknown; status?: number; headers?: Record<string, unknown> }) {
+    // Without a response, the server was not reached.
+    const { data: body, status = 0, headers } = response ?? {};
     // The body of an error of the server, a problem detail.
     const data = body as { message?: string; fieldErrors?: unknown } | undefined;
     let errorMessage: string | null = null;

@@ -26,7 +26,7 @@ const useDataUtils = () => ({
   /**
    * Method to abbreviate the text given
    */
-  abbreviate(text, append = '...') {
+  abbreviate(text: string | null | undefined, append = '...'): string {
     if (!text) {
       return '';
     }
@@ -39,26 +39,26 @@ const useDataUtils = () => ({
   /**
    * Method to find the byte size of the string provides
    */
-  byteSize(base64String) {
+  byteSize(base64String: string): string {
     return byteSize(base64String);
   },
 
   /**
    * Method to open file
    */
-  openFile(contentType, data, blobType?: BlobType) {
+  openFile(contentType: string | null | undefined, data: string, blobType?: BlobType): void {
     openFile(data, contentType, blobType);
   },
 
-  setFileData(event, entity, field, isImage) {
-    if (event?.target.files?.[0]) {
-      const file = event.target.files[0];
+  setFileData(event: Event, entity: object, field: string, isImage: boolean): void {
+    const file = (event?.target as HTMLInputElement | null)?.files?.[0];
+    if (file) {
       if (isImage && !file.type.startsWith("image/")) {
         return;
       }
       toBase64(file, base64Data => {
-        entity[field] = base64Data;
-        entity[`${field}ContentType`] = file.type;
+        (entity as Record<string, unknown>)[field] = base64Data;
+        (entity as Record<string, unknown>)[`${field}ContentType`] = file.type;
       });
     }
   },
@@ -66,7 +66,7 @@ const useDataUtils = () => ({
   /**
    * Method to parse header links
    */
-  parseLinks(header) {
+  parseLinks(header: string): Record<string, number> {
     try {
       return getPageNumberFromLinkHeader(header);
     } catch {

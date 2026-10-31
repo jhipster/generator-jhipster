@@ -18,6 +18,8 @@
 -%>
 import { type Ref, ref } from 'vue';
 
+import { type AxiosError } from 'axios';
+
 import type AlertService from '@/shared/alert/alert.service';
 
 /**
@@ -56,7 +58,7 @@ export const useEntityRemove = <T, K>({
       closeDialog();
       await onRemoved();
     } catch (error) {
-      alertService.showHttpError(error.response);
+      alertService.showHttpError((error as AxiosError).response);
     }
   };
 

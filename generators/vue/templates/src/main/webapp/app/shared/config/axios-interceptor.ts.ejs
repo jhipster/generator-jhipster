@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import axios from 'axios';
+import axios, { type AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios';
 
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
 
 const TIMEOUT = 1 * 60 * 1000;
-const onRequestSuccess = config => {
+const onRequestSuccess = (config: AxiosRequestConfig): AxiosRequestConfig => {
 <%_ if (authenticationTypeJwt) { _%>
   const token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
   if (token) {
@@ -37,19 +37,19 @@ const onRequestSuccess = config => {
   config.url = `${SERVER_API_URL}${config.url}`;
   return config;
 };
-const setupAxiosInterceptors = (onUnauthenticated, onServerError) => {
-  const onResponseError = err => {
+const setupAxiosInterceptors = (onUnauthenticated: (error: AxiosError) => unknown, onServerError: (error: AxiosError) => unknown): void => {
+  const onResponseError = (err: AxiosError) => {
     const status = err.status || err.response?.status;
     if (status === 403 || status === 401) {
       return onUnauthenticated(err);
     }
-    if (status >= 500) {
+    if (status && status >= 500) {
       return onServerError(err);
     }
     return Promise.reject(err);
   };
 
-  axios.interceptors.request.use(onRequestSuccess);
+  axios.interceptors.request.use(onRequestSuccess as (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig);
   axios.interceptors.response.use(res => res, onResponseError);
 };
 

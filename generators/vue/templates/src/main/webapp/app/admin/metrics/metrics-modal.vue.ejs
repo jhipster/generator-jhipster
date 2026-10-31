@@ -56,7 +56,7 @@
             <td>{{ entry.blockedCount }}</td>
             <td>{{ entry.waitedTime }}</td>
             <td>{{ entry.waitedCount }}</td>
-            <td class="thread-dump-modal-lock" :title="entry.lockName">
+            <td class="thread-dump-modal-lock" :title="entry.lockName ?? undefined">
               <code>{{ entry.lockName }}</code>
             </td>
           </tr>

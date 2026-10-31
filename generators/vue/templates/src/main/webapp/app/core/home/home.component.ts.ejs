@@ -31,7 +31,7 @@ import type LoginService from '@/account/login.service';
 export default defineComponent({
   setup() {
 <%_ if (authenticationTypeOauth2) { _%>
-    const { login } = inject<LoginService>('loginService');
+    const { login } = inject<LoginService>('loginService')!;
 <%_ } else { _%>
     const { showLogin } = useLoginModal();
 <%_ } _%>

@@ -39,7 +39,7 @@ export default class AccountService {
     try {
       const res = await axios.get<{ activeProfiles?: string[]; 'display-ribbon-on-profiles'?: string }>('management/info');
       if (res.data?.activeProfiles) {
-        this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
+        this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles'] ?? '');
         this.store.setActiveProfiles(res.data.activeProfiles);
       }
       return true;
@@ -95,7 +95,7 @@ export default class AccountService {
     return this.store.authenticated;
   }
 
-  get userAuthorities(): string[] {
+  get userAuthorities(): string[] | undefined {
     return this.store.account?.authorities;
   }
 
