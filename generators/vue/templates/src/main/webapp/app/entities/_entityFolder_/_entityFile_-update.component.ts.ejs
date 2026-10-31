@@ -29,9 +29,9 @@ import { useRoute, useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core'
 
 import { useAlertService } from '@/shared/alert/alert.service';
-import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
+import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/composables';
 <%_ if (anyFieldIsBlobDerived) { _%>
-import useDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/composables/data-utils';
 <%_ } _%>
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object

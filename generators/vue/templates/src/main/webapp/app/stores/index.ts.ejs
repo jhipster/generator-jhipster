@@ -16,26 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, defineComponent } from 'vue';
+import { useAccountStore as useStore } from '@/stores/account-store';
+export type AccountStore = ReturnType<typeof useStore>;
+export { useStore };
 <%_ if (enableTranslation) { _%>
-import { useI18n } from 'vue-i18n';
+
+export { useTranslationStore } from '@/stores/translation-store';
 <%_ } _%>
-
-import { useStore } from '@/store';
-
-export default defineComponent({
-  name: 'Ribbon',
-  setup() {
-    const store = useStore();
-    const ribbonEnv = computed(() => store.ribbonOnProfiles);
-    const ribbonEnabled = computed(() => store.ribbonOnProfiles && store.activeProfiles.indexOf(store.ribbonOnProfiles) > -1);
-
-    return {
-      ribbonEnv,
-      ribbonEnabled,
-<%_ if (enableTranslation) { _%>
-      t$: useI18n().t,
-<%_ } _%>
-    };
-  },
-});

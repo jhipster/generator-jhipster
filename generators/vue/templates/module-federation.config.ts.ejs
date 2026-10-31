@@ -24,18 +24,15 @@ import packageJson from './package.json' with { type: 'json' };
 const apiVersion = '0.0.1';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
-<%_ if (clientBundlerVite) { _%>
-// Application modules are not installed packages, `import` points the federation plugin to the source file.
+// Application modules are not installed packages, `import` points the federation plugin to the source file, relative to
+// the root of the bundler: it provides the module even when only a lazy chunk or another shared module imports it.
 const shareMappings = (...mappings: string[]) =>
   Object.fromEntries(
     mappings.map(map => [
       map,
-      { ...sharedDefaults, version: apiVersion, import: `./<%- relativeDir(clientRootDir, clientSrcDir) %>${map.replace('@/', 'app/')}` },
+      { ...sharedDefaults, version: apiVersion, import: `./<%- clientBundlerVite ? relativeDir(clientRootDir, clientSrcDir) : '' %>${map.replace('@/', 'app/')}` },
     ]),
   );
-<%_ } else { _%>
-const shareMappings = (...mappings: string[]) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));
-<%_ } _%>
 
 const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
   Object.fromEntries(
@@ -57,10 +54,19 @@ export default {
   shareScope: 'default',
   shared: {
     ...shareDependencies(),
+    // Application modules shared as singletons across the gateway and the microfrontends, from app/shared.
     ...shareMappings(
       '@/shared/jhipster/constants',
+      '@/shared/jhipster/data-utils',
+<%_ if (communicationSpringWebsocket) { _%>
+      '@/shared/jhipster/encode-csrf-token',
+<%_ } _%>
+      '@/shared/jhipster/error.constants',
+      '@/shared/jhipster/headers',
+      '@/shared/jhipster/link-header',
+      '@/shared/jhipster/problem-details',
       '@/shared/alert/alert.service',
-      '@/locale/translation.service',
+      '@/shared/language/translation.service',
     ),
   },
   dts: false,

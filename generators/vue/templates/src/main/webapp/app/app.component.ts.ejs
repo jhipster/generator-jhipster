@@ -26,11 +26,11 @@ import { storeToRefs } from 'pinia';
 import LoginForm from '@/account/login-form/login-form.vue';
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
-import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
-import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
-import Ribbon from '@/core/ribbon/ribbon.vue';
+import JhiFooter from '@/layouts/footer/footer.vue';
+import JhiNavbar from '@/layouts/navbar/navbar.vue';
+import Ribbon from '@/layouts/ribbon/ribbon.vue';
 import { useAlertService } from '@/shared/alert/alert.service';
-import '@/shared/config/dayjs';
+import '@/config/dayjs';
 
 export default defineComponent({
   name: 'App',

@@ -25,10 +25,10 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAlertService } from '@/shared/alert/alert.service';
 <%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
 <%_ if (composables.length > 0) { _%>
-import { <%- composables.join(', ') %> } from '@/shared/composables';
+import { <%- composables.join(', ') %> } from '@/composables';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
-import useDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/composables/data-utils';
 <%_ } _%>
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 

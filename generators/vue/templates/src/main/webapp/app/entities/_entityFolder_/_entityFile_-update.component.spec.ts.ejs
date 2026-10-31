@@ -28,9 +28,9 @@ import dayjs from 'dayjs';
 <%_ } _%>
 
 import AlertService from '@/shared/alert/alert.service';
-import { contentStub, modelInputStub, triggerAll } from '@/shared/testing/stubs';
+import { contentStub, modelInputStub, triggerAll } from '@/testing/stubs';
 <%_ if (anyFieldIsTimeDerived) { _%>
-import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
+import { DATE_TIME_LONG_FORMAT } from '@/composables/date-format';
 <%_ } _%>
 
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';

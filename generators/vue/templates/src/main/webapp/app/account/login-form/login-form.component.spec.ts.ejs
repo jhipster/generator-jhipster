@@ -26,8 +26,8 @@ import axios from 'axios';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { bFormStub, slotsStub } from '@/shared/testing/stubs';
-import { useStore } from '@/store';
+import { bFormStub, slotsStub } from '@/testing/stubs';
+import { useStore } from '@/stores';
 import AccountService from '../account.service';
 
 import LoginForm from './login-form.vue';

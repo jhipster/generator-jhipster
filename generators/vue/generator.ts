@@ -58,7 +58,7 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
  */
 const vueClientConstants: Record<string, VueFieldClientConstant> = {
   Languages: {
-    vueConstantImport: "import languages from '@/shared/config/languages';",
+    vueConstantImport: "import languages from '@/config/languages';",
     vueConstantValues: 'Object.keys(languages())',
   },
   Authority: {
@@ -293,7 +293,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             // Admin entities, like the authorities, go to the admin menu.
             this.editFile(
               entity.adminEntity ?
-                `${application.clientSrcDir}/app/core/jhi-navbar/jhi-navbar.vue`
+                `${application.clientSrcDir}/app/layouts/navbar/navbar.vue`
               : `${application.clientSrcDir}/app/entities/entities-menu.vue`,
               createNeedleCallback({
                 needle: entity.adminEntity ? 'add-element-to-admin-menu' : 'add-entity-to-menu',
