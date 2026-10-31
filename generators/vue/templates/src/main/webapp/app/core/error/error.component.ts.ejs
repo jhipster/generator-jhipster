@@ -33,12 +33,12 @@ export default defineComponent({
   name: 'Error',
   setup() {
 <%_ if (authenticationTypeOauth2) { _%>
-    const { login } = inject<LoginService>('loginService');
+    const { login } = inject<LoginService>('loginService')!;
 <%_ } else { _%>
     const { showLogin } = useLoginModal();
 <%_ } _%>
-    const authenticated = inject<ComputedRef<boolean>>('authenticated');
-    const errorMessage: Ref<string> = ref(null);
+    const authenticated = inject<ComputedRef<boolean>>('authenticated')!;
+    const errorMessage: Ref<string | null> = ref(null);
     const error403: Ref<boolean> = ref(false);
     const error404: Ref<boolean> = ref(false);
     const route = useRoute();

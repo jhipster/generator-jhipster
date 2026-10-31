@@ -33,8 +33,8 @@ import type AccountService from '../account.service';
 export default defineComponent({
   setup() {
     const authenticationError: Ref<boolean> = ref(false);
-    const login: Ref<string> = ref(null);
-    const password: Ref<string> = ref(null);
+    const login: Ref<string | null> = ref(null);
+    const password: Ref<string | null> = ref(null);
     const rememberMe: Ref<boolean> = ref(false);
 
     const { hideLogin } = useLoginModal();
@@ -43,7 +43,7 @@ export default defineComponent({
 
     const previousState = () => router.go(-1);
 
-    const accountService = inject<AccountService>('accountService');
+    const accountService = inject<AccountService>('accountService')!;
 
     const doLogin = async () => {
 <%_ if (authenticationTypeJwt) { _%>
@@ -62,7 +62,7 @@ export default defineComponent({
           }
         }
 <%_ } else { _%>
-      const data = `username=${encodeURIComponent(login.value)}&password=${encodeURIComponent(password.value)}&remember-me=${rememberMe.value}&submit=Login`;
+      const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}&remember-me=${rememberMe.value}&submit=Login`;
       try {
         await axios.post('api/authentication', data, {
           headers: {

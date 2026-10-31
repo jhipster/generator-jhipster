@@ -38,7 +38,7 @@ const DESTINATION_ACTIVITY = '/topic/activity';
 
 export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; authenticated?: ComputedRef<boolean> } = {}) => {
   const router = useRouter();
-  authenticated = authenticated ?? inject('authenticated');
+  authenticated = authenticated ?? inject<ComputedRef<boolean>>('authenticated')!;
   const trackerService = new TrackerService({ stomp });
 
   router.afterEach(to => trackerService.sendActivity(to.fullPath));
@@ -75,7 +75,7 @@ export interface TrackerActivity {
 
 export default class TrackerService {
   status = ref<'open' | 'connecting' | 'closing' | 'closed'>('closed');
-  private rxStomp: RxStomp;
+  private rxStomp!: RxStomp;
 
   constructor({ stomp }: { stomp?: RxStomp }) {
     this.stomp = stomp ?? new RxStomp();

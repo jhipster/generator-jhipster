@@ -20,21 +20,23 @@ import { computed, ref } from 'vue';
 
 import { defineStore } from 'pinia'
 
+import { type IUser } from '@/entities/user/user.model';
+
 export const useAccountStore = defineStore('main', () => {
-  const userIdentity = ref(null);
-  const logon = ref(null);
+  const userIdentity = ref<IUser | null>(null);
+  const logon = ref<Promise<boolean> | null>(null);
   const profilesLoaded = ref(false);
-  const activeProfiles = ref('');
+  const activeProfiles = ref<string[]>([]);
   const ribbonOnProfiles = ref('');
 
   const account = computed(() => userIdentity.value);
   const authenticated = computed(() => !!userIdentity.value);
 
-  function authenticate(promise) {
+  function authenticate(promise: Promise<boolean> | null) {
     logon.value = promise;
   }
 
-  function setAuthentication(identity) {
+  function setAuthentication(identity: IUser | null) {
     userIdentity.value = identity;
     logon.value = null;
   }
@@ -48,11 +50,11 @@ export const useAccountStore = defineStore('main', () => {
     profilesLoaded.value = true;
   }
 
-  function setActiveProfiles(profile) {
+  function setActiveProfiles(profile: string[]) {
     activeProfiles.value = profile;
   }
 
-  function setRibbonOnProfiles(ribbon) {
+  function setRibbonOnProfiles(ribbon: string) {
     ribbonOnProfiles.value = ribbon;
   }
 

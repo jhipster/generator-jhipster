@@ -35,7 +35,8 @@ export default defineComponent({
     const { formatDate } = useDateFormat();
     const metricsService = inject('metricsService', () => new MetricsService(), true);
 
-    const metrics: Ref<Metrics> = ref({});
+    // Empty until the first response, the template showing it after.
+    const metrics: Ref<Metrics> = ref({} as Metrics);
     const threadData: Ref<Thread[] | null> = ref(null);
     const threadStats: Ref<Record<string, number>> = ref({});
     const updatingMetrics = ref(true);
@@ -89,10 +90,11 @@ export default defineComponent({
     const openModal = (): void => {
       metricsModal.value?.show();
     };
-    const filterNaN = (input: number): number => (isNaN(input) ? 0 : input);
-    const formatNumber1 = (value: number): string => new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
-    const formatNumber2 = (value: number): string =>
-      new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value);
+    const filterNaN = (input?: number): number => (input === undefined || isNaN(input) ? 0 : input);
+    const formatNumber1 = (value?: number): string =>
+      new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value ?? Number.NaN);
+    const formatNumber2 = (value?: number): string =>
+      new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value ?? Number.NaN);
     const convertMillisecondsToDuration = (ms: number): string => {
       const times: Record<string, number> = {
         year: 31557600000,
@@ -115,9 +117,10 @@ export default defineComponent({
       }
       return time_string;
     };
-    const isObjectExisting = (metricsValue: Record<string, unknown> | undefined, key: string): boolean => Boolean(metricsValue?.[key]);
-    const isObjectExistingAndNotEmpty = (metricsValue: Record<string, unknown> | undefined, key: string): boolean =>
-      isObjectExisting(metricsValue, key) && JSON.stringify(metricsValue?.[key]) !== '{}';
+    const isObjectExisting = (metricsValue: object | undefined, key: string): boolean =>
+      Boolean((metricsValue as Record<string, unknown> | undefined)?.[key]);
+    const isObjectExistingAndNotEmpty = (metricsValue: object | undefined, key: string): boolean =>
+      isObjectExisting(metricsValue, key) && JSON.stringify((metricsValue as Record<string, unknown> | undefined)?.[key]) !== '{}';
 
     onMounted(() => {
       refresh();

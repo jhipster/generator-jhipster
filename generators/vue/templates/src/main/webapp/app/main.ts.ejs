@@ -91,7 +91,7 @@ const app = createApp({
     const translationStore = useTranslationStore();
     const translationService = new TranslationService(composer);
 
-    const changeLanguage = async (newLanguage: string) => {
+    const changeLanguage = async (newLanguage?: string | null) => {
       if (newLanguage && composer.locale.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
         translationStore.setCurrentLanguage(newLanguage);
@@ -113,7 +113,9 @@ const app = createApp({
     watch(
       () => translationStore.currentLanguage,
       value => {
-        translationService.setLocale(value);
+        if (value) {
+          translationService.setLocale(value);
+        }
       },
     );
 

@@ -66,10 +66,10 @@ export default defineComponent({
     const registerService = inject('registerService', () => new RegisterService(), true);
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
-    const error: Ref<string> = ref('');
-    const errorEmailExists: Ref<string> = ref('');
-    const errorUserExists: Ref<string> = ref('');
-    const success: Ref<boolean> = ref(false);
+    const error: Ref<string | null> = ref('');
+    const errorEmailExists: Ref<string | null> = ref('');
+    const errorUserExists: Ref<string | null> = ref('');
+    const success: Ref<boolean | null> = ref(false);
 
     const confirmPassword: Ref = ref(null);
     const registerAccount: Ref = ref({
