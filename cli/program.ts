@@ -20,6 +20,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { requireNamespace } from '@yeoman/namespace';
 import type { BaseEnvironmentOptions, LookupOptions } from '@yeoman/types';
 import chalk from 'chalk';
 import didYouMean from 'didyoumean';
@@ -233,13 +234,16 @@ export const buildCommands = ({
           command.usage(`${operands} [options]`);
           operands = Array.isArray(operands) ? operands : [operands];
           // A scoped namespace (`@scope/jhipster-foo:bar`) is used as it is.
-          command.generatorNamespaces = operands.map(namespace =>
-            namespace.startsWith('@') || namespace.startsWith(JHIPSTER_NS) ? namespace : `${JHIPSTER_NS}-${namespace}`,
-          );
-          // The package of `@scope/jhipster-foo` is `@scope/generator-jhipster-foo`; a registered one, like the dev blueprint, is not looked up.
+          command.generatorNamespaces = operands.map(operand => {
+            const namespace = requireNamespace(operand);
+            return namespace.scope || namespace.unscoped.startsWith(JHIPSTER_NS) ?
+                namespace.toString()
+              : namespace.with({ unscoped: `${JHIPSTER_NS}-${namespace.unscoped}` }).toString();
+          });
+          // The registered generators, like the ones of the dev blueprint, are not looked up.
           const packagesToLookup = command.generatorNamespaces
             .filter(namespace => !namespace.includes(':') || !env.getGeneratorMeta(namespace))
-            .map(namespace => namespace.split(':')[0].replace(/^(@[^/]+\/)?/, '$1generator-'));
+            .map(namespace => requireNamespace(namespace).generatorHint);
           if (packagesToLookup.length > 0) {
             envBuilder?.lookupGenerators(packagesToLookup);
           }
