@@ -10,7 +10,7 @@ _%>
                 <div>
 <%_ if (!builtInUserManagement && !userProvidedPrimaryKey) { _%>
                     <div class="mb-3" v-if="<%- entityInstance %>.<%- primaryKey.name %>">
-                        <label for="id">{{ t$('global.field.id') }}</label>
+                        <label class="form-label" for="id">{{ t$('global.field.id') }}</label>
                         <input type="text" class="form-control" id="id" name="<%- primaryKey.name %>"
                                v-model="<%- entityInstance %>.<%- primaryKey.name %>" readonly />
                     </div>
@@ -22,7 +22,7 @@ _%>
   _%>
                     <div class="mb-3<%- field.fieldTypeBoolean ? ' form-check' : '' %>">
   <%_ if (!field.fieldTypeBoolean) { _%>
-                        <label class="form-control-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
+                        <label class="form-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
   <%_ if (field.clientConstantsAsValues) { _%>
                         <select class="form-select" name="<%- fieldName %>" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"<%- field.collection ? ' multiple' : '' %>>
@@ -125,7 +125,7 @@ _%>
   _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="mb-3">
-                        <label class="form-control-label" for="<%- entityFileName %>-<%- relationshipName %>">{{ t$('<%- translationKey %>') }}</label>
+                        <label class="form-label" for="<%- entityFileName %>-<%- relationshipName %>">{{ t$('<%- translationKey %>') }}</label>
                         <select class="form-select" id="<%- entityFileName %>-<%- relationshipName %>" data-cy="<%- relationshipFieldName %>" name="<%- relationshipName %>" v-model="<%- entityInstance %>.<%- relationshipFieldName %>"<%- relationshipRequired ? ' required' : '' %>>
     <%_ if (relationshipRequired) { _%>
                             <option v-if="!<%- entityInstance %>.<%- relationshipName %>" :value="null" selected></option>
@@ -137,7 +137,7 @@ _%>
                     </div>
   <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="mb-3">
-                        <label for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
+                        <label class="form-label" for="<%- entityFileName %>-<%- relationshipFieldNamePlural %>">{{ t$('<%- translationKey %>') }}</label>
                         <select class="form-select" id="<%- entityFileName %>-<%- relationshipFieldNamePlural %>" data-cy="<%- relationshipFieldName %>" multiple name="<%- relationshipName %>" v-if="<%- entityInstance %>.<%- relationshipFieldNamePlural %> !== undefined" v-model="<%- entityInstance %>.<%- relationshipFieldNamePlural %>"<%- relationshipRequired ? ' required' : '' %>>
                             <option :value="<% if (relationship.relationshipSerializePrimaryKeyOnly) { %><%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %><% } else { %>getSelected(<%- entityInstance %>.<%- relationshipFieldNamePlural %>, <%- otherEntityName %>Option, '<%- relationship.otherEntity.primaryKey.name %>')<% } %>" v-for="<%- otherEntityName %>Option in <%- relationship.otherEntity.entityInstancePlural %>" :key="<%- otherEntityName %>Option.<%- relationship.otherEntity.primaryKey.name %>">{{<%- otherEntityName %>Option.<%- otherEntityField %>}}</option>
                         </select>
