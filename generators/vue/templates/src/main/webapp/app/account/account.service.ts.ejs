@@ -22,7 +22,7 @@ import { type IUser } from '@/entities/user/user.model';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { type AccountStore } from '@/store';
+import { type AccountStore } from '@/stores';
 
 export default class AccountService {
   constructor(private readonly store: AccountStore) {}

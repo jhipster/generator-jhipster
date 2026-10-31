@@ -36,12 +36,12 @@ import type LoginService from '@/account/login.service';
 <%_ } _%>
 import EntitiesMenu from '@/entities/entities-menu.vue';
 <%_ if (enableTranslation) { _%>
-import languages from '@/shared/config/languages';
+import languages from '@/config/languages';
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { useStore } from '@/store';
+import { useStore } from '@/stores';
 
 export default defineComponent({
   name: 'JhiNavbar',
@@ -54,7 +54,7 @@ export default defineComponent({
   <%_ for (const remote of microfrontends) { _%>
     '<%- remote.moduleFederationName %>-menu': defineAsyncComponent(() => {
       return (loadRemote<{ default: Component }>('<%- remote.moduleFederationName %>/entities-menu') as Promise<{ default: Component }>)
-        .catch(() => import('@/core/error/error-loading.vue'));
+        .catch(() => import('@/layouts/error/error-loading.vue'));
     }),
   <%_ } _%>
 <%_ } _%>

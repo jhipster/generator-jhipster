@@ -35,17 +35,17 @@ import { useLoginModal } from '@/account/login-modal';
 import LoginService from '@/account/login.service';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
+import TranslationService from '@/shared/language/translation.service';
 <%_ } _%>
-import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
-import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
-import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
-import JhiItemCount from '@/shared/jhi-item-count.vue';
+import { setupAxiosInterceptors } from '@/config/axios-interceptor';
+import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/config/config';
+import { initBootstrapVue } from '@/config/config-bootstrap-vue';
+import JhiItemCount from '@/components/jhi-item-count.vue';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import JhiSortIndicator from '@/shared/sort/jhi-sort-indicator.vue';
-import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/store';
+import JhiSortIndicator from '@/components/jhi-sort-indicator.vue';
+import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/stores';
 
 <%_ if (communicationSpringWebsocket) { _%>
 import { useTrackerService } from './admin/tracker/tracker.service';

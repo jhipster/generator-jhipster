@@ -21,7 +21,7 @@ import { type Ref, defineComponent, inject, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import { useDateFormat } from '@/shared/composables'
+import { useDateFormat } from '@/composables'
 
 import <%- jhiPrefixCapitalized %>MetricsModal from './metrics-modal.vue';
 import MetricsService, { type Metrics, type Thread } from './metrics.service';

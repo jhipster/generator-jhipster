@@ -24,7 +24,7 @@ import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enh
 import axios from 'axios';
 import dayjs from 'dayjs';
 
-import languages from '@/shared/config/languages';
+import languages from '@/config/languages';
 
 export default class TranslationService {
   private readonly i18n: Composer;
@@ -41,7 +41,7 @@ export default class TranslationService {
       this.i18n.setLocaleMessage(newLanguage, {});
       // Load translations exposed by microfrontend
 <%_ } _%>
-      <%- exposeMicrofrontend ? '// ' : '' %>const translations = await import(`../../i18n/${newLanguage}/${newLanguage}.js`);
+      <%- exposeMicrofrontend ? '// ' : '' %>const translations = await import(`../../../i18n/${newLanguage}/${newLanguage}.js`);
       <%- exposeMicrofrontend ? '// ' : '' %>this.i18n.setLocaleMessage(newLanguage, translations.default);
 <%_ if (microfrontend) { _%>
 
