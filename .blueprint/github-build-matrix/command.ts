@@ -42,5 +42,12 @@ export default {
       scope: 'generator',
       choices: eventNameChoices,
     },
+    pushBefore: {
+      description: 'The commit before a push, to diff the push with',
+      cli: {
+        type: String,
+      },
+      scope: 'generator',
+    },
   },
 } as const satisfies JHipsterCommandDefinition;

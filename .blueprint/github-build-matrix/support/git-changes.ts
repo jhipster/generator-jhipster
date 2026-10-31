@@ -82,6 +82,13 @@ export const detectChanges = (files: string[]): Changes =>
 /** Every area changed, the choice of the events without a base commit to diff against. */
 export const allChanges = (): Changes => Object.fromEntries(Object.keys(patterns).map(key => [key, true])) as Changes;
 
+/** No area changed. */
+export const noChanges = (): Changes => Object.fromEntries(Object.keys(patterns).map(key => [key, false])) as Changes;
+
+/** Whether every file is of the Kubernetes generators, which the samples of the client workflows do not deploy with. */
+export const isKubernetesOnly = (files: string[]): boolean =>
+  files.length > 0 && files.every(file => minimatch(file, 'generators/kubernetes*/**', { dot: true }));
+
 export type GitChangesOptions = {
   allTrue?: boolean;
   /**
@@ -93,6 +100,15 @@ export type GitChangesOptions = {
   baseDir?: string;
 };
 
+/** The files changed between the revisions, see `GitChangesOptions`. */
+export const getChangedFiles = async ({
+  revisions = '@~1',
+  baseDir = fileURLToPath(new URL('../../../', import.meta.url).href),
+}: Omit<GitChangesOptions, 'allTrue'> = {}): Promise<string[]> => {
+  const summary = await simpleGit({ baseDir }).diffSummary([revisions].flat());
+  return summary.files.map(({ file }) => file);
+};
+
 export const getGitChanges = async ({
   allTrue,
   revisions = '@~1',
@@ -102,6 +118,5 @@ export const getGitChanges = async ({
     return allChanges();
   }
 
-  const summary = await simpleGit({ baseDir }).diffSummary([revisions].flat());
-  return detectChanges(summary.files.map(({ file }) => file));
+  return detectChanges(await getChangedFiles({ revisions, baseDir }));
 };

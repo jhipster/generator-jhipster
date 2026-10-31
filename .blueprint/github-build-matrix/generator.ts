@@ -22,21 +22,29 @@ import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/ci/index.ts'
 
 import type { eventNameChoices, workflowChoices } from './command.ts';
 import { buildMatrix } from './support/build-matrix.ts';
-import { allChanges } from './support/git-changes.ts';
+import { type Changes, allChanges, getChangedFiles, isKubernetesOnly, noChanges } from './support/git-changes.ts';
 
 export default class extends BaseGenerator {
   workflow!: (typeof workflowChoices)[number] | `daily-${string}`;
   eventName?: (typeof eventNameChoices)[number];
+  pushBefore?: string;
   matrix!: string;
 
   get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async buildMatrix() {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
-        const useChanges = this.eventName === 'pull_request';
+        let changes: Changes | undefined = this.eventName === 'pull_request' ? undefined : allChanges();
+        if (this.eventName === 'push' && this.pushBefore && ['angular', 'react', 'vue'].includes(this.workflow)) {
+          // A push of Kubernetes changes only, diffed with the commit before it, does not test the clients.
+          const files = await getChangedFiles({ revisions: [this.pushBefore, 'HEAD'] }).catch(() => []);
+          if (isKubernetesOnly(files)) {
+            changes = noChanges();
+          }
+        }
         const matrix = await buildMatrix({
           workflow: this.workflow,
-          changes: useChanges ? undefined : allChanges(),
+          changes,
           samplesFolder: this.templatePath('../samples/'),
           useVersionPlaceholders: this.useVersionPlaceholders,
           warn: message => this.log.warn(message),
