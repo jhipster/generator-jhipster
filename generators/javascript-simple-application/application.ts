@@ -36,7 +36,7 @@ export type JavascriptSimpleApplicationPreparingAddedApplicationProperties = {
   skipJhipsterDependencies?: boolean;
 
   nodeVersion: string;
-  nodePackageManager: string;
+  nodePackageManager: 'npm' | 'pnpm';
   nodePackageManagerCommand: string;
   nodeWebappBuildTarget: string;
 

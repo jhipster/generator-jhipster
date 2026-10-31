@@ -101,7 +101,6 @@ describe('jdl options', () => {
     'microfrontends',
     'languages',
     'nativeLanguage',
-    'nodePackageManager',
     'packageName',
     'creationTimestamp',
     'websocket',

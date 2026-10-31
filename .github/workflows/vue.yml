@@ -96,6 +96,13 @@ jobs:
           maven-cache: true
           gradle-cache: ${{ matrix.gradle-cache }}
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+      # Workspaces are installed by the package manager their packageManager declares, at its version, through corepack.
+      # Corepack is installed from npm, as Node.js no longer bundles it.
+      - name: 'SETUP: corepack'
+        if: matrix.workspaces == 'true'
+        run: |
+          npm install -g corepack
+          echo "COREPACK_ENABLE_DOWNLOAD_PROMPT=0" >> $GITHUB_ENV
       # Fail git operations on line ending mismatches, and make sure that JHipster generates crlf line endings on Windows correctly.
       - run: |
           git config --global core.autocrlf false
@@ -142,10 +149,10 @@ jobs:
         run: npm run ci:backend:test
         continue-on-error: ${{matrix.continue-on-backend-tests-error || false}}
         timeout-minutes: 15
-      # Run npm install for workspaces only, as it is done in packaging for non-workspaces
-      - name: 'PREPARE: npm install'
+      # Install the workspaces only, as it is done in packaging for non-workspaces
+      - name: 'PREPARE: install'
         if: steps.compare.outputs.equals != 'true' && matrix.workspaces == 'true'
-        run: npm install
+        run: corepack $(node -p "require('./package.json').packageManager.split('@')[0]") install
         timeout-minutes: 7
       - name: 'TESTS: packaging'
         id: packaging
