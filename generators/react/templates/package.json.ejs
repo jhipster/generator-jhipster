@@ -34,9 +34,13 @@
     "bootswatch": "<%- nodeDependencies.bootswatch %>",
 <%_ } _%>
     "dayjs": "<%- nodeDependencies.dayjs %>",
+<%_ if (enableTranslation) { _%>
+    "deepmerge": "<%- nodeDependencies.deepmerge %>",
+<%_ } _%>
     "react": "<%- nodeDependencies.react %>",
     "react-dom": "<%- nodeDependencies['react-dom'] %>",
     "react-hook-form": "<%- nodeDependencies['react-hook-form'] %>",
+    "react-infinite-scroll-component": "<%- nodeDependencies['react-infinite-scroll-component'] %>",
     "react-jhipster": "<%- nodeDependencies['react-jhipster'] %>",
     "react-redux": "<%- nodeDependencies['react-redux'] %>",
     "react-router": "<%- nodeDependencies['react-router'] %>",
@@ -60,13 +64,9 @@
     "autoprefixer": "<%- nodeDependencies.autoprefixer %>",
     "eslint": "<%- nodeDependencies.eslint %>",
     "happy-dom": "<%- nodeDependencies['happy-dom'] %>",
-<%_ if (enableTranslation) { _%>
-    "deepmerge": null,
-<%_ } _%>
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%- nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
-    "react-infinite-scroll-component": "<%- nodeDependencies['react-infinite-scroll-component'] %>",
     "rimraf": "<%- nodeDependencies.rimraf %>",
     "sass": "<%- nodeDependencies.sass %>",
 <%_ if (skipServer) { _%>
