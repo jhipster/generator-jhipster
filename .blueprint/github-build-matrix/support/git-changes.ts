@@ -76,8 +76,15 @@ const someFileMatchesSomePattern = (files: string[], patterns: string[], ignore?
 /** The areas of the repository touched by some files, one flag per pattern. */
 export type Changes = Record<keyof typeof patterns, boolean>;
 
-export const detectChanges = (files: string[]): Changes =>
-  Object.fromEntries(Object.entries(patterns).map(([key, pattern]) => [key, someFileMatchesSomePattern(files, pattern)])) as Changes;
+/** Whether the file is a snapshot of the tests, which only the tests of generator-jhipster check, not the samples. */
+export const isSnapshot = (file: string): boolean => minimatch(file, '**/__snapshots__/**', { dot: true }) || file.endsWith('.snap');
+
+export const detectChanges = (files: string[]): Changes => {
+  const sampleFiles = files.filter(file => !isSnapshot(file));
+  return Object.fromEntries(
+    Object.entries(patterns).map(([key, pattern]) => [key, someFileMatchesSomePattern(sampleFiles, pattern)]),
+  ) as Changes;
+};
 
 /** Every area changed, the choice of the events without a base commit to diff against. */
 export const allChanges = (): Changes => Object.fromEntries(Object.keys(patterns).map(key => [key, true])) as Changes;

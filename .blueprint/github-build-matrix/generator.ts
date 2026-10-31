@@ -22,7 +22,7 @@ import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/ci/index.ts'
 
 import type { eventNameChoices, workflowChoices } from './command.ts';
 import { buildMatrix } from './support/build-matrix.ts';
-import { type Changes, allChanges, getChangedFiles, isKubernetesOnly, noChanges } from './support/git-changes.ts';
+import { type Changes, allChanges, getChangedFiles, isKubernetesOnly, isSnapshot, noChanges } from './support/git-changes.ts';
 
 export default class extends BaseGenerator {
   workflow!: (typeof workflowChoices)[number] | `daily-${string}`;
@@ -35,10 +35,14 @@ export default class extends BaseGenerator {
       async buildMatrix() {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
         let changes: Changes | undefined = this.eventName === 'pull_request' ? undefined : allChanges();
-        if (this.eventName === 'push' && this.pushBefore && ['angular', 'react', 'vue'].includes(this.workflow)) {
-          // A push of Kubernetes changes only, diffed with the commit before it, does not test the clients.
+        if (this.eventName === 'push' && this.pushBefore) {
+          // The push diffed with the commit before it: snapshots only run no sample, Kubernetes only no sample of the clients.
           const files = await getChangedFiles({ revisions: [this.pushBefore, 'HEAD'] }).catch(() => []);
-          if (isKubernetesOnly(files)) {
+          const sampleFiles = files.filter(file => !isSnapshot(file));
+          if (
+            (files.length > 0 && sampleFiles.length === 0) ||
+            (['angular', 'react', 'vue'].includes(this.workflow) && isKubernetesOnly(sampleFiles))
+          ) {
             changes = noChanges();
           }
         }
