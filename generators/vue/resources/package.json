@@ -32,7 +32,9 @@
     "@rsbuild/plugin-vue": "2.0.1",
     "@stylistic/eslint-plugin": "5.10.0",
     "@tsconfig/node24": "24.0.5",
+    "@types/js-cookie": "3.0.6",
     "@types/node": "22.20.5",
+    "@types/sockjs-client": "1.5.4",
     "@vitejs/plugin-vue": "6.0.10",
     "@vitest/eslint-plugin": "1.6.28",
     "@vue/test-utils": "2.5.1",
@@ -54,7 +56,8 @@
     "vite": "8.3.5",
     "vite-plugin-static-copy": "4.1.1",
     "vitest": "5.0.5",
-    "vitest-sonar-reporter": "3.0.0"
+    "vitest-sonar-reporter": "3.0.0",
+    "vue-tsc": "3.3.13"
   },
   "packageManager": "npm@12"
 }

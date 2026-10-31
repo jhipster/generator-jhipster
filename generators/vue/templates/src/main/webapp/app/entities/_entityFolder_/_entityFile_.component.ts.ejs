@@ -16,14 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
+import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>type Ref, <%- paginationNo ? '' : 'computed, ' %>defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+import { useRoute, useRouter } from 'vue-router';
 <%_ } _%>
 
 <%_ if (paginationInfiniteScroll) { _%>
 import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
+import { type AxiosError } from 'axios';
 
 import { useAlertService } from '@/shared/alert/alert.service';
 <%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
@@ -60,10 +64,27 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
     const itemsPerPage = ref(20);
-    const queryCount: Ref<number> = ref(null);
+    const queryCount: Ref<number | null> = ref(null);
+    const route = useRoute();
+    const router = useRouter();
+  <%_ if (paginationPagination) { _%>
+    // The page and the sort of the list are kept in the query parameters of the route.
+  <%_ } else { _%>
+    // The sort of the list is kept in the query parameters of the route.
+  <%_ } _%>
+    const sortParam = computed(() => String(route.query.sort ?? 'id,asc').split(','));
+    const propOrder = computed(() => sortParam.value[0]);
+    const reverse = computed(() => sortParam.value[1] === 'desc');
+  <%_ if (paginationPagination) { _%>
+    const page = computed({
+      get: () => Number(route.query.page ?? 1),
+      set: (value: number) => {
+        router.push({ query: { ...route.query, page: String(value) } });
+      },
+    });
+  <%_ } else { _%>
     const page: Ref<number> = ref(1);
-    const propOrder = ref('id');
-    const reverse = ref(false);
+  <%_ } _%>
     const totalItems = ref(0);
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
@@ -140,7 +161,7 @@ export default defineComponent({
         <%- entityInstancePlural %>.value = res.data;
 <%_ } _%>
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showHttpError((err as AxiosError).response);
       } finally {
         isFetching.value = false;
       }
@@ -159,7 +180,7 @@ export default defineComponent({
     });
 
 <%_ if (searchEngineAny) { _%>
-    const search = (query) => {
+    const search = (query: string) => {
       if (!query) {
         return clear();
       }
@@ -171,7 +192,7 @@ export default defineComponent({
 
     const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
       alertService,
-      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>,
+      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>!,
       remove: id => <%- entityInstance %>Service().delete(id),
   <%_ if (enableTranslation) { _%>
       removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
@@ -193,18 +214,14 @@ export default defineComponent({
         await <%- entityInstance %>Service().update({ ...<%- entityInstance %>, activated });
         handleSyncList();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showHttpError((error as AxiosError).response);
       }
     };
 
   <%_ } _%>
     const changeOrder = (newOrder: string) => {
-      if (propOrder.value === newOrder) {
-        reverse.value = !reverse.value;
-      } else {
-        reverse.value = false;
-      }
-      propOrder.value = newOrder;
+      const descending = propOrder.value === newOrder && !reverse.value;
+      router.push({ query: { ...route.query, <%- paginationPagination ? "page: '1', " : '' %>sort: `${newOrder},${descending ? 'desc' : 'asc'}` } });
     };
   <%_ if (paginationInfiniteScroll) { _%>
 
@@ -220,7 +237,7 @@ export default defineComponent({
       }
     });
 
-    const infiniteScrollEl = ref<HTMLElement>(null);
+    const infiniteScrollEl = ref<HTMLElement | null>(null);
     const intersectionObserver = useIntersectionObserver(
       infiniteScrollEl,
       intersection => {
@@ -242,19 +259,8 @@ export default defineComponent({
     });
   <%_ } else { _%>
 
-    // Whenever order changes, reset the pagination
-    watch([propOrder, reverse], async () => {
-      if (page.value === 1) {
-        // first page, retrieve new data
-        await retrieve<%- entityAngularName %>s();
-      } else {
-        // reset the pagination
-        clear();
-      }
-    });
-
-    // Whenever page changes, switch to the new page.
-    watch(page, async () => {
+    // Whenever the page or the order changes, retrieve the new data.
+    watch([page, propOrder, reverse], async () => {
       await retrieve<%- entityAngularName %>s();
     });
   <%_ } _%>

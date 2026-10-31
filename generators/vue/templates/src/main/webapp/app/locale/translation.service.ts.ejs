@@ -61,7 +61,7 @@ export default class TranslationService {
     dayjs.locale(lang);
     this.i18n.locale.value = lang;
     axios.defaults.headers.common['Accept-Language'] = lang;
-    document.querySelector('html').setAttribute('lang', lang);
+    document.querySelector('html')?.setAttribute('lang', lang);
 <%_ if (enableI18nRTL) { _%>
     this.updatePageDirection(lang);
 <%_ } _%>
@@ -69,16 +69,16 @@ export default class TranslationService {
 <%_ if (enableI18nRTL) { _%>
 
   private isRTL(lang: string): boolean {
-    return this.languages[lang]?.rtl;
+    return Boolean((this.languages as Record<string, { rtl?: boolean }>)[lang]?.rtl);
   }
 
   private updatePageDirection(currentLanguage: string): void {
-    document.querySelector('html').setAttribute('dir', this.isRTL(currentLanguage) ? 'rtl' : 'ltr');
+    document.querySelector('html')?.setAttribute('dir', this.isRTL(currentLanguage) ? 'rtl' : 'ltr');
   }
 <%_ } _%>
 
   isLanguageSupported(lang: string) {
-    return Boolean(this.languages[lang]);
+    return Boolean((this.languages as Record<string, unknown>)[lang]);
   }
 
   getLocalStoreLanguage(): string | null {
