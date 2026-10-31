@@ -316,4 +316,49 @@ describe(`generator - ${clientFramework}`, () => {
       );
     });
   });
+
+  describe('vite microfrontend', () => {
+    describe('gateway', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({
+            ...commonConfig,
+            applicationType: 'gateway',
+            clientBundler: 'vite',
+            microfrontends: [{ baseName: 'blog' }],
+          })
+          .withSharedApplication({ gatewayServicesApiAvailable: true, getWebappTranslation: () => 'translations' })
+          .withMockedSource()
+          .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+      });
+
+      it('should share application modules by absolute path with the dev server too', () => {
+        runResult.assertFileContent('module-federation.config.ts', 'import: fileURLToPath(new URL(`./');
+        runResult.assertNoFileContent('module-federation.config.ts', 'process.env.NODE_ENV');
+        expect(runResult.getSnapshot('**/module-federation.config.ts')).toMatchSnapshot();
+      });
+    });
+
+    describe('microservice', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({
+            ...commonConfig,
+            applicationType: 'microservice',
+            clientBundler: 'vite',
+          })
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withMockedSource()
+          .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+      });
+
+      it('should share application modules by absolute path and not with the dev server', () => {
+        runResult.assertFileContent('module-federation.config.ts', 'import: fileURLToPath(new URL(`./');
+        runResult.assertFileContent('module-federation.config.ts', '...(development ? {} : applicationModules)');
+        expect(runResult.getSnapshot('**/module-federation.config.ts')).toMatchSnapshot();
+      });
+    });
+  });
 });
