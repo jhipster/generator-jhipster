@@ -189,11 +189,11 @@ export const UserManagement = () => {
               <td>{user.email}</td>
               <td>
                 {user.activated ? (
-                  <Button variant="success" onClick={toggleActive(user)}>
+                  <Button variant="success" size="sm" onClick={toggleActive(user)} disabled={account.login === user.login}>
                     <Translate contentKey="userManagement.activated">Activated</Translate>
                   </Button>
                 ) : (
-                  <Button variant="danger" onClick={toggleActive(user)}>
+                  <Button variant="danger" size="sm" onClick={toggleActive(user)}>
                     <Translate contentKey="userManagement.deactivated">Deactivated</Translate>
                   </Button>
                 )}
@@ -239,6 +239,7 @@ export const UserManagement = () => {
                     variant="danger"
                     size="sm"
                     disabled={account.login === user.login}
+                    className={account.login === user.login ? 'disabled' : undefined}
                     data-cy="entityDeleteButton"
                   >
                     <FontAwesomeIcon icon={faTrash} />{' '}
