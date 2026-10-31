@@ -96,7 +96,7 @@
     "cleanup": "rimraf <%- relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%- relativeDir(clientRootDir, clientDistDir) %>",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
     "serve": "<%- nodePackageManager %> run start --",
     "start": "<%- nodePackageManager %> run webapp:dev --",
     "pretest": "<%- nodePackageManager %> run lint",
