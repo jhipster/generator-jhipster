@@ -9,6 +9,7 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
       "02-mysql",
       "03-psql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -59,6 +60,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql,mspsql)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -191,6 +209,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -326,6 +360,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -333,6 +369,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -1089,6 +1130,7 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -1137,6 +1179,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -1269,6 +1328,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -1404,6 +1479,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -1411,6 +1488,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -1921,6 +2003,7 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
       "01-gateway",
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -1971,6 +2054,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -2103,6 +2203,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -2238,6 +2354,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -2245,6 +2363,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -2972,6 +3095,7 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -3020,6 +3144,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -3152,6 +3293,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -3287,6 +3444,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -3294,6 +3453,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -3808,6 +3972,7 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
       "07-mariadb"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -3864,6 +4029,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql,mspsql,msmongodb,msmariadb)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -3996,6 +4178,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -4131,6 +4329,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -4138,6 +4338,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -5684,6 +5889,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -5732,6 +5938,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -5914,6 +6137,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -6049,6 +6288,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -6056,6 +6297,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -8868,6 +9114,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -8916,6 +9163,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -9048,6 +9312,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9183,6 +9463,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -9190,6 +9472,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9655,6 +9942,7 @@ exports[`generator - Knative Using Helm generator type only gateway should match
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -9703,6 +9991,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n jhipsternamespace
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul -n jhipsternamespace
+kubectl rollout restart deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout status deployment/consul-config-loader -n jhipsternamespace
+until kubectl exec consul-0 -n jhipsternamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)' -n jhipsternamespace
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -9835,6 +10140,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9970,6 +10291,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -9977,6 +10300,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -10496,6 +10824,7 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
       "02-mysql",
       "03-psql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -10537,6 +10866,22 @@ $ docker push jhipster/mspsql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql,mspsql)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -11297,6 +11642,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -11432,6 +11793,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -11439,6 +11802,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -11499,6 +11867,7 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -11538,6 +11907,22 @@ $ docker push jhipster/jhgate
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -12058,6 +12443,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -12193,6 +12594,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -12200,6 +12603,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -12261,6 +12669,7 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
       "01-gateway",
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -12302,6 +12711,22 @@ $ docker push jhipster/msmysql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -13025,6 +13450,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -13160,6 +13601,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -13167,6 +13610,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -13227,6 +13675,7 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -13266,6 +13715,22 @@ $ docker push jhipster/jhgate
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -13786,6 +14251,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -13921,6 +14402,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -13928,6 +14411,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -13994,6 +14482,7 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
       "11-mssql"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -14043,6 +14532,22 @@ $ docker push jhipster/msmssqldb
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql,mspsql,msmongodb,msmariadb,msmssqldb)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -15952,6 +16457,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -16087,6 +16608,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -16094,6 +16617,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -16154,6 +16682,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -16193,6 +16722,22 @@ $ docker push jhipster/msmysql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -19359,6 +19904,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -19494,6 +20055,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -19501,6 +20064,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -19561,6 +20129,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -19600,6 +20169,22 @@ $ docker push jhipster/msmysql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -20075,6 +20660,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -20210,6 +20811,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -20217,6 +20820,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -20277,6 +20885,7 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -20316,6 +20925,22 @@ $ docker push jhipsterrepository/jhgate
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n jhipsternamespace
+kubectl delete secret gossip-key --ignore-not-found -n jhipsternamespace
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul -n jhipsternamespace
+kubectl rollout restart deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout status deployment/consul-config-loader -n jhipsternamespace
+until kubectl exec consul-0 -n jhipsternamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)' -n jhipsternamespace
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -20845,6 +21470,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -20980,6 +21621,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -20987,6 +21630,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"

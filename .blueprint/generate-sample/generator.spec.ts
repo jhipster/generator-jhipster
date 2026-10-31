@@ -94,8 +94,11 @@ describe(`generator - ${generator}`, () => {
         });
     });
 
-    it('should fix the database password of the deployments for every generator of the sample', () => {
-      expect(runResult.env.sharedOptions).toMatchObject({ dbRandomPassword: 'sample-db-password' });
+    it('should fix the database password and the consul gossip key of the deployments for every generator of the sample', () => {
+      expect(runResult.env.sharedOptions).toMatchObject({
+        dbRandomPassword: 'sample-db-password',
+        consulGossipKey: 'c2FtcGxlLWNvbnN1bC1nb3NzaXAta2V5LS0tLS0tLS0=',
+      });
     });
   });
 

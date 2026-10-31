@@ -31,6 +31,16 @@ import { BaseKubernetesGenerator } from '../../generator.ts';
 import { spawnCheckCommand } from '../../kubernetes-base.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 
+/** Consul accepts a gossip key of 16, 24 or 32 bytes, base64 encoded. */
+const validateConsulGossipKey = (key: string) => {
+  const isBase64 = key.length % 4 === 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(key);
+  if (!isBase64 || ![16, 24, 32].includes(Buffer.from(key, 'base64').length)) {
+    throw new Error(
+      'consulGossipKey must be a base64 encoded key of 16, 24 or 32 bytes. Generate one with `openssl rand -base64 32`, or remove it from .yo-rc.json to get a random one.',
+    );
+  }
+};
+
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -81,6 +91,14 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
       generateSecrets() {
         this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
         this.jhipsterConfig.dbRandomPassword ??= this.options.reproducibleTests ? 'SECRET-PASSWORD' : randomBytes(30).toString('hex');
+        // Only the Consul servers use it, a deployment switched to Consul later gets one then
+        if (this.jhipsterConfigWithDefaults.serviceDiscoveryType === 'consul') {
+          this.jhipsterConfig.consulGossipKey ??= (
+            this.options.reproducibleTests ?
+              Buffer.from('SECRET-GOSSIP-KEY'.padEnd(32, '-'))
+            : randomBytes(32)).toString('base64');
+          validateConsulGossipKey(this.jhipsterConfig.consulGossipKey);
+        }
       },
     });
   }

@@ -42,6 +42,8 @@ const sampleSecrets = ({ jdl }: { jdl: boolean }) => ({
 });
 /** The password of the databases of the deployments of a sample, which a deployment draws otherwise. */
 const SAMPLE_DB_RANDOM_PASSWORD = 'sample-db-password';
+/** The gossip key of the Consul servers of the deployments of a sample, a valid key of 32 bytes, which a deployment draws otherwise. */
+const SAMPLE_CONSUL_GOSSIP_KEY = 'c2FtcGxlLWNvbnN1bC1nb3NzaXAta2V5LS0tLS0tLS0=';
 
 const packageRoot = getPackageRoot();
 
@@ -63,10 +65,11 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         this.projectVersion = `${packageJson.version}-git`;
       },
       sampleSecrets() {
-        // A sample generates the same code each time: the database password a deployment draws is fixed, for every
-        // generator of the sample, the deployments of a workspace included.
+        // A sample generates the same code each time: the database password and the Consul gossip key a deployment draws
+        // are fixed, for every generator of the sample, the deployments of a workspace included.
         Object.assign(this.env.sharedOptions, {
           dbRandomPassword: SAMPLE_DB_RANDOM_PASSWORD,
+          consulGossipKey: SAMPLE_CONSUL_GOSSIP_KEY,
         });
       },
     });
