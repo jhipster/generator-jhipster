@@ -140,7 +140,12 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.adminPasswordBase64 ??= convertSecretToBase64(deployment.adminPassword);
 
         applications.forEach(appConfig => {
-          if (appConfig.prodDatabaseTypeMysql || appConfig.prodDatabaseTypeMariadb || appConfig.prodDatabaseTypePostgresql) {
+          if (
+            appConfig.prodDatabaseTypeMysql ||
+            appConfig.prodDatabaseTypeMariadb ||
+            appConfig.prodDatabaseTypePostgresql ||
+            appConfig.prodDatabaseTypeMssql
+          ) {
             const { prodDatabaseType } = appConfig;
             const hostname = `${appConfig.baseName.toLowerCase()}-${prodDatabaseType}.${deployment.kubernetesNamespace}.svc.cluster.local`;
             const databaseName = appConfig.baseName.toLowerCase();

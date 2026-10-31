@@ -233,6 +233,44 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('reactive mssql microservice', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspaceApplicationAtFolder('reactive-mssql', {
+          applicationType: 'microservice',
+          baseName: 'msreactivemssql',
+          prodDatabaseType: 'mssql',
+          reactive: true,
+          serverPort: 8081,
+        })
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps: ['reactive-mssql'],
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+    it('should match deployment snapshot', function () {
+      expect(runResult.getSnapshot('**/msreactivemssql-deployment.yml')).toMatchSnapshot();
+    });
+  });
+
   describe('only gateway with eureka', () => {
     before(async () => {
       const chosenApps = ['01-gateway'];

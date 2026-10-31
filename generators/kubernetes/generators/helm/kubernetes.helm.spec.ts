@@ -397,6 +397,38 @@ describe('generator - Kubernetes Helm', () => {
     });
   });
 
+  describe('mssql microservice', () => {
+    before(async () => {
+      const chosenApps = ['11-mssql'];
+
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES_HELM)
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps,
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          istio: false,
+        });
+    });
+    it('should match deployment snapshot', function () {
+      expect(runResult.getSnapshot('**/msmssqldb-deployment.yml')).toMatchSnapshot();
+    });
+  });
+
   describe('monolith application', () => {
     before(async () => {
       const chosenApps = ['08-monolith'];
