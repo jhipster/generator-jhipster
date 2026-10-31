@@ -231,8 +231,9 @@ export const buildCommands = ({
         const command = this;
 
         if (cmdName === 'run') {
+          // The first operand is the generator, the following ones are its arguments.
+          operands = (Array.isArray(operands) ? operands : [operands]).slice(0, 1);
           command.usage(`${operands} [options]`);
-          operands = Array.isArray(operands) ? operands : [operands];
           // A scoped namespace (`@scope/jhipster-foo:bar`) is used as it is.
           command.generatorNamespaces = operands.map(operand => {
             const namespace = requireNamespace(operand);

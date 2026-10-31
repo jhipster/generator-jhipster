@@ -119,6 +119,34 @@ const cliSharedBlueprintFiles = {
 `,
 };
 
+const argumentGeneratorFiles = {
+  'index.js': `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {
+    get [BaseGenerator.INITIALIZING]() {
+      return {
+        log() {
+          /* eslint-disable no-console */
+          console.log(\`Running with \${this.sampleName}\`);
+        },
+      };
+    }
+  };
+};
+`,
+  'command.js': `export default {
+  configs: {
+    sampleName: {
+      argument: {
+        type: String,
+      },
+      scope: 'generator',
+    },
+  },
+};
+`,
+};
+
 describe('cli', () => {
   const jhipsterCli = join(import.meta.dirname, '..', 'bin', 'jhipster.cjs');
   const logger = { verboseInfo: exnode.fn(), warn: exnode.fn(), fatal: exnode.fn(), debug: exnode.fn() };
@@ -765,6 +793,39 @@ describe('cli', () => {
           });
         });
       }
+    });
+    describe('running a generator with an argument', () => {
+      let stdout: string;
+      let exitCode: number | null;
+      before(async () => {
+        await helpers
+          .prepareTemporaryDir()
+          .withFiles({
+            'checkout/package.json': { name: 'generator-jhipster-checkout', type: 'module' },
+            ...Object.fromEntries(
+              Object.entries(argumentGeneratorFiles).map(([file, content]) => [`checkout/.blueprint/baz/${file}`, content]),
+            ),
+          })
+          .commitFiles();
+      });
+      before(done => {
+        const forked = fork(jhipsterCli, ['run', '@jhipster/jhipster-dev:baz', 'quux'], {
+          stdio: 'pipe',
+          env: { ...process.env, JHIPSTER_DEV_PATH: 'checkout' },
+        });
+        forked.on('exit', code => {
+          exitCode = code;
+          stdout = forked.stdout?.read().toString();
+          done();
+        });
+      });
+
+      it('should pass the argument to the generator', () => {
+        expect(stdout).toMatch('Running with quux');
+      });
+      it('should exit with code 0', () => {
+        expect(exitCode).toBe(0);
+      });
     });
     describe('custom generator', () => {
       describe('--help', () => {
