@@ -139,7 +139,8 @@ const app = createApp({
       }
 
 <%_ } _%>
-      if (!store.authenticated) {
+      // The account is loaded on the first navigation only: a login loads it again, a 401 logs out.
+      if (from === START_LOCATION && !store.authenticated) {
         await accountService.update();
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
