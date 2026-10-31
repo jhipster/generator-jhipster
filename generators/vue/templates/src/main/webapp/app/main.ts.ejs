@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, createApp<%- enableTranslation ? ', onMounted' : '' %>, provide, watch } from 'vue';
+import { computed, createApp, h<%- enableTranslation ? ', onMounted' : '' %>, provide, watch } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -76,7 +76,6 @@ const i18n = initI18N();
 <%_ } _%>
 
 const app = createApp({
-  components: { App },
   setup() {
 <%_ if (authenticationUsesCsrf) { _%>
     provide('loginService', new LoginService());
@@ -194,7 +193,7 @@ const app = createApp({
     provide('trackerService', useTrackerService({ authenticated }));
 <%_ } _%>
   },
-  template: '<App/>',
+  render: () => h(App),
 });
 
 initFortAwesome(app);
