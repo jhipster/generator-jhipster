@@ -684,7 +684,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/templates/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -692,76 +692,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -966,7 +958,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/mspsql-knative/templates/mspsql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: mspsql
@@ -974,83 +966,75 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: mspsql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: mspsql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: mspsql
-            version: "v1"
-        spec:
-          containers:
-          - name: mspsql-app
-            image: jhipster/mspsql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_DATASOURCE_USERNAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mspsql-postgresql
-                  key: postgresql-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_ELASTICSEARCH_REST_URIS
-              value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: mspsql-app
+        image: jhipster/mspsql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_DATASOURCE_USERNAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mspsql-postgresql
+              key: postgresql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -1832,7 +1816,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/templates/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -1840,76 +1824,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -2698,7 +2674,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/templates/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -2706,76 +2682,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -2906,7 +2874,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/templates/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -2914,76 +2882,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -3764,7 +3724,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/templates/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -3772,76 +3732,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -4655,7 +4607,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/templates/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -4663,76 +4615,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -4863,7 +4807,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmariadb-knative/templates/msmariadb-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmariadb
@@ -4871,81 +4815,73 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmariadb
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmariadb-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmariadb
-            version: "v1"
-        spec:
-          containers:
-          - name: msmariadb-app
-            image: jhipster/msmariadb
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmariadb.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmariadb
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: msmariadb-mariadb
-                  key: mariadb-root-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmariadb-app
+        image: jhipster/msmariadb
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmariadb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmariadb
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmariadb-mariadb
+              key: mariadb-root-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -5079,7 +5015,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmongodb-knative/templates/msmongodb-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmongodb
@@ -5087,72 +5023,64 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmongodb
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmongodb-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmongodb
-            version: "v1"
-        spec:
-          containers:
-          - name: msmongodb-app
-            image: jhipster/msmongodb
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmongodb.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmongodb
-            - name: SPRING_MONGODB_URI
-              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmongodb-app
+        image: jhipster/msmongodb
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmongodb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmongodb
+        - name: SPRING_MONGODB_URI
+          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -5280,7 +5208,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/templates/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -5288,76 +5216,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -5562,7 +5482,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/mspsql-knative/templates/mspsql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: mspsql
@@ -5570,83 +5490,75 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: mspsql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: mspsql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: mspsql
-            version: "v1"
-        spec:
-          containers:
-          - name: mspsql-app
-            image: jhipster/mspsql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_DATASOURCE_USERNAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mspsql-postgresql
-                  key: postgresql-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_ELASTICSEARCH_REST_URIS
-              value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: mspsql-app
+        image: jhipster/mspsql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_DATASOURCE_USERNAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mspsql-postgresql
+              key: postgresql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -5702,7 +5614,7 @@ spec:
 exports[`generator - Knative Using Helm generator type mssql microservice should match service snapshot 1`] = `
 {
   "knative/msmssqldb-knative/templates/msmssqldb-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmssqldb
@@ -5710,67 +5622,62 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmssqldb
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmssqldb-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmssqldb
-            version: "v1"
-        spec:
-          containers:
-          - name: msmssqldb-app
-            image: jhipster/msmssqldb
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmssqldb
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmssqldb
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmssqldb-app
+        image: jhipster/msmssqldb
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmssqldb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmssqldb
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -8853,7 +8760,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/templates/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -8861,78 +8768,70 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
-              value: 'true'
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
+          value: 'true'
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -9669,7 +9568,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/templates/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -9677,76 +9576,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -10536,7 +10427,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/templates/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -10544,76 +10435,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipsterrepository/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.jhipsternamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.jhipsternamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipsterrepository/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.jhipsternamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.jhipsternamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -11002,7 +10885,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -11010,76 +10893,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -11291,7 +11166,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/mspsql-knative/mspsql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: mspsql
@@ -11299,83 +11174,75 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: mspsql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: mspsql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: mspsql
-            version: "v1"
-        spec:
-          containers:
-          - name: mspsql-app
-            image: jhipster/mspsql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_DATASOURCE_USERNAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mspsql-postgresql
-                  key: postgresql-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_ELASTICSEARCH_REST_URIS
-              value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: mspsql-app
+        image: jhipster/mspsql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_DATASOURCE_USERNAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mspsql-postgresql
+              key: postgresql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -12075,7 +11942,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -12083,76 +11950,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -12882,7 +12741,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -12890,76 +12749,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -13115,7 +12966,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -13123,76 +12974,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -13892,7 +13735,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -13900,76 +13743,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -14712,7 +14547,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -14720,76 +14555,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipster/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipster/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -14964,7 +14791,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmariadb-knative/msmariadb-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmariadb
@@ -14972,81 +14799,73 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmariadb
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmariadb-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmariadb
-            version: "v1"
-        spec:
-          containers:
-          - name: msmariadb-app
-            image: jhipster/msmariadb
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmariadb.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmariadb
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: msmariadb-mariadb
-                  key: mariadb-root-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmariadb-app
+        image: jhipster/msmariadb
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmariadb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmariadb
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmariadb-mariadb
+              key: mariadb-root-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -15408,7 +15227,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmongodb-knative/msmongodb-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmongodb
@@ -15416,72 +15235,64 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmongodb
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmongodb-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmongodb
-            version: "v1"
-        spec:
-          containers:
-          - name: msmongodb-app
-            image: jhipster/msmongodb
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmongodb.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmongodb
-            - name: SPRING_MONGODB_URI
-              value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmongodb-app
+        image: jhipster/msmongodb
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmongodb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmongodb
+        - name: SPRING_MONGODB_URI
+          value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -15637,7 +15448,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmssqldb-knative/msmssqldb-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmssqldb
@@ -15645,81 +15456,73 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmssqldb
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmssqldb-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmssqldb
-            version: "v1"
-        spec:
-          containers:
-          - name: msmssqldb-app
-            image: jhipster/msmssqldb
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmssqldb.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmssqldb
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
-            - name: SPRING_DATASOURCE_USERNAME
-              value: SA
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: msmssqldb-mssql
-                  key: mssql-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmssqldb-app
+        image: jhipster/msmssqldb
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmssqldb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmssqldb
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: SA
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmssqldb-mssql
+              key: mssql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -15847,7 +15650,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -15855,76 +15658,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -16136,7 +15931,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/mspsql-knative/mspsql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: mspsql
@@ -16144,83 +15939,75 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: mspsql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: mspsql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: mspsql
-            version: "v1"
-        spec:
-          containers:
-          - name: mspsql-app
-            image: jhipster/mspsql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: mspsql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_DATASOURCE_USERNAME
-              value: mspsql
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mspsql-postgresql
-                  key: postgresql-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
-            - name: SPRING_ELASTICSEARCH_REST_URIS
-              value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: mspsql-app
+        image: jhipster/mspsql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_DATASOURCE_USERNAME
+          value: mspsql
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mspsql-postgresql
+              key: postgresql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://mspsql-elasticsearch.default.svc.cluster.local:9200
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -19583,7 +19370,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -19591,78 +19378,70 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
-              value: 'true'
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
+          value: 'true'
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -20344,7 +20123,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmysql-knative/msmysql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msmysql
@@ -20352,76 +20131,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msmysql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msmysql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msmysql
-            version: "v1"
-        spec:
-          containers:
-          - name: msmysql-app
-            image: jhipster/msmysql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msmysql.mynamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msmysql
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_DATASOURCE_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msmysql-app
+        image: jhipster/msmysql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmysql
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -21129,7 +20900,7 @@ spec:
     "stateCleared": "modified",
   },
   "knative/jhgate-knative/jhgate-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: jhgate
@@ -21137,76 +20908,68 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: jhgate
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: jhgate-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: jhgate
-            version: "v1"
-        spec:
-          containers:
-          - name: jhgate-app
-            image: jhipsterrepository/jhgate
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.jhipsternamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: jhgate.jhipsternamespace.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: jhgate
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: SPRING_R2DBC_USERNAME
-              value: root
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8080
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: jhgate-app
+        image: jhipsterrepository/jhgate
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.jhipsternamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: jhgate.jhipsternamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: jhgate
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: SPRING_R2DBC_USERNAME
+          value: root
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
@@ -21593,7 +21356,7 @@ spec:
 exports[`generator - Knative Using K8s generator type reactive postgresql microservice should match service snapshot 1`] = `
 {
   "knative/msreactivepsql-knative/msreactivepsql-service.yml": {
-    "contents": "apiVersion: serving.knative.dev/v1alpha1
+    "contents": "apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: msreactivepsql
@@ -21601,81 +21364,73 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
       labels:
         app: msreactivepsql
         version: "v1"
-  runLatest:
-    configuration:
-      revisionTemplate:
-        metadata:
-          name: msreactivepsql-knative
-          annotations:
-            # this prevents from scale to zero
-            autoscaling.knative.dev/minScale: "1"
-          labels:
-            app: msreactivepsql
-            version: "v1"
-        spec:
-          containers:
-          - name: msreactivepsql-app
-            image: jhipster/msreactivepsql
-            env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: prod
-            - name: SPRING_CLOUD_CONSUL_HOST
-              value: consul-ui.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
-            # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
-              value: 3m
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
-              value: "false"
-            # The Knative Service answers on port 80 of its cluster address, not on the app's port
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: msreactivepsql.default.svc.cluster.local
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
-              value: "80"
-            - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
-              value: msreactivepsql
-            - name: SPRING_R2DBC_URL
-              value: r2dbc:postgresql://msreactivepsql-postgresql.default.svc.cluster.local:5432/msreactivepsql
-            - name: SPRING_R2DBC_USERNAME
-              value: msreactivepsql
-            - name: SPRING_R2DBC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: msreactivepsql-postgresql
-                  key: postgresql-password
-            - name: SPRING_LIQUIBASE_URL
-              value: jdbc:postgresql://msreactivepsql-postgresql.default.svc.cluster.local:5432/msreactivepsql
-            - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-              value: "x-request-id,x-ot-span-context"
-            - name: JAVA_OPTS
-              value: " -Xmx256m -Xms256m"
-            - name: SERVER_SHUTDOWN
-              value: graceful
-            resources:
-              requests:
-                memory: "512Mi"
-                cpu: "500m"
-              limits:
-                memory: "1Gi"
-                cpu: "1"
-            ports:
-            - containerPort: 8081
-            readinessProbe:
-              httpGet:
-                path: /management/health/readiness
-              initialDelaySeconds: 20
-              periodSeconds: 15
-              failureThreshold: 6
-              timeoutSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /management/health/liveness
-              initialDelaySeconds: 120
-              timeoutSeconds: 5
+    spec:
+      containers:
+      - name: msreactivepsql-app
+        image: jhipster/msreactivepsql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msreactivepsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msreactivepsql
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:postgresql://msreactivepsql-postgresql.default.svc.cluster.local:5432/msreactivepsql
+        - name: SPRING_R2DBC_USERNAME
+          value: msreactivepsql
+        - name: SPRING_R2DBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msreactivepsql-postgresql
+              key: postgresql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:postgresql://msreactivepsql-postgresql.default.svc.cluster.local:5432/msreactivepsql
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
   traffic:
     - tag: latest
       percent: 100
