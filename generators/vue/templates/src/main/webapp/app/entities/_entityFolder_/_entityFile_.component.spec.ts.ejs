@@ -59,7 +59,7 @@ const intersection = vi.hoisted(() => ({
 }));
 
 vi.mock('@vueuse/core', () => ({
-  useIntersectionObserver: (_target: unknown, callback: typeof intersection.callback) => {
+  useIntersectionObserver(_target: unknown, callback: typeof intersection.callback) {
     intersection.callback = callback;
     return intersection.observer;
   },

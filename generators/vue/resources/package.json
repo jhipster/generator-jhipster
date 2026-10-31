@@ -30,6 +30,7 @@
     "@rsbuild/core": "2.2.14",
     "@rsbuild/plugin-sass": "2.0.1",
     "@rsbuild/plugin-vue": "2.0.1",
+    "@stylistic/eslint-plugin": "5.10.0",
     "@tsconfig/node24": "24.0.5",
     "@types/node": "22.20.5",
     "@vitejs/plugin-vue": "6.0.10",

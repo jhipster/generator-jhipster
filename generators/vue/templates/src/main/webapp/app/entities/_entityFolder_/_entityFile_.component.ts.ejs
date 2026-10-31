@@ -214,8 +214,8 @@ export default defineComponent({
     });
 
     // Whenever the data resets or page changes, switch to the new page.
-    watch([<%- entityInstancePlural %>, page], async ([data, page], [_prevData, prevPage]) => {
-      if (data.length === 0 || page !== prevPage) {
+    watch([<%- entityInstancePlural %>, page], async ([data, currentPage], [_prevData, prevPage]) => {
+      if (data.length === 0 || currentPage !== prevPage) {
         await retrieve<%- entityAngularName %>s();
       }
     });

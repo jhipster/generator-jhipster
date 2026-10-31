@@ -47,14 +47,14 @@ export const useDateFormat = <T extends object>({ entityRef }: { entityRef?: Ref
   } = entityRef
     ? {
         ...dateFormatUtils,
-        updateInstantField: (field: string, event: { target?: { value?: string } | null }) => {
+        updateInstantField(field: string, event: { target?: { value?: string } | null }) {
           if (event.target?.value) {
             (entityRef.value as Record<string, unknown>)[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
           } else {
             (entityRef.value as Record<string, unknown>)[field] = null;
           }
         },
-        updateZonedDateTimeField: (field: string, event: { target?: { value?: string } | null }) => {
+        updateZonedDateTimeField(field: string, event: { target?: { value?: string } | null }) {
           if (event.target?.value) {
             (entityRef.value as Record<string, unknown>)[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
           } else {

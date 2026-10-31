@@ -26,8 +26,8 @@ export const bModalStub = defineComponent({
     return () => h('div', [slots.title?.(), slots.default?.(), slots.footer?.()]);
   },
   methods: {
-    hide: () => {},
-    show: () => {},
+    hide() {},
+    show() {},
   },
 });
 
@@ -41,7 +41,7 @@ export const bButtonStub = defineComponent({
 /** A router-link rendering its content, a custom one with a navigate doing nothing. */
 export const routerLinkStub = defineComponent({
   setup(_props, { slots }) {
-    return () => h('span', slots.default?.({ navigate: () => {} }));
+    return () => h('span', slots.default?.({ navigate() {} }));
   },
 });
 
