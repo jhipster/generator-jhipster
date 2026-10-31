@@ -31,11 +31,12 @@ export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm';
 export const DATE_TIME_LONG_FORMAT = 'YYYY-MM-DDTHH:mm';
 
 export const useDateFormat = <T extends object>({ entityRef }: { entityRef?: Ref<T> } = {}) => {
-  const formatDate = value => (value ? dayjs(value).format(DATE_TIME_FORMAT) : '');
+  const formatDate = (value?: string | number | Date | null): string => (value ? dayjs(value).format(DATE_TIME_FORMAT) : '');
   const dateFormatUtils = {
-    convertDateTimeFromServer: (date: Date): string => (date && dayjs(date).isValid() ? dayjs(date).format(DATE_TIME_LONG_FORMAT) : null),
+    convertDateTimeFromServer: (date?: string | Date | null): string | null =>
+      date && dayjs(date).isValid() ? dayjs(date).format(DATE_TIME_LONG_FORMAT) : null,
     formatDate,
-    formatDuration: value => (value ? dayjs.duration(value).humanize() : ''),
+    formatDuration: (value?: string | null): string => (value ? dayjs.duration(value).humanize() : ''),
 <%_ if (!enableTranslation) { _%>
     formatDateLong: formatDate,
     formatDateShort: formatDate,
@@ -66,11 +67,11 @@ export const useDateFormat = <T extends object>({ entityRef }: { entityRef?: Ref
 <%_ if (enableTranslation) { _%>
 
   const i18n = useI18n();
-  const formatDateI18N = (date, format = 'short') => (date ? i18n.d(Date.parse(date), format) : null);
+  const formatDateI18N = (date?: string | null, format = 'short'): string | null => (date ? i18n.d(Date.parse(date), format) : null);
   const i18nUtils = {
     formatDateI18N,
-    formatDateLong: date => formatDateI18N(date, 'long'),
-    formatDateShort: date => formatDateI18N(date, 'short'),
+    formatDateLong: (date?: string | null) => formatDateI18N(date, 'long'),
+    formatDateShort: (date?: string | null) => formatDateI18N(date, 'short'),
   };
 <%_ } _%>
 

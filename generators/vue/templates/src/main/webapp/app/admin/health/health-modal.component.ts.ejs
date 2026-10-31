@@ -34,8 +34,8 @@ export default defineComponent({
   setup(props) {
     const healthService = inject('healthService', () => new HealthService(), true);
 
-    const baseName = (name: string): string => healthService.getBaseName(name);
-    const subSystemName = (name: string): string => healthService.getSubSystemName(name);
+    const baseName = (name: string): string | undefined => healthService.getBaseName(name);
+    const subSystemName = (name: string): string | undefined => healthService.getSubSystemName(name);
     const readableValue = (value: unknown): string => {
       if (props.currentHealth.name === 'diskSpace') {
         // Should display storage space in a human-readable unit
