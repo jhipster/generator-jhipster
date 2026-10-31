@@ -54,9 +54,7 @@ describe('Tracker Service', () => {
 
     TrackerApp = {
       name: 'TrackerApp',
-      template: `
-        <div></div>
-      `,
+      render: () => null,
       setup() {
         trackerService = useTrackerService({ stomp: mockStomp as unknown as RxStomp });
         trackerService['buildUrl'] = () => '';
