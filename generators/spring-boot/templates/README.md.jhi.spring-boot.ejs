@@ -217,6 +217,14 @@ To launch your application's tests, run:
 <&_ if (fragment.productionSection) { -&>
 ### Packaging as jar
 
+To try the <%- baseName %> application in production, run:
+
+```bash
+<%- nodePackageManagerCommand %> run try-it
+```
+
+It builds the production jar (`npm run java:jar:prod`) and runs it with the `prod` and `secret-samples` profiles: `<%- packageJsonScripts['try-it'] %>`.
+
 To build the final jar and optimize the <%- baseName %> application for production, run:
 
 ```bash
@@ -235,12 +243,15 @@ To ensure everything worked, run:
 
 ```bash
 <%_ if (buildToolMaven) { _%>
-java -jar target/*.jar
+java -jar target/*.jar --spring.profiles.active=prod,secret-samples
 <%_ } _%>
 <%_ if (buildToolGradle) { _%>
-java -jar build/libs/*.jar
+java -jar build/libs/*.jar --spring.profiles.active=prod,secret-samples
 <%_ } _%>
 ```
+
+The `secret-samples` profile, in `<%- srcMainResources %>config/application-secret-samples.yml`, holds sample passwords and secrets, for development and tests only.
+To run the application in production, do not activate it: provide your own passwords and secrets to the `prod` profile instead, for example with environment variables.
 
 <% if (!skipClient) { %>Then navigate to [http://localhost:<%- serverPort %>](http://localhost:<%- serverPort %>) in your browser.
 <% } %>
@@ -339,7 +350,7 @@ You can also fully dockerize your application and all the services that it depen
 To achieve this, first build a Docker image of your app by running:
 
 ```bash
-npm run java:docker
+<%- nodePackageManagerCommand %> run java:docker
 ```
 
 The image is built for the architecture of your Docker daemon, arm64 on Apple Silicon chips (M\*) for instance.

@@ -793,7 +793,10 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     },
   ],
   "packageJsonNodeEngine": undefined,
-  "packageJsonScripts": {},
+  "packageJsonScripts": {
+    "pretry-it": "npm run java:jar:prod",
+    "try-it": "java -jar target/*.jar --spring.profiles.active=prod,secret-samples",
+  },
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
   "prettierExtensions": [
@@ -1688,7 +1691,10 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     },
   ],
   "packageJsonNodeEngine": undefined,
-  "packageJsonScripts": {},
+  "packageJsonScripts": {
+    "pretry-it": "npm run java:jar:prod",
+    "try-it": "java -jar target/*.jar --spring.profiles.active=prod,secret-samples",
+  },
   "packageName": "com.mycompany.myapp",
   "pageOrFlux": "Page",
   "prettierExtensions": [

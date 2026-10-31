@@ -30,14 +30,12 @@ import type { Application as JavaApplication, Field as JavaField, Relationship a
 
 export type JavaAddedApplicationProperties = {
   useNpmWrapper: boolean;
-  javaPackagingDestDir: string;
 };
 
 export const mutateApplicationPreparing = {
   __override__: false,
 
   useNpmWrapper: false,
-  javaPackagingDestDir: app => (app.buildToolGradle ? `${app.temporaryDir}libs/` : app.temporaryDir),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<JavaApplication>, JavaAddedApplicationProperties>;
 
 type JavaAddedPropertyProperties = {
