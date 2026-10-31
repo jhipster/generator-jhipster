@@ -54,6 +54,11 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   - task: Npm@1
     inputs:
       command: 'custom'
+      customCommand: ' run lint'
+    displayName: 'LINT: frontend'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
       customCommand: ' run ci:backend:test'
     displayName: 'TESTS: backend'
   - task: PublishTestResults@2
@@ -166,6 +171,11 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run lint'
+    displayName: 'LINT: frontend'
   - script: |
       curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
       chmod +x snyk
@@ -296,6 +306,11 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   - task: Npm@1
     inputs:
       command: 'custom'
+      customCommand: ' run lint'
+    displayName: 'LINT: frontend'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
       customCommand: ' run ci:backend:test'
     displayName: 'TESTS: backend'
   - task: PublishTestResults@2
@@ -408,6 +423,11 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     inputs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run lint'
+    displayName: 'LINT: frontend'
   - script: |
       curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
       chmod +x snyk
@@ -538,6 +558,11 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
   - task: Npm@1
     inputs:
       command: 'custom'
+      customCommand: ' run lint'
+    displayName: 'LINT: frontend'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
       customCommand: ' run ci:backend:test'
     displayName: 'TESTS: backend'
   - task: PublishTestResults@2
@@ -628,6 +653,9 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
+            - run:
+                name: Run frontend lint
+                command: npm run lint
             - save_cache:
                 paths:
                     - node
@@ -705,6 +733,9 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
+            - run:
+                name: Run frontend lint
+                command: npm run lint
             - run:
                 name: Install Snyk CLI
                 command: |
@@ -793,6 +824,9 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
+            - run:
+                name: Run frontend lint
+                command: npm run lint
             - save_cache:
                 paths:
                     - node
@@ -870,6 +904,9 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
+            - run:
+                name: Run frontend lint
+                command: npm run lint
             - run:
                 name: Install Snyk CLI
                 command: |
@@ -956,6 +993,8 @@ jobs:
                   java-version: JAVA_VERSION
             - name: Install Node.js packages
               run: npm install
+            - name: Run frontend lint
+              run: npm run lint
             - name: Run backend test
               run: npm run ci:backend:test
             - name: Run frontend test
@@ -1020,6 +1059,8 @@ jobs:
                   java-version: JAVA_VERSION
             - name: Install Node.js packages
               run: npm install
+            - name: Run frontend lint
+              run: npm run lint
             - name: Install Snyk CLI
               run: |
                   curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
@@ -1166,6 +1207,8 @@ jobs:
                   java-version: JAVA_VERSION
             - name: Install Node.js packages
               run: npm install
+            - name: Run frontend lint
+              run: npm run lint
             - name: Run backend test
               run: npm run ci:backend:test
             - name: Run frontend test
@@ -1230,6 +1273,8 @@ jobs:
                   java-version: JAVA_VERSION
             - name: Install Node.js packages
               run: npm install
+            - name: Run frontend lint
+              run: npm run lint
             - name: Install Snyk CLI
               run: |
                   curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
@@ -1395,6 +1440,8 @@ jobs:
                   java-version: JAVA_VERSION
             - name: Install Node.js packages
               run: npm install
+            - name: Run frontend lint
+              run: npm run lint
             - name: Run backend test
               run: npm run ci:backend:test
             - name: Run frontend test
@@ -1456,6 +1503,11 @@ nohttp:
     stage: check
     script:
         - ./gradlew checkstyleNohttp --no-daemon
+
+frontend-lint:
+    stage: check
+    script:
+        - ./gradlew npm_run_lint -PnodeInstall --no-daemon
 
 gradle-compile:
     stage: build
@@ -1580,6 +1632,11 @@ dependency-scanning:
         - ./snyk test --all-projects
         - ./snyk monitor --all-projects
     allow_failure: true
+
+frontend-lint:
+    stage: check
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run lint' -Dmaven.repo.local=$MAVEN_USER_HOME
 
 maven-compile:
     stage: build
@@ -1730,6 +1787,11 @@ nohttp:
     script:
         - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
+frontend-lint:
+    stage: check
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run lint' -Dmaven.repo.local=$MAVEN_USER_HOME
+
 maven-compile:
     stage: build
     script:
@@ -1844,6 +1906,11 @@ dependency-scanning:
         - ./snyk test --all-projects
         - ./snyk monitor --all-projects
     allow_failure: true
+
+frontend-lint:
+    stage: check
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run lint' -Dmaven.repo.local=$MAVEN_USER_HOME
 
 maven-compile:
     stage: build
@@ -1984,6 +2051,11 @@ nohttp:
     script:
         - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
+frontend-lint:
+    stage: check
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run lint' -Dmaven.repo.local=$MAVEN_USER_HOME
+
 maven-compile:
     stage: build
     script:
@@ -2086,6 +2158,11 @@ nohttp:
     script:
         - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
+frontend-lint:
+    stage: check
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run lint' -Dmaven.repo.local=$MAVEN_USER_HOME
+
 maven-compile:
     stage: build
     script:
@@ -2157,9 +2234,15 @@ cache:
     paths:
         - node_modules/
 stages:
+    - check
     - build
     - test
     - packaging
+webapp-lint:
+    stage: check
+    script:
+        - npm install
+        - npm run lint
 webapp-build:
     stage: build
     script:
@@ -2245,6 +2328,9 @@ node {
 
     stage('npm install') {
         sh "./gradlew npm_install -PnodeInstall --no-daemon"
+    }
+    stage('frontend lint') {
+        sh "./gradlew npm_run_lint -PnodeInstall --no-daemon"
     }
     stage('backend tests') {
         try {
@@ -2445,6 +2531,9 @@ node {
         }
         stage('Snyk monitor') {
            sh './snyk monitor --all-projects'
+        }
+        stage('frontend lint') {
+            sh "npm run lint"
         }
         stage('backend tests') {
             try {
@@ -2707,6 +2796,9 @@ node {
     stage('npm install') {
         sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
     }
+    stage('frontend lint') {
+        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run lint'"
+    }
     stage('backend tests') {
         try {
             sh "./mvnw -ntp verify -P-webapp"
@@ -2904,6 +2996,9 @@ node {
     }
     stage('Snyk monitor') {
        sh './snyk monitor --all-projects'
+    }
+    stage('frontend lint') {
+        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run lint'"
     }
     stage('backend tests') {
         try {
@@ -3161,6 +3256,7 @@ install:
   - npm install
 script:
   - npm run ci:backend:test
+  - npm run lint
   - npm run ci:frontend:test
   - npm run java:jar:prod
   - npm run ci:e2e:package
@@ -3235,6 +3331,7 @@ install:
   - npm install
 script:
   - npm run ci:backend:test
+  - npm run lint
   - npm run ci:frontend:test
   - npm run java:jar:prod
   - npm run ci:e2e:package
@@ -3313,6 +3410,7 @@ script:
   - ./snyk test --all-projects || true
   - ./snyk monitor --all-projects
   - npm run ci:backend:test
+  - npm run lint
   - npm run ci:frontend:test
   - npm run java:jar:prod
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN; fi

@@ -56,6 +56,13 @@ jobs:
       command: 'install'
     displayName: 'INSTALL: launch npm install'
 <%_ } _%>
+<%_ if (!skipClient) { _%>
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run lint'
+    displayName: 'LINT: frontend'
+<%_ } _%>
 <%_ if (ciCdIntegrationsSnyk) { _%>
   - script: |
       curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
