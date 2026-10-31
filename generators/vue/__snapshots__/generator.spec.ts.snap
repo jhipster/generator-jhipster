@@ -6665,3 +6665,136 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
   },
 }
 `;
+
+exports[`generator - vue vite microfrontend gateway should share application modules by absolute path with the dev server too 1`] = `
+{
+  "module-federation.config.ts": {
+    "contents": "import { fileURLToPath } from 'node:url';
+
+import type { createModuleFederationConfig } from '@module-federation/sdk';
+
+import packageJson from './package.json' with { type: 'json' };
+
+// Microfrontend API, should match across gateway and microservices.
+const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+// Application modules are not installed packages, \`import\` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
+const shareMappings = (...mappings: string[]) =>
+  Object.fromEntries(
+    mappings.map(map => [
+      map,
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(\`./src/main/webapp/\${map.replace('@/', 'app/')}\`, import.meta.url)),
+      },
+    ]),
+  );
+
+const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
+  Object.fromEntries(
+    Object.entries(packageJson.dependencies)
+      .filter(([dependency]) => !skipList.includes(dependency))
+      .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
+  );
+
+const applicationModules = shareMappings(
+  '@/shared/jhipster/constants',
+  '@/shared/alert/alert.service',
+  '@/locale/translation.service',
+);
+
+export default {
+  name: 'jhipster',
+  exposes: {
+    './entities-router': './app/router/entities.ts',
+    './entities-menu': './app/entities/entities-menu.vue',
+    './i18n-en': './i18n/en/en.js',
+    './i18n-fr': './i18n/fr/fr.js',
+    // jhipster-needle-expose
+  },
+  filename: 'remoteEntry.js',
+  shareScope: 'default',
+  shared: {
+    ...shareDependencies(),
+    ...applicationModules,
+  },
+  dts: false,
+  manifest: true,
+} as const satisfies Parameters<typeof createModuleFederationConfig>[0];
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - vue vite microfrontend microservice should share application modules by absolute path and not with the dev server 1`] = `
+{
+  "module-federation.config.ts": {
+    "contents": "import { fileURLToPath } from 'node:url';
+
+import type { createModuleFederationConfig } from '@module-federation/sdk';
+
+import packageJson from './package.json' with { type: 'json' };
+
+// Microfrontend API, should match across gateway and microservices.
+const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+// Application modules are not installed packages, \`import\` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
+const shareMappings = (...mappings: string[]) =>
+  Object.fromEntries(
+    mappings.map(map => [
+      map,
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(\`./src/main/webapp/\${map.replace('@/', 'app/')}\`, import.meta.url)),
+      },
+    ]),
+  );
+
+const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
+  Object.fromEntries(
+    Object.entries(packageJson.dependencies)
+      .filter(([dependency]) => !skipList.includes(dependency))
+      .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
+  );
+
+const applicationModules = shareMappings(
+  '@/shared/jhipster/constants',
+  '@/shared/alert/alert.service',
+  '@/locale/translation.service',
+);
+
+const development = process.env.NODE_ENV !== 'production';
+
+export default {
+  name: 'jhipster',
+  exposes: {
+    './entities-router': './app/router/entities.ts',
+    './entities-menu': './app/entities/entities-menu.vue',
+    './i18n-en': './i18n/en/en.js',
+    './i18n-fr': './i18n/fr/fr.js',
+    // jhipster-needle-expose
+  },
+  filename: 'remoteEntry.js',
+  shareScope: 'default',
+  shared: {
+    ...shareDependencies(),
+    // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
+    // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build
+    // from the dev server. Share them unconditionally once the fix is released.
+    ...(development ? {} : applicationModules),
+  },
+  dts: false,
+  manifest: true,
+} as const satisfies Parameters<typeof createModuleFederationConfig>[0];
+",
+    "stateCleared": "modified",
+  },
+}
+`;
