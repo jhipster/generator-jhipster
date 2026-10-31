@@ -185,9 +185,8 @@ export default defineComponent({
   <%_ } _%>
     });
 <%_ } _%>
-<%_ if (!paginationNo) { _%>
+<%_ if (builtInUserManagement) { _%>
 
-  <%_ if (builtInUserManagement) { _%>
     const setActive = async (<%- entityInstance %>: I<%- entityAngularName %>, activated: boolean) => {
       try {
         await <%- entityInstance %>Service().update({ ...<%- entityInstance %>, activated });
@@ -196,8 +195,9 @@ export default defineComponent({
         alertService.showHttpError(error.response);
       }
     };
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
 
-  <%_ } _%>
     const changeOrder = (newOrder: string) => {
       if (propOrder.value === newOrder) {
         reverse.value = !reverse.value;
