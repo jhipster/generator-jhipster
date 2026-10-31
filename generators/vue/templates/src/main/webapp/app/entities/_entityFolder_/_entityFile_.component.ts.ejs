@@ -64,7 +64,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
     const itemsPerPage = ref(20);
-    const queryCount: Ref<number> = ref(null);
+    const queryCount: Ref<number | null> = ref(null);
     const route = useRoute();
     const router = useRouter();
   <%_ if (paginationPagination) { _%>

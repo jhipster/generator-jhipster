@@ -42,36 +42,26 @@ export const useDateFormat = <T extends object>({ entityRef }: { entityRef?: Ref
     formatDateShort: formatDate,
 <%_ } _%>
   };
-  const entityUtils: {
-    updateInstantField?: (field: string, event: { target?: { value?: string } | null }) => void;
-    updateZonedDateTimeField?: (field: string, event: { target?: { value?: string } | null }) => void;
-  } = entityRef
-    ? {
-        ...dateFormatUtils,
-        updateInstantField(field: string, event: { target?: { value?: string } | null }) {
-          if (event.target?.value) {
-            (entityRef.value as Record<string, unknown>)[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-          } else {
-            (entityRef.value as Record<string, unknown>)[field] = null;
-          }
-        },
-        updateZonedDateTimeField(field: string, event: { target?: { value?: string } | null }) {
-          if (event.target?.value) {
-            (entityRef.value as Record<string, unknown>)[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-          } else {
-            (entityRef.value as Record<string, unknown>)[field] = null;
-          }
-        },
-      }
-    : {};
+  /** Sets the field of the entity to the date and time of the event of an input, null when empty. */
+  const updateDateTimeField = (field: string, event: Event | { target?: { value?: string } | null }) => {
+    const value = (event.target as { value?: string } | null)?.value;
+    if (entityRef) {
+      (entityRef.value as Record<string, unknown>)[field] = value ? dayjs(value, DATE_TIME_LONG_FORMAT) : null;
+    }
+  };
+  const entityUtils = {
+    updateInstantField: updateDateTimeField,
+    updateZonedDateTimeField: updateDateTimeField,
+  };
 <%_ if (enableTranslation) { _%>
 
   const i18n = useI18n();
-  const formatDateI18N = (date?: string | null, format = 'short'): string | null => (date ? i18n.d(Date.parse(date), format) : null);
+  const formatDateI18N = (date?: string | Date | null, format = 'short'): string | null =>
+    date ? i18n.d(typeof date === 'string' ? Date.parse(date) : date, format) : null;
   const i18nUtils = {
     formatDateI18N,
-    formatDateLong: (date?: string | null) => formatDateI18N(date, 'long'),
-    formatDateShort: (date?: string | null) => formatDateI18N(date, 'short'),
+    formatDateLong: (date?: string | Date | null) => formatDateI18N(date, 'long'),
+    formatDateShort: (date?: string | Date | null) => formatDateI18N(date, 'short'),
   };
 <%_ } _%>
 
