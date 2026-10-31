@@ -28,7 +28,7 @@ const Error = () => import('@/core/error/error.vue');
 import account from '@/router/account';
 <%_ } _%>
 import admin from '@/router/admin';
-import entities from '@/router/entities';
+import entities from '@/entities/entities.routes';
 import pages from '@/router/pages';
 
 export const createRouter = () => createVueRouter({
@@ -80,6 +80,7 @@ export const lazyRoutes = Promise.all([
       router.addRoute(<%- remote.moduleFederationName %>Router!.default);
       return <%- remote.moduleFederationName %>Router!.default;
     }).catch(error => {
+      // eslint-disable-next-line no-console
       console.log(`Error loading <%- remote.moduleFederationName %> menus. Make sure it's up. ${error}`);
     }),
   <%_ } _%>

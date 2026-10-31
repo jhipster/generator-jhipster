@@ -60,6 +60,7 @@
 <%_ } _%>
     "@eslint/js": null,
     "@pinia/testing": "<%- nodeDependencies['@pinia/testing'] %>",
+    "@stylistic/eslint-plugin": "<%- nodeDependencies['@stylistic/eslint-plugin'] %>",
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
     "@tsconfig/node24": null,
     "@vitejs/plugin-vue": "<%- nodeDependencies['@vitejs/plugin-vue'] %>",
@@ -96,7 +97,7 @@
     "cleanup": "rimraf <%- relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%- relativeDir(clientRootDir, clientDistDir) %>",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
     "serve": "<%- nodePackageManager %> run start --",
     "start": "<%- nodePackageManager %> run webapp:dev --",
     "pretest": "<%- nodePackageManager %> run lint",

@@ -33,7 +33,7 @@ import { <%- composables.join(', ') %> } from '@/shared/composables';
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 
@@ -214,8 +214,8 @@ export default defineComponent({
     });
 
     // Whenever the data resets or page changes, switch to the new page.
-    watch([<%- entityInstancePlural %>, page], async ([data, page], [_prevData, prevPage]) => {
-      if (data.length === 0 || page !== prevPage) {
+    watch([<%- entityInstancePlural %>, page], async ([data, currentPage], [_prevData, prevPage]) => {
+      if (data.length === 0 || currentPage !== prevPage) {
         await retrieve<%- entityAngularName %>s();
       }
     });

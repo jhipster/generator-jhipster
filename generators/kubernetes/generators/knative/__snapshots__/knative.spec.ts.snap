@@ -9,6 +9,7 @@ exports[`generator - Knative Using Helm generator type MySQL and PostgreSQL micr
       "02-mysql",
       "03-psql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -59,6 +60,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql,mspsql)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -191,6 +209,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -326,6 +360,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -333,6 +369,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -530,42 +571,17 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall mspsql 2>/dev/null
-    else
-helm delete --purge mspsql 2>/dev/null
-    fi
+helm uninstall mspsql --namespace default 2>/dev/null
 helm dep up ./mspsql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install mspsql  ./mspsql-\${suffix} --replace --namespace default
-    else
-helm install --name mspsql  ./mspsql-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -698,8 +714,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -969,8 +988,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: mspsql
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: mspsql
         - name: SPRING_DATASOURCE_URL
@@ -1073,6 +1095,7 @@ exports[`generator - Knative Using Helm generator type gateway and ingress shoul
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -1121,6 +1144,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -1253,6 +1293,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -1388,6 +1444,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -1395,6 +1453,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -1592,31 +1655,14 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -1800,8 +1846,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -1897,6 +1946,7 @@ exports[`generator - Knative Using Helm generator type gateway and mysql microse
       "01-gateway",
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -1947,6 +1997,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -2079,6 +2146,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -2214,6 +2297,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -2221,6 +2306,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -2418,42 +2508,17 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -2639,8 +2704,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -2836,8 +2904,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -2932,6 +3003,7 @@ exports[`generator - Knative Using Helm generator type gateway with istio routin
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -2980,6 +3052,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -3112,6 +3201,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -3247,6 +3352,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -3254,6 +3361,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -3451,31 +3563,14 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -3659,8 +3754,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -3760,6 +3858,7 @@ exports[`generator - Knative Using Helm generator type gateway, mysql, psql, mon
       "07-mariadb"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -3816,6 +3915,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql,mspsql,msmongodb,msmariadb)'
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -3948,6 +4064,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -4083,6 +4215,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -4090,6 +4224,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -4287,75 +4426,26 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall mspsql 2>/dev/null
-    else
-helm delete --purge mspsql 2>/dev/null
-    fi
+helm uninstall mspsql --namespace default 2>/dev/null
 helm dep up ./mspsql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install mspsql  ./mspsql-\${suffix} --replace --namespace default
-    else
-helm install --name mspsql  ./mspsql-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmongodb 2>/dev/null
-    else
-helm delete --purge msmongodb 2>/dev/null
-    fi
+helm uninstall msmongodb --namespace default 2>/dev/null
 helm dep up ./msmongodb-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmongodb  ./msmongodb-\${suffix} --replace --namespace default
-    else
-helm install --name msmongodb  ./msmongodb-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmariadb 2>/dev/null
-    else
-helm delete --purge msmariadb 2>/dev/null
-    fi
+helm uninstall msmariadb --namespace default 2>/dev/null
 helm dep up ./msmariadb-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmariadb  ./msmariadb-\${suffix} --replace --namespace default
-    else
-helm install --name msmariadb  ./msmariadb-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -4547,8 +4637,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -4744,8 +4837,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmariadb
+          value: msmariadb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmariadb
         - name: SPRING_DATASOURCE_URL
@@ -4949,8 +5045,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmongodb
+          value: msmongodb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmongodb
         - name: SPRING_MONGODB_URI
@@ -5139,8 +5238,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -5410,8 +5512,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: mspsql
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: mspsql
         - name: SPRING_DATASOURCE_URL
@@ -5506,6 +5611,83 @@ spec:
 }
 `;
 
+exports[`generator - Knative Using Helm generator type mssql microservice should match service snapshot 1`] = `
+{
+  "knative/msmssqldb-knative/templates/msmssqldb-service.yml": {
+    "contents": "apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: msmssqldb
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        # this prevents from scale to zero
+        autoscaling.knative.dev/min-scale: "1"
+      labels:
+        app: msmssqldb
+        version: "v1"
+    spec:
+      containers:
+      - name: msmssqldb-app
+        image: jhipster/msmssqldb
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: msmssqldb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: msmssqldb
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+  traffic:
+    - tag: latest
+      percent: 100
+      latestRevision: true
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - Knative Using Helm generator type mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
   "knative/.yo-rc.json": {
@@ -5514,6 +5696,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -5562,6 +5745,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -5744,6 +5944,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -5879,6 +6095,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -5886,6 +6104,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -8429,31 +8652,14 @@ cs=csvc
 suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace mynamespace istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace mynamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace mynamespace 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -8584,8 +8790,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -8690,6 +8899,7 @@ exports[`generator - Knative Using Helm generator type mysql microservice with c
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -8738,6 +8948,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -8870,6 +9097,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9005,6 +9248,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -9012,6 +9257,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9210,31 +9460,14 @@ cs=csvc
 suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace mynamespace istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace mynamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace mynamespace 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -9365,8 +9598,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -9469,6 +9705,7 @@ exports[`generator - Knative Using Helm generator type only gateway should match
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -9517,6 +9754,23 @@ You can upgrade all your apps (if you have made any changes to the generated man
 \`\`\`
 bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 \`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n jhipsternamespace
+bash helm-knative-upgrade.sh
+kubectl rollout status statefulset/consul -n jhipsternamespace
+kubectl rollout restart deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout status deployment/consul-config-loader -n jhipsternamespace
+until kubectl exec consul-0 -n jhipsternamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)' -n jhipsternamespace
+\`\`\`
+
+\`helm-knative-upgrade.sh\` recreates the StatefulSet and removes the old \`gossip-key\` Secret of the \`csvc\` chart.
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
 ",
@@ -9649,6 +9903,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9784,6 +10054,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -9791,6 +10063,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9989,31 +10266,14 @@ cs=csvc
 suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace jhipsternamespace istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace jhipsternamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace jhipsternamespace
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace jhipsternamespace
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace jhipsternamespace 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace jhipsternamespace
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace jhipsternamespace
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -10197,8 +10457,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.jhipsternamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -10302,6 +10565,7 @@ exports[`generator - Knative Using K8s generator type MySQL and PostgreSQL micro
       "02-mysql",
       "03-psql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -10343,6 +10607,22 @@ $ docker push jhipster/mspsql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql,mspsql)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -10635,8 +10915,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -10913,8 +11196,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: mspsql
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: mspsql
         - name: SPRING_DATASOURCE_URL
@@ -11087,6 +11373,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -11222,6 +11524,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -11229,6 +11533,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -11289,6 +11598,7 @@ exports[`generator - Knative Using K8s generator type gateway and ingress should
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -11328,6 +11638,22 @@ $ docker push jhipster/jhgate
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -11646,8 +11972,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -11840,6 +12169,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -11975,6 +12320,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -11982,6 +12329,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -12043,6 +12395,7 @@ exports[`generator - Knative Using K8s generator type gateway and mysql microser
       "01-gateway",
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -12084,6 +12437,22 @@ $ docker push jhipster/msmysql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -12402,8 +12771,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -12624,8 +12996,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -12791,6 +13166,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -12926,6 +13317,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -12933,6 +13326,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -12993,6 +13391,7 @@ exports[`generator - Knative Using K8s generator type gateway with istio routing
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -13032,6 +13431,22 @@ $ docker push jhipster/jhgate
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -13350,8 +13765,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -13544,6 +13962,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -13679,6 +14113,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -13686,6 +14122,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -13752,6 +14193,7 @@ exports[`generator - Knative Using K8s generator type gateway, mysql, psql, mong
       "11-mssql"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -13801,6 +14243,22 @@ $ docker push jhipster/msmssqldb
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate,msmysql,mspsql,msmongodb,msmariadb,msmssqldb)'
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -14119,8 +14577,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -14360,8 +14821,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmariadb
+          value: msmariadb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmariadb
         - name: SPRING_DATASOURCE_URL
@@ -14793,8 +15257,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmongodb
+          value: msmongodb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmongodb
         - name: SPRING_MONGODB_URI
@@ -14893,13 +15360,27 @@ spec:
     "stateCleared": "modified",
   },
   "knative/msmssqldb-knative/msmssqldb-mssql.yml": {
-    "contents": "apiVersion: apps/v1
+    "contents": "apiVersion: v1
+kind: Secret
+metadata:
+  name: msmssqldb-mssql
+  namespace: default
+  labels:
+    app: msmssqldb-mssql
+type: Opaque
+data:
+  mssql-password: U0VDUkVULVBBU1NXT1JELUFhMQ==
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: msmssqldb-mssql
   namespace: default
 spec:
   replicas: 1
+  # the ReadWriteOnce volume can't be shared with a second SQL Server pod during a rolling update
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: msmssqldb-mssql
@@ -14910,38 +15391,48 @@ spec:
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
+      securityContext:
+        # the mssql user of the image, so that it can write to the volume
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
       - name: data
         emptyDir: {}
       containers:
-      - name: mysql
+      - name: mssql
         image: mssql-placeholder
         env:
         - name: MSSQL_PID
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
+        # the image creates this database when it starts with an empty data directory
+        - name: MSSQL_DB
+          value: msmssqldb
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
-              key: SA_PASSWORD
+              name: msmssqldb-mssql
+              key: mssql-password
         ports:
         - containerPort: 1433
+        readinessProbe:
+          exec:
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DB]" -o /dev/null']
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
-        - name: mssqldb
+        - name: data
           mountPath: /var/opt/mssql
         resources:
+          # SQL Server doesn't start with less than 2000 MB of memory
           requests:
-            memory: "512Mi"
+            memory: "2Gi"
             cpu: "500m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
-
 ---
 apiVersion: v1
 kind: Service
@@ -14952,22 +15443,7 @@ spec:
   selector:
     app: msmssqldb-mssql
   ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: LoadBalancer
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: mssql-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 8Gi
+  - port: 1433
 ",
     "stateCleared": "modified",
   },
@@ -15002,10 +15478,24 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmssqldb
+          value: msmssqldb.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmssqldb
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: SA
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmssqldb-mssql
+              key: mssql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -15190,8 +15680,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -15468,8 +15961,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: mspsql
+          value: mspsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: mspsql
         - name: SPRING_DATASOURCE_URL
@@ -15642,6 +16138,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -15777,6 +16289,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -15784,6 +16298,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -15844,6 +16363,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -15883,6 +16403,22 @@ $ docker push jhipster/msmysql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -18864,8 +19400,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -19041,6 +19580,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -19176,6 +19731,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -19183,6 +19740,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -19243,6 +19805,7 @@ exports[`generator - Knative Using K8s generator type mysql microservice with cu
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -19282,6 +19845,22 @@ $ docker push jhipster/msmysql
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (msmysql)' -n mynamespace
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -19574,8 +20153,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msmysql
+          value: msmysql.mynamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msmysql
         - name: SPRING_DATASOURCE_URL
@@ -19749,6 +20331,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -19884,6 +20482,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -19891,6 +20491,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -19951,6 +20556,7 @@ exports[`generator - Knative Using K8s generator type only gateway should match 
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -19990,6 +20596,22 @@ $ docker push jhipsterrepository/jhgate
 You can deploy all your apps by running the below terminal command:
 \`\`\`
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
+\`\`\`
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret, and servers deployed by an older JHipster version can't talk to them: a rolling update stalls on its first pod. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\`, wait until your configuration is in Consul, then restart the pods of your apps to register them again:
+
+\`\`\`
+kubectl delete statefulset consul -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n jhipsternamespace
+kubectl delete secret gossip-key --ignore-not-found -n jhipsternamespace
+kubectl apply -f registry-knative/
+kubectl rollout status statefulset/consul -n jhipsternamespace
+kubectl rollout restart deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout status deployment/consul-config-loader -n jhipsternamespace
+until kubectl exec consul-0 -n jhipsternamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl delete pod -l 'serving.knative.dev/service in (jhgate)' -n jhipsternamespace
 \`\`\`
 
 For Kubernetes specific more information, refer to the \`kubernetes\` sub-generator Readme instructions.
@@ -20308,8 +20930,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: jhgate
+          value: jhgate.jhipsternamespace.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: jhgate
         - name: SPRING_R2DBC_URL
@@ -20511,6 +21136,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -20646,6 +21287,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -20653,6 +21296,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -20738,8 +21386,11 @@ spec:
           value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: msreactivepsql
+          value: msreactivepsql.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: msreactivepsql
         - name: SPRING_R2DBC_URL

@@ -16,11 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const lowercaseBaseName = app.baseName.toLowerCase();
+    // SQL Server rejects passwords without 3 of the 4 character categories, and the random password is lowercase hex
+    const mssqlPassword = `${dbRandomPassword}-Aa1`;
+_%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
 apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
-  name: <%- app.baseName.toLowerCase() %>-mssql-pvc
+  name: <%- lowercaseBaseName %>-mssql-pvc
   namespace: <%- kubernetesNamespace %>
 spec:
   accessModes:
@@ -33,85 +37,94 @@ spec:
   <%_ } _%>
 ---
 <%_ } _%>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
+kind: Secret
+metadata:
+  name: <%- lowercaseBaseName %>-mssql
+  namespace: <%- kubernetesNamespace %>
+  labels:
+    app: <%- lowercaseBaseName %>-mssql
+type: Opaque
+data:
+  mssql-password: <%- Buffer.from(mssqlPassword).toString('base64') %>
+---
 apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
-  name: <%- app.baseName.toLowerCase() %>-mssql
+  name: <%- lowercaseBaseName %>-mssql
   namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
+  # the ReadWriteOnce volume can't be shared with a second SQL Server pod during a rolling update
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app: <%- app.baseName.toLowerCase() %>-mssql
+      app: <%- lowercaseBaseName %>-mssql
   template:
     metadata:
       labels:
-        app: <%- app.baseName.toLowerCase() %>-mssql
+        app: <%- lowercaseBaseName %>-mssql
 <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
 <%_ } _%>
     spec:
+      securityContext:
+        # the mssql user of the image, so that it can write to the volume
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
       - name: data
 <%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
-          claimName: <%- app.baseName.toLowerCase() %>-mssql-pvc
+          claimName: <%- lowercaseBaseName %>-mssql-pvc
 <%_ } else { _%>
         emptyDir: {}
 <%_ } _%>
       containers:
-      - name: mysql
+      - name: mssql
         image: <%- dockerContainers.mssql %>
         env:
         - name: MSSQL_PID
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
+        # the image creates this database when it starts with an empty data directory
+        - name: MSSQL_DB
+          value: <%- lowercaseBaseName %>
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
-              key: SA_PASSWORD
+              name: <%- lowercaseBaseName %>-mssql
+              key: mssql-password
         ports:
         - containerPort: 1433
+        readinessProbe:
+          exec:
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DB]" -o /dev/null']
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
-        - name: mssqldb
+        - name: data
           mountPath: /var/opt/mssql
         resources:
+          # SQL Server doesn't start with less than 2000 MB of memory
           requests:
-            memory: "512Mi"
+            memory: "2Gi"
             cpu: "500m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
-
 ---
 apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%- app.baseName.toLowerCase() %>-mssql
+  name: <%- lowercaseBaseName %>-mssql
   namespace: <%- kubernetesNamespace %>
 spec:
   selector:
-    app: <%- app.baseName.toLowerCase() %>-mssql
+    app: <%- lowercaseBaseName %>-mssql
   ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: LoadBalancer
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: mssql-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 8Gi
+  - port: 1433

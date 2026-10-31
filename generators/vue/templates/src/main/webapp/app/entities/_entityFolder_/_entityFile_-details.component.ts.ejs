@@ -30,7 +30,7 @@ import { <%- composables.join(', ') %> } from '@/shared/composables';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 

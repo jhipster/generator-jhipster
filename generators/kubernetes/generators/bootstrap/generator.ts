@@ -28,7 +28,18 @@ import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../../../spring-boot/generators/data-relational/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
+import { spawnCheckCommand } from '../../kubernetes-base.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
+
+/** Consul accepts a gossip key of 16, 24 or 32 bytes, base64 encoded. */
+const validateConsulGossipKey = (key: string) => {
+  const isBase64 = key.length % 4 === 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(key);
+  if (!isBase64 || ![16, 24, 32].includes(Buffer.from(key, 'base64').length)) {
+    throw new Error(
+      'consulGossipKey must be a base64 encoded key of 16, 24 or 32 bytes. Generate one with `openssl rand -base64 32`, or remove it from .yo-rc.json to get a random one.',
+    );
+  }
+};
 
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
@@ -48,15 +59,12 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         if (this.skipChecks) return;
 
         // `--client` reports the kubectl version without contacting the current context's cluster.
-        const { exitCode, stderr } = await this.spawnCommand('kubectl version --client', { reject: false, stdio: 'pipe' });
+        const { exitCode } = await spawnCheckCommand.call(this, 'kubectl version --client');
         if (exitCode !== 0) {
           this.log.warn(
             'kubectl is not installed on your computer or does not run.\n' +
               'Make sure you have kubectl installed. Read https://kubernetes.io/docs/tasks/tools/\n',
           );
-          if (stderr) {
-            this.log.debug(stderr);
-          }
         }
       },
     });
@@ -83,6 +91,14 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
       generateSecrets() {
         this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
         this.jhipsterConfig.dbRandomPassword ??= this.options.reproducibleTests ? 'SECRET-PASSWORD' : randomBytes(30).toString('hex');
+        // Only the Consul servers use it, a deployment switched to Consul later gets one then
+        if (this.jhipsterConfigWithDefaults.serviceDiscoveryType === 'consul') {
+          this.jhipsterConfig.consulGossipKey ??= (
+            this.options.reproducibleTests ?
+              Buffer.from('SECRET-GOSSIP-KEY'.padEnd(32, '-'))
+            : randomBytes(32)).toString('base64');
+          validateConsulGossipKey(this.jhipsterConfig.consulGossipKey);
+        }
       },
     });
   }
@@ -142,7 +158,12 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.adminPasswordBase64 ??= convertSecretToBase64(deployment.adminPassword);
 
         applications.forEach(appConfig => {
-          if (appConfig.prodDatabaseTypeMysql || appConfig.prodDatabaseTypeMariadb || appConfig.prodDatabaseTypePostgresql) {
+          if (
+            appConfig.prodDatabaseTypeMysql ||
+            appConfig.prodDatabaseTypeMariadb ||
+            appConfig.prodDatabaseTypePostgresql ||
+            appConfig.prodDatabaseTypeMssql
+          ) {
             const { prodDatabaseType } = appConfig;
             const hostname = `${appConfig.baseName.toLowerCase()}-${prodDatabaseType}.${deployment.kubernetesNamespace}.svc.cluster.local`;
             const databaseName = appConfig.baseName.toLowerCase();

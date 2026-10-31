@@ -30,7 +30,7 @@ const remotes = vi.hoisted(() => {
 });
 
 vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
-  loadRemote: async (id: string) => {
+  async loadRemote(id: string) {
     await remotes.loaded;
     if (remotes.fail) {
       throw new Error(`${id} is down`);

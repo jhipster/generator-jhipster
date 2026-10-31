@@ -87,18 +87,18 @@ const app = createApp({
     const store = useStore();
     const accountService = new AccountService(store);
 <%_ if (enableTranslation) { _%>
-    const i18n = useI18n();
+    const composer = useI18n();
     const translationStore = useTranslationStore();
-    const translationService = new TranslationService(i18n);
+    const translationService = new TranslationService(composer);
 
     const changeLanguage = async (newLanguage: string) => {
-      if (newLanguage && i18n.locale.value !== newLanguage) {
+      if (newLanguage && composer.locale.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
         translationStore.setCurrentLanguage(newLanguage);
       }
     };
 
-    provide('currentLanguage', i18n.locale);
+    provide('currentLanguage', composer.locale);
     provide('changeLanguage', changeLanguage);
 
     watch(
@@ -123,7 +123,7 @@ const app = createApp({
         store.account?.langKey,
         navigator.language,
         '<%- nativeLanguage %>'
-      ].find(lang => lang && translationService.isLanguageSupported(lang));
+      ].find(language => language && translationService.isLanguageSupported(language));
       await changeLanguage(lang);
     });
 <%_ } else { _%>

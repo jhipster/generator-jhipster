@@ -179,7 +179,7 @@ export default class VueGenerator extends VueApplicationGenerator {
       applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
-          webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
+          webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
         });
 
         if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
@@ -224,7 +224,7 @@ export default class VueGenerator extends VueApplicationGenerator {
             } = entity;
 
             this.editFile(
-              `${application.clientSrcDir}/app/router/entities.ts`,
+              `${application.clientSrcDir}/app/entities/entities.routes.ts`,
               createNeedleCallback({
                 needle: 'jhipster-needle-add-entity-to-router-import',
                 contentToAdd: `const ${entityAngularName} = () => import('@/entities/${entityFolderName}/${entityFileName}.vue');
@@ -239,7 +239,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             );
 
             this.editFile(
-              `${application.clientSrcDir}/app/router/entities.ts`,
+              `${application.clientSrcDir}/app/entities/entities.routes.ts`,
               createNeedleCallback({
                 needle: 'jhipster-needle-add-entity-to-router',
                 contentToAdd: `{

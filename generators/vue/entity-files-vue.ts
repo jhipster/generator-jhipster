@@ -23,8 +23,7 @@ import type { Application as ClientApplication, Entity as ClientEntity, Source a
 export const entityFiles = asWriteFilesSection({
   client: [
     clientApplicationTemplatesBlock({
-      relativePath: 'shared/model/',
-      templates: ['_entityModel_.model.ts'],
+      templates: ['entities/_entityFolder_/_entityFile_.model.ts'],
     }),
     {
       condition: generator => !generator.embedded,
@@ -91,6 +90,16 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientAp
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
+    }
+  }
+  if (control.isJhipsterVersionLessThan('9.5.0')) {
+    for (const entity of (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
+      this.removeFile(`${application.clientSrcDir}app/shared/model/${entity.entityModelFileName}.model.ts`);
+      for (const field of entity.fields) {
+        if (field.fieldIsEnum) {
+          this.removeFile(`${application.clientSrcDir}app/shared/model/enumerations/${field.enumFileName}.model.ts`);
+        }
+      }
     }
   }
 });

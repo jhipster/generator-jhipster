@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, it } from 'expect-node';
+import { before, describe, expect, fn, it } from 'expect-node';
 
 import { defaultHelpers as helpers, runResult } from '#testing';
 
@@ -191,6 +191,73 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('a gateway with the consul gossip key given', () => {
+    const consulGossipKey = Buffer.from('given-consul-gossip-key'.padEnd(32, '-')).toString('base64');
+    before(async () => {
+      const chosenApps = ['01-gateway'];
+
+      await helpers
+        .generateDeploymentWorkspaces()
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+          consulGossipKey,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'gateway',
+          directoryPath: '../',
+          chosenApps,
+          adminPassword: 'meetup',
+          dockerRepositoryName: 'jhipsterrepository',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'jhipsternamespace',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+
+    it('should store it instead of generating one', () => {
+      runResult.assertJsonFileContent('./kubernetes/.yo-rc.json', { 'generator-jhipster': { consulGossipKey } });
+    });
+
+    it('should deploy the consul servers with it', () => {
+      runResult.assertFileContent('./kubernetes/registry-k8s/consul.yml', `gossip-key: ${Buffer.from(consulGossipKey).toString('base64')}`);
+    });
+  });
+
+  for (const consulGossipKey of ['', 'not-a-key', Buffer.from('too-short').toString('base64')]) {
+    describe(`a gateway with the invalid consul gossip key '${consulGossipKey}'`, () => {
+      const chosenApps = ['01-gateway'];
+      before(async () => {
+        await helpers
+          .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+          .withWorkspacesSamples(...chosenApps)
+          .withGenerateWorkspaceApplications();
+      });
+
+      it('should fail with a message showing how to generate one', async () => {
+        await expect(
+          helpers
+            .runJHipsterDeployment(GENERATOR_KUBERNETES)
+            .withSpawnMock()
+            .withFiles({
+              'kubernetes/.yo-rc.json': {
+                'generator-jhipster': { deploymentType: 'kubernetes', appsFolders: chosenApps, consulGossipKey },
+              },
+            }),
+        ).rejects.toThrow('consulGossipKey must be a base64 encoded key of 16, 24 or 32 bytes');
+      });
+    });
+  }
+
   describe('reactive postgresql microservice', () => {
     before(async () => {
       await helpers
@@ -233,6 +300,44 @@ describe('generator - Kubernetes', () => {
     });
   });
 
+  describe('reactive mssql microservice', () => {
+    before(async () => {
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspaceApplicationAtFolder('reactive-mssql', {
+          applicationType: 'microservice',
+          baseName: 'msreactivemssql',
+          prodDatabaseType: 'mssql',
+          reactive: true,
+          serverPort: 8081,
+        })
+        .withGenerateWorkspaceApplications();
+
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock()
+        .withOptions({
+          askAnswered: true,
+        })
+        .withAnswers({
+          deploymentApplicationType: 'microservice',
+          directoryPath: '../',
+          chosenApps: ['reactive-mssql'],
+          dockerRepositoryName: 'jhipster',
+          dockerPushCommand: 'docker push',
+          kubernetesNamespace: 'default',
+          jhipsterConsole: false,
+          kubernetesServiceType: 'LoadBalancer',
+          clusteredDbApps: [],
+          kubernetesUseDynamicStorage: true,
+          kubernetesStorageClassName: '',
+        });
+    });
+    it('should match deployment snapshot', function () {
+      expect(runResult.getSnapshot('**/msreactivemssql-deployment.yml')).toMatchSnapshot();
+    });
+  });
+
   describe('only gateway with eureka', () => {
     before(async () => {
       const chosenApps = ['01-gateway'];
@@ -271,6 +376,9 @@ describe('generator - Kubernetes', () => {
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.eurekaregistry);
       runResult.assertFileContent('./kubernetes/registry-k8s/jhipster-registry.yml', /bWVldHVw/);
+    });
+    it('should not generate a consul gossip key', () => {
+      runResult.assertNoFileContent('./kubernetes/.yo-rc.json', 'consulGossipKey');
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
@@ -955,6 +1063,86 @@ describe('generator - Kubernetes', () => {
         expect(kubectlWarnings()).toEqual([
           'kubectl is not installed on your computer or does not run.\nMake sure you have kubectl installed. Read https://kubernetes.io/docs/tasks/tools/\n',
         ]);
+      });
+    });
+  });
+
+  describe('istio ingress domain', () => {
+    const istioIpCommand =
+      'kubectl -n istio-system get svc istio-ingressgateway -o jsonpath={.status.loadBalancer.ingress[0].ip} --request-timeout=5s';
+    let spawnStub: ReturnType<typeof fn>;
+    let ingressDomainQuestion: { message?: string; answer?: string };
+    const runWithIstioIp = async (istioIp: () => unknown) => {
+      const chosenApps = ['01-gateway'];
+
+      await helpers
+        .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
+        .withWorkspacesSamples(...chosenApps)
+        .withGenerateWorkspaceApplications();
+
+      ingressDomainQuestion = {};
+      spawnStub = fn((method: string, command: string) => {
+        if (method === 'spawnCommandSync' && command.startsWith('kubectl -n istio-system')) {
+          return istioIp();
+        }
+        const result = { exitCode: 0, stdout: '', stderr: '' };
+        return method.endsWith('Sync') ? result : Promise.resolve(result);
+      });
+      await helpers
+        .runJHipsterDeployment(GENERATOR_KUBERNETES)
+        .withSpawnMock({ stub: spawnStub })
+        .withOptions({ skipChecks: false })
+        .withAnswers(
+          {
+            deploymentApplicationType: 'microservice',
+            directoryPath: '../',
+            chosenApps,
+            dockerRepositoryName: 'jhipster',
+            dockerPushCommand: 'docker push',
+            kubernetesNamespace: 'default',
+            clusteredDbApps: [],
+            istio: true,
+            kubernetesUseDynamicStorage: true,
+            kubernetesStorageClassName: '',
+          },
+          {
+            callback: (answer: any, { question }: { question: any }) => {
+              if (question.name === 'ingressDomain') {
+                ingressDomainQuestion = { message: question.message, answer };
+              }
+              return answer;
+            },
+          },
+        );
+    };
+
+    describe('with an ingress gateway IP address', () => {
+      before(async () => {
+        await runWithIstioIp(() => ({ exitCode: 0, stdout: '1.2.3.4', stderr: '' }));
+      });
+      it('asks kubectl for the IP address without shell quotes and with a timeout', () => {
+        expect(
+          spawnStub.mock.calls
+            .map(([method, command, options]) => ({ method, command, options }))
+            .filter(({ command }) => command.startsWith('kubectl -n istio-system')),
+        ).toEqual([{ method: 'spawnCommandSync', command: istioIpCommand, options: { stdio: 'pipe' } }]);
+      });
+      it('defaults the ingress domain to the IP address', () => {
+        expect(ingressDomainQuestion.answer).toBe('1.2.3.4.nip.io');
+      });
+    });
+
+    describe('with an ingress gateway without an IP address yet', () => {
+      before(async () => {
+        await runWithIstioIp(() => ({ exitCode: 0, stdout: '', stderr: '' }));
+      });
+      it('does not default the ingress domain to an invalid domain', () => {
+        expect(ingressDomainQuestion.answer).toBe('');
+      });
+      it('tells how to find the IP address', () => {
+        expect(ingressDomainQuestion.message).toContain(
+          "Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'\n",
+        );
       });
     });
   });

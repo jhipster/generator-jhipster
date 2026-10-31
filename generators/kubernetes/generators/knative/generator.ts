@@ -24,7 +24,7 @@ import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { checkImages, configureImageNames } from '../../../base-workspaces/internal/docker-base.ts';
 import { getJdbcUrl } from '../../../spring-boot/generators/data-relational/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
-import { checkHelm } from '../../kubernetes-base.ts';
+import { checkHelm, spawnCheckCommand } from '../../kubernetes-base.ts';
 
 import {
   applicationHelmFiles,
@@ -38,7 +38,7 @@ import {
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;
 
-const { K8S } = GeneratorTypes;
+const { K8S, HELM } = GeneratorTypes;
 
 /**
  * @class
@@ -60,16 +60,23 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
         this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkHelm,
       async checkKnative() {
         if (this.skipChecks) return;
-        try {
-          await this.spawnCommand(
-            String.raw`kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\.[8-9]{1,3}\.[0-9]*`,
-          );
-        } catch {
+
+        // Asks the API discovery of the current cluster for the Knative Serving resources the manifests use, which needs no
+        // permission on a namespace. The timeout keeps an unreachable cluster from blocking the generator before its prompts.
+        const { exitCode, stdout } = await spawnCheckCommand.call(
+          this,
+          'kubectl api-resources --api-group=serving.knative.dev --output=name --request-timeout=5s',
+        );
+        if (exitCode !== 0) {
           this.log.warn(
-            'Knative 0.8.* or later is not installed on your computer.\n' +
+            'Unable to check whether Knative Serving is installed: kubectl could not query your current Kubernetes cluster.\n' +
+              'Make sure the current kubectl context is the cluster you deploy to, with Knative and Istio installed. Read https://knative.dev/docs/install/\n',
+          );
+        } else if (!stdout.trim()) {
+          this.log.warn(
+            'Knative Serving is not installed in your current Kubernetes cluster.\n' +
               'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
           );
         }
@@ -83,6 +90,20 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get configuringWorkspaces() {
+    return this.asConfiguringWorkspacesTaskGroup({
+      async checkHelm() {
+        // The generator type is prompted after initializing, and helm is only needed to deploy the helm charts.
+        if (this.jhipsterConfigWithDefaults.generatorType !== HELM) return;
+        await checkHelm.call(this);
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
   get preparingWorkspaces() {

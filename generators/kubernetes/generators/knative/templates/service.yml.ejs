@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ // The SQL Server manifests aren't generated for Helm charts
+    const mssqlDeployed = app.prodDatabaseTypeMssql && generatorTypeK8s;
+_%>
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -65,8 +68,11 @@ spec:
   <%_ if (istio) { _%>
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
+        # The Knative Service answers on port 80 of its cluster address, not on the app's port
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-          value: <%- app.baseName.toLowerCase() %>
+          value: <%- app.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+          value: "80"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: <%- app.baseName.toLowerCase() %>
   <%_ } _%>
@@ -78,7 +84,7 @@ spec:
               name: jwt-secret
               key: secret
 <%_ } _%>
-<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
+<%_ if (app.prodDatabaseTypeMysql || app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql || mssqlDeployed) { _%>
   <%_ if (app.reactive) { _%>
         - name: SPRING_R2DBC_URL
           value: <%- app.kubernetesR2dbcUrl %>
@@ -90,12 +96,12 @@ spec:
         - name: SPRING_DATASOURCE_USERNAME
           value: <%- app.prodDatabaseUsername %>
   <%_ } _%>
-  <%_ if (app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql) { _%>
+  <%_ if (app.prodDatabaseTypeMariadb || app.prodDatabaseTypePostgresql || app.prodDatabaseTypeMssql) { _%>
         - name: <%- app.reactive ? 'SPRING_R2DBC_PASSWORD' : 'SPRING_DATASOURCE_PASSWORD' %>
           valueFrom:
             secretKeyRef:
               name: <%- app.baseName.toLowerCase() %>-<%- app.prodDatabaseType %>
-              key: <%- app.prodDatabaseTypeMariadb ? 'mariadb-root-password' : 'postgresql-password' %>
+              key: <%- app.prodDatabaseTypeMariadb ? 'mariadb-root-password' : `${app.prodDatabaseType}-password` %>
   <%_ } _%>
         - name: SPRING_LIQUIBASE_URL
           value: <%- app.kubernetesJdbcUrl %>
