@@ -48,7 +48,7 @@ export default {
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
 <%_ if (applicationTypeMicroservice || exposeMicrofrontend) { _%>
-    './entities-router': './app/router/entities.ts',
+    './entities-router': './app/entities/entities.routes.ts',
     './entities-menu': './app/entities/entities-menu.vue',
 <%_ } _%>
     // jhipster-needle-expose

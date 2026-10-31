@@ -70,7 +70,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
 
   it('menu contains the item in router import', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.routes.ts`,
       `
 const entityName = () => import('@/entities/entityFolderName/entityFileName.vue');
 const entityNameDetails = () => import('@/entities/entityFolderName/entityFileName-details.vue');
@@ -81,7 +81,7 @@ const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileNam
 
   it('menu contains the item in router', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.routes.ts`,
       `
     {
       path: 'routerName',

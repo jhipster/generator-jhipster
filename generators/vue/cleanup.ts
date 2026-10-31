@@ -125,6 +125,9 @@ export default asWritingTask<ClientEntity, ClientApplication>(async function cle
       `${application.clientSrcDir}app/admin/user-management/user-management-edit.component.ts`,
       `${application.clientSrcDir}app/admin/user-management/user-management-edit.component.spec.ts`,
       `${application.clientSrcDir}app/admin/user-management/user-management.service.ts`,
+      `${application.clientSrcDir}app/shared/model/user.model.ts`,
+      `${application.clientSrcDir}app/shared/model/user.model.spec.ts`,
+      `${application.clientSrcDir}app/router/entities.ts`,
     ],
   });
 });

@@ -283,7 +283,7 @@ describe(`generator - ${clientFramework}`, () => {
     });
 
     it('should generate the embedded entity model', () => {
-      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/shared/model/embedded-entity.model.ts`);
+      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity.model.ts`);
     });
 
     it('should not generate ui files for the embedded entity', () => {
