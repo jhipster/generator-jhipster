@@ -61,7 +61,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
     const itemsPerPage = ref(20);
-    const queryCount: Ref<number> = ref(null);
+    const queryCount: Ref<number | null> = ref(null);
     const page: Ref<number> = ref(1);
     const propOrder = ref('id');
     const reverse = ref(false);
