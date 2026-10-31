@@ -130,11 +130,13 @@ export default defineComponent({
     <%_ if (relationship.otherEntity.builtInUser) { _%>
       userService().retrieve().then((res) => {
         <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
-      });
+      })
+      .catch(error => alertService.showHttpError(error.response));
     <%_ } else { _%>
       <%- relationship.otherEntity.entityInstance %>Service().retrieve().then((res) => {
         <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
-      });
+      })
+      .catch(error => alertService.showHttpError(error.response));
     <%_ } _%>
   <%_ } _%>
     };
