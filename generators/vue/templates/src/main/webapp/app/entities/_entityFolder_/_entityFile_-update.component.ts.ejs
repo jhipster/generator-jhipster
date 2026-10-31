@@ -27,6 +27,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useVuelidate } from '@vuelidate/core'
+import { type AxiosError } from 'axios';
 
 import { useAlertService } from '@/shared/alert/alert.service';
 import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
@@ -103,7 +104,7 @@ export default defineComponent({
 
     const previousState = () => router.go(-1);
 
-    const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
+    const retrieve<%- entityAngularName %> = async (<%- entityInstance %><%- primaryKey.nameCapitalized %>: string | number) => {
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
 <%_ for (field of fields.filter(field => !field.id)) { _%>
@@ -116,12 +117,12 @@ export default defineComponent({
 <%_ } _%>
         <%- entityInstance %>.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showHttpError((error as AxiosError).response);
       }
     };
 
     if (route.params?.<%- entityInstance %>Id) {
-      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id);
+      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id as string);
     }
 <%_ if (relationships.length > 0) { _%>
 
@@ -213,7 +214,7 @@ export default defineComponent({
         }
         previousState();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showHttpError((error as AxiosError).response);
       } finally {
         isSaving.value = false;
       }
@@ -221,8 +222,8 @@ export default defineComponent({
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
 
     const clearInputImage = (field: string, fieldContentType: string, idInput: string) => {
-      <%- entityInstance %>.value[field] = null;
-      <%- entityInstance %>.value[fieldContentType] = null;
+      (<%- entityInstance %>.value as Record<string, unknown>)[field] = null;
+      (<%- entityInstance %>.value as Record<string, unknown>)[fieldContentType] = null;
       const input = document.getElementById(idInput) as HTMLInputElement | null;
       if (input) {
         input.value = '';
@@ -232,7 +233,8 @@ export default defineComponent({
 <%_ if (relationshipsContainManyToOne) { _%>
 
     // The server gives null for a collection without values.
-    const getSelected = (selectedVals, option, pkField = 'id') => selectedVals?.find(value => option[pkField] === value[pkField]) ?? option;
+    const getSelected = <T extends object>(selectedVals: T[] | null | undefined, option: T, pkField = 'id'): T =>
+      selectedVals?.find(value => (option as Record<string, unknown>)[pkField] === (value as Record<string, unknown>)[pkField]) ?? option;
 <%_ } _%>
 
     return {
