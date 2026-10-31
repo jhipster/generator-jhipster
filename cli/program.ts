@@ -232,10 +232,17 @@ export const buildCommands = ({
         if (cmdName === 'run') {
           command.usage(`${operands} [options]`);
           operands = Array.isArray(operands) ? operands : [operands];
-          command.generatorNamespaces = operands.map(
-            namespace => `${namespace.startsWith(JHIPSTER_NS) ? '' : `${JHIPSTER_NS}-`}${namespace}`,
+          // A scoped namespace (`@scope/jhipster-foo:bar`) is used as it is.
+          command.generatorNamespaces = operands.map(namespace =>
+            namespace.startsWith('@') || namespace.startsWith(JHIPSTER_NS) ? namespace : `${JHIPSTER_NS}-${namespace}`,
           );
-          envBuilder?.lookupGenerators(command.generatorNamespaces.map(namespace => `generator-${namespace.split(':')[0]}`));
+          // The package of `@scope/jhipster-foo` is `@scope/generator-jhipster-foo`; a registered one, like the dev blueprint, is not looked up.
+          const packagesToLookup = command.generatorNamespaces
+            .filter(namespace => !namespace.includes(':') || !env.getGeneratorMeta(namespace))
+            .map(namespace => namespace.split(':')[0].replace(/^(@[^/]+\/)?/, '$1generator-'));
+          if (packagesToLookup.length > 0) {
+            envBuilder?.lookupGenerators(packagesToLookup);
+          }
           for (const namespace of command.generatorNamespaces) {
             const resolved = resolveCommand({ command: namespace }, { getGeneratorMeta: namespace => env.getGeneratorMeta(namespace) });
             if (!resolved) {

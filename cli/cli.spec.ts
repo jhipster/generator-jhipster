@@ -702,6 +702,31 @@ describe('cli', () => {
         });
       });
     });
+    describe('running a generator of the dev blueprint by its scoped namespace', () => {
+      let stdout: string;
+      let exitCode: number | null;
+      before(done => {
+        const forked = fork(jhipsterCli, ['run', '@jhipster/jhipster-dev:generate-sample', '--help'], {
+          stdio: 'pipe',
+          env: { ...process.env, JHIPSTER_DEV_BLUEPRINT: 'true' },
+        });
+        forked.on('exit', code => {
+          exitCode = code;
+          stdout = forked.stdout?.read().toString();
+          done();
+        });
+      });
+
+      it('should print usage', () => {
+        expect(stdout).toMatch('Usage: jhipster run @jhipster/jhipster-dev:generate-sample [options]');
+      });
+      it('should print options', () => {
+        expect(stdout).toMatch('--sample-only');
+      });
+      it('should exit with code 0', () => {
+        expect(exitCode).toBe(0);
+      });
+    });
     describe('custom generator', () => {
       describe('--help', () => {
         let stdout: string;
