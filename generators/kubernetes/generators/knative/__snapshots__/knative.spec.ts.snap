@@ -571,42 +571,17 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall mspsql 2>/dev/null
-    else
-helm delete --purge mspsql 2>/dev/null
-    fi
+helm uninstall mspsql --namespace default 2>/dev/null
 helm dep up ./mspsql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install mspsql  ./mspsql-\${suffix} --replace --namespace default
-    else
-helm install --name mspsql  ./mspsql-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -1690,31 +1665,14 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -2565,42 +2523,17 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -3655,31 +3588,14 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -4540,75 +4456,26 @@ spec:
 cs=csvc
 suffix=knative
 kubectl label namespace default istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace default 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace default
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace default 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace default
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace default 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace default
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall mspsql 2>/dev/null
-    else
-helm delete --purge mspsql 2>/dev/null
-    fi
+helm uninstall mspsql --namespace default 2>/dev/null
 helm dep up ./mspsql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install mspsql  ./mspsql-\${suffix} --replace --namespace default
-    else
-helm install --name mspsql  ./mspsql-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmongodb 2>/dev/null
-    else
-helm delete --purge msmongodb 2>/dev/null
-    fi
+helm uninstall msmongodb --namespace default 2>/dev/null
 helm dep up ./msmongodb-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmongodb  ./msmongodb-\${suffix} --replace --namespace default
-    else
-helm install --name msmongodb  ./msmongodb-\${suffix} --replace --namespace default
-    fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmariadb 2>/dev/null
-    else
-helm delete --purge msmariadb 2>/dev/null
-    fi
+helm uninstall msmariadb --namespace default 2>/dev/null
 helm dep up ./msmariadb-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmariadb  ./msmariadb-\${suffix} --replace --namespace default
-    else
-helm install --name msmariadb  ./msmariadb-\${suffix} --replace --namespace default
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -8845,31 +8712,14 @@ cs=csvc
 suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace mynamespace istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace mynamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace mynamespace 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -9675,31 +9525,14 @@ cs=csvc
 suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace mynamespace istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace mynamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace mynamespace
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall msmysql 2>/dev/null
-    else
-helm delete --purge msmysql 2>/dev/null
-    fi
+helm uninstall msmysql --namespace mynamespace 2>/dev/null
 helm dep up ./msmysql-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    else
-helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamespace
-    fi
 ",
     "stateCleared": "modified",
   },
@@ -10503,31 +10336,14 @@ cs=csvc
 suffix=knative
 kubectl apply -f namespace.yml
 kubectl label namespace jhipsternamespace istio-injection=enabled
-helmVersion=$(helm version --client | grep -E "v3\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}" | wc -l)
 if [ -d "\${cs}-\${suffix}" ]; then
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall \${cs} 2>/dev/null
-    else
-helm delete --purge \${cs} 2>/dev/null
-    fi
+helm uninstall \${cs} --namespace jhipsternamespace 2>/dev/null
 helm dep up ./\${cs}-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install \${cs} ./\${cs}-\${suffix} --replace --namespace jhipsternamespace
-    else
-helm install --name \${cs} ./\${cs}-\${suffix} --replace --namespace jhipsternamespace
-    fi
 fi
-    if [ $helmVersion -eq 1 ]; then
-helm uninstall jhgate 2>/dev/null
-    else
-helm delete --purge jhgate 2>/dev/null
-    fi
+helm uninstall jhgate --namespace jhipsternamespace 2>/dev/null
 helm dep up ./jhgate-\${suffix}
-    if [ $helmVersion -eq 1 ]; then
 helm install jhgate  ./jhgate-\${suffix} --replace --namespace jhipsternamespace
-    else
-helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace jhipsternamespace
-    fi
 ",
     "stateCleared": "modified",
   },
