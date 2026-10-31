@@ -21,6 +21,9 @@ import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 <%_ if (builtInUserManagement) { _%>
 import { ref } from 'vue';
 <%_ } _%>
+<%_ if (!paginationNo) { _%>
+import { type Router, createMemoryHistory, createRouter } from 'vue-router';
+<%_ } _%>
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
@@ -72,8 +75,16 @@ describe('Component Tests', () => {
   describe('<%- entityAngularName %> Management Component', () => {
     let <%- entityInstance %>ServiceStub: Record<string, Mock>;
     let mountOptions: MountingOptions<<%- entityAngularName %>ComponentType>['global'];
+<%_ if (!paginationNo) { _%>
+    let router: Router;
+<%_ } _%>
 
-    beforeEach(() => {
+    beforeEach(async () => {
+<%_ if (!paginationNo) { _%>
+      router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/', component: { render: () => null } }] });
+      await router.push('/');
+
+<%_ } _%>
       <%- entityInstance %>ServiceStub = {
         retrieve: vi.fn(),
         delete: vi.fn(),
@@ -110,6 +121,9 @@ describe('Component Tests', () => {
         directives: {
           'b-modal': {},
         },
+<%_ if (!paginationNo) { _%>
+        plugins: [router],
+<%_ } _%>
         provide: {
           alertService,
           <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
@@ -223,7 +237,7 @@ describe('Component Tests', () => {
 
         // WHEN
         comp.page = 2;
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalled();
@@ -243,13 +257,13 @@ describe('Component Tests', () => {
       it('should re-initialize the page', async () => {
         // GIVEN
         comp.page = 2;
-        await comp.$nextTick();
+        await flushPromises();
         <%- entityInstance %>ServiceStub.retrieve.mockReset();
         <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
 
         // WHEN
         comp.clear();
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
         expect(comp.page).toEqual(1);
@@ -261,21 +275,35 @@ describe('Component Tests', () => {
       it('should reset the page when the order changes', async () => {
         // GIVEN
         comp.page = 2;
-        await comp.$nextTick();
+        await flushPromises();
 
         // WHEN
         comp.changeOrder('name');
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
         expect(comp.page).toEqual(1);
+        expect(router.currentRoute.value.query).toEqual({ page: '1', sort: 'name,asc' });
+      });
+
+      it('should read the page and the sort from the route', async () => {
+        // WHEN
+        await router.push({ query: { page: '3', sort: 'name,desc' } });
+        await flushPromises();
+
+        // THEN
+        expect(comp.page).toEqual(3);
+        expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
+          page: 2,
+          sort: ['name,desc', 'id'],
+        });
       });
 
   <%_ } _%>
       it('should calculate the sort attribute for a non-id attribute', async () => {
         // WHEN
-        comp.propOrder = 'name';
-        await comp.$nextTick();
+        comp.changeOrder('name');
+        await flushPromises();
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
@@ -412,7 +440,7 @@ describe('Component Tests', () => {
         const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: {}, plugins: [createBootstrap()] } });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: { ...mountOptions, provide: {}, plugins: [...(mountOptions?.plugins ?? []), createBootstrap()] } });
         await flushPromises();
 
         // THEN
