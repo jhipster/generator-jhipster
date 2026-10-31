@@ -21,7 +21,7 @@ import { describe, expect, it } from 'expect-node';
 
 import { lookupGenerators } from '../../../lib/utils/index.ts';
 
-import { detectChanges } from './git-changes.ts';
+import { detectChanges, isKubernetesOnly, isSnapshot, noChanges } from './git-changes.ts';
 
 describe('git-changes', () => {
   for (const generator of [
@@ -34,4 +34,30 @@ describe('git-changes', () => {
       });
     });
   }
+
+  describe('isKubernetesOnly', () => {
+    it('should accept the files of the Kubernetes generators only', () => {
+      expect(isKubernetesOnly(['generators/kubernetes/index.ts', 'generators/kubernetes/generators/knative/generator.ts'])).toBe(true);
+      expect(isKubernetesOnly(['generators/kubernetes/generators/helm/index.ts'])).toBe(true);
+      expect(isKubernetesOnly(['generators/kubernetes/index.ts', 'generators/vue/index.ts'])).toBe(false);
+      expect(isKubernetesOnly([])).toBe(false);
+    });
+  });
+
+  describe('noChanges', () => {
+    it('should have no area changed', () => {
+      expect(Object.values(noChanges()).some(Boolean)).toBe(false);
+    });
+  });
+
+  describe('isSnapshot', () => {
+    it('should accept the snapshots of the tests only', () => {
+      expect(isSnapshot('generators/kubernetes/generators/knative/__snapshots__/knative.spec.ts.snap')).toBe(true);
+      expect(isSnapshot('generators/vue/generator.spec.ts')).toBe(false);
+    });
+
+    it('should not count the snapshots as changes', () => {
+      expect(detectChanges(['generators/vue/__snapshots__/generator.spec.ts.snap'])).toEqual(noChanges());
+    });
+  });
 });
