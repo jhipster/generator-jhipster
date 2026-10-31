@@ -76,8 +76,11 @@ spec:
   <%_ if (istio) { _%>
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
               value: "false"
+            # The Knative Service answers on port 80 of its cluster address, not on the app's port
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
-              value: <%- app.baseName.toLowerCase() %>
+              value: <%- app.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.svc.cluster.local
+            - name: SPRING_CLOUD_CONSUL_DISCOVERY_PORT
+              value: "80"
             - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
               value: <%- app.baseName.toLowerCase() %>
   <%_ } _%>
