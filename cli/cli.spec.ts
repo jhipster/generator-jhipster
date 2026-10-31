@@ -727,6 +727,45 @@ describe('cli', () => {
         expect(exitCode).toBe(0);
       });
     });
+    describe('a blueprint checkout given by JHIPSTER_DEV_PATH', () => {
+      for (const namespace of ['@scope/jhipster-checkout:foo', '@jhipster/jhipster-dev:bar']) {
+        describe(`running ${namespace}`, () => {
+          let stdout: string;
+          let exitCode: number | null;
+          before(async () => {
+            await helpers
+              .prepareTemporaryDir()
+              .withFiles({
+                'checkout/package.json': { name: '@scope/generator-jhipster-checkout', version: '9.9.9', type: 'module' },
+                'checkout/generators/foo/index.js': cliBlueprintFiles['generators/foo/index.js'],
+                'checkout/generators/foo/command.js': cliBlueprintFiles['generators/foo/command.js'],
+                'checkout/.blueprint/bar/index.js': cliBlueprintFiles['generators/foo/index.js'],
+                'checkout/.blueprint/bar/command.js': cliBlueprintFiles['generators/foo/command.js'],
+              })
+              .commitFiles();
+          });
+          before(done => {
+            const forked = fork(jhipsterCli, ['run', namespace, '--foo-bar'], {
+              stdio: 'pipe',
+              env: { ...process.env, JHIPSTER_DEV_PATH: 'checkout' },
+            });
+            forked.on('exit', code => {
+              exitCode = code;
+              stdout = forked.stdout?.read().toString();
+              done();
+            });
+          });
+
+          it('should print runtime log', () => {
+            expect(stdout).toMatch('Running foo');
+            expect(stdout).toMatch('Running bar');
+          });
+          it('should exit with code 0', () => {
+            expect(exitCode).toBe(0);
+          });
+        });
+      }
+    });
     describe('custom generator', () => {
       describe('--help', () => {
         let stdout: string;
