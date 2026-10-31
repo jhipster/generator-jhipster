@@ -43,7 +43,9 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkHelm,
+      async checkHelm() {
+        await checkHelm.call(this);
+      },
     });
   }
 

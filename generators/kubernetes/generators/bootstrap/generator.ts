@@ -28,6 +28,7 @@ import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../../../spring-boot/generators/data-relational/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
+import { spawnCheckCommand } from '../../kubernetes-base.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
 
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
@@ -48,15 +49,12 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         if (this.skipChecks) return;
 
         // `--client` reports the kubectl version without contacting the current context's cluster.
-        const { exitCode, stderr } = await this.spawnCommand('kubectl version --client', { reject: false, stdio: 'pipe' });
+        const { exitCode } = await spawnCheckCommand.call(this, 'kubectl version --client');
         if (exitCode !== 0) {
           this.log.warn(
             'kubectl is not installed on your computer or does not run.\n' +
               'Make sure you have kubectl installed. Read https://kubernetes.io/docs/tasks/tools/\n',
           );
-          if (stderr) {
-            this.log.debug(stderr);
-          }
         }
       },
     });
