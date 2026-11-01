@@ -83,6 +83,8 @@ export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
   javaPackageTestDir: string;
 
   temporaryDir?: string;
+  /** The folder the build tool packages the jar or the war into. */
+  javaPackagingDestDir: string;
 
   reactive: boolean;
   buildToolUnknown?: boolean;
@@ -159,6 +161,17 @@ export const mutateApplicationPreparing = {
         return 'build/';
       default:
         throw new Error(`Unknown build tool: ${buildTool}`);
+    }
+  },
+  javaPackagingDestDir: ({ buildTool, temporaryDir }, { delayMarker }) => {
+    switch (buildTool) {
+      case 'maven':
+        return temporaryDir;
+      case 'gradle':
+        return `${temporaryDir}libs/`;
+      default:
+        // Delayed for a build tool a blueprint adds, which may set it, else the folder of maven.
+        return delayMarker ?? temporaryDir;
     }
   },
   clientRootDir: '',

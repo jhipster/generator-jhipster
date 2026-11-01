@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { Source as CommonSource } from '../../../common/types.d.ts';
+import { javaJarStartCommand } from '../../../java-simple-application/internal/java-jar-start-command.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
@@ -94,7 +95,11 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${application.javaPackagingDestDir}e2e.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment${application.e2eTls ? ',tls,tls-samples' : ''} ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+          'ci:e2e:server:start': `${javaJarStartCommand({
+            destDir: application.javaPackagingDestDir,
+            jarName: 'e2e.$npm_package_config_packaging',
+            profiles: `e2e,secret-samples,$npm_package_config_default_environment${application.e2eTls ? ',tls,tls-samples' : ''}`,
+          })} ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
       packageJsonE2eScripts({ application }) {
