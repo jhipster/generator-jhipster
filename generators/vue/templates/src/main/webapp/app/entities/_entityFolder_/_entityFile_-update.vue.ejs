@@ -50,7 +50,7 @@ _%>
       <%_ if (field.blobContentTypeImage) { _%>
                                 <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>')" class="btn btn-secondary btn-xs pull-end">
       <%_ } else { _%>
-                                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=null;<%- entityInstance %>.<%- fieldName %>ContentType=null;"
+                                <button type="button" @click="<%- entityInstance %>.<%- fieldName %>=undefined;<%- entityInstance %>.<%- fieldName %>ContentType=undefined;"
                                         class="btn btn-secondary btn-xs pull-end">
       <%_ } _%>
                                     <font-awesome-icon icon="times"></font-awesome-icon>

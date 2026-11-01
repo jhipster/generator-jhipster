@@ -22,6 +22,8 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
 
+import { type AxiosError } from 'axios';
+
 import { useAlertService } from '@/shared/alert/alert.service';
 <%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
 <%_ if (composables.length > 0) { _%>
@@ -60,7 +62,7 @@ export default defineComponent({
 <%_ if (!readOnly) { _%>
     const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
       alertService,
-      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>,
+      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>!,
       remove: id => <%- entityInstance %>Service().delete(id),
   <%_ if (enableTranslation) { _%>
       removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
@@ -71,17 +73,17 @@ export default defineComponent({
     });
 <%_ } _%>
 
-    const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
+    const retrieve<%- entityAngularName %> = async (<%- entityInstance %><%- primaryKey.nameCapitalized %>: string | number) => {
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
         <%- entityInstance %>.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showHttpError((error as AxiosError).response);
       }
     };
 
     if (route.params?.<%- entityInstance %>Id) {
-      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id);
+      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id as string);
     }
 
     return {
