@@ -46,6 +46,10 @@ export default class CommonGenerator extends BaseApplicationGenerator {
                 'shared/jhipster/problem-details.ts',
               ],
             }),
+            clientApplicationTemplatesBlock({
+              condition: ctx => ctx.clientTestFrameworkVitest,
+              templates: ['shared/jhipster/pagination.spec.ts'],
+            }),
           ],
           context: application,
         });

@@ -138,7 +138,6 @@ export const vueFiles = asWriteFilesSection({
         'shared/jhipster/data-utils.spec.ts',
         'shared/jhipster/headers.spec.ts',
         'shared/jhipster/link-header.spec.ts',
-        'shared/jhipster/pagination.spec.ts',
       ],
     },
   ],
