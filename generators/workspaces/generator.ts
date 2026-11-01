@@ -186,11 +186,12 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
       generatePackageJson({ applications }) {
         if (!this.generateWorkspaces) return;
 
-        // The npm packages: the official applications, and the ones of a blueprint with a package.json.
+        // The npm packages: the official applications, and the ones of a blueprint with node dependencies, which its
+        // javascript-simple-application bootstrap gives it, or a package.json already written.
         const packages = this.appsFolders.filter(appFolder => {
           const application = applications.find(app => app.appFolder === appFolder);
           return (
-            (application && isOfficialApplicationType(application.applicationType)) ||
+            (application && (isOfficialApplicationType(application.applicationType) || application.nodeDependencies)) ||
             this.fs.exists(this.destinationPath(appFolder, 'package.json'))
           );
         });

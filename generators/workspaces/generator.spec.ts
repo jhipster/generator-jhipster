@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 import { before, describe, it } from 'expect-node';
-import { basename } from 'node:path';
+import { basename, join } from 'node:path';
+
+import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
 
 import Generator from './generator.ts';
 
@@ -64,6 +66,24 @@ describe(`generator - ${generator}`, () => {
         .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
         .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' })
         .withFiles({ 'mobile/package.json': { name: 'mobile' } });
+
+      result.assertJsonFileContent('package.json', {
+        workspaces: { packages: ['gateway', 'mobile'] },
+        scripts: { 'docker:build': 'concurrently npm:docker:build:gateway npm:docker:build:mobile' },
+      });
+    });
+
+    it('keeps the application with node dependencies in the workspaces', async () => {
+      await helpers
+        .runJHipster(generator)
+        .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'mobile'] })
+        .withJHipsterConfig({ baseName: 'workspaces' })
+        .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
+        .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' })
+        // The application its blueprint bootstraps, with the javascript-simple-application bootstrap, before its package.json is written.
+        .onEnvironment(env => {
+          env.getContextMap(join(env.cwd, 'mobile')).set(CONTEXT_DATA_APPLICATION_KEY, { applicationType: 'expo', nodeDependencies: {} });
+        });
 
       result.assertJsonFileContent('package.json', {
         workspaces: { packages: ['gateway', 'mobile'] },
