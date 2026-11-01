@@ -34,7 +34,6 @@ export default defineConfig({
   root: path.join(import.meta.dirname, '<%- relativeDir(clientRootDir, clientSrcDir) %>'),
   resolve: {
     alias: {
-      vue$: 'vue/dist/vue.esm-bundler.js',
       '@content': path.resolve(import.meta.dirname, './<%- relativeDir(clientRootDir, clientSrcDir) %>content'),
       '@': path.resolve(import.meta.dirname, './<%- relativeDir(clientRootDir, clientSrcDir) %>app'),
     },
