@@ -77,8 +77,10 @@ export default defineComponent({
     const reverse = computed(() => sortParam.value[1] === 'desc');
   <%_ if (paginationPagination) { _%>
     const page = computed({
-      get: () => Number(route.query.page ?? 1),
-      set: (value: number) => {
+      get() {
+        return Number(route.query.page ?? 1);
+      },
+      set(value: number) {
         router.push({ query: { ...route.query, page: String(value) } });
       },
     });
