@@ -37,7 +37,19 @@ import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 import type { CliCommand } from './types.d.ts';
 import { logger } from './utils.ts';
 
-const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? join(import.meta.dirname, '../.blueprint') : undefined;
+/**
+ * The checkout of a blueprint in development, in `JHIPSTER_DEV_PATH`: its generators are looked up, its `.blueprint` is
+ * the dev blueprint. Given by the developer, like `JHIPSTER_DEV_BLUEPRINT`, `--disable-blueprints` does not affect it.
+ */
+const jhipsterDevPath = process.env.JHIPSTER_DEV_PATH ? resolve(process.env.JHIPSTER_DEV_PATH) : undefined;
+/** The dev blueprint: the `.blueprint` of `JHIPSTER_DEV_PATH`, else the one of generator-jhipster with `JHIPSTER_DEV_BLUEPRINT=true`. */
+const getJHipsterDevBlueprintPath = (): string | undefined => {
+  if (jhipsterDevPath) {
+    return join(jhipsterDevPath, '.blueprint');
+  }
+  return process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? join(import.meta.dirname, '../.blueprint') : undefined;
+};
+const jhipsterDevBlueprintPath = getJHipsterDevBlueprintPath();
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
 // Local and dev blueprints generators.
@@ -157,6 +169,9 @@ export default class EnvironmentBuilder {
     this._lookupDevBlueprint();
     this._loadBlueprints(blueprints);
     this._lookups(lookups);
+    if (jhipsterDevPath) {
+      this._lookups([{ packagePaths: [jhipsterDevPath] }]);
+    }
     this._lookupBlueprints();
     await this._loadSharedOptions();
     return this;
