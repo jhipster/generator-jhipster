@@ -25,7 +25,7 @@ export default class ActivateService {
     this.axios = axios;
   }
 
-  activateAccount(key: string): Promise<AxiosResponse<void>> {
+  activateAccount(key: string | null): Promise<AxiosResponse<void>> {
     return this.axios.get(`api/activate?key=${key}`);
   }
 }

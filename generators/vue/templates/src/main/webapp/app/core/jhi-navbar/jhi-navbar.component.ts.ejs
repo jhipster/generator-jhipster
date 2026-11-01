@@ -61,7 +61,7 @@ export default defineComponent({
   },
   setup() {
 <%_ if (authenticationUsesCsrf) { _%>
-    const loginService = inject<LoginService>('loginService');
+    const loginService = inject<LoginService>('loginService')!;
   <%_ if (authenticationTypeOauth2) { _%>
     const { login } = loginService;
   <%_ } _%>
@@ -70,10 +70,10 @@ export default defineComponent({
 <%_ if (generateUserManagement) { _%>
     const { showLogin } = useLoginModal();
 <%_ } _%>
-    const accountService = inject<AccountService>('accountService');
+    const accountService = inject<AccountService>('accountService')!;
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 <%_ if (enableTranslation) { _%>
-    const changeLanguage = inject<(string) => Promise<void>>('changeLanguage');
+    const changeLanguage = inject<(language: string) => Promise<void>>('changeLanguage')!;
 
     const isActiveLanguage = (key: string) => key === currentLanguage.value;
 <%_ } _%>

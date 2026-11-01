@@ -38,7 +38,7 @@ export default defineComponent({
 
     const healthModal = ref<{ show: () => void } | null>(null);
 
-    const baseName = (name: string): string => healthService.getBaseName(name);
+    const baseName = (name: string): string | undefined => healthService.getBaseName(name);
     const getBadgeClass = (statusState: unknown): string => (statusState === 'UP' ? 'bg-success' : 'bg-danger');
     const refresh = (): void => {
       updatingHealth.value = true;
@@ -59,7 +59,7 @@ export default defineComponent({
       currentHealth.value = health;
       healthModal.value?.show();
     };
-    const subSystemName = (name: string): string => healthService.getSubSystemName(name);
+    const subSystemName = (name: string): string | undefined => healthService.getSubSystemName(name);
 
     onMounted(() => {
       refresh();

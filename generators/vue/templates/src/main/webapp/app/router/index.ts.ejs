@@ -67,6 +67,12 @@ declare module 'vue-router' {
   interface RouteMeta {
     /** The authorities allowed to access the route. */
     authorities?: string[];
+    /** The message of the error page. */
+    errorMessage?: string;
+    /** The error page shows the forbidden error. */
+    error403?: boolean;
+    /** The error page shows the not found error. */
+    error404?: boolean;
   }
 }
 

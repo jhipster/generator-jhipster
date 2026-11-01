@@ -19,13 +19,114 @@
 import axios, { type AxiosPromise } from 'axios';
 
 /** The metrics of the jhimetrics endpoint, by group. */
-export type Metrics = Record<string, unknown>;
+export interface Metrics {
+  jvm: Record<string, JvmMetrics>;
+  databases: Databases;
+  'http.server.requests': HttpServerRequests;
+  cache: Record<string, CacheMetrics>;
+  garbageCollector: GarbageCollector;
+  services: Record<string, Record<string, MaxMeanCount>>;
+  processMetrics: ProcessMetrics;
+}
+
+export interface JvmMetrics {
+  committed: number;
+  max: number;
+  used: number;
+}
+
+export interface Databases {
+  min: Value;
+  idle: Value;
+  max: Value;
+  usage: MetricsWithPercentile;
+  pending: Value;
+  active: Value;
+  acquire: MetricsWithPercentile;
+  creation: MetricsWithPercentile;
+  connections: Value;
+}
+
+export interface Value {
+  value: number;
+}
+
+export interface MetricsWithPercentile {
+  '0.0': number;
+  '1.0': number;
+  max: number;
+  totalTime: number;
+  mean: number;
+  '0.5': number;
+  count: number;
+  '0.99': number;
+  '0.75': number;
+  '0.95': number;
+}
+
+export interface HttpServerRequests {
+  all: {
+    count: number;
+  };
+  percode: Record<string, MaxMeanCount>;
+}
+
+export interface MaxMeanCount {
+  max: number;
+  mean: number;
+  count: number;
+}
+
+export interface CacheMetrics {
+  'cache.gets.miss': number;
+  'cache.puts': number;
+  'cache.gets.hit': number;
+  'cache.removals': number;
+  'cache.evictions': number;
+}
+
+export interface GarbageCollector {
+  'jvm.gc.max.data.size': number;
+  'jvm.gc.pause': MetricsWithPercentile;
+  'jvm.gc.memory.promoted': number;
+  'jvm.gc.memory.allocated': number;
+  classesLoaded: number;
+  'jvm.gc.live.data.size': number;
+  classesUnloaded: number;
+}
+
+export interface ProcessMetrics {
+  'system.cpu.usage': number;
+  'system.cpu.count': number;
+  'system.load.average.1m'?: number;
+  'process.cpu.usage': number;
+  'process.files.max'?: number;
+  'process.files.open'?: number;
+  'process.start.time': number;
+  'process.uptime': number;
+}
+
+/** A frame of the stack trace of a thread. */
+export interface StackTrace {
+  className: string;
+  methodName: string;
+  fileName: string;
+  lineNumber: number;
+}
 
 /** A thread of the thread dump endpoint. */
 export interface Thread {
   threadName: string;
+  threadId: number;
   threadState: string;
-  [key: string]: unknown;
+  blockedTime: number;
+  blockedCount: number;
+  waitedTime: number;
+  waitedCount: number;
+  lockName: string | null;
+  stackTrace: StackTrace[];
+  /** The stack trace is shown in the modal. */
+  show?: boolean;
 }
 
 export default class MetricsService {
