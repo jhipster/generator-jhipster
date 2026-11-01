@@ -81,7 +81,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
-    const version = `v${APP_VERSION}`;
+    const version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
     const hasAnyAuthorityValues: Ref<Record<string, boolean>> = ref({});
 
     const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
