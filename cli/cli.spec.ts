@@ -827,6 +827,71 @@ describe('cli', () => {
         expect(exitCode).toBe(0);
       });
     });
+    describe('running a generator of the dev blueprint with a blueprint', () => {
+      let stdout: string;
+      let exitCode: number | null;
+      before(async () => {
+        await helpers
+          .prepareTemporaryDir()
+          .withFiles({
+            'checkout/package.json': { name: 'generator-jhipster-checkout', version: '9.9.9', type: 'module' },
+            'checkout/generators/app/index.js': cliBlueprintFiles['generators/foo/index.js'],
+            'checkout/generators/app/command.js': `export default {
+  configs: {
+    checkoutOption: {
+      cli: {
+        type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
+      scope: 'storage',
+    },
+  },
+};
+`,
+            'checkout/.blueprint/baz/index.js': `export const createGenerator = async env => {
+  const BaseGenerator = await env.requireGenerator('jhipster:base');
+  return class extends BaseGenerator {
+    get [BaseGenerator.INITIALIZING]() {
+      return {
+        log() {
+          /* eslint-disable no-console */
+          console.log(\`Blueprint configs: \${'checkoutOption' in this.options.commandsConfigs}\`);
+        },
+      };
+    }
+  };
+};
+`,
+            'checkout/.blueprint/baz/command.js': `export default {
+  configs: {},
+  import: ['app'],
+};
+`,
+          })
+          .commitFiles();
+      });
+      before(done => {
+        const forked = fork(jhipsterCli, ['run', '@jhipster/jhipster-dev:baz', '--blueprints', 'checkout'], {
+          stdio: 'pipe',
+          env: { ...process.env, JHIPSTER_DEV_PATH: 'checkout' },
+        });
+        forked.on('exit', code => {
+          exitCode = code;
+          stdout = forked.stdout?.read().toString();
+          done();
+        });
+      });
+
+      it('should pass the configs of the commands of the blueprint', () => {
+        expect(stdout).toMatch('Blueprint configs: true');
+      });
+      it('should exit with code 0', () => {
+        expect(exitCode).toBe(0);
+      });
+    });
     describe('custom generator', () => {
       describe('--help', () => {
         let stdout: string;

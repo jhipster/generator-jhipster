@@ -249,7 +249,13 @@ export const buildCommands = ({
             envBuilder?.lookupGenerators(packagesToLookup);
           }
           for (const namespace of command.generatorNamespaces) {
-            const resolved = resolveCommand({ command: namespace }, { getGeneratorMeta: namespace => env.getGeneratorMeta(namespace) });
+            const resolved = resolveCommand(
+              { command: namespace },
+              {
+                getGeneratorMeta: namespace => env.getGeneratorMeta(namespace),
+                blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
+              },
+            );
             if (!resolved) {
               logger.fatal(chalk.red(`\nGenerator ${namespace} not found.\n`));
             }
