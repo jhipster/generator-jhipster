@@ -39,6 +39,8 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
     if (!isOfficialApplicationType(applicationType)) {
       this.log.debug(`${applicationType} is not an official application type, its blueprint generates the application.`);
       this.cancelCancellableTasks();
+      // The base name and the creation timestamp, which javascript-simple-application gives the official ones.
+      await this.dependsOnJHipster('project-name');
     } else {
       await this.dependsOnJHipster('javascript-simple-application');
     }
