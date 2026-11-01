@@ -18,6 +18,8 @@
  */
 import { before, describe, expect, it } from 'expect-node';
 
+import { CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
+
 import type Generator from './generator.ts';
 
 import { testBlueprintSupport } from '#test-support';
@@ -27,6 +29,8 @@ const helpers = createTestHelpers<Generator>({
   importMeta: import.meta,
 });
 const result = typedResult<Generator>();
+const getJHipsterConfig = (): { creationTimestamp: number } => (result.fs.readJSON('.yo-rc.json') as any)['generator-jhipster'];
+const getSource = (): Record<string, unknown> | undefined => result.env.getContextMap(result.cwd).get(CONTEXT_DATA_SOURCE_KEY);
 
 describe(`generator - ${helpers.commandName}`, () => {
   it('should support features parameter', async () => {
@@ -83,9 +87,54 @@ describe(`generator - ${helpers.commandName}`, () => {
         await helpers.runJHipster().withJHipsterConfig({ applicationType: 'expo' });
       });
 
-      it('should write the config and the package.json only', () => {
-        expect(Object.keys(result.getStateSnapshot()).sort()).toEqual(['.yo-rc.json', 'package.json']);
+      it('should write the config only', () => {
+        expect(Object.keys(result.getStateSnapshot()).sort()).toEqual(['.yo-rc.json']);
       });
+      it('should not bootstrap the server nor the client', () => {
+        expect(getSource()?.editJavaFile).toBeUndefined();
+        expect(result.application?.frontendAppName).toBeUndefined();
+      });
+    });
+  });
+
+  describe('with an application type of a blueprint without creationTimestamp', () => {
+    describe('reproducible', () => {
+      before(async () => {
+        // @ts-expect-error a type a blueprint declares, out of the official ones
+        await helpers.runJHipster().withJHipsterConfig({ applicationType: 'expo', creationTimestamp: undefined });
+      });
+
+      it('should write the reproducible creationTimestamp of the base name', () => {
+        const { creationTimestamp } = getJHipsterConfig();
+        expect(creationTimestamp).toBeGreaterThan(new Date(2023, 11, 1).getTime());
+        expect(creationTimestamp).toBeLessThanOrEqual(new Date(2024, 0, 1).getTime());
+      });
+    });
+
+    describe('not reproducible', () => {
+      const startTime = Date.now();
+      before(async () => {
+        await helpers
+          .runJHipster()
+          // @ts-expect-error a type a blueprint declares, out of the official ones
+          .withJHipsterConfig({ applicationType: 'expo', creationTimestamp: undefined })
+          .withOptions({ reproducible: false });
+      });
+
+      it('should write the current time as creationTimestamp', () => {
+        expect(getJHipsterConfig().creationTimestamp).toBeGreaterThanOrEqual(startTime);
+      });
+    });
+  });
+
+  describe('with an official application type', () => {
+    before(async () => {
+      await helpers.runJHipster().withJHipsterConfig({ applicationType: 'monolith' }).withSkipWritingPriorities();
+    });
+
+    it('should bootstrap the server and the client', () => {
+      expect(getSource()?.editJavaFile).toBeDefined();
+      expect(result.application?.frontendAppName).toBeDefined();
     });
   });
 
