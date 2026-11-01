@@ -28,11 +28,11 @@ export type SortState = { predicate?: string; order?: SortOrder };
  * The sort state of a sort parameter: `<predicate>,<order>`, or `<predicate>` without an order.
  */
 export const parseSortParam = (sortParam: string | null | undefined): SortState => {
-  const [predicate, order] = (sortParam ?? '').split(',');
-  if (!predicate) {
-    return {};
+  if (!sortParam?.includes(',')) {
+    return sortParam ? { predicate: sortParam } : {};
   }
-  return order === undefined ? { predicate } : { predicate, order: order === 'desc' ? 'desc' : 'asc' };
+  const [predicate, order] = sortParam.split(',');
+  return predicate ? { predicate, order: order === 'desc' ? 'desc' : 'asc' } : {};
 };
 
 /**
