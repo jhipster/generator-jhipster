@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe, it } from 'expect-node';
+import { before, describe, it } from 'expect-node';
 import { basename } from 'node:path';
 
 import Generator from './generator.ts';
@@ -56,15 +56,42 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('with an application of a type of a blueprint', () => {
-    it('keeps the application in the workspaces', async () => {
+    it('keeps the application with a package.json in the workspaces', async () => {
       await helpers
         .runJHipster(generator)
         .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['gateway', 'mobile'] })
         .withJHipsterConfig({ baseName: 'workspaces' })
         .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' })
-        .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' });
+        .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'expo' })
+        .withFiles({ 'mobile/package.json': { name: 'mobile' } });
 
-      result.assertJsonFileContent('package.json', { workspaces: { packages: ['gateway', 'mobile'] } });
+      result.assertJsonFileContent('package.json', {
+        workspaces: { packages: ['gateway', 'mobile'] },
+        scripts: { 'docker:build': 'concurrently npm:docker:build:gateway npm:docker:build:mobile' },
+      });
+    });
+
+    describe('without a package.json', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          // The application of the blueprint first: the dependencies of the workspaces are looked up in the applications in order.
+          .withOptions({ workspaces: true, monorepository: true, workspacesFolders: ['mobile', 'gateway'] })
+          .withJHipsterConfig({ baseName: 'workspaces' })
+          .withWorkspaceApplicationAtFolder('mobile', { baseName: 'mobile', applicationType: 'flutter' })
+          .withWorkspaceApplicationAtFolder('gateway', { baseName: 'gateway', applicationType: 'gateway' });
+      });
+
+      it('leaves the application out of the npm workspaces and their scripts', () => {
+        result.assertJsonFileContent('package.json', {
+          workspaces: { packages: ['gateway'] },
+          scripts: {
+            'docker:build': 'concurrently npm:docker:build:gateway',
+            'docker:build:gateway': 'npm run docker:build --workspace gateway --if-present',
+          },
+        });
+        result.assertNoFileContent('package.json', /--workspace mobile/);
+      });
     });
   });
 

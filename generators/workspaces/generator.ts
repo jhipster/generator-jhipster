@@ -18,6 +18,7 @@
  */
 import assert from 'node:assert';
 
+import { isOfficialApplicationType } from '../../lib/core/application-types.ts';
 import { packageJson } from '../../lib/index.ts';
 import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
@@ -185,11 +186,19 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
       generatePackageJson({ applications }) {
         if (!this.generateWorkspaces) return;
 
+        // The npm packages: the official applications, and the ones of a blueprint with a package.json.
+        const packages = this.appsFolders.filter(appFolder => {
+          const application = applications.find(app => app.appFolder === appFolder);
+          return (
+            (application && isOfficialApplicationType(application.applicationType)) ||
+            this.fs.exists(this.destinationPath(appFolder, 'package.json'))
+          );
+        });
         const findDependencyVersion = (dependency: string): string | undefined =>
-          applications.find(app => app.nodeDependencies[dependency])?.nodeDependencies[dependency];
+          applications.find(app => app.nodeDependencies?.[dependency])?.nodeDependencies[dependency];
         this.packageJson.merge({
           workspaces: {
-            packages: this.appsFolders,
+            packages,
           },
           devDependencies: {
             concurrently: findDependencyVersion('concurrently')!,
@@ -198,7 +207,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
             'ci:e2e:run': 'npm run e2e:headless --workspaces --if-present',
             ...this.getOtherScripts(),
-            ...this.createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'docker:build'),
+            ...this.createPackagesConcurrentlyScript(packages, 'watch', 'backend:build-cache', 'java:docker', 'docker:build'),
             ...this.createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
         });
@@ -260,12 +269,17 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   createConcurrentlyScript(...scripts: string[]) {
+    return this.createPackagesConcurrentlyScript(this.appsFolders, ...scripts);
+  }
+
+  /** The scripts running a script in each package, and concurrently in all of them. */
+  createPackagesConcurrentlyScript(packages: string[], ...scripts: string[]) {
     const scriptsList = scripts.flatMap(script => {
-      const packageScripts = this.appsFolders.map(packageName => [
+      const packageScripts = packages.map(packageName => [
         `${script}:${packageName}`,
         `npm run ${script} --workspace ${packageName} --if-present`,
       ]);
-      packageScripts.push([script, `concurrently ${this.appsFolders.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
+      packageScripts.push([script, `concurrently ${packages.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
       return packageScripts;
     });
     return Object.fromEntries(scriptsList);
