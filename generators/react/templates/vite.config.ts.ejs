@@ -123,7 +123,9 @@ const config = defineConfig({
     proxy: Object.fromEntries(
       [
         '/api',
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
         '/services',
+<%_ } _%>
         '/management',
         '/v3/api-docs',
 <%_ if (databaseTypeSql && devDatabaseTypeH2Any) { _%>
