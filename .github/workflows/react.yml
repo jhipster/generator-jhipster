@@ -59,8 +59,11 @@ jobs:
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
       - run: npm ci --production --engine-strict --ignore-scripts
+      - name: 'SETUP: Fetch the commit before the push'
+        if: github.event_name == 'push'
+        run: git fetch --depth=1 origin ${{ github.event.before }} || true
       - id: build
-        run: bin/jhipster.cjs github-build-matrix react --event-name ${{ github.event_name }}
+        run: bin/jhipster.cjs github-build-matrix react --event-name ${{ github.event_name }}${{ github.event_name == 'push' && format(' --push-before {0}', github.event.before) || '' }}
   applications:
     name: ${{ matrix.job-name }}
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
