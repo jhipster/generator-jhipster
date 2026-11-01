@@ -46,14 +46,12 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
     const { applicationType } = this.jhipsterConfig;
     if (!isOfficialApplicationType(applicationType)) {
-      // The common configuration is loaded, the workspaces read it, but the client and the server are the ones of its blueprint.
-      this.log.debug(`${applicationType} is not an official application type, its blueprint bootstraps the client and the server.`);
-      await this.dependsOnBootstrap('common');
-      return;
+      this.log.debug(`${applicationType} is not an official application type, its blueprint bootstraps the application.`);
+      this.cancelCancellableTasks();
+    } else {
+      await this.dependsOnBootstrap('client');
+      await this.dependsOnBootstrap('server');
     }
-
-    await this.dependsOnBootstrap('client');
-    await this.dependsOnBootstrap('server');
   }
 
   get preparing() {
