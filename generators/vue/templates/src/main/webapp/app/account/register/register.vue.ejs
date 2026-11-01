@@ -25,7 +25,7 @@
       <div class="col-md-8">
         <form id="register-form" name="registerForm" novalidate @submit.prevent="register()" v-if="!success">
           <div class="mb-3">
-            <label class="form-control-label" for="username">{{ t$('global.form[\'username.label\']') }}</label>
+            <label class="form-label" for="username">{{ t$('global.form[\'username.label\']') }}</label>
             <input
               type="text"
               class="form-control"
@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
+            <label class="form-label" for="email">{{ t$('global.form[\'email.label\']') }}</label>
             <input
               type="email"
               class="form-control"
@@ -87,7 +87,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="firstPassword">{{ t$('global.form[\'newpassword.label\']') }}</label>
+            <label class="form-label" for="firstPassword">{{ t$('global.form[\'newpassword.label\']') }}</label>
             <input
               type="password"
               class="form-control"
@@ -114,7 +114,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-control-label" for="secondPassword"
+            <label class="form-label" for="secondPassword"
               >{{ t$('global.form[\'confirmpassword.label\']') }}</label
             >
             <input
