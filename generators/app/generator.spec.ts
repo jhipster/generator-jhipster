@@ -18,6 +18,8 @@
  */
 import { before, describe, expect, it } from 'expect-node';
 
+import { CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
+
 import type Generator from './generator.ts';
 
 import { testBlueprintSupport } from '#test-support';
@@ -27,6 +29,7 @@ const helpers = createTestHelpers<Generator>({
   importMeta: import.meta,
 });
 const result = typedResult<Generator>();
+const getSource = (): Record<string, unknown> => result.env.getContextMap(result.cwd).get(CONTEXT_DATA_SOURCE_KEY);
 
 describe(`generator - ${helpers.commandName}`, () => {
   it('should support features parameter', async () => {
@@ -86,6 +89,21 @@ describe(`generator - ${helpers.commandName}`, () => {
       it('should write the config and the package.json only', () => {
         expect(Object.keys(result.getStateSnapshot()).sort()).toEqual(['.yo-rc.json', 'package.json']);
       });
+      it('should not bootstrap the server nor the client', () => {
+        expect(getSource().editJavaFile).toBeUndefined();
+        expect(result.application?.frontendAppName).toBeUndefined();
+      });
+    });
+  });
+
+  describe('with an official application type', () => {
+    before(async () => {
+      await helpers.runJHipster().withJHipsterConfig({ applicationType: 'monolith' }).withSkipWritingPriorities();
+    });
+
+    it('should bootstrap the server and the client', () => {
+      expect(getSource().editJavaFile).toBeDefined();
+      expect(result.application?.frontendAppName).toBeDefined();
     });
   });
 

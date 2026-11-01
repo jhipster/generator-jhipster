@@ -18,17 +18,23 @@
  */
 import assert from 'node:assert';
 
+import { isOfficialApplicationType } from '../../../../lib/core/application-types.ts';
 import { validations } from '../../../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { stringifyApplicationData } from '../../../base-application/support/index.ts';
-import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../../../common/types.ts';
+import type {
+  Application as CommonApplication,
+  Config as CommonConfig,
+  Entity as CommonEntity,
+  Field as CommonField,
+} from '../../../common/types.ts';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -36,6 +42,14 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
     if (this.delegateToBlueprint) {
       throw new Error('Only sbs blueprint is supported');
+    }
+
+    const { applicationType } = this.jhipsterConfig;
+    if (!isOfficialApplicationType(applicationType)) {
+      // The common configuration is loaded, the workspaces read it, but the client and the server are the ones of its blueprint.
+      this.log.debug(`${applicationType} is not an official application type, its blueprint bootstraps the client and the server.`);
+      await this.dependsOnBootstrap('common');
+      return;
     }
 
     await this.dependsOnBootstrap('client');
