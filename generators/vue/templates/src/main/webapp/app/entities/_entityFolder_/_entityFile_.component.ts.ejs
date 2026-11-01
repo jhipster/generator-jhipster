@@ -37,6 +37,9 @@ import { <%- composables.join(', ') %> } from '@/shared/composables';
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
+<%_ if (!paginationNo) { _%>
+import { <%- paginationPagination ? 'PAGE_PARAM, ' : '' %>SORT_PARAM, buildSortParam, <%- paginationPagination ? 'parsePageParam, ' : '' %>parseSortParam } from '@/shared/jhipster/pagination';
+<%_ } _%>
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
@@ -72,16 +75,16 @@ export default defineComponent({
   <%_ } else { _%>
     // The sort of the list is kept in the query parameters of the route.
   <%_ } _%>
-    const sortParam = computed(() => String(route.query.sort ?? 'id,asc').split(','));
-    const propOrder = computed(() => sortParam.value[0]);
-    const reverse = computed(() => sortParam.value[1] === 'desc');
+    const sortState = computed(() => parseSortParam(route.query[SORT_PARAM]?.toString() ?? 'id,asc'));
+    const propOrder = computed(() => sortState.value.predicate ?? 'id');
+    const reverse = computed(() => sortState.value.order === 'desc');
   <%_ if (paginationPagination) { _%>
     const page = computed({
       get() {
-        return Number(route.query.page ?? 1);
+        return parsePageParam(route.query[PAGE_PARAM]?.toString());
       },
       set(value: number) {
-        router.push({ query: { ...route.query, page: String(value) } });
+        router.push({ query: { ...route.query, [PAGE_PARAM]: String(value) } });
       },
     });
   <%_ } else { _%>
@@ -113,13 +116,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
 
-    const sort = (): string[] => {
-      const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
-      if (propOrder.value !== 'id') {
-        result.push('id');
-      }
-      return result;
-    };
+    const sort = (): string[] => buildSortParam({ predicate: propOrder.value, order: reverse.value ? 'desc' : 'asc' }, 'id');
 <%_ } _%>
 
     const retrieve<%- entityAngularName %>s = async () => {
@@ -223,7 +220,15 @@ export default defineComponent({
   <%_ } _%>
     const changeOrder = (newOrder: string) => {
       const descending = propOrder.value === newOrder && !reverse.value;
-      router.push({ query: { ...route.query, <%- paginationPagination ? "page: '1', " : '' %>sort: `${newOrder},${descending ? 'desc' : 'asc'}` } });
+      router.push({
+        query: {
+          ...route.query,
+  <%_ if (paginationPagination) { _%>
+          [PAGE_PARAM]: '1',
+  <%_ } _%>
+          [SORT_PARAM]: buildSortParam({ predicate: newOrder, order: descending ? 'desc' : 'asc' }),
+        },
+      });
     };
   <%_ if (paginationInfiniteScroll) { _%>
 

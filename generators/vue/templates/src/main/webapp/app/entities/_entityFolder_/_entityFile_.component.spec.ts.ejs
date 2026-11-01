@@ -283,7 +283,7 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.page).toEqual(1);
-        expect(router.currentRoute.value.query).toEqual({ page: '1', sort: 'name,asc' });
+        expect(router.currentRoute.value.query).toEqual({ page: '1', sort: ['name,asc'] });
       });
 
       it('should read the page and the sort from the route', async () => {
@@ -295,7 +295,7 @@ describe('Component Tests', () => {
         expect(comp.page).toEqual(3);
         expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
           page: 2,
-          sort: ['name,desc', 'id'],
+          sort: ['name,desc', 'id,asc'],
         });
       });
 
@@ -307,7 +307,7 @@ describe('Component Tests', () => {
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
-          sort: ['name,asc', 'id'],
+          sort: ['name,asc', 'id,asc'],
         });
       });
 <%_ } _%>

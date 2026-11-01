@@ -92,6 +92,9 @@ import { Filter, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { type BlobType } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
+<%_ if (paginationPagination) { _%>
+import { parsePageParam } from 'app/shared/jhipster/pagination';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
@@ -326,8 +329,7 @@ export class <%- componentName %> {
 <%_ } _%>
     private fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
 <%_ if (paginationPagination) { _%>
-      const page = params.get(PAGE_HEADER);
-      this.page.set(+ (page ?? 1));
+      this.page.set(parsePageParam(params.get(PAGE_HEADER)));
 <%_ } _%>
       this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
