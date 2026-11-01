@@ -451,6 +451,37 @@ describe('Component Tests', () => {
         expect(comp.isSaving).toBe(false);
       });
 
+<%_ if (allRelationshipsThatNeedSelectOptions.length > 0) { _%>
+      it('Should show the error of a failed load of the relationships', async () => {
+        // GIVEN
+        const failedRetrieve = () => ({ retrieve: vi.fn().mockRejectedValue({ response: { status: 500 } }) });
+        <%- entityInstance %>ServiceStub.retrieve.mockRejectedValue({ response: { status: 500 } });
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Update, {
+          global: {
+            ...mountOptions,
+            provide: {
+              ...mountOptions.provide,
+  <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
+    <%_ if (relationship.otherEntityUser && generateBuiltInUserEntity) { _%>
+              userService: failedRetrieve,
+    <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
+              <%- relationship.otherEntity.entityInstance %>Service: failedRetrieve,
+    <%_ } _%>
+  <%_ } _%>
+            },
+          },
+        });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).toHaveBeenCalledTimes(<%- allRelationshipsThatNeedSelectOptions.length %>);
+        expect(showHttpError).toHaveBeenCalledWith({ status: 500 });
+      });
+
+<%_ } _%>
       it('Should use the default services', async () => {
         // GIVEN
         const get = vi.spyOn(axios, 'get').mockResolvedValue({ headers: {}, data: [] });
