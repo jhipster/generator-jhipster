@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosResponse } from 'axios';
 
 export interface ServiceInstance {
@@ -40,3 +42,5 @@ export default class GatewayService {
     });
   }
 }
+
+export const gatewayServiceKey: InjectionKey<GatewayService> = Symbol.for('jhipster:gatewayService');

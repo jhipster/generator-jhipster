@@ -29,8 +29,9 @@ import { useRoute, useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core'
 import { type AxiosError } from 'axios';
 
-import { useAlertService } from '@/shared/alert/alert.service';
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
 import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
+import { currentLanguageKey } from '@/shared/config/injection-keys';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
@@ -45,14 +46,14 @@ _%>
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
 import { type IUser } from '@/entities/user/user.model';
-import UserService from '@/entities/user/user.service';
+import UserService, { userServiceKey } from '@/entities/user/user.service';
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
-import <%- relationship.otherEntity.entityAngularName %>Service from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
+import <%- relationship.otherEntity.entityAngularName %>Service, { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
 import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/entities/<%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.model';
   <%_ } _%>
 <%_ } _%>
 import { type I<%- entityAngularName %>, <%- entityAngularName %> } from './<%- entityFileName %>.model';
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 <%_ for (const constantImport of new Set(clientConstantFields.map(field => field.vueFieldClientConstant.vueConstantImport))) { _%>
 <%- constantImport %>
 <%_ } _%>
@@ -64,8 +65,8 @@ import { <%- importedType %> } from '<%- importedPath %>';
 export default defineComponent({
   name: '<%- entityAngularName %>Update',
   setup() {
-    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+    const alertService = inject(alertServiceKey, () => useAlertService(), true);
 
     const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref(new <%- entityAngularName %>());
 <%_ if (relationshipsContainManyToOne) { _%>
@@ -75,12 +76,12 @@ export default defineComponent({
 <%_ } _%>
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
-    const userService = inject('userService', () => new UserService());
+    const userService = inject(userServiceKey, () => new UserService());
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<IUser[]> = ref([]);
   <%_ } else { _%>
     <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 
-    const <%- relationship.otherEntity.entityInstance %>Service = inject('<%- relationship.otherEntity.entityInstance %>Service', () => new <%- relationship.otherEntity.entityAngularName %>Service());
+    const <%- relationship.otherEntity.entityInstance %>Service = inject(<%- relationship.otherEntity.entityInstance %>ServiceKey, () => new <%- relationship.otherEntity.entityAngularName %>Service());
     <%_ } _%>
 
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<I<%- relationship.otherEntity.entityAngularName %>[]> = ref([]);
@@ -93,7 +94,7 @@ export default defineComponent({
     const <%- field.fieldName %>Values: string[] = <%- field.vueFieldClientConstant.vueConstantValues %>;
 <%_ } _%>
     const isSaving = ref(false);
-    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+    const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
     const route = useRoute();
     const router = useRouter();

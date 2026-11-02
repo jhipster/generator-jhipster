@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
 import { type Composer } from 'vue-i18n';
 
 <%_ if (microfrontend) { _%>
@@ -85,3 +86,5 @@ export default class TranslationService {
     return localStorage.getItem('currentLanguage');
   }
 }
+
+export const translationServiceKey: InjectionKey<TranslationService> = Symbol.for('jhipster:translationService');

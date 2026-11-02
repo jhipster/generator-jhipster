@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosResponse } from 'axios';
 
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
@@ -71,3 +73,5 @@ export default class <%- entityAngularName %>Service {
   }
 <%_ } _%>
 }
+
+export const <%- entityInstance %>ServiceKey: InjectionKey<() => <%- entityAngularName %>Service> = Symbol.for('jhipster:<%- entityInstance %>Service');

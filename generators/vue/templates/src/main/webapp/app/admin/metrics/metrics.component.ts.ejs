@@ -24,7 +24,7 @@ import { useI18n } from 'vue-i18n';
 import { useDateFormat } from '@/shared/composables'
 
 import <%- jhiPrefixCapitalized %>MetricsModal from './metrics-modal.vue';
-import MetricsService, { type Metrics, type Thread } from './metrics.service';
+import MetricsService, { type Metrics, type Thread, metricsServiceKey } from './metrics.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Metrics',
@@ -33,7 +33,7 @@ export default defineComponent({
   },
   setup() {
     const { formatDate } = useDateFormat();
-    const metricsService = inject('metricsService', () => new MetricsService(), true);
+    const metricsService = inject(metricsServiceKey, () => new MetricsService(), true);
 
     // Empty until the first response, the template showing it after.
     const metrics: Ref<Metrics> = ref({} as Metrics);

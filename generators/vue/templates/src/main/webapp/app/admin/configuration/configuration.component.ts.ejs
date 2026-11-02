@@ -23,12 +23,12 @@ import { useI18n } from 'vue-i18n';
 
 import { orderAndFilterBy } from '@/shared/computables';
 
-import ConfigurationService, { type ConfigurationBean, type EnvConfiguration } from './configuration.service';
+import ConfigurationService, { type ConfigurationBean, type EnvConfiguration, configurationServiceKey } from './configuration.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Configuration',
   setup() {
-    const configurationService = inject('configurationService', () => new ConfigurationService(), true);
+    const configurationService = inject(configurationServiceKey, () => new ConfigurationService(), true);
 
     const orderProp = ref('prefix');
     const reverse = ref(false);

@@ -22,7 +22,7 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import <%- jhiPrefixCapitalized %>HealthModal from './health-modal.vue';
-import HealthService, { type HealthData } from './health.service';
+import HealthService, { type HealthData, healthServiceKey } from './health.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Health',
@@ -30,7 +30,7 @@ export default defineComponent({
     'health-modal': <%- jhiPrefixCapitalized %>HealthModal,
   },
   setup() {
-    const healthService = inject('healthService', () => new HealthService(), true);
+    const healthService = inject(healthServiceKey, () => new HealthService(), true);
 
     const healthData: Ref<HealthData[] | null> = ref(null);
     const currentHealth: Ref<HealthData | null> = ref(null);
