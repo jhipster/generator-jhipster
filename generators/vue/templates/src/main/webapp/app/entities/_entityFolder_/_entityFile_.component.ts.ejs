@@ -37,6 +37,9 @@ import { currentUsernameKey } from '@/shared/config/injection-keys';
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
+<%_ if (!paginationNo) { _%>
+import { ITEMS_PER_PAGE } from '@/shared/sort/sorts';
+<%_ } _%>
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
 import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
@@ -63,7 +66,7 @@ export default defineComponent({
     const currentSearch = ref('');
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-    const itemsPerPage = ref(20);
+    const itemsPerPage = ref(ITEMS_PER_PAGE);
     const queryCount: Ref<number | null> = ref(null);
     const page: Ref<number> = ref(1);
     const propOrder = ref('id');
