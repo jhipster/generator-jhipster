@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosPromise } from 'axios';
 
 export type Level = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF';
@@ -39,3 +41,5 @@ export default class LogsService {
     return axios.get('management/loggers');
   }
 }
+
+export const logsServiceKey: InjectionKey<LogsService> = Symbol.for('jhipster:logsService');

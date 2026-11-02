@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type ComputedRef, type Ref, defineComponent, inject, ref } from 'vue';
+import { type Ref, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -26,18 +26,19 @@ import { useRoute } from 'vue-router';
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-import type LoginService from '@/account/login.service';
+import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
+import { authenticatedKey } from '@/shared/config/injection-keys';
 
 export default defineComponent({
   name: 'Error',
   setup() {
 <%_ if (authenticationTypeOauth2) { _%>
-    const { login } = inject<LoginService>('loginService')!;
+    const { login } = inject(loginServiceKey)!;
 <%_ } else { _%>
     const { showLogin } = useLoginModal();
 <%_ } _%>
-    const authenticated = inject<ComputedRef<boolean>>('authenticated')!;
+    const authenticated = inject(authenticatedKey)!;
     const errorMessage: Ref<string | null> = ref(null);
     const error403: Ref<boolean> = ref(false);
     const error404: Ref<boolean> = ref(false);

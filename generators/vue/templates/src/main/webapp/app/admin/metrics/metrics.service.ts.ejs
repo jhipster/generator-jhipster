@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosPromise } from 'axios';
 
 /** The metrics of the jhimetrics endpoint, by group. */
@@ -138,3 +140,5 @@ export default class MetricsService {
     return axios.get('management/threaddump');
   }
 }
+
+export const metricsServiceKey: InjectionKey<MetricsService> = Symbol.for('jhipster:metricsService');

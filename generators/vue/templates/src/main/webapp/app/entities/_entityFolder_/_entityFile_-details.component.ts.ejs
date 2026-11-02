@@ -24,17 +24,20 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { type AxiosError } from 'axios';
 
-import { useAlertService } from '@/shared/alert/alert.service';
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
 <%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
 <%_ if (composables.length > 0) { _%>
 import { <%- composables.join(', ') %> } from '@/shared/composables';
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+import { currentUsernameKey } from '@/shared/config/injection-keys';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
 export default defineComponent({
   name: '<%- entityAngularName %>Details',
@@ -45,10 +48,10 @@ export default defineComponent({
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
     const dateFormat = useDateFormat();
 <%_ } _%>
-    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+    const alertService = inject(alertServiceKey, () => useAlertService(), true);
 <%_ if (builtInUserManagement) { _%>
-    const username = inject<ComputedRef<string>>('currentUsername');
+    const username = inject(currentUsernameKey);
 <%_ } _%>
 
 <% if (anyFieldIsBlobDerived) { %>
