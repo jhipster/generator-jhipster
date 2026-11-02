@@ -19,10 +19,10 @@
 
 import { databaseTypes } from '../../../../../lib/jhipster/index.ts';
 import { buildMutateDataForProperty } from '../../../../../lib/utils/derived-property.ts';
-import { mutateData } from '../../../../../lib/utils/object.ts';
+import { type MutateDataParam, mutateData } from '../../../../../lib/utils/object.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../../spring-boot/generators/data-relational/types.d.ts';
 
-import { getDatabaseData } from './database-data.ts';
+import databaseData, { getDatabaseData } from './database-data.ts';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.ts';
 
 const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_MEMORY, H2_DISK } = databaseTypes;
@@ -66,15 +66,22 @@ export default function prepareSqlApplicationProperties({ application }: { appli
         };
       }
 
-      const prodDatabaseData = getDatabaseData(context.prodDatabaseType);
-      const prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? context.baseName;
-      return {
+      // A database of a blueprint has no database data: the Java properties stay undefined, Spring Boot rejects it.
+      const prodDatabaseData = databaseData[context.prodDatabaseType];
+      const prodDatabaseName = prodDatabaseData?.defaultDatabaseName ?? context.baseName;
+      const defaults = {
         __override__: false,
+        prodDatabaseUsername: prodDatabaseData?.defaultUsername ?? context.baseName,
+        prodDatabasePassword: prodDatabaseData?.defaultPassword ?? '',
+        prodDatabaseName,
+      };
+      if (!prodDatabaseData) {
+        return defaults;
+      }
+      return {
+        ...defaults,
         prodHibernateDialect: prodDatabaseData.hibernateDialect,
         prodJdbcDriver: prodDatabaseData.jdbcDriver,
-        prodDatabaseUsername: prodDatabaseData.defaultUsername ?? context.baseName,
-        prodDatabasePassword: prodDatabaseData.defaultPassword ?? '',
-        prodDatabaseName,
         prodJdbcUrl: data =>
           getJdbcUrl(data.prodDatabaseType, {
             databaseName: data.prodDatabaseName,
@@ -130,15 +137,21 @@ export default function prepareSqlApplicationProperties({ application }: { appli
             }),
         };
       }
-      return {
+      const defaults = {
         __override__: false,
+        devDatabaseUsername: data => data.prodDatabaseUsername,
+        devDatabasePassword: data => data.prodDatabasePassword,
+        devDatabaseName: data => data.prodDatabaseName,
+      } satisfies MutateDataParam<SpringDataRelationalApplication>;
+      if (!databaseData[context.prodDatabaseType]) {
+        return defaults;
+      }
+      return {
+        ...defaults,
         devJdbcUrl: data => data.prodJdbcUrl,
         devR2dbcUrl: data => data.prodR2dbcUrl,
         devHibernateDialect: data => data.prodHibernateDialect,
         devJdbcDriver: data => data.prodJdbcDriver,
-        devDatabaseUsername: data => data.prodDatabaseUsername,
-        devDatabasePassword: data => data.prodDatabasePassword,
-        devDatabaseName: data => data.prodDatabaseName,
       };
     },
   );
