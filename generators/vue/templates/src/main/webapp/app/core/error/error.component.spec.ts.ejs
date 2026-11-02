@@ -26,6 +26,10 @@ import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 <%_ if (generateUserManagement) { _%>
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+import { authenticatedKey } from '@/shared/config/injection-keys';
 
 import Error from './error.vue';
 
@@ -61,9 +65,9 @@ describe('Error component', () => {
         plugins: [createTestingPinia()],
         provide: {
 <%_ if (authenticationTypeOauth2) { _%>
-          loginService,
+          [loginServiceKey as symbol]: loginService,
 <%_ } _%>
-          authenticated,
+          [authenticatedKey as symbol]: authenticated,
         },
       },
     };

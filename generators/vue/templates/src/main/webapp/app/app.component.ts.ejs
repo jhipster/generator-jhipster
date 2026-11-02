@@ -29,7 +29,7 @@ import { useLoginModal } from '@/account/login-modal';
 import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 import Ribbon from '@/core/ribbon/ribbon.vue';
-import { useAlertService } from '@/shared/alert/alert.service';
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
 import '@/shared/config/dayjs';
 
 export default defineComponent({
@@ -44,7 +44,7 @@ export default defineComponent({
     JhiFooter,
   },
   setup() {
-    provide('alertService', useAlertService());
+    provide(alertServiceKey, useAlertService());
 <%_ if (!authenticationTypeOauth2) { _%>
     const { loginModalOpen } = storeToRefs(useLoginModal());
 <%_ } _%>

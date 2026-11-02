@@ -24,18 +24,25 @@ import { useI18n } from 'vue-i18n';
 <%_ if (paginationInfiniteScroll) { _%>
 import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
+import { type AxiosError } from 'axios';
 
-import { useAlertService } from '@/shared/alert/alert.service';
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
 <%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
 <%_ if (composables.length > 0) { _%>
 import { <%- composables.join(', ') %> } from '@/shared/composables';
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+import { currentUsernameKey } from '@/shared/config/injection-keys';
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
+<%_ if (!paginationNo) { _%>
+import { ITEMS_PER_PAGE } from '@/shared/sort/sorts';
+<%_ } _%>
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
 export default defineComponent({
   name: '<%- entityAngularName %>',
@@ -49,18 +56,18 @@ export default defineComponent({
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
     const dataUtils = useDataUtils();
 <%_ } _%>
-    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+    const alertService = inject(alertServiceKey, () => useAlertService(), true);
 <%_ if (builtInUserManagement) { _%>
-    const username = inject<ComputedRef<string>>('currentUsername');
+    const username = inject(currentUsernameKey);
 <%_ } _%>
 
 <%_ if (searchEngineAny) { _%>
     const currentSearch = ref('');
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-    const itemsPerPage = ref(20);
-    const queryCount: Ref<number> = ref(null);
+    const itemsPerPage = ref(ITEMS_PER_PAGE);
+    const queryCount: Ref<number | null> = ref(null);
     const page: Ref<number> = ref(1);
     const propOrder = ref('id');
     const reverse = ref(false);
@@ -140,7 +147,7 @@ export default defineComponent({
         <%- entityInstancePlural %>.value = res.data;
 <%_ } _%>
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showHttpError((err as AxiosError).response);
       } finally {
         isFetching.value = false;
       }
@@ -159,7 +166,7 @@ export default defineComponent({
     });
 
 <%_ if (searchEngineAny) { _%>
-    const search = (query) => {
+    const search = (query: string) => {
       if (!query) {
         return clear();
       }
@@ -171,7 +178,7 @@ export default defineComponent({
 
     const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
       alertService,
-      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>,
+      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>!,
       remove: id => <%- entityInstance %>Service().delete(id),
   <%_ if (enableTranslation) { _%>
       removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
@@ -193,7 +200,7 @@ export default defineComponent({
         await <%- entityInstance %>Service().update({ ...<%- entityInstance %>, activated });
         handleSyncList();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showHttpError((error as AxiosError).response);
       }
     };
 
@@ -220,7 +227,7 @@ export default defineComponent({
       }
     });
 
-    const infiniteScrollEl = ref<HTMLElement>(null);
+    const infiniteScrollEl = ref<HTMLElement | null>(null);
     const intersectionObserver = useIntersectionObserver(
       infiniteScrollEl,
       intersection => {

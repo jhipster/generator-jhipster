@@ -24,7 +24,7 @@ import axios from 'axios';
 import { Subject, type Subscription } from 'rxjs';
 
 import <%- jhiPrefixCapitalized %>Tracker from './tracker.vue';
-import { type TrackerActivity } from './tracker.service';
+import { type TrackerActivity, trackerServiceKey } from './tracker.service';
 
 type <%- jhiPrefixCapitalized %>TrackerComponentType = InstanceType<typeof <%- jhiPrefixCapitalized %>Tracker>;
 
@@ -64,7 +64,7 @@ describe('<%- jhiPrefixCapitalized %>Tracker', () => {
           'font-awesome-icon': true,
         },
         provide: {
-          trackerService: trackerServiceStub,
+          [trackerServiceKey as symbol]: trackerServiceStub,
         },
       },
     });

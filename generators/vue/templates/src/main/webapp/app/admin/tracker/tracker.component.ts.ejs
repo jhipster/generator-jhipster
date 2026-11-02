@@ -26,17 +26,16 @@ import { type Subscription } from 'rxjs';
 
 import { useDateFormat } from '@/shared/composables'
 
-import type TrackerService from './tracker.service';
-import { type TrackerActivity } from './tracker.service';
+import { type TrackerActivity, trackerServiceKey } from './tracker.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>TrackerComponent',
   setup() {
     const { formatDateShort: formatDate } = useDateFormat();
-    const trackerService = inject<TrackerService>('trackerService');
+    const trackerService = inject(trackerServiceKey)!;
     const activities: Ref<TrackerActivity[]> = ref([]);
     const route = useRoute();
-    let subscription: Subscription;
+    let subscription: Subscription | null = null;
 
     const showActivity = (activity: TrackerActivity) => {
       let existingActivity = false;

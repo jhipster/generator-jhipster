@@ -62,6 +62,10 @@
     "@pinia/testing": "<%- nodeDependencies['@pinia/testing'] %>",
     "@stylistic/eslint-plugin": "<%- nodeDependencies['@stylistic/eslint-plugin'] %>",
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
+<%_ if (communicationSpringWebsocket) { _%>
+    "@types/js-cookie": "<%- nodeDependencies['@types/js-cookie'] %>",
+    "@types/sockjs-client": "<%- nodeDependencies['@types/sockjs-client'] %>",
+<%_ } _%>
     "@tsconfig/node24": null,
     "@vitejs/plugin-vue": "<%- nodeDependencies['@vitejs/plugin-vue'] %>",
     "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
@@ -84,7 +88,8 @@
     "vite": null,
     "vitest": "<%- nodeDependencies.vitest %>",
     "vite-plugin-static-copy": null,
-    "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>"
+    "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>",
+    "vue-tsc": "<%- nodeDependencies['vue-tsc'] %>"
   },
   "engines": {
     "node": ">=<%- nodeVersion %>"
@@ -100,9 +105,10 @@
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
     "serve": "<%- nodePackageManager %> run start --",
     "start": "<%- nodePackageManager %> run webapp:dev --",
-    "pretest": "<%- nodePackageManager %> run lint",
+    "pretest": "<%- nodePackageManager %> run lint && <%- nodePackageManager %> run type-check",
     "test": "<%- nodePackageManager %> run vitest-run --",
     "test:watch": "<%- nodePackageManager %> run vitest",
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json",
     "vitest-run": "vitest --run --coverage",
     "vitest": "vitest",
     "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",

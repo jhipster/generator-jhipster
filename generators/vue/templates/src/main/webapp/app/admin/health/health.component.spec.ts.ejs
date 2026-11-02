@@ -23,7 +23,7 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import HealthService from './health.service';
+import HealthService, { healthServiceKey } from './health.service';
 import Health from './health.vue';
 
 type HealthComponentType = InstanceType<typeof Health>;
@@ -48,7 +48,7 @@ describe('Health Component', () => {
           'b-modal': {},
         },
         provide: {
-          healthService: new HealthService(),
+          [healthServiceKey as symbol]: new HealthService(),
         },
       },
     });

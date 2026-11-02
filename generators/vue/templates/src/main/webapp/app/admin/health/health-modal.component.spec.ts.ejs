@@ -21,6 +21,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
 import HealthModal from './health-modal.vue';
+import { healthServiceKey } from './health.service';
 
 type HealthModalComponentType = InstanceType<typeof HealthModal>;
 
@@ -39,7 +40,7 @@ describe('Health Modal Component', () => {
           'font-awesome-icon': true,
         },
         provide: {
-          healthService,
+          [healthServiceKey as symbol]: healthService,
         },
       },
     });
@@ -85,7 +86,7 @@ describe('Health Modal Component for diskSpace', () => {
       },
       global: {
         provide: {
-          healthService,
+          [healthServiceKey as symbol]: healthService,
         },
       },
     });

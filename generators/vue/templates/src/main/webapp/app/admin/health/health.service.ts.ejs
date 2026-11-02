@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosPromise } from 'axios';
 
 /** A health indicator of the health endpoint: its status and its details or its sub-indicators. */
@@ -47,14 +49,14 @@ export default class HealthService {
     return response;
   }
 
-  getBaseName(name: string): string {
+  getBaseName(name: string): string | undefined {
     if (name) {
       const split = name.split('.');
       return split[0];
     }
   }
 
-  getSubSystemName(name: string): string {
+  getSubSystemName(name: string): string | undefined {
     if (name) {
       const split = name.split('.');
       split.splice(0, 1);
@@ -127,3 +129,5 @@ export default class HealthService {
     return typeof healthObject === 'object' && healthObject !== null && Object.hasOwn(healthObject, 'status');
   }
 }
+
+export const healthServiceKey: InjectionKey<HealthService> = Symbol.for('jhipster:healthService');
