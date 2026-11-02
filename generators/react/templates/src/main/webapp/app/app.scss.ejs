@@ -26,10 +26,6 @@
 <%_ if (!clientThemeNone) { _%>
 @import 'bootswatch/dist/<%- clientTheme %>/bootswatch';
 <%_ } _%>
-body {
-  margin: 0;
-}
-
 body,
 h1,
 h2,
@@ -41,16 +37,6 @@ h4 {
 a {
   color: #533f03;
   font-weight: bold;
-}
-
-* {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  &:after,
-  &::before {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
 }
 
 .app-container {
