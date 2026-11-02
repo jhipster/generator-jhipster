@@ -19,10 +19,10 @@
 import { defineComponent, provide } from 'vue';
 
 <%_ if (generateBuiltInUserEntity) { _%>
-import UserService from '@/entities/user/user.service';
+import UserService, { userServiceKey } from '@/entities/user/user.service';
 <%_ } _%>
 <%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
-import <%- entity.entityAngularName %>Service from './<%- entity.entityFolderName %>/<%- entity.entityFileName %>.service';
+import <%- entity.entityAngularName %>Service, { <%- entity.entityInstance %>ServiceKey } from './<%- entity.entityFolderName %>/<%- entity.entityFileName %>.service';
 <%_ } _%>
 // jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
 
@@ -30,10 +30,10 @@ export default defineComponent({
   name: 'Entities',
   setup() {
 <%_ if (generateBuiltInUserEntity) { _%>
-    provide('userService', () => new UserService());
+    provide(userServiceKey, () => new UserService());
 <%_ } _%>
 <%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
-    provide('<%- entity.entityInstance %>Service', () => new <%- entity.entityAngularName %>Service());
+    provide(<%- entity.entityInstance %>ServiceKey, () => new <%- entity.entityAngularName %>Service());
 <%_ } _%>
     // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
   },

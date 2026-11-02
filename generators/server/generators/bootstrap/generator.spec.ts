@@ -65,5 +65,43 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with a relational database of a blueprint', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ baseName: 'sample', backendType: 'nodejs', prodDatabaseType: 'sqlite', devDatabaseType: 'sqlite' } as any)
+        .withMockedJHipsterGenerators();
+    });
+
+    it('should leave the properties of the Java databases undefined', () => {
+      const {
+        prodDatabaseName,
+        prodDatabaseUsername,
+        prodDatabasePassword,
+        prodJdbcUrl,
+        prodR2dbcUrl,
+        prodJdbcDriver,
+        prodHibernateDialect,
+      } = runResult.application as any;
+      expect({
+        prodDatabaseName,
+        prodDatabaseUsername,
+        prodDatabasePassword,
+        prodJdbcUrl,
+        prodR2dbcUrl,
+        prodJdbcDriver,
+        prodHibernateDialect,
+      }).toEqual({
+        prodDatabaseName: 'sample',
+        prodDatabaseUsername: 'sample',
+        prodDatabasePassword: '',
+        prodJdbcUrl: undefined,
+        prodR2dbcUrl: undefined,
+        prodJdbcDriver: undefined,
+        prodHibernateDialect: undefined,
+      });
+    });
+  });
+
   testBootstrapEntities(generator);
 });

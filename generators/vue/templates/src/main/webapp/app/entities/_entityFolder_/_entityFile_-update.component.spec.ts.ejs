@@ -17,6 +17,12 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
+<%_ const allRelationshipsThatNeedSelectOptions = Object
+      .values(relationshipsByOtherEntity)
+      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+      .filter(relationships => relationships.length > 0);
+    const invalidValueFields = fields.filter(field => field.vueInvalidValue && (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+_%>
 import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type RouteLocation } from 'vue-router';
 
@@ -27,21 +33,22 @@ import { createBootstrap } from 'bootstrap-vue-next';
 import dayjs from 'dayjs';
 <%_ } _%>
 
-import AlertService from '@/shared/alert/alert.service';
+<%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
+  <%_ if (relationship.otherEntityUser && generateBuiltInUserEntity) { _%>
+import { userServiceKey } from '@/entities/user/user.service';
+  <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
+import { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
+  <%_ } _%>
+<%_ } _%>
+import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 import { contentStub, modelInputStub, triggerAll } from '@/shared/testing/stubs';
 <%_ if (anyFieldIsTimeDerived) { _%>
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
 
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
-<%_ const allRelationshipsThatNeedSelectOptions = Object
-      .values(relationshipsByOtherEntity)
-      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
-      .filter(relationships => relationships.length > 0);
-    const invalidValueFields = fields.filter(field => field.vueInvalidValue && (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
-_%>
 
 type <%- entityAngularName %>UpdateComponentType = InstanceType<typeof <%- entityAngularName %>Update>;
 
@@ -110,15 +117,15 @@ describe('Component Tests', () => {
           'b-form-input': modelInputStub,
         },
         provide: {
-          alertService,
-          <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
+          [alertServiceKey as symbol]: alertService,
+          [<%- entityInstance %>ServiceKey as symbol]: () => <%- entityInstance %>ServiceStub,
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntityUser && generateBuiltInUserEntity) { _%>
-          userService: () => ({
+          [userServiceKey as symbol]: () => ({
             retrieve: vi.fn().mockResolvedValue({ data: [<%- relationship.otherEntity.entityInstance %>Option] }),
           }),
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
-            <%- relationship.otherEntity.entityInstance %>Service: () => ({
+            [<%- relationship.otherEntity.entityInstance %>ServiceKey as symbol]: () => ({
                 retrieve: vi.fn().mockResolvedValue({ data: [<%- relationship.otherEntity.entityInstance %>Option] }),
               }),
   <%_ } _%>
@@ -466,9 +473,9 @@ describe('Component Tests', () => {
               ...mountOptions.provide,
   <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
     <%_ if (relationship.otherEntityUser && generateBuiltInUserEntity) { _%>
-              userService: failedRetrieve,
+              [userServiceKey as symbol]: failedRetrieve,
     <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
-              <%- relationship.otherEntity.entityInstance %>Service: failedRetrieve,
+              [<%- relationship.otherEntity.entityInstance %>ServiceKey as symbol]: failedRetrieve,
     <%_ } _%>
   <%_ } _%>
             },

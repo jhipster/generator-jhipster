@@ -278,11 +278,11 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               `${application.clientSrcDir}/app/entities/entities.component.ts`,
               createNeedleCallback({
                 needle: 'jhipster-needle-add-entity-service-to-entities-component-import',
-                contentToAdd: `import ${entityAngularName}Service from './${entityFolderName}/${entityFileName}.service';`,
+                contentToAdd: `import ${entityAngularName}Service, { ${entityInstance}ServiceKey } from './${entityFolderName}/${entityFileName}.service';`,
               }),
               createNeedleCallback({
                 needle: 'add-entity-service-to-entities-component',
-                contentToAdd: `provide('${entityInstance}Service', () => new ${entityAngularName}Service());`,
+                contentToAdd: `provide(${entityInstance}ServiceKey, () => new ${entityAngularName}Service());`,
               }),
             );
 

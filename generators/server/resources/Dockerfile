@@ -13,7 +13,7 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:18.6
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:26.8.1-1
+FROM quay.io/keycloak/keycloak:26.8.1-2
 LABEL ALIAS=keycloak
 
 FROM mysql:26.10.0
@@ -55,13 +55,13 @@ LABEL ALIAS=consul
 FROM prom/prometheus:v3.15.1
 LABEL ALIAS=prometheus
 
-FROM prom/alertmanager:v0.34.1
+FROM prom/alertmanager:v0.34.2
 LABEL ALIAS=prometheus-alertmanager
 
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:13.2.4
+FROM grafana/grafana:13.3.0
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

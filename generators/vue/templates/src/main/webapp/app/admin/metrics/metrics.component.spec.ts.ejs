@@ -23,7 +23,7 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import MetricsService from './metrics.service';
+import MetricsService, { metricsServiceKey } from './metrics.service';
 import Metrics from './metrics.vue';
 
 type MetricsComponentType = InstanceType<typeof Metrics>;
@@ -252,7 +252,7 @@ describe('Metrics Component', () => {
           'b-progress-bar': {},
         },
         provide: {
-          metricsService: new MetricsService(),
+          [metricsServiceKey as symbol]: new MetricsService(),
         },
       },
     });
@@ -316,7 +316,7 @@ describe('Metrics Component', () => {
             'metrics-modal': true,
           },
           provide: {
-            metricsService: new MetricsService(),
+            [metricsServiceKey as symbol]: new MetricsService(),
           },
         },
       });

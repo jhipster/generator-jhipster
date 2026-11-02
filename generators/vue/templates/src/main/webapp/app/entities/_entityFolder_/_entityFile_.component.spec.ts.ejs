@@ -32,9 +32,13 @@ import { createBootstrap } from 'bootstrap-vue-next';
 import dayjs from 'dayjs';
 <%_ } _%>
 
-import AlertService from '@/shared/alert/alert.service';
+import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
+<%_ if (builtInUserManagement) { _%>
+import { currentUsernameKey } from '@/shared/config/injection-keys';
+<%_ } _%>
 import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/testing/stubs';
 
+import { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';
 
 const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
@@ -125,10 +129,10 @@ describe('Component Tests', () => {
         plugins: [router],
 <%_ } _%>
         provide: {
-          alertService,
-          <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
+          [alertServiceKey as symbol]: alertService,
+          [<%- entityInstance %>ServiceKey as symbol]: () => <%- entityInstance %>ServiceStub,
 <%_ if (builtInUserManagement) { _%>
-          currentUsername: ref('admin'),
+          [currentUsernameKey as symbol]: ref('admin'),
 <%_ } _%>
         },
       };

@@ -267,7 +267,7 @@ export const <%- entityReactName %>Update = () => {
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (field.blobContentTypeText) { _%>
-            type="textarea"
+            inputTag="textarea"
             <%- include('react_validators') %>
           />
     <%_ } else { _%>

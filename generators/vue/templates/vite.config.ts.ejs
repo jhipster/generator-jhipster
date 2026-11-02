@@ -86,7 +86,7 @@ const config = defineConfig({
     tsconfigPaths: true,
   },
   define: {
-    SERVER_API_URL: '"/"',
+    SERVER_API_URL: '""',
     // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
     VERSION: JSON.stringify(process.env.APP_VERSION || 'DEV'),
   },

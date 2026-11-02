@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios from 'axios';
 
 import { type IUser } from '@/entities/user/user.model';
@@ -110,3 +112,5 @@ export default class AccountService {
     return false;
   }
 }
+
+export const accountServiceKey: InjectionKey<AccountService> = Symbol.for('jhipster:accountService');

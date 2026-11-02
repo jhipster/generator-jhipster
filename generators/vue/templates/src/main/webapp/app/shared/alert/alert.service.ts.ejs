@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -135,3 +136,5 @@ export default class AlertService {
     this.showError(errorMessage!);
   }
 }
+
+export const alertServiceKey: InjectionKey<AlertService> = Symbol.for('jhipster:alertService');

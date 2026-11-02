@@ -23,12 +23,12 @@ import { useI18n } from 'vue-i18n';
 
 import { orderAndFilterBy } from '@/shared/computables';
 
-import LogsService, { type Level, type LoggersResponse } from './logs.service';
+import LogsService, { type Level, type LoggersResponse, logsServiceKey } from './logs.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>Logs',
   setup() {
-    const logsService = inject('logsService', () => new LogsService(), true);
+    const logsService = inject(logsServiceKey, () => new LogsService(), true);
 
     const loggers: Ref<{ name: string; level: Level }[]> = ref([]);
     const filtered = ref('');

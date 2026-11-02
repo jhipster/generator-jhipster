@@ -22,11 +22,11 @@ import { useRoute } from 'vue-router';
 
 import { useLoginModal } from '@/account/login-modal';
 
-import ActivateService from './activate.service';
+import ActivateService, { activateServiceKey } from './activate.service';
 
 export default defineComponent({
   setup() {
-    const activateService = inject('activateService', () => new ActivateService(), true);
+    const activateService = inject(activateServiceKey, () => new ActivateService(), true);
     const { showLogin } = useLoginModal();
     const route = useRoute();
 
