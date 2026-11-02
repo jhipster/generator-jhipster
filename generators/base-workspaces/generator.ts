@@ -126,9 +126,14 @@ export default abstract class BaseWorkspacesGenerator<
         let composePort = 8080;
         return Object.entries(this.resolveApplicationFolders()).map(([appFolder, resolvedFolder]) => {
           const contextMap = this.env.getContextMap(resolvedFolder) as Map<string, WorkspacesApplication>;
-          const application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
+          let application = contextMap.get(CONTEXT_DATA_APPLICATION_KEY);
           if (!application) {
-            throw new Error(`No application found in ${resolvedFolder}`);
+            // JHipster does not bootstrap an application of a blueprint: without the blueprint, only its type is known.
+            const { applicationType } = (this.fs.readJSON(join(resolvedFolder, '.yo-rc.json')) as any)?.['generator-jhipster'] ?? {};
+            if (isOfficialApplicationType(applicationType)) {
+              throw new Error(`No application found in ${resolvedFolder}`);
+            }
+            application = { applicationType } as WorkspacesApplication;
           }
           application.appFolder = appFolder;
           if (isOfficialApplicationType(application.applicationType)) {

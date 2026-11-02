@@ -21,12 +21,12 @@ import { type Ref, defineComponent, inject, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import GatewayService, { type GatewayRoute } from './gateway.service';
+import GatewayService, { type GatewayRoute, gatewayServiceKey } from './gateway.service';
 
 export default defineComponent({
   name: '<%- jhiPrefixCapitalized %>GatewayComponent',
   setup() {
-    const gatewayService = inject('gatewayService', () => new GatewayService(), true);
+    const gatewayService = inject(gatewayServiceKey, () => new GatewayService(), true);
 
     const gatewayRoutes: Ref<GatewayRoute[]> = ref([]);
     const updatingRoutes = ref(false);

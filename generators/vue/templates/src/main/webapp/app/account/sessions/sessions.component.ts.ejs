@@ -37,8 +37,8 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const success: Ref<string> = ref(null);
-    const error: Ref<string> = ref(null);
+    const success: Ref<string | null> = ref(null);
+    const error: Ref<string | null> = ref(null);
     const sessions: Ref<Session[]> = ref([]);
 
     const authenticated = computed(() => store.authenticated);

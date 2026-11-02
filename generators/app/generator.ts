@@ -29,18 +29,21 @@ import { checkNode } from './support/index.ts';
 
 export default class AppGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
   async beforeQueue() {
-    const { applicationType } = this.jhipsterConfig;
-    if (!isOfficialApplicationType(applicationType)) {
-      this.log.debug(`${applicationType} is not an official application type, its blueprint generates the application.`);
-      this.cancelCancellableTasks();
-    }
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
-    await this.dependsOnJHipster('javascript-simple-application');
     await this.dependsOnBootstrap('app');
+
+    const { applicationType } = this.jhipsterConfig;
+    if (!isOfficialApplicationType(applicationType)) {
+      this.log.debug(`${applicationType} is not an official application type, its blueprint generates the application.`);
+      this.cancelCancellableTasks();
+      // The base name and the creation timestamp, which javascript-simple-application gives the official ones.
+      await this.dependsOnJHipster('project-name');
+    } else {
+      await this.dependsOnJHipster('javascript-simple-application');
+    }
   }
 
   get initializing() {

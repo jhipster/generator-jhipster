@@ -18,17 +18,23 @@
  */
 import assert from 'node:assert';
 
+import { isOfficialApplicationType } from '../../../../lib/core/application-types.ts';
 import { validations } from '../../../../lib/jhipster/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { stringifyApplicationData } from '../../../base-application/support/index.ts';
-import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../../../common/types.ts';
+import type {
+  Application as CommonApplication,
+  Config as CommonConfig,
+  Entity as CommonEntity,
+  Field as CommonField,
+} from '../../../common/types.ts';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
 } = validations;
 
-export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication> {
+export default class BootstrapApplicationGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -38,8 +44,14 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnBootstrap('client');
-    await this.dependsOnBootstrap('server');
+    const { applicationType } = this.jhipsterConfig;
+    if (!isOfficialApplicationType(applicationType)) {
+      this.log.debug(`${applicationType} is not an official application type, its blueprint bootstraps the application.`);
+      this.cancelCancellableTasks();
+    } else {
+      await this.dependsOnBootstrap('client');
+      await this.dependsOnBootstrap('server');
+    }
   }
 
   get preparing() {

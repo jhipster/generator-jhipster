@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosResponse } from 'axios';
 
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
@@ -31,17 +33,17 @@ const baseSearchApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search?query=
 export default class <%- entityAngularName %>Service {
 <%_ if (searchEngineAny) { _%>
   <%_ if (paginationNo) { _%>
-  search(query): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+  search(query: string): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
     return axios.get(`${baseSearchApiUrl}${query}`);
   }
   <%_ } else { _%>
-  search(query, paginationQuery): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+  search(query: string, paginationQuery?: PaginationQuery): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
     return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`);
   }
   <%_ } _%>
 <%_ } _%>
 
-  async find(<%- primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<I<%- entityAngularName %>> {
+  async find(<%- primaryKey.name %>: string | number) : Promise<I<%- entityAngularName %>> {
     const res = await axios.get(`${baseApiUrl}/${<%- primaryKey.name %>}`);
     return res.data;
   }
@@ -71,3 +73,5 @@ export default class <%- entityAngularName %>Service {
   }
 <%_ } _%>
 }
+
+export const <%- entityInstance %>ServiceKey: InjectionKey<() => <%- entityAngularName %>Service> = Symbol.for('jhipster:<%- entityInstance %>Service');

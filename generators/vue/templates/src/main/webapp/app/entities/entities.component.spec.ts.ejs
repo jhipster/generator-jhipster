@@ -26,10 +26,10 @@ describe('Entities', () => {
   it('should provide a factory of the service of each entity', () => {
     const wrapper = shallowMount(Entities, { global: { stubs: { 'router-view': true } } });
 
-    // The values the component provides itself, its own properties.
-    const provides = Object.entries((wrapper.vm.$ as unknown as { provides: Record<string, () => unknown> }).provides);
-    for (const [name, factory] of provides) {
-      expect({ name, service: factory() }).toEqual({ name, service: expect.any(Object) });
+    // The values the component provides itself, its own properties, by their injection keys.
+    const provides = (wrapper.vm.$ as unknown as { provides: Record<symbol, () => unknown> }).provides;
+    for (const key of Object.getOwnPropertySymbols(provides)) {
+      expect({ key: key.description, service: provides[key]() }).toEqual({ key: key.description, service: expect.any(Object) });
     }
   });
 });

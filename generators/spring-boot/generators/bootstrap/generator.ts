@@ -19,6 +19,7 @@
 import assert from 'node:assert';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
+import databaseData from '../../../base-application/generators/database-bootstrap/support/database-data.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
@@ -47,6 +48,16 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      checkDatabase({ application }) {
+        // The shared preparation accepts the relational databases of blueprints, Spring Boot only knows its own.
+        if (application.databaseTypeSql) {
+          for (const databaseType of [application.prodDatabaseType, application.devDatabaseType]) {
+            if (!databaseData[databaseType!]) {
+              throw new Error(`Database ${databaseType} is not supported by Spring Boot`);
+            }
+          }
+        }
+      },
       defaults({ applicationDefaults }) {
         applicationDefaults(mutateApplicationPreparing, {
           // Deprecated: Spring Boot 3 is no longer supported, springBoot4 is always true.
