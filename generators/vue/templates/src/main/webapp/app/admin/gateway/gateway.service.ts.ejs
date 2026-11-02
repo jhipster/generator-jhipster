@@ -19,6 +19,7 @@
 import axios, { type AxiosResponse } from 'axios';
 
 export interface ServiceInstance {
+  uri: string;
   healthService?: { checks: { status: string }[] };
   instanceInfo?: { status: string };
   [key: string]: unknown;
