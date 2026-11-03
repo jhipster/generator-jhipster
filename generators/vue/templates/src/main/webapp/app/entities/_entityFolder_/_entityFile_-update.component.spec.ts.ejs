@@ -24,10 +24,11 @@
     const invalidValueFields = fields.filter(field => field.vueInvalidValue && (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
 _%>
 import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { reactive } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
-import axios from 'axios';
+import axios, { CanceledError } from 'axios';
 import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
@@ -418,6 +419,45 @@ describe('Component Tests', () => {
     });
 
 <%_ } _%>
+    describe('Route changes', () => {
+      it('Should load again when the id of the route changes', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        route = reactive({ params: { <%- entityInstance %>Id: '123' } });
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        route.params = { <%- entityInstance %>Id: '456' };
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.find.mock.calls.map(([id]) => id)).toEqual(['123', '456']);
+        expect(<%- entityInstance %>ServiceStub.find.mock.calls[0][1].signal.aborted).toBe(true);
+
+        // WHEN
+        route.params = {};
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.<%- entityInstance %>.<%- primaryKey.name %>).toBeUndefined();
+      });
+
+      it('Should not show the error of an aborted load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockRejectedValue(new CanceledError());
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        route = { params: { <%- entityInstance %>Id: '123' } };
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).not.toHaveBeenCalled();
+      });
+    });
+
     describe('Errors and defaults', () => {
       it('Should show the error of a failed load', async () => {
         // GIVEN
