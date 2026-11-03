@@ -256,8 +256,8 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
         let postServicesSleep;
 
         const dbType = databaseTypeSql ? prodDatabaseType : databaseType;
-        const dockerFile = `${application.dockerServicesDir}${dbType}.yml`;
-        if (this.fs.exists(this.destinationPath(dockerFile))) {
+        if (application.dockerServices.includes(dbType!)) {
+          const dockerFile = `${application.dockerServicesDir}${dbType}.yml`;
           scriptsStorage.set({
             'docker:db:up': `docker compose -f ${dockerFile} up --wait`,
             'docker:db:down': `docker compose -f ${dockerFile} down -v`,
