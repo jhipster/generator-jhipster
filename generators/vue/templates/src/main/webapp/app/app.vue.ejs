@@ -19,9 +19,9 @@
 <template>
   <BApp>
     <div id="app-root">
-      <ribbon></ribbon>
+      <Ribbon></Ribbon>
       <div id="app-header">
-        <jhi-navbar></jhi-navbar>
+        <JhiNavbar></JhiNavbar>
       </div>
       <div class="container-fluid">
         <div class="card jh-card">
@@ -32,13 +32,43 @@
           <template #title>
             <span data-cy="loginTitle" id="login-title">{{ t$('login.title') }}</span>
           </template>
-          <login-form v-if="loginModalOpen"></login-form>
+          <LoginForm v-if="loginModalOpen"></LoginForm>
         </b-modal>
 <%_ } _%>
-        <jhi-footer></jhi-footer>
+        <JhiFooter></JhiFooter>
       </div>
     </div>
   </BApp>
 </template>
 
-<script lang="ts" src="./app.component.ts"></script>
+<script setup lang="ts">
+import { provide } from 'vue';
+<%_ if (enableTranslation && !authenticationTypeOauth2) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { BApp } from 'bootstrap-vue-next';
+<%_ if (!authenticationTypeOauth2) { _%>
+import { storeToRefs } from 'pinia';
+<%_ } _%>
+
+<%_ if (!authenticationTypeOauth2) { _%>
+import LoginForm from '@/account/login-form/login-form.vue';
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
+import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
+import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
+import Ribbon from '@/core/ribbon/ribbon.vue';
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
+import '@/shared/config/dayjs';
+
+defineOptions({ name: 'App' });
+
+provide(alertServiceKey, useAlertService());
+<%_ if (enableTranslation && !authenticationTypeOauth2) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
+const { loginModalOpen } = storeToRefs(useLoginModal());
+<%_ } _%>
+</script>

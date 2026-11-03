@@ -365,9 +365,118 @@
       <template #title>
         <h4 class="modal-title" id="showMetricsLabel">{{ t$('metrics.jvm.threads.dump.title') }}</h4>
       </template>
-      <metrics-modal :thread-dump="threadData"></metrics-modal>
+      <MetricsModal :thread-dump="threadData"></MetricsModal>
     </b-modal>
   </div>
 </template>
 
-<script lang="ts" src="./metrics.component.ts"></script>
+<script setup lang="ts">
+import { inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { useDateFormat } from '@/shared/composables'
+
+import MetricsModal from './metrics-modal.vue';
+import MetricsService, { type Metrics, type Thread, metricsServiceKey } from './metrics.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>Metrics' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+const { formatDate } = useDateFormat();
+const metricsService = inject(metricsServiceKey, () => new MetricsService(), true);
+
+// Empty until the first response, the template showing it after.
+const metrics = ref<Metrics>({} as Metrics);
+const threadData = ref<Thread[] | null>(null);
+const threadStats = ref<Record<string, number>>({});
+const updatingMetrics = ref(true);
+
+const metricsModal = ref<{ show: () => void } | null>(null);
+
+const refresh = () =>
+  metricsService
+    .getMetrics()
+    .then(resultsMetrics => {
+      metrics.value = resultsMetrics.data;
+      metricsService
+        .retrieveThreadDump()
+        .then(res => {
+          updatingMetrics.value = true;
+          threadData.value = res.data.threads;
+
+          const stats = {
+            threadDumpRunnable: 0,
+            threadDumpWaiting: 0,
+            threadDumpTimedWaiting: 0,
+            threadDumpBlocked: 0,
+            threadDumpAll: 0,
+          };
+
+          threadData.value.forEach(value => {
+            if (value.threadState === 'RUNNABLE') {
+              stats.threadDumpRunnable += 1;
+            } else if (value.threadState === 'WAITING') {
+              stats.threadDumpWaiting += 1;
+            } else if (value.threadState === 'TIMED_WAITING') {
+              stats.threadDumpTimedWaiting += 1;
+            } else if (value.threadState === 'BLOCKED') {
+              stats.threadDumpBlocked += 1;
+            }
+          });
+
+          stats.threadDumpAll = stats.threadDumpRunnable + stats.threadDumpWaiting + stats.threadDumpTimedWaiting + stats.threadDumpBlocked;
+          threadStats.value = stats;
+
+          updatingMetrics.value = false;
+        })
+        .catch(() => {
+          updatingMetrics.value = true;
+        });
+    })
+    .catch(() => {
+      updatingMetrics.value = true;
+    });
+
+const openModal = (): void => {
+  metricsModal.value?.show();
+};
+const filterNaN = (input?: number): number => (input === undefined || isNaN(input) ? 0 : input);
+const formatNumber1 = (value?: number): string =>
+  new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value ?? Number.NaN);
+const formatNumber2 = (value?: number): string =>
+  new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value ?? Number.NaN);
+const convertMillisecondsToDuration = (ms: number): string => {
+  const times: Record<string, number> = {
+    year: 31557600000,
+    month: 2629746000,
+    day: 86400000,
+    hour: 3600000,
+    minute: 60000,
+    second: 1000,
+  };
+  let time_string = '';
+  for (const key in times) {
+    if (Math.floor(ms / times[key]) > 0) {
+      let plural = '';
+      if (Math.floor(ms / times[key]) > 1) {
+        plural = 's';
+      }
+      time_string += `${Math.floor(ms / times[key])} ${key}${plural} `;
+      ms = ms - times[key] * Math.floor(ms / times[key]);
+    }
+  }
+  return time_string;
+};
+const isObjectExisting = (metricsValue: object | undefined, key: string): boolean =>
+  Boolean((metricsValue as Record<string, unknown> | undefined)?.[key]);
+const isObjectExistingAndNotEmpty = (metricsValue: object | undefined, key: string): boolean =>
+  isObjectExisting(metricsValue, key) && JSON.stringify((metricsValue as Record<string, unknown> | undefined)?.[key]) !== '{}';
+
+onMounted(() => {
+  refresh();
+});
+</script>

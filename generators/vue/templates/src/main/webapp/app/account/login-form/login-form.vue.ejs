@@ -79,4 +79,72 @@
   </div>
 </template>
 
-<script lang="ts" src="./login-form.component.ts"></script>
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute, useRouter } from 'vue-router';
+
+import axios from 'axios';
+
+import { useLoginModal } from '@/account/login-modal';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
+import { accountServiceKey } from '../account.service';
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const authenticationError = ref(false);
+const login = ref<string | null>(null);
+const password = ref<string | null>(null);
+const rememberMe = ref(false);
+
+const { hideLogin } = useLoginModal();
+const route = useRoute();
+const router = useRouter();
+
+const previousState = () => router.go(-1);
+
+const accountService = inject(accountServiceKey)!;
+
+const doLogin = async () => {
+<%_ if (authenticationTypeJwt) { _%>
+  const data = { username: login.value, password: password.value, rememberMe: rememberMe.value };
+  try {
+    const result = await axios.post('api/authenticate', data);
+    const bearerToken = result.headers.authorization;
+    if (bearerToken?.startsWith('Bearer ')) {
+      const jwt = bearerToken.slice(7, bearerToken.length);
+      if (rememberMe.value) {
+        localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
+        sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+      } else {
+        sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
+        localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+      }
+    }
+<%_ } else { _%>
+  const data = `username=${encodeURIComponent(login.value ?? '')}&password=${encodeURIComponent(password.value ?? '')}&remember-me=${rememberMe.value}&submit=Login`;
+  try {
+    await axios.post('api/authentication', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+<%_ } _%>
+
+    authenticationError.value = false;
+    hideLogin();
+    await accountService.retrieveAccount();
+    if (route.path === '/forbidden') {
+      previousState();
+    }
+  } catch {
+    authenticationError.value = true;
+  }
+};
+</script>

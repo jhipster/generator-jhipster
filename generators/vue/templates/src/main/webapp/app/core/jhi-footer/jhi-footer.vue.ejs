@@ -4,4 +4,14 @@
   </div>
 </template>
 
-<script lang="ts" src="./jhi-footer.component.ts"></script>
+<script setup lang="ts">
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>Footer' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+</script>

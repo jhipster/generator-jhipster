@@ -112,7 +112,9 @@ describe('JhiNavbar', () => {
   it('should not have user data set', () => {
     expect(jhiNavbar.authenticated).toBeFalsy();
     expect(jhiNavbar.openAPIEnabled).toBeFalsy();
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
     expect(jhiNavbar.inProduction).toBeFalsy();
+<%_ } _%>
   });
 
   it('should have user data set after authentication', () => {
@@ -125,7 +127,9 @@ describe('JhiNavbar', () => {
     store.setActiveProfiles(['prod', 'api-docs']);
 
     expect(jhiNavbar.openAPIEnabled).toBeTruthy();
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
     expect(jhiNavbar.inProduction).toBeTruthy();
+<%_ } _%>
   });
 
   it('should use login service', () => {
@@ -237,6 +241,7 @@ describe('JhiNavbar', () => {
 <%_ } _%>
   });
 
+<%_ if (enableTranslation) { _%>
   it('should default to the native language', () => {
     const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
     const navbar = shallowMount(JhiNavbar, { global: { plugins: [pinia, router], provide: { [accountServiceKey as symbol]: accountService<%- authenticationUsesCsrf ? ', [loginServiceKey as symbol]: loginService' : '' %> } } });
@@ -244,6 +249,7 @@ describe('JhiNavbar', () => {
     expect(navbar.vm.currentLanguage).toBe('<%- nativeLanguage %>');
     language.mockRestore();
   });
+<%_ } _%>
 
   it('should log in from the menu of an anonymous user', async () => {
     store.logout();

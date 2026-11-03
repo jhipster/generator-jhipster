@@ -4,7 +4,23 @@
   </div>
 </template>
 
-<script lang="ts" src="./ribbon.component.ts"></script>
+<script setup lang="ts">
+import { computed } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { useStore } from '@/store';
+
+defineOptions({ name: 'Ribbon' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+const store = useStore();
+const ribbonEnv = computed(() => store.ribbonOnProfiles);
+const ribbonEnabled = computed(() => store.ribbonOnProfiles && store.activeProfiles.indexOf(store.ribbonOnProfiles) > -1);
+</script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

@@ -17,4 +17,43 @@
   </div>
 </template>
 
-<script lang="ts" src="./error.component.ts"></script>
+<script setup lang="ts">
+import { inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute } from 'vue-router';
+
+<%_ if (!authenticationTypeOauth2) { _%>
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+import { authenticatedKey } from '@/shared/config/injection-keys';
+
+defineOptions({ name: 'Error' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+const { login } = inject(loginServiceKey)!;
+<%_ } else { _%>
+const { showLogin } = useLoginModal();
+<%_ } _%>
+const authenticated = inject(authenticatedKey)!;
+const errorMessage = ref<string | null>(null);
+const error403 = ref<boolean>(false);
+const error404 = ref<boolean>(false);
+const route = useRoute();
+
+if (route.meta) {
+  errorMessage.value = route.meta.errorMessage ?? null;
+  error403.value = route.meta.error403 ?? false;
+  error404.value = route.meta.error404 ?? false;
+  if (!authenticated.value && error403.value) {
+    <%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>();
+  }
+}
+</script>
