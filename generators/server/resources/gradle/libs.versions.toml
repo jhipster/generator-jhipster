@@ -1,9 +1,17 @@
 [libraries]
+# Applied over Spring Boot's managed versions when they are older, to pick up security fixes
+jackson-bom = { module = 'tools.jackson:jackson-bom', version = '3.1.8' }
+jackson-2-bom = { module = 'com.fasterxml.jackson:jackson-bom', version = '2.21.8' }
+mariadb = { module = 'org.mariadb.jdbc:mariadb-java-client', version = '3.5.11' }
+
 springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '3.2.0' }
 
 cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '8.0.4' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
+
+# liquibase-neo4j 5.0.4 and 5.0.4.1 fail with "Could not retrieve current Neo4j user" against the neo4j-java-driver Spring Boot manages
+liquibase-neo4j = { module = 'org.liquibase.ext:liquibase-neo4j', version = '5.0.0' }
 
 neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '4.2.0' }
 

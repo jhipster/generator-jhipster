@@ -18,6 +18,7 @@
  */
 import chalk from 'chalk';
 import uniqBy from 'lodash-es/uniqBy.js';
+import { lt as semverLessThan } from 'semver';
 
 import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
@@ -724,6 +725,15 @@ ${classProperties
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      overrideManagedVersions({ application, source }) {
+        for (const name of ['jackson-bom', 'jackson-2-bom', 'mariadb'] as const) {
+          const managedVersion = application.javaManagedProperties[`${name}.version`];
+          const version = application.javaDependencies[name];
+          if (managedVersion && version && semverLessThan(managedVersion, version)) {
+            source.overrideProperty!({ property: `${name}.version`, value: version });
+          }
+        }
+      },
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
