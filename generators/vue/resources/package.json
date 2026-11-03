@@ -57,7 +57,7 @@
     "vite-plugin-static-copy": "4.1.1",
     "vitest": "5.0.5",
     "vitest-sonar-reporter": "3.0.0",
-    "vue-tsc": "3.3.13"
+    "vue-tsc": "3.3.14"
   },
   "packageManager": "npm@12"
 }
