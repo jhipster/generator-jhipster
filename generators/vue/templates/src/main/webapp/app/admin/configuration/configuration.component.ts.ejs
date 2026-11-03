@@ -1,0 +1,92 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { type Ref, computed, defineComponent, inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { orderAndFilterBy } from '@/shared/computables';
+
+import ConfigurationService, { type ConfigurationBean, type EnvConfiguration, configurationServiceKey } from './configuration.service';
+
+export default defineComponent({
+  name: '<%- jhiPrefixCapitalized %>Configuration',
+  setup() {
+    const configurationService = inject(configurationServiceKey, () => new ConfigurationService(), true);
+
+    const orderProp = ref('prefix');
+    const reverse = ref(false);
+    const allConfiguration: Ref<EnvConfiguration> = ref({});
+    const configuration: Ref<ConfigurationBean[]> = ref([]);
+    const configKeys: Ref<string[][]> = ref([]);
+    const filtered = ref('');
+
+    const filteredConfiguration = computed(() =>
+      orderAndFilterBy(configuration.value, {
+        filterByTerm: filtered.value,
+        orderByProp: orderProp.value,
+        reverse: reverse.value,
+      }),
+    );
+
+    const init = (): void => {
+      configurationService.loadConfiguration().then(res => {
+        configuration.value = res;
+
+        for (const config of configuration.value) {
+          if (config.properties !== undefined) {
+            configKeys.value.push(Object.keys(config.properties));
+          }
+        }
+      });
+
+      configurationService.loadEnvConfiguration().then(res => {
+        allConfiguration.value = res;
+      });
+    };
+
+    const changeOrder = (prop: string): void => {
+      orderProp.value = prop;
+      reverse.value = !reverse.value;
+    };
+
+    const keys = (dict: object | undefined): string[] => (dict === undefined ? [] : Object.keys(dict));
+
+    onMounted(() => {
+      init();
+    });
+
+    return {
+      configurationService,
+      orderProp,
+      reverse,
+      allConfiguration,
+      configuration,
+      configKeys,
+      filtered,
+      filteredConfiguration,
+      init,
+      changeOrder,
+      keys,
+<%_ if (enableTranslation) { _%>
+      t$: useI18n().t,
+<%_ } _%>
+    };
+  },
+});

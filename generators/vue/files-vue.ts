@@ -119,6 +119,7 @@ export const vueFiles = asWriteFilesSection({
         'shared/computables/arrays.ts',
         'shared/computables/arrays.spec.ts',
         'shared/computables/index.ts',
+        'shared/sort/jhi-sort-indicator.component.ts',
         'shared/sort/jhi-sort-indicator.vue',
         'shared/sort/sorts.ts',
         'shared/sort/sorts.spec.ts',
@@ -191,6 +192,7 @@ export const vueFiles = asWriteFilesSection({
       condition: generator => generator.withAdminUi,
       templates: [
         'admin/configuration/configuration.vue',
+        'admin/configuration/configuration.component.ts',
         'admin/configuration/configuration.component.spec.ts',
         'admin/configuration/configuration.service.ts',
         'admin/health/health.vue',
@@ -200,6 +202,7 @@ export const vueFiles = asWriteFilesSection({
         'admin/health/health.service.ts',
         'admin/health/health.service.spec.ts',
         'admin/logs/logs.vue',
+        'admin/logs/logs.component.ts',
         'admin/logs/logs.component.spec.ts',
         'admin/logs/logs.service.ts',
         'admin/metrics/metrics.vue',
