@@ -35,14 +35,14 @@ export function prepareFieldColumnForDatabase({
   field,
   log,
 }: {
-  application: { jhiTablePrefix?: string };
-  entity: DatabaseEntity & { databaseType?: string; prodDatabaseType?: string };
+  application: { jhiTablePrefix?: string; databaseType?: string; prodDatabaseType?: string };
+  entity: DatabaseEntity;
   field: DatabaseField;
   log: { warn: (message: string) => void };
 }) {
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
-    if (isReservedTableName(fieldNameUnderscored, entity.prodDatabaseType ?? entity.databaseType)) {
+    if (isReservedTableName(fieldNameUnderscored, application.prodDatabaseType ?? application.databaseType!)) {
       if (application.jhiTablePrefix) {
         field.fieldNameAsDatabaseColumn = `${application.jhiTablePrefix}_${fieldNameUnderscored}`;
       } else {
@@ -59,7 +59,7 @@ export function prepareFieldColumnForDatabase({
   field.columnName = field.fieldNameAsDatabaseColumn;
   if (field.unique) {
     field.uniqueConstraintName = getUXConstraintName(entity.entityTableName, field.columnName, {
-      prodDatabaseType: entity.prodDatabaseType,
+      prodDatabaseType: application.prodDatabaseType,
     }).value;
   }
 }

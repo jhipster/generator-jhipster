@@ -77,7 +77,8 @@ export default {
   filename: 'remoteEntry.js',
   shareScope: 'default',
   shared: {
-    ...shareDependencies(),
+    // Stateless libraries stay bundled with each application, so their versions may differ between the gateway and microfrontends.
+    ...shareDependencies({ skipList: ['deepmerge', 'react-infinite-scroll-component'] }),
 <%_ if (applicationTypeMicroservice) { _%>
     // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
     // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build

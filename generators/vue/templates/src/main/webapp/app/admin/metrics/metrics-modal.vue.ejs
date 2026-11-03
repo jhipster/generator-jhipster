@@ -56,7 +56,7 @@
             <td>{{ entry.blockedCount }}</td>
             <td>{{ entry.waitedTime }}</td>
             <td>{{ entry.waitedCount }}</td>
-            <td class="thread-dump-modal-lock" :title="entry.lockName">
+            <td class="thread-dump-modal-lock" :title="entry.lockName ?? undefined">
               <code>{{ entry.lockName }}</code>
             </td>
           </tr>
@@ -66,4 +66,64 @@
   </div>
 </template>
 
-<script lang="ts" src="./metrics-modal.component.ts"></script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { filterBy } from '@/shared/computables';
+
+import { type Thread } from './metrics.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>MetricsModal' });
+
+const props = withDefaults(defineProps<{ threadDump?: Thread[] | null }>(), {
+  threadDump: () => [],
+});
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const threadDumpFilter = ref('');
+const filteredThreadDump = computed(() => filterBy(props.threadDump ?? [], { filterByTerm: threadDumpFilter.value }));
+
+const threadDumpData = computed(() => {
+  const data = {
+    threadDumpAll: 0,
+    threadDumpBlocked: 0,
+    threadDumpRunnable: 0,
+    threadDumpTimedWaiting: 0,
+    threadDumpWaiting: 0,
+  };
+  if (props.threadDump) {
+    props.threadDump.forEach(value => {
+      if (value.threadState === 'RUNNABLE') {
+        data.threadDumpRunnable += 1;
+      } else if (value.threadState === 'WAITING') {
+        data.threadDumpWaiting += 1;
+      } else if (value.threadState === 'TIMED_WAITING') {
+        data.threadDumpTimedWaiting += 1;
+      } else if (value.threadState === 'BLOCKED') {
+        data.threadDumpBlocked += 1;
+      }
+    });
+    data.threadDumpAll = data.threadDumpRunnable + data.threadDumpWaiting + data.threadDumpTimedWaiting + data.threadDumpBlocked;
+  }
+  return data;
+});
+
+const getBadgeClass = (threadState: string): string => {
+  if (threadState === 'RUNNABLE') {
+    return 'bg-success';
+  } else if (threadState === 'WAITING') {
+    return 'bg-info';
+  } else if (threadState === 'TIMED_WAITING') {
+    return 'bg-warning';
+  } else if (threadState === 'BLOCKED') {
+    return 'bg-danger';
+  }
+  return '';
+};
+</script>

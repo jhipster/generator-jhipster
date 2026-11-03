@@ -102,4 +102,27 @@ describe('helpers', () => {
       expect(runResult.env.isPackageRegistered('agent-worktree')).toBe(false);
     });
   });
+  describe('withConfiguredBlueprint of a checkout of a blueprint published under another name', () => {
+    let blueprintPackagePath: string;
+
+    before(async () => {
+      // Like a checkout of generator-jhipster-foo renamed under a scope.
+      blueprintPackagePath = join(mkdtempSync(join(tmpdir(), 'jhi-blueprint-')), 'checkout');
+      mkdirSync(join(blueprintPackagePath, 'generators/app'), { recursive: true });
+      writeFileSync(join(blueprintPackagePath, 'package.json'), JSON.stringify({ name: '@scope/generator-jhipster-foo' }));
+      writeFileSync(join(blueprintPackagePath, 'generators/app/index.js'), 'export default class {}\n');
+      await defineDefaults({ blueprint: 'generator-jhipster-foo', blueprintPackagePath });
+      await helpers.run(helpers.createDummyGenerator<typeof CoreGenerator>(), { namespace: DUMMY_NAMESPACE }).withConfiguredBlueprint();
+    });
+
+    after(async () => {
+      await defineDefaults({ blueprint: undefined, blueprintPackagePath: undefined });
+      rmSync(join(blueprintPackagePath, '..'), { recursive: true, force: true });
+    });
+
+    it('should register the blueprint generators under the configured blueprint namespace', () => {
+      expect(runResult.env.isPackageRegistered('jhipster-foo')).toBe(true);
+      expect(runResult.env.isPackageRegistered('@scope/jhipster-foo')).toBe(false);
+    });
+  });
 });

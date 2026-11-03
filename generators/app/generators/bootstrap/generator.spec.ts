@@ -62,6 +62,8 @@ const expectedEntity = (entity: any) => ({
   restProperties: expect.any(Array),
 
   fields: entity?.fields?.map(expectedField),
+  // The fields of the user by their name, which the fields above print.
+  ...(entity?.fieldsByName ? { fieldsByName: expect.any(Object) } : {}),
   relationships: expect.any(Array),
   primaryKey: expectedPrimaryKey(entity.primaryKey),
   reactiveOtherEntities: expect.any(Set),

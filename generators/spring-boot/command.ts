@@ -422,6 +422,7 @@ const command = {
   import: [
     'java',
     'liquibase',
+    'docker',
     'jhipster:spring-boot:data-cassandra',
     'jhipster:spring-boot:data-couchbase',
     'jhipster:spring-boot:data-elasticsearch',

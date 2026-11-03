@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.d.ts';
 
@@ -28,7 +29,7 @@ import {
   prepareFieldForDatabase,
   prepareRelationshipForDatabase,
 } from './support/index.ts';
-import type { Application as DatabaseApplication } from './types.d.ts';
+import type { Application as DatabaseApplication, DatabaseEntity } from './types.d.ts';
 
 /**
  * Prepares the application and its entities for the database it uses, whichever it is: the properties a generator writing
@@ -49,14 +50,35 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
-      prepareDatabase({ applicationDefaults }) {
+      prepareDatabase({ application, applicationDefaults }) {
+        // The database configuration is declared by the generator of the backend, which differs from blueprint to
+        // blueprint: the properties the preparation of the database reads, derived here when it does not give them.
+        if (application.databaseType === databaseTypes.SQL) {
+          (application as { prodDatabaseType?: string }).prodDatabaseType ??= databaseTypes.POSTGRESQL;
+        }
         applicationDefaults({
+          databaseTypeAny: ({ databaseType }) => Boolean(databaseType) && databaseType !== databaseTypes.NO,
+          databaseTypeSql: ({ databaseType }) => databaseType === databaseTypes.SQL,
+          databaseTypeCassandra: ({ databaseType }) => databaseType === databaseTypes.CASSANDRA,
+          databaseTypeNeo4j: ({ databaseType }) => databaseType === databaseTypes.NEO4J,
           jhiTablePrefix: ({ jhiPrefix }) => hibernateSnakeCase(jhiPrefix),
           // The port of a relational database depends on its vendor, the one of another database on its type.
           prodDatabasePort: (data, { undefinedMarker }) =>
             (data.databaseType === databaseTypes.SQL ?
               databaseData[data.prodDatabaseType]?.defaultPort
             : getDatabaseTypeData(data.databaseType).defaultPort) ?? undefinedMarker,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntityForDatabase({ entity }) {
+        // The table of the entity, which every generator writing its database reads.
+        mutateData(entity as DatabaseEntity, {
+          __override__: false,
+          entityTableName: ({ entityNameCapitalized }) => hibernateSnakeCase(entityNameCapitalized),
         });
       },
     });
@@ -80,7 +102,7 @@ export default class DatabaseGenerator extends BaseApplicationGenerator<
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationshipForDatabase({ application, entity, relationship }) {
-        prepareRelationshipForDatabase({ application: application as any, entity: entity as any, relationship });
+        prepareRelationshipForDatabase({ application, entity: entity as any, relationship });
       },
     });
   }

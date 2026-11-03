@@ -109,6 +109,25 @@ describe('resolver - generator dependencies', () => {
       );
       expect(namespaces(dependencies).at(-1)).toBe('jhipster-foo:foo');
     });
+
+    it('should resolve the options of docker for a blueprint replacing the server and importing docker', () => {
+      // The namespaces of a blueprint are not the ones of JHipster that the type of import knows.
+      const blueprints: Record<string, JHipsterCommandDefinition> = {
+        'jhipster-foo:server': {
+          configs: {},
+          import: ['jhipster-foo:node-server'] as unknown as JHipsterCommandDefinition['import'],
+          override: true,
+        },
+        'jhipster-foo:node-server': { configs: {}, import: ['docker'] },
+      };
+      const dependencies = resolveCommandDependencies(
+        { command: 'jdl' },
+        { getGeneratorMeta: metaLookup(blueprints), blueprintNamespaces: ['jhipster-foo'] },
+      );
+      expect(namespaces(dependencies)).toEqual(expect.arrayContaining(['jhipster-foo:server', 'jhipster-foo:node-server', 'docker']));
+      expect(namespaces(dependencies)).not.toContain('spring-boot');
+      expect(dependencies.find(({ namespace }) => namespace === 'docker')?.command?.configs).toHaveProperty('oauth2AppSchemes');
+    });
   });
 
   describe('lookupGeneratorCommands', () => {

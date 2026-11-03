@@ -66,7 +66,7 @@ export function prepareRelationshipForLiquibase({
   relationship: LiquibaseRelationship;
 }) {
   // The relationships of a previous entity never go through the priorities, so the database prepares them here too.
-  prepareRelationshipForDatabase({ application: application as any, entity, relationship });
+  prepareRelationshipForDatabase({ application, entity, relationship });
   mutateData(relationship, {
     unique: ({ id, ownerSide, relationshipOneToOne }) => id || (ownerSide && relationshipOneToOne),
   });

@@ -16,14 +16,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosPromise } from 'axios';
 
+export type Level = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF';
+
+export interface Logger {
+  configuredLevel: Level | null;
+  effectiveLevel: Level;
+}
+
+export interface LoggersResponse {
+  levels: Level[];
+  loggers: Record<string, Logger>;
+}
+
 export default class LogsService {
-  changeLevel(name: string, configuredLevel: string): AxiosPromise<any> {
+  changeLevel(name: string, configuredLevel: string): AxiosPromise<void> {
     return axios.post(`management/loggers/${name}`, { configuredLevel });
   }
 
-  findAll(): AxiosPromise<any> {
+  findAll(): AxiosPromise<LoggersResponse> {
     return axios.get('management/loggers');
   }
 }
+
+export const logsServiceKey: InjectionKey<LogsService> = Symbol.for('jhipster:logsService');

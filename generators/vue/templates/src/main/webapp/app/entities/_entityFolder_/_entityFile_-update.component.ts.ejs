@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
+    const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
+_%>
 import { type Ref, computed, defineComponent, inject, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
@@ -23,9 +27,11 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useVuelidate } from '@vuelidate/core'
+import { type AxiosError } from 'axios';
 
-import { useAlertService } from '@/shared/alert/alert.service';
-import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
+import { useControlledRequest, useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
+import { currentLanguageKey } from '@/shared/config/injection-keys';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
@@ -39,14 +45,18 @@ _%>
 
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
-import UserService from '@/entities/user/user.service';
+import { type IUser } from '@/entities/user/user.model';
+import UserService, { userServiceKey } from '@/entities/user/user.service';
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
-import <%- relationship.otherEntity.entityAngularName %>Service from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
-import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/shared/model/<%- relationship.otherEntity.entityModelFileName %>.model';
+import <%- relationship.otherEntity.entityAngularName %>Service, { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
+import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/entities/<%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.model';
   <%_ } _%>
 <%_ } _%>
-import { type I<%- entityAngularName %>, <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import { type I<%- entityAngularName %>, <%- entityAngularName %> } from './<%- entityFileName %>.model';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
+<%_ for (const constantImport of new Set(clientConstantFields.map(field => field.vueFieldClientConstant.vueConstantImport))) { _%>
+<%- constantImport %>
+<%_ } _%>
 <%_ const enumImports = entityClientEnumImports; _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
@@ -55,42 +65,58 @@ import { <%- importedType %> } from '<%- importedPath %>';
 export default defineComponent({
   name: '<%- entityAngularName %>Update',
   setup() {
-    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+    const alertService = inject(alertServiceKey, () => useAlertService(), true);
 
-    const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref(new <%- entityAngularName %>());
+    const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
+      const entity = new <%- entityAngularName %>();
 <%_ if (relationshipsContainManyToOne) { _%>
   <%_ for (const relationship of relationships.filter(relationship => relationship.collection && relationship.persistableRelationship)) { _%>
-    <%- entityInstance %>.value.<%- relationship.relationshipFieldNamePlural %> = [];
+      entity.<%- relationship.relationshipFieldNamePlural %> = [];
   <%_ } _%>
 <%_ } _%>
+      return entity;
+    };
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
-    const userService = inject('userService', () => new UserService());
-    const <%- relationship.otherEntity.entityInstancePlural %>: Ref<Array<any>> = ref([]);
+    const userService = inject(userServiceKey, () => new UserService());
+    const { data: <%- relationship.otherEntity.entityInstancePlural %> } = useControlledRequest(async (_params, { signal }) => (await userService().retrieve({ signal })).data, {
+      initialData: (): IUser[] => [],
+      onError: error => alertService.showHttpError((error as AxiosError).response),
+    });
   <%_ } else { _%>
     <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 
-    const <%- relationship.otherEntity.entityInstance %>Service = inject('<%- relationship.otherEntity.entityInstance %>Service', () => new <%- relationship.otherEntity.entityAngularName %>Service());
+    const <%- relationship.otherEntity.entityInstance %>Service = inject(<%- relationship.otherEntity.entityInstance %>ServiceKey, () => new <%- relationship.otherEntity.entityAngularName %>Service());
     <%_ } _%>
 
-    const <%- relationship.otherEntity.entityInstancePlural %>: Ref<I<%- relationship.otherEntity.entityAngularName %>[]> = ref([]);
+    const { data: <%- relationship.otherEntity.entityInstancePlural %> } = useControlledRequest(async (_params, { signal }) => (await <%- relationship.otherEntity.entityInstance %>Service().retrieve({ signal })).data, {
+      initialData: (): I<%- relationship.otherEntity.entityAngularName %>[] => [],
+      onError: error => alertService.showHttpError((error as AxiosError).response),
+    });
   <%_ } _%>
 <%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
     const <%- enumField.enumInstance %>Values: Ref<string[]> = ref(Object.keys(<%- enumField.fieldType %>));
 <%_ } _%>
+<%_ for (const field of clientConstantFields) { _%>
+    const <%- field.fieldName %>Values: string[] = <%- field.vueFieldClientConstant.vueConstantValues %>;
+<%_ } _%>
     const isSaving = ref(false);
-    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+    const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
     const route = useRoute();
     const router = useRouter();
+<%_ if (userProvidedPrimaryKey) { _%>
+    // The primary key is given by the user: an entity is updated when the route has it.
+    const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
+<%_ } _%>
 
     const previousState = () => router.go(-1);
 
-    const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
-      try {
-        const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
+    const { data: <%- entityInstance %> } = useControlledRequest(
+      async (id, { signal }) => {
+        const res = await <%- entityInstance %>Service().find(id, { signal });
 <%_ for (field of fields.filter(field => !field.id)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
@@ -99,33 +125,15 @@ export default defineComponent({
         }
   <%_ } _%>
 <%_ } _%>
-        <%- entityInstance %>.value = res;
-      } catch (error) {
-        alertService.showHttpError(error.response);
-      }
-    };
-
-    if (route.params?.<%- entityInstance %>Id) {
-      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id);
-    }
-<%_ if (relationships.length > 0) { _%>
-
-    const initRelationships = () => {
-  <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
-    <%_ if (relationship.otherEntity.builtInUser) { _%>
-      userService().retrieve().then((res) => {
-        <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
-      });
-    <%_ } else { _%>
-      <%- relationship.otherEntity.entityInstance %>Service().retrieve().then((res) => {
-        <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
-      });
-    <%_ } _%>
-  <%_ } _%>
-    };
-
-    initRelationships();
-<%_ } _%>
+        return res;
+      },
+      {
+        // The router reuses the component when the id of the route changes, and an update without id is a new entity.
+        params: () => route.params?.<%- entityInstance %>Id as string | undefined,
+        initialData: new<%- entityAngularName %>,
+        onError: error => alertService.showHttpError((error as AxiosError).response),
+      },
+    );
 <%_ if (anyFieldIsBlobDerived) { _%>
 
     const dataUtils = useDataUtils();
@@ -136,11 +144,14 @@ export default defineComponent({
 <%_ } _%>
     const validations = useValidation();
     const validationRules = {
-<%_ for (field of fields.filter(field => !field.id)) { _%>
+<%_ for (field of formFields) { _%>
       <%- field.fieldName %>:  {
   <%_ if (field.fieldValidate) { _%>
     <%_ if (field.fieldValidationRequired) { _%>
         required: validations.required(t$('entity.validation.required').toString()),
+    <%_ } _%>
+    <%_ if (field.fieldValidationEmail) { _%>
+        email: validations.email(t$('global.messages.validate.email.invalid').toString()),
     <%_ } _%>
     <%_ if (field.fieldValidationMinLength) { _%>
         minLength: validations.minLength(t$('entity.validation.minlength', { min: <%- field.fieldValidateRulesMinlength %> }).toString(), <%- field.fieldValidateRulesMinlength %>),
@@ -156,6 +167,9 @@ export default defineComponent({
     <%_ } _%>
     <%_ if (field.fieldValidationMax) { _%>
         max: validations.maxValue(t$('entity.validation.max', { max: <%- field.fieldValidateRulesMax %> }).toString(), <%- field.fieldValidateRulesMax %>),
+    <%_ } _%>
+    <%_ if (field.fieldValidationPattern) { _%>
+        pattern: validations.pattern(t$('<%- builtInUserManagement && field.fieldName === 'login' ? 'entity.validation.patternLogin' : 'entity.validation.pattern' %>', { pattern: '<%- field.fieldNameHumanized %>' }).toString(), new RegExp('<%- field.fieldValidateRulesPatternVue %>')),
     <%_ } _%>
   <%_ } _%>
       },
@@ -174,7 +188,7 @@ export default defineComponent({
     const save = async () => {
       isSaving.value = true;
       try {
-        if (<%- entityInstance %>.value.<%- primaryKey.name %>) {
+        if (<% if (userProvidedPrimaryKey) { %>isUpdate.value<% } else { %><%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %><% } %>) {
           const param = await <%- entityInstance %>Service().update(<%- entityInstance %>.value);
           alertService.showInfo(
 <%_ if (enableTranslation) { _%>
@@ -195,7 +209,7 @@ export default defineComponent({
         }
         previousState();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showHttpError((error as AxiosError).response);
       } finally {
         isSaving.value = false;
       }
@@ -203,8 +217,8 @@ export default defineComponent({
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
 
     const clearInputImage = (field: string, fieldContentType: string, idInput: string) => {
-      <%- entityInstance %>.value[field] = null;
-      <%- entityInstance %>.value[fieldContentType] = null;
+      (<%- entityInstance %>.value as Record<string, unknown>)[field] = null;
+      (<%- entityInstance %>.value as Record<string, unknown>)[fieldContentType] = null;
       const input = document.getElementById(idInput) as HTMLInputElement | null;
       if (input) {
         input.value = '';
@@ -213,12 +227,9 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (relationshipsContainManyToOne) { _%>
 
-    const getSelected = (selectedVals, option, pkField = 'id') => {
-      if (selectedVals) {
-        return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
-      }
-      return option;
-    };
+    // The server gives null for a collection without values.
+    const getSelected = <T extends object>(selectedVals: T[] | null | undefined, option: T, pkField = 'id'): T =>
+      selectedVals?.find(value => (option as Record<string, unknown>)[pkField] === (value as Record<string, unknown>)[pkField]) ?? option;
 <%_ } _%>
 
     return {
@@ -227,6 +238,9 @@ export default defineComponent({
       <%- entityInstance %>,
       previousState,
       save,
+<%_ if (userProvidedPrimaryKey) { _%>
+      isUpdate,
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
       clearInputImage,
 <%_ } _%>
@@ -235,6 +249,9 @@ export default defineComponent({
 <%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
       <%- enumField.enumInstance %>Values,
+<%_ } _%>
+<%_ for (const field of clientConstantFields) { _%>
+      <%- field.fieldName %>Values,
 <%_ } _%>
       isSaving,
       currentLanguage,

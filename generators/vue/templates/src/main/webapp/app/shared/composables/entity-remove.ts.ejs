@@ -18,6 +18,8 @@
 -%>
 import { type Ref, ref } from 'vue';
 
+import { type AxiosError } from 'axios';
+
 import type AlertService from '@/shared/alert/alert.service';
 
 /**
@@ -37,15 +39,15 @@ export const useEntityRemove = <T, K>({
   onRemoved: () => unknown;
 }) => {
   const removeId: Ref<K | null> = ref(null);
-  const removeEntity = ref<any>(null);
+  const removeEntity = ref<{ show: () => void; hide: () => void } | null>(null);
 
   const prepareRemove = (instance: T) => {
     removeId.value = getId(instance);
-    removeEntity.value.show();
+    removeEntity.value?.show();
   };
 
   const closeDialog = () => {
-    removeEntity.value.hide();
+    removeEntity.value?.hide();
   };
 
   const confirmRemove = async () => {
@@ -56,7 +58,7 @@ export const useEntityRemove = <T, K>({
       closeDialog();
       await onRemoved();
     } catch (error) {
-      alertService.showHttpError(error.response);
+      alertService.showHttpError((error as AxiosError).response);
     }
   };
 

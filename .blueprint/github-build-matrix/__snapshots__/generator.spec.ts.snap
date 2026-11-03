@@ -3521,9 +3521,13 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "skip-backend-tests": "false",
       "skip-frontend-tests": "false",
       "name": "vue-default-additional",
-      "app-sample": "vue-default",
       "entity": "none",
-      "jdl-entity": "custom-id",
+      "app-sample": "vue-default",
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "removeNeedles": true,
+        "e2eTls": true
+      },
       "workspaces": "false",
       "disabled": false,
       "build-jhipster-bom": true,

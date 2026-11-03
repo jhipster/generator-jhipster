@@ -94,8 +94,9 @@ export default class BaseGenerator<
     } = this.features;
 
     this.sbsBlueprint = sbsBlueprint;
-    // A generator of the package of jhipster, whatever its name, like a fork published under a scope, is no blueprint.
-    this.fromBlueprint = this.rootGeneratorName() !== packageJson.name;
+    // A generator of the package of jhipster, whatever its name, like a fork published under a scope, is no blueprint:
+    // generator-jhipster by its namespace (`rootGeneratorNameFromNamespace`), the name of its package without one.
+    this.fromBlueprint = ![GENERATOR_JHIPSTER, packageJson.name].includes(this.rootGeneratorName());
 
     if (this.fromBlueprint) {
       this.blueprintStorage = this._getStorage(undefined, { transform: this.features.configTransform });

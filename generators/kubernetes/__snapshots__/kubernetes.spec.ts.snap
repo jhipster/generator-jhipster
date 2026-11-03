@@ -468,6 +468,7 @@ exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gatew
       "02-mysql",
       "03-psql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -568,6 +569,85 @@ Using livenessProbes and readinessProbe allow you to tell Kubernetes about the s
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
 
+
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql deployment/mspsql
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - msmysql
+                  - mspsql
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
 
 
 ## Troubleshooting
@@ -722,9 +802,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -904,9 +987,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
         - name: SPRING_DATASOURCE_USERNAME
@@ -1211,6 +1297,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -1244,6 +1346,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -1254,7 +1359,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -1341,6 +1446,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -1348,6 +1455,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -1429,6 +1541,7 @@ exports[`generator - Kubernetes gateway and ingress should match files snapshot 
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -1512,6 +1625,84 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
+
 
 ## Troubleshooting
 
@@ -1584,9 +1775,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -1893,6 +2087,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -1926,6 +2136,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -1936,7 +2149,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -2023,6 +2236,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -2030,6 +2245,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -2108,6 +2328,7 @@ exports[`generator - Kubernetes gateway and ingressType gke should match files s
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -2210,6 +2431,84 @@ Using livenessProbes and readinessProbe allow you to tell Kubernetes about the s
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
 
+
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
 
 ## Keycloak
 
@@ -2370,9 +2669,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -5407,6 +5709,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -5440,6 +5758,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -5450,7 +5771,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -5537,6 +5858,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -5544,6 +5867,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -5622,6 +5950,7 @@ exports[`generator - Kubernetes gateway and ingressType nginx should match files
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -5725,6 +6054,84 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
+
 ## Keycloak
 
 The following Keycloak [best practices](https://www.keycloak.org/server/configuration-production) for production are included in the generated k8s: a production grade database PostgreSQL, the \`edge\` deployment mode, high availability through clustered deployment, and \`HOSTNAME\` configuration. HTTP/TLS is not enabled for ease of deployment, but it is required for a secure exchange of credentials and other sensitive data with Keycloak, preventing several attack vectors.
@@ -5824,9 +6231,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -8835,6 +9245,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -8868,6 +9294,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -8878,7 +9307,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -8965,6 +9394,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -8972,6 +9403,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9051,6 +9487,7 @@ exports[`generator - Kubernetes gateway and mysql microservice should match file
       "01-gateway",
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -9136,6 +9573,85 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - msmysql
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
+
 
 ## Troubleshooting
 
@@ -9208,9 +9724,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -9471,9 +9990,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -9676,6 +10198,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9709,6 +10247,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -9719,7 +10260,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -9806,6 +10347,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -9813,6 +10356,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -9894,6 +10442,7 @@ exports[`generator - Kubernetes gateway with istio routing should match files sn
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -9976,6 +10525,84 @@ Using livenessProbes and readinessProbe allow you to tell Kubernetes about the s
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
 
+
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 --labels=sidecar.istio.io/inject=false -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
 
 
 ## Troubleshooting
@@ -10186,9 +10813,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -10501,6 +11131,7 @@ resources:
 - registry-k8s/consul.yml
 - registry-k8s/consul-config-loader.yml
 - registry-k8s/application-configmap.yml
+- registry-k8s/consul-destination-rule.yml
 # istio
 - istio-k8s/grafana-gateway.yml
 - istio-k8s/zipkin-gateway.yml
@@ -10629,6 +11260,24 @@ spec:
 ",
     "stateCleared": "modified",
   },
+  "kubernetes/registry-k8s/consul-destination-rule.yml": {
+    "contents": "# The Istio sidecar load-balances the consul-ui Service itself and ignores its sessionAffinity.
+# Hashing on the source IP sends all of a pod's requests, including the deregistration at shutdown,
+# to the Consul server that received its registration.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: consul-destinationrule
+  namespace: default
+spec:
+  host: consul-ui.default.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        useSourceIp: true
+",
+    "stateCleared": "modified",
+  },
   "kubernetes/registry-k8s/consul.yml": {
     "contents": "# Consul HA cluster
 #
@@ -10648,6 +11297,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -10681,6 +11346,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -10691,7 +11359,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -10780,6 +11448,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -10787,6 +11457,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -10867,7 +11542,7 @@ exports[`generator - Kubernetes gateway with istio routing should match spawn ca
   ],
   [
     "spawnCommandSync",
-    "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
+    "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath={.status.loadBalancer.ingress[0].ip} --request-timeout=5s",
     {
       "stdio": "pipe",
     },
@@ -10889,6 +11564,7 @@ exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql mi
       "11-mssql"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -11002,6 +11678,89 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - msmysql
+                  - mspsql
+                  - msmongodb
+                  - msmariadb
+                  - msmssqldb
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
+
 
 ## Troubleshooting
 
@@ -11074,9 +11833,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -11354,9 +12116,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
         - name: SPRING_DATASOURCE_USERNAME
@@ -11556,9 +12321,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_MONGODB_URI
           value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -11946,6 +12714,7 @@ spec:
             - |
                 while true
                 do
+                  rt=$(nc -z -w 1 msmssqldb-mssql 1433)
                   if [ $? -eq 0 ]; then
                     echo "DB is UP"
                     break
@@ -11960,9 +12729,23 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: SA
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmssqldb-mssql
+              key: mssql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -12007,6 +12790,17 @@ spec:
     requests:
       storage: 2Gi
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: msmssqldb-mssql
+  namespace: default
+  labels:
+    app: msmssqldb-mssql
+type: Opaque
+data:
+  mssql-password: U0VDUkVULVBBU1NXT1JELUFhMQ==
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12014,6 +12808,9 @@ metadata:
   namespace: default
 spec:
   replicas: 1
+  # the ReadWriteOnce volume can't be shared with a second SQL Server pod during a rolling update
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: msmssqldb-mssql
@@ -12022,39 +12819,49 @@ spec:
       labels:
         app: msmssqldb-mssql
     spec:
+      securityContext:
+        # the mssql user of the image, so that it can write to the volume
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
       - name: data
         persistentVolumeClaim:
           claimName: msmssqldb-mssql-pvc
       containers:
-      - name: mysql
+      - name: mssql
         image: mssql-placeholder
         env:
         - name: MSSQL_PID
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
+        # the image creates this database when it starts with an empty data directory
+        - name: MSSQL_DB
+          value: msmssqldb
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
-              key: SA_PASSWORD
+              name: msmssqldb-mssql
+              key: mssql-password
         ports:
         - containerPort: 1433
+        readinessProbe:
+          exec:
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DB]" -o /dev/null']
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
-        - name: mssqldb
+        - name: data
           mountPath: /var/opt/mssql
         resources:
+          # SQL Server doesn't start with less than 2000 MB of memory
           requests:
-            memory: "512Mi"
+            memory: "2Gi"
             cpu: "500m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
-
 ---
 apiVersion: v1
 kind: Service
@@ -12065,22 +12872,7 @@ spec:
   selector:
     app: msmssqldb-mssql
   ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: LoadBalancer
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: mssql-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 8Gi
+  - port: 1433
 ",
     "stateCleared": "modified",
   },
@@ -12155,9 +12947,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -12337,9 +13132,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
         - name: SPRING_DATASOURCE_USERNAME
@@ -12644,6 +13442,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -12677,6 +13491,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -12687,7 +13504,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -12774,6 +13591,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -12781,6 +13600,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -12877,6 +13701,7 @@ exports[`generator - Kubernetes mongodb microservice with a clustered database s
     "clusteredDbApps": [
       "04-mongo"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -12955,6 +13780,84 @@ Using livenessProbes and readinessProbe allow you to tell Kubernetes about the s
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
 
+
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmongodb
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - msmongodb
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
 
 
 ## Troubleshooting
@@ -13104,9 +14007,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_MONGODB_URI
           value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017,msmongodb-mongodb-1.msmongodb-mongodb.default:27017,msmongodb-mongodb-2.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -13532,6 +14438,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -13565,6 +14487,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -13575,7 +14500,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -13662,6 +14587,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -13669,6 +14596,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -14212,6 +15144,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace and jhi
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -14314,6 +15247,84 @@ kubectl get svc jhipster-grafana -n mynamespace
 * If you have chosen *LoadBalancer*, then use the IaaS provided load balancer IP
 
 
+
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql -n mynamespace
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: mynamespace
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - msmysql
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -n mynamespace -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -n mynamespace -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul -n mynamespace\`.
 
 
 ## Troubleshooting
@@ -17094,9 +18105,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.mynamespace.svc.cluster.local
+          value: consul-ui.mynamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -17327,6 +18341,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -17360,6 +18390,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -17370,7 +18403,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -17457,6 +18490,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -17464,6 +18499,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -17542,6 +18582,7 @@ exports[`generator - Kubernetes mysql microservice with custom namespace should 
     "appsFolders": [
       "02-mysql"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -17620,6 +18661,84 @@ Using livenessProbes and readinessProbe allow you to tell Kubernetes about the s
 This is because the rolling upgrade strategy first stops a running replica in order to place a new. Running only one replica, will cause a short downtime during upgrades.
 
 
+
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul -n mynamespace
+kubectl get pvc -o name -n mynamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n mynamespace
+kubectl delete secret gossip-key --ignore-not-found -n mynamespace
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul -n mynamespace
+kubectl rollout restart deployment/consul-config-loader -n mynamespace
+kubectl rollout status deployment/consul-config-loader -n mynamespace
+until kubectl exec consul-0 -n mynamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/msmysql -n mynamespace
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: mynamespace
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - msmysql
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -n mynamespace -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -n mynamespace -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul -n mynamespace\`.
 
 
 ## Troubleshooting
@@ -17772,9 +18891,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.mynamespace.svc.cluster.local
+          value: consul-ui.mynamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.mynamespace.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -17985,6 +19107,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: mynamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -18018,6 +19156,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -18028,7 +19169,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -18115,6 +19256,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.mynamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -18122,6 +19265,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -18206,6 +19354,7 @@ exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservic
       "11-mssql"
     ],
     "clusteredDbApps": [],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "microservice",
     "deploymentType": "kubernetes",
@@ -18319,6 +19468,89 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul
+kubectl get pvc -o name | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete
+kubectl delete secret gossip-key --ignore-not-found
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul
+kubectl rollout restart deployment/consul-config-loader
+kubectl rollout status deployment/consul-config-loader
+until kubectl exec consul-0 -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate deployment/msmysql deployment/mspsql deployment/msmongodb deployment/msmariadb deployment/msmssqldb
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - msmysql
+                  - mspsql
+                  - msmongodb
+                  - msmariadb
+                  - msmssqldb
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul\`.
+
 
 ## Troubleshooting
 
@@ -18391,9 +19623,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.default.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -18671,9 +19906,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mariadb://msmariadb-mariadb.default.svc.cluster.local:3306/msmariadb?useLegacyDatetimeCode=false
         - name: SPRING_DATASOURCE_USERNAME
@@ -18873,9 +20111,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_MONGODB_URI
           value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
@@ -19263,6 +20504,7 @@ spec:
             - |
                 while true
                 do
+                  rt=$(nc -z -w 1 msmssqldb-mssql 1433)
                   if [ $? -eq 0 ]; then
                     echo "DB is UP"
                     break
@@ -19277,9 +20519,23 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
+        - name: SPRING_DATASOURCE_USERNAME
+          value: SA
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msmssqldb-mssql
+              key: mssql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:sqlserver://msmssqldb-mssql.default.svc.cluster.local:1433;database=msmssqldb;encrypt=false
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
@@ -19324,6 +20580,17 @@ spec:
     requests:
       storage: 2Gi
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: msmssqldb-mssql
+  namespace: default
+  labels:
+    app: msmssqldb-mssql
+type: Opaque
+data:
+  mssql-password: U0VDUkVULVBBU1NXT1JELUFhMQ==
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19331,6 +20598,9 @@ metadata:
   namespace: default
 spec:
   replicas: 1
+  # the ReadWriteOnce volume can't be shared with a second SQL Server pod during a rolling update
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: msmssqldb-mssql
@@ -19339,39 +20609,49 @@ spec:
       labels:
         app: msmssqldb-mssql
     spec:
+      securityContext:
+        # the mssql user of the image, so that it can write to the volume
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
       volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
       - name: data
         persistentVolumeClaim:
           claimName: msmssqldb-mssql-pvc
       containers:
-      - name: mysql
+      - name: mssql
         image: mssql-placeholder
         env:
         - name: MSSQL_PID
           value: "Express"
         - name: ACCEPT_EULA
           value: "Y"
+        # the image creates this database when it starts with an empty data directory
+        - name: MSSQL_DB
+          value: msmssqldb
         - name: MSSQL_SA_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql
-              key: SA_PASSWORD
+              name: msmssqldb-mssql
+              key: mssql-password
         ports:
         - containerPort: 1433
+        readinessProbe:
+          exec:
+            command: ["/bin/bash", "-c", '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -Q "USE [$MSSQL_DB]" -o /dev/null']
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
-        - name: mssqldb
+        - name: data
           mountPath: /var/opt/mssql
         resources:
+          # SQL Server doesn't start with less than 2000 MB of memory
           requests:
-            memory: "512Mi"
+            memory: "2Gi"
             cpu: "500m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
-
 ---
 apiVersion: v1
 kind: Service
@@ -19382,22 +20662,7 @@ spec:
   selector:
     app: msmssqldb-mssql
   ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: LoadBalancer
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: mssql-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-premium
-  resources:
-    requests:
-      storage: 8Gi
+  - port: 1433
 ",
     "stateCleared": "modified",
   },
@@ -19472,9 +20737,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://msmysql-mysql.default.svc.cluster.local:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_DATASOURCE_USERNAME
@@ -19654,9 +20922,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://mspsql-postgresql.default.svc.cluster.local:5432/mspsql
         - name: SPRING_DATASOURCE_USERNAME
@@ -19961,6 +21232,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: default
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -19994,6 +21281,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -20004,7 +21294,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -20091,6 +21381,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.default.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -20098,6 +21390,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -20191,6 +21488,7 @@ exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
     "appsFolders": [
       "01-gateway"
     ],
+    "consulGossipKey": "U0VDUkVULUdPU1NJUC1LRVktLS0tLS0tLS0tLS0tLS0=",
     "dbRandomPassword": "SECRET-PASSWORD",
     "deploymentApplicationType": "gateway",
     "deploymentType": "kubernetes",
@@ -20274,6 +21572,84 @@ This is because the rolling upgrade strategy first stops a running replica in or
 
 
 
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the \`consul-gossip-key\` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart \`consul-config-loader\` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old \`gossip-key\` Secret is no longer used:
+
+\`\`\`
+kubectl delete statefulset consul -n jhipsternamespace
+kubectl get pvc -o name -n jhipsternamespace | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete -n jhipsternamespace
+kubectl delete secret gossip-key --ignore-not-found -n jhipsternamespace
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul -n jhipsternamespace
+kubectl rollout restart deployment/consul-config-loader -n jhipsternamespace
+kubectl rollout status deployment/consul-config-loader -n jhipsternamespace
+until kubectl exec consul-0 -n jhipsternamespace -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+kubectl rollout restart deployment/jhgate -n jhipsternamespace
+\`\`\`
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with \`consul keyring\`, also put the new key in the \`consul-gossip-key\` Secret and in \`consulGossipKey\` of \`.yo-rc.json\`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the \`consul-gossip-key\` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that \`consul-config-loader\` stores in Consul, and register or deregister services. It can even read the gossip key from \`/v1/operator/keyring\`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and \`consul-config-loader\` reach Consul. Apply it with:
+
+\`\`\`
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: jhipsternamespace
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - jhgate
+                  - consul-config-loader
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+\`\`\`
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+\`\`\`
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0 -n jhipsternamespace -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+\`\`\`
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+\`\`\`
+kubectl exec consul-0 -n jhipsternamespace -- consul catalog services
+\`\`\`
+
+When you add an app that uses Consul, add its name to \`values\` and apply the policy again. \`kubectl port-forward\` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run \`kubectl delete networkpolicy consul -n jhipsternamespace\`.
+
 
 ## Troubleshooting
 
@@ -20346,9 +21722,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.jhipsternamespace.svc.cluster.local
+          value: consul-ui.jhipsternamespace.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_USERNAME
@@ -20637,6 +22016,22 @@ spec:
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
+#
+# The gossip key of the consul-gossip-key Secret is only used on the first start of a server, Consul keeps its keyring
+# in its data directory then. After rotating the key with \`consul keyring\`, also update the Secret and consulGossipKey
+# in .yo-rc.json, or new servers (scale-up, lost volume) can't join.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: consul-gossip-key
+  namespace: jhipsternamespace
+  labels:
+    app.kubernetes.io/name: consul
+    app: consul
+type: Opaque
+data:
+  gossip-key: VTBWRFVrVlVMVWRQVTFOSlVDMUxSVmt0TFMwdExTMHRMUzB0TFMwdExTMD0=
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -20670,6 +22065,9 @@ spec:
     app: consul
   sessionAffinity: None
 ---
+# Apps reach Consul through this Service and register through the Consul agent API, and only the server that received a
+# registration can remove it. Session affinity sends all of a pod's connections, including the deregistration at shutdown,
+# to the same server. With Istio, the sidecar ignores sessionAffinity, so consul-destination-rule.yml pins it instead.
 apiVersion: v1
 kind: Service
 metadata:
@@ -20680,7 +22078,7 @@ metadata:
     app: consul
 spec:
   type: ClusterIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
   ports:
     - name: http
       port: 8500
@@ -20767,6 +22165,8 @@ spec:
             - -client=0.0.0.0
             - -bootstrap-expect=3
             - -retry-join=consul-headless.jhipsternamespace.svc.cluster.local
+            # encrypts the gossip traffic between the servers, apps reach Consul over HTTP and don't need the key
+            - -encrypt=$(GOSSIP_KEY)
             # Consul defaults to raft_multiplier 5, HashiCorp recommends 1 for production servers
             - "-hcl=performance { raft_multiplier = 1 }"
           env:
@@ -20774,6 +22174,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: GOSSIP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: consul-gossip-key
+                  key: gossip-key
             # the image's entrypoint changes data directory ownership with su-exec, which needs root
             - name: CONSUL_DISABLE_PERM_MGMT
               value: "true"
@@ -21414,6 +22819,113 @@ deploy:
 
 exports[`generator - Kubernetes only gateway with eureka should match spawn calls snapshot 1`] = `[]`;
 
+exports[`generator - Kubernetes reactive mssql microservice should match deployment snapshot 1`] = `
+{
+  "kubernetes/msreactivemssql-k8s/msreactivemssql-deployment.yml": {
+    "contents": "apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: msreactivemssql
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msreactivemssql
+      version: "v1"
+  template:
+    metadata:
+      labels:
+        app: msreactivemssql
+        version: "v1"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - msreactivemssql
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      initContainers:
+        - name: init-ds
+          image: busybox:latest
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+                while true
+                do
+                  rt=$(nc -z -w 1 msreactivemssql-mssql 1433)
+                  if [ $? -eq 0 ]; then
+                    echo "DB is UP"
+                    break
+                  fi
+                  echo "DB is not yet reachable;sleep for 10s before retry"
+                  sleep 10
+                done
+      containers:
+      - name: msreactivemssql-app
+        image: jhipster/msreactivemssql
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul-ui.default.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
+        - name: SPRING_R2DBC_URL
+          value: r2dbc:mssql://msreactivemssql-mssql.default.svc.cluster.local:1433/msreactivemssql
+        - name: SPRING_R2DBC_USERNAME
+          value: SA
+        - name: SPRING_R2DBC_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: msreactivemssql-mssql
+              key: mssql-password
+        - name: SPRING_LIQUIBASE_URL
+          value: jdbc:sqlserver://msreactivemssql-mssql.default.svc.cluster.local:1433;database=msreactivemssql;encrypt=false
+        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
+          value: "x-request-id,x-ot-span-context"
+        - name: JAVA_OPTS
+          value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        ports:
+        - name: http
+          containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /management/health/readiness
+            port: http
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          failureThreshold: 6
+        livenessProbe:
+          httpGet:
+            path: /management/health/liveness
+            port: http
+          initialDelaySeconds: 120
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - Kubernetes reactive postgresql microservice should match deployment snapshot 1`] = `
 {
   "kubernetes/msreactivepsql-k8s/msreactivepsql-deployment.yml": {
@@ -21470,9 +22982,12 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul-headless.default.svc.cluster.local
+          value: consul-ui.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+        # Lets Consul remove a registration whose deregistration was lost, once its health check has been critical this long
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECKCRITICALTIMEOUT
+          value: 3m
         - name: SPRING_R2DBC_URL
           value: r2dbc:postgresql://msreactivepsql-postgresql.default.svc.cluster.local:5432/msreactivepsql
         - name: SPRING_R2DBC_USERNAME

@@ -451,6 +451,12 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           }),
         );
       },
+      prepareUserFieldsByName({ application }) {
+        // The validations of the user in every layer are read from its fields.
+        if (application.user) {
+          application.user.fieldsByName = Object.fromEntries(application.user.fields.map(field => [field.fieldName, field]));
+        }
+      },
       checkProperties({ entities }) {
         for (const entity of entities) {
           const properties = [...entity.fields.map(entity => entity.propertyName), ...entity.relationships.map(rel => rel.propertyName)];

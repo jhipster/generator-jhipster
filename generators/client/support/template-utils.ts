@@ -62,11 +62,17 @@ export const generateEntityClientImports = (
   const relevantRelationships = filterRelevantRelationships(relationships);
 
   relevantRelationships.forEach(relationship => {
+    // A relationship serialized as the primary keys of the other entity needs no type of it.
+    if (relationship.relationshipSerializePrimaryKeyOnly && clientFramework === VUE) return;
     const importType = `I${relationship.otherEntity.entityAngularName}`;
     let importPath: string;
     const prefix = clientFramework === VUE ? '@' : 'app';
     const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
-    if (relationship.otherEntity?.builtInUser) {
+    if (clientFramework === VUE) {
+      // The model of an entity is next to its service.
+      const { entityFolderName, entityFileName } = relationship.otherEntity;
+      importPath = `${prefix}/entities/${entityFolderName}/${entityFileName}.model`;
+    } else if (relationship.otherEntity?.builtInUser) {
       importPath = `${prefix}/${modelPath}/user.model`;
     } else {
       importPath = `${prefix}/${modelPath}/${normalizePathEnd(relationship.otherEntity.clientRootFolder)}${relationship.otherEntity.entityFileName}.model`;
@@ -93,7 +99,7 @@ export const generateEntityClientEnumImports = (fields: BaseApplicationField[], 
     ) {
       const importType = fieldType;
       const basePath = clientFramework === VUE ? '@' : 'app';
-      const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
+      const modelPath = clientFramework === ANGULAR || clientFramework === VUE ? 'entities' : 'shared/model';
       const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;
       uniqueEnums[fieldType] = field.fieldType;
       typeImports.set(importType, importPath);

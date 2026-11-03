@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "@angular/common": "22.2.3",
+    "@angular/common": "22.2.4",
     "@fortawesome/angular-fontawesome": "5.1.0",
     "@fortawesome/free-solid-svg-icons": "7.3.1",
     "@ng-bootstrap/ng-bootstrap": "21.0.0",
-    "@ngx-translate/core": "18.0.0",
+    "@ngx-translate/core": "18.1.0",
     "@stomp/rx-stomp": "2.4.0",
     "bootstrap": "5.3.8",
     "bootswatch": "5.3.8",
@@ -13,16 +13,16 @@
     "ngx-infinite-scroll": "22.0.0",
     "rxjs": "7.8.2",
     "sockjs-client": "1.6.1",
-    "tslib": "2.8.1"
+    "tslib": "2.9.1"
   },
   "devDependencies": {
-    "@angular-architects/native-federation": "22.2.3",
+    "@angular-architects/native-federation": "22.2.4",
     "@angular-builders/custom-esbuild": "22.0.1",
-    "@angular-devkit/architect": "0.2202.4",
-    "@angular/build": "22.2.4",
-    "@angular/cli": "22.2.4",
+    "@angular-devkit/architect": "0.2202.5",
+    "@angular/build": "22.2.5",
+    "@angular/cli": "22.2.5",
     "@eslint/js": "10.0.1",
-    "@softarc/native-federation-orchestrator": "4.8.0",
+    "@softarc/native-federation-orchestrator": "4.9.0",
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/folder-hash": "4.0.4",
     "@types/node": "22.20.5",
@@ -30,7 +30,7 @@
     "@vitest/eslint-plugin": "1.6.28",
     "angular-eslint": "22.6.0",
     "deepmerge": "4.3.1",
-    "eslint": "10.13.0",
+    "eslint": "10.14.0",
     "folder-hash": "4.1.4",
     "globals": "17.13.0",
     "jiti": "2.7.0",
@@ -40,7 +40,7 @@
     "sonar-scanner": "3.1.0",
     "tinyglobby": "0.2.17",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.0",
+    "typescript-eslint": "8.72.1",
     "vitest": "5.0.5",
     "vitest-sonar-reporter": "3.0.0"
   },

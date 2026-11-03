@@ -141,9 +141,6 @@ export const UserManagement = () => {
       <Table responsive striped>
         <thead>
           <tr>
-            <th className="hand" onClick={sort('id')}>
-              <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-            </th>
             <th className="hand" onClick={sort('login')}>
               <Translate contentKey="userManagement.login">Login</Translate> <FontAwesomeIcon icon={getSortIconByFieldName('login')} />
             </th>
@@ -157,9 +154,6 @@ export const UserManagement = () => {
               <FontAwesomeIcon icon={getSortIconByFieldName('langKey')} />
             </th>
 <%_ } _%>
-            <th>
-              <Translate contentKey="userManagement.profiles">Profiles</Translate>
-            </th>
 <%_ if (!databaseTypeCassandra) { _%>
             <th className="hand" onClick={sort('createdDate')}>
               <Translate contentKey="userManagement.createdDate">Created Date</Translate>{' '}
@@ -173,27 +167,27 @@ export const UserManagement = () => {
               <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate>{' '}
               <FontAwesomeIcon icon={getSortIconByFieldName('lastModifiedDate')} />
             </th>
-            <th />
 <%_ } _%>
+            <th>
+              <Translate contentKey="userManagement.profiles">Profiles</Translate>
+            </th>
+            <th />
           </tr>
         </thead>
         <tbody>
           {users.map((user, i) => (
             <tr id={user.login} key={`user-${i}`} data-cy="entityTable">
               <td>
-                <Button as={Link as any} to={user.login} variant="link" size="sm">
-                  {user.id}
-                </Button>
+                <Link to={user.login}>{user.login}</Link>
               </td>
-              <td>{user.login}</td>
               <td>{user.email}</td>
               <td>
                 {user.activated ? (
-                  <Button variant="success" onClick={toggleActive(user)}>
+                  <Button variant="success" size="sm" onClick={toggleActive(user)} disabled={account.login === user.login}>
                     <Translate contentKey="userManagement.activated">Activated</Translate>
                   </Button>
                 ) : (
-                  <Button variant="danger" onClick={toggleActive(user)}>
+                  <Button variant="danger" size="sm" onClick={toggleActive(user)}>
                     <Translate contentKey="userManagement.deactivated">Deactivated</Translate>
                   </Button>
                 )}
@@ -201,13 +195,6 @@ export const UserManagement = () => {
 <%_ if (enableTranslation) { _%>
               <td>{user.langKey}</td>
 <%_ } _%>
-              <td>
-                {user.authorities?.map((authority, j) => (
-                  <div key={`user-auth-${i}-${j}`}>
-                    <Badge bg="info">{authority}</Badge>
-                  </div>
-                ))}
-              </td>
 <%_ if (!databaseTypeCassandra) { _%>
               <td>
                 {user.createdDate && <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />}
@@ -219,6 +206,13 @@ export const UserManagement = () => {
                 )}
               </td>
 <%_ } _%>
+              <td>
+                {user.authorities?.map((authority, j) => (
+                  <div key={`user-auth-${i}-${j}`}>
+                    <Badge bg="info">{authority}</Badge>
+                  </div>
+                ))}
+              </td>
               <td className="text-end">
                 <div className="btn-group flex-btn-group-container">
                   <Button as={Link as any} to={user.login} variant="info" size="sm" data-cy="entityDetailsButton">
@@ -239,6 +233,7 @@ export const UserManagement = () => {
                     variant="danger"
                     size="sm"
                     disabled={account.login === user.login}
+                    className={account.login === user.login ? 'disabled' : undefined}
                     data-cy="entityDeleteButton"
                   >
                     <FontAwesomeIcon icon={faTrash} />{' '}

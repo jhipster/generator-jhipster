@@ -26,14 +26,12 @@
       <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="Configuration">
         <thead>
           <tr>
-            <th class="w-40" @click="changeOrder('prefix')" scope="col">
+            <jhi-sort-header class="w-40" field-name="prefix" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
               <span>{{ t$('configuration.table.prefix') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="prefix"></jhi-sort-indicator>
-            </th>
-            <th class="w-60" @click="changeOrder('properties')" scope="col">
+            </jhi-sort-header>
+            <jhi-sort-header class="w-60" field-name="properties" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
               <span>{{ t$('configuration.table.properties') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="properties"></jhi-sort-indicator>
-            </th>
+            </jhi-sort-header>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +43,7 @@
               <div class="row" v-for="key in keys(entry.properties)" :key="key">
                 <div class="col-md-4">{{ key }}</div>
                 <div class="col-md-8">
-                  <span class="float-end badge bg-secondary break">{{ entry.properties[key] }}</span>
+                  <span class="float-end badge bg-secondary break">{{ entry.properties?.[key] }}</span>
                 </div>
               </div>
             </td>

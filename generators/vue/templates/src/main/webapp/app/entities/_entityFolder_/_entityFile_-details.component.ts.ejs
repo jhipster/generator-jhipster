@@ -16,23 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, defineComponent, inject, ref } from 'vue';
+import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>defineComponent, inject } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
 
-import { useAlertService } from '@/shared/alert/alert.service';
-<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
-<%_ if (composables.length > 0) { _%>
+import { type AxiosError } from 'axios';
+
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
+<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove'], 'useControlledRequest']; _%>
 import { <%- composables.join(', ') %> } from '@/shared/composables';
+<%_ if (builtInUserManagement) { _%>
+import { currentUsernameKey } from '@/shared/config/injection-keys';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
 export default defineComponent({
   name: '<%- entityAngularName %>Details',
@@ -43,8 +46,11 @@ export default defineComponent({
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
     const dateFormat = useDateFormat();
 <%_ } _%>
-    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+    const alertService = inject(alertServiceKey, () => useAlertService(), true);
+<%_ if (builtInUserManagement) { _%>
+    const username = inject(currentUsernameKey);
+<%_ } _%>
 
 <% if (anyFieldIsBlobDerived) { %>
     const dataUtils = useDataUtils();
@@ -53,11 +59,16 @@ export default defineComponent({
     const router = useRouter();
 
     const previousState = () => router.go(-1);
-    const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref({});
+    const { data: <%- entityInstance %> } = useControlledRequest((id, { signal }) => <%- entityInstance %>Service().find(id, { signal }), {
+      // The router reuses the component when the id of the route changes.
+      params: () => route.params?.<%- entityInstance %>Id as string | undefined,
+      initialData: (): I<%- entityAngularName %> => ({}),
+      onError: error => alertService.showHttpError((error as AxiosError).response),
+    });
 <%_ if (!readOnly) { _%>
     const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
       alertService,
-      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>,
+      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>!,
       remove: id => <%- entityInstance %>Service().delete(id),
   <%_ if (enableTranslation) { _%>
       removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
@@ -68,20 +79,10 @@ export default defineComponent({
     });
 <%_ } _%>
 
-    const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
-      try {
-        const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
-        <%- entityInstance %>.value = res;
-      } catch (error) {
-        alertService.showHttpError(error.response);
-      }
-    };
-
-    if (route.params?.<%- entityInstance %>Id) {
-      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id);
-    }
-
     return {
+<%_ if (builtInUserManagement) { _%>
+      username,
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>

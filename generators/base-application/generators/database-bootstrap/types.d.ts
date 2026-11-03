@@ -26,6 +26,11 @@ import type {
  * The properties the preparation of the database adds to the application, whichever database it is.
  */
 export type Application = {
+  /** Derived from the `databaseType` the generator of the backend declares, when it does not derive them. */
+  databaseTypeAny?: boolean;
+  databaseTypeSql?: boolean;
+  databaseTypeCassandra?: boolean;
+  databaseTypeNeo4j?: boolean;
   /** The prefix of the tables of JHipster itself, from `jhiPrefix`. */
   jhiTablePrefix: string;
   /** The port the production database listens to by default, for its service and the configuration of the backend. */

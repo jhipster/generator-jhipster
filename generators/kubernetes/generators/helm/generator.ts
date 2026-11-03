@@ -43,12 +43,27 @@ export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      checkHelm,
+      async checkHelm() {
+        await checkHelm.call(this);
+      },
     });
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get loadingWorkspaces() {
+    return this.asLoadingWorkspacesTaskGroup({
+      loadGeneratorType({ deployment }) {
+        // Lets the shared kubernetes templates know that they are rendered in Helm charts.
+        deployment.generatorType = 'helm';
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 
   get preparingWorkspaces() {

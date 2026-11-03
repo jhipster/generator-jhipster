@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { computed, createApp<%- enableTranslation ? ', onMounted' : '' %>, provide, watch } from 'vue';
+import { computed, createApp, h<%- enableTranslation ? ', onMounted' : '' %>, provide, watch } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -27,28 +27,29 @@ import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' :
 <%_ } _%>
 import { createPinia, storeToRefs } from 'pinia'
 
-import AccountService from '@/account/account.service';
+import AccountService, { accountServiceKey } from '@/account/account.service';
 <%_ if (generateUserManagement) { _%>
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
-import LoginService from '@/account/login.service';
+import LoginService, { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
+import TranslationService, { translationServiceKey } from '@/locale/translation.service';
 <%_ } _%>
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
 import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
+import { authenticatedKey<%- enableTranslation ? ', changeLanguageKey' : '' %>, currentLanguageKey, currentUsernameKey } from '@/shared/config/injection-keys';
 import JhiItemCount from '@/shared/jhi-item-count.vue';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import JhiSortIndicator from '@/shared/sort/jhi-sort-indicator.vue';
+import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
 import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/store';
 
 <%_ if (communicationSpringWebsocket) { _%>
-import { useTrackerService } from './admin/tracker/tracker.service';
+import { trackerServiceKey, useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 import App from './app.vue';
 import router from './router';
@@ -76,10 +77,9 @@ const i18n = initI18N();
 <%_ } _%>
 
 const app = createApp({
-  components: { App },
   setup() {
 <%_ if (authenticationUsesCsrf) { _%>
-    provide('loginService', new LoginService());
+    provide(loginServiceKey, new LoginService());
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
     const { hideLogin, showLogin } = useLoginModal();
@@ -87,19 +87,19 @@ const app = createApp({
     const store = useStore();
     const accountService = new AccountService(store);
 <%_ if (enableTranslation) { _%>
-    const i18n = useI18n();
+    const composer = useI18n();
     const translationStore = useTranslationStore();
-    const translationService = new TranslationService(i18n);
+    const translationService = new TranslationService(composer);
 
-    const changeLanguage = async (newLanguage: string) => {
-      if (newLanguage && i18n.locale.value !== newLanguage) {
+    const changeLanguage = async (newLanguage?: string | null) => {
+      if (newLanguage && composer.locale.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
         translationStore.setCurrentLanguage(newLanguage);
       }
     };
 
-    provide('currentLanguage', i18n.locale);
-    provide('changeLanguage', changeLanguage);
+    provide(currentLanguageKey, composer.locale);
+    provide(changeLanguageKey, changeLanguage);
 
     watch(
       () => store.account,
@@ -113,7 +113,9 @@ const app = createApp({
     watch(
       () => translationStore.currentLanguage,
       value => {
-        translationService.setLocale(value);
+        if (value) {
+          translationService.setLocale(value);
+        }
       },
     );
 
@@ -123,11 +125,11 @@ const app = createApp({
         store.account?.langKey,
         navigator.language,
         '<%- nativeLanguage %>'
-      ].find(lang => lang && translationService.isLanguageSupported(lang));
+      ].find(language => language && translationService.isLanguageSupported(language));
       await changeLanguage(lang);
     });
 <%_ } else { _%>
-    provide('currentLanguage', computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
+    provide(currentLanguageKey, computed(() => store.account?.langKey ?? navigator.language ?? '<%- nativeLanguage %>'));
 <%_ } _%>
 
     router.beforeResolve(async (to, from) => {
@@ -139,7 +141,8 @@ const app = createApp({
       }
 
 <%_ } _%>
-      if (!store.authenticated) {
+      // The account is loaded on the first navigation only: a login loads it again, a 401 logs out.
+      if (from === START_LOCATION && !store.authenticated) {
         await accountService.update();
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
@@ -178,23 +181,20 @@ const app = createApp({
     );
 
     const { authenticated } = storeToRefs(store);
-    provide('authenticated', authenticated);
-    provide(
-      'currentUsername',
-      computed(() => store.account?.login),
-    );
+    provide(authenticatedKey, authenticated);
+    provide(currentUsernameKey, computed(() => store.account?.login));
 
 <%_ if (enableTranslation) { _%>
-    provide('translationService', translationService);
+    provide(translationServiceKey, translationService);
 <%_ } _%>
-    provide('accountService', accountService);
+    provide(accountServiceKey, accountService);
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
 <%_ if (communicationSpringWebsocket) { _%>
 
-    provide('trackerService', useTrackerService({ authenticated }));
+    provide(trackerServiceKey, useTrackerService({ authenticated }));
 <%_ } _%>
   },
-  template: '<App/>',
+  render: () => h(App),
 });
 
 initFortAwesome(app);
@@ -203,7 +203,7 @@ initBootstrapVue(app);
 
 app
   .component('JhiItemCount', JhiItemCount)
-  .component('JhiSortIndicator', JhiSortIndicator)
+  .component('JhiSortHeader', JhiSortHeader)
   .use(router)
   .use(pinia)
 <%_ if (enableTranslation) { _%>

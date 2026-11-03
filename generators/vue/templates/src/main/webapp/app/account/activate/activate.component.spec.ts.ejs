@@ -19,14 +19,16 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { createTestingPinia } from '@pinia/testing';
-import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
+import { type ComponentMountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
+
+import { useLoginModal } from '@/account/login-modal';
 
 import Activate from './activate.vue';
 
 type ActivateComponentType = InstanceType<typeof Activate>;
 
-const route = { query: { key: 'key' } };
+const route: { query: { key: string | string[] } } = { query: { key: 'key' } };
 
 vi.mock('vue-router', () => ({
   useRoute: () => route,
@@ -73,5 +75,19 @@ describe('Activate Component', () => {
 
     expect(activate.error).toBeFalsy();
     expect(activate.success).toBeTruthy();
+    await flushPromises();
+    await wrapper.find('a.alert-link').trigger('click');
+    expect(useLoginModal().showLogin).toHaveBeenCalled();
+  });
+
+  it('should activate with the first key of the route', async () => {
+    axiosStub.get.mockResolvedValue({});
+    route.query.key = ['first', 'second'];
+
+    const wrapper = shallowMount(Activate, mountOptions);
+    await wrapper.vm.$nextTick();
+
+    expect(axiosStub.get).toHaveBeenLastCalledWith(expect.stringContaining('key=first'));
+    route.query.key = 'key';
   });
 });

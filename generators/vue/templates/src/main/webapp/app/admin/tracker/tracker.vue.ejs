@@ -25,4 +25,60 @@
   </div>
 </template>
 
-<script lang="ts" src="./tracker.component.ts"></script>
+<script setup lang="ts">
+import { inject, onMounted, onUnmounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute } from 'vue-router';
+
+import { type Subscription } from 'rxjs';
+
+import { useDateFormat } from '@/shared/composables'
+
+import { type TrackerActivity, trackerServiceKey } from './tracker.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>TrackerComponent' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+const { formatDateShort: formatDate } = useDateFormat();
+const trackerService = inject(trackerServiceKey)!;
+const activities = ref<TrackerActivity[]>([]);
+const route = useRoute();
+let subscription: Subscription | null = null;
+
+const showActivity = (activity: TrackerActivity) => {
+  let existingActivity = false;
+  for (let index = 0; index < activities.value.length; index++) {
+    if (activities.value[index].sessionId === activity.sessionId) {
+      existingActivity = true;
+      if (activity.page === 'logout') {
+        activities.value.splice(index, 1);
+      } else {
+        activities.value.splice(index, 1);
+        activities.value.push(activity);
+      }
+    }
+  }
+  if (!existingActivity && activity.page !== 'logout') {
+    activities.value.push(activity);
+  }
+};
+
+onMounted(() => {
+  subscription = trackerService.subscribe(activity => {
+    showActivity(activity);
+  });
+  // Make sure current session shows on the list
+  trackerService.sendActivity(route.fullPath);
+});
+
+onUnmounted(() => {
+  if (subscription) {
+    subscription.unsubscribe();
+    subscription = null;
+  }
+});
+</script>

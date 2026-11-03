@@ -33,13 +33,15 @@ describe('Axios interceptor', () => {
   beforeEach(() => {
     axios.interceptors.request.clear();
     axios.interceptors.response.clear();
+    localStorage.clear();
+    sessionStorage.clear();
   });
 
   it('should use localStorage to provide bearer', () => {
 <%_ if (authenticationTypeJwt) { _%>
     localStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'auth');
 <%_ } _%>
-    const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
+    const result = setupAxiosConfig.onRequestSuccess({});
 
 <%_ if (authenticationTypeJwt) { _%>
     expect(result.headers.Authorization).toBe('Bearer auth');
@@ -51,13 +53,29 @@ describe('Axios interceptor', () => {
 <%_ if (authenticationTypeJwt) { _%>
     sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'auth');
 <%_ } _%>
-    const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
+    const result = setupAxiosConfig.onRequestSuccess({});
 
 <%_ if (authenticationTypeJwt) { _%>
     expect(result.headers.Authorization).toBe('Bearer auth');
 <%_ } _%>
     expect(result.url.indexOf(SERVER_API_URL)).toBeGreaterThan(-1);
   });
+<%_ if (authenticationTypeJwt) { _%>
+
+  it('should not provide a bearer without a token', () => {
+    const result = setupAxiosConfig.onRequestSuccess({ url: 'api/test' });
+
+    expect(result.headers).toBeUndefined();
+  });
+
+  it('should add the bearer to the existing headers', () => {
+    localStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'auth');
+
+    const result = setupAxiosConfig.onRequestSuccess({ url: 'api/test', headers: { Accept: 'application/json' } });
+
+    expect(result.headers).toEqual({ Accept: 'application/json', Authorization: 'Bearer auth' });
+  });
+<%_ } _%>
 });
 
 describe('Axios errors interceptor', () => {
@@ -90,6 +108,19 @@ describe('Axios errors interceptor', () => {
     setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
 
     mock.onGet().reply(402);
+    await expect(axios('/api/test')).rejects.toThrow();
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should pass the responses and the errors without a response', async () => {
+    const callback = vi.fn();
+
+    setupAxiosConfig.setupAxiosInterceptors(callback, callback);
+
+    mock.reset();
+    mock.onGet().replyOnce(200, 'ok');
+    await expect(axios('/api/test')).resolves.toMatchObject({ data: 'ok' });
+    mock.onGet().networkErrorOnce();
     await expect(axios('/api/test')).rejects.toThrow();
     expect(callback).not.toHaveBeenCalled();
   });

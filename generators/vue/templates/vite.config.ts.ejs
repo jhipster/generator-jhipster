@@ -84,13 +84,11 @@ const config = defineConfig({
   },
   resolve: {
     tsconfigPaths: true,
-    alias: {
-      vue: 'vue/dist/vue.esm-bundler.js',
-    },
   },
   define: {
-    SERVER_API_URL: '"/"',
-    APP_VERSION: `"${process.env.APP_VERSION ? process.env.APP_VERSION : 'DEV'}"`,
+    SERVER_API_URL: '""',
+    // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
+    VERSION: JSON.stringify(process.env.APP_VERSION || 'DEV'),
   },
   server: {
     host: true,

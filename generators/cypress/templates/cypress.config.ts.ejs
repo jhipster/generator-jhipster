@@ -28,9 +28,7 @@ export default defineConfig({
   viewportWidth: 1200,
   viewportHeight: 720,
   retries: 2,
-<%_ if (clientFrameworkReact) { _%>
   scrollBehavior: 'center',
-<%_ } _%>
   expose: {
     adminUsername: '<%- defaultAdminUsername %>',
     adminPassword: '<%- defaultAdminPassword %>',

@@ -150,6 +150,92 @@ kubectl scale statefulset jhipster-registry --replicas 3<%- kubernetesNamespaceD
 ```
 <%_ } _%>
 
+<%_ if (serviceDiscoveryConsul) { _%>
+  <%_ const consulApps = appConfigs.filter(app => app.serviceDiscoveryConsul).map(app => app.baseName.toLowerCase());
+      const consulClients = [...consulApps, 'consul-config-loader'];
+  _%>
+## Consul
+
+### Upgrading a Consul cluster deployed by an older JHipster version
+
+The Consul servers encrypt their gossip traffic with the key of the `consul-gossip-key` Secret. Servers deployed by an older JHipster version don't, and they can't talk to the new ones: a rolling update stalls on its first pod, and the apps registered with that pod disappear from Consul. Replace the cluster instead. This deletes the data of the Consul servers, so restart `consul-config-loader` to load your configuration again, wait until it's in Consul, then restart your apps to register them again. The old `gossip-key` Secret is no longer used:
+
+```
+kubectl delete statefulset consul<%- namespaceOption %>
+kubectl get pvc -o name<%- namespaceOption %> | grep -E '^persistentvolumeclaim/data-consul-[0-9]+$' | xargs -r kubectl delete<%- namespaceOption %>
+kubectl delete secret gossip-key --ignore-not-found<%- namespaceOption %>
+kubectl apply -f registry-k8s/
+kubectl rollout status statefulset/consul<%- namespaceOption %>
+kubectl rollout restart deployment/consul-config-loader<%- namespaceOption %>
+kubectl rollout status deployment/consul-config-loader<%- namespaceOption %>
+until kubectl exec consul-0<%- namespaceOption %> -- consul kv get config/application/data > /dev/null 2>&1; do sleep 2; done
+  <%_ if (consulApps.length > 0) { _%>
+kubectl rollout restart <%- consulApps.map(app => `deployment/${app}`).join(' ') %><%- namespaceOption %>
+  <%_ } _%>
+```
+
+### Rotating the gossip key
+
+Consul stores the key in its data directory on first start, and ignores the key of the Secret after that. If you rotate the key with `consul keyring`, also put the new key in the `consul-gossip-key` Secret and in `consulGossipKey` of `.yo-rc.json`, or new Consul servers (after a scale-up, or a server that lost its volume) can't join the cluster.
+
+### Before going to production
+
+The gossip traffic between the Consul servers is encrypted with the key of the `consul-gossip-key` Secret, but the Consul HTTP API on port 8500 has no authentication: any pod of the cluster can read and change the configuration that `consul-config-loader` stores in Consul, and register or deregister services. It can even read the gossip key from `/v1/operator/keyring`, so until this NetworkPolicy (or Consul ACLs) is in place, the encryption alone doesn't keep the pods of your cluster out.
+
+This NetworkPolicy lets only the Consul servers, your apps and `consul-config-loader` reach Consul. Apply it with:
+
+```
+kubectl apply -f - <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: consul
+  namespace: <%- kubernetesNamespace %>
+spec:
+  podSelector:
+    matchLabels:
+      app: consul
+  policyTypes:
+    - Ingress
+  ingress:
+    # the Consul servers gossip and replicate between themselves
+    - from:
+        - podSelector:
+            matchLabels:
+              app: consul
+    # the apps and consul-config-loader use the HTTP API
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+  <%_ for (const client of consulClients) { _%>
+                  - <%- client %>
+  <%_ } _%>
+      ports:
+        - protocol: TCP
+          port: 8500
+EOF
+```
+
+Check that a pod that isn't one of your apps can't reach Consul anymore. This command should fail with a timeout after 5 seconds:
+
+```
+kubectl run consul-access-check -q --rm -i --restart=Never --image=curlimages/curl:8.17.0<%- istio ? ' --labels=sidecar.istio.io/inject=false' : '' %><%- namespaceOption %> -- curl -sS -m 5 http://consul-ui:8500/v1/status/leader
+```
+
+If it prints the address of the Consul leader instead, the network plugin of your cluster doesn't enforce NetworkPolicies, and you need one that does, such as Calico or Cilium.
+
+Check that your apps are still registered:
+
+```
+kubectl exec consul-0<%- namespaceOption %> -- consul catalog services
+```
+
+When you add an app that uses Consul, add its name to `values` and apply the policy again. `kubectl port-forward` to Consul keeps working, since it doesn't go through the pod network. To remove the policy, run `kubectl delete networkpolicy consul<%- namespaceOption %>`.
+
+<%_ } _%>
 <%_ if (useKeycloak) { _%>
 ## Keycloak
 

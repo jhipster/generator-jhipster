@@ -314,6 +314,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/base-application/generators/database-bootstrap/templates/template-file-base-application:database-bootstrap.ejs": {
     "stateCleared": "modified",
   },
+  "generators/base-application/generators/database-changelogs/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/base-application/generators/database-changelogs/templates/template-file-base-application:database-changelogs.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/base-application/index.ts": {
     "stateCleared": "modified",
   },

@@ -17,8 +17,20 @@
  * limitations under the License.
  */
 import { describe, expect, it } from 'expect-node';
+import { mkdirSync, mkdtempSync, realpathSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { getJHipsterStore, jhipsterNamespace } from './lookups.ts';
+
+/** A blueprint published under a scope, `@scope/generator-jhipster-foo`, in a folder named `folder`. */
+const createScopedPackage = (folder: string) => {
+  const root = join(realpathSync(mkdtempSync(join(tmpdir(), 'scoped-package-'))), folder);
+  mkdirSync(join(root, 'generators', 'app'), { recursive: true });
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ name: '@scope/generator-jhipster-foo', version: '0.0.1' }));
+  writeFileSync(join(root, 'generators', 'app', 'index.js'), 'export default class {}\n');
+  return root;
+};
 
 describe('resolver - lookups', () => {
   describe('getJHipsterStore', () => {
@@ -30,6 +42,20 @@ describe('resolver - lookups', () => {
     });
     it('should flatten the nested generators', () => {
       expect(getJHipsterStore().namespaces()).toContain('jhipster:spring-boot:cache');
+    });
+  });
+  describe('a package published under another name', () => {
+    it('should name a package installed under an alias after its folder', () => {
+      const root = createScopedPackage(join('node_modules', 'generator-jhipster-foo'));
+      const store = getJHipsterStore({ empty: true });
+      store.lookupSync({ packagePaths: [root] });
+      expect(store.namespaces()).toEqual(['jhipster-foo:app']);
+    });
+    it('should name a checkout after its package.json', () => {
+      const root = createScopedPackage('checkout');
+      const store = getJHipsterStore({ empty: true });
+      store.lookupSync({ packagePaths: [root] });
+      expect(store.namespaces()).toEqual(['@scope/jhipster-foo:app']);
     });
   });
   describe('jhipsterNamespace', () => {

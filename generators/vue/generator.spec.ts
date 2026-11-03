@@ -51,22 +51,16 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/configuration/configuration.vue`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
 
-  `${clientSrcDir}app/admin/health/health.component.ts`,
   `${clientSrcDir}app/admin/health/health.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.vue`,
   `${clientSrcDir}app/admin/health/health-modal.vue`,
-  `${clientSrcDir}app/admin/health/health-modal.component.ts`,
   `${clientSrcDir}app/admin/health/health-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
   `${clientSrcDir}app/admin/health/health.service.spec.ts`,
-
   `${clientSrcDir}app/admin/logs/logs.component.ts`,
   `${clientSrcDir}app/admin/logs/logs.component.spec.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.ts`,
-
-  `${clientSrcDir}app/admin/metrics/metrics.component.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.component.spec.ts`,
-  `${clientSrcDir}app/admin/metrics/metrics-modal.component.ts`,
   `${clientSrcDir}app/admin/metrics/metrics-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.vue`,
   `${clientSrcDir}app/admin/metrics/metrics-modal.vue`,
@@ -283,7 +277,7 @@ describe(`generator - ${clientFramework}`, () => {
     });
 
     it('should generate the embedded entity model', () => {
-      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/shared/model/embedded-entity.model.ts`);
+      runResult.assertFile(`${CLIENT_MAIN_SRC_DIR}app/entities/embedded-entity/embedded-entity.model.ts`);
     });
 
     it('should not generate ui files for the embedded entity', () => {

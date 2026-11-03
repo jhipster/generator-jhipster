@@ -6,6 +6,7 @@ import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions
 import type { Config as BootstrapConfig, Options as BootstrapOptions } from '../../generators/bootstrap/types.d.ts';
 import type { Config as ClientConfig, Options as ClientOptions } from '../../generators/client/types.d.ts';
 import type { Config as CypressConfig, Options as CypressOptions } from '../../generators/cypress/types.d.ts';
+import type { Config as DockerConfig, Options as DockerOptions } from '../../generators/docker/types.d.ts';
 import type { Config as GitConfig, Options as GitOptions } from '../../generators/git/types.d.ts';
 import type { Config as JavaConfig, Options as JavaOptions } from '../../generators/java/types.d.ts';
 import type { Config as JavascriptConfig, Options as JavascriptOptions } from '../../generators/javascript-simple-application/types.d.ts';
@@ -30,6 +31,7 @@ export type ConfigAll = Simplify<
     BootstrapConfig &
     ClientConfig &
     CypressConfig &
+    DockerConfig &
     GitConfig &
     JavaConfig &
     JavascriptConfig &
@@ -54,6 +56,7 @@ export type OptionsAll = Simplify<
     BootstrapOptions &
     ClientOptions &
     CypressOptions &
+    DockerOptions &
     GitOptions &
     JavaOptions &
     JavascriptOptions &

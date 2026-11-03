@@ -17,19 +17,25 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { <%- builtInUserManagement ? 'reactive, ref' : 'reactive' %> } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
-import axios from 'axios';
+import axios, { CanceledError } from 'axios';
+import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
 
-import AlertService from '@/shared/alert/alert.service';
+import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
+<%_ if (builtInUserManagement) { _%>
+import { currentUsernameKey } from '@/shared/config/injection-keys';
+<%_ } _%>
 import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/testing/stubs';
 
 import <%- entityAngularName %>Details from './<%- entityFileName %>-details.vue';
+import { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
 type <%- entityAngularName %>DetailsComponentType = InstanceType<typeof <%- entityAngularName %>Details>;
 
@@ -43,6 +49,20 @@ vi.mock('vue-router', () => ({
 }));
 
 const <%- entityInstance %>Sample = { ...<%- tsSampleWithFullData %>, <%- primaryKey.name %>: <%- tsKeyId %> };
+<%_ const relationshipsWithValues = relationships.filter(relationship => !relationship.otherEntity.embedded); _%>
+<%_ for (const otherEntity of new Set(relationshipsWithValues.map(relationship => relationship.otherEntity))) { _%>
+const <%- otherEntity.entityInstance %>Option = { <%- otherEntity.primaryKey.name %>: <%- otherEntity.primaryKey.tsSampleValues[0] %> };
+<%_ } _%>
+const <%- entityInstance %>SampleWithRelationships = {
+  ...<%- entityInstance %>Sample,
+<%_ for (const relationship of relationshipsWithValues) { _%>
+  <%_ if (relationship.collection) { _%>
+  <%- relationship.relationshipFieldNamePlural %>: [<%- relationship.otherEntity.entityInstance %>Option, { <%- relationship.otherEntity.primaryKey.name %>: <%- relationship.otherEntity.primaryKey.tsSampleValues[1] %> }],
+  <%_ } else { _%>
+  <%- relationship.relationshipFieldName %>: <%- relationship.otherEntity.entityInstance %>Option,
+  <%_ } _%>
+<%_ } _%>
+};
 
 
 describe('Component Tests', () => {
@@ -53,7 +73,7 @@ describe('Component Tests', () => {
   });
 
   describe('<%- entityAngularName %> Management Detail Component', () => {
-    let <%- entityInstance %>ServiceStub: any;
+    let <%- entityInstance %>ServiceStub: Record<string, Mock>;
     let mountOptions: MountingOptions<<%- entityAngularName %>DetailsComponentType>['global'];
 
     beforeEach(() => {
@@ -67,11 +87,11 @@ describe('Component Tests', () => {
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-        i18n: { t: vi.fn() } as any,
+        i18n: { t: vi.fn() },
 <%_ } _%>
         toast: {
           create: vi.fn(),
-        } as any,
+        },
       });
 
       mountOptions = {
@@ -82,8 +102,11 @@ describe('Component Tests', () => {
           'router-link': routerLinkStub,
         },
         provide: {
-          alertService,
-          <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
+          [alertServiceKey as symbol]: alertService,
+          [<%- entityInstance %>ServiceKey as symbol]: () => <%- entityInstance %>ServiceStub,
+<%_ if (builtInUserManagement) { _%>
+          [currentUsernameKey as symbol]: ref('admin'),
+<%_ } _%>
         },
       };
     });
@@ -91,7 +114,7 @@ describe('Component Tests', () => {
     describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>SampleWithRelationships);
         route = {
           params: {
             <%- entityInstance %>Id: '' + <%- tsKeyId %>,
@@ -100,10 +123,10 @@ describe('Component Tests', () => {
         const wrapper = shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
         const comp = wrapper.vm;
         // WHEN
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
-        expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>Sample);
+        expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>SampleWithRelationships);
       });
     });
 
@@ -176,6 +199,38 @@ describe('Component Tests', () => {
       });
     });
 
+    describe('Route changes', () => {
+      it('Should load again when the id of the route changes', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        route = reactive({ params: { <%- entityInstance %>Id: '123' } });
+        shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        route.params = { <%- entityInstance %>Id: '456' };
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.find.mock.calls.map(([id]) => id)).toEqual(['123', '456']);
+        expect(<%- entityInstance %>ServiceStub.find.mock.calls[0][1].signal.aborted).toBe(true);
+      });
+
+      it('Should not show the error of an aborted load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockRejectedValue(new CanceledError());
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        route = { params: { <%- entityInstance %>Id: '123' } };
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).not.toHaveBeenCalled();
+      });
+    });
+
     describe('Errors and defaults', () => {
       it('Should show the error of a failed load', async () => {
         // GIVEN
@@ -223,7 +278,7 @@ describe('Component Tests', () => {
         };
 
         // WHEN
-        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: { alertService } } });
+        const wrapper = shallowMount(<%- entityAngularName %>Details, { global: { ...mountOptions, provide: {}, plugins: [createBootstrap()] } });
         await flushPromises();
 
         // THEN

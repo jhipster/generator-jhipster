@@ -16,19 +16,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asInitializingTask } from '../base-application/support/task-type-inference.ts';
-
 import type { BaseKubernetesGenerator } from './generator.ts';
 
-export const checkHelm = asInitializingTask(async function (this: BaseKubernetesGenerator) {
+/**
+ * Spawns the command of a prerequisite check without a shell, so arguments must not be quoted, and logs its output at debug level.
+ * Never throws: `exitCode` is undefined when the command could not be spawned.
+ */
+export async function spawnCheckCommand(this: BaseKubernetesGenerator, command: string): Promise<{ exitCode?: number; stdout: string }> {
+  try {
+    const { exitCode, stdout, stderr, shortMessage } = await this.spawnCommand(command, { reject: false, stdio: 'pipe' });
+    this.log.debug(`${command}: ${exitCode === 0 ? stdout : stderr || shortMessage}`);
+    return { exitCode, stdout };
+  } catch (error) {
+    this.log.debug(`${command}: ${(error as Error).message}`);
+    return { exitCode: undefined, stdout: '' };
+  }
+}
+
+export async function checkHelm(this: BaseKubernetesGenerator) {
   if (this.skipChecks) return;
 
-  try {
-    await this.spawnCommand(String.raw`helm version --client | grep -E "(v2\.1[2-9]{1,2}\.[0-9]{1,3})|(v3\.[0-9]{1,2}\.[0-9]{1,3})"`);
-  } catch {
+  // `--short` prints the client version only (`v3.16.1+g5a5449d`) on helm 3 and 4, which has no `--client` flag.
+  // helm 2 prints `Client: v2.16.12+g47f0b88` before failing when it cannot reach Tiller, so the version is read whatever the exit code.
+  const { stdout } = await spawnCheckCommand.call(this, 'helm version --short');
+  const [, major, minor] = /v(\d+)\.(\d+)\./.exec(stdout) ?? [];
+  if (major === undefined) {
     this.log.warn(
-      'helm 2.12.x or later is not installed on your computer.\n' +
-        'Make sure you have helm installed. Read https://github.com/helm/helm/\n',
+      'helm is not installed on your computer or does not run.\n' +
+        'Make sure you have helm 2.12 or later installed. Read https://helm.sh/docs/intro/install/\n',
+    );
+  } else if (Number(major) < 2 || (Number(major) === 2 && Number(minor) < 12)) {
+    this.log.warn(
+      `helm ${major}.${minor} is installed, but helm 2.12 or later is required.\n` +
+        'Upgrade helm. Read https://helm.sh/docs/intro/install/\n',
     );
   }
-});
+}

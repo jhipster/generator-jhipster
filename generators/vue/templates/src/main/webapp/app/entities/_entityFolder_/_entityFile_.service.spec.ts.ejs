@@ -34,7 +34,7 @@ import {
   <%_ } _%>
 } from '@/shared/composables/date-format';
 <%_ } _%>
-import { <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import { <%- entityAngularName %> } from './<%- entityFileName %>.model';
 
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 
@@ -110,6 +110,20 @@ describe('Service Tests', () => {
           .find(<%- tsKeyId %>).then((res) => {
             expect(res).toMatchObject(elemDefault);
         });
+      });
+
+      it('should pass the signal of the request', async () => {
+        const { signal } = new AbortController();
+        axiosStub.get.mockResolvedValue({ data: {} });
+
+        await service.find(<%- tsKeyId %>, { signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+        await service.retrieve({ signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+<%_ if (searchEngineAny) { _%>
+        await service.search('query', { signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+<%_ } _%>
       });
 
       it('should not find an element', async () => {
@@ -275,6 +289,17 @@ describe('Service Tests', () => {
         });
       });
 
+<%_ if (searchEngineAny) { _%>
+      it('should search the <%- entityAngularName %>', async () => {
+        axiosStub.get.mockResolvedValue({ data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+
+        const res = await service.search('query'<%- paginationNo ? '' : ', { sort: {}, page: 0, size: 10 }' %>);
+
+        expect(res.data).toEqual([{ <%- primaryKey.name %>: <%- tsKeyId %> }]);
+        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=query'), { signal: undefined });
+      });
+
+<%_ } _%>
       it('should not return a list of <%- entityAngularName %>', async () => {
         axiosStub.get.mockRejectedValue(error);
 

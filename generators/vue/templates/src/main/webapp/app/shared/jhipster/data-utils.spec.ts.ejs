@@ -1,0 +1,63 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+import { byteSize, openFile, paddingSize, toBase64, toOpenableContentType } from './data-utils';
+
+describe('data utils', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should compute the size of a base64 value', () => {
+    expect(paddingSize('AA==')).toBe(2);
+    expect(paddingSize('AAA=')).toBe(1);
+    expect(paddingSize('AAAA')).toBe(0);
+    expect(byteSize('AAAAAAAA')).toBe('6 bytes');
+  });
+
+  it('should read a file as base64', async () => {
+    const base64Data = await new Promise(resolve => toBase64(new File(['jhipster'], 'file.txt', { type: 'text/plain' }), resolve));
+
+    expect(base64Data).toBe(btoa('jhipster'));
+  });
+
+  it('should open only safe content types', () => {
+    expect(toOpenableContentType('image/png; charset=utf-8', 'image')).toBe('image/png');
+    expect(toOpenableContentType('image/svg+xml', 'image')).toBe('application/octet-stream');
+    expect(toOpenableContentType('text/plain', 'text')).toBe('text/plain');
+    expect(toOpenableContentType('text/html', 'text')).toBe('application/octet-stream');
+    expect(toOpenableContentType(undefined)).toBe('application/octet-stream');
+  });
+
+  it('should open a file in a new window, revoking its url once loaded', () => {
+    const win: { onload?: () => void } = {};
+    const open = vi.spyOn(globalThis, 'open').mockReturnValue(win as unknown as Window);
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:file');
+    const revokeObjectURL = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+
+    openFile(btoa('jhipster'), 'text/plain', 'text');
+    win.onload!();
+    open.mockReturnValue(null);
+    openFile(btoa('jhipster'), 'text/plain', 'text');
+
+    expect(open).toHaveBeenCalledWith('blob:file');
+    expect(revokeObjectURL).toHaveBeenCalledOnce();
+  });
+});

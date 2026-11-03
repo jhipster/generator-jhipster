@@ -1,15 +1,15 @@
 {
+  "allowScripts": {
+    "cypress": true
+  },
   "devDependencies": {
     "@cypress/schematic": "6.0.0",
-    "cypress": "16.2.0",
+    "cypress": "16.2.1",
     "cypress-audit": "1.1.0",
     "cypress-terminal-report": "7.4.0",
     "eslint-plugin-cypress": "7.0.2",
-    "lighthouse": "13.5.0",
+    "lighthouse": "13.6.0",
     "monocart-coverage-reports": "2.13.2"
   },
-  "packageManager": "npm@12",
-  "allowScripts": {
-    "cypress": true
-  }
+  "packageManager": "npm@12"
 }

@@ -36,11 +36,13 @@ export default mergeConfig(
       },
       coverage: {
         provider: 'v8',
+        // The helpers of the tests.
+        exclude: ['**/shared/testing/**'],
         thresholds: {
-          statements: 70,
-          branches: 55,
-          functions: 40,
-          lines: 70,
+          statements: 95,
+          branches: 95,
+          functions: 95,
+          lines: 95,
         },
         reportsDirectory: fileURLToPath(new URL('./<%- relativeDir(clientRootDir, temporaryDir) %>vite-coverage', import.meta.url)),
       },

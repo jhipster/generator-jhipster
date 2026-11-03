@@ -16,11 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type InjectionKey } from 'vue';
+
 import axios, { type AxiosResponse } from 'axios';
 
-import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
+import { type RequestOptions } from '@/shared/composables';
 <%_ if (!paginationNo) { _%>
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
+import buildPaginationQueryOpts, { type PaginationQuery } from '@/shared/sort/sorts';
 <%_ } _%>
 
 const baseApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>';
@@ -31,24 +34,23 @@ const baseSearchApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search?query=
 export default class <%- entityAngularName %>Service {
 <%_ if (searchEngineAny) { _%>
   <%_ if (paginationNo) { _%>
-  async search(query): Promise<I<%- entityAngularName %>[]> {
-    const res = await axios.get(`${baseSearchApiUrl}${query}`);
-    return res.data;
+  search(query: string, { signal }: RequestOptions = {}): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+    return axios.get(`${baseSearchApiUrl}${query}`, { signal });
   }
   <%_ } else { _%>
-  search(query, paginationQuery): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
-    return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`);
+  search(query: string, { signal, ...paginationQuery }: PaginationQuery & RequestOptions = {}): Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+    return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`, { signal });
   }
   <%_ } _%>
 <%_ } _%>
 
-  async find(<%- primaryKey.name %>: <%- primaryKey.tsType %>) : Promise<I<%- entityAngularName %>> {
-    const res = await axios.get(`${baseApiUrl}/${<%- primaryKey.name %>}`);
+  async find(<%- primaryKey.name %>: string | number, { signal }: RequestOptions = {}) : Promise<I<%- entityAngularName %>> {
+    const res = await axios.get(`${baseApiUrl}/${<%- primaryKey.name %>}`, { signal });
     return res.data;
   }
 
-  retrieve(<%- paginationNo ? '' : 'paginationQuery?: any' %>) : Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
-    return axios.get(baseApiUrl<%- paginationNo ? '' : ' + `?${buildPaginationQueryOpts(paginationQuery)}` ' %>);
+  retrieve({ signal<%- paginationNo ? '' : ', ...paginationQuery' %> }: <%- paginationNo ? '' : 'PaginationQuery & ' %>RequestOptions = {}) : Promise<AxiosResponse<I<%- entityAngularName %>[]>> {
+    return axios.get(baseApiUrl<%- paginationNo ? '' : ' + `?${buildPaginationQueryOpts(paginationQuery)}` ' %>, { signal });
   }
 <%_ if (!readOnly) { _%>
 
@@ -72,3 +74,5 @@ export default class <%- entityAngularName %>Service {
   }
 <%_ } _%>
 }
+
+export const <%- entityInstance %>ServiceKey: InjectionKey<() => <%- entityAngularName %>Service> = Symbol.for('jhipster:<%- entityInstance %>Service');

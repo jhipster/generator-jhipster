@@ -16,26 +16,36 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
+<%_ const vueImports = [...builtInUserManagement ? ['type ComputedRef'] : [], ...paginationNo ? [] : ['type Ref', 'computed'], 'defineComponent', 'inject', ...searchEngineAny || !paginationNo ? ['ref'] : [], ...paginationInfiniteScroll ? ['watchEffect'] : []]; _%>
+import { <%- vueImports.join(', ') %> } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+import { useRoute, useRouter } from 'vue-router';
 <%_ } _%>
 
 <%_ if (paginationInfiniteScroll) { _%>
 import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
+import { type AxiosError } from 'axios';
 
-import { useAlertService } from '@/shared/alert/alert.service';
-<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove']]; _%>
-<%_ if (composables.length > 0) { _%>
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
+<%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove'], 'useControlledRequest']; _%>
 import { <%- composables.join(', ') %> } from '@/shared/composables';
+<%_ if (builtInUserManagement) { _%>
+import { currentUsernameKey } from '@/shared/config/injection-keys';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+<%_ if (!paginationNo) { _%>
+import { <%- paginationPagination ? 'PAGE_PARAM, ' : '' %>SORT_PARAM, buildSortParam, <%- paginationPagination ? 'parsePageParam, ' : '' %>parseSortParam } from '@/shared/jhipster/pagination';
+import { ITEMS_PER_PAGE } from '@/shared/sort/sorts';
+<%_ } _%>
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
 
-import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 
 export default defineComponent({
   name: '<%- entityAngularName %>',
@@ -49,80 +59,64 @@ export default defineComponent({
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
     const dataUtils = useDataUtils();
 <%_ } _%>
-    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+    const alertService = inject(alertServiceKey, () => useAlertService(), true);
+<%_ if (builtInUserManagement) { _%>
+    const username = inject(currentUsernameKey);
+<%_ } _%>
 
 <%_ if (searchEngineAny) { _%>
+    // The text of the search field, and the search submitted, which loads.
     const currentSearch = ref('');
+    const searchQuery = ref('');
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-    const itemsPerPage = ref(20);
-    const queryCount: Ref<number> = ref(null);
+    const itemsPerPage = ref(ITEMS_PER_PAGE);
+    const queryCount: Ref<number | null> = ref(null);
+    const route = useRoute();
+    const router = useRouter();
+  <%_ if (paginationPagination) { _%>
+    // The page and the sort of the list are kept in the query parameters of the route.
+  <%_ } else { _%>
+    // The sort of the list is kept in the query parameters of the route.
+  <%_ } _%>
+    const sortState = computed(() => parseSortParam(route.query[SORT_PARAM]?.toString() ?? 'id,asc'));
+    const propOrder = computed(() => sortState.value.predicate ?? 'id');
+    const reverse = computed(() => sortState.value.order === 'desc');
+  <%_ if (paginationPagination) { _%>
+    const page = computed({
+      get() {
+        return parsePageParam(route.query[PAGE_PARAM]?.toString());
+      },
+      set(value: number) {
+        router.push({ query: { ...route.query, [PAGE_PARAM]: String(value) } });
+      },
+    });
+  <%_ } else { _%>
     const page: Ref<number> = ref(1);
-    const propOrder = ref('id');
-    const reverse = ref(false);
+  <%_ } _%>
     const totalItems = ref(0);
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
     const links: Ref = ref({});
 <%_ } _%>
 
-    const <%- entityInstancePlural %>: Ref<I<%- entityAngularName %>[]> = ref([]);
-
-    const isFetching = ref(false);
-
-    const clear = () => {
-<%_ if (searchEngineAny) { _%>
-      currentSearch.value = '';
-<%_ } _%>
 <%_ if (!paginationNo) { _%>
-      page.value = 1;
-<%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-      links.value = {};
-      <%- entityInstancePlural %>.value = [];
-<%_ } _%>
-    };
-<%_ if (!paginationNo) { _%>
+    const sort = (): string[] => buildSortParam({ predicate: propOrder.value, order: reverse.value ? 'desc' : 'asc' }, 'id');
 
-    const sort = (): Array<any> => {
-      const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
-      if (propOrder.value !== 'id') {
-        result.push('id');
-      }
-      return result;
-    };
 <%_ } _%>
-
-    const retrieve<%- entityAngularName %>s = async () => {
-      isFetching.value = true;
-      try {
+<%_ const params = [...searchEngineAny ? ['search: searchQuery.value'] : [], ...paginationNo ? [] : ['page: page.value', 'sort: sort()']]; _%>
+    const { data: <%- entityInstancePlural %>, isLoading: isFetching, execute: retrieve<%- entityAngularName %>s } = useControlledRequest(
+      async (<%- params.length > 0 ? 'params' : '_params' %>, { signal })<%- paginationInfiniteScroll ? `: Promise<I${entityAngularName}[]>` : '' %> => {
 <%_ if (!paginationNo) { _%>
-        const paginationQuery = {
-          page: page.value - 1,
-          size: itemsPerPage.value,
-          sort: sort(),
-        };
+        const query = { page: params.page - 1, size: itemsPerPage.value, sort: params.sort, signal };
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
-        const res = currentSearch.value ?
-          (await <%- entityInstance %>Service().search(
-            currentSearch.value,
-  <%_ if (!paginationNo) { _%>
-            paginationQuery,
-  <%_ } _%>
-          )) :
-          (await <%- entityInstance %>Service().retrieve(
-  <%_ if (!paginationNo) { _%>
-            paginationQuery
-  <%_ } _%>
-          ));
+        const res = params.search ?
+          await <%- entityInstance %>Service().search(params.search, <%- paginationNo ? '{ signal }' : 'query' %>) :
+          await <%- entityInstance %>Service().retrieve(<%- paginationNo ? '{ signal }' : 'query' %>);
 <%_ } else { _%>
-        const res = await <%- entityInstance %>Service().retrieve(
-  <%_ if (!paginationNo) { _%>
-          paginationQuery,
-  <%_ } _%>
-        );
+        const res = await <%- entityInstance %>Service().retrieve(<%- paginationNo ? '{ signal }' : 'query' %>);
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
         totalItems.value = Number(res.headers['x-total-count']);
@@ -130,17 +124,44 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
         links.value = dataUtils.parseLinks(res.headers?.['link']);
-        <%- entityInstancePlural %>.value.push(...(res.data ?? []));
+        // The first page starts the list, the next ones are added to it.
+        return params.page === 1 ? (res.data ?? []) : [...<%- entityInstancePlural %>.value, ...(res.data ?? [])];
 <%_ } else { _%>
-        <%- entityInstancePlural %>.value = res.data;
+        return res.data;
 <%_ } _%>
-      } catch (err) {
-        alertService.showHttpError(err.response);
-      } finally {
-        isFetching.value = false;
+      },
+      {
+<%_ if (params.length > 0) { _%>
+        // A change of the <%- [...searchEngineAny ? ['search'] : [], ...paginationNo ? [] : ['page', 'order']].join(' or of the ') %> loads again.
+        params: () => ({ <%- params.join(', ') %> }),
+<%_ } _%>
+        initialData: (): I<%- entityAngularName %>[] => [],
+        onError: err => alertService.showHttpError((err as AxiosError).response),
+      },
+    );
+
+<%_ if (searchEngineAny || !paginationNo) { _%>
+    const clear = () => {
+  <%_ if (paginationInfiniteScroll) { _%>
+      // The list loads again from its first page, the parameters changed or not.
+      const unchanged = page.value === 1<%- searchEngineAny ? ' && !searchQuery.value' : '' %>;
+  <%_ } _%>
+  <%_ if (searchEngineAny) { _%>
+      currentSearch.value = '';
+      searchQuery.value = '';
+  <%_ } _%>
+  <%_ if (!paginationNo) { _%>
+      page.value = 1;
+  <%_ } _%>
+  <%_ if (paginationInfiniteScroll) { _%>
+      links.value = {};
+      if (unchanged) {
+        retrieve<%- entityAngularName %>s();
       }
+  <%_ } _%>
     };
 
+<%_ } _%>
     const handleSyncList = () => {
 <%_ if (paginationInfiniteScroll) { _%>
       clear();
@@ -149,24 +170,28 @@ export default defineComponent({
 <%_ } _%>
     };
 
-    onMounted(async () => {
-      await retrieve<%- entityAngularName %>s();
-    });
-
 <%_ if (searchEngineAny) { _%>
-    const search = (query) => {
+    const search = (query: string) => {
       if (!query) {
         return clear();
       }
+      // The same search loads again.
+      if (<%- paginationNo ? '' : 'page.value === 1 && ' %>searchQuery.value === query) {
+        retrieve<%- entityAngularName %>s();
+      }
+  <%_ if (!paginationNo) { _%>
+      // The results start at their first page.
+      page.value = 1;
+  <%_ } _%>
       currentSearch.value = query;
-      retrieve<%- entityAngularName %>s();
+      searchQuery.value = query;
     };
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
     const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
       alertService,
-      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>,
+      getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>!,
       remove: id => <%- entityInstance %>Service().delete(id),
   <%_ if (enableTranslation) { _%>
       removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
@@ -180,31 +205,39 @@ export default defineComponent({
   <%_ } _%>
     });
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+
+    const setActive = async (<%- entityInstance %>: I<%- entityAngularName %>, activated: boolean) => {
+      try {
+        await <%- entityInstance %>Service().update({ ...<%- entityInstance %>, activated });
+        handleSyncList();
+      } catch (error) {
+        alertService.showHttpError((error as AxiosError).response);
+      }
+    };
+<%_ } _%>
 <%_ if (!paginationNo) { _%>
 
     const changeOrder = (newOrder: string) => {
-      if (propOrder.value === newOrder) {
-        reverse.value = !reverse.value;
-      } else {
-        reverse.value = false;
-      }
-      propOrder.value = newOrder;
+      const descending = propOrder.value === newOrder && !reverse.value;
+  <%_ if (paginationInfiniteScroll) { _%>
+      // The first page of the new order.
+      links.value = {};
+      page.value = 1;
+  <%_ } _%>
+      router.push({
+        query: {
+          ...route.query,
+  <%_ if (paginationPagination) { _%>
+          [PAGE_PARAM]: '1',
+  <%_ } _%>
+          [SORT_PARAM]: buildSortParam({ predicate: newOrder, order: descending ? 'desc' : 'asc' }),
+        },
+      });
     };
   <%_ if (paginationInfiniteScroll) { _%>
 
-    // Whenever order changes, reset the pagination
-    watch([propOrder, reverse], () => {
-      clear();
-    });
-
-    // Whenever the data resets or page changes, switch to the new page.
-    watch([<%- entityInstancePlural %>, page], async ([data, page], [_prevData, prevPage]) => {
-      if (data.length === 0 || page !== prevPage) {
-        await retrieve<%- entityAngularName %>s();
-      }
-    });
-
-    const infiniteScrollEl = ref<HTMLElement>(null);
+    const infiniteScrollEl = ref<HTMLElement | null>(null);
     const intersectionObserver = useIntersectionObserver(
       infiniteScrollEl,
       intersection => {
@@ -220,36 +253,25 @@ export default defineComponent({
     watchEffect(() => {
       if (links.value.next) {
         intersectionObserver.resume();
-      } else if (intersectionObserver.isActive) {
+      } else if (intersectionObserver.isActive.value) {
         intersectionObserver.pause();
       }
-    });
-  <%_ } else { _%>
-
-    // Whenever order changes, reset the pagination
-    watch([propOrder, reverse], async () => {
-      if (page.value === 1) {
-        // first page, retrieve new data
-        await retrieve<%- entityAngularName %>s();
-      } else {
-        // reset the pagination
-        clear();
-      }
-    });
-
-    // Whenever page changes, switch to the new page.
-    watch(page, async () => {
-      await retrieve<%- entityAngularName %>s();
     });
   <%_ } _%>
 <%_ } _%>
 
     return {
+<%_ if (builtInUserManagement) { _%>
+      username,
+      setActive,
+<%_ } _%>
       <%- entityInstancePlural %>,
       handleSyncList,
       isFetching,
       retrieve<%- entityAngularName %>s,
+<%_ if (searchEngineAny || !paginationNo) { _%>
       clear,
+<%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
 <%_ } _%>

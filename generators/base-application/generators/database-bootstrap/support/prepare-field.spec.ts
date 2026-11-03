@@ -25,9 +25,9 @@ import { prepareFieldColumnForDatabase } from './prepare-field.ts';
 
 const prepareColumn = (field: Partial<DatabaseField>, { jhiTablePrefix = 'jhi', prodDatabaseType = 'postgresql' } = {}) => {
   const warnings: string[] = [];
-  const entity = { entityTableName: 'book', databaseType: 'sql', prodDatabaseType } as DatabaseEntity;
+  const entity = { entityTableName: 'book' } as DatabaseEntity;
   prepareFieldColumnForDatabase({
-    application: { jhiTablePrefix },
+    application: { jhiTablePrefix, databaseType: 'sql', prodDatabaseType },
     entity,
     field: field as DatabaseField,
     log: { warn: message => warnings.push(message) },

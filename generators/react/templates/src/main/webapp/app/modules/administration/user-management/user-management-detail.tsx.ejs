@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 import { useEffect, useState } from 'react';
-import { Badge, Button, Row } from 'react-bootstrap';
+import { Badge, Button, Col, Row } from 'react-bootstrap';
 import { TextFormat, Translate } from 'react-jhipster';
 import { Link, useParams } from 'react-router';
 
-import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
@@ -48,7 +48,8 @@ export const UserManagementDetail = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
-    <div>
+    <Row className="justify-content-center">
+      <Col md="8">
       <h2 data-cy="userManagementDetailsHeading">
         <Translate contentKey="userManagement.detail.title">User</Translate> [<strong>{user.login}</strong>]
       </h2>
@@ -102,6 +103,13 @@ export const UserManagementDetail = () => {
         </span>
       </Button>
       &nbsp;
+      <Button as={Link as any} to={`/admin/user-management/${user.login}/edit`} replace variant="primary">
+        <FontAwesomeIcon icon={faPencilAlt} />{' '}
+        <span className="d-none d-md-inline">
+          <Translate contentKey="entity.action.edit">Edit</Translate>
+        </span>
+      </Button>
+      &nbsp;
       <Button
         onClick={() => setShowDeleteDialog(true)}
         variant="danger"
@@ -114,7 +122,8 @@ export const UserManagementDetail = () => {
         </span>
       </Button>
       {showDeleteDialog ? <UserManagementDeleteDialog onClose={() => setShowDeleteDialog(false)} /> : null}
-    </div>
+      </Col>
+    </Row>
   );
 };
 

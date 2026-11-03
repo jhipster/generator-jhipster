@@ -429,15 +429,26 @@ export default class KubernetesCommonGenerator extends BaseKubernetesGenerator {
                 const when = this.jhipsterConfigWithDefaults.kubernetesServiceType === INGRESS || this.jhipsterConfigWithDefaults.istio;
                 if (when) {
                   if (this.jhipsterConfigWithDefaults.istio) {
-                    const istioIpCommand =
-                      "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
+                    const istioIpCommand = 'kubectl -n istio-system get svc istio-ingressgateway';
+                    const istioIpJsonPath = '{.status.loadBalancer.ingress[0].ip}';
                     // If it's Istio, and no previous domain is configured, try to determine the default value, unless skipChecks
                     if (!this.skipChecks) {
+                      let istioIngressIp = '';
                       try {
-                        const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
-                        defaultValue = `${istioIngressIp}.nip.io`;
+                        // Spawned without a shell, so the JSONPath is not quoted. The timeout keeps an unreachable cluster from blocking the prompt.
+                        ({ stdout: istioIngressIp } = this.spawnCommandSync(
+                          `${istioIpCommand} -o jsonpath=${istioIpJsonPath} --request-timeout=5s`,
+                          {
+                            stdio: 'pipe',
+                          },
+                        ));
                       } catch {
-                        istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
+                        // Reported below, like a gateway without an IP address yet.
+                      }
+                      if (istioIngressIp.trim()) {
+                        defaultValue = `${istioIngressIp.trim()}.nip.io`;
+                      } else {
+                        istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand} -o jsonpath='${istioIpJsonPath}'`;
                       }
                     }
                   } else if (this.jhipsterConfigWithDefaults.ingressType === NGINX) {
@@ -450,7 +461,8 @@ export default class KubernetesCommonGenerator extends BaseKubernetesGenerator {
               },
               type: 'input',
               name: 'ingressDomain',
-              message: `${istioMessage}${istioMessage ? '\n' : ''}What is the root FQDN for your ingress services (e.g. ${examples.join(', ')})?`,
+              message: () =>
+                `${istioMessage}${istioMessage ? '\n' : ''}What is the root FQDN for your ingress services (e.g. ${examples.join(', ')})?`,
               // if Ingress Type is nginx, then default to minikube ip
               // else, default to empty string, because it's mostly not needed.
               default: () => defaultValue,

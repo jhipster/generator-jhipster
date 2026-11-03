@@ -271,6 +271,11 @@ export default class BaseApplicationGenerator<
     return this.#objectsStorage.get(name);
   }
 
+  /** Declares an object of the application, by its name, in the `objects` of the `.yo-rc.json` file. */
+  setObjectConfig(name: string, config: ApplicationObjectConfig): void {
+    this.#objectsStorage.set(name, config);
+  }
+
   /**
    * An object of the application, by its name: its configuration with the objects and the entities it references embedded
    * in place of their reference, each the same instance wherever it is referenced, an entity the one the application
