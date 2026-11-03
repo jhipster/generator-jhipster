@@ -18,9 +18,9 @@
 -%>
 import { WritableSignal, signal } from '@angular/core';
 
-export type SortOrder = 'asc' | 'desc';
+import { type SortState } from 'app/shared/jhipster/pagination';
 
-export type SortState = { predicate?: string; order?: SortOrder };
+export type { SortOrder, SortState } from 'app/shared/jhipster/pagination';
 
 export const sortStateSignal = (state: SortState): WritableSignal<SortState> =>
   signal(state, {

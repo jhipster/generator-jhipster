@@ -16,9 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>type Ref, defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
+import { <%- builtInUserManagement ? 'type ComputedRef, ' : '' %>type Ref, <%- paginationNo ? '' : 'computed, ' %>defineComponent, inject, onMounted, ref, watch, watchEffect } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+import { useRoute, useRouter } from 'vue-router';
 <%_ } _%>
 
 <%_ if (paginationInfiniteScroll) { _%>
@@ -38,6 +41,7 @@ import { currentUsernameKey } from '@/shared/config/injection-keys';
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
+import { <%- paginationPagination ? 'PAGE_PARAM, ' : '' %>SORT_PARAM, buildSortParam, <%- paginationPagination ? 'parsePageParam, ' : '' %>parseSortParam } from '@/shared/jhipster/pagination';
 import { ITEMS_PER_PAGE } from '@/shared/sort/sorts';
 <%_ } _%>
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
@@ -68,9 +72,28 @@ export default defineComponent({
 <%_ if (!paginationNo) { _%>
     const itemsPerPage = ref(ITEMS_PER_PAGE);
     const queryCount: Ref<number | null> = ref(null);
+    const route = useRoute();
+    const router = useRouter();
+  <%_ if (paginationPagination) { _%>
+    // The page and the sort of the list are kept in the query parameters of the route.
+  <%_ } else { _%>
+    // The sort of the list is kept in the query parameters of the route.
+  <%_ } _%>
+    const sortState = computed(() => parseSortParam(route.query[SORT_PARAM]?.toString() ?? 'id,asc'));
+    const propOrder = computed(() => sortState.value.predicate ?? 'id');
+    const reverse = computed(() => sortState.value.order === 'desc');
+  <%_ if (paginationPagination) { _%>
+    const page = computed({
+      get() {
+        return parsePageParam(route.query[PAGE_PARAM]?.toString());
+      },
+      set(value: number) {
+        router.push({ query: { ...route.query, [PAGE_PARAM]: String(value) } });
+      },
+    });
+  <%_ } else { _%>
     const page: Ref<number> = ref(1);
-    const propOrder = ref('id');
-    const reverse = ref(false);
+  <%_ } _%>
     const totalItems = ref(0);
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
@@ -97,13 +120,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
 
-    const sort = (): string[] => {
-      const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
-      if (propOrder.value !== 'id') {
-        result.push('id');
-      }
-      return result;
-    };
+    const sort = (): string[] => buildSortParam({ predicate: propOrder.value, order: reverse.value ? 'desc' : 'asc' }, 'id');
 <%_ } _%>
 
     const retrieve<%- entityAngularName %>s = async () => {
@@ -206,12 +223,16 @@ export default defineComponent({
 
   <%_ } _%>
     const changeOrder = (newOrder: string) => {
-      if (propOrder.value === newOrder) {
-        reverse.value = !reverse.value;
-      } else {
-        reverse.value = false;
-      }
-      propOrder.value = newOrder;
+      const descending = propOrder.value === newOrder && !reverse.value;
+      router.push({
+        query: {
+          ...route.query,
+  <%_ if (paginationPagination) { _%>
+          [PAGE_PARAM]: '1',
+  <%_ } _%>
+          [SORT_PARAM]: buildSortParam({ predicate: newOrder, order: descending ? 'desc' : 'asc' }),
+        },
+      });
     };
   <%_ if (paginationInfiniteScroll) { _%>
 
@@ -249,19 +270,8 @@ export default defineComponent({
     });
   <%_ } else { _%>
 
-    // Whenever order changes, reset the pagination
-    watch([propOrder, reverse], async () => {
-      if (page.value === 1) {
-        // first page, retrieve new data
-        await retrieve<%- entityAngularName %>s();
-      } else {
-        // reset the pagination
-        clear();
-      }
-    });
-
-    // Whenever page changes, switch to the new page.
-    watch(page, async () => {
+    // Whenever the page or the order changes, retrieve the new data.
+    watch([page, propOrder, reverse], async () => {
       await retrieve<%- entityAngularName %>s();
     });
   <%_ } _%>
