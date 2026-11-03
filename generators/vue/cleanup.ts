@@ -115,6 +115,11 @@ export default asWritingTask<ClientEntity, ClientApplication>(async function cle
       [application.authenticationTypeJwt, `${application.clientSrcDir}app/account/login.service.spec.ts`],
     ],
     '9.5.0': [
+      `${application.clientSrcDir}app/account/activate/activate.component.ts`,
+      `${application.clientSrcDir}app/admin/docs/docs.component.ts`,
+      `${application.clientSrcDir}app/admin/gateway/gateway.component.ts`,
+      `${application.clientSrcDir}app/admin/health/health.component.ts`,
+      `${application.clientSrcDir}app/admin/health/health-modal.component.ts`,
       `${application.clientSrcDir}app/admin/user-management/user-management.vue`,
       `${application.clientSrcDir}app/admin/user-management/user-management.component.ts`,
       `${application.clientSrcDir}app/admin/user-management/user-management.component.spec.ts`,

@@ -51,11 +51,9 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/configuration/configuration.vue`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
 
-  `${clientSrcDir}app/admin/health/health.component.ts`,
   `${clientSrcDir}app/admin/health/health.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.vue`,
   `${clientSrcDir}app/admin/health/health-modal.vue`,
-  `${clientSrcDir}app/admin/health/health-modal.component.ts`,
   `${clientSrcDir}app/admin/health/health-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
   `${clientSrcDir}app/admin/health/health.service.spec.ts`,

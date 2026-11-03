@@ -16,4 +16,36 @@
   </div>
 </template>
 
-<script lang="ts" src="./activate.component.ts"></script>
+<script setup lang="ts">
+import { inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute } from 'vue-router';
+
+import { useLoginModal } from '@/account/login-modal';
+
+import ActivateService, { activateServiceKey } from './activate.service';
+
+const activateService = inject(activateServiceKey, () => new ActivateService(), true);
+const { showLogin } = useLoginModal();
+const route = useRoute();
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const success = ref(false);
+const error = ref(false);
+
+onMounted(async () => {
+  const key = Array.isArray(route.query.key) ? route.query.key[0] : route.query.key;
+  try {
+    await activateService.activateAccount(key);
+    success.value = true;
+    error.value = false;
+  } catch {
+    error.value = true;
+    success.value = false;
+  }
+});
+</script>
