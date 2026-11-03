@@ -16,21 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const accountFields = user.fields.filter(field => ['login', 'firstName', 'lastName', 'email'].includes(field.fieldName));
-    const fieldRules = field => [
-      field.fieldValidationRequired && 'required',
-      field.fieldValidationMinLength && `minLength: minLength(${field.fieldValidateRulesMinlength})`,
-      field.fieldValidationMaxLength && `maxLength: maxLength(${field.fieldValidateRulesMaxlength})`,
-      field.fieldValidationPattern && `pattern: helpers.regex(new RegExp('${field.fieldValidateRulesPatternVue}'))`,
-      field.fieldValidateRules?.includes('email') && 'email',
-    ].filter(Boolean);
-_%>
 import { email, helpers, maxLength, minLength, required } from '@vuelidate/validators';
 
 /** The rules of the fields of the account, from the fields of the user. */
 export const accountValidations = {
-<%_ for (const field of accountFields) { _%>
-  <%- field.fieldName %>: { <%- fieldRules(field).join(', ') %> },
+<%_ for (const field of user.fields.filter(field => ['login', 'firstName', 'lastName', 'email'].includes(field.fieldName))) { _%>
+  <%- field.fieldName %>: {
+  <%_ if (field.fieldValidationRequired) { _%>
+    required,
+  <%_ } _%>
+  <%_ if (field.fieldValidationMinLength) { _%>
+    minLength: minLength(<%- field.fieldValidateRulesMinlength %>),
+  <%_ } _%>
+  <%_ if (field.fieldValidationMaxLength) { _%>
+    maxLength: maxLength(<%- field.fieldValidateRulesMaxlength %>),
+  <%_ } _%>
+  <%_ if (field.fieldValidationPattern) { _%>
+    pattern: helpers.regex(new RegExp('<%- field.fieldValidateRulesPatternVue %>')),
+  <%_ } _%>
+  <%_ if (field.fieldValidateRules?.includes('email')) { _%>
+    email,
+  <%_ } _%>
+  },
 <%_ } _%>
 };
 
