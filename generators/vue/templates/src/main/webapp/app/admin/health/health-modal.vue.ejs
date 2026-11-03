@@ -26,4 +26,38 @@
   </div>
 </template>
 
-<script lang="ts" src="./health-modal.component.ts"></script>
+<script setup lang="ts">
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { type HealthData } from './health.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>HealthModal' });
+
+const props = withDefaults(defineProps<{ currentHealth?: HealthData | null }>(), {
+  currentHealth: () => ({}) as HealthData,
+});
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const readableValue = (value: unknown): string => {
+  if (props.currentHealth?.name === 'diskSpace') {
+    // Should display storage space in a human-readable unit
+    const val = Number(value) / 1073741824;
+    if (val > 1) {
+      // Value
+      return `${val.toFixed(2)} GB`;
+    }
+    return `${(Number(value) / 1048576).toFixed(2)} MB`;
+  }
+
+  if (typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+  return String(value);
+};
+
+</script>

@@ -16,16 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { shallowMount } from '@vue/test-utils';
 
 import HealthModal from './health-modal.vue';
-import { healthServiceKey } from './health.service';
 
 type HealthModalComponentType = InstanceType<typeof HealthModal>;
-
-const healthService = { getBaseName: vi.fn(), getSubSystemName: vi.fn() };
 
 describe('Health Modal Component', () => {
   let healthModal: HealthModalComponentType;
@@ -39,26 +36,9 @@ describe('Health Modal Component', () => {
         stubs: {
           'font-awesome-icon': true,
         },
-        provide: {
-          [healthServiceKey as symbol]: healthService,
-        },
       },
     });
     healthModal = wrapper.vm;
-  });
-
-  describe('baseName and subSystemName', () => {
-    it('should use healthService to get base name', () => {
-      healthModal.baseName('base');
-
-      expect(healthService.getBaseName).toHaveBeenCalled();
-    });
-
-    it('should use healthService to get sub system name', () => {
-      healthModal.subSystemName('base');
-
-      expect(healthService.getSubSystemName).toHaveBeenCalled();
-    });
   });
 
   describe('readableValue should transform data', () => {
@@ -83,11 +63,6 @@ describe('Health Modal Component for diskSpace', () => {
     const wrapper = shallowMount(HealthModal, {
       props: {
         currentHealth: { name: 'diskSpace' },
-      },
-      global: {
-        provide: {
-          [healthServiceKey as symbol]: healthService,
-        },
       },
     });
     healthModal = wrapper.vm;

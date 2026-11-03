@@ -179,7 +179,6 @@ export const vueFiles = asWriteFilesSection({
         'account/settings/settings.vue',
         'account/settings/settings.component.ts',
         'account/settings/settings.component.spec.ts',
-        'account/activate/activate.component.ts',
         'account/activate/activate.component.spec.ts',
         'account/activate/activate.service.ts',
         'account/activate/activate.vue',
@@ -199,7 +198,7 @@ export const vueFiles = asWriteFilesSection({
   adminModule: [
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts', 'admin/docs/docs.component.spec.ts'],
+      templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.spec.ts'],
     },
     {
       ...clientApplicationTemplatesBlock(),
@@ -210,10 +209,8 @@ export const vueFiles = asWriteFilesSection({
         'admin/configuration/configuration.component.spec.ts',
         'admin/configuration/configuration.service.ts',
         'admin/health/health.vue',
-        'admin/health/health.component.ts',
         'admin/health/health.component.spec.ts',
         'admin/health/health-modal.vue',
-        'admin/health/health-modal.component.ts',
         'admin/health/health-modal.component.spec.ts',
         'admin/health/health.service.ts',
         'admin/health/health.service.spec.ts',
@@ -244,12 +241,7 @@ export const vueFiles = asWriteFilesSection({
     {
       condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
       ...clientApplicationTemplatesBlock(),
-      templates: [
-        'admin/gateway/gateway.vue',
-        'admin/gateway/gateway.component.ts',
-        'admin/gateway/gateway.component.spec.ts',
-        'admin/gateway/gateway.service.ts',
-      ],
+      templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.spec.ts', 'admin/gateway/gateway.service.ts'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,
