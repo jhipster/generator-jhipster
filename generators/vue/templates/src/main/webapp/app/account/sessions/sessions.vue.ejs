@@ -39,4 +39,55 @@
   </div>
 </template>
 
-<script lang="ts" src="./sessions.component.ts"></script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import axios from 'axios';
+
+import { useStore } from '@/store';
+
+defineOptions({ name: 'Sessions' });
+
+interface Session {
+  series: string;
+  tokenDate: string;
+  ipAddress: string;
+  userAgent: string;
+}
+
+const store = useStore();
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const success = ref<string | null>(null);
+const error = ref<string | null>(null);
+const sessions = ref<Session[]>([]);
+
+const authenticated = computed(() => store.authenticated);
+const username = computed(() => store.account?.login ?? '');
+
+const retrieveSessions = () =>
+  axios.get<Session[]>('api/account/sessions').then(response => {
+    error.value = null;
+    sessions.value = response.data;
+  });
+
+const invalidate = (session: string) =>
+  axios
+    .delete(`api/account/sessions/${session}`)
+    .then(() => {
+      error.value = null;
+      success.value = 'OK';
+      retrieveSessions();
+    })
+    .catch(() => {
+      success.value = null;
+      error.value = 'ERROR';
+    });
+
+retrieveSessions();
+</script>

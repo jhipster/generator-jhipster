@@ -122,4 +122,77 @@
   </div>
 </template>
 
-<script lang="ts" src="./settings.component.ts"></script>
+<script setup lang="ts">
+import { computed, inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { useVuelidate } from '@vuelidate/core';
+import { email, maxLength, minLength, required } from '@vuelidate/validators';
+import axios from 'axios';
+
+import { currentUsernameKey } from '@/shared/config/injection-keys';
+<%_ if (enableTranslation) { _%>
+import getLanguages from '@/shared/config/languages';
+<%_ } _%>
+import { EMAIL_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+import { useStore } from '@/store';
+
+defineOptions({ name: 'Settings' });
+
+const store = useStore();
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+const languages = getLanguages();
+<%_ } _%>
+
+const success = ref<string | null>(null);
+const error = ref<string | null>(null);
+const errorEmailExists = ref<string | null>(null);
+
+const settingsAccount = computed(() => store.account);
+const username = inject(currentUsernameKey, () => computed(() => store.account?.login), true);
+
+const rules = {
+  settingsAccount: {
+    firstName: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(50),
+    },
+    lastName: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(50),
+    },
+    email: {
+      required,
+      email,
+      minLength: minLength(5),
+      maxLength: maxLength(254),
+    },
+  },
+};
+const v$ = useVuelidate(rules, { settingsAccount });
+
+const save = () => {
+  error.value = null;
+  errorEmailExists.value = null;
+  return axios
+    .post('api/account', settingsAccount.value)
+    .then(() => {
+      error.value = null;
+      success.value = 'OK';
+      errorEmailExists.value = null;
+    })
+    .catch(ex => {
+      success.value = null;
+      error.value = 'ERROR';
+      if (ex.response.status === 400 && ex.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+        errorEmailExists.value = 'ERROR';
+        error.value = null;
+      }
+    });
+};
+</script>

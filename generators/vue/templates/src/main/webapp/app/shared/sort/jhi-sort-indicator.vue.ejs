@@ -2,4 +2,11 @@
   <font-awesome-icon :icon="currentOrder === fieldName ? (reverse ? 'sort-down' : 'sort-up') : 'sort'"> </font-awesome-icon>
 </template>
 
-<script lang="ts" src="./jhi-sort-indicator.component.ts"></script>
+<script setup lang="ts">
+defineOptions({ name: 'JhiSortIndicatorComponent' });
+
+withDefaults(defineProps<{ currentOrder?: string; fieldName?: string; reverse?: boolean }>(), {
+  currentOrder: '',
+  fieldName: '',
+});
+</script>

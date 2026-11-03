@@ -59,4 +59,28 @@
   </div>
 </template>
 
-<script lang="ts" src="./home.component.ts"></script>
+<script setup lang="ts">
+import { inject } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+<%_ if (!authenticationTypeOauth2) { _%>
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+import { authenticatedKey, currentUsernameKey } from '@/shared/config/injection-keys';
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+const { login } = inject(loginServiceKey)!;
+<%_ } else { _%>
+const { showLogin } = useLoginModal();
+<%_ } _%>
+const authenticated = inject(authenticatedKey);
+const username = inject(currentUsernameKey);
+</script>

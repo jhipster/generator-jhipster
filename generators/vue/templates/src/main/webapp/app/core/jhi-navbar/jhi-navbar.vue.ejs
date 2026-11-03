@@ -180,7 +180,128 @@
   </b-navbar>
 </template>
 
-<script lang="ts" src="./jhi-navbar.component.ts"></script>
+<script setup lang="ts">
+import { <%- microfrontend ? 'type Component, ' : '' %>computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRouter } from 'vue-router';
+
+<%_ if (microfrontend) { _%>
+import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
+<%_ } _%>
+import { storeToRefs } from 'pinia';
+
+import { accountServiceKey } from '@/account/account.service';
+<%_ if (generateUserManagement) { _%>
+import { useLoginModal } from '@/account/login-modal';
+<%_ } _%>
+<%_ if (authenticationUsesCsrf) { _%>
+import { loginServiceKey } from '@/account/login.service';
+<%_ } _%>
+<%- exposeMicrofrontend ? '// ' : '' %>import EntitiesMenu from '@/entities/entities-menu.vue';
+<%_ if (enableTranslation) { _%>
+import { changeLanguageKey, currentLanguageKey } from '@/shared/config/injection-keys';
+import getLanguages from '@/shared/config/languages';
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
+import { useStore } from '@/store';
+
+defineOptions({
+  name: 'JhiNavbar',
+  components: {
+<%_ if (exposeMicrofrontend) { _%>
+    // Load entities menu exposed by microfrontend
+<%_ } _%>
+    <%- exposeMicrofrontend ? '// ' : '' %>'entities-menu': EntitiesMenu,
+<%_ if (microfrontend) { _%>
+  <%_ for (const remote of microfrontends) { _%>
+    '<%- remote.moduleFederationName %>-menu': defineAsyncComponent(() => {
+      return (loadRemote<{ default: Component }>('<%- remote.moduleFederationName %>/entities-menu') as Promise<{ default: Component }>)
+        .catch(() => import('@/core/error/error-loading.vue'));
+    }),
+  <%_ } _%>
+<%_ } _%>
+  },
+});
+
+<%_ if (authenticationUsesCsrf) { _%>
+const loginService = inject(loginServiceKey)!;
+  <%_ if (authenticationTypeOauth2) { _%>
+const { login } = loginService;
+  <%_ } _%>
+<%_ } _%>
+
+<%_ if (generateUserManagement) { _%>
+const { showLogin } = useLoginModal();
+<%_ } _%>
+const accountService = inject(accountServiceKey)!;
+<%_ if (enableTranslation) { _%>
+const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+const changeLanguage = inject(changeLanguageKey)!;
+const languages = getLanguages();
+const { t: t$ } = useI18n();
+
+const isActiveLanguage = (key: string) => key === currentLanguage.value;
+<%_ } _%>
+
+const router = useRouter();
+const store = useStore();
+
+const version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
+const hasAnyAuthorityValues = ref<Record<string, boolean>>({});
+
+const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+const inProduction = computed(() => store.activeProfiles.includes('prod'));
+<%_ } _%>
+const { authenticated } = storeToRefs(store);
+
+const subIsActive = (input: string | string[]) => {
+  const paths = Array.isArray(input) ? input : [input];
+  // current path starts with this path string
+  return paths.some(path => router.currentRoute.value.path.startsWith(path));
+};
+
+const hasAnyAuthority = (authorities: string): boolean => {
+  accountService.hasAnyAuthorityAndCheckAuth(authorities).then(value => {
+    if (hasAnyAuthorityValues.value[authorities] !== value) {
+      hasAnyAuthorityValues.value = { ...hasAnyAuthorityValues.value, [authorities]: value };
+    }
+  });
+  return hasAnyAuthorityValues.value[authorities] ?? false;
+};
+
+const logout = async () => {
+<%_ if (authenticationTypeJwt) { _%>
+  localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  store.logout();
+<%_ } else { _%>
+  <%- authenticationTypeOauth2 ? 'const response = ' : '' %>await loginService.logout();
+  store.logout();
+
+  <%_ if (authenticationTypeOauth2) { _%>
+  const next = response.data?.logoutUrl;
+
+  if (next) {
+    if (/^https?:\/\//i.test(next)) {
+      window.location.href = next;
+      return;
+    }
+    await router.push(next);
+    return;
+  }
+
+  <%_ } _%>
+<%_ } _%>
+  if (router.currentRoute.value.path !== '/') {
+    await router.push('/');
+  }
+};
+</script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

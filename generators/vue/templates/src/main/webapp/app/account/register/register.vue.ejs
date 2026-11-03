@@ -162,4 +162,91 @@
   </div>
 </template>
 
-<script lang="ts" src="./register.component.ts"></script>
+<script setup lang="ts">
+import { computed, inject, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { useVuelidate } from '@vuelidate/core';
+import { email, helpers, maxLength, minLength, required, sameAs } from '@vuelidate/validators';
+
+import { useLoginModal } from '@/account/login-modal';
+import RegisterService, { registerServiceKey } from '@/account/register/register.service';
+import { currentLanguageKey } from '@/shared/config/injection-keys';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
+
+defineOptions({ name: 'Register' });
+
+const loginPattern = helpers.regex(/<%- webappLoginRegExp %>/);
+
+const { showLogin } = useLoginModal();
+const registerService = inject(registerServiceKey, () => new RegisterService(), true);
+const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+
+const error = ref<string | null>('');
+const errorEmailExists = ref<string | null>('');
+const errorUserExists = ref<string | null>('');
+const success = ref<boolean | null>(false);
+
+const confirmPassword = ref<string | null>(null);
+const registerAccount = ref<{ login?: string; email?: string; password?: string; langKey?: string }>({
+  login: undefined,
+  email: undefined,
+  password: undefined,
+});
+
+const rules = computed(() => ({
+  registerAccount: {
+    login: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(50),
+      pattern: loginPattern,
+    },
+    email: {
+      required,
+      minLength: minLength(5),
+      maxLength: maxLength(254),
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(4),
+      maxLength: maxLength(254),
+    },
+  },
+  confirmPassword: {
+    required,
+    minLength: minLength(4),
+    maxLength: maxLength(50),
+    sameAsPassword: sameAs(registerAccount.value.password),
+  },
+}));
+const v$ = useVuelidate(rules, { registerAccount, confirmPassword });
+
+const register = (): void => {
+  error.value = null;
+  errorUserExists.value = null;
+  errorEmailExists.value = null;
+  registerAccount.value.langKey = currentLanguage.value;
+  registerService
+    .processRegistration(registerAccount.value)
+    .then(() => {
+      success.value = true;
+    })
+    .catch(error_ => {
+      success.value = null;
+      if (error_.response.status === 400 && error_.response.data.type === LOGIN_ALREADY_USED_TYPE) {
+        errorUserExists.value = 'ERROR';
+      } else if (error_.response.status === 400 && error_.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+        errorEmailExists.value = 'ERROR';
+      } else {
+        error.value = 'ERROR';
+      }
+    });
+};
+</script>

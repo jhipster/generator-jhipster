@@ -10,4 +10,14 @@
   </div>
 </template>
 
-<script lang="ts" src="./entities-menu.component.ts"></script>
+<script setup lang="ts">
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+
+<%_ } _%>
+defineOptions({ name: 'EntitiesMenu' });
+<%_ if (enableTranslation) { _%>
+
+const { t: t$ } = useI18n();
+<%_ } _%>
+</script>

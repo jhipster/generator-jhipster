@@ -42,6 +42,10 @@ import vitest from '@vitest/eslint-plugin';
       parserOptions: { parser: '@typescript-eslint/parser' },
       globals: { ...globals.browser },
     },
+    rules: {
+      // TypeScript checks the undefined names, as typescript-eslint leaves it to it in .ts files.
+      'no-undef': 'off',
+    },
   },
   {
     files: ['<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.vue', '<%- relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
