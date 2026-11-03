@@ -20,8 +20,9 @@ import { email, helpers, maxLength, minLength, required } from '@vuelidate/valid
 
 /** The rules of the fields of the account, from the fields of the user. */
 export const accountValidations = {
-<%_ for (const field of user.fields.filter(field => ['login', 'firstName', 'lastName', 'email'].includes(field.fieldName))) { _%>
-  <%- field.fieldName %>: {
+<%_ for (const fieldName of ['login', 'firstName', 'lastName', 'email']) { _%>
+  <%_ const field = user.fieldsByName[fieldName]; _%>
+  <%- fieldName %>: {
   <%_ if (field.fieldValidationRequired) { _%>
     required,
   <%_ } _%>
@@ -31,15 +32,17 @@ export const accountValidations = {
   <%_ if (field.fieldValidationMaxLength) { _%>
     maxLength: maxLength(<%- field.fieldValidateRulesMaxlength %>),
   <%_ } _%>
-  <%_ if (field.fieldValidationPattern) { _%>
+  <%_ if (fieldName === 'login') { _%>
+    pattern: helpers.regex(/<%- webappLoginRegExp %>/),
+  <%_ } else if (field.fieldValidationPattern) { _%>
     pattern: helpers.regex(new RegExp('<%- field.fieldValidateRulesPatternVue %>')),
   <%_ } _%>
-  <%_ if (field.fieldValidateRules?.includes('email')) { _%>
+  <%_ if (field.fieldValidationEmail) { _%>
     email,
   <%_ } _%>
   },
 <%_ } _%>
 };
 
-/** The rules of a password, as the server validates it. */
-export const passwordValidations = { required, minLength: minLength(4), maxLength: maxLength(100) };
+/** The rules of a password, as the other clients validate it. */
+export const passwordValidations = { required, minLength: minLength(4), maxLength: maxLength(50) };
