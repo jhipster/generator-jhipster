@@ -111,10 +111,15 @@ describe('resolver - generator dependencies', () => {
     });
 
     it('should resolve the options of docker for a blueprint replacing the server and importing docker', () => {
-      const blueprints = {
-        'jhipster-foo:server': { configs: {}, import: ['jhipster-foo:node-server'], override: true },
+      // The namespaces of a blueprint are not the ones of JHipster that the type of import knows.
+      const blueprints: Record<string, JHipsterCommandDefinition> = {
+        'jhipster-foo:server': {
+          configs: {},
+          import: ['jhipster-foo:node-server'] as unknown as JHipsterCommandDefinition['import'],
+          override: true,
+        },
         'jhipster-foo:node-server': { configs: {}, import: ['docker'] },
-      } as const satisfies Record<string, JHipsterCommandDefinition>;
+      };
       const dependencies = resolveCommandDependencies(
         { command: 'jdl' },
         { getGeneratorMeta: metaLookup(blueprints), blueprintNamespaces: ['jhipster-foo'] },
