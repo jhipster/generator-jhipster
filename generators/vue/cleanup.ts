@@ -115,6 +115,8 @@ export default asWritingTask<ClientEntity, ClientApplication>(async function cle
       [application.authenticationTypeJwt, `${application.clientSrcDir}app/account/login.service.spec.ts`],
     ],
     '9.5.0': [
+      `${application.clientSrcDir}app/admin/configuration/configuration.component.ts`,
+      `${application.clientSrcDir}app/admin/logs/logs.component.ts`,
       `${application.clientSrcDir}app/account/activate/activate.component.ts`,
       `${application.clientSrcDir}app/admin/docs/docs.component.ts`,
       `${application.clientSrcDir}app/admin/gateway/gateway.component.ts`,

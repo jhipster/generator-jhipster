@@ -70,4 +70,60 @@
   </div>
 </template>
 
-<script lang="ts" src="./logs.component.ts"></script>
+<script setup lang="ts">
+import { computed, inject, onMounted, ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { orderAndFilterBy } from '@/shared/computables';
+
+import LogsService, { type Level, type LoggersResponse, logsServiceKey } from './logs.service';
+
+defineOptions({ name: '<%- jhiPrefixCapitalized %>Logs' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+const logsService = inject(logsServiceKey, () => new LogsService(), true);
+
+const loggers = ref<{ name: string; level: Level }[]>([]);
+const filtered = ref('');
+const orderProp = ref('name');
+const reverse = ref(false);
+const filteredLoggers = computed(() =>
+  orderAndFilterBy(loggers.value, {
+    filterByTerm: filtered.value,
+    orderByProp: orderProp.value,
+    reverse: reverse.value,
+  }),
+);
+
+const extractLoggers = (response: { data?: LoggersResponse }): void => {
+  loggers.value = [];
+  if (response.data) {
+    for (const key of Object.keys(response.data.loggers)) {
+      const logger = response.data.loggers[key];
+      loggers.value.push({ name: key, level: logger.effectiveLevel });
+    }
+  }
+};
+const init = (): void => {
+  logsService.findAll().then(response => {
+    extractLoggers(response);
+  });
+};
+const updateLevel = (name: string, level: string): void => {
+  logsService.changeLevel(name, level).then(() => {
+    init();
+  });
+};
+const changeOrder = (prop: string): void => {
+  orderProp.value = prop;
+  reverse.value = !reverse.value;
+};
+
+onMounted(() => {
+  init();
+});
+</script>
