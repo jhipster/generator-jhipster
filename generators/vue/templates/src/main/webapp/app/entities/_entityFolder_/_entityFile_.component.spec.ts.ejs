@@ -36,6 +36,9 @@ import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 <%_ if (builtInUserManagement) { _%>
 import { currentUsernameKey } from '@/shared/config/injection-keys';
 <%_ } _%>
+<%_ if (!paginationNo) { _%>
+import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
+<%_ } _%>
 import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/testing/stubs';
 
 import { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
@@ -117,7 +120,7 @@ describe('Component Tests', () => {
           'font-awesome-icon': true,
           'b-badge': true,
 <%_ if (!paginationNo) { _%>
-          'jhi-sort-indicator': true,
+          'jhi-sort-header': JhiSortHeader,
 <%_ } _%>
           'b-button': bButtonStub,
           'router-link': routerLinkStub,
@@ -367,6 +370,26 @@ describe('Component Tests', () => {
     });
 
 <%_ } _%>
+<%_ if (!paginationNo) { _%>
+    describe('Sort headers', () => {
+      it('Should sort by a column from the button of its header', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        await wrapper.find('th button').trigger('click');
+        // The order is kept in the route, which the click navigates.
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.propOrder).toBe('<%- primaryKey.name %>');
+        expect(wrapper.find('th').attributes('aria-sort')).toBe('<%- primaryKey.name === 'id' ? 'descending' : 'ascending' %>');
+      });
+    });
+
+<%_ } _%>
     describe('Actions', () => {
       it('Should handle the actions of the list', async () => {
         // GIVEN
@@ -392,7 +415,7 @@ describe('Component Tests', () => {
         await triggerAll(wrapper, 'button, th, a', 'click');
 <%_ if (!paginationNo) { _%>
         // A second click on a column reverses its order.
-        await triggerAll(wrapper, 'th', 'click');
+        await triggerAll(wrapper, 'th button', 'click');
 <%_ } _%>
         await flushPromises();
 

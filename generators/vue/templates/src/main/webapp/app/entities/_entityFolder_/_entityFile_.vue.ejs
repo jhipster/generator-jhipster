@@ -44,16 +44,22 @@
             <table class="table table-striped" aria-describedby="<%- entityInstancePlural %>">
                 <thead>
                 <tr>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- primaryKey.name %>')"<% } %>><span>{{ t$('<%- primaryKey.name === 'id' ? 'global.field.id' : `${i18nKeyPrefix}.${primaryKey.name}` %>') }}</span><%- paginationNo ? '' : ` <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="${primaryKey.name}"></jhi-sort-indicator>` %></th>
-<%_ for (field of listFields) { _%>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- field.fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${field.fieldName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- field.fieldName %>"></jhi-sort-indicator><% } %></th>
-<%_ } _%>
-<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
-                    <th scope="col"><span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span></th>
-  <%_ } else if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
-    <%_ const fieldName = `.${relationship.otherEntityField}`; _%>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + fieldName %>')"<% } %>><span>{{ t$('<%- relationship.propertyTranslationKey %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" field-name="<%- relationship.relationshipName + fieldName %>"></jhi-sort-indicator><% } %></th>
+<%_ const columns = [
+      { sortField: primaryKey.name, translationKey: primaryKey.name === 'id' ? 'global.field.id' : `${i18nKeyPrefix}.${primaryKey.name}` },
+      ...listFields.map(field => ({ sortField: field.fieldName, translationKey: `${i18nKeyPrefix}.${field.fieldName}` })),
+      ...relationships
+        .filter(rel => !rel.otherEntity.embedded && (rel.relationshipSerializePrimaryKeyOnly || (rel.persistableRelationship && (paginationNo || !rel.collection))))
+        .map(rel => ({
+          sortField: rel.relationshipSerializePrimaryKeyOnly ? undefined : `${rel.relationshipName}.${rel.otherEntityField}`,
+          translationKey: rel.propertyTranslationKey,
+        })),
+    ];
+_%>
+<%_ for (const { sortField, translationKey } of columns) { _%>
+  <%_ if (paginationNo || !sortField) { _%>
+                    <th scope="col"><span>{{ t$('<%- translationKey %>') }}</span></th>
+  <%_ } else { _%>
+                    <jhi-sort-header field-name="<%- sortField %>" :current-order="propOrder" :reverse="reverse" @sort="changeOrder"><span>{{ t$('<%- translationKey %>') }}</span></jhi-sort-header>
   <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
