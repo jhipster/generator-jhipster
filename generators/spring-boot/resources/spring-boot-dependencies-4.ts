@@ -22,4 +22,18 @@
  */
 import springBootDependencies4 from './spring-boot-dependencies-4.json' with { type: 'json' };
 
-export default springBootDependencies4;
+const { version, properties, modules } = springBootDependencies4;
+
+export default {
+  /** Spring Boot's managed versions, keyed by property name without the `.version` suffix. */
+  versions: {
+    'spring-boot-dependencies': version,
+    ...Object.fromEntries(
+      Object.entries(properties)
+        .filter(([property]) => property.endsWith('.version'))
+        .map(([property, value]) => [property.slice(0, -'.version'.length), value]),
+    ),
+  } as Record<string, string>,
+  properties,
+  modules,
+};
