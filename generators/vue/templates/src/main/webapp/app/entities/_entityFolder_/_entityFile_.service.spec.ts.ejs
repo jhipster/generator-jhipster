@@ -112,6 +112,20 @@ describe('Service Tests', () => {
         });
       });
 
+      it('should pass the signal of the request', async () => {
+        const { signal } = new AbortController();
+        axiosStub.get.mockResolvedValue({ data: {} });
+
+        await service.find(<%- tsKeyId %>, { signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+        await service.retrieve({ signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+<%_ if (searchEngineAny) { _%>
+        await service.search('query', { signal });
+        expect(axiosStub.get).toHaveBeenLastCalledWith(expect.any(String), { signal });
+<%_ } _%>
+      });
+
       it('should not find an element', async () => {
         axiosStub.get.mockRejectedValue(error);
         await expect(service.find(<%- tsKeyId %>)).rejects.toMatchObject(error);
@@ -282,7 +296,7 @@ describe('Service Tests', () => {
         const res = await service.search('query'<%- paginationNo ? '' : ', { sort: {}, page: 0, size: 10 }' %>);
 
         expect(res.data).toEqual([{ <%- primaryKey.name %>: <%- tsKeyId %> }]);
-        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=query'));
+        expect(axiosStub.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=query'), { signal: undefined });
       });
 
 <%_ } _%>

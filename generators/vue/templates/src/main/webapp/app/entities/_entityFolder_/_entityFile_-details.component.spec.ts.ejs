@@ -18,13 +18,11 @@
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-<%_ if (builtInUserManagement) { _%>
-import { ref } from 'vue';
-<%_ } _%>
+import { <%- builtInUserManagement ? 'reactive, ref' : 'reactive' %> } from 'vue';
 import { type RouteLocation } from 'vue-router';
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
-import axios from 'axios';
+import axios, { CanceledError } from 'axios';
 import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
@@ -198,6 +196,38 @@ describe('Component Tests', () => {
 <%_ if (!readOnly) { _%>
         expect(<%- entityInstance %>ServiceStub.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
 <%_ } _%>
+      });
+    });
+
+    describe('Route changes', () => {
+      it('Should load again when the id of the route changes', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        route = reactive({ params: { <%- entityInstance %>Id: '123' } });
+        shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        await flushPromises();
+
+        // WHEN
+        route.params = { <%- entityInstance %>Id: '456' };
+        await flushPromises();
+
+        // THEN
+        expect(<%- entityInstance %>ServiceStub.find.mock.calls.map(([id]) => id)).toEqual(['123', '456']);
+        expect(<%- entityInstance %>ServiceStub.find.mock.calls[0][1].signal.aborted).toBe(true);
+      });
+
+      it('Should not show the error of an aborted load', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.find.mockRejectedValue(new CanceledError());
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        route = { params: { <%- entityInstance %>Id: '123' } };
+
+        // WHEN
+        shallowMount(<%- entityAngularName %>Details, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(showHttpError).not.toHaveBeenCalled();
       });
     });
 

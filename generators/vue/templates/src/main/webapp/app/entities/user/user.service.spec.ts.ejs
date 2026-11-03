@@ -28,7 +28,17 @@ describe('UserService', () => {
 
     await expect(new UserService().retrieve()).resolves.toEqual({ data: [{ id: 1 }] });
 
-    expect(get).toHaveBeenCalledWith('api/users');
+    expect(get).toHaveBeenCalledWith('api/users', { signal: undefined });
+    get.mockRestore();
+  });
+
+  it('should pass the signal of the request', async () => {
+    const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: [] });
+    const { signal } = new AbortController();
+
+    await new UserService().retrieve({ signal });
+
+    expect(get).toHaveBeenCalledWith('api/users', { signal });
     get.mockRestore();
   });
 });

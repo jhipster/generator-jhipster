@@ -30,7 +30,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { type AxiosError } from 'axios';
 
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
-import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
+import { useControlledRequest, useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
 import { currentLanguageKey } from '@/shared/config/injection-keys';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
@@ -68,23 +68,32 @@ export default defineComponent({
     const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
     const alertService = inject(alertServiceKey, () => useAlertService(), true);
 
-    const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref(new <%- entityAngularName %>());
+    const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
+      const entity = new <%- entityAngularName %>();
 <%_ if (relationshipsContainManyToOne) { _%>
   <%_ for (const relationship of relationships.filter(relationship => relationship.collection && relationship.persistableRelationship)) { _%>
-    <%- entityInstance %>.value.<%- relationship.relationshipFieldNamePlural %> = [];
+      entity.<%- relationship.relationshipFieldNamePlural %> = [];
   <%_ } _%>
 <%_ } _%>
+      return entity;
+    };
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
     const userService = inject(userServiceKey, () => new UserService());
-    const <%- relationship.otherEntity.entityInstancePlural %>: Ref<IUser[]> = ref([]);
+    const { data: <%- relationship.otherEntity.entityInstancePlural %> } = useControlledRequest(async (_params, { signal }) => (await userService().retrieve({ signal })).data, {
+      initialData: (): IUser[] => [],
+      onError: error => alertService.showHttpError((error as AxiosError).response),
+    });
   <%_ } else { _%>
     <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 
     const <%- relationship.otherEntity.entityInstance %>Service = inject(<%- relationship.otherEntity.entityInstance %>ServiceKey, () => new <%- relationship.otherEntity.entityAngularName %>Service());
     <%_ } _%>
 
-    const <%- relationship.otherEntity.entityInstancePlural %>: Ref<I<%- relationship.otherEntity.entityAngularName %>[]> = ref([]);
+    const { data: <%- relationship.otherEntity.entityInstancePlural %> } = useControlledRequest(async (_params, { signal }) => (await <%- relationship.otherEntity.entityInstance %>Service().retrieve({ signal })).data, {
+      initialData: (): I<%- relationship.otherEntity.entityAngularName %>[] => [],
+      onError: error => alertService.showHttpError((error as AxiosError).response),
+    });
   <%_ } _%>
 <%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
@@ -105,9 +114,9 @@ export default defineComponent({
 
     const previousState = () => router.go(-1);
 
-    const retrieve<%- entityAngularName %> = async (<%- entityInstance %><%- primaryKey.nameCapitalized %>: string | number) => {
-      try {
-        const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
+    const { data: <%- entityInstance %> } = useControlledRequest(
+      async (id, { signal }) => {
+        const res = await <%- entityInstance %>Service().find(id, { signal });
 <%_ for (field of fields.filter(field => !field.id)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
@@ -116,35 +125,15 @@ export default defineComponent({
         }
   <%_ } _%>
 <%_ } _%>
-        <%- entityInstance %>.value = res;
-      } catch (error) {
-        alertService.showHttpError((error as AxiosError).response);
-      }
-    };
-
-    if (route.params?.<%- entityInstance %>Id) {
-      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id as string);
-    }
-<%_ if (relationships.length > 0) { _%>
-
-    const initRelationships = () => {
-  <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
-    <%_ if (relationship.otherEntity.builtInUser) { _%>
-      userService().retrieve().then((res) => {
-        <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
-      })
-      .catch(error => alertService.showHttpError(error.response));
-    <%_ } else { _%>
-      <%- relationship.otherEntity.entityInstance %>Service().retrieve().then((res) => {
-        <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
-      })
-      .catch(error => alertService.showHttpError(error.response));
-    <%_ } _%>
-  <%_ } _%>
-    };
-
-    initRelationships();
-<%_ } _%>
+        return res;
+      },
+      {
+        // The router reuses the component when the id of the route changes, and an update without id is a new entity.
+        params: () => route.params?.<%- entityInstance %>Id as string | undefined,
+        initialData: new<%- entityAngularName %>,
+        onError: error => alertService.showHttpError((error as AxiosError).response),
+      },
+    );
 <%_ if (anyFieldIsBlobDerived) { _%>
 
     const dataUtils = useDataUtils();

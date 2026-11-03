@@ -26,7 +26,7 @@ import { type Router, createMemoryHistory, createRouter } from 'vue-router';
 <%_ } _%>
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
-import axios from 'axios';
+import axios, { CanceledError } from 'axios';
 import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
@@ -355,7 +355,7 @@ describe('Component Tests', () => {
         await flushPromises();
 
         // THEN
-        expect(<%- entityInstance %>ServiceStub.search).toHaveBeenCalledWith('query'<%- paginationNo ? '' : ', expect.anything()' %>);
+        expect(<%- entityInstance %>ServiceStub.search).toHaveBeenCalledWith('query', expect.anything());
         expect(wrapper.vm.<%- entityInstancePlural %>).toContainEqual(expect.objectContaining({ <%- primaryKey.name %>: <%- tsKeyId %> }));
 
         // WHEN
@@ -448,6 +448,43 @@ describe('Component Tests', () => {
     });
 
 <%_ } _%>
+    describe('Aborted requests', () => {
+      beforeEach(() => {
+        // A request rejects when it is aborted, else never ends.
+        <%- entityInstance %>ServiceStub.retrieve.mockImplementation(
+          ({ signal }: { signal: AbortSignal }) =>
+            new Promise((_resolve, reject) => signal.addEventListener('abort', () => reject(new CanceledError()))),
+        );
+      });
+
+      it('Should abort the previous load and keep fetching the newer one', async () => {
+        // GIVEN
+        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        const { signal } = <%- entityInstance %>ServiceStub.retrieve.mock.lastCall![0];
+
+        // WHEN
+        wrapper.vm.handleSyncList();
+        await flushPromises();
+
+        // THEN
+        expect({ aborted: signal.aborted, isFetching: wrapper.vm.isFetching }).toEqual({ aborted: true, isFetching: true });
+        expect(showHttpError).not.toHaveBeenCalled();
+      });
+
+      it('Should abort the load when the component unmounts', () => {
+        // GIVEN
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        const { signal } = <%- entityInstance %>ServiceStub.retrieve.mock.lastCall![0];
+
+        // WHEN
+        wrapper.unmount();
+
+        // THEN
+        expect(signal.aborted).toBe(true);
+      });
+    });
+
     describe('Errors and defaults', () => {
       it('Should show the error of a failed load', async () => {
         // GIVEN
