@@ -45,15 +45,15 @@
             <column name="id" type="<%- idField.columnType %>"<%- idField.liquibaseAutoIncrement ? ' autoIncrement="true" startWith="1050"' : '' %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="login" type="varchar(50)">
+            <column name="login" type="varchar(<%- user.fieldsByName.login.fieldValidateRulesMaxlength %>)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
   <%_ if (generateUserManagement) { _%>
             <column name="password_hash" type="varchar(60)"/>
   <%_ } _%>
-            <column name="first_name" type="varchar(50)"/>
-            <column name="last_name" type="varchar(50)"/>
-            <column name="email" type="varchar(191)">
+            <column name="first_name" type="varchar(<%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %>)"/>
+            <column name="last_name" type="varchar(<%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>)"/>
+            <column name="email" type="varchar(<%- user.fieldsByName.email.fieldValidateRulesMaxlength %>)">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
             <column name="image_url" type="varchar(256)"/>

@@ -114,12 +114,8 @@ export const UserManagementUpdate = () => {
                 value: /<%- webappLoginRegExp %>/,
                 message: translate('register.messages.validate.login.pattern'),
               },
-              minLength: {
-                value: 1,
-                message: translate('register.messages.validate.login.minlength'),
-              },
               maxLength: {
-                value: 50,
+                value: <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>,
                 message: translate('register.messages.validate.login.maxlength'),
               },
             }}
@@ -131,8 +127,8 @@ export const UserManagementUpdate = () => {
             label={translate('userManagement.firstName')}
             validate={{
               maxLength: {
-                value: 50,
-                message: translate('entity.validation.maxlength', { max: 50 }),
+                value: <%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %>,
+                message: translate('entity.validation.maxlength', { max: <%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %> }),
               },
             }}
           />
@@ -143,8 +139,8 @@ export const UserManagementUpdate = () => {
             label={translate('userManagement.lastName')}
             validate={{
               maxLength: {
-                value: 50,
-                message: translate('entity.validation.maxlength', { max: 50 }),
+                value: <%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>,
+                message: translate('entity.validation.maxlength', { max: <%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %> }),
               },
             }}
           />
@@ -161,11 +157,11 @@ export const UserManagementUpdate = () => {
                 message: translate('global.messages.validate.email.required'),
               },
               minLength: {
-                value: 5,
+                value: <%- user.fieldsByName.email.fieldValidateRulesMinlength %>,
                 message: translate('global.messages.validate.email.minlength'),
               },
               maxLength: {
-                value: 254,
+                value: <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>,
                 message: translate('global.messages.validate.email.maxlength'),
               },
               validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),

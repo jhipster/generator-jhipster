@@ -28,6 +28,7 @@ describe('useValidation', () => {
   it.each([
     ['required', validations.required('message'), '', 'value'],
     ['decimal', validations.decimal('message'), 'a', '1.5'],
+    ['email', validations.email('message'), 'a', 'jhi@pster.net'],
     ['integer', validations.integer('message'), '1.5', '1'],
     ['sameAs', validations.sameAs('message', 'value'), 'other', 'value'],
     ['minLength', validations.minLength('message', 2), 'a', 'ab'],

@@ -193,11 +193,11 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("login")
 <%_ } else if (databaseTypeSql) { _%>
-    @Column(name = "login", length = 50, unique = true, nullable = false)
+    @Column(name = "login", length = <%- user.fieldsByName.login.fieldValidateRulesMaxlength %>, unique = true, nullable = false)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed
@@ -223,9 +223,9 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     private String password;
 <%_ } _%>
 
-    @Size(max = 50)
+    @Size(max = <%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && !reactive) { _%>
-    @Column(name = "first_name", length = 50)
+    @Column(name = "first_name", length = <%- user.fieldsByName.firstName.fieldValidateRulesMaxlength %>)
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("first_name")
@@ -244,9 +244,9 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
 <%_ } _%>
     private String firstName;
 
-    @Size(max = 50)
+    @Size(max = <%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && !reactive) { _%>
-    @Column(name = "last_name", length = 50)
+    @Column(name = "last_name", length = <%- user.fieldsByName.lastName.fieldValidateRulesMaxlength %>)
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("last_name")
@@ -266,11 +266,11 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 254)
+    @Size(min = <%- user.fieldsByName.email.fieldValidateRulesMinlength %>, max = <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>)
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("email")
 <%_ } else if (databaseTypeSql) { _%>
-    @Column(name = "email", length = 254, unique = true)
+    @Column(name = "email", length = <%- user.fieldsByName.email.fieldValidateRulesMaxlength %>, unique = true)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed

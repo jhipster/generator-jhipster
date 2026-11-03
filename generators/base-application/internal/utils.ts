@@ -159,7 +159,8 @@ export function createUserEntity(
         {
           fieldName: 'langKey',
           fieldType: TYPE_STRING,
-          fieldValidateRules: [Validations.MAXLENGTH],
+          fieldValidateRules: [Validations.MINLENGTH, Validations.MAXLENGTH],
+          fieldValidateRulesMinlength: 2,
           fieldValidateRulesMaxlength: 10,
           builtIn: true,
         },

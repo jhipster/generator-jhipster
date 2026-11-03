@@ -150,6 +150,9 @@ export default defineComponent({
     <%_ if (field.fieldValidationRequired) { _%>
         required: validations.required(t$('entity.validation.required').toString()),
     <%_ } _%>
+    <%_ if (field.fieldValidationEmail) { _%>
+        email: validations.email(t$('global.messages.validate.email.invalid').toString()),
+    <%_ } _%>
     <%_ if (field.fieldValidationMinLength) { _%>
         minLength: validations.minLength(t$('entity.validation.minlength', { min: <%- field.fieldValidateRulesMinlength %> }).toString(), <%- field.fieldValidateRulesMinlength %>),
     <%_ } _%>
