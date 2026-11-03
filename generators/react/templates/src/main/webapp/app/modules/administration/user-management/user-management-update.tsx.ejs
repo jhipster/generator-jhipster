@@ -165,7 +165,7 @@ export const UserManagementUpdate = () => {
                 message: translate('global.messages.validate.email.minlength'),
               },
               maxLength: {
-                value: 254,
+                value: 191,
                 message: translate('global.messages.validate.email.maxlength'),
               },
               validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),

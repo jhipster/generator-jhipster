@@ -266,11 +266,11 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 254)
+    @Size(min = 5, max = 191)
 <%_ if (databaseTypeSql && reactive) { _%>
     @Column("email")
 <%_ } else if (databaseTypeSql) { _%>
-    @Column(name = "email", length = 254, unique = true)
+    @Column(name = "email", length = 191, unique = true)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed

@@ -56,15 +56,15 @@ export default class Settings implements OnInit {
   settingsForm = new FormGroup({
     firstName: new FormControl(initialAccount.firstName, {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+      validators: [Validators.maxLength(50)],
     }),
     lastName: new FormControl(initialAccount.lastName, {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+      validators: [Validators.maxLength(50)],
     }),
     email: new FormControl(initialAccount.email, {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(191), Validators.email],
     }),
     langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
     activated: new FormControl(initialAccount.activated, { nonNullable: true }),

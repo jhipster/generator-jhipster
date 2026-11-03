@@ -301,7 +301,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
 <%_ if (reactive) { _%>
-    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 254) String mail) {
+    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 191) String mail) {
         LOG.debug("REST request to request password reset");
         return userService
             .requestPasswordReset(mail)
@@ -316,7 +316,7 @@ public class AccountResource {
             })
             .then();
 <%_ } else { _%>
-    public void requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 254) String mail) {
+    public void requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 191) String mail) {
         LOG.debug("REST request to request password reset");
         Optional<<%- user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
