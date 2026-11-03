@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const userFieldsByName = Object.fromEntries(user.fields.map(field => [field.fieldName, field])); _%>
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -56,15 +57,15 @@ export default class Settings implements OnInit {
   settingsForm = new FormGroup({
     firstName: new FormControl(initialAccount.firstName, {
       nonNullable: true,
-      validators: [Validators.maxLength(50)],
+      validators: [Validators.maxLength(<%- userFieldsByName.firstName.fieldValidateRulesMaxlength %>)],
     }),
     lastName: new FormControl(initialAccount.lastName, {
       nonNullable: true,
-      validators: [Validators.maxLength(50)],
+      validators: [Validators.maxLength(<%- userFieldsByName.lastName.fieldValidateRulesMaxlength %>)],
     }),
     email: new FormControl(initialAccount.email, {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(191), Validators.email],
+      validators: [<%- userFieldsByName.email.fieldValidationRequired ? 'Validators.required, ' : '' %>Validators.minLength(<%- userFieldsByName.email.fieldValidateRulesMinlength %>), Validators.maxLength(<%- userFieldsByName.email.fieldValidateRulesMaxlength %>)<%- userFieldsByName.email.fieldValidationEmail ? ', Validators.email' : '' %>],
     }),
     langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
     activated: new FormControl(initialAccount.activated, { nonNullable: true }),

@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const userFieldsByName = Object.fromEntries((locals.user?.fields ?? []).map(field => [field.fieldName, field])); _%>
 package <%- packageName %>.web.rest;
 
 <%_ if (authenticationTypeSession && !reactive) { _%>
@@ -301,7 +302,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
 <%_ if (reactive) { _%>
-    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 191) String mail) {
+    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = <%- userFieldsByName.email.fieldValidateRulesMinlength %>, max = <%- userFieldsByName.email.fieldValidateRulesMaxlength %>) String mail) {
         LOG.debug("REST request to request password reset");
         return userService
             .requestPasswordReset(mail)
@@ -316,7 +317,7 @@ public class AccountResource {
             })
             .then();
 <%_ } else { _%>
-    public void requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 191) String mail) {
+    public void requestPasswordReset(@RequestBody @Email @Size(min = <%- userFieldsByName.email.fieldValidateRulesMinlength %>, max = <%- userFieldsByName.email.fieldValidateRulesMaxlength %>) String mail) {
         LOG.debug("REST request to request password reset");
         Optional<<%- user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {

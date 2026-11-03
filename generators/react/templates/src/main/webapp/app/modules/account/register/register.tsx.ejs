@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const userFieldsByName = Object.fromEntries(user.fields.map(field => [field.fieldName, field])); _%>
 import { useEffect, useState } from 'react';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import { Translate, ValidatedField, ValidatedForm, isEmail, translate } from 'react-jhipster';
@@ -90,8 +91,7 @@ export const RegisterPage = () => {
                   value: /<%- webappLoginRegExp %>/,
                   message: translate('register.messages.validate.login.pattern'),
                 },
-                minLength: { value: 1, message: translate('register.messages.validate.login.minlength') },
-                maxLength: { value: 50, message: translate('register.messages.validate.login.maxlength') },
+                maxLength: { value: <%- userFieldsByName.login.fieldValidateRulesMaxlength %>, message: translate('register.messages.validate.login.maxlength') },
               }}
               data-cy="username"
             />
@@ -102,8 +102,8 @@ export const RegisterPage = () => {
               type="email"
               validate={{
                 required: { value: true, message: translate('global.messages.validate.email.required') },
-                minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
-                maxLength: { value: 191, message: translate('global.messages.validate.email.maxlength') },
+                minLength: { value: <%- userFieldsByName.email.fieldValidateRulesMinlength %>, message: translate('global.messages.validate.email.minlength') },
+                maxLength: { value: <%- userFieldsByName.email.fieldValidateRulesMaxlength %>, message: translate('global.messages.validate.email.maxlength') },
                 validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
               }}
               data-cy="email"

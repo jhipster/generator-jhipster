@@ -40,20 +40,22 @@
     -->
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (generateBuiltInUserEntity) { _%>
-  <%_ const idField = user.primaryKey.fields[0]; _%>
+  <%_ const idField = user.primaryKey.fields[0];
+      const userFieldsByName = Object.fromEntries(user.fields.map(field => [field.fieldName, field]));
+  _%>
         <createTable tableName="<%- user.entityTableName %>">
             <column name="id" type="<%- idField.columnType %>"<%- idField.liquibaseAutoIncrement ? ' autoIncrement="true" startWith="1050"' : '' %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="login" type="varchar(50)">
+            <column name="login" type="varchar(<%- userFieldsByName.login.fieldValidateRulesMaxlength %>)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
   <%_ if (generateUserManagement) { _%>
             <column name="password_hash" type="varchar(60)"/>
   <%_ } _%>
-            <column name="first_name" type="varchar(50)"/>
-            <column name="last_name" type="varchar(50)"/>
-            <column name="email" type="varchar(191)">
+            <column name="first_name" type="varchar(<%- userFieldsByName.firstName.fieldValidateRulesMaxlength %>)"/>
+            <column name="last_name" type="varchar(<%- userFieldsByName.lastName.fieldValidateRulesMaxlength %>)"/>
+            <column name="email" type="varchar(<%- userFieldsByName.email.fieldValidateRulesMaxlength %>)">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
             <column name="image_url" type="varchar(256)"/>

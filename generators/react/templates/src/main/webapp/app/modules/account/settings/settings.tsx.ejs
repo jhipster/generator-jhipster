@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const userFieldsByName = Object.fromEntries(user.fields.map(field => [field.fieldName, field])); _%>
 import { useEffect } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { Translate, ValidatedField, ValidatedForm, isEmail, translate } from 'react-jhipster';
@@ -77,7 +78,7 @@ export const SettingsPage = () => {
               id="firstName"
               placeholder={translate('settings.form.firstname.placeholder')}
               validate={{
-                maxLength: { value: 50, message: translate('settings.messages.validate.firstname.maxlength') },
+                maxLength: { value: <%- userFieldsByName.firstName.fieldValidateRulesMaxlength %>, message: translate('settings.messages.validate.firstname.maxlength') },
               }}
               data-cy="firstname"
             />
@@ -87,7 +88,7 @@ export const SettingsPage = () => {
               id="lastName"
               placeholder={translate('settings.form.lastname.placeholder')}
               validate={{
-                maxLength: { value: 50, message: translate('settings.messages.validate.lastname.maxlength') },
+                maxLength: { value: <%- userFieldsByName.lastName.fieldValidateRulesMaxlength %>, message: translate('settings.messages.validate.lastname.maxlength') },
               }}
               data-cy="lastname"
             />
@@ -98,8 +99,8 @@ export const SettingsPage = () => {
               type="email"
               validate={{
                 required: { value: true, message: translate('global.messages.validate.email.required') },
-                minLength: { value: 5, message: translate('global.messages.validate.email.minlength') },
-                maxLength: { value: 191, message: translate('global.messages.validate.email.maxlength') },
+                minLength: { value: <%- userFieldsByName.email.fieldValidateRulesMinlength %>, message: translate('global.messages.validate.email.minlength') },
+                maxLength: { value: <%- userFieldsByName.email.fieldValidateRulesMaxlength %>, message: translate('global.messages.validate.email.maxlength') },
                 validate: v => isEmail(v) || translate('global.messages.validate.email.invalid'),
               }}
               data-cy="email"

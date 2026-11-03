@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const userFieldsByName = Object.fromEntries(user.fields.map(field => [field.fieldName, field])); _%>
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -59,15 +60,16 @@ export default class Register implements AfterViewInit {
     login: new FormControl('', {
       nonNullable: true,
       validators: [
+<%_ if (userFieldsByName.login.fieldValidationRequired) { _%>
         Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(50),
-        Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
+<%_ } _%>
+        Validators.maxLength(<%- userFieldsByName.login.fieldValidateRulesMaxlength %>),
+        Validators.pattern('<%- userFieldsByName.login.fieldValidateRulesPatternAngular %>'),
       ],
     }),
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(191), Validators.email],
+      validators: [<%- userFieldsByName.email.fieldValidationRequired ? 'Validators.required, ' : '' %>Validators.minLength(<%- userFieldsByName.email.fieldValidateRulesMinlength %>), Validators.maxLength(<%- userFieldsByName.email.fieldValidateRulesMaxlength %>)<%- userFieldsByName.email.fieldValidationEmail ? ', Validators.email' : '' %>],
     }),
     password: new FormControl('', {
       nonNullable: true,

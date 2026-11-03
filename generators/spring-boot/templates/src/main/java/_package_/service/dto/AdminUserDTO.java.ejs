@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const userFieldsByName = Object.fromEntries(user.fields.map(field => [field.fieldName, field])); _%>
 package <%- packageName %>.service.dto;
 
 import <%- packageName %>.config.Constants;
@@ -50,17 +51,17 @@ public class <%- user.adminUserDto %> implements Serializable {
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = <%- userFieldsByName.login.fieldValidateRulesMaxlength %>)
     private String login;
 
-    @Size(max = 50)
+    @Size(max = <%- userFieldsByName.firstName.fieldValidateRulesMaxlength %>)
     private String firstName;
 
-    @Size(max = 50)
+    @Size(max = <%- userFieldsByName.lastName.fieldValidateRulesMaxlength %>)
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 191)
+    @Size(min = <%- userFieldsByName.email.fieldValidateRulesMinlength %>, max = <%- userFieldsByName.email.fieldValidateRulesMaxlength %>)
     private String email;
 <%_ if (!databaseTypeCassandra) { _%>
 
