@@ -28,14 +28,12 @@
       <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
         <thead>
           <tr title="click to order">
-            <th @click="changeOrder('name')" scope="col">
+            <jhi-sort-header field-name="name" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
               <span>{{ t$('logs.table.name') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="name"></jhi-sort-indicator>
-            </th>
-            <th @click="changeOrder('level')" scope="col">
+            </jhi-sort-header>
+            <jhi-sort-header field-name="level" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
               <span>{{ t$('logs.table.level') }}</span>
-              <jhi-sort-indicator :current-order="orderProp" :reverse="reverse" field-name="level"></jhi-sort-indicator>
-            </th>
+            </jhi-sort-header>
           </tr>
         </thead>
         <tbody>

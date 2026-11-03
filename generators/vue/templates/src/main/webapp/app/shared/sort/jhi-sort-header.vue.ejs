@@ -1,0 +1,30 @@
+<template>
+  <th scope="col" :aria-sort="ariaSort">
+    <button type="button" class="btn btn-link p-0 border-0 align-baseline text-reset text-decoration-none fw-bold" @click="emit('sort', fieldName)">
+      <slot></slot>
+      <JhiSortIndicator :current-order="currentOrder" :reverse="reverse" :field-name="fieldName"></JhiSortIndicator>
+    </button>
+  </th>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import JhiSortIndicator from './jhi-sort-indicator.vue';
+
+/** A header cell of a sortable column: a button sorts by its field, reachable with the keyboard, and the cell tells its order. */
+defineOptions({ name: 'JhiSortHeaderComponent' });
+
+const props = withDefaults(defineProps<{ currentOrder?: string; fieldName?: string; reverse?: boolean }>(), {
+  currentOrder: '',
+  fieldName: '',
+});
+const emit = defineEmits<{ sort: [fieldName: string] }>();
+
+const ariaSort = computed(() => {
+  if (props.currentOrder !== props.fieldName) {
+    return undefined;
+  }
+  return props.reverse ? 'descending' : 'ascending';
+});
+</script>

@@ -21,6 +21,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
+import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
+
 import Configuration from './configuration.vue';
 
 type ConfigurationComponentType = InstanceType<typeof Configuration>;
@@ -39,7 +41,7 @@ describe('Configuration Component', () => {
     const wrapper = shallowMount(Configuration, {
       global: {
         stubs: {
-          'jhi-sort-indicator': true,
+          'jhi-sort-header': JhiSortHeader, 'jhi-sort-indicator': true,
         },
       },
     });
@@ -115,11 +117,11 @@ describe('Configuration view', () => {
               },
       }),
     );
-    const wrapper = shallowMount(Configuration, { global: { stubs: { 'jhi-sort-indicator': true } } });
+    const wrapper = shallowMount(Configuration, { global: { stubs: { 'jhi-sort-header': JhiSortHeader, 'jhi-sort-indicator': true } } });
     await flushPromises();
 
     // WHEN
-    for (const element of wrapper.findAll('th')) {
+    for (const element of wrapper.findAll('th button')) {
       await element.trigger('click');
     }
     await wrapper.find('input').setValue('b');
