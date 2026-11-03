@@ -3987,6 +3987,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/account-validations.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
