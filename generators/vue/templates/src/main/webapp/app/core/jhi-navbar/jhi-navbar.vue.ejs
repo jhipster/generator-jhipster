@@ -241,7 +241,7 @@ const accountService = inject(accountServiceKey)!;
 <%_ if (enableTranslation) { _%>
 const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 const changeLanguage = inject(changeLanguageKey)!;
-const languages = getLanguages();
+const languages = computed(() => getLanguages());
 const { t: t$ } = useI18n();
 
 const isActiveLanguage = (key: string) => key === currentLanguage.value;

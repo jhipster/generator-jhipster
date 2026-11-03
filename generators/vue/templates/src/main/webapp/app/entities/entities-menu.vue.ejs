@@ -18,6 +18,10 @@ import { useI18n } from 'vue-i18n';
 defineOptions({ name: 'EntitiesMenu' });
 <%_ if (enableTranslation) { _%>
 
+  <%_ if (!entities.some(entity => !entity.embedded && !entity.adminEntity)) { _%>
+// The entities the needle adds to the menu translate with it.
+// eslint-disable-next-line no-unused-vars
+  <%_ } _%>
 const { t: t$ } = useI18n();
 <%_ } _%>
 </script>
