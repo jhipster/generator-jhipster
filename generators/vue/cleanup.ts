@@ -133,6 +133,8 @@ export default asWritingTask<ClientEntity, ClientApplication>(async function cle
       `${application.clientSrcDir}app/shared/model/user.model.ts`,
       `${application.clientSrcDir}app/shared/model/user.model.spec.ts`,
       `${application.clientSrcDir}app/router/entities.ts`,
+      `${application.clientSrcDir}app/shared/sort/jhi-sort-indicator.component.ts`,
+      `${application.clientSrcDir}app/shared/sort/jhi-sort-indicator.vue`,
     ],
   });
 });

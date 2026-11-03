@@ -42,7 +42,7 @@ describe('Logs Component', () => {
     const wrapper = shallowMount(Logs, {
       global: {
         stubs: {
-          'jhi-sort-header': JhiSortHeader, 'jhi-sort-indicator': true,
+          'jhi-sort-header': JhiSortHeader, 'font-awesome-icon': true,
           BButton: true,
           BButtonGroup: true,
         },
@@ -117,7 +117,7 @@ describe('Logs view', () => {
     const wrapper = shallowMount(Logs, {
       global: {
         stubs: {
-          'jhi-sort-header': JhiSortHeader, 'jhi-sort-indicator': true,
+          'jhi-sort-header': JhiSortHeader, 'font-awesome-icon': true,
           BButton: buttonStub,
           BButtonGroup: contentStub,
         },
@@ -142,7 +142,7 @@ describe('Logs view', () => {
     const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: { loggers: {} } });
 
     // WHEN
-    shallowMount(Logs, { global: { stubs: { 'jhi-sort-header': JhiSortHeader, 'jhi-sort-indicator': true, BButton: true, BButtonGroup: true } } });
+    shallowMount(Logs, { global: { stubs: { 'jhi-sort-header': JhiSortHeader, 'font-awesome-icon': true, BButton: true, BButtonGroup: true } } });
     await flushPromises();
 
     // THEN

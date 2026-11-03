@@ -46,7 +46,6 @@ import JhiItemCount from '@/shared/jhi-item-count.vue';
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
 import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
-import JhiSortIndicator from '@/shared/sort/jhi-sort-indicator.vue';
 import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/store';
 
 <%_ if (communicationSpringWebsocket) { _%>
@@ -205,7 +204,6 @@ initBootstrapVue(app);
 app
   .component('JhiItemCount', JhiItemCount)
   .component('JhiSortHeader', JhiSortHeader)
-  .component('JhiSortIndicator', JhiSortIndicator)
   .use(router)
   .use(pinia)
 <%_ if (enableTranslation) { _%>

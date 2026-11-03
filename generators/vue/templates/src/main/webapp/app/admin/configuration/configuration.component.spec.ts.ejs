@@ -41,7 +41,7 @@ describe('Configuration Component', () => {
     const wrapper = shallowMount(Configuration, {
       global: {
         stubs: {
-          'jhi-sort-header': JhiSortHeader, 'jhi-sort-indicator': true,
+          'jhi-sort-header': JhiSortHeader, 'font-awesome-icon': true,
         },
       },
     });
@@ -117,7 +117,7 @@ describe('Configuration view', () => {
               },
       }),
     );
-    const wrapper = shallowMount(Configuration, { global: { stubs: { 'jhi-sort-header': JhiSortHeader, 'jhi-sort-indicator': true } } });
+    const wrapper = shallowMount(Configuration, { global: { stubs: { 'jhi-sort-header': JhiSortHeader, 'font-awesome-icon': true } } });
     await flushPromises();
 
     // WHEN

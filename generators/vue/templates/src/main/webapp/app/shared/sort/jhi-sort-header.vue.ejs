@@ -2,15 +2,13 @@
   <th scope="col" :aria-sort="ariaSort">
     <button type="button" class="btn btn-link p-0 border-0 align-baseline text-reset text-decoration-none fw-bold" @click="emit('sort', fieldName)">
       <slot></slot>
-      <JhiSortIndicator :current-order="currentOrder" :reverse="reverse" :field-name="fieldName"></JhiSortIndicator>
+      <font-awesome-icon :icon="currentOrder === fieldName ? (reverse ? 'sort-down' : 'sort-up') : 'sort'"></font-awesome-icon>
     </button>
   </th>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-
-import JhiSortIndicator from './jhi-sort-indicator.vue';
 
 /** A header cell of a sortable column: a button sorts by its field, reachable with the keyboard, and the cell tells its order. */
 defineOptions({ name: 'JhiSortHeaderComponent' });

@@ -688,10 +688,10 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "clientRoot/src/app/shared/sort/jhi-sort-header.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/sort/jhi-sort-indicator.vue": {
+  "clientRoot/src/app/shared/sort/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/sorts.spec.ts": {
@@ -1672,10 +1672,10 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "clientRoot/src/app/shared/sort/jhi-sort-header.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/sort/jhi-sort-indicator.vue": {
+  "clientRoot/src/app/shared/sort/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/sorts.spec.ts": {
@@ -2576,10 +2576,10 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "clientRoot/src/app/shared/sort/jhi-sort-header.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/sort/jhi-sort-indicator.vue": {
+  "clientRoot/src/app/shared/sort/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/sorts.spec.ts": {
@@ -3537,10 +3537,10 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.spec.ts": {
@@ -4620,10 +4620,10 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.spec.ts": {
@@ -5486,10 +5486,10 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.spec.ts": {
@@ -6369,10 +6369,10 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
+  "src/main/webapp/app/shared/sort/jhi-sort-header.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sorts.spec.ts": {
