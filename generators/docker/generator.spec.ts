@@ -76,6 +76,7 @@ describe(`generator - ${generator}`, () => {
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { searchEngine, serviceDiscoveryType } = sampleConfig;
+    const dbType = (sampleConfig.prodDatabaseType ?? sampleConfig.databaseType) as string;
 
     describe(name, () => {
       before(async () => {
@@ -87,6 +88,16 @@ describe(`generator - ${generator}`, () => {
       });
       it('should match app.yml snapshot', () => {
         expect(runResult.getSnapshot('**/app.yml')).toMatchSnapshot();
+      });
+      it('should write the database docker scripts', () => {
+        const { scripts } = runResult.fs.readJSON(`${runResult.cwd}/package.json`) as { scripts: Record<string, string> };
+        if (dbType === ORACLE) {
+          expect(scripts['docker:db:up']).toBe('echo "Docker for db oracle not configured for application jhipster"');
+          expect(scripts['docker:db:down']).toBeUndefined();
+        } else {
+          expect(scripts['docker:db:up']).toBe(`docker compose -f src/main/docker/${dbType}.yml up --wait`);
+          expect(scripts['docker:db:down']).toBe(`docker compose -f src/main/docker/${dbType}.yml down -v`);
+        }
       });
       describe('searchEngine', () => {
         const elasticsearch = searchEngine === ELASTICSEARCH;
