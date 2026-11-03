@@ -17,9 +17,21 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { URL_SCHEME_PATTERN } from '../../lib/constants/jdl.ts';
 
 const command = {
-  configs: {},
+  configs: {
+    oauth2AppSchemes: {
+      description:
+        'URL schemes of the apps (like mobile apps) signing in at the OAuth2 provider of the application, allowed as redirect URIs of its client',
+      jdl: {
+        type: 'list',
+        tokenType: 'list',
+        tokenValuePattern: URL_SCHEME_PATTERN,
+      },
+      scope: 'storage',
+    },
+  },
   import: [],
 } as const satisfies JHipsterCommandDefinition;
 
