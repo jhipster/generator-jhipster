@@ -1395,6 +1395,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "uniqueValue": [],
     },
   ],
+  "fieldsByName": Any<Object>,
   "fieldsContainNoOwnerOneToOne": false,
   "fluentMethods": true,
   "generateFakeData": Any<Function>,

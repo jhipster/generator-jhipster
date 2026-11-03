@@ -1569,6 +1569,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "uniqueValue": Any<Array>,
       },
     ],
+    "fieldsByName": Any<Object>,
     "fieldsContainNoOwnerOneToOne": false,
     "fluentMethods": true,
     "generateFakeData": Any<Function>,

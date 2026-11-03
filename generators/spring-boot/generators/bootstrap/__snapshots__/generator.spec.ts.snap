@@ -2121,6 +2121,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
         "uniqueValue": Any<Array>,
       },
     ],
+    "fieldsByName": Any<Object>,
     "fieldsContainNoOwnerOneToOne": false,
     "fluentMethods": true,
     "generateFakeData": Any<Function>,
