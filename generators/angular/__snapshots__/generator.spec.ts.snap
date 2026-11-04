@@ -414,7 +414,7 @@ export class UserManagementDetail {
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity"
+        class="btn btn-primary"
         [routerLink]="['/user-management/new']"
       >
         <fa-icon icon="plus" />

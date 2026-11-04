@@ -27,7 +27,7 @@
             </button>
 <%_ if (!readOnly) { _%>
 
-            <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity" [routerLink]="['/<%- entityPage %>/new']">
+            <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary" [routerLink]="['/<%- entityPage %>/new']">
                 <fa-icon icon="plus" />
                 <span <%- searchEngineAny ? 'class="hidden-sm-down" ' : '' %>>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createLabel')</span>
             </button>
