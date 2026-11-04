@@ -26,7 +26,7 @@ _%>
     const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
     const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
 _%>
-import { type Ref, computed, defineComponent, inject, ref } from 'vue';
+import { <%- [...enumTypeFields.length > 0 ? ['type Ref'] : [], 'computed', 'defineComponent', 'inject', ...enumTypeFields.length > 0 ? ['ref'] : []].join(', ') %> } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -35,7 +35,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { type AxiosError } from 'axios';
 
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
-<%_ const composables = ['useControlledRequest', ...anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntityValidation']; _%>
+<%_ const composables = ['useControlledRequest', ...anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntitySave', 'useEntityValidation']; _%>
 import { <%- composables.join(', ') %> } from '@/shared/composables';
 import { currentLanguageKey } from '@/shared/config/injection-keys';
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -94,7 +94,6 @@ export default defineComponent({
 <%_ for (const field of clientConstantFields) { _%>
     const <%- field.fieldName %>Values: string[] = <%- field.vueFieldClientConstant.vueConstantValues %>;
 <%_ } _%>
-    const isSaving = ref(false);
     const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
     const route = useRoute();
@@ -143,35 +142,21 @@ export default defineComponent({
 <%_ } _%>
     });
 
-    const save = async () => {
-      isSaving.value = true;
-      try {
-        if (<% if (userProvidedPrimaryKey) { %>isUpdate.value<% } else { %><%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %><% } %>) {
-          const param = await <%- entityInstance %>Service().update(<%- entityInstance %>.value);
-          alertService.showInfo(
+    const { isSaving, save } = useEntitySave({
+      alertService,
+      isUpdate: () => <% if (userProvidedPrimaryKey) { %>isUpdate.value<% } else { %>Boolean(<%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %>)<% } %>,
+      create: () => <%- entityInstance %>Service().create(<%- entityInstance %>.value),
+      update: () => <%- entityInstance %>Service().update(<%- entityInstance %>.value),
+      getId: saved => saved.<%- primaryKey.name %>,
 <%_ if (enableTranslation) { _%>
-            t$('<%- i18nAlertHeaderPrefix %>.updated', { param: param.<%- primaryKey.name %> }),
+      createdMessage: id => t$('<%- i18nAlertHeaderPrefix %>.created', { param: id }).toString(),
+      updatedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.updated', { param: id }).toString(),
 <%_ } else { _%>
-            `A <%- entityAngularName %> is updated with identifier ${param.<%- primaryKey.name %>}`,
+      createdMessage: id => `A <%- entityAngularName %> is created with identifier ${id}`,
+      updatedMessage: id => `A <%- entityAngularName %> is updated with identifier ${id}`,
 <%_ } _%>
-          );
-        } else {
-          const param = await <%- entityInstance %>Service().create(<%- entityInstance %>.value);
-          alertService.showSuccess(
-<%_ if (enableTranslation) { _%>
-            t$('<%- i18nAlertHeaderPrefix %>.created', { param: param.<%- primaryKey.name %> }).toString(),
-<%_ } else { _%>
-            `A <%- entityAngularName %> is created with identifier ${param.<%- primaryKey.name %>}`,
-<%_ } _%>
-          );
-        }
-        previousState();
-      } catch (error) {
-        alertService.showHttpError((error as AxiosError).response);
-      } finally {
-        isSaving.value = false;
-      }
-    };
+      onSaved: () => previousState(),
+    });
 <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
 
     const clearInputImage = (field: string, fieldContentType: string, idInput: string) => {

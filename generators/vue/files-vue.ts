@@ -117,6 +117,8 @@ export const vueFiles = asWriteFilesSection({
         'shared/composables/entity-remove.spec.ts',
         'shared/composables/entity-options.ts',
         'shared/composables/entity-options.spec.ts',
+        'shared/composables/entity-save.ts',
+        'shared/composables/entity-save.spec.ts',
         'shared/composables/entity-validation.ts',
         'shared/composables/entity-validation.spec.ts',
         'shared/composables/index.ts',
