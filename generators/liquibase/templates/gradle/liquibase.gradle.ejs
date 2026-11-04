@@ -71,8 +71,6 @@ liquibase {
       classpath "<%- srcMainResources %>"
       // Liquibase 5 resolves the changelog and its includes from the search path.
       searchPath ".,<%- srcMainResources %>"
-      // Like the Maven plugin, leave out the test-only tables, so liquibaseDiffChangelog doesn't drop them
-      contexts "!test"
     }
     diffLog {
       driver "<%- devJdbcDriver %>"
@@ -90,8 +88,17 @@ liquibase {
 <%_ } _%>
       logLevel "debug"
       classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
-<%_ if (authenticationTypeOauth2) { _%>
-      excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
+<%_ const diffExcludeObjects = [
+      // H2 stores the table name in upper case
+      ...databaseTypeSql ? [`(?i)${jhiTablePrefix}_date_time_wrapper`] : [],
+      ...authenticationTypeOauth2 ? ['oauth_access_token', 'oauth_approvals', 'oauth_client_details', 'oauth_client_token', 'oauth_code', 'oauth_refresh_token'] : [],
+    ];
+_%>
+<%_ if (diffExcludeObjects.length > 0) { _%>
+  <%_ if (databaseTypeSql) { _%>
+      // liquibaseUpdate runs the test context, which creates <%- jhiTablePrefix %>_date_time_wrapper for the test-only DateTimeWrapper entity
+  <%_ } _%>
+      excludeObjects "<%- diffExcludeObjects.join(', ') %>"
 <%_ } _%>
     }
   }

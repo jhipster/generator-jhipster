@@ -84,6 +84,58 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime sourceSets.main.output');
       runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime "org.liquibase.ext:liquibase-hibernate7:');
     });
+    it('should not set contexts, which generate-changelog and diff-changelog write to the changesets', () => {
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'contexts');
+    });
+    it('should exclude the test-only table from the diff', () => {
+      runResult.assertFileContent('gradle/liquibase.gradle', 'excludeObjects "(?i)jhi_date_time_wrapper"');
+    });
+  });
+
+  describe('with gradle and oauth2', () => {
+    before(async () => {
+      await helpers.runJHipster('app').withJHipsterConfig({ buildTool: 'gradle', skipClient: true, authenticationType: 'oauth2' });
+    });
+
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
+    it('should exclude the test-only table and the oauth2 tables from the diff', () => {
+      runResult.assertFileContent(
+        'gradle/liquibase.gradle',
+        'excludeObjects "(?i)jhi_date_time_wrapper, oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"',
+      );
+    });
+  });
+
+  describe('with gradle and neo4j', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('app')
+        .withJHipsterConfig({ buildTool: 'gradle', skipClient: true, databaseType: 'neo4j', databaseMigration: 'liquibase' });
+    });
+
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
+    it('should not exclude objects from the diff', () => {
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'excludeObjects');
+    });
+  });
+
+  describe('with gradle and cassandra', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('app')
+        .withJHipsterConfig({ buildTool: 'gradle', skipClient: true, databaseType: 'cassandra', databaseMigration: 'liquibase' });
+    });
+
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
+    it('should not exclude objects from the diff', () => {
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'excludeObjects');
+    });
   });
 
   describe('with gradle and a reactive application', () => {

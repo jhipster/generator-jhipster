@@ -32,8 +32,6 @@ liquibase {
       classpath "src/main/resources/"
       // Liquibase 5 resolves the changelog and its includes from the search path.
       searchPath ".,src/main/resources/"
-      // Like the Maven plugin, leave out the test-only tables, so liquibaseDiffChangelog doesn't drop them
-      contexts "!test"
     }
     diffLog {
       driver "org.postgresql.Driver"
@@ -42,6 +40,203 @@ liquibase {
       changelogFile project.ext.diffChangelogFile
       logLevel "debug"
       classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
+      // liquibaseUpdate runs the test context, which creates jhi_date_time_wrapper for the test-only DateTimeWrapper entity
+      excludeObjects "(?i)jhi_date_time_wrapper"
+    }
+  }
+
+  runList = project.ext.runList
+}
+
+tasks.named('liquibaseDiff').configure { dependsOn(tasks.named('compileJava')) }
+tasks.named('liquibaseDiffChangelog').configure { dependsOn(tasks.named('compileJava')) }
+
+ext {
+  if (project.hasProperty("no-liquibase")) {
+    springProfiles += ",no-liquibase"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - liquibase with gradle and cassandra should match the gradle liquibase file snapshot 1`] = `
+{
+  "gradle/liquibase.gradle": {
+    "contents": "configurations {
+    liquibaseRuntime.extendsFrom sourceSets.main.compileClasspath
+}
+
+dependencies {
+  implementation "org.liquibase:liquibase-core"
+  liquibaseRuntime "org.liquibase:liquibase-core"
+  // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
+  liquibaseRuntime "info.picocli:picocli:'PICOCLI-VERSION'"
+  implementation "org.liquibase.ext:liquibase-cassandra:\${dependencyManagement.importedProperties['liquibase.version']}"
+  implementation "org.springframework:spring-jdbc"
+  // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+if (!project.hasProperty("runList")) {
+ project.ext.runList = "main"
+}
+
+liquibase {
+  activities {
+    main {
+      driver "com.ing.data.cassandra.jdbc.CassandraDriver"
+      url "jdbc:cassandra://localhost:9042/jhipster?compliancemode=Liquibase&requesttimeout=20000&localdatacenter=datacenter1"
+      username ""
+      changelogFile "src/main/resources/config/liquibase/master.xml"
+      logLevel "debug"
+      classpath "src/main/resources/"
+      // Liquibase 5 resolves the changelog and its includes from the search path.
+      searchPath ".,src/main/resources/"
+    }
+    diffLog {
+      driver "com.ing.data.cassandra.jdbc.CassandraDriver"
+      url "jdbc:cassandra://localhost:9042/jhipster?compliancemode=Liquibase&requesttimeout=20000&localdatacenter=datacenter1"
+      username ""
+      changelogFile project.ext.diffChangelogFile
+      referenceUrl "hibernate:spring:com.mycompany.myapp.domain?dialect=&hibernate.physical_naming_strategy=&hibernate.implicit_naming_strategy="
+      logLevel "debug"
+      classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
+    }
+  }
+
+  runList = project.ext.runList
+}
+
+tasks.named('liquibaseDiff').configure { dependsOn(tasks.named('compileJava')) }
+tasks.named('liquibaseDiffChangelog').configure { dependsOn(tasks.named('compileJava')) }
+
+ext {
+  if (project.hasProperty("no-liquibase")) {
+    springProfiles += ",no-liquibase"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - liquibase with gradle and neo4j should match the gradle liquibase file snapshot 1`] = `
+{
+  "gradle/liquibase.gradle": {
+    "contents": "configurations {
+    liquibaseRuntime.extendsFrom sourceSets.main.compileClasspath
+}
+
+dependencies {
+  implementation "org.liquibase:liquibase-core"
+  liquibaseRuntime "org.liquibase:liquibase-core"
+  // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
+  liquibaseRuntime "info.picocli:picocli:'PICOCLI-VERSION'"
+  // Exclude current neo4j driver and use the one provided by spring-data
+  // See: https://github.com/jhipster/generator-jhipster/pull/24241
+  implementation ("org.liquibase.ext:liquibase-neo4j:\${dependencyManagement.importedProperties['liquibase.version']}") {
+    exclude group: "org.neo4j.driver", module: "neo4j-java-driver"
+    exclude group: "org.slf4j", module: "*"
+  }
+  implementation "org.springframework:spring-jdbc"
+  // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+if (!project.hasProperty("runList")) {
+ project.ext.runList = "main"
+}
+
+liquibase {
+  activities {
+    main {
+      driver ""
+      url "jdbc:neo4j:bolt://localhost:7687"
+      username ""
+      changelogFile "src/main/resources/config/liquibase/master.xml"
+      logLevel "debug"
+      classpath "src/main/resources/"
+      // Liquibase 5 resolves the changelog and its includes from the search path.
+      searchPath ".,src/main/resources/"
+    }
+    diffLog {
+      driver ""
+      url "jdbc:neo4j:bolt://localhost:7687"
+      username ""
+      changelogFile project.ext.diffChangelogFile
+      referenceUrl "hibernate:spring:com.mycompany.myapp.domain?dialect=&hibernate.physical_naming_strategy=&hibernate.implicit_naming_strategy="
+      logLevel "debug"
+      classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
+    }
+  }
+
+  runList = project.ext.runList
+}
+
+tasks.named('liquibaseDiff').configure { dependsOn(tasks.named('compileJava')) }
+tasks.named('liquibaseDiffChangelog').configure { dependsOn(tasks.named('compileJava')) }
+
+ext {
+  if (project.hasProperty("no-liquibase")) {
+    springProfiles += ",no-liquibase"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - liquibase with gradle and oauth2 should match the gradle liquibase file snapshot 1`] = `
+{
+  "gradle/liquibase.gradle": {
+    "contents": "configurations {
+    liquibaseRuntime.extendsFrom sourceSets.main.compileClasspath
+}
+
+dependencies {
+  implementation "org.liquibase:liquibase-core"
+  liquibaseRuntime "org.liquibase:liquibase-core"
+  // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
+  liquibaseRuntime "info.picocli:picocli:'PICOCLI-VERSION'"
+  liquibaseRuntime "org.postgresql:postgresql"
+  // The diffLog activity's hibernate:spring reference reads the compiled entities.
+  liquibaseRuntime sourceSets.main.output
+  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate7:\${dependencyManagement.importedProperties['liquibase.version']}"
+  // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+}
+
+project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+if (!project.hasProperty("runList")) {
+ project.ext.runList = "main"
+}
+
+liquibase {
+  activities {
+    main {
+      driver "org.postgresql.Driver"
+      url "jdbc:postgresql://localhost:5432/jhipster"
+      username "jhipster"
+      changelogFile "src/main/resources/config/liquibase/master.xml"
+      logLevel "debug"
+      classpath "src/main/resources/"
+      // Liquibase 5 resolves the changelog and its includes from the search path.
+      searchPath ".,src/main/resources/"
+    }
+    diffLog {
+      driver "org.postgresql.Driver"
+      url "jdbc:postgresql://localhost:5432/jhipster"
+      username "jhipster"
+      changelogFile project.ext.diffChangelogFile
+      referenceUrl "hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy"
+      logLevel "debug"
+      classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
+      // liquibaseUpdate runs the test context, which creates jhi_date_time_wrapper for the test-only DateTimeWrapper entity
+      excludeObjects "(?i)jhi_date_time_wrapper, oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
     }
   }
 
@@ -97,8 +292,6 @@ liquibase {
       classpath "src/main/resources/"
       // Liquibase 5 resolves the changelog and its includes from the search path.
       searchPath ".,src/main/resources/"
-      // Like the Maven plugin, leave out the test-only tables, so liquibaseDiffChangelog doesn't drop them
-      contexts "!test"
     }
     diffLog {
       driver "org.postgresql.Driver"
@@ -108,6 +301,8 @@ liquibase {
       referenceUrl "hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy"
       logLevel "debug"
       classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
+      // liquibaseUpdate runs the test context, which creates jhi_date_time_wrapper for the test-only DateTimeWrapper entity
+      excludeObjects "(?i)jhi_date_time_wrapper"
     }
   }
 
