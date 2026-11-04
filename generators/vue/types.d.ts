@@ -43,6 +43,8 @@ export type Field = ClientField & {
   vueClientValidation?: boolean;
   /** A TypeScript expression of a value failing a validation of the field other than required. */
   vueInvalidValue?: string;
+  /** The rules of the field for useEntityValidation, as a TypeScript object literal. */
+  vueValidationRules?: string;
 };
 
 export interface Entity<F extends ClientField = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {

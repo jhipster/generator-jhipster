@@ -44,6 +44,7 @@ import type {
   Config as VueConfig,
   Entity as VueEntity,
   Features as VueFeatures,
+  Field as VueField,
   Options as VueOptions,
   Source as VueSource,
   VueFieldClientConstant,
@@ -89,6 +90,23 @@ const hasClientValidation = (field: Field): boolean =>
       field.fieldValidationMax ||
       field.fieldValidationPattern),
   );
+
+/** The rules of the field for useEntityValidation, as a TypeScript object literal. */
+const validationRules = (field: VueField, login: boolean): string => {
+  if (!field.fieldValidate) return '{}';
+  const rules = [
+    field.fieldValidationRequired && 'required: true',
+    field.fieldValidationEmail && 'email: true',
+    field.fieldValidationMinLength && `minLength: ${field.fieldValidateRulesMinlength}`,
+    field.fieldValidationMaxLength && `maxLength: ${field.fieldValidateRulesMaxlength}`,
+    (field.fieldTypeInteger || field.fieldTypeLong) && 'integer: true',
+    field.fieldValidationMin && `min: ${field.fieldValidateRulesMin}`,
+    field.fieldValidationMax && `max: ${field.fieldValidateRulesMax}`,
+    field.fieldValidationPattern &&
+      `pattern: { regex: new RegExp('${field.fieldValidateRulesPatternVue}'), name: '${field.fieldNameHumanized}'${login ? ', login: true' : ''} }`,
+  ].filter(Boolean);
+  return rules.length > 0 ? `{ ${rules.join(', ')} }` : '{}';
+};
 
 /** A TypeScript expression of a value failing a validation of the field other than required, which an empty value fails. */
 const invalidValue = (field: Field): string | undefined => {
@@ -342,6 +360,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             __override__: false,
             vueClientValidation: () => hasClientValidation(field),
             vueInvalidValue: () => (field.fieldValidate ? invalidValue(field) : undefined),
+            vueValidationRules: () => validationRules(field, Boolean(entity.builtInUserManagement && field.fieldName === 'login')),
           });
         }
       },

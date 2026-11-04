@@ -16,6 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const allRelationshipsThatNeedSelectOptions = Object
+      .values(relationshipsByOtherEntity)
+      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+      .filter(relationships => relationships.length > 0);
+    const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
+_%>
 <%_ const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
     const userProvidedPrimaryKey = !builtInUserManagement && formFields.some(field => field.id);
     const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
@@ -26,30 +32,21 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 import { useRoute, useRouter } from 'vue-router';
 
-import { useVuelidate } from '@vuelidate/core'
 import { type AxiosError } from 'axios';
 
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
-import { useControlledRequest, useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
+<%_ const composables = ['useControlledRequest', ...anyFieldIsTimeDerived ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntityValidation']; _%>
+import { <%- composables.join(', ') %> } from '@/shared/composables';
 import { currentLanguageKey } from '@/shared/config/injection-keys';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
 
-<%_ const allRelationshipsThatNeedSelectOptions = Object
-      .values(relationshipsByOtherEntity)
-      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
-      .filter(relationships => relationships.length > 0);
-    const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
-_%>
-
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
-import { type IUser } from '@/entities/user/user.model';
 import UserService, { userServiceKey } from '@/entities/user/user.service';
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 import <%- relationship.otherEntity.entityAngularName %>Service, { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
-import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/entities/<%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.model';
   <%_ } _%>
 <%_ } _%>
 import { type I<%- entityAngularName %>, <%- entityAngularName %> } from './<%- entityFileName %>.model';
@@ -67,6 +64,7 @@ export default defineComponent({
   setup() {
     const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
     const alertService = inject(alertServiceKey, () => useAlertService(), true);
+    const showLoadError = (error: unknown) => alertService.showHttpError((error as AxiosError).response);
 
     const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
       const entity = new <%- entityAngularName %>();
@@ -80,20 +78,14 @@ export default defineComponent({
 <%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
   <%_ if (relationship.otherEntity.builtInUser) { _%>
     const userService = inject(userServiceKey, () => new UserService());
-    const { data: <%- relationship.otherEntity.entityInstancePlural %> } = useControlledRequest(async (_params, { signal }) => (await userService().retrieve({ signal })).data, {
-      initialData: (): IUser[] => [],
-      onError: error => alertService.showHttpError((error as AxiosError).response),
-    });
+    const <%- relationship.otherEntity.entityInstancePlural %> = useEntityOptions(options => userService().retrieve(options), showLoadError);
   <%_ } else { _%>
     <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
 
     const <%- relationship.otherEntity.entityInstance %>Service = inject(<%- relationship.otherEntity.entityInstance %>ServiceKey, () => new <%- relationship.otherEntity.entityAngularName %>Service());
     <%_ } _%>
 
-    const { data: <%- relationship.otherEntity.entityInstancePlural %> } = useControlledRequest(async (_params, { signal }) => (await <%- relationship.otherEntity.entityInstance %>Service().retrieve({ signal })).data, {
-      initialData: (): I<%- relationship.otherEntity.entityAngularName %>[] => [],
-      onError: error => alertService.showHttpError((error as AxiosError).response),
-    });
+    const <%- relationship.otherEntity.entityInstancePlural %> = useEntityOptions(options => <%- relationship.otherEntity.entityInstance %>Service().retrieve(options), showLoadError);
   <%_ } _%>
 <%_ } _%>
 <%_ for (const enumField of enumTypeFields) { _%>
@@ -131,7 +123,7 @@ export default defineComponent({
         // The router reuses the component when the id of the route changes, and an update without id is a new entity.
         params: () => route.params?.<%- entityInstance %>Id as string | undefined,
         initialData: new<%- entityAngularName %>,
-        onError: error => alertService.showHttpError((error as AxiosError).response),
+        onError: showLoadError,
       },
     );
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -142,48 +134,14 @@ export default defineComponent({
 <%_ if (enableTranslation) { _%>
     const { t: t$ } = useI18n();
 <%_ } _%>
-    const validations = useValidation();
-    const validationRules = {
+    const v$ = useEntityValidation(<%- entityInstance %>, {
 <%_ for (field of formFields) { _%>
-      <%- field.fieldName %>:  {
-  <%_ if (field.fieldValidate) { _%>
-    <%_ if (field.fieldValidationRequired) { _%>
-        required: validations.required(t$('entity.validation.required').toString()),
-    <%_ } _%>
-    <%_ if (field.fieldValidationEmail) { _%>
-        email: validations.email(t$('global.messages.validate.email.invalid').toString()),
-    <%_ } _%>
-    <%_ if (field.fieldValidationMinLength) { _%>
-        minLength: validations.minLength(t$('entity.validation.minlength', { min: <%- field.fieldValidateRulesMinlength %> }).toString(), <%- field.fieldValidateRulesMinlength %>),
-    <%_ } _%>
-    <%_ if (field.fieldValidationMaxLength) { _%>
-        maxLength: validations.maxLength(t$('entity.validation.maxlength', { max: <%- field.fieldValidateRulesMaxlength %> }).toString(), <%- field.fieldValidateRulesMaxlength %>),
-    <%_ } _%>
-    <%_ if (field.fieldTypeInteger || field.fieldTypeLong) { _%>
-        integer: validations.integer(t$('entity.validation.number').toString()),
-    <%_ } _%>
-    <%_ if (field.fieldValidationMin) { _%>
-        min: validations.minValue(t$('entity.validation.min', { min: <%- field.fieldValidateRulesMin %> }).toString(), <%- field.fieldValidateRulesMin %>),
-    <%_ } _%>
-    <%_ if (field.fieldValidationMax) { _%>
-        max: validations.maxValue(t$('entity.validation.max', { max: <%- field.fieldValidateRulesMax %> }).toString(), <%- field.fieldValidateRulesMax %>),
-    <%_ } _%>
-    <%_ if (field.fieldValidationPattern) { _%>
-        pattern: validations.pattern(t$('<%- builtInUserManagement && field.fieldName === 'login' ? 'entity.validation.patternLogin' : 'entity.validation.pattern' %>', { pattern: '<%- field.fieldNameHumanized %>' }).toString(), new RegExp('<%- field.fieldValidateRulesPatternVue %>')),
-    <%_ } _%>
-  <%_ } _%>
-      },
+      <%- field.fieldName %>: <%- field.vueValidationRules %>,
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
-      <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: {
-  <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
-        required: validations.required(t$('entity.validation.required').toString()),
-  <%_ } _%>
-      },
+      <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: <%- relationship.relationshipValidate ? '{ required: true }' : '{}' %>,
 <%_ } _%>
-    };
-    const v$ = useVuelidate(validationRules, <%- entityInstance %> as any);
-    v$.value.$validate();
+    });
 
     const save = async () => {
       isSaving.value = true;
