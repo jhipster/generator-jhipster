@@ -99,7 +99,7 @@
 <%_ if (!readOnly) { _%>
     <b-modal ref="removeEntity" id="removeEntity" title-tag="h4">
         <template #title>
-            <span id="<%- i18nKeyPrefix %>.delete.question" data-cy="<%- entityInstance %>DeleteDialogHeading">{{ t$('entity.delete.title') }}</span>
+            <span data-cy="<%- entityInstance %>DeleteDialogHeading">{{ t$('entity.delete.title') }}</span>
         </template>
         <p id="<%- jhiPrefixDashed %>-delete-<%- entityInstance %>-heading">{{ t$('<%- i18nKeyPrefix %>.delete.question', {'id': removeId}) }}</p>
         <template #footer>

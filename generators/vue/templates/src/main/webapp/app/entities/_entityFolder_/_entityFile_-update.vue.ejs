@@ -6,7 +6,7 @@ _%>
     <div class="d-flex justify-content-center">
         <div class="col-8">
             <form name="editForm" novalidate @submit.prevent="save()" >
-                <h2 id="<%- i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">{{ t$('<%- i18nKeyPrefix %>.home.createOrEditLabel') }}</h2>
+                <h2 id="<%- jhiPrefixDashed %>-<%- entityFileName %>-heading" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">{{ t$('<%- i18nKeyPrefix %>.home.createOrEditLabel') }}</h2>
                 <div>
 <%_ if (!builtInUserManagement && !userProvidedPrimaryKey) { _%>
                     <div class="mb-3" v-if="<%- entityInstance %>.<%- primaryKey.name %>">
