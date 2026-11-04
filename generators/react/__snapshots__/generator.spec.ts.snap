@@ -2785,8 +2785,6 @@ const applicationModules = shareMappings(
   'app/shared/util/entity-utils',
 );
 
-const development = process.env.NODE_ENV !== 'production';
-
 export default {
   name: 'jhipster',
   exposes: {
@@ -2799,10 +2797,7 @@ export default {
   shared: {
     // Stateless libraries stay bundled with each application, so their versions may differ between the gateway and microfrontends.
     ...shareDependencies({ skipList: ['deepmerge', 'react-infinite-scroll-component'] }),
-    // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
-    // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build
-    // from the dev server. Share them unconditionally once the fix is released.
-    ...(development ? {} : applicationModules),
+    ...applicationModules,
   },
   dts: false,
   manifest: true,
@@ -3689,8 +3684,6 @@ const applicationModules = shareMappings(
   'app/shared/util/entity-utils',
 );
 
-const development = process.env.NODE_ENV !== 'production';
-
 export default {
   name: 'jhipster',
   exposes: {
@@ -3703,10 +3696,7 @@ export default {
   shared: {
     // Stateless libraries stay bundled with each application, so their versions may differ between the gateway and microfrontends.
     ...shareDependencies({ skipList: ['deepmerge', 'react-infinite-scroll-component'] }),
-    // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
-    // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build
-    // from the dev server. Share them unconditionally once the fix is released.
-    ...(development ? {} : applicationModules),
+    ...applicationModules,
   },
   dts: false,
   manifest: true,
