@@ -69,6 +69,7 @@ export function createUserEntity(
   const user: Partial<UserEntity> = {
     name: 'User',
     builtIn: true,
+    fixedServerProperties: true,
     changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).User,
     entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],

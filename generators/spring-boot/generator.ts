@@ -546,7 +546,11 @@ ${classProperties
         }
       },
       checkDtoRelationships({ entity, entityName, relationship }) {
-        if (entity.dto !== relationship.otherEntity.dto && !relationship.otherEntity.builtIn) {
+        if (
+          entity.dto !== relationship.otherEntity.dto &&
+          !relationship.otherEntity.builtInUser &&
+          !relationship.otherEntity.builtInAuthority
+        ) {
           this.log.warn(
             `Relationship between entities with different DTO configurations can cause unexpected results. Check ${relationship.relationshipName} in the ${entityName} entity.`,
           );
