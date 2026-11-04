@@ -2481,7 +2481,7 @@ export const sampleWithPartialData: IUserManagement = {
   email: "Gerson.Franey@gmail.com",
   activated: false,
   imageUrl: "boo suspension",
-  lastModifiedDate: dayjs("2019-12-31T08:52"),
+  lastModifiedDate: dayjs("2019-12-31T08:49"),
 };
 
 export const sampleWithFullData: IUserManagement = {
@@ -2493,9 +2493,9 @@ export const sampleWithFullData: IUserManagement = {
   activated: false,
   imageUrl: "as vastly than",
   createdBy: "out absentmindedly",
-  createdDate: dayjs("2019-12-31T08:56"),
+  createdDate: dayjs("2019-12-31T08:53"),
   lastModifiedBy: "but sour sympathetically",
-  lastModifiedDate: dayjs("2019-12-31T04:49"),
+  lastModifiedDate: dayjs("2019-12-31T04:46"),
 };
 
 export const sampleWithNewData: NewUserManagement = {

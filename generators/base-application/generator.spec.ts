@@ -422,10 +422,10 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .run(OrderGenerator)
         .withJHipsterGenerators({ useDefaultMocks: true })
-        // UserManagement gets the changelog date of the creation timestamp plus one minute: 20200804035352.
+        // UserManagement gets the changelog date of the creation timestamp minus two minutes: 20200804035052.
         .withJHipsterConfig({ creationTimestamp: 1596513172471 }, [
           { name: 'Bar' },
-          { name: 'Foo', annotations: { changelogDate: '20200804035352' } },
+          { name: 'Foo', annotations: { changelogDate: '20200804035052' } },
           { name: 'UserManagement' },
         ]);
     });
@@ -484,7 +484,7 @@ describe(`generator - ${generator}`, () => {
         .withJHipsterConfig({}, [{ name: 'Foo' }]);
     });
 
-    it('should prepare the entities in the order they were added', () => {
+    it('should prepare the entities in the order of their changelog date', () => {
       expect(Object.keys(loaded)).toEqual(['User', 'UserManagement', 'Authority', 'Foo', 'Catalog', 'CatalogItem']);
     });
 

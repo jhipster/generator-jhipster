@@ -56,18 +56,15 @@ import type { EntityToLoad } from '../../tasks.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
 
 /**
- * Adds a built-in entity to the entities to load, after the built-in entities already there, in place of the entry of its
- * `.jhipster` file, which customizes it.
+ * Adds a built-in entity to the entities to load, in place of the entry of its `.jhipster` file, which customizes it.
  */
 function addBuiltInEntityToLoad(entitiesToLoad: EntityToLoad<any>[], entity: any): any {
-  const index = entitiesToLoad.findIndex(({ entityName }) => entityName === entity.name);
-  if (index >= 0) {
+  const entry = entitiesToLoad.find(({ entityName }) => entityName === entity.name);
+  if (entry) {
     // Keep the object of the entry, the one of the tasks.
-    const [entry] = entitiesToLoad.splice(index, 1);
-    entity = Object.assign(entry.entityBootstrap, entity);
+    return Object.assign(entry.entityBootstrap, entity);
   }
-  const position = entitiesToLoad.filter(({ entityBootstrap }) => entityBootstrap.builtIn).length;
-  entitiesToLoad.splice(position, 0, { entityName: entity.name, entityBootstrap: entity });
+  entitiesToLoad.push({ entityName: entity.name, entityBootstrap: entity });
   return entity;
 }
 
@@ -285,6 +282,12 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             Object.assign(entityBootstrap, entity);
           }
         }
+        // The entities in the order they were created, by their changelog date: the built-in ones, dated before the
+        // creation of the application, first, also at the same date.
+        const changelogDate = ({ entityBootstrap }: EntityToLoad<any>): number => Number(entityBootstrap.changelogDate ?? Infinity);
+        const builtInFirst = ({ entityBootstrap }: EntityToLoad<any>): number => (entityBootstrap.builtIn ? 0 : 1);
+        // Two entities without date compare as equal (Infinity - Infinity is NaN).
+        entitiesToLoad.sort((a, b) => changelogDate(a) - changelogDate(b) || builtInFirst(a) - builtInFirst(b));
 
         const entities = entitiesToLoad.map(({ entityBootstrap }) => entityBootstrap);
         loadEntitiesAnnotations(entities);

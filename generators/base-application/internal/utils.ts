@@ -43,11 +43,12 @@ const authorityEntityName = 'Authority';
 export const getChangelogDateForBuiltInEntities = (
   creationTimestamp: number = Date.now(),
 ): { User: string; UserManagement: string; Authority: string } => {
+  // Before the creation timestamp, so the built-in entities come before the entities of the application.
   const date = new Date(creationTimestamp);
   return {
-    User: formatDateForChangelog(date),
-    UserManagement: formatDateForChangelog(new Date(date.getTime() + 1 * 60000)),
-    Authority: formatDateForChangelog(new Date(date.getTime() + 2 * 60000)),
+    User: formatDateForChangelog(new Date(date.getTime() - 3 * 60000)),
+    UserManagement: formatDateForChangelog(new Date(date.getTime() - 2 * 60000)),
+    Authority: formatDateForChangelog(new Date(date.getTime() - 1 * 60000)),
   };
 };
 
