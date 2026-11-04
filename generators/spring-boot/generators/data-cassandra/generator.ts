@@ -209,7 +209,7 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
     return this.asPostWritingEntitiesTaskGroup({
       addLiquibaseChangelogs({ application, entities, source }) {
         if (!application.databaseMigrationLiquibase) return;
-        for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn && !entity.skipDbChangelog)) {
+        for (const entity of entities.filter(entity => !entity.skipServer && !entity.skipDbChangelog)) {
           (source as LiquibaseSource).addLiquibaseChangelog?.({
             changelogName: `${entity.changelogDate}_added_entity_${entity.entityClass}`,
             section: 'base',

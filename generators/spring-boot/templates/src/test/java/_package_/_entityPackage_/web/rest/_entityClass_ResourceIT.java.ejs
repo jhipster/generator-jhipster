@@ -34,7 +34,9 @@ import static <%- packageName %>.web.rest.TestUtil.convertObjectToPartialUpdateB
       .filter(relationship =>
         relationship.ownerSide
           && !relationship.id
-          && !relationship.otherEntity.builtIn
+          && relationship.otherEntity.entityDomainLayer
+          && relationship.otherEntity.entityPersistenceLayer
+          && relationship.otherEntity.entityRestLayer
           && !relationship.otherEntity.embedded
           && !relationship.otherEntity.skipServer
           && relationship.otherEntity.entityClass !== entityClass

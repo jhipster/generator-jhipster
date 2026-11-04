@@ -110,7 +110,7 @@ export default abstract class BaseEntityChangesGenerator<
   }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseEntityChangesChangelog<Entity>[] {
     const { recreateInitialChangelog } = this;
     const { incrementalChangelog } = application;
-    const entityNames = paramEntities.filter(e => !e.builtIn).map(e => e.name);
+    const entityNames = paramEntities.filter(e => !e.skipDbChangelog).map(e => e.name);
 
     const entitiesByName = Object.fromEntries(paramEntities.map(entity => [entity.name, entity]));
     const entitiesWithExistingChangelog = new Set(

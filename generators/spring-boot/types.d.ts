@@ -96,7 +96,6 @@ export interface Relationship extends ServerRelationship, SpringBootAddedPropert
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends ServerEntity<F, R>, SpringEntity, CommandEntity {
-  skipDbChangelog?: boolean;
   entityJavaFilterableProperties: any[];
   entityJavaCustomFilters: any[];
 

@@ -317,6 +317,8 @@ type BaseApplicationAddedEntityProperties = {
   /** @experimental */
   auditableEntity?: boolean;
   builtIn?: boolean;
+  /** The entity has no database changelog. */
+  skipDbChangelog?: boolean;
   builtInUser?: boolean;
   builtInUserManagement?: boolean;
   builtInAuthority?: boolean;

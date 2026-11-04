@@ -430,7 +430,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asPostWritingEntitiesTaskGroup({
       jsonFilter({ application, entities, source }) {
         if (application.reactive || !application.graalvmSupport) return;
-        for (const entity of entities.filter(({ builtIn, builtInUser, embedded }) => builtInUser || (!builtIn && !embedded))) {
+        for (const entity of entities.filter(
+          ({ builtInUser, embedded, entityDomainLayer }) => builtInUser || (entityDomainLayer && !embedded),
+        )) {
           source.editJavaFile!(`${application.srcMainJava}/${entity.entityAbsoluteFolder}/domain/${entity.entityClass}.java`, {
             annotations: [
               {
