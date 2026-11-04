@@ -47,6 +47,24 @@ describe('generator - base-application - support - prepareField', () => {
         expect(field.path).toEqual(['name']);
       });
     });
+    describe('when the field is only unique', () => {
+      let field: any = { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['unique'] };
+      beforeEach(() => {
+        field = prepareCommonFieldForTemplates(defaultEntity, field, defaultGenerator as any);
+      });
+      it('should be unique without validation', () => {
+        expect(field).toMatchObject({ unique: true, fieldValidate: false });
+      });
+    });
+    describe('when the field is unique and required', () => {
+      let field: any = { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required', 'unique'] };
+      beforeEach(() => {
+        field = prepareCommonFieldForTemplates(defaultEntity, field, defaultGenerator as any);
+      });
+      it('should be unique with validation', () => {
+        expect(field).toMatchObject({ unique: true, fieldValidate: true });
+      });
+    });
   });
 
   describe('getEnumValuesWithCustomValues', () => {

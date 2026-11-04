@@ -309,11 +309,12 @@ export function prepareCommonFieldForTemplates(
     field.contentTypeFieldName = `${field.fieldName}ContentType`;
   }
 
-  field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+  // unique is a constraint of the database, not a validation of the value.
+  field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.some(rule => rule !== UNIQUE);
   defaults(field, {
     nullable: !(field.fieldValidate && field.fieldValidateRules!.includes(REQUIRED)),
   });
-  field.unique = field.fieldValidate && field.fieldValidateRules!.includes(UNIQUE);
+  field.unique = field.fieldValidateRules?.includes(UNIQUE) ?? false;
   if (field.fieldValidate && field.fieldValidateRules!.includes(MAXLENGTH)) {
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
@@ -345,7 +346,7 @@ export function prepareCommonFieldForTemplates(
   field.generateFakeData = (type = 'csv') => {
     let generated = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
-    if ((field.fieldValidate && field.fieldValidateRules!.includes(UNIQUE)) || field.id) {
+    if (field.unique || field.id) {
       let i = 0;
       while (field.uniqueValue!.includes(generated.originalData)) {
         if (i++ === 5) {
