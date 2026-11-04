@@ -29,7 +29,7 @@
     <div>
       @if (account(); as accountRef) {
         <div class="alert alert-success">
-          <span id="home-logged-message">__jhiTranslateTag__('home.logged.message', { "username": "accountRef.login" })</span>
+          <span>__jhiTranslateTag__('home.logged.message', { "username": "accountRef.login" })</span>
         </div>
       } @else {
         <div class="alert alert-warning">
