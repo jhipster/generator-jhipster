@@ -255,6 +255,14 @@ describe('Alert Service test suite', () => {
     expect(toastStub).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ body: 'Internal server error.', variant: 'danger' }));
   });
 
+  it('should not show a toast when http status = 401', () => {
+    // WHEN
+    alertService.showHttpError({ status: 401 });
+
+    // THEN
+    expect(toastStub).not.toHaveBeenCalled();
+  });
+
   it('should show error toast when http status = 400 without a body', () => {
     // WHEN
     alertService.showHttpError({ status: 400, headers: {} });
