@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientBundlerVite) { _%>
+import { fileURLToPath } from 'node:url';
+
+<%_ } _%>
 import type { createModuleFederationConfig } from '@module-federation/sdk';
 
 import packageJson from './package.json' with { type: 'json' };
@@ -26,11 +30,16 @@ const apiVersion = '0.0.1';
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
 <%_ if (clientBundlerVite) { _%>
 // Application modules are not installed packages, `import` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
 const shareMappings = (...mappings: string[]) =>
   Object.fromEntries(
     mappings.map(map => [
       map,
-      { ...sharedDefaults, version: apiVersion, import: `./<%- relativeDir(clientRootDir, clientSrcDir) %>${map.replace('@/', 'app/')}` },
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(`./<%- relativeDir(clientRootDir, clientSrcDir) %>${map.replace('@/', 'app/')}`, import.meta.url)),
+      },
     ]),
   );
 <%_ } else { _%>
