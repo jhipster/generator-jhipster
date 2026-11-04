@@ -47,20 +47,6 @@ const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
 
-const applicationModules = shareMappings(
-  'app/config/constants',
-  'app/config/store',
-  'app/shared/error/error-boundary-routes',
-  'app/shared/layout/menus/menu-components',
-  'app/shared/layout/menus/menu-item',
-  'app/shared/reducers',
-  // `app/shared/reducers/locale` is not shared: its `registerTranslations` loads the translations of the application
-  // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
-  'app/shared/reducers/reducer.utils',
-  'app/shared/util/date-utils',
-  'app/shared/util/entity-utils',
-);
-
 export default {
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
@@ -75,7 +61,21 @@ export default {
   shared: {
     // Stateless libraries stay bundled with each application, so their versions may differ between the gateway and microfrontends.
     ...shareDependencies({ skipList: ['deepmerge', 'react-infinite-scroll-component'] }),
-    ...applicationModules,
+    // Sharing application modules in the dev server needs @module-federation/vite 1.23.7 or later, older versions
+    // fail with `createSlice is not a function` (https://github.com/module-federation/vite/issues/1507).
+    ...shareMappings(
+      'app/config/constants',
+      'app/config/store',
+      'app/shared/error/error-boundary-routes',
+      'app/shared/layout/menus/menu-components',
+      'app/shared/layout/menus/menu-item',
+      'app/shared/reducers',
+      // `app/shared/reducers/locale` is not shared: its `registerTranslations` loads the translations of the application
+      // it is bundled with, so a microfrontend keeps its own copy to register its translations into the host.
+      'app/shared/reducers/reducer.utils',
+      'app/shared/util/date-utils',
+      'app/shared/util/entity-utils',
+    ),
   },
   dts: false,
   manifest: true,
