@@ -46,7 +46,6 @@ const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 
 const testSamples = buildClientSamples(commonConfig);
 
 const clientAdminFiles = (clientSrcDir: string) => [
-  `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.vue`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
@@ -57,7 +56,6 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/health/health-modal.component.spec.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
   `${clientSrcDir}app/admin/health/health.service.spec.ts`,
-  `${clientSrcDir}app/admin/logs/logs.component.ts`,
   `${clientSrcDir}app/admin/logs/logs.component.spec.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.component.spec.ts`,
@@ -290,7 +288,7 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should not use the embedded entity service at the update component', () => {
       runResult.assertNoFileContent(
-        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.vue`,
         'embedded-entity.service',
       );
       runResult.assertNoFileContent(

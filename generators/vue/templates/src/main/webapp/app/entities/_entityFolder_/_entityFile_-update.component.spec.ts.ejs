@@ -21,7 +21,13 @@
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
-    const invalidValueFields = fields.filter(field => field.vueInvalidValue && (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    const formFields = fields.filter(field => (!field.id || builtInUserManagement || !field.autoGenerate) && !field.hidden && !(builtInUserManagement && field.readonly));
+    const invalidValueFields = formFields.filter(field => field.vueInvalidValue);
+    // The functions the component has for the inputs of its form.
+    const inputFields = formFields.filter(field => !field.clientConstantsAsValues && !field.fieldIsEnum);
+    const anyInputIsTimed = inputFields.some(field => !field.fieldTypeLocalDate && field.fieldTypeTimed);
+    const imageInputField = inputFields.find(field => field.fieldTypeBinary && !field.blobContentTypeText && field.blobContentTypeImage);
+    const usesCurrentLanguage = inputFields.some(field => field.fieldTypeLocalDate);
 _%>
 import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactive } from 'vue';
@@ -43,7 +49,7 @@ import { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/enti
 <%_ } _%>
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 import { contentStub, modelInputStub, triggerAll } from '@/shared/testing/stubs';
-<%_ if (anyFieldIsTimeDerived) { _%>
+<%_ if (anyInputIsTimed) { _%>
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
 
@@ -139,7 +145,7 @@ describe('Component Tests', () => {
       vi.resetAllMocks();
     });
 
-<%_ if (anyFieldIsTimeDerived) { _%>
+<%_ if (anyInputIsTimed) { _%>
     describe('load', () => {
       beforeEach(() => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
@@ -274,8 +280,8 @@ describe('Component Tests', () => {
       });
     });
 
-<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
-  <%_ const { fieldName } = fields.find(field => field.blobContentTypeImage); _%>
+<%_ if (imageInputField) { _%>
+  <%_ const { fieldName } = imageInputField; _%>
     describe('clearInputImage', () => {
       it('Should clear the image and its content type', async () => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
@@ -540,10 +546,13 @@ describe('Component Tests', () => {
         // THEN
         expect(wrapper.vm.<%- entityInstance %>Service()).toBeInstanceOf(<%- entityAngularName %>Service);
         expect(wrapper.vm.alertService).toBeInstanceOf(AlertService);
+<%_ if (usesCurrentLanguage) { _%>
         expect(wrapper.vm.currentLanguage).toBe(navigator.language);
+<%_ } _%>
         get.mockRestore();
       });
 
+<%_ if (usesCurrentLanguage) { _%>
       it('Should default to the native language', () => {
         // GIVEN
         const language = vi.spyOn(navigator, 'language', 'get').mockReturnValue(undefined as unknown as string);
@@ -555,6 +564,7 @@ describe('Component Tests', () => {
         expect(wrapper.vm.currentLanguage).toBe('<%- nativeLanguage %>');
         language.mockRestore();
       });
+<%_ } _%>
     });
   });
 });

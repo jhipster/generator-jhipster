@@ -191,6 +191,32 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
       });
     });
 
+    describe('with a script and translation disabled', () => {
+      it('should translate the script like a ts file', () => {
+        const body = `<template>
+  <span>{{ t$('entity.validation.required') }}</span>
+</template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const rules = { required: validations.required(t$('entity.validation.min', { min: 1 }).toString()) };
+</script>
+`;
+        expect(replaceVueTranslations({ getWebappTranslation, body, enableTranslation: false })).toMatchInlineSnapshot(`
+"<template>
+  <span>getWebappTranslation('entity.validation.required')</span>
+</template>
+
+<script setup lang="ts">
+
+const rules = { required: validations.required('getWebappTranslation('entity.validation.min', { min: 1 })') };
+</script>
+"
+`);
+      });
+    });
+
     describe('with translation enabled', () => {
       it('should return the body without translation tags contents', () => {
         expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(String.raw`

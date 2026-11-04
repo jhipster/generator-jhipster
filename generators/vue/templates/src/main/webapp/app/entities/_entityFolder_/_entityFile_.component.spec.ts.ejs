@@ -260,6 +260,7 @@ describe('Component Tests', () => {
         expect(<%- entityInstance %>ServiceStub.retrieve).not.toHaveBeenCalled();
       });
   <%_ } _%>
+  <%_ if (searchEngineAny || paginationInfiniteScroll) { _%>
 
       it('should re-initialize the page', async () => {
         // GIVEN
@@ -277,6 +278,7 @@ describe('Component Tests', () => {
         expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(1);
         expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
       });
+  <%_ } _%>
 
   <%_ if (paginationPagination) { _%>
       it('should reset the page when the order changes', async () => {

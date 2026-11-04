@@ -114,7 +114,14 @@ export function replaceVueTranslations(
   if (enableTranslation) {
     return body;
   }
-  return replaceTranslationAttributes({ content: body, getWebappTranslation });
+  // The script of a component translates like a ts file.
+  const scriptStart = body.search(/<script[\s>]/);
+  const template = scriptStart === -1 ? body : body.slice(0, scriptStart);
+  const script = scriptStart === -1 ? '' : body.slice(scriptStart);
+  return (
+    replaceTranslationAttributes({ content: template, getWebappTranslation }) +
+    removeDeclarations({ content: replaceTranslations({ content: script, type: 'ts', getWebappTranslation }) })
+  );
 }
 
 export function replaceTranslations({

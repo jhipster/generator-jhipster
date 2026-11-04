@@ -116,5 +116,76 @@
 <%_ } _%>
 </template>
 
-<script lang="ts" src="./<%- entityFileName %>-details.component.ts">
+<script setup lang="ts">
+<%_ // The functions of the composables the template uses.
+    const shownFields = fields.filter(field => !field.hidden && !field.clientConstantsAsValues && !field.fieldIsEnum);
+    const fileFields = shownFields.filter(field => field.fieldTypeBinary && (field.blobContentTypeImage || field.blobContentTypeAny));
+    const otherFields = shownFields.filter(field => !fileFields.includes(field));
+    const dateFormatFunctions = [
+      ...otherFields.some(field => field.fieldTypeDuration) ? ['formatDuration'] : [],
+      ...otherFields.some(field => !field.fieldTypeDuration && field.fieldTypeTimed) ? ['formatDateLong'] : [],
+    ];
+    const dataUtilsFunctions = fileFields.length > 0 ? ['byteSize', 'openFile'] : [];
+_%>
+import { inject } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute, useRouter } from 'vue-router';
+
+import { type AxiosError } from 'axios';
+
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
+<%_ const composables = [...dateFormatFunctions.length > 0 ? ['useDateFormat'] : [], ...readOnly ? [] : ['useEntityRemove'], 'useControlledRequest']; _%>
+import { <%- composables.join(', ') %> } from '@/shared/composables';
+<%_ if (builtInUserManagement) { _%>
+import { currentUsernameKey } from '@/shared/config/injection-keys';
+<%_ } _%>
+<%_ if (dataUtilsFunctions.length > 0) { _%>
+import useDataUtils from '@/shared/data/data-utils.service';
+<%_ } _%>
+import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
+
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
+
+defineOptions({ name: '<%- entityAngularName %>Details' });
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+<%_ if (dateFormatFunctions.length > 0) { _%>
+const { <%- dateFormatFunctions.join(', ') %> } = useDateFormat();
+<%_ } _%>
+<%_ if (dataUtilsFunctions.length > 0) { _%>
+const { <%- dataUtilsFunctions.join(', ') %> } = useDataUtils();
+<%_ } _%>
+const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+const alertService = inject(alertServiceKey, () => useAlertService(), true);
+<%_ if (builtInUserManagement) { _%>
+const username = inject(currentUsernameKey);
+<%_ } _%>
+
+const route = useRoute();
+const router = useRouter();
+
+const previousState = () => router.go(-1);
+const { data: <%- entityInstance %> } = useControlledRequest((id, { signal }) => <%- entityInstance %>Service().find(id, { signal }), {
+  // The router reuses the component when the id of the route changes.
+  params: () => route.params?.<%- entityInstance %>Id as string | undefined,
+  initialData: (): I<%- entityAngularName %> => ({}),
+  onError: error => alertService.showHttpError((error as AxiosError).response),
+});
+<%_ if (!readOnly) { _%>
+const { removeId, removeEntity, prepareRemove, closeDialog, confirmRemove: remove<%- entityAngularName %> } = useEntityRemove({
+  alertService,
+  getId: (instance: I<%- entityAngularName %>) => instance.<%- primaryKey.name %>!,
+  remove: id => <%- entityInstance %>Service().delete(id),
+  <%_ if (enableTranslation) { _%>
+  removedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.deleted', { param: id }).toString(),
+  <%_ } else { _%>
+  removedMessage: id => `A <%- entityAngularName %> is deleted with identifier ${id}`,
+  <%_ } _%>
+  onRemoved: () => router.push({ name: '<%- entityAngularName %>' }),
+});
+<%_ } _%>
 </script>
