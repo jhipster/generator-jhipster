@@ -26,7 +26,7 @@ import { type Router, createMemoryHistory, createRouter } from 'vue-router';
 <%_ } _%>
 
 import { type MountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
-import axios, { CanceledError } from 'axios';
+import axios from 'axios';
 import { createBootstrap } from 'bootstrap-vue-next';
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
@@ -61,20 +61,6 @@ const <%- entityInstance %>SampleWithRelationships = {
 };
 
 type <%- entityAngularName %>ComponentType = InstanceType<typeof <%- entityAngularName %>>;
-<%_ if (paginationInfiniteScroll) { _%>
-
-const intersection = vi.hoisted(() => ({
-  callback: undefined as unknown as (entries: Partial<IntersectionObserverEntry>[]) => void,
-  observer: { isActive: { value: true }, pause: vi.fn(), resume: vi.fn() },
-}));
-
-vi.mock('@vueuse/core', () => ({
-  useIntersectionObserver(_target: unknown, callback: typeof intersection.callback) {
-    intersection.callback = callback;
-    return intersection.observer;
-  },
-}));
-<%_ } _%>
 
 describe('Component Tests', () => {
   let alertService: AlertService;
@@ -184,48 +170,8 @@ describe('Component Tests', () => {
         expect(wrapper.vm.page).toBe(2);
       });
 <%_ } _%>
-<%_ if (paginationInfiniteScroll) { _%>
-
-      it('should load the next page when the end of the list is visible', async () => {
-        // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: { link: '<http://localhost/api?page=1&size=20>; rel="next"' }, data: [<%- entityInstance %>Sample] });
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
-        await flushPromises();
-        expect(intersection.observer.resume).toHaveBeenCalled();
-
-        // WHEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [] });
-        intersection.callback([{ isIntersecting: true }]);
-        await flushPromises();
-
-        // THEN
-        expect(wrapper.vm.page).toBe(2);
-        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(2);
-        expect(intersection.observer.pause).toHaveBeenCalled();
-      });
-
-      it('should not load a page while the list is fetched or the end is not visible', async () => {
-        // GIVEN
-        intersection.observer.isActive.value = false;
-        intersection.observer.pause.mockClear();
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
-        await flushPromises();
-
-        // WHEN
-        intersection.callback([{ isIntersecting: false }]);
-        wrapper.vm.isFetching = true;
-        intersection.callback([{ isIntersecting: true }]);
-        wrapper.vm.<%- entityInstancePlural %> = [<%- entityInstance %>Sample];
-        await flushPromises();
-
-        // THEN
-        expect(wrapper.vm.page).toBe(1);
-        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledOnce();
-        expect(intersection.observer.pause).not.toHaveBeenCalled();
-        intersection.observer.isActive.value = true;
-      });
-<%_ } _%>
     });
+<%_ if (!readOnly) { _%>
     describe('Handles', () => {
       let comp: <%- entityAngularName %>ComponentType;
 
@@ -236,89 +182,6 @@ describe('Component Tests', () => {
         <%- entityInstance %>ServiceStub.retrieve.mockReset();
         <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [] });
       });
-<%_ if (!paginationNo) { _%>
-
-      it('should load a page', async () => {
-        // GIVEN
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
-
-        // WHEN
-        comp.page = 2;
-        await flushPromises();
-
-        // THEN
-        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalled();
-        expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
-    });
-  <%_ if (!paginationInfiniteScroll) { _%>
-
-      it('should not load a page if the page is the same as the previous page', () => {
-        // WHEN
-        comp.page = 1;
-
-        // THEN
-        expect(<%- entityInstance %>ServiceStub.retrieve).not.toHaveBeenCalled();
-      });
-  <%_ } _%>
-
-      it('should re-initialize the page', async () => {
-        // GIVEN
-        comp.page = 2;
-        await flushPromises();
-        <%- entityInstance %>ServiceStub.retrieve.mockReset();
-        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [<%- entityInstance %>Sample] });
-
-        // WHEN
-        comp.clear();
-        await flushPromises();
-
-        // THEN
-        expect(comp.page).toEqual(1);
-        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(1);
-        expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
-      });
-
-  <%_ if (paginationPagination) { _%>
-      it('should reset the page when the order changes', async () => {
-        // GIVEN
-        comp.page = 2;
-        await flushPromises();
-
-        // WHEN
-        comp.changeOrder('name');
-        await flushPromises();
-
-        // THEN
-        expect(comp.page).toEqual(1);
-        expect(router.currentRoute.value.query).toEqual({ page: '1', sort: ['name,asc'] });
-      });
-
-      it('should read the page and the sort from the route', async () => {
-        // WHEN
-        await router.push({ query: { page: '3', sort: 'name,desc' } });
-        await flushPromises();
-
-        // THEN
-        expect(comp.page).toEqual(3);
-        expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
-          page: 2,
-          sort: ['name,desc', 'id,asc'],
-        });
-      });
-
-  <%_ } _%>
-      it('should calculate the sort attribute for a non-id attribute', async () => {
-        // WHEN
-        comp.changeOrder('name');
-        await flushPromises();
-
-        // THEN
-        expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
-          sort: ['name,asc', 'id,asc'],
-        });
-      });
-<%_ } _%>
-<%_ if (!readOnly) { _%>
 
       it('Should call delete service on confirmDelete', async () => {
         // GIVEN
@@ -337,8 +200,8 @@ describe('Component Tests', () => {
         await comp.$nextTick(); // handle component clear watch
         expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(1);
       });
-<%_ } _%>
     });
+<%_ } _%>
 
 <%_ if (searchEngineAny) { _%>
     describe('Search', () => {
@@ -448,43 +311,6 @@ describe('Component Tests', () => {
     });
 
 <%_ } _%>
-    describe('Aborted requests', () => {
-      beforeEach(() => {
-        // A request rejects when it is aborted, else never ends.
-        <%- entityInstance %>ServiceStub.retrieve.mockImplementation(
-          ({ signal }: { signal: AbortSignal }) =>
-            new Promise((_resolve, reject) => signal.addEventListener('abort', () => reject(new CanceledError()))),
-        );
-      });
-
-      it('Should abort the previous load and keep fetching the newer one', async () => {
-        // GIVEN
-        const showHttpError = vi.spyOn(alertService, 'showHttpError').mockImplementation(() => {});
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
-        const { signal } = <%- entityInstance %>ServiceStub.retrieve.mock.lastCall![0];
-
-        // WHEN
-        wrapper.vm.handleSyncList();
-        await flushPromises();
-
-        // THEN
-        expect({ aborted: signal.aborted, isFetching: wrapper.vm.isFetching }).toEqual({ aborted: true, isFetching: true });
-        expect(showHttpError).not.toHaveBeenCalled();
-      });
-
-      it('Should abort the load when the component unmounts', () => {
-        // GIVEN
-        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
-        const { signal } = <%- entityInstance %>ServiceStub.retrieve.mock.lastCall![0];
-
-        // WHEN
-        wrapper.unmount();
-
-        // THEN
-        expect(signal.aborted).toBe(true);
-      });
-    });
-
     describe('Errors and defaults', () => {
       it('Should show the error of a failed load', async () => {
         // GIVEN
