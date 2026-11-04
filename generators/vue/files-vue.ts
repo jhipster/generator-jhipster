@@ -86,6 +86,7 @@ export const vueFiles = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: [
         'locale/translation.service.ts',
+        'locale/translation.service.spec.ts',
         'shared/config/store/translation-store.ts',
         'shared/config/store/translation-store.spec.ts',
         'shared/config/languages.ts',

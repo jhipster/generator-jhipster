@@ -46,12 +46,18 @@ export default class TranslationService {
       <%- exposeMicrofrontend ? '// ' : '' %>this.i18n.setLocaleMessage(newLanguage, translations.default);
 <%_ if (microfrontend) { _%>
 
-      await Promise.all([
-  <%_ for (const remote of microfrontends) { _%>
-        loadRemote<{ default: Parameters<Composer['mergeLocaleMessage']>[1] }>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`)
-          .then(<%- remote.moduleFederationName %>Translations => this.i18n.mergeLocaleMessage(newLanguage, <%- remote.moduleFederationName %>Translations!.default)),
+      const remoteTranslations = await Promise.all([
+  <%_ for (const remote of microfrontends.filter(remote => !remote.self)) { _%>
+        loadRemote<{ default: Parameters<Composer['mergeLocaleMessage']>[1] }>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`),
+  <%_ } _%>
+  <%_ for (const remote of microfrontends.filter(remote => remote.self)) { _%>
+        loadRemote<{ default: Parameters<Composer['mergeLocaleMessage']>[1] }>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`),
   <%_ } _%>
       ]);
+      // The translations of the application itself are merged last, so they take precedence over the microfrontends' ones.
+      for (const remoteTranslation of remoteTranslations) {
+        this.i18n.mergeLocaleMessage(newLanguage, remoteTranslation!.default);
+      }
 <%_ } _%>
 
       this.loadedLanguages.add(newLanguage);
