@@ -32,6 +32,8 @@ liquibase {
       classpath "src/main/resources/"
       // Liquibase 5 resolves the changelog and its includes from the search path.
       searchPath ".,src/main/resources/"
+      // Like the Maven plugin, leave out the test-only tables, so liquibaseDiffChangelog doesn't drop them
+      contexts "!test"
     }
     diffLog {
       driver "org.postgresql.Driver"
@@ -95,6 +97,8 @@ liquibase {
       classpath "src/main/resources/"
       // Liquibase 5 resolves the changelog and its includes from the search path.
       searchPath ".,src/main/resources/"
+      // Like the Maven plugin, leave out the test-only tables, so liquibaseDiffChangelog doesn't drop them
+      contexts "!test"
     }
     diffLog {
       driver "org.postgresql.Driver"
