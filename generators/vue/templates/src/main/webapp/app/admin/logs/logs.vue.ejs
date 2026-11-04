@@ -25,7 +25,7 @@
 
       <span>{{ t$('logs.filter') }}</span> <input type="text" v-model="filtered" class="form-control" />
 
-      <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
+      <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
         <thead>
           <tr title="click to order">
             <jhi-sort-header field-name="name" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
