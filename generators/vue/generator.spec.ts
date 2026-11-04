@@ -266,6 +266,21 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('vite microfrontend', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'microservice', clientBundler: 'vite', enableTranslation: true }, entities)
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should share application modules by absolute path', () => {
+      runResult.assertFileContent('module-federation.config.ts', 'import: fileURLToPath(new URL(`./');
+    });
+  });
+
   describe('entity with a relationship to an embedded entity', () => {
     before(async () => {
       await helpers
