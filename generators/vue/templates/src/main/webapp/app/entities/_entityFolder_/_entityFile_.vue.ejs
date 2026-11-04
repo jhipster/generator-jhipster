@@ -9,7 +9,7 @@
                 </button>
 <%_ if (!readOnly) { _%>
                 <router-link :to="{name: '<%- entityAngularName %>Create'}" custom v-slot="{ navigate }">
-                    <button @click="navigate" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%- entityUrl %>">
+                    <button @click="navigate" id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity">
                         <font-awesome-icon icon="plus"></font-awesome-icon>
                         <span>{{ t$('<%- i18nKeyPrefix %>.home.createLabel') }}</span>
                     </button>
