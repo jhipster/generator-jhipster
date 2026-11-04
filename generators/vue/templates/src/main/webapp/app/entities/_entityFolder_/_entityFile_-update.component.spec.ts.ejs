@@ -43,7 +43,7 @@ import { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/enti
 <%_ } _%>
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 import { contentStub, modelInputStub, triggerAll } from '@/shared/testing/stubs';
-<%_ if (anyFieldIsTimeDerived) { _%>
+<%_ if (vueFormTimeFields) { _%>
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
 
@@ -139,7 +139,7 @@ describe('Component Tests', () => {
       vi.resetAllMocks();
     });
 
-<%_ if (anyFieldIsTimeDerived) { _%>
+<%_ if (vueFormTimeFields) { _%>
     describe('load', () => {
       beforeEach(() => {
         const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
@@ -150,14 +150,14 @@ describe('Component Tests', () => {
         const date = new Date('2019-10-15T11:42:02Z');
 
         // WHEN
-        const convertedDate = comp.convertDateTimeFromServer(date);
+        const convertedDate = comp.dateFormat.convertDateTimeFromServer(date);
 
         // THEN
         expect(convertedDate).toEqual(dayjs(date).format(DATE_TIME_LONG_FORMAT));
       });
 
       it('Should not convert date if date is not present', () => {
-        expect(comp.convertDateTimeFromServer(null)).toBeNull();
+        expect(comp.dateFormat.convertDateTimeFromServer(null)).toBeNull();
       });
     });
 <%_ } _%>
@@ -540,9 +540,12 @@ describe('Component Tests', () => {
         // THEN
         expect(wrapper.vm.<%- entityInstance %>Service()).toBeInstanceOf(<%- entityAngularName %>Service);
         expect(wrapper.vm.alertService).toBeInstanceOf(AlertService);
+<%_ if (anyFieldIsLocalDate) { _%>
         expect(wrapper.vm.currentLanguage).toBe(navigator.language);
+<%_ } _%>
         get.mockRestore();
       });
+<%_ if (anyFieldIsLocalDate) { _%>
 
       it('Should default to the native language', () => {
         // GIVEN
@@ -555,6 +558,7 @@ describe('Component Tests', () => {
         expect(wrapper.vm.currentLanguage).toBe('<%- nativeLanguage %>');
         language.mockRestore();
       });
+<%_ } _%>
     });
   });
 });

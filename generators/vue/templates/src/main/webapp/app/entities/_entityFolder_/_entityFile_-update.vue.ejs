@@ -42,10 +42,10 @@ _%>
       <%_ } _%>
                             <div v-if="<%- entityInstance %>.<%- fieldName %>" class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
-                                <a class="pull-start" @click="openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a><br>
-                                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+                                <a class="pull-start" @click="dataUtils.openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">{{ t$('entity.action.open') }}</a><br>
+                                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
       <%_ } else { _%>
-                                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
+                                <span class="pull-start">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{dataUtils.byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
       <%_ } _%>
       <%_ if (field.blobContentTypeImage) { _%>
                                 <button type="button" @click="clearInputImage('<%- fieldName %>', '<%- fieldName %>ContentType', 'file_<%- fieldName %>')" class="btn btn-secondary btn-xs pull-end">
@@ -57,7 +57,7 @@ _%>
                                 </button>
                             </div>
                             <label for="file_<%- fieldName %>" class="btn btn-primary pull-end">{{ <%- fieldTypeBlobContent === 'image' ? 't$(\'entity.action.addimage\')' : 't$(\'entity.action.addblob\')' %> }}</label>
-                            <input type="file" ref="file_<%- fieldName %>" id="file_<%- fieldName %>" style="display: none;" data-cy="<%- fieldName %>" @change="setFileData($event, <%- entityInstance %>, '<%- fieldName %>', <%- fieldTypeBlobContent === 'image' ? 'true)" accept="image/*"' : 'false)"' %>/>
+                            <input type="file" ref="file_<%- fieldName %>" id="file_<%- fieldName %>" style="display: none;" data-cy="<%- fieldName %>" @change="dataUtils.setFileData($event, <%- entityInstance %>, '<%- fieldName %>', <%- fieldTypeBlobContent === 'image' ? 'true)" accept="image/*"' : 'false)"' %>/>
                         </div>
     <%_ } _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
@@ -83,15 +83,15 @@ _%>
                         <div class="d-flex">
                             <input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="datetime-local" class="<%- fieldInputClass %>" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }"
                             <%- field.fieldValidate && field.fieldValidationRequired ? ' required' : '' %>
-                            :value="convertDateTimeFromServer(v$.<%- fieldName %>.$model)"
-                            @change="updateInstantField('<%- fieldName %>', $event)"/>
+                            :value="dateFormat.convertDateTimeFromServer(v$.<%- fieldName %>.$model)"
+                            @change="dateFormat.updateInstantField('<%- fieldName %>', $event)"/>
                         </div>
     <%_ } else if (field.fieldTypeZonedDateTime) { _%>
                         <div class="d-flex">
                             <input id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" type="datetime-local" class="<%- fieldInputClass %>" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }"
                             <%- field.fieldValidate && field.fieldValidationRequired ? ' required' : '' %>
-                            :value="convertDateTimeFromServer(v$.<%- fieldName %>.$model)"
-                            @change="updateZonedDateTimeField('<%- fieldName %>', $event)"/>
+                            :value="dateFormat.convertDateTimeFromServer(v$.<%- fieldName %>.$model)"
+                            @change="dateFormat.updateZonedDateTimeField('<%- fieldName %>', $event)"/>
                         </div>
     <%_ } else if (field.blobContentTypeText) { _%>
                         <textarea class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
@@ -166,5 +166,167 @@ _%>
         </div>
     </div>
 </template>
-<script lang="ts" src="./<%- entityFileName %>-update.component.ts">
+
+<script setup lang="ts">
+<%_ const allRelationshipsThatNeedSelectOptions = Object
+      .values(relationshipsByOtherEntity)
+      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+      .filter(relationships => relationships.length > 0);
+    const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
+    const clientConstantFields = formFields.filter(field => field.clientConstantsAsValues);
+    const usesGetSelected = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship && !rel.relationshipSerializePrimaryKeyOnly);
+_%>
+import { <%- [...anyFieldIsLocalDate || userProvidedPrimaryKey ? ['computed'] : [], 'inject', ...enumTypeFields.length > 0 ? ['ref'] : []].join(', ') %> } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+import { useRoute, useRouter } from 'vue-router';
+
+import { type AxiosError } from 'axios';
+
+import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
+<%_ const composables = ['useControlledRequest', ...vueFormTimeFields ? ['useDateFormat'] : [], ...allRelationshipsThatNeedSelectOptions.length > 0 ? ['useEntityOptions'] : [], 'useEntitySave', 'useEntityValidation']; _%>
+import { <%- composables.join(', ') %> } from '@/shared/composables';
+<%_ if (anyFieldIsLocalDate) { _%>
+import { currentLanguageKey } from '@/shared/config/injection-keys';
+<%_ } _%>
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+import useDataUtils from '@/shared/data/data-utils.service';
+<%_ } _%>
+
+<%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
+  <%_ if (relationship.otherEntity.builtInUser) { _%>
+import UserService, { userServiceKey } from '@/entities/user/user.service';
+  <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
+import <%- relationship.otherEntity.entityAngularName %>Service, { <%- relationship.otherEntity.entityInstance %>ServiceKey } from '@/entities/<%- relationship.otherEntity.entityClientRootFolder %><%- relationship.otherEntity.entityFolderName %>/<%- relationship.otherEntity.entityFileName %>.service';
+  <%_ } _%>
+<%_ } _%>
+import { type I<%- entityAngularName %>, <%- entityAngularName %> } from './<%- entityFileName %>.model';
+import <%- entityAngularName %>Service, { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
+<%_ for (const constantImport of new Set(clientConstantFields.map(field => field.vueFieldClientConstant.vueConstantImport))) { _%>
+<%- constantImport %>
+<%_ } _%>
+<%_ const enumImports = entityClientEnumImports; _%>
+<%_ for (const [importedType, importedPath] of enumImports) { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ } _%>
+
+defineOptions({ name: '<%- entityAngularName %>Update' });
+
+const <%- entityInstance %>Service = inject(<%- entityInstance %>ServiceKey, () => new <%- entityAngularName %>Service());
+const alertService = inject(alertServiceKey, () => useAlertService(), true);
+const showLoadError = (error: unknown) => alertService.showHttpError((error as AxiosError).response);
+
+const new<%- entityAngularName %> = (): I<%- entityAngularName %> => {
+  const entity = new <%- entityAngularName %>();
+<%_ if (relationshipsContainManyToOne) { _%>
+  <%_ for (const relationship of relationships.filter(relationship => relationship.collection && relationship.persistableRelationship)) { _%>
+  entity.<%- relationship.relationshipFieldNamePlural %> = [];
+  <%_ } _%>
+<%_ } _%>
+  return entity;
+};
+<%_ for (const [relationship] of allRelationshipsThatNeedSelectOptions) { _%>
+  <%_ if (relationship.otherEntity.builtInUser) { _%>
+const userService = inject(userServiceKey, () => new UserService());
+const <%- relationship.otherEntity.entityInstancePlural %> = useEntityOptions(options => userService().retrieve(options), showLoadError);
+  <%_ } else { _%>
+    <%_ if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
+
+const <%- relationship.otherEntity.entityInstance %>Service = inject(<%- relationship.otherEntity.entityInstance %>ServiceKey, () => new <%- relationship.otherEntity.entityAngularName %>Service());
+    <%_ } _%>
+
+const <%- relationship.otherEntity.entityInstancePlural %> = useEntityOptions(options => <%- relationship.otherEntity.entityInstance %>Service().retrieve(options), showLoadError);
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const enumField of enumTypeFields) { _%>
+const <%- enumField.enumInstance %>Values = ref<string[]>(Object.keys(<%- enumField.fieldType %>));
+<%_ } _%>
+<%_ for (const field of clientConstantFields) { _%>
+const <%- field.fieldName %>Values: string[] = <%- field.vueFieldClientConstant.vueConstantValues %>;
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
+const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
+<%_ } _%>
+
+const route = useRoute();
+const router = useRouter();
+<%_ if (userProvidedPrimaryKey) { _%>
+// The primary key is given by the user: an entity is updated when the route has it.
+const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
+<%_ } _%>
+
+const previousState = () => router.go(-1);
+
+const { data: <%- entityInstance %> } = useControlledRequest(
+  async (id, { signal }) => {
+    const res = await <%- entityInstance %>Service().find(id, { signal });
+<%_ for (field of fields.filter(field => !field.id)) { _%>
+  <%_ const { fieldName, fieldType } = field; _%>
+  <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+    if (res.<%- fieldName %>) {
+      res.<%- fieldName %> = new Date(res.<%- fieldName %>);
+    }
+  <%_ } _%>
+<%_ } _%>
+    return res;
+  },
+  {
+    // The router reuses the component when the id of the route changes, and an update without id is a new entity.
+    params: () => route.params?.<%- entityInstance %>Id as string | undefined,
+    initialData: new<%- entityAngularName %>,
+    onError: showLoadError,
+  },
+);
+<%_ if (vueFormTimeFields) { _%>
+const dateFormat = useDateFormat({ entityRef: <%- entityInstance %> });
+<%_ } _%>
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+const dataUtils = useDataUtils();
+<%_ } _%>
+
+<%_ if (enableTranslation) { _%>
+const { t: t$ } = useI18n();
+<%_ } _%>
+const v$ = useEntityValidation(<%- entityInstance %>, {
+<%_ for (field of formFields) { _%>
+  <%- field.fieldName %>: <%- field.vueValidationRules %>,
+<%_ } _%>
+<%_ for (relationship of relationships) { _%>
+  <%- relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName %>: <%- relationship.relationshipValidate ? '{ required: true }' : '{}' %>,
+<%_ } _%>
+});
+
+const { isSaving, save } = useEntitySave({
+  alertService,
+  isUpdate: () => <% if (userProvidedPrimaryKey) { %>isUpdate.value<% } else { %>Boolean(<%- entityInstance %>.value.<%- builtInUserManagement ? 'id' : primaryKey.name %>)<% } %>,
+  create: () => <%- entityInstance %>Service().create(<%- entityInstance %>.value),
+  update: () => <%- entityInstance %>Service().update(<%- entityInstance %>.value),
+  getId: saved => saved.<%- primaryKey.name %>,
+<%_ if (enableTranslation) { _%>
+  createdMessage: id => t$('<%- i18nAlertHeaderPrefix %>.created', { param: id }).toString(),
+  updatedMessage: id => t$('<%- i18nAlertHeaderPrefix %>.updated', { param: id }).toString(),
+<%_ } else { _%>
+  createdMessage: id => `A <%- entityAngularName %> is created with identifier ${id}`,
+  updatedMessage: id => `A <%- entityAngularName %> is updated with identifier ${id}`,
+<%_ } _%>
+  onSaved: () => previousState(),
+});
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+
+const clearInputImage = (field: string, fieldContentType: string, idInput: string) => {
+  (<%- entityInstance %>.value as Record<string, unknown>)[field] = null;
+  (<%- entityInstance %>.value as Record<string, unknown>)[fieldContentType] = null;
+  const input = document.getElementById(idInput) as HTMLInputElement | null;
+  if (input) {
+    input.value = '';
+  }
+};
+<%_ } _%>
+<%_ if (usesGetSelected) { _%>
+
+// The server gives null for a collection without values.
+const getSelected = <T extends object>(selectedVals: T[] | null | undefined, option: T, pkField = 'id'): T =>
+  selectedVals?.find(value => (option as Record<string, unknown>)[pkField] === (value as Record<string, unknown>)[pkField]) ?? option;
+<%_ } _%>
 </script>

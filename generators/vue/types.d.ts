@@ -52,6 +52,8 @@ export interface Entity<F extends ClientField = Field, R extends ClientRelations
   entityVueAuthorities?: string;
   /** The authorities of the routes that read the entity, as a list of string literals. */
   entityVueReadAuthorities?: string;
+  /** Whether a field of the update form is an Instant or a ZonedDateTime. */
+  vueFormTimeFields?: boolean;
 }
 
 export type Application = ClientApplication & VueAddedApplicationProperties;

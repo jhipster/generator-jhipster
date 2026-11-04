@@ -303,7 +303,7 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should not use the embedded entity service at the update component', () => {
       runResult.assertNoFileContent(
-        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/entities/relationship-with-embedded/relationship-with-embedded-update.vue`,
         'embedded-entity.service',
       );
       runResult.assertNoFileContent(
