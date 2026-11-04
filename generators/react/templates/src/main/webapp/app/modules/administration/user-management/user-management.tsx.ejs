@@ -131,7 +131,7 @@ export const UserManagement = () => {
         <div className="d-flex justify-content-end">
           <Button className="me-2" variant="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon={faSync} spin={loading} />{' '}
-            <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
+            <Translate contentKey="userManagement.home.refreshListLabel">Refresh list</Translate>
           </Button>
           <Link to="new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon={faPlus} /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
