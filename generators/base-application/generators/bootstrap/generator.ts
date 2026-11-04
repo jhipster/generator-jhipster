@@ -52,7 +52,24 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../../support/index.ts';
+import type { EntityToLoad } from '../../tasks.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
+
+/**
+ * Adds a built-in entity to the entities to load, after the built-in entities already there, in place of the entry of its
+ * `.jhipster` file, which customizes it.
+ */
+function addBuiltInEntityToLoad(entitiesToLoad: EntityToLoad<any>[], entity: any): any {
+  const index = entitiesToLoad.findIndex(({ entityName }) => entityName === entity.name);
+  if (index >= 0) {
+    // Keep the object of the entry, the one of the tasks.
+    const [entry] = entitiesToLoad.splice(index, 1);
+    entity = Object.assign(entry.entityBootstrap, entity);
+  }
+  const position = entitiesToLoad.filter(({ entityBootstrap }) => entityBootstrap.builtIn).length;
+  entitiesToLoad.splice(position, 0, { entityName: entity.name, entityBootstrap: entity });
+  return entity;
+}
 
 export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<BaseApplicationEntity, BaseApplicationApplication> {
   async beforeQueue() {
@@ -219,59 +236,49 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     return this.asLoadingEntitiesTaskGroup({
       loadUser({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity) {
-          const User = 'User';
-
-          const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === User);
-          const bootstrap = customUser?.entityBootstrap;
-          if (!bootstrap) {
-            throw new Error('User entity should already be passed.');
-          }
-
-          const customUserData = customUser?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
-          application.user = bootstrap;
+          // The .jhipster file of User customizes it.
+          const customUserData: any = this.getEntityConfig('User')?.getAll() ?? {};
+          application.user = addBuiltInEntityToLoad(
+            entitiesToLoad,
+            createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application),
+          );
         }
       },
       loadUserManagement({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity && application.generateUserManagement) {
-          const UserManagement = 'UserManagement';
-          const customUserManagement = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === UserManagement);
-          const bootstrap = customUserManagement?.entityBootstrap;
-          if (!bootstrap) {
-            throw new Error('UserManagement entity should already be passed.');
-          }
-
-          const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
-          Object.assign(
-            bootstrap,
+          const customUserManagementData: any = this.getEntityConfig('UserManagement')?.getAll() ?? {};
+          application.userManagement = addBuiltInEntityToLoad(
+            entitiesToLoad,
             createUserManagementEntity.call(
               this,
               { ...customUserManagementData, ...customUserManagementData.annotations },
               application as any,
             ),
           );
-          application.userManagement = bootstrap;
         }
       },
       loadAuthority({ application, entitiesToLoad }) {
         if (application.generateBuiltInAuthorityEntity) {
-          const authority = 'Authority';
-
-          const customEntity = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === authority);
-          const bootstrap = customEntity?.entityBootstrap;
-          if (!bootstrap) {
-            throw new Error('Authority entity should already be passed.');
-          }
-
-          const customEntityData = customEntity?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
-          application.authority = bootstrap;
+          const customEntityData: any = this.getEntityConfig('Authority')?.getAll() ?? {};
+          application.authority = addBuiltInEntityToLoad(
+            entitiesToLoad,
+            createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application),
+          );
         }
       },
-      loadingEntities({ application, entitiesToLoad }) {
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
+    return this.loadingEntities;
+  }
+
+  get postLoadingEntities() {
+    return this.asPostLoadingEntitiesTaskGroup({
+      loadEntities({ application, entitiesToLoad }) {
         for (const { entityName, entityBootstrap, entityStorage } of entitiesToLoad) {
           if (!entityBootstrap.builtIn) {
-            let entity = entityStorage.getAll() as BaseEntity;
+            let entity = (entityStorage?.getAll() ?? {}) as BaseEntity;
             entity.name ??= entityName;
             entity = { ...entity, ...entity.annotations };
             entity.changelogDate ??= entity.incrementalChangelogDate;
@@ -319,8 +326,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     });
   }
 
-  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
-    return this.loadingEntities;
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.postLoadingEntities;
   }
 
   get preparingEachEntity() {

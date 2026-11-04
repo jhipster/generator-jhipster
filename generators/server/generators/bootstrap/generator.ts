@@ -114,8 +114,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     return this.postPreparing;
   }
 
-  get loadingEntities() {
-    return this.asLoadingEntitiesTaskGroup({
+  get postLoadingEntities() {
+    return this.asPostLoadingEntitiesTaskGroup({
       loadingEntities({ entitiesToLoad }) {
         for (const { entityBootstrap } of entitiesToLoad) {
           loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
@@ -127,8 +127,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     });
   }
 
-  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
-    return this.loadingEntities;
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.postLoadingEntities;
   }
 
   get preparingEachEntity() {

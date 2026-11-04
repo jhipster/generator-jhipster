@@ -436,6 +436,78 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('built-in entities added at the loadingEntities priority', () => {
+    const loaded: Record<string, any> = {};
+
+    class BuiltInGenerator extends Generator {
+      async beforeQueue() {
+        await this.dependsOnBootstrap('app');
+      }
+
+      get [Generator.LOADING_ENTITIES]() {
+        return this.asLoadingEntitiesTaskGroup({
+          addBuiltInEntities({ entitiesToLoad }) {
+            const builtIn = (entityBootstrap: any) => ({ entityName: entityBootstrap.name, entityBootstrap });
+            entitiesToLoad.push(
+              builtIn({
+                name: 'Catalog',
+                builtIn: true,
+                changelogDate: '20260101000000',
+                fields: [{ fieldName: 'title', fieldType: 'String' }],
+                relationships: [],
+              }),
+              builtIn({
+                name: 'CatalogItem',
+                builtIn: true,
+                changelogDate: '20260101000100',
+                fields: [],
+                relationships: [{ relationshipName: 'catalog', otherEntityName: 'Catalog', relationshipType: 'many-to-one' }],
+              }),
+            );
+          },
+        });
+      }
+
+      get [Generator.POST_PREPARING_EACH_ENTITY]() {
+        return this.asPostPreparingEachEntityTaskGroup({
+          collect({ entity }) {
+            loaded[entity.name] = entity;
+          },
+        });
+      }
+    }
+
+    before(async () => {
+      await helpers
+        .run(BuiltInGenerator)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withJHipsterConfig({}, [{ name: 'Foo' }]);
+    });
+
+    it('should prepare the entities in the order they were added', () => {
+      expect(Object.keys(loaded)).toEqual(['User', 'UserManagement', 'Authority', 'Foo', 'Catalog', 'CatalogItem']);
+    });
+
+    it('should load User, UserManagement and Authority as built-in entities', () => {
+      expect(loaded).toMatchObject({ User: { builtIn: true }, UserManagement: { builtIn: true }, Authority: { builtIn: true } });
+    });
+
+    it('should prepare a built-in entity added by another generator', () => {
+      expect(loaded.Catalog).toMatchObject({ builtIn: true, changelogDate: '20260101000000' });
+      expect(loaded.Catalog.fields.map(({ fieldName }: any) => fieldName)).toEqual(['id', 'title']);
+    });
+
+    it('should resolve the relationships of a built-in entity added by another generator', () => {
+      expect(loaded.CatalogItem.relationships[0].otherEntity).toBe(loaded.Catalog);
+    });
+
+    it('should not store the built-in entities', () => {
+      runResult.assertNoFile(['.jhipster/Catalog.json', '.jhipster/CatalogItem.json']);
+      const yoRc = runResult.fs.readJSON(`${runResult.cwd}/.yo-rc.json`) as { 'generator-jhipster': { entities: string[] } };
+      expect(yoRc['generator-jhipster'].entities).toEqual(['Foo']);
+    });
+  });
+
   describe('entities option', () => {
     // no args
     const initializing = exnode.fn();
