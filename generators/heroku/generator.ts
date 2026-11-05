@@ -18,7 +18,6 @@
  */
 
 import chalk from 'chalk';
-import { globSync } from 'tinyglobby';
 
 import { kebabCase } from '../../lib/utils/string-utils.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
@@ -204,25 +203,6 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         } else {
           this.log.log(chalk.bold('\nInitializing Git repository'));
           await git.init();
-        }
-      },
-
-      async installHerokuDeployPlugin() {
-        if (!this.hasHerokuCli) return;
-
-        const cliPlugin = 'heroku-cli-deploy';
-
-        const { stdout, stderr, exitCode } = await this.spawnHerokuCommand('plugins', { stdio: 'pipe' });
-        if (exitCode !== 0) {
-          if (stdout.includes(cliPlugin)) {
-            this.log.log('\nHeroku CLI deployment plugin already installed');
-          } else {
-            this.log.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-            const { exitCode } = await this.spawnHerokuCommand(`plugins:install ${cliPlugin}`);
-            if (exitCode !== 0) {
-              throw new Error(stderr);
-            }
-          }
         }
       },
 
@@ -473,28 +453,38 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
           }
         } else {
           this.log.log(chalk.bold('\nDeploying application'));
-          let jarFileWildcard = 'target/*.jar';
-          if (application.buildToolGradle) {
-            jarFileWildcard = 'build/libs/*.jar';
-          }
+          // The build plugins upload the jar that productionBuild built, with the Procfile and system.properties.
+          // gradle/heroku.gradle sets the Gradle app name. Both plugins build with heroku/jvm.
+          // deploy-only, unlike deploy, doesn't run the package phase again.
+          const deployCommand =
+            application.buildToolGradle ?
+              './gradlew deployHeroku --no-daemon'
+            : `./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy-only -Dheroku.appName=${this.herokuAppName}`;
 
-          const files = globSync(jarFileWildcard, {});
-          const jarFile = files[0];
+          // Heroku CLI 11 stores the `heroku login` token in the OS keychain, which the Gradle plugin can't read.
+          let env: Record<string, string> | undefined;
+          if (!process.env.HEROKU_API_KEY) {
+            const { stdout: token } = await this.spawnHerokuCommand('auth:token', { verboseInfo: false });
+            if (token?.trim()) {
+              env = { HEROKU_API_KEY: token.trim() };
+            }
+          }
 
           this.log.log(
             chalk.bold(
               `\nUploading your application code.\nThis may take ${chalk.cyan('several minutes')} depending on your connection speed...`,
             ),
           );
-          try {
-            await this.spawnHeroku(['deploy:jar', jarFile, '--app', this.herokuAppName!], { stdio: 'pipe' });
-            await this.spawnHerokuCommand('buildpacks:set heroku/jvm', { stdio: 'pipe' });
-            this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
-            this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
-            this.log.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-          } catch (err) {
-            this.log.error(err);
+          const { exitCode } = await this.printChildOutput(
+            this.spawnCommand(deployCommand, { stdio: 'pipe', reject: false, ...(env ? { env } : {}) }),
+          );
+          if (exitCode !== 0) {
+            this.log.error(`Heroku deployment failed: ${deployCommand}`);
+            throw new Error(`Heroku deployment failed with exit code ${exitCode}. Fix the error above and run 'jhipster heroku' again.`);
           }
+          this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
+          this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
+          this.log.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
         }
       },
     });

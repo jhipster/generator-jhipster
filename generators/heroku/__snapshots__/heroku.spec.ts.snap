@@ -181,14 +181,6 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
     },
   ],
   [
-    "spawnCommand",
-    "heroku plugins",
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
     "spawn",
     "heroku",
     [
@@ -397,14 +389,6 @@ exports[`generator - Heroku monolith application in the US calls should match sn
     },
   ],
   [
-    "spawnCommand",
-    "heroku plugins",
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
     "spawn",
     "heroku",
     [
@@ -605,14 +589,6 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
   [
     "spawnCommand",
     "heroku whoami",
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
-    "heroku plugins",
     {
       "reject": false,
       "stdio": "pipe",
@@ -880,14 +856,6 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
     },
   ],
   [
-    "spawnCommand",
-    "heroku plugins",
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
     "spawn",
     "heroku",
     [
@@ -1090,14 +1058,6 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
   [
     "spawnCommand",
     "heroku whoami",
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
-    "heroku plugins",
     {
       "reject": false,
       "stdio": "pipe",
@@ -1334,14 +1294,6 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
     },
   ],
   [
-    "spawnCommand",
-    "heroku plugins",
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
     "spawn",
     "heroku",
     [
@@ -1570,14 +1522,6 @@ exports[`generator - Heroku monolith application with existing app calls should 
       "--json",
       "jhipster-existing",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
-    "heroku plugins",
     {
       "reject": false,
       "stdio": "pipe",
