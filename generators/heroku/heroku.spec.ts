@@ -74,6 +74,14 @@ describe('generator - Heroku', () => {
         if (args[0] === 'apps:info' && args[1] === '--json' && args[2] === appInfoResult?.appName) {
           return appInfoResult.result;
         }
+        if (args[0] === 'config' && args[1] === '--json') {
+          return createSpawnCommandReturn({
+            stdout: JSON.stringify({
+              FOUNDELASTICSEARCH_URL: 'https://jhipster-test.es.us-east-1.aws.found.io',
+              FOUNDELASTICSEARCH_INITIAL_CREDENTIALS: 'elastic:test-password',
+            }),
+          });
+        }
       }
 
       return createSpawnCommandReturn();
@@ -283,6 +291,35 @@ describe('generator - Heroku', () => {
             herokuRegion: 'us',
             herokuDeployType: 'jar',
             herokuJavaVersion: '11',
+          })
+          .withSpawnMock(stub);
+      });
+      it('should match files snapshot', function () {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+      it('creates expected monolith files', () => {
+        runResult.assertFile(expectedFiles.monolith);
+        runResult.assertFileContent('.yo-rc.json', '"herokuDeployType": "jar"');
+        runResult.assertFileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+        runResult.assertNoFileContent(`${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
+      });
+      it('calls should match snapshot', () => {
+        expect(getRunResultCalls()).toMatchSnapshot();
+      });
+    });
+
+    describe('with elasticsearch of your own', () => {
+      beforeEach(async () => {
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+            herokuElasticsearch: 'external',
           })
           .withSpawnMock(stub);
       });

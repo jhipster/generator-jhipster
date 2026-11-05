@@ -74,9 +74,5 @@ spring:
     hikari:
       maximumPoolSize: 8
 <%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-  elasticsearch:
-    uris: ${BONSAI_URL}
-<%_ } _%>
 server:
   port: ${PORT:8080}

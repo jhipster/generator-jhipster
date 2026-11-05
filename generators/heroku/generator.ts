@@ -46,6 +46,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
   herokuSkipDeploy!: boolean;
   herokuSkipBuild!: boolean;
   dynoSize!: string;
+  herokuElasticsearch?: 'foundelasticsearch' | 'external';
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -277,21 +278,75 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         }
       },
 
+      async askForElasticsearch({ application }) {
+        if (!this.hasHerokuCli || this.herokuAppExists || !application.searchEngineElasticsearch) return;
+
+        // Elastic's add-on is the only Heroku add-on that runs Elasticsearch 9, and it has no free plan
+        const { stdout } = await this.spawnHeroku(['addons:plans', 'foundelasticsearch', '--json'], { verboseInfo: false });
+        let price = '';
+        try {
+          const plan = JSON.parse(stdout).find((plan: { default: boolean }) => plan.default);
+          price = `, $${plan.price.cents / 100}/${plan.price.unit}`;
+        } catch {
+          // Leave the price out
+        }
+        const answers = await this.prompt([
+          {
+            type: 'select',
+            name: 'herokuElasticsearch',
+            message: 'Which Elasticsearch should the app use?',
+            choices: [
+              { value: 'foundelasticsearch', name: `Elastic's Heroku add-on (foundelasticsearch${price})` },
+              { value: 'external', name: 'My own Elasticsearch, configured after the deployment' },
+            ],
+            default: 'foundelasticsearch',
+          },
+        ]);
+        this.herokuElasticsearch = answers.herokuElasticsearch;
+      },
+
       async herokuAddonsCreate({ application }) {
         if (!this.hasHerokuCli || this.herokuAppExists) return;
 
         this.log.log(chalk.bold('\nProvisioning addons'));
-        if (application.searchEngineElasticsearch) {
-          this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
+        if (application.searchEngineElasticsearch && this.herokuElasticsearch === 'foundelasticsearch') {
+          this.log.log(chalk.bold('\nProvisioning Elasticsearch addon foundelasticsearch'));
           const { stdout, stderr } = (await this.spawn('heroku', [
             'addons:create',
-            'bonsai:sandbox-6',
-            '--as',
-            'BONSAI',
+            'foundelasticsearch',
+            '--wait',
             '--app',
             this.herokuAppName!,
-          ])) as { stdout: string; stderr: string };
+          ])) as {
+            stdout: string;
+            stderr: string;
+          };
           this.checkAddOnReturn({ addOn: 'Elasticsearch', stdout, stderr });
+
+          // The add-on's URL has no credentials, they're in FOUNDELASTICSEARCH_INITIAL_CREDENTIALS as user:password.
+          // Spring Boot reads SPRING_ELASTICSEARCH_* from the environment, like an Elasticsearch of your own.
+          const { stdout: config } = await this.spawnHeroku(['config', '--json', '--app', this.herokuAppName!]);
+          const { FOUNDELASTICSEARCH_URL: url, FOUNDELASTICSEARCH_INITIAL_CREDENTIALS: credentials = '' } = JSON.parse(config || '{}');
+          const separator = credentials.indexOf(':');
+          if (url && separator > 0) {
+            // Not piped, so the credentials aren't logged
+            await this.spawnHeroku([
+              'config:set',
+              `SPRING_ELASTICSEARCH_URIS=${url}`,
+              `SPRING_ELASTICSEARCH_USERNAME=${credentials.slice(0, separator)}`,
+              `SPRING_ELASTICSEARCH_PASSWORD=${credentials.slice(separator + 1)}`,
+              '--app',
+              this.herokuAppName!,
+            ]);
+          } else {
+            this.log.warn(
+              'Could not read the foundelasticsearch settings. Set SPRING_ELASTICSEARCH_URIS, SPRING_ELASTICSEARCH_USERNAME and SPRING_ELASTICSEARCH_PASSWORD.',
+            );
+          }
+        } else if (application.searchEngineElasticsearch) {
+          this.log.warn(
+            `Point the app to your Elasticsearch 9 cluster before it starts:\n\t${chalk.bold(`heroku config:set SPRING_ELASTICSEARCH_URIS=https://<host> SPRING_ELASTICSEARCH_USERNAME=<username> SPRING_ELASTICSEARCH_PASSWORD=<password> --app ${this.herokuAppName}`)}`,
+          );
         }
 
         let dbAddOn;
