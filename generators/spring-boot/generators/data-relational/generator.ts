@@ -32,6 +32,7 @@ import {
   getTestcontainerSupport,
   javaSqlDatabaseArtifacts,
 } from './internal/dependencies.ts';
+import { R2DBC_MARIADB_LOCKING_LAMBDAS } from './resources/blockhound.ts';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.ts';
 import type {
   Application as SpringDataRelationalApplication,
@@ -401,10 +402,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<
               'setAutoCommit',
               // `receive` and `sendCommand` acquire the lock inside their `Flux.create` lambdas, which run at
               // subscribe time, so the enclosing method is no longer on the stack and BlockHound only sees the
-              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.2 and must be rechecked on driver upgrades.
-              'lambda$receive$15',
-              'lambda$sendCommand$17',
-              'lambda$sendCommand$20',
+              // synthetic lambda.
+              ...R2DBC_MARIADB_LOCKING_LAMBDAS,
             ],
           });
 
