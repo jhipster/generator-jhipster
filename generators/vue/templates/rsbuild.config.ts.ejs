@@ -26,6 +26,9 @@ import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginVue } from '@rsbuild/plugin-vue';
 import { getAbsoluteFSPath } from 'swagger-ui-dist';
 
+<%_ if (enableTranslation) { _%>
+import { i18nRsbuildPlugin } from './build-plugins/i18n.ts';
+<%_ } _%>
 <%_ if (microfrontend) { _%>
 import mfConfig from './module-federation.config.ts';
 <%_ } _%>
@@ -41,6 +44,9 @@ export default defineConfig({
   plugins: [
     pluginVue(),
     pluginSass(),
+<%_ if (enableTranslation) { _%>
+    i18nRsbuildPlugin(),
+<%_ } _%>
 <%_ if (microfrontend) { _%>
     pluginModuleFederation(mfConfig),
 <%_ } _%>
