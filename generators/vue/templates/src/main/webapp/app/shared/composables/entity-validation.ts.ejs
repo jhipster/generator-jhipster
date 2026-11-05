@@ -49,8 +49,12 @@ export const useEntityValidation = <T extends object>(entity: Ref<T>, rules: Rec
   const vuelidateRules = ({ required, email, minLength, maxLength, integer, min, max, pattern }: PropertyRules) => ({
     ...(required ? { required: validations.required(t$('entity.validation.required').toString()) } : {}),
     ...(email ? { email: validations.email(t$('global.messages.validate.email.invalid').toString()) } : {}),
-    ...(minLength === undefined ? {} : { minLength: validations.minLength(t$('entity.validation.minlength', { min: minLength }).toString(), minLength) }),
-    ...(maxLength === undefined ? {} : { maxLength: validations.maxLength(t$('entity.validation.maxlength', { max: maxLength }).toString(), maxLength) }),
+    ...(minLength === undefined
+      ? {}
+      : { minLength: validations.minLength(t$('entity.validation.minlength', { min: minLength }).toString(), minLength) }),
+    ...(maxLength === undefined
+      ? {}
+      : { maxLength: validations.maxLength(t$('entity.validation.maxlength', { max: maxLength }).toString(), maxLength) }),
     ...(integer ? { integer: validations.integer(t$('entity.validation.number').toString()) } : {}),
     ...(min === undefined ? {} : { min: validations.minValue(t$('entity.validation.min', { min }).toString(), min) }),
     ...(max === undefined ? {} : { max: validations.maxValue(t$('entity.validation.max', { max }).toString(), max) }),
@@ -65,7 +69,10 @@ export const useEntityValidation = <T extends object>(entity: Ref<T>, rules: Rec
         }
       : {}),
   });
-  const v$ = useVuelidate(Object.fromEntries(Object.entries(rules).map(([property, propertyRules]) => [property, vuelidateRules(propertyRules)])), entity);
+  const v$ = useVuelidate(
+    Object.fromEntries(Object.entries(rules).map(([property, propertyRules]) => [property, vuelidateRules(propertyRules)])),
+    entity,
+  );
   v$.value.$validate();
   return v$;
 };

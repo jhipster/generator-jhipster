@@ -23,5 +23,7 @@ import { type RequestOptions, useControlledRequest } from './controlled-request'
 /**
  * The entities a relationship of the form chooses from, loaded once.
  */
-export const useEntityOptions = <T>(retrieve: (options: RequestOptions) => Promise<AxiosResponse<T[]>>, onError?: (error: unknown) => void) =>
-  useControlledRequest(async (_params, { signal }) => (await retrieve({ signal })).data, { initialData: (): T[] => [], onError }).data;
+export const useEntityOptions = <T>(
+  retrieve: (options: RequestOptions) => Promise<AxiosResponse<T[]>>,
+  onError?: (error: unknown) => void,
+) => useControlledRequest(async (_params, { signal }) => (await retrieve({ signal })).data, { initialData: (): T[] => [], onError }).data;
