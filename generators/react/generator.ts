@@ -28,7 +28,6 @@ import {
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
-import type { Entity as ClientEntity, Features, Field as ClientField, Options } from '../client/types.ts';
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
@@ -36,6 +35,16 @@ import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';
 import { writeFiles } from './files-react.ts';
 import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.ts';
+import type {
+  Application as ReactApplication,
+  Config as ReactConfig,
+  Entity as ReactEntity,
+  Features as ReactFeatures,
+  Field as ReactField,
+  Options as ReactOptions,
+  ReactFieldClientConstant,
+  Source as ReactSource,
+} from './types.d.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -43,7 +52,7 @@ const { REACT } = clientFrameworkTypes;
 /**
  * Client constants backing the values of `clientConstantsAsValues` fields, by field type.
  */
-const reactClientConstants: Record<string, { reactConstantImport: string; reactConstantValues: string }> = {
+const reactClientConstants: Record<string, ReactFieldClientConstant> = {
   Languages: {
     reactConstantImport: "import { locales } from 'app/config/translation';",
     reactConstantValues: 'locales',
@@ -59,18 +68,16 @@ const isAdminEntity = (application: { applicationTypeMicroservice?: boolean }, e
 
 const REGEX_LITERAL_REPLACEMENTS: Record<string, string> = { '/': String.raw`\/`, [String.raw`\'`]: "'" };
 
-export default class ReactGenerator extends ClientApplicationGenerator<
-  ClientEntity<
-    ClientField & {
-      reactFieldClientConstant?: { reactConstantImport: string; reactConstantValues: string };
-      fieldValidateRulesPatternReact?: string;
-      fieldValidateRulesPatternReactString?: string;
-    }
-  > & {
-    entityReactState?: string;
-  }
-> {
-  constructor(args?: string[], options?: Options, features?: Features) {
+export class ReactApplicationGenerator extends ClientApplicationGenerator<
+  ReactEntity,
+  ReactApplication,
+  ReactConfig,
+  ReactOptions,
+  ReactSource
+> {}
+
+export default class ReactGenerator extends ReactApplicationGenerator {
+  constructor(args?: string[], options?: ReactOptions, features?: ReactFeatures) {
     super(args, options, { ...features, loadCommand: ['jhipster:server'] });
   }
 
@@ -103,7 +110,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
     });
   }
 
-  get [ClientApplicationGenerator.CONFIGURING]() {
+  get [ReactApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -119,7 +126,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
     });
   }
 
-  get [ClientApplicationGenerator.COMPOSING]() {
+  get [ReactApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -228,7 +235,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING]() {
+  get [ReactApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -246,7 +253,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
+  get [ReactApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
@@ -274,7 +281,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+  get [ReactApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
@@ -302,7 +309,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+  get [ReactApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
@@ -323,7 +330,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.DEFAULT]() {
+  get [ReactApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -355,7 +362,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.WRITING]() {
+  get [ReactApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -366,7 +373,7 @@ ${comment}
     };
   }
 
-  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
+  get [ReactApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -419,7 +426,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.POST_WRITING]() {
+  get [ReactApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
@@ -429,7 +436,7 @@ ${comment}
     };
   }
 
-  get [ClientApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [ReactApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
@@ -446,7 +453,7 @@ ${comment}
     });
   }
 
-  get [ClientApplicationGenerator.END]() {
+  get [ReactApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
@@ -454,7 +461,7 @@ ${comment}
    * @private
    * Generate Entity Client Field Default Values
    */
-  generateEntityClientFieldDefaultValues(fields: ClientField[]): Record<string, string> {
+  generateEntityClientFieldDefaultValues(fields: ReactField[]): Record<string, string> {
     const defaultVariablesValues: Record<string, string> = {};
     fields.forEach(field => {
       const { fieldType, fieldName } = field;
@@ -483,7 +490,7 @@ ${comment}
     return formatEntityClientImports(relationships, dto, REACT);
   }
 
-  generateEntityClientEnumImports(fields: ClientField[]) {
+  generateEntityClientEnumImports(fields: ReactField[]) {
     return getClientEnumImportsFormat(fields, REACT);
   }
 }
