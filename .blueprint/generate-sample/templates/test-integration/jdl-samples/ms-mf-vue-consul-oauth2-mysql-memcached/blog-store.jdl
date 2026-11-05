@@ -6,7 +6,7 @@
  * - serviceDiscovery: consul
  * - authenticationType: oauth2
  * - prodDatabaseType: mysql
- * - testFrameworks: cypress
+ * - testFrameworks: playwright
  *
  * Imperative focus:
  * - cacheProvider: memcached
@@ -30,7 +30,7 @@ application {
     packageName com.okta.developer.gateway
     prodDatabaseType mysql
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
     microfrontends [blog, notification]
   }
   entities UserData, Product
@@ -53,7 +53,7 @@ application {
     prodDatabaseType mysql
     serverPort 8081
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
   }
   entities Blog, Post, Tag
 }
@@ -74,7 +74,7 @@ application {
     prodDatabaseType mysql
     serverPort 8082
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
   }
   entities Product
 }
@@ -97,7 +97,7 @@ application {
     reactive true
     serverPort 8083
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
   }
   entities Notification
 }
