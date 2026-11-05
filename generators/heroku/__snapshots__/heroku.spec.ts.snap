@@ -1141,6 +1141,126 @@ server:
 }
 `;
 
+exports[`generator - Heroku monolith application with elasticsearch and an app that already has the foundelasticsearch add-on calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:plans",
+      "foundelasticsearch",
+      "--json",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "foundelasticsearch",
+      "--as",
+      "FOUNDELASTICSEARCH",
+      "--wait",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "SPRING_ELASTICSEARCH_URIS",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
+`;
+
+exports[`generator - Heroku monolith application with elasticsearch and an app that already has the foundelasticsearch add-on should match files state snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Procfile": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/bootstrap-heroku.yml": {
+    "stateCleared": "modified",
+  },
+  "system.properties": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - Heroku monolith application with elasticsearch and an existing app with the bonsai add-on calls should match snapshot 1`] = `
 [
   [

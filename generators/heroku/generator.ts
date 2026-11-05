@@ -336,7 +336,19 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
           this.checkAddOnReturn({ addOn: 'Elasticsearch', stdout: exitCode === 0 ? stdout : '', stderr });
 
           let configured = false;
-          if (exitCode === 0) {
+          if (exitCode !== 0) {
+            // The alias already exists when the app has the add-on, so keep the settings a previous run set
+            const { stdout: uris, exitCode: getExitCode } = await this.spawnHeroku([
+              'config:get',
+              'SPRING_ELASTICSEARCH_URIS',
+              '--app',
+              this.herokuAppName!,
+            ]);
+            configured = getExitCode === 0 && uris.trim() !== '';
+            if (configured) {
+              this.log.info('Keeping the Elasticsearch settings the app already has');
+            }
+          } else {
             // The add-on's URL has no credentials, they're in FOUNDELASTICSEARCH_INITIAL_CREDENTIALS as user:password.
             // Spring Boot reads SPRING_ELASTICSEARCH_* from the environment, like an Elasticsearch of your own.
             const { stdout: config } = await this.spawnHeroku(['config', '--json', '--app', this.herokuAppName!]);

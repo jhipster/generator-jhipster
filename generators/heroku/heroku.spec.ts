@@ -60,6 +60,7 @@ describe('generator - Heroku', () => {
   let appInfoResult: { appName: string; result: any } | undefined;
   let configResult: any;
   let bonsaiUrl: string | undefined;
+  let existingElasticsearch: boolean;
 
   beforeEach(() => {
     createWithNameResult = undefined;
@@ -67,6 +68,7 @@ describe('generator - Heroku', () => {
     appInfoResult = undefined;
     configResult = undefined;
     bonsaiUrl = undefined;
+    existingElasticsearch = false;
 
     stub = exnode.fn((method: string, command: string, args: string[]) => {
       if (method === 'spawnCommand' && command === 'heroku plugins') {
@@ -93,6 +95,12 @@ describe('generator - Heroku', () => {
               }),
             })
           );
+        }
+        if (args[0] === 'addons:create' && args[1] === 'foundelasticsearch' && existingElasticsearch) {
+          return createSpawnCommandReturn({ exitCode: 1, stderr: 'FOUNDELASTICSEARCH is already in use' });
+        }
+        if (args[0] === 'config:get' && args[1] === 'SPRING_ELASTICSEARCH_URIS' && existingElasticsearch) {
+          return createSpawnCommandReturn({ stdout: 'https://jhipster-test.es.us-east-1.aws.found.io' });
         }
         if (args[0] === 'config:get' && args[1] === 'BONSAI_URL' && bonsaiUrl) {
           return createSpawnCommandReturn({ stdout: bonsaiUrl });
@@ -353,6 +361,33 @@ describe('generator - Heroku', () => {
         expect(elasticsearchWarnings()).toEqual([
           expect.stringContaining('Could not set the Elasticsearch settings from the foundelasticsearch add-on.'),
         ]);
+      });
+    });
+
+    describe('with elasticsearch and an app that already has the foundelasticsearch add-on', () => {
+      beforeEach(async () => {
+        existingElasticsearch = true;
+        await helpers
+          .runJHipster(GENERATOR_HEROKU)
+          .withJHipsterConfig({ searchEngine: 'elasticsearch' })
+          .withOptions({ skipBuild: true })
+          .withAnswers({
+            herokuAppName,
+            herokuRegion: 'us',
+            herokuDeployType: 'jar',
+            herokuJavaVersion: '11',
+            herokuElasticsearch: 'foundelasticsearch',
+          })
+          .withSpawnMock(stub);
+      });
+      it('should match files state snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('calls should match snapshot', () => {
+        expect(getRunResultCalls()).toMatchSnapshot();
+      });
+      it('keeps the Elasticsearch settings without a warning', () => {
+        expect(elasticsearchWarnings()).toEqual([]);
       });
     });
 
