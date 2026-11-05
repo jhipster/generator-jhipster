@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientBundlerVite) { _%>
+import { fileURLToPath } from 'node:url';
+
+<%_ } _%>
 import type { createModuleFederationConfig } from '@module-federation/sdk';
 
 import packageJson from './package.json' with { type: 'json' };
@@ -26,11 +30,16 @@ const apiVersion = '0.0.1';
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
 <%_ if (clientBundlerVite) { _%>
 // Application modules are not installed packages, `import` points the federation plugin to the source file.
+// The path is absolute because the dev server resolves it from a virtual module.
 const shareMappings = (...mappings: string[]) =>
   Object.fromEntries(
     mappings.map(map => [
       map,
-      { ...sharedDefaults, version: apiVersion, import: `./<%- relativeDir(clientRootDir, clientSrcDir) %>${map.replace('@/', 'app/')}` },
+      {
+        ...sharedDefaults,
+        version: apiVersion,
+        import: fileURLToPath(new URL(`./<%- relativeDir(clientRootDir, clientSrcDir) %>${map.replace('@/', 'app/')}`, import.meta.url)),
+      },
     ]),
   );
 <%_ } else { _%>
@@ -44,6 +53,16 @@ const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
 
+const applicationModules = shareMappings(
+  '@/shared/jhipster/constants',
+  '@/shared/alert/alert.service',
+  '@/locale/translation.service',
+);
+
+<%_ if (clientBundlerVite && applicationTypeMicroservice) { _%>
+const development = process.env.NODE_ENV !== 'production';
+
+<%_ } _%>
 export default {
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
@@ -57,11 +76,14 @@ export default {
   shareScope: 'default',
   shared: {
     ...shareDependencies(),
-    ...shareMappings(
-      '@/shared/jhipster/constants',
-      '@/shared/alert/alert.service',
-      '@/locale/translation.service',
-    ),
+<%_ if (clientBundlerVite && applicationTypeMicroservice) { _%>
+    // Workaround for https://github.com/module-federation/vite/issues/1507: the dev server evaluates the application modules
+    // before the shared packages they import, so only the build shares them. Like vite.config.ts, NODE_ENV tells a build
+    // from the dev server. Share them unconditionally once the fix is released.
+    ...(development ? {} : applicationModules),
+<%_ } else { _%>
+    ...applicationModules,
+<%_ } _%>
   },
   dts: false,
   manifest: true,
