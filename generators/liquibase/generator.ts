@@ -153,12 +153,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         });
         this.numberOfRows = application.clientFrameworkReact ? 10 : 30;
       },
-      liquibaseNeo4j({ application }) {
-        // TODO drop hardcoded version
-        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.3') {
-          application.javaDependencies['liquibase-neo4j'] = '5.0.0';
-        }
-      },
       addNeedles({ source, application }) {
         source.addLiquibaseChangelog = changelog =>
           this.editFile(`${application.srcMainResources}config/liquibase/master.xml`, addLiquibaseChangelogCallback(changelog));
@@ -534,8 +528,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             {
               groupId: 'org.liquibase.ext',
               artifactId: 'liquibase-neo4j',
-              // eslint-disable-next-line no-template-curly-in-string
-              version: application.javaDependencies['liquibase-neo4j'] ?? '${liquibase.version}',
+              // Pinned in the server libs.versions.toml while Spring Boot manages Liquibase 5.0.x
+              version: application.javaDependencies['liquibase-neo4j'],
               // Exclude current neo4j driver and use the one provided by spring-data
               // See: https://github.com/jhipster/generator-jhipster/pull/24241
               additionalContent: `
@@ -595,7 +589,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
             { gradleFile: 'gradle/liquibase.gradle' },
           );
         }
-        if (application.databaseTypeNeo4j && application.javaDependencies['liquibase-neo4j']) {
+        if (application.databaseTypeNeo4j) {
           source.addGradleDependencyCatalogLibrary!({
             libraryName: 'liquibase-neo4j',
             module: 'org.liquibase.ext:liquibase-neo4j',

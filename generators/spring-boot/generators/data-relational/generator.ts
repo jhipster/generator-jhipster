@@ -364,9 +364,11 @@ export default class SqlGenerator extends BaseApplicationGenerator<
       nativeGradleBuildTool({ application, source }) {
         if (!application.buildToolGradle || !application.graalvmSupport) return;
 
-        const { reactive, javaManagedProperties } = application;
+        const { reactive, javaDependencies, javaManagedProperties } = application;
         if (!reactive) {
-          source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version: javaManagedProperties['hibernate.version']! });
+          // The graalvm libs.versions.toml pins the plugin, which can lag behind the hibernate-core that Spring Boot manages
+          const version = javaDependencies['hibernate-orm'] ?? javaManagedProperties['hibernate.version']!;
+          source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version });
           source.addGradleDependencyCatalogPlugin!({
             addToBuild: true,
             pluginName: 'hibernate',
@@ -399,10 +401,10 @@ export default class SqlGenerator extends BaseApplicationGenerator<
               'setAutoCommit',
               // `receive` and `sendCommand` acquire the lock inside their `Flux.create` lambdas, which run at
               // subscribe time, so the enclosing method is no longer on the stack and BlockHound only sees the
-              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.1 and must be rechecked on driver upgrades.
-              'lambda$receive$14',
-              'lambda$sendCommand$16',
-              'lambda$sendCommand$19',
+              // synthetic lambda. Names are tied to r2dbc-mariadb 1.4.2 and must be rechecked on driver upgrades.
+              'lambda$receive$15',
+              'lambda$sendCommand$17',
+              'lambda$sendCommand$20',
             ],
           });
 

@@ -128,7 +128,7 @@ export type Source = JavaSource &
     /**
      * Override a property defined in Spring Boot Dependencies POM.
      */
-    overrideProperty?({ property, value }: { property: SpringBootProperties; value: string }): void;
+    overrideProperty?({ property, value, comment }: { property: SpringBootProperties; value: string; comment?: string }): void;
     /**
      * @example
      * addApplicationPropertiesClass({
