@@ -77,8 +77,8 @@
   <%_ } _%>
 <%_ } _%>
                 </dl>
-                <button type="submit"
-                        @click.prevent="previousState()"
+                <button type="button"
+                        @click="previousState()"
                         class="btn btn-info"
                         data-cy="entityDetailsBackButton">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.back') }}</span>
