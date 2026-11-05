@@ -95,6 +95,10 @@ export default class AlertService {
     const data = body as { message?: string; fieldErrors?: unknown } | undefined;
     let errorMessage: string | null = null;
     switch (status) {
+      case 401:
+        // The login is asked for again.
+        return;
+
       case 0:
         errorMessage = this.i18n.t('error.server.not.reachable').toString();
         break;

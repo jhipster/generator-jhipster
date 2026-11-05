@@ -172,9 +172,9 @@ const app = createApp({
 <%_ } else { _%>
             showLogin();
 <%_ } _%>
-            return;
           }
         }
+        // The caller fails, a 401 left out of its alerts.
         return Promise.reject(error);
       },
       error => Promise.reject(error),
