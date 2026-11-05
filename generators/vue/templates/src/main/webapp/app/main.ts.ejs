@@ -94,6 +94,11 @@ const app = createApp({
     const changeLanguage = async (newLanguage?: string | null) => {
       if (newLanguage && composer.locale.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
+  <%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+        if (store.authenticated) {
+          await translationService.refreshMicrofrontendTranslations(newLanguage);
+        }
+  <%_ } _%>
         translationStore.setCurrentLanguage(newLanguage);
       }
     };
@@ -110,6 +115,17 @@ const app = createApp({
       },
     );
 
+  <%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
+    watch(
+      () => store.authenticated,
+      async authenticated => {
+        if (authenticated && translationStore.currentLanguage) {
+          await translationService.refreshMicrofrontendTranslations(translationStore.currentLanguage);
+        }
+      },
+    );
+
+  <%_ } _%>
     watch(
       () => translationStore.currentLanguage,
       value => {
