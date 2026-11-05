@@ -25,6 +25,7 @@ application {
     baseName gateway
     buildTool maven
     clientFramework angular
+    languages [en, pt-br]
     clientTestFramework vitest
     creationTimestamp 1617901618886
     databaseMigration liquibase
@@ -47,6 +48,7 @@ application {
     buildTool maven
     cacheProvider no
     clientFramework angular
+    languages [en, pt-br]
     clientTestFramework vitest
     creationTimestamp 1617901618887
     databaseType neo4j
@@ -90,6 +92,7 @@ application {
     baseName notification,
     buildTool gradle
     clientFramework angular
+    languages [en, pt-br]
     clientTestFramework vitest
     creationTimestamp 1617901618889
     databaseType neo4j

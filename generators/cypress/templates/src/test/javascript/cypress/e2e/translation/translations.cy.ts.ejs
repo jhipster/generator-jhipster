@@ -1,0 +1,87 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const remotes = microfrontend ? microfrontends.filter(remote => !remote.self) : [];
+    const otherLanguage = languages.find(language => language !== nativeLanguage);
+_%>
+import { <%- remotes.length > 0 ? 'entityItemSelector, ' : '' %><%- otherLanguage ? 'languageMenuSelector, ' : '' %>navbarSelector } from '../../support/commands';
+
+describe('translations', () => {
+<%_ if (otherLanguage) { _%>
+  it('should translate the welcome of the home page', () => {
+    cy.readFile('<%- relativeDir(clientRootDir, clientI18nDir) %><%- otherLanguage %>/home.json').then(({ home }) => {
+      cy.visit('/');
+      cy.get(navbarSelector).find(languageMenuSelector).click();
+      cy.get('[data-cy="language-<%- otherLanguage %>"]').click();
+      cy.get('h1.display-4').should('contain.text', home.title);
+    });
+  });
+<%_ } _%>
+<%_ if (remotes.length > 0) { _%>
+  <%_ if (otherLanguage) { _%>
+
+  <%_ } _%>
+  describe('microfrontends', () => {
+    let username: string;
+    let password: string;
+
+    before(() => {
+      cy.credentials().then(credentials => {
+        ({ username, password } = credentials);
+      });
+    });
+
+    beforeEach(() => {
+      cy.login(username, password);
+      // The translations of the microfrontends arrive after the ones of the application.
+      cy.intercept('GET', '/services/**', req => {
+        req.on('response', res => {
+          res.setDelay(500);
+        });
+      });
+    });
+
+  <%_ for (const remote of remotes) { _%>
+    // A retry would hide a title replaced after the check.
+    it('should keep the application title once the <%- remote.baseName %> translations are loaded', { retries: 0 }, () => {
+      cy.visit('/');
+      cy.get(navbarSelector).find(entityItemSelector).click();
+      // A translated menu item of the microfrontend tells that its translations are loaded.
+      cy.get(`${navbarSelector} ${entityItemSelector} .dropdown-item[href^="/<%- remote.baseName.toLowerCase() %>/"]`, { timeout: 20000 })
+        .should('not.contain.text', 'global.menu.entities')
+        .and('not.contain.text', 'translation-not-found');
+      cy.get(navbarSelector).find('.navbar-title').should('have.text', '<%- capitalizedBaseName %>');
+    });
+
+    <%_ if (otherLanguage) { _%>
+    it('should load the <%- remote.baseName %> translations of another language', { retries: 0 }, () => {
+      cy.visit('/');
+      cy.get(navbarSelector).find(languageMenuSelector).click();
+      cy.get('[data-cy="language-<%- otherLanguage %>"]').click();
+      cy.get(navbarSelector).find(entityItemSelector).click();
+      cy.get(`${navbarSelector} ${entityItemSelector} .dropdown-item[href^="/<%- remote.baseName.toLowerCase() %>/"]`, { timeout: 20000 })
+        .should('not.contain.text', 'global.menu.entities')
+        .and('not.contain.text', 'translation-not-found');
+      cy.get(navbarSelector).find('.navbar-title').should('have.text', '<%- capitalizedBaseName %>');
+    });
+
+    <%_ } _%>
+  <%_ } _%>
+  });
+<%_ } _%>
+});

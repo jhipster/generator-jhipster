@@ -116,7 +116,7 @@
 <%_ } _%>
         </b-nav-item-dropdown>
 <%_ if (enableTranslation) { _%>
-        <b-nav-item-dropdown id="languagesnavBarDropdown" end v-if="languages && Object.keys(languages).length > 1">
+        <b-nav-item-dropdown id="languagesnavBarDropdown" data-cy="languageMenu" end v-if="languages && Object.keys(languages).length > 1">
           <template #button-content>
             <font-awesome-icon icon="flag" />
             <span class="no-bold">{{ t$('global.menu.language') }}</span>
@@ -124,6 +124,7 @@
           <b-dropdown-item
             v-for="(value, key) in languages"
             :key="`lang-${key}`"
+            :data-cy="`language-${key}`"
             @click="changeLanguage(key)"
             :class="{ active: isActiveLanguage(key) }"
           >
