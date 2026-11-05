@@ -52,4 +52,34 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`[]`);
     });
   });
+
+  describe('with pnpm', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators(['bootstrap'])
+        .withMockedSource()
+        .withSharedApplication({})
+        .withJHipsterConfig({ nodePackageManager: 'pnpm' });
+    });
+
+    it('should write the pnpm settings', () => {
+      result.assertFile('pnpm-workspace.yaml');
+    });
+  });
+
+  describe('with pnpm in a monorepository', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators(['bootstrap'])
+        .withMockedSource()
+        .withSharedApplication({})
+        .withJHipsterConfig({ nodePackageManager: 'pnpm', monorepository: true });
+    });
+
+    it('should leave the pnpm settings to the monorepository', () => {
+      result.assertNoFile('pnpm-workspace.yaml');
+    });
+  });
 });
