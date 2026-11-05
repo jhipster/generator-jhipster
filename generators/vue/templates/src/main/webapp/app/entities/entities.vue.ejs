@@ -2,4 +2,24 @@
   <router-view></router-view>
 </template>
 
-<script lang="ts" src="./entities.component.ts"></script>
+<script setup lang="ts">
+import { provide } from 'vue';
+
+<%_ if (generateBuiltInUserEntity) { _%>
+import UserService, { userServiceKey } from '@/entities/user/user.service';
+<%_ } _%>
+<%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
+import <%- entity.entityAngularName %>Service, { <%- entity.entityInstance %>ServiceKey } from './<%- entity.entityFolderName %>/<%- entity.entityFileName %>.service';
+<%_ } _%>
+// jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
+
+defineOptions({ name: 'Entities' });
+
+<%_ if (generateBuiltInUserEntity) { _%>
+provide(userServiceKey, () => new UserService());
+<%_ } _%>
+<%_ for (entity of entities.filter(entity => !entity.embedded)) { _%>
+provide(<%- entity.entityInstance %>ServiceKey, () => new <%- entity.entityAngularName %>Service());
+<%_ } _%>
+// jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
+</script>

@@ -421,9 +421,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/entities/entities.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/entities.routes.ts": {
     "stateCleared": "modified",
   },
@@ -431,9 +428,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
@@ -469,9 +463,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
@@ -503,9 +494,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple-details.vue": {
@@ -1324,9 +1312,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/entities/admin/authority/authority-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/admin/authority/authority-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/admin/authority/authority-details.vue": {
     "stateCleared": "modified",
   },
@@ -1366,9 +1351,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/entities/entities.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/entities.routes.ts": {
     "stateCleared": "modified",
   },
@@ -1376,9 +1358,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
@@ -1414,9 +1393,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
@@ -1448,9 +1424,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple-details.vue": {
@@ -2267,9 +2240,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/entities/entities.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/entities.routes.ts": {
     "stateCleared": "modified",
   },
@@ -2277,9 +2247,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
@@ -2315,9 +2282,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
@@ -2349,9 +2313,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple-details.vue": {
@@ -3195,9 +3156,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/entities/entities.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entities.routes.ts": {
     "stateCleared": "modified",
   },
@@ -3205,9 +3163,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
@@ -3243,9 +3198,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
@@ -3277,9 +3229,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.vue": {
@@ -4155,9 +4104,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/entities/admin/authority/authority-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/admin/authority/authority-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/admin/authority/authority-details.vue": {
     "stateCleared": "modified",
   },
@@ -4189,9 +4135,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/admin/user-management/user-management-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management-details.vue": {
@@ -4233,9 +4176,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/entities/entities.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entities.routes.ts": {
     "stateCleared": "modified",
   },
@@ -4243,9 +4183,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
@@ -4281,9 +4218,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
@@ -4315,9 +4249,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.vue": {
@@ -5108,9 +5039,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/entities/entities.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entities.routes.ts": {
     "stateCleared": "modified",
   },
@@ -5118,9 +5046,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
@@ -5156,9 +5081,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
@@ -5190,9 +5112,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.vue": {
@@ -5973,9 +5892,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/entities/entities.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entities.routes.ts": {
     "stateCleared": "modified",
   },
@@ -5983,9 +5899,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
@@ -6021,9 +5934,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
@@ -6055,9 +5965,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple-details.vue": {

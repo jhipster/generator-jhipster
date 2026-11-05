@@ -243,7 +243,6 @@ export const entitiesFiles = {
     {
       ...clientApplicationTemplatesBlock(),
       templates: [
-        'entities/entities.component.ts',
         'entities/entities.vue',
         'entities/entities.component.spec.ts',
         'entities/entities-menu.vue',
