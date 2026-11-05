@@ -370,26 +370,28 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         await this.spawnHeroku(configSetCmd, { stdio: 'pipe' });
       },
 
-      async configureJwtSecret({ application }) {
-        if (!this.hasHerokuCli || !application.authenticationTypeJwt) return;
+      async configureSecrets({ application }) {
+        if (!this.hasHerokuCli) return;
 
-        // The JWT secret is only in application-secret-samples.yml, which the prod profile doesn't load
-        const name = 'JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET';
-        if (!application.applicationTypeMonolith) {
-          this.log.warn(`Set the same ${name} on the gateway and each microservice, so they accept each other's tokens.`);
-          return;
+        // The secrets are only in application-secret-samples.yml, which the prod profile doesn't load
+        if (application.authenticationTypeJwt) {
+          const name = 'JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET';
+          if (application.applicationTypeMonolith) {
+            await this.setHerokuConfigIfMissing(name, createBase64Secret(64, this.options.reproducibleTests), { secret: true });
+          } else if (!application.serviceDiscoveryEureka) {
+            // With Eureka, the JHipster Registry's central config serves the shared JWT secret
+            const value = await this.getHerokuConfig(name);
+            if (value === '') {
+              this.log.warn(
+                `Set the same ${name} on the gateway and each microservice, so they accept each other's tokens:\n\t${this.herokuConfigSetCommand(name, '<value>')}`,
+              );
+            }
+          }
+        } else if (application.authenticationTypeSession && !application.reactive) {
+          await this.setHerokuConfigIfMissing('JHIPSTER_SECURITY_REMEMBER_ME_KEY', createBase64Secret(this.options.reproducibleTests), {
+            secret: true,
+          });
         }
-        const { stdout } = await this.spawnHeroku(['config:get', name, '--app', this.herokuAppName!]);
-        if (stdout.trim()) return;
-
-        this.log.log(chalk.bold('\nSetting a JWT secret'));
-        // Not piped, so the secret isn't logged
-        await this.spawnHeroku([
-          'config:set',
-          `${name}=${createBase64Secret(64, this.options.reproducibleTests)}`,
-          '--app',
-          this.herokuAppName!,
-        ]);
       },
     });
   }
@@ -474,10 +476,7 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
             }
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
-            const { stdout: configData } = await this.spawnHeroku(['config:get', configName, '--app', this.herokuAppName!]);
-            if (!configData) {
-              await this.spawnHeroku(['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName!]);
-            }
+            await this.setHerokuConfigIfMissing(configName, configValues);
 
             const { stdout: buildpackData } = await this.spawnHeroku(['buildpacks', '--app', this.herokuAppName!]);
             if (!buildpackData.includes(buildpack)) {
@@ -537,6 +536,42 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
    */
   addMavenProfile(profileId: string, other: string) {
     createPomStorage(this, { sortFile: false }).addProfile({ id: profileId, content: other });
+  }
+
+  herokuConfigSetCommand(name: string, value: string) {
+    return `heroku config:set ${name}=${value} --app ${this.herokuAppName}`;
+  }
+
+  /**
+   * Get a config var of the Heroku app.
+   * @returns the value, an empty string when the var isn't set, or undefined when the Heroku CLI failed
+   */
+  async getHerokuConfig(name: string): Promise<string | undefined> {
+    const { stdout, exitCode } = await this.spawnHeroku(['config:get', name, '--app', this.herokuAppName!]);
+    if (exitCode !== 0) {
+      this.log.warn(`Could not read ${name} from the Heroku app ${this.herokuAppName}, leaving it unchanged.`);
+      return undefined;
+    }
+    return stdout.trim();
+  }
+
+  /**
+   * Set a config var of the Heroku app, unless it's already set or can't be read.
+   * Values marked as secret are left out of the messages.
+   */
+  async setHerokuConfigIfMissing(name: string, value: string, { secret = false }: { secret?: boolean } = {}): Promise<void> {
+    const currentValue = await this.getHerokuConfig(name);
+    if (currentValue !== '') return;
+
+    this.log.log(chalk.bold(`\nSetting ${name}`));
+    // spawnHeroku only prints the output when the stdio option is 'pipe', so the value stays out of the log.
+    // Trade-off: config:set takes the value as an argument, so other local users can see it with ps while the command runs.
+    const { exitCode } = await this.spawnHeroku(['config:set', `${name}=${value}`, '--app', this.herokuAppName!]);
+    if (exitCode !== 0) {
+      this.log.warn(
+        `Could not set ${name} on the Heroku app. Set it with:\n\t${this.herokuConfigSetCommand(name, secret ? '<value>' : value)}`,
+      );
+    }
   }
 
   async spawnHerokuCommand(
