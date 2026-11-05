@@ -23,9 +23,6 @@ import { useEffect
 import { Button, Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, ' : '' %>Row<%- anyFieldHasDocumentation ? ', Tooltip' : '' %> } from 'react-bootstrap';
 import {
   Translate,
-<%_ if (anyFieldIsBlobDerived) { _%>
-  byteSize,
-<%_ } _%>
 <%_ if (anyFieldIsDateDerived) { _%>
   TextFormat
 <%_ } _%>
@@ -42,7 +39,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 <%_ if (anyFieldHasFileBasedContentType) { _%>
-import { openFile } from 'app/shared/jhipster/data-utils';
+import { byteSize, openFile } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
 
 <%_ if (!readOnly) { _%>
