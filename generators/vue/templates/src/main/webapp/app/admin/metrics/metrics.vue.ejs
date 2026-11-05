@@ -132,7 +132,7 @@
       </div>
     </div>
 
-    <h3>{{ t$('metrics.jvm.gc.title') }}</h3>
+    <h3 id="garbageCollectorMetrics">{{ t$('metrics.jvm.gc.title') }}</h3>
     <div class="row" v-if="!updatingMetrics && isObjectExisting(metrics, 'garbageCollector')">
       <div class="col-md-4">
         <div>
@@ -183,7 +183,7 @@
         </div>
       </div>
       <div class="table-responsive">
-        <table class="table table-striped" aria-describedby="Jvm gc">
+        <table class="table table-striped" aria-describedby="garbageCollectorMetrics">
           <thead>
             <tr>
               <th scope="col"></th>
@@ -214,11 +214,11 @@
       </div>
     </div>
 
-    <h3>{{ t$('metrics.jvm.http.title') }}</h3>
+    <h3 id="requestMetrics">{{ t$('metrics.jvm.http.title') }}</h3>
     <table
       class="table table-striped"
       v-if="!updatingMetrics && isObjectExisting(metrics, 'http.server.requests')"
-      aria-describedby="Jvm http"
+      aria-describedby="requestMetrics"
     >
       <thead>
         <tr>
@@ -244,9 +244,9 @@
       </tbody>
     </table>
 
-    <h3>Endpoints requests (time in milliseconds)</h3>
+    <h3 id="endpointsRequestsMetrics">Endpoints requests (time in milliseconds)</h3>
     <div class="table-responsive" v-if="!updatingMetrics">
-      <table class="table table-striped" aria-describedby="Endpoint">
+      <table class="table table-striped" aria-describedby="endpointsRequestsMetrics">
         <thead>
           <tr>
             <th scope="col">Method</th>
@@ -268,9 +268,9 @@
       </table>
     </div>
 
-    <h3>{{ t$('metrics.cache.title') }}</h3>
+    <h3 id="cacheMetrics">{{ t$('metrics.cache.title') }}</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExisting(metrics, 'cache')">
-      <table class="table table-striped" aria-describedby="Cache">
+      <table class="table table-striped" aria-describedby="cacheMetrics">
         <thead>
           <tr>
             <th scope="col">{{ t$('metrics.cache.cachename') }}</th>
@@ -304,9 +304,9 @@
       </table>
     </div>
 
-    <h3>{{ t$('metrics.datasource.title') }}</h3>
+    <h3 id="datasourceMetrics">{{ t$('metrics.datasource.title') }}</h3>
     <div class="table-responsive" v-if="!updatingMetrics && isObjectExistingAndNotEmpty(metrics, 'databases')">
-      <table class="table table-striped" aria-describedby="Connection pool">
+      <table class="table table-striped" aria-describedby="datasourceMetrics">
         <thead>
           <tr>
             <th scope="col">

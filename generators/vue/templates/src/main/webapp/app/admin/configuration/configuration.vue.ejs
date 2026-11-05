@@ -22,8 +22,8 @@
 
     <div v-if="allConfiguration && configuration">
       <span>{{ t$('configuration.filter') }}</span> <input type="text" v-model="filtered" class="form-control" />
-      <h3>Spring configuration</h3>
-      <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="Configuration">
+      <h3 id="spring-configuration">Spring configuration</h3>
+      <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="spring-configuration">
         <thead>
           <tr>
             <jhi-sort-header class="w-40" field-name="prefix" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
@@ -50,11 +50,11 @@
           </tr>
         </tbody>
       </table>
-      <div v-for="key in keys(allConfiguration)" :key="key">
-        <h4>
+      <div v-for="(key, i) in keys(allConfiguration)" :key="key">
+        <h4 :id="'property-source-' + i">
           <span>{{ key }}</span>
         </h4>
-        <table class="table table-sm table-striped table-bordered table-responsive d-table" aria-describedby="Properties">
+        <table class="table table-sm table-striped table-bordered table-responsive d-table" :aria-describedby="'property-source-' + i">
           <thead>
             <tr>
               <th class="w-40" scope="col">Property</th>
