@@ -157,6 +157,7 @@ export const vueFiles = asWriteFilesSection({
       condition: generator => generator.generateUserManagement,
       ...clientApplicationTemplatesBlock(),
       templates: [
+        'account/account-validations.ts',
         'account/change-password/change-password.vue',
         'account/change-password/change-password.component.spec.ts',
         'account/register/register.vue',

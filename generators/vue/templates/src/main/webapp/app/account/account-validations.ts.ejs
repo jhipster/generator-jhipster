@@ -1,0 +1,48 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { email, helpers, maxLength, minLength, required } from '@vuelidate/validators';
+
+/** The rules of the fields of the account, from the fields of the user. */
+export const accountValidations = {
+<%_ for (const fieldName of ['login', 'firstName', 'lastName', 'email']) { _%>
+  <%_ const field = user.fieldsByName[fieldName]; _%>
+  <%- fieldName %>: {
+  <%_ if (field.fieldValidationRequired) { _%>
+    required,
+  <%_ } _%>
+  <%_ if (field.fieldValidationMinLength) { _%>
+    minLength: minLength(<%- field.fieldValidateRulesMinlength %>),
+  <%_ } _%>
+  <%_ if (field.fieldValidationMaxLength) { _%>
+    maxLength: maxLength(<%- field.fieldValidateRulesMaxlength %>),
+  <%_ } _%>
+  <%_ if (fieldName === 'login') { _%>
+    pattern: helpers.regex(/<%- webappLoginRegExp %>/),
+  <%_ } else if (field.fieldValidationPattern) { _%>
+    pattern: helpers.regex(new RegExp('<%- field.fieldValidateRulesPatternVue %>')),
+  <%_ } _%>
+  <%_ if (field.fieldValidationEmail) { _%>
+    email,
+  <%_ } _%>
+  },
+<%_ } _%>
+};
+
+/** The rules of a password, as the other clients validate it. */
+export const passwordValidations = { required, minLength: minLength(4), maxLength: maxLength(50) };

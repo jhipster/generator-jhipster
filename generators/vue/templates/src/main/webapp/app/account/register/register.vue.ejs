@@ -33,24 +33,20 @@
               id="username"
               name="login"
               :class="{ 'is-valid': !v$.registerAccount.login.$invalid, 'is-invalid': v$.registerAccount.login.$invalid }"
-              required
-              minlength="1"
-              maxlength="50"
-              pattern="^[a-zA-Z0-9!#$&'*+=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
               :placeholder="t$('global.form[\'username.placeholder\']')"
               data-cy="username"
             />
             <div v-if="v$.registerAccount.login.$anyDirty && v$.registerAccount.login.$invalid">
-              <small class="form-text text-danger" v-if="v$.registerAccount.login.required.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.required?.$invalid">{{
                 t$('register.messages.validate.login.required')
               }}</small>
-              <small class="form-text text-danger" v-if="v$.registerAccount.login.minLength.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.minLength?.$invalid">{{
                 t$('register.messages.validate.login.minlength')
               }}</small>
-              <small class="form-text text-danger" v-if="v$.registerAccount.login.maxLength.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.maxLength?.$invalid">{{
                 t$('register.messages.validate.login.maxlength')
               }}</small>
-              <small class="form-text text-danger" v-if="v$.registerAccount.login.pattern.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.login.pattern?.$invalid">{{
                 t$('register.messages.validate.login.pattern')
               }}</small>
             </div>
@@ -64,24 +60,20 @@
               name="email"
               :class="{ 'is-valid': !v$.registerAccount.email.$invalid, 'is-invalid': v$.registerAccount.email.$invalid }"
               v-model="v$.registerAccount.email.$model"
-              minlength="5"
-              maxlength="254"
-              email
-              required
               :placeholder="t$('global.form[\'email.placeholder\']')"
               data-cy="email"
             />
             <div v-if="v$.registerAccount.email.$anyDirty && v$.registerAccount.email.$invalid">
-              <small class="form-text text-danger" v-if="v$.registerAccount.email.required.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.required?.$invalid">{{
                 t$('global.messages.validate.email.required')
               }}</small>
-              <small class="form-text text-danger" v-if="v$.registerAccount.email.email.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.email?.$invalid">{{
                 t$('global.messages.validate.email.invalid')
               }}</small>
-              <small class="form-text text-danger" v-if="v$.registerAccount.email.minLength.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.minLength?.$invalid">{{
                 t$('global.messages.validate.email.minlength')
               }}</small>
-              <small class="form-text text-danger" v-if="v$.registerAccount.email.maxLength.$invalid">{{
+              <small class="form-text text-danger" v-if="v$.registerAccount.email.maxLength?.$invalid">{{
                 t$('global.messages.validate.email.maxlength')
               }}</small>
             </div>
@@ -95,9 +87,6 @@
               name="password"
               :class="{ 'is-valid': !v$.registerAccount.password.$invalid, 'is-invalid': v$.registerAccount.password.$invalid }"
               v-model="v$.registerAccount.password.$model"
-              minlength="4"
-              maxlength="50"
-              required
               :placeholder="t$('global.form[\'newpassword.placeholder\']')"
               data-cy="firstPassword"
             />
@@ -124,9 +113,6 @@
               name="confirmPasswordInput"
               :class="{ 'is-valid': !v$.confirmPassword.$invalid, 'is-invalid': v$.confirmPassword.$invalid }"
               v-model="v$.confirmPassword.$model"
-              minlength="4"
-              maxlength="50"
-              required
               :placeholder="t$('global.form[\'confirmpassword.placeholder\']')"
               data-cy="secondPassword"
             />
@@ -169,16 +155,15 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { useVuelidate } from '@vuelidate/core';
-import { email, helpers, maxLength, minLength, required, sameAs } from '@vuelidate/validators';
+import { sameAs } from '@vuelidate/validators';
 
+import { accountValidations, passwordValidations } from '@/account/account-validations';
 import { useLoginModal } from '@/account/login-modal';
 import RegisterService, { registerServiceKey } from '@/account/register/register.service';
 import { currentLanguageKey } from '@/shared/config/injection-keys';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 
 defineOptions({ name: 'Register' });
-
-const loginPattern = helpers.regex(/<%- webappLoginRegExp %>/);
 
 const { showLogin } = useLoginModal();
 const registerService = inject(registerServiceKey, () => new RegisterService(), true);
@@ -201,28 +186,12 @@ const registerAccount = ref<{ login?: string; email?: string; password?: string;
 
 const rules = computed(() => ({
   registerAccount: {
-    login: {
-      required,
-      minLength: minLength(1),
-      maxLength: maxLength(50),
-      pattern: loginPattern,
-    },
-    email: {
-      required,
-      minLength: minLength(5),
-      maxLength: maxLength(254),
-      email,
-    },
-    password: {
-      required,
-      minLength: minLength(4),
-      maxLength: maxLength(254),
-    },
+    login: accountValidations.login,
+    email: accountValidations.email,
+    password: passwordValidations,
   },
   confirmPassword: {
-    required,
-    minLength: minLength(4),
-    maxLength: maxLength(50),
+    ...passwordValidations,
     sameAsPassword: sameAs(registerAccount.value.password),
   },
 }));
