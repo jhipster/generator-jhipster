@@ -1219,9 +1219,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/configuration/configuration.component.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/admin/configuration/configuration.service.ts": {
     "stateCleared": "modified",
   },
@@ -1262,9 +1259,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/logs/logs.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/admin/logs/logs.component.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/admin/logs/logs.service.ts": {
@@ -3081,9 +3075,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/configuration/configuration.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/configuration/configuration.service.ts": {
     "stateCleared": "modified",
   },
@@ -3115,9 +3106,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/logs/logs.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.service.ts": {
@@ -4050,9 +4038,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/configuration/configuration.component.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/configuration/configuration.service.ts": {
     "stateCleared": "modified",
   },
@@ -4084,9 +4069,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/logs/logs.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.service.ts": {
