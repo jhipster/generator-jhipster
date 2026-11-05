@@ -11,6 +11,7 @@ cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '8.0.4' }
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
 # liquibase-neo4j 5.0.4 and 5.0.4.1 fail with "Could not retrieve current Neo4j user" against the neo4j-java-driver Spring Boot manages
+# TODO: drop the pin, and use Spring Boot's liquibase.version again, once a liquibase-neo4j release works with the managed driver (Liquibase 5.0.x)
 liquibase-neo4j = { module = 'org.liquibase.ext:liquibase-neo4j', version = '5.0.0' }
 
 neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '4.2.0' }

@@ -364,9 +364,11 @@ export default class SqlGenerator extends BaseApplicationGenerator<
       nativeGradleBuildTool({ application, source }) {
         if (!application.buildToolGradle || !application.graalvmSupport) return;
 
-        const { reactive, javaDependencies } = application;
+        const { reactive, javaDependencies, javaManagedProperties } = application;
         if (!reactive) {
-          source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version: javaDependencies['hibernate-orm'] });
+          // The graalvm libs.versions.toml pins the plugin, which can lag behind the hibernate-core that Spring Boot manages
+          const version = javaDependencies['hibernate-orm'] ?? javaManagedProperties['hibernate.version']!;
+          source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version });
           source.addGradleDependencyCatalogPlugin!({
             addToBuild: true,
             pluginName: 'hibernate',

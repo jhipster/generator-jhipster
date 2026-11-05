@@ -97,7 +97,10 @@ export type Source = BaseSimpleApplicationSource &
       ...definitions: ConditionalJavaDefinition[]
     ): void;
     addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions & { dev?: boolean }): void;
-    addJavaProperty?({ property, value }: { property: string; value: string }): void;
+    /**
+     * Add a property to gradle.properties or pom.xml. The comment is only written to gradle.properties.
+     */
+    addJavaProperty?({ property, value, comment }: { property: string; value: string; comment?: string }): void;
     hasJavaProperty?(propertyName: string): boolean;
     hasJavaManagedProperty?(propertyName: string): boolean;
     addMainLog?({ name, level }: { name: string; level: string }): void;

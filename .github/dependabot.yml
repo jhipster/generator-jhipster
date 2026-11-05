@@ -261,6 +261,17 @@ updates:
       - 'theme: dependencies'
       - 'theme: java'
       - 'skip-changelog'
+    ignore:
+      # liquibase-neo4j 5.0.4 and 5.0.4.1 fail against the neo4j-java-driver Spring Boot manages, see libs.versions.toml.
+      - dependency-name: 'org.liquibase.ext:liquibase-neo4j'
+        versions: ['5.0.4', '5.0.4.1']
+      # Overrides of Spring Boot's managed versions only apply to patch releases of the managed line.
+      - dependency-name: 'tools.jackson:jackson-bom'
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+      - dependency-name: 'com.fasterxml.jackson:jackson-bom'
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+      - dependency-name: 'org.mariadb.jdbc:mariadb-java-client'
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
 
   - package-ecosystem: 'gradle'
     directory: '/generators/spring-cloud/resources/'

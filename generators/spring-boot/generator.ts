@@ -18,7 +18,6 @@
  */
 import chalk from 'chalk';
 import uniqBy from 'lodash-es/uniqBy.js';
-import { lt as semverLessThan } from 'semver';
 
 import { getEntityDerivedPropertyMutations } from '../../lib/command/mutations.ts';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
@@ -45,6 +44,7 @@ import cleanupTask from './cleanup.ts';
 import command from './command.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
+import { MANAGED_VERSION_OVERRIDES, getManagedVersionOverrides } from './resources/managed-version-overrides.ts';
 import springBootDependencies from './resources/spring-boot-dependencies-4.ts';
 import type {
   Application as SpringBootApplication,
@@ -55,6 +55,7 @@ import type {
   Options as SpringBootOptions,
   Source as SpringBootSource,
   SpringBootModule,
+  SpringBootProperties,
 } from './types.ts';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
@@ -726,12 +727,17 @@ ${classProperties
   get postWriting() {
     return this.asPostWritingTaskGroup({
       overrideManagedVersions({ application, source }) {
-        for (const name of ['jackson-bom', 'jackson-2-bom', 'mariadb'] as const) {
-          const managedVersion = application.javaManagedProperties[`${name}.version`];
-          const version = application.javaDependencies[name];
-          if (managedVersion && version && semverLessThan(managedVersion, version)) {
-            source.overrideProperty!({ property: `${name}.version`, value: version });
-          }
+        const overrides = getManagedVersionOverrides({
+          names: MANAGED_VERSION_OVERRIDES.filter(name => name !== 'mariadb' || application.prodDatabaseTypeMariadb),
+          managedProperties: application.javaManagedProperties,
+          dependencies: application.javaDependencies,
+        });
+        for (const { property, value } of overrides) {
+          source.overrideProperty!({
+            property: property as SpringBootProperties,
+            value,
+            comment: `Temporary override of the version managed by Spring Boot ${application.javaDependencies['spring-boot']}, for security fixes`,
+          });
         }
       },
       baseDependencies({ application, source }) {
