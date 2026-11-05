@@ -455,11 +455,11 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
           this.log.log(chalk.bold('\nDeploying application'));
           // The build plugins upload the jar that productionBuild built, with the Procfile and system.properties.
           // gradle/heroku.gradle sets the Gradle app name. Both plugins build with heroku/jvm.
-          // deploy-only, unlike deploy, doesn't run the package phase again.
+          // deploy-only, unlike deploy, doesn't run the package phase again. The heroku profile limits the upload to the jar.
           const deployCommand =
             application.buildToolGradle ?
               './gradlew deployHeroku --no-daemon'
-            : `./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy-only -Dheroku.appName=${this.herokuAppName}`;
+            : `./mvnw -ntp -Pheroku com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy-only -Dheroku.appName=${this.herokuAppName}`;
 
           // Heroku CLI 11 stores the `heroku login` token in the OS keychain, which the Gradle plugin can't read.
           let env: Record<string, string> | undefined;

@@ -106,6 +106,18 @@ exports[`generator - Heroku microservice application with JAR deployment should 
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -314,6 +326,18 @@ exports[`generator - Heroku monolith application in the EU should match files sn
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -519,6 +543,18 @@ exports[`generator - Heroku monolith application in the US should match files sn
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -781,6 +817,18 @@ exports[`generator - Heroku monolith application with Git deployment should matc
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -988,6 +1036,18 @@ exports[`generator - Heroku monolith application with PostgreSQL should match fi
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -1219,6 +1279,18 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -1438,6 +1510,18 @@ exports[`generator - Heroku monolith application with elasticsearch should match
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -1634,6 +1718,18 @@ exports[`generator - Heroku monolith application with existing app should match 
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <!-- Upload only the jar, not the rest of target, which holds the Node.js used for the client build -->
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.7</version>
+                        <configuration>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>target/\${project.build.finalName}.jar</include>
+                            </includes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

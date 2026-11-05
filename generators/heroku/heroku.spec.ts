@@ -86,7 +86,7 @@ describe('generator - Heroku', () => {
   });
 
   describe('JAR deployment', () => {
-    const mavenDeployCommand = `./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy-only -Dheroku.appName=${herokuAppName}`;
+    const mavenDeployCommand = `./mvnw -ntp -Pheroku com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy-only -Dheroku.appName=${herokuAppName}`;
     const gradleDeployCommand = './gradlew deployHeroku --no-daemon';
     const spawnCommands = () =>
       getRunResultCalls()
