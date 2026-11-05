@@ -39,7 +39,7 @@
     "@vitest/eslint-plugin": "1.6.28",
     "autoprefixer": "10.6.2",
     "eslint": "10.14.0",
-    "globals": "17.13.0",
+    "globals": "17.14.0",
     "happy-dom": "21.0.4",
     "jiti": "2.7.0",
     "postcss-rtlcss": "6.0.0",
