@@ -1,4 +1,5 @@
 {
+  "artifactId": "spring-boot-dependencies",
   "version": "4.1.2",
   "properties": {
     "activemq.version": "6.2.10",

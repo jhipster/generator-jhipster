@@ -28,6 +28,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
   springBootDependenciesFile!: string;
   pomContent!: string;
   springBootJson!: {
+    artifactId: string;
     version: string;
     properties: Record<string, string>;
     modules: Record<string, string>;
@@ -61,6 +62,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
         this.destinationRoot(getPackageRoot());
         const pom = parseMavenPom(this.pomContent);
         this.springBootJson = {
+          artifactId: pom.project.artifactId,
           version: pom.project.version,
           properties: pom.project.properties ?? {},
           modules: Object.fromEntries(
