@@ -1,0 +1,187 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { computed, ref, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import { useIntersectionObserver } from '@vueuse/core';
+import { type AxiosResponse } from 'axios';
+
+import useDataUtils from '@/shared/data/data-utils.service';
+import { PAGE_PARAM, SORT_PARAM, buildSortParam, parsePageParam, parseSortParam } from '@/shared/jhipster/pagination';
+import { ITEMS_PER_PAGE } from '@/shared/sort/sorts';
+
+import { type RequestOptions, useControlledRequest } from './controlled-request';
+
+/** The query of a load of the list: with a pagination, its page (from 0), its size and its sort. */
+export type ListQuery = RequestOptions & { page?: number; size?: number; sort?: string[] };
+
+export type UseEntityListOptions<T> = {
+  /** Loads the list. */
+  retrieve: (query: ListQuery) => Promise<AxiosResponse<T[]>>;
+  /** Loads the results of a search. */
+  search?: (text: string, query: ListQuery) => Promise<AxiosResponse<T[]>>;
+  /**
+   * The list in pages, its page and its sort in the query parameters of the route, or loaded a page more when its end is
+   * visible, its sort in the route. Without it, the list is loaded whole.
+   */
+  pagination?: 'pagination' | 'infinite-scroll';
+  /** Called with the error of a failed load. */
+  onError?: (error: unknown) => void;
+};
+
+/**
+ * The list of an entity: its load, its search, its page and its sort.
+ */
+export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseEntityListOptions<T>) => {
+  const paged = pagination !== undefined;
+  const infiniteScroll = pagination === 'infinite-scroll';
+  const route = paged ? useRoute() : undefined;
+  const router = paged ? useRouter() : undefined;
+
+  // The text of the search field, and the search submitted, which loads.
+  const currentSearch = ref('');
+  const searchQuery = ref('');
+  const itemsPerPage = ref(ITEMS_PER_PAGE);
+  const totalItems = ref(0);
+  const links = ref<Record<string, number>>({});
+
+  const sortState = computed(() => parseSortParam(route?.query[SORT_PARAM]?.toString() ?? 'id,asc'));
+  const propOrder = computed(() => sortState.value.predicate ?? 'id');
+  const reverse = computed(() => sortState.value.order === 'desc');
+  const page =
+    pagination === 'pagination'
+      ? computed({
+          get: () => parsePageParam(route!.query[PAGE_PARAM]?.toString()),
+          set: (value: number) => router!.push({ query: { ...route!.query, [PAGE_PARAM]: String(value) } }),
+        })
+      : ref(1);
+
+  const {
+    data: items,
+    isLoading: isFetching,
+    execute: retrieveItems,
+  } = useControlledRequest(
+    async (params, { signal }): Promise<T[]> => {
+      const query: ListQuery = paged ? { page: params.page - 1, size: itemsPerPage.value, sort: params.sort, signal } : { signal };
+      const res = search && params.search ? await search(params.search, query) : await retrieve(query);
+      if (paged) {
+        totalItems.value = Number(res.headers['x-total-count']);
+      }
+      if (infiniteScroll) {
+        links.value = useDataUtils().parseLinks(res.headers?.['link']);
+        // The first page starts the list, the next ones are added to it.
+        return params.page === 1 ? (res.data ?? []) : [...items.value, ...(res.data ?? [])];
+      }
+      return res.data;
+    },
+    {
+      // A change of the search, of the page or of the order loads again.
+      params: () => ({
+        search: searchQuery.value,
+        page: page.value,
+        sort: paged ? buildSortParam({ predicate: propOrder.value, order: reverse.value ? 'desc' : 'asc' }, 'id') : [],
+      }),
+      initialData: (): T[] => [],
+      onError,
+    },
+  );
+
+  const clear = () => {
+    // With the infinite scroll, the list loads again from its first page, the parameters changed or not.
+    const unchanged = page.value === 1 && !searchQuery.value;
+    currentSearch.value = '';
+    searchQuery.value = '';
+    page.value = 1;
+    if (infiniteScroll) {
+      links.value = {};
+      if (unchanged) {
+        retrieveItems();
+      }
+    }
+  };
+
+  /** Loads the list again, from its first page with the infinite scroll. */
+  const reload = () => (infiniteScroll ? clear() : retrieveItems());
+
+  const submitSearch = (text: string) => {
+    if (!text) {
+      return clear();
+    }
+    // The same search loads again.
+    if (page.value === 1 && searchQuery.value === text) {
+      retrieveItems();
+    }
+    // The results start at their first page.
+    page.value = 1;
+    currentSearch.value = text;
+    searchQuery.value = text;
+  };
+
+  const changeOrder = (newOrder: string) => {
+    const descending = propOrder.value === newOrder && !reverse.value;
+    if (infiniteScroll) {
+      // The first page of the new order.
+      links.value = {};
+      page.value = 1;
+    }
+    router!.push({
+      query: {
+        ...route!.query,
+        ...(pagination === 'pagination' ? { [PAGE_PARAM]: '1' } : {}),
+        [SORT_PARAM]: buildSortParam({ predicate: newOrder, order: descending ? 'desc' : 'asc' }),
+      },
+    });
+  };
+
+  const infiniteScrollEl = ref<HTMLElement | null>(null);
+  if (infiniteScroll) {
+    const intersectionObserver = useIntersectionObserver(
+      infiniteScrollEl,
+      ([entry]) => {
+        if (entry.isIntersecting && !isFetching.value) {
+          page.value++;
+        }
+      },
+      { threshold: 0.5, immediate: false },
+    );
+    watchEffect(() => {
+      if (links.value.next) {
+        intersectionObserver.resume();
+      } else if (intersectionObserver.isActive.value) {
+        intersectionObserver.pause();
+      }
+    });
+  }
+
+  return {
+    items,
+    isFetching,
+    reload,
+    clear,
+    currentSearch,
+    search: submitSearch,
+    page,
+    itemsPerPage,
+    totalItems,
+    propOrder,
+    reverse,
+    changeOrder,
+    infiniteScrollEl,
+  };
+};
