@@ -94,9 +94,6 @@ export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): 
   const options = { ...customOptions };
   const { applicationType } = options;
 
-  if (options.graalvmSupport) {
-    options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
-  }
   if (applicationType === APPLICATION_TYPE_GATEWAY) {
     return getConfigForGatewayApplication(options);
   }
