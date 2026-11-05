@@ -37,6 +37,10 @@ runs:
       run: |
         echo "::group::jhipster-bom"
         ./mvnw dependency:go-offline --ntp
+        # Builds the bom as jhipster/actions/build-jhipster-bom does, whose plugins are not all downloaded by dependency:go-offline.
+        npm run install-ci || true
+        # A job that does not build the bom must not find it in the cache.
+        rm -rf ~/.m2/repository/tech/jhipster/*/0.0.0-CICD ~/.m2/repository/tech/jhipster/*/maven-metadata-local.xml
         echo "::endgroup::"
       if: always() && inputs.jhipster-bom-path
       shell: bash
