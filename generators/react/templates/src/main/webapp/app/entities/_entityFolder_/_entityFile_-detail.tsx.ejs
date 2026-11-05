@@ -20,7 +20,7 @@ import { useEffect
 <%_ if (!readOnly) { _%>
 , useState
 <%_ } _%> } from 'react';
-import { Button, Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, ' : '' %>Row<%- anyFieldHasDocumentation ? ', Tooltip' : '' %> } from 'react-bootstrap';
+import { <%- builtInUserManagement ? 'Badge, ' : '' %>Button, Col, <%- anyFieldHasDocumentation ? 'OverlayTrigger, ' : '' %>Row<%- anyFieldHasDocumentation ? ', Tooltip' : '' %> } from 'react-bootstrap';
 import {
   Translate,
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -63,6 +63,9 @@ export const <%- entityReactName %>Detail = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+  const account = useAppSelector(state => state.authentication.account);
+<%_ } _%>
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   return (
     <Row className="justify-content-center">
@@ -72,7 +75,7 @@ export const <%- entityReactName %>Detail = () => {
         </h2>
         <hr />
           <dl className="row-md jh-entity-details">
-<%_ for (field of fields) { _%>
+<%_ for (field of fields.filter(field => !field.hidden)) { _%>
   <%_ const { fieldName, fieldNameHumanized } = field; _%>
             <dt>
               <span id="<%- fieldName %>">
@@ -93,7 +96,9 @@ export const <%- entityReactName %>Detail = () => {
   <%_ } _%>
             </dt>
             <dd>
-  <%_ if (field.fieldTypeBoolean) { _%>
+  <%_ if (field.clientConstantsAsValues) { _%>
+              {<%- entityInstance %>Entity.<%- fieldName %><%- field.collection ? "?.join(', ')" : '' %>}
+  <%_ } else if (field.fieldTypeBoolean) { _%>
               {<%- entityInstance %>Entity.<%- fieldName %> ? 'true' : 'false'}
   <%_ } else if (field.fieldTypeTimed) { _%>
               {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_DATE_FORMAT} /> : null}
@@ -127,13 +132,28 @@ export const <%- entityReactName %>Detail = () => {
             </dd>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, relationshipNameHumanized } = relationship;
+  <%_ const { relationshipFieldName, relationshipFieldNamePlural, relationshipNameHumanized } = relationship;
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;
   _%>
-  <%_ if (relationship.persistableRelationship) { _%>
+  <%_ if (relationship.relationshipSerializePrimaryKeyOnly) { _%>
             <dt>
-              <Translate contentKey="<%- i18nKeyPrefix %>.<%- relationshipName %>">
+              <Translate contentKey="<%- relationship.propertyTranslationKey %>">
+                <%- relationshipNameHumanized %>
+              </Translate>
+            </dt>
+            <dd>
+              <ul className="list-unstyled">
+                {<%- entityInstance %>Entity.<%- relationshipFieldNamePlural %>?.map(<%- relationshipFieldName %> => (
+                  <li key={<%- relationshipFieldName %>}>
+                    <Badge bg="info">{<%- relationshipFieldName %>}</Badge>
+                  </li>
+                ))}
+              </ul>
+            </dd>
+  <%_ } else if (relationship.persistableRelationship) { _%>
+            <dt>
+              <Translate contentKey="<%- relationship.propertyTranslationKey %>">
                 <%- relationshipNameHumanized %>
               </Translate>
             </dt>
@@ -174,7 +194,7 @@ export const <%- entityReactName %>Detail = () => {
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Button>
 <%_ if (!readOnly) { _%>
-        <Button onClick={() => setShowDeleteDialog(true)} variant="danger" data-cy="entityDeleteButton">
+        <Button onClick={() => setShowDeleteDialog(true)}<% if (builtInUserManagement) { %> disabled={account.login === <%- entityInstance %>Entity.login}<% } %> variant="danger" data-cy="entityDeleteButton">
           <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
         </Button>
         {showDeleteDialog ? <<%- entityReactName %>DeleteDialog onClose={() => setShowDeleteDialog(false)} /> : null}

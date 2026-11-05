@@ -35,11 +35,6 @@ const adminMenuItems = () => (
       <Translate contentKey="global.menu.admin.gateway">Gateway</Translate>
     </MenuItem>
 <%_ } _%>
-<%_ if (generateUserManagement) { _%>
-    <MenuItem icon="users" to="/admin/user-management">
-      <Translate contentKey="global.menu.admin.userManagement">User management</Translate>
-    </MenuItem>
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     <MenuItem icon="eye" to="/admin/tracker"><Translate contentKey="global.menu.admin.tracker">User tracker</Translate></MenuItem>
 <%_ } _%>

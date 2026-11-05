@@ -116,7 +116,7 @@ export const files = asWriteFilesSection({
       templates: ['shared/reducers/locale.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/user-management.ts'],
     },
@@ -171,18 +171,6 @@ export const files = asWriteFilesSection({
       condition: generator => generator.communicationSpringWebsocket,
       ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/tracker/tracker.tsx'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      ...clientApplicationTemplatesBlock(),
-      templates: [
-        'modules/administration/user-management/index.tsx',
-        'modules/administration/user-management/user-management.tsx',
-        'modules/administration/user-management/user-management-update.tsx',
-        'modules/administration/user-management/user-management-detail.tsx',
-        'modules/administration/user-management/user-management-delete-dialog.tsx',
-        'modules/administration/user-management/user-management.reducer.ts',
-      ],
     },
     {
       condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
@@ -279,20 +267,12 @@ export const files = asWriteFilesSection({
       ],
     },
     {
-      condition: generator => generator.generateUserManagement,
-      ...clientApplicationTemplatesBlock(),
-      templates: [
-        'modules/administration/user-management/user-management.reducer.spec.ts',
-        'modules/administration/user-management/user-management-delete-dialog.spec.tsx',
-      ],
-    },
-    {
       condition: generator => generator.enableTranslation,
       ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/locale.spec.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       ...clientApplicationTemplatesBlock(),
       templates: ['shared/reducers/user-management.spec.ts'],
     },

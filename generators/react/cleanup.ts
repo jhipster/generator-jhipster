@@ -92,5 +92,13 @@ export default asWritingTask<ClientEntity, ClientApplication>(function cleanupOl
   }
   if (control.isJhipsterVersionLessThan('9.5.0')) {
     this.removeFile(`${application.clientSrcDir}app/shared/layout/footer/footer.scss`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/index.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/user-management.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/user-management-update.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/user-management-detail.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/user-management-delete-dialog.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/user-management-delete-dialog.spec.tsx`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/user-management.reducer.ts`);
+    this.removeFile(`${application.clientSrcDir}app/modules/administration/user-management/user-management.reducer.spec.ts`);
   }
 });

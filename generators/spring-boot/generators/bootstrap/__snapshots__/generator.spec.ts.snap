@@ -3581,7 +3581,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
     "searchEngineElasticsearch": false,
     "searchEngineNo": true,
     "service": "no",
-    "skipClient": true,
+    "skipClient": false,
     "skipDbChangelog": true,
     "skipServer": true,
     "skipUiGrouping": false,

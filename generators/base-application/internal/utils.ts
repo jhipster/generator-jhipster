@@ -227,7 +227,7 @@ export function createUserManagementEntity(
   const userManagement = {
     ...user,
     name: 'UserManagement',
-    skipClient: !application.clientFrameworkAngular && !application.clientFrameworkVue,
+    skipClient: false,
     skipServer: true,
     changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).UserManagement,
     clientRootFolder: 'admin',
@@ -244,7 +244,7 @@ export function createUserManagementEntity(
   };
 
   mutateData(userManagement, {
-    entityPage: ({ skipClient }) => (skipClient && !application.clientFrameworkAngular ? 'admin/user-management' : undefined),
+    entityPage: () => (application.clientFrameworkAngular || application.clientFrameworkVue ? undefined : 'admin/user-management'),
   });
 
   mutateFields(userManagement.fields!, [
@@ -303,7 +303,7 @@ export function createUserManagementEntity(
     ]);
   }
 
-  if (!application.generateBuiltInAuthorityEntity && (application.clientFrameworkAngular || application.clientFrameworkVue)) {
+  if (!application.generateBuiltInAuthorityEntity) {
     // Without an Authority entity the server exposes the authorities as a string array, expose it as a constants backed enum collection.
     addOrExtendFields(userManagement.fields!, [
       {
@@ -351,8 +351,7 @@ export function createAuthorityEntity(
     builtInAuthority: true,
     skipClient:
       !application.backendTypeSpringBoot ||
-      application.clientFrameworkReact ||
-      (application.clientFrameworkVue && application.applicationTypeMicroservice),
+      ((application.clientFrameworkReact || application.clientFrameworkVue) && application.applicationTypeMicroservice),
     searchEngine: 'no',
     service: 'no',
     dto: 'no',

@@ -40,10 +40,33 @@ import { isTranslatedReactFile, translateReactFilesTransform } from './support/i
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
+/**
+ * Client constants backing the values of `clientConstantsAsValues` fields, by field type.
+ */
+const reactClientConstants: Record<string, { reactConstantImport: string; reactConstantValues: string }> = {
+  Languages: {
+    reactConstantImport: "import { locales } from 'app/config/translation';",
+    reactConstantValues: 'locales',
+  },
+  Authority: {
+    reactConstantImport: "import { Authority } from 'app/shared/jhipster/constants';",
+    reactConstantValues: 'Object.values(Authority)',
+  },
+};
+
+const isAdminEntity = (application: { applicationTypeMicroservice?: boolean }, entity: { adminEntity?: boolean }): boolean =>
+  Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
+
 const REGEX_LITERAL_REPLACEMENTS: Record<string, string> = { '/': String.raw`\/`, [String.raw`\'`]: "'" };
 
 export default class ReactGenerator extends ClientApplicationGenerator<
-  ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string; fieldValidateRulesPatternReactString?: string }> & {
+  ClientEntity<
+    ClientField & {
+      reactFieldClientConstant?: { reactConstantImport: string; reactConstantValues: string };
+      fieldValidateRulesPatternReact?: string;
+      fieldValidateRulesPatternReactString?: string;
+    }
+  > & {
     entityReactState?: string;
   }
 > {
@@ -151,6 +174,9 @@ ${comment}
           const entityRoutes = `${application.clientSrcDir}app/entities/routes.tsx`;
           const entityReducers = `${application.clientSrcDir}app/entities/reducers.ts`;
           const entityMenu = `${application.clientSrcDir}app/entities/menu.tsx`;
+          const adminRoutes = `${application.clientSrcDir}app/modules/administration/index.tsx`;
+          const adminMenu = `${application.clientSrcDir}app/shared/layout/menus/admin.tsx`;
+          const rootReducers = `${application.clientSrcDir}app/shared/reducers/index.ts`;
           for (const entity of entities) {
             const {
               entityAngularName,
@@ -163,28 +189,30 @@ ${comment}
               entityNameHumanized,
             } = entity;
 
+            // Admin entities, like the users, go to the admin menu, its routes and the reducers of the application.
+            const adminEntity = isAdminEntity(application, entity);
             this.editFile(
-              entityMenu,
+              adminEntity ? adminMenu : entityMenu,
               createNeedleCallback({
-                needle: 'add-entity-to-menu',
-                contentToAdd: `<MenuItem icon="asterisk" to="/${entityPage}">
+                needle: adminEntity ? 'add-element-to-admin-menu' : 'add-entity-to-menu',
+                contentToAdd: `<MenuItem icon="${entity.builtInUserManagement ? 'users' : 'asterisk'}" to="/${entityPage}">
   ${application.enableTranslation ? `<Translate contentKey="${entityTranslationKeyMenuPath}" />` : entityNameHumanized}
 </MenuItem>`,
               }),
             );
             this.editFile(
-              entityRoutes,
+              adminEntity ? adminRoutes : entityRoutes,
               createNeedleCallback({
                 needle: 'add-route-import',
-                contentToAdd: `import ${entityAngularName} from './${entityFolderName}';`,
+                contentToAdd: `import ${entityAngularName} from '${adminEntity ? 'app/entities' : '.'}/${entityFolderName}';`,
               }),
               createNeedleCallback({
                 needle: 'add-route-path',
-                contentToAdd: `<Route path="/${entityUrl}/*" element={<${entityAngularName} />} />`,
+                contentToAdd: `<Route path="${adminEntity ? entity.entityFileName : `/${entityUrl}`}/*" element={<${entityAngularName} />} />`,
               }),
             );
             this.editFile(
-              entityReducers,
+              adminEntity ? rootReducers : entityReducers,
               createNeedleCallback({
                 needle: 'add-reducer-import',
                 contentToAdd: `import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`,
@@ -207,8 +235,13 @@ ${comment}
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
+        if (isAdminEntity(application, entity)) {
+          entity.entityPage = `admin/${entity.entityFileName}`;
+        }
         entity.entityReactState =
-          application.applicationTypeMonolith ? entity.entityInstance : `${application.lowercaseBaseName}.${entity.entityInstance}`;
+          application.applicationTypeMonolith || isAdminEntity(application, entity) ?
+            entity.entityInstance
+          : `${application.lowercaseBaseName}.${entity.entityInstance}`;
       },
     });
   }
@@ -220,6 +253,13 @@ ${comment}
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       react({ field }) {
+        if (field.clientConstantsAsValues) {
+          const reactFieldClientConstant = reactClientConstants[field.fieldType];
+          if (!reactFieldClientConstant) {
+            throw new Error(`Field type '${field.fieldType}' has no React client constant to back its values`);
+          }
+          field.reactFieldClientConstant = reactFieldClientConstant;
+        }
         const { fieldValidateRulesPattern } = field;
         if (fieldValidateRulesPattern !== undefined) {
           // Regex literal: escape unescaped `/`, drop the useless escape of `\'` (as produced by JDL), keep other escapes.

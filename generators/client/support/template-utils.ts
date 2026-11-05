@@ -32,7 +32,7 @@ import type { Entity as ClientEntity, Field as ClientField, Relationship as Clie
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
-const { ANGULAR, VUE } = clientFrameworkTypes;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 /**
  * @private
@@ -63,7 +63,7 @@ export const generateEntityClientImports = (
 
   relevantRelationships.forEach(relationship => {
     // A relationship serialized as the primary keys of the other entity needs no type of it.
-    if (relationship.relationshipSerializePrimaryKeyOnly && clientFramework === VUE) return;
+    if (relationship.relationshipSerializePrimaryKeyOnly && (clientFramework === VUE || clientFramework === REACT)) return;
     const importType = `I${relationship.otherEntity.entityAngularName}`;
     let importPath: string;
     const prefix = clientFramework === VUE ? '@' : 'app';
