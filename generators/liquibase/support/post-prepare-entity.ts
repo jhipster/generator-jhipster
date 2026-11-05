@@ -30,8 +30,8 @@ export default asPostPreparingEachEntityTask<LiquibaseEntity, LiquibaseApplicati
   application,
   entity,
 }) {
-  const { relationships, builtIn, name, primaryKey } = entity;
-  if (builtIn && name === 'User' && primaryKey) {
+  const { relationships, builtInUser, primaryKey } = entity;
+  if (builtInUser && primaryKey) {
     const userIdType = primaryKey.type;
     const idField = primaryKey.fields[0];
     const idFieldName = idField.fieldName ?? 'id';

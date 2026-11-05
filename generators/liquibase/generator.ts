@@ -285,7 +285,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         }
 
         const entitiesToWrite =
-          this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
+          this.options.entities ?? entities.filter(entity => !entity.skipDbChangelog && !entity.skipServer).map(entity => entity.name);
         // Write only specified entities changelogs.
         const changes = entityChanges.filter(
           databaseChangelog => entitiesToWrite.length === 0 || entitiesToWrite.includes(databaseChangelog.entityName),

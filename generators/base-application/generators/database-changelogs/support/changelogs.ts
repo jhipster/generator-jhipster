@@ -227,7 +227,7 @@ const changelogDateOf = (generator: Generator, entity: EntityConfig): string =>
 const formerEntityNames = (generator: Generator): string[] =>
   getEntitiesFromDir(generator.getEntitiesConfigPath()).filter(name => existsSync(generator.getEntityConfigPath(name)));
 
-/** The entities of the application, prepared, the built-in ones aside. */
+/** The entities of the application, prepared, the ones without database changelog aside. */
 const preparedEntities = (generator: Generator): Map<string, EntityConfig> => {
   const entities = generator.getContextData<Map<string, EntityConfig>>(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, { factory: () => new Map() });
   if (entities.size === 0 && generator.getExistingEntities().length > 0) {
@@ -235,7 +235,7 @@ const preparedEntities = (generator: Generator): Map<string, EntityConfig> => {
       `The entity changelogs are read before the entities are prepared: declare the custom object with changelogsCustomObject`,
     );
   }
-  return new Map([...entities].filter(([, entity]) => !entity.builtIn));
+  return new Map([...entities].filter(([, entity]) => !entity.skipDbChangelog));
 };
 
 const formerChangelogs = (generator: Generator): boolean =>

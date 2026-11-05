@@ -110,7 +110,7 @@ export default abstract class BaseEntityChangesGenerator<
   }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseEntityChangesChangelog<Entity>[] {
     const { recreateInitialChangelog } = this;
     const { incrementalChangelog } = application;
-    const entityNames = paramEntities.filter(e => !e.builtIn).map(e => e.name);
+    const entityNames = paramEntities.filter(e => !e.skipDbChangelog).map(e => e.name);
 
     const entitiesByName = Object.fromEntries(paramEntities.map(entity => [entity.name, entity]));
     const entitiesWithExistingChangelog = new Set(
@@ -131,13 +131,15 @@ export default abstract class BaseEntityChangesGenerator<
     );
 
     for (const [entityName, entity] of Object.entries(entitiesByName)) {
-      if (entity.builtIn) {
+      // The server properties of an entity with fixed ones never change, and a built-in entity without file has no
+      // previous state: its current one stands for it.
+      if (entity.fixedServerProperties || (entity.builtIn && !previousEntitiesByName[entityName])) {
         previousEntitiesByName[entityName] = entity;
       }
     }
 
     if (application.generateBuiltInUserEntity && !previousEntitiesByName.User) {
-      previousEntitiesByName.User = { name: 'User', builtIn: true } as Entity;
+      previousEntitiesByName.User = { name: 'User', builtIn: true, fixedServerProperties: true } as Entity;
     }
 
     const entities = Object.values(previousEntitiesByName);

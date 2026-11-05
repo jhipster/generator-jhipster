@@ -227,8 +227,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
-  get loadingEntities() {
-    return this.asLoadingEntitiesTaskGroup({
+  get postLoadingEntities() {
+    return this.asPostLoadingEntitiesTaskGroup({
       loadEntityConfig({ entitiesToLoad }) {
         for (const { entityName, entityBootstrap } of entitiesToLoad) {
           for (const field of entityBootstrap.fields) {
@@ -243,8 +243,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.loadingEntities);
+  get [BaseApplicationGenerator.POST_LOADING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.postLoadingEntities);
   }
 
   get postPreparingEachEntity() {

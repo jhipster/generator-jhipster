@@ -34,6 +34,7 @@ import type { ApplicationObject, ApplicationObjectConfig } from './objects.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
 import {
   CONTEXT_DATA_APPLICATION_ENTITIES_KEY,
+  CONTEXT_DATA_APPLICATION_ENTITIES_TO_LOAD_KEY,
   CONTEXT_DATA_APPLICATION_ENTITY_STORAGES_KEY,
   CONTEXT_DATA_APPLICATION_OBJECTS_KEY,
   CONTEXT_DATA_APPLICATION_OBJECTS_STORAGE_KEY,
@@ -63,6 +64,7 @@ const {
   POST_PREPARING,
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
+  POST_LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
   PREPARING_EACH_ENTITY_FIELD,
   PREPARING_EACH_ENTITY_RELATIONSHIP,
@@ -80,6 +82,7 @@ const {
 const {
   CONFIGURING_EACH_ENTITY_QUEUE,
   LOADING_ENTITIES_QUEUE,
+  POST_LOADING_ENTITIES_QUEUE,
   PREPARING_EACH_ENTITY_QUEUE,
   PREPARING_EACH_ENTITY_FIELD_QUEUE,
   PREPARING_EACH_ENTITY_RELATIONSHIP_QUEUE,
@@ -90,7 +93,7 @@ const {
 
 const { asPriority } = BaseGenerator;
 
-const PRIORITY_WITH_ENTITIES_TO_LOAD = new Set<string>([LOADING_ENTITIES]);
+const PRIORITY_WITH_ENTITIES_TO_LOAD = new Set<string>([LOADING_ENTITIES, POST_LOADING_ENTITIES]);
 const PRIORITY_WITH_ENTITIES = new Set<string>([DEFAULT]);
 const PRIORITY_WITH_FILTERED_ENTITIES = new Set<string>([WRITING_ENTITIES, POST_WRITING_ENTITIES]);
 
@@ -117,6 +120,7 @@ const PRIORITY_WITH_APPLICATION = new Set<string>([
 
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
+  POST_LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
   PREPARING_EACH_ENTITY_FIELD,
   PREPARING_EACH_ENTITY_RELATIONSHIP,
@@ -161,6 +165,8 @@ export default class BaseApplicationGenerator<
 
   static readonly LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
 
+  static readonly POST_LOADING_ENTITIES = asPriority(POST_LOADING_ENTITIES);
+
   static readonly PREPARING_EACH_ENTITY = asPriority(PREPARING_EACH_ENTITY);
 
   static readonly PREPARING_EACH_ENTITY_FIELD = asPriority(PREPARING_EACH_ENTITY_FIELD);
@@ -194,6 +200,11 @@ export default class BaseApplicationGenerator<
 
   get #entities(): Map<string, BaseEntity> {
     return this.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, { factory: () => new Map() });
+  }
+
+  /** The entities to load, built once and shared by the generators of the application. */
+  get #entitiesToLoad(): { list?: EntityToLoad<any>[] } {
+    return this.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_TO_LOAD_KEY, { factory: () => ({}) });
   }
 
   get #entitiesForTasks() {
@@ -437,6 +448,14 @@ export default class BaseApplicationGenerator<
     return {};
   }
 
+  /**
+   * Priority API stub for blueprints.
+   * The entities to load are loaded: every generator added its entities to them at the loadingEntities priority.
+   */
+  get postLoadingEntities() {
+    return {};
+  }
+
   get preparingEachEntity() {
     return {};
   }
@@ -489,6 +508,15 @@ export default class BaseApplicationGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asLoadingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['LoadingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): TaskGroup<keyof T> {
+    return taskGroup;
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asPostLoadingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostLoadingEntitiesTaskParam']>>>(
     taskGroup: T,
   ): TaskGroup<keyof T> {
     return taskGroup;
@@ -580,6 +608,9 @@ export default class BaseApplicationGenerator<
     if (entitiesToLoad) {
       args.entitiesToLoad = this.#getEntitiesDataToLoad();
     }
+    if (entities || filteredEntities) {
+      this.#syncLoadedEntities();
+    }
     if (entities) {
       args.entities = [...this.#entities.values()];
     }
@@ -617,27 +648,13 @@ export default class BaseApplicationGenerator<
    * @returns {string[]}
    */
   #getEntitiesDataToLoad(): EntityToLoad<any>[] {
-    const application = this.context;
-    const builtInEntities: string[] = [];
-    if (application.generateBuiltInUserEntity) {
-      // Reorder User entity to be the first one to be loaded
-      builtInEntities.push('User');
-    }
-    if (application.generateBuiltInUserEntity && application.generateUserManagement) {
-      // Reorder User entity to be the first one to be loaded
-      builtInEntities.push('UserManagement');
-    }
-    if (application.generateBuiltInAuthorityEntity) {
-      // Reorder User entity to be the first one to be loaded
-      builtInEntities.push('Authority');
-    }
-    const entitiesToLoad = [...new Set([...builtInEntities, ...this.getExistingEntityNames()])];
-    return entitiesToLoad.map(entityName => {
+    // Built once and shared by the generators: the bootstrap adds the built-in entities to it.
+    const entitiesToLoad = this.#entitiesToLoad;
+    entitiesToLoad.list ??= this.getExistingEntityNames().map(entityName => {
       const generator = this;
       if (!this.#entities.has(entityName)) {
         this.#entities.set(entityName, { name: entityName, fields: [], relationships: [] });
       }
-      const entityBootstrap = this.#entities.get(entityName);
       return {
         entityName,
         get entityStorage() {
@@ -646,9 +663,20 @@ export default class BaseApplicationGenerator<
         get entityConfig() {
           return generator.getEntityConfig(entityName, true)!.createProxy();
         },
-        entityBootstrap,
+        entityBootstrap: this.#entities.get(entityName),
       } as EntityToLoad<any>;
     });
+    return entitiesToLoad.list;
+  }
+
+  /** The entities, in the order of the entities loaded, with the ones added to the entities to load. */
+  #syncLoadedEntities(): void {
+    const { list } = this.#entitiesToLoad;
+    if (!list) return;
+    this.#entities.clear();
+    for (const { entityName, entityBootstrap } of list) {
+      this.#entities.set(entityName, entityBootstrap);
+    }
   }
 
   /**
@@ -657,6 +685,7 @@ export default class BaseApplicationGenerator<
    * @returns {object[]}
    */
   #getEntitiesDataToPrepare(): Pick<PreparingEachEntityTaskParam<Entity, Application>, 'entity' | 'entityName' | 'description'>[] {
+    this.#syncLoadedEntities();
     return this.#entitiesForTasks;
   }
 
@@ -751,6 +780,25 @@ export default class BaseApplicationGenerator<
         const tasks = this.extractTasksFromPriority(LOADING_ENTITIES, { skip: false });
         this.log.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
         const args = this.getArgsForPriority(LOADING_ENTITIES);
+        tasks.forEach(task => {
+          this.queueTask({
+            ...task,
+            args,
+          });
+        });
+      },
+    });
+
+    this.queueTask({
+      queueName: POST_LOADING_ENTITIES_QUEUE,
+      taskName: 'queuePostLoadingEntities',
+      cancellable: true,
+      method: () => {
+        if (this.options.skipPriorities?.includes(POST_LOADING_ENTITIES)) return;
+        this.log.debug(`Queueing entity tasks ${POST_LOADING_ENTITIES}`);
+        const tasks = this.extractTasksFromPriority(POST_LOADING_ENTITIES, { skip: false });
+        this.log.debug(`Queueing entity tasks ${POST_LOADING_ENTITIES}`);
+        const args = this.getArgsForPriority(POST_LOADING_ENTITIES);
         tasks.forEach(task => {
           this.queueTask({
             ...task,

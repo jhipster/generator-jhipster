@@ -173,10 +173,10 @@ describe(`generator - ${generator}`, () => {
       it('should prepare entities', () => {
         expect(Object.keys(runResult.entities!)).toMatchInlineSnapshot(`
 [
-  "User",
   "UserManagement",
   "Authority",
   "EntityA",
+  "User",
 ]
 `);
       });

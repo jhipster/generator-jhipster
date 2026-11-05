@@ -317,6 +317,10 @@ type BaseApplicationAddedEntityProperties = {
   /** @experimental */
   auditableEntity?: boolean;
   builtIn?: boolean;
+  /** The server properties of the entity are fixed by its templates: the fields and relationships added to it are ignored at the backend. */
+  fixedServerProperties?: boolean;
+  /** The entity has no database changelog. */
+  skipDbChangelog?: boolean;
   builtInUser?: boolean;
   builtInUserManagement?: boolean;
   builtInAuthority?: boolean;

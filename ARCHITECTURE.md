@@ -258,7 +258,13 @@ get [Generator.CONFIGURING_EACH_ENTITY]() {
 
 #### Loading entities (base-application)
 
-Usually empty: the entire entity configuration is loaded by default.
+Adds entities to the entities to load, shared by the generators of the application. The entity configurations are
+loaded at the post loading entities priority.
+
+#### Post loading entities (base-application)
+
+The entities to load are loaded, with their relationships resolved: the place to read or change the loaded configuration
+of every entity before it is prepared.
 
 #### Preparing each entity (base-application)
 

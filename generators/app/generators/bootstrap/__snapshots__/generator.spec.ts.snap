@@ -1397,6 +1397,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
   ],
   "fieldsByName": Any<Object>,
   "fieldsContainNoOwnerOneToOne": false,
+  "fixedServerProperties": true,
   "fluentMethods": true,
   "generateFakeData": Any<Function>,
   "hasCyclicRequiredRelationship": false,

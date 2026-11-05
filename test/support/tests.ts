@@ -34,6 +34,7 @@ const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);
 const {
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
+  POST_LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
   PREPARING_EACH_ENTITY_FIELD,
   PREPARING_EACH_ENTITY_RELATIONSHIP,
@@ -341,7 +342,7 @@ export const testBlueprintSupport = (
         });
       });
     if (entity) {
-      [LOADING_ENTITIES, WRITING_ENTITIES, POST_WRITING_ENTITIES].forEach(priority => {
+      [LOADING_ENTITIES, POST_LOADING_ENTITIES, WRITING_ENTITIES, POST_WRITING_ENTITIES].forEach(priority => {
         it(`should call ${priority} tasks once`, ({ skip }) => {
           if (!spy.prioritiesTasks[priority]) {
             skip();
