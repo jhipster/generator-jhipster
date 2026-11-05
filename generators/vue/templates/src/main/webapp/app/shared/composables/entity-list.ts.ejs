@@ -23,7 +23,7 @@ import { useIntersectionObserver } from '@vueuse/core';
 import { type AxiosResponse } from 'axios';
 
 import useDataUtils from '@/shared/data/data-utils.service';
-import { PAGE_PARAM, SORT_PARAM, buildSortParam, parsePageParam, parseSortParam } from '@/shared/jhipster/pagination';
+import { ASC, DESC, PAGE_PARAM, SORT_PARAM, buildSortParam, parsePageParam, parseSortParam } from '@/shared/jhipster/pagination';
 import { ITEMS_PER_PAGE } from '@/shared/sort/sorts';
 
 import { type RequestOptions, useControlledRequest } from './controlled-request';
@@ -63,7 +63,7 @@ export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseE
 
   const sortState = computed(() => parseSortParam(route?.query[SORT_PARAM]?.toString() ?? 'id,asc'));
   const propOrder = computed(() => sortState.value.predicate ?? 'id');
-  const reverse = computed(() => sortState.value.order === 'desc');
+  const reverse = computed(() => sortState.value.order === DESC);
   const page =
     pagination === 'pagination'
       ? computed({
@@ -95,7 +95,7 @@ export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseE
       params: () => ({
         search: searchQuery.value,
         page: page.value,
-        sort: paged ? buildSortParam({ predicate: propOrder.value, order: reverse.value ? 'desc' : 'asc' }, 'id') : [],
+        sort: paged ? buildSortParam({ predicate: propOrder.value, order: reverse.value ? DESC : ASC }, 'id') : [],
       }),
       initialData: (): T[] => [],
       onError,
@@ -144,7 +144,7 @@ export const useEntityList = <T>({ retrieve, search, pagination, onError }: UseE
       query: {
         ...route!.query,
         ...(pagination === 'pagination' ? { [PAGE_PARAM]: '1' } : {}),
-        [SORT_PARAM]: buildSortParam({ predicate: newOrder, order: descending ? 'desc' : 'asc' }),
+        [SORT_PARAM]: buildSortParam({ predicate: newOrder, order: descending ? DESC : ASC }),
       },
     });
   };
