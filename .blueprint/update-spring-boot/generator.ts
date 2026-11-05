@@ -18,8 +18,9 @@
  */
 import BaseApplicationGenerator from '../../generators/base-core/index.ts';
 import { parseMavenPom } from '../../generators/java-simple-application/generators/maven/support/dependabot-maven.ts';
-import { checkManagedVersionCouplings } from '../../generators/spring-boot/internal/managed-version-checks.ts';
 import { getPackageRoot } from '../../lib/index.ts';
+
+import { checkManagedVersionCouplings, readManagedVersionCatalogs } from './internal/managed-version-checks.ts';
 
 export default class UpdateSpringBootGenerator extends BaseApplicationGenerator {
   version!: string;
@@ -88,10 +89,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
       checkManagedVersionCouplings() {
         const messages = checkManagedVersionCouplings({
           managedProperties: this.springBootJson.properties,
-          serverCatalog: this.readTemplate(this.fetchFromInstalledJHipster('server/resources/gradle/libs.versions.toml')),
-          graalvmCatalog: this.readTemplate(
-            this.fetchFromInstalledJHipster('java-simple-application/generators/graalvm/resources/gradle/libs.versions.toml'),
-          ),
+          ...readManagedVersionCatalogs(),
         });
         for (const message of messages) {
           this.log.warn(message);

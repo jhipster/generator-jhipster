@@ -26,13 +26,13 @@ import BaseApplicationGenerator from '../../../base-application/index.ts';
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
 import writeTask from './files.ts';
-import { R2DBC_MARIADB_LOCKING_LAMBDAS } from './internal/blockhound.ts';
 import {
   getDatabaseTypeMavenDefinition,
   getH2MavenDefinition,
   getTestcontainerSupport,
   javaSqlDatabaseArtifacts,
 } from './internal/dependencies.ts';
+import { R2DBC_MARIADB_LOCKING_LAMBDAS } from './resources/blockhound.ts';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.ts';
 import type {
   Application as SpringDataRelationalApplication,

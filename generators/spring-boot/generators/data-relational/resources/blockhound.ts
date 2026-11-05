@@ -20,6 +20,8 @@
  * The r2dbc-mariadb version whose `SimpleClient` lambdas were checked with `javap`.
  * `receive` and `sendCommand` acquire a lock inside their `Flux.create` lambdas, and javac numbers those lambdas,
  * so the names below change between driver releases.
+ * BlockHound matches stack frames by method name, and while the lock is taken only the lambda is on the stack,
+ * so allowing a stable name instead would mean allowing a reactor class for every caller.
  */
 export const R2DBC_MARIADB_BLOCKHOUND_VERSION = '1.4.2';
 
