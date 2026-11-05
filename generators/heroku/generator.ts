@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import { globSync } from 'tinyglobby';
 
+import { createBase64Secret } from '../../lib/utils/secret.ts';
 import { kebabCase } from '../../lib/utils/string-utils.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
@@ -367,6 +368,28 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
         const herokuJHipsterRegistry = `https://${herokuJHipsterRegistryUsername}:${herokuJHipsterRegistryPassword}@${answers.herokuJHipsterRegistryApp}.herokuapp.com`;
         const configSetCmd = ['config:set', 'JHIPSTER_REGISTRY_URL', herokuJHipsterRegistry, '--app', this.herokuAppName!];
         await this.spawnHeroku(configSetCmd, { stdio: 'pipe' });
+      },
+
+      async configureJwtSecret({ application }) {
+        if (!this.hasHerokuCli || !application.authenticationTypeJwt) return;
+
+        // The JWT secret is only in application-secret-samples.yml, which the prod profile doesn't load
+        const name = 'JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET';
+        if (!application.applicationTypeMonolith) {
+          this.log.warn(`Set the same ${name} on the gateway and each microservice, so they accept each other's tokens.`);
+          return;
+        }
+        const { stdout } = await this.spawnHeroku(['config:get', name, '--app', this.herokuAppName!]);
+        if (stdout.trim()) return;
+
+        this.log.log(chalk.bold('\nSetting a JWT secret'));
+        // Not piped, so the secret isn't logged
+        await this.spawnHeroku([
+          'config:set',
+          `${name}=${createBase64Secret(64, this.options.reproducibleTests)}`,
+          '--app',
+          this.herokuAppName!,
+        ]);
       },
     });
   }
