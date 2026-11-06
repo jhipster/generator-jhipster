@@ -29,19 +29,6 @@ export default class GraalvmGenerator extends SpringBootApplicationGenerator {
     await this.dependsOnJHipster('jhipster:java-simple-application:graalvm');
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      forceConfig() {
-        // Cache is not supported for GraalVM native image
-        this.jhipsterConfig.cacheProvider ??= 'no';
-      },
-    });
-  }
-
-  get [SpringBootApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {

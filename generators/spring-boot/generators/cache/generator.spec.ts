@@ -57,6 +57,24 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('ehcache with graalvm support', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ cacheProvider: EHCACHE, enableHibernateCache: true, graalvmSupport: true })
+        .withMockedSource();
+    });
+
+    it('should add the native hints that the reachability metadata is missing', () => {
+      expect(result.sourceCallsArg.addNativeHint).toEqual([
+        {
+          publicConstructors: ['org.hibernate.cache.jcache.internal.JCacheRegionFactory.class'],
+          publicMethods: ['javax.cache.management.CacheStatisticsMXBean.class', 'javax.cache.management.CacheMXBean.class'],
+        },
+      ]);
+    });
+  });
+
   describe('reactive application', () => {
     it('should fail with a cache provider', async () => {
       await expect(

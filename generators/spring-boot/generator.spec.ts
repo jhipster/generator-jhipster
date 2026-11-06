@@ -47,6 +47,20 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
 
+  describe('with graalvm support and an existing cache provider', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ graalvmSupport: true, cacheProvider: 'ehcache' })
+        .withMockedJHipsterGenerators()
+        .withSkipWritingPriorities();
+    });
+
+    it('should compose with the cache generator', () => {
+      expect(runResult.composedMockedGenerators).toContain('jhipster:spring-boot:cache');
+    });
+  });
+
   describe('addTestSpringFactory', () => {
     before(async () => {
       await helpers
