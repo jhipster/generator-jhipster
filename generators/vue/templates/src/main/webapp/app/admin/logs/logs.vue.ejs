@@ -76,7 +76,7 @@ import { computed, inject, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import { orderAndFilterBy } from '@/shared/computables';
+import { orderAndFilterBy } from '@/utils';
 import { type Log, type LoggersResponse, toLogs } from '@/shared/jhipster/logs';
 
 import LogsService, { logsServiceKey } from './logs.service';

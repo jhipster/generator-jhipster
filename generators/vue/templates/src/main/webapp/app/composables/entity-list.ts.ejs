@@ -22,9 +22,9 @@ import { useRoute, useRouter } from 'vue-router';
 import { useIntersectionObserver } from '@vueuse/core';
 import { type AxiosResponse } from 'axios';
 
-import useDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/composables/data-utils';
 import { ASC, DESC, PAGE_PARAM, SORT_PARAM, buildSortParam, parsePageParam, parseSortParam } from '@/shared/jhipster/pagination';
-import { ITEMS_PER_PAGE } from '@/shared/sort/sorts';
+import { ITEMS_PER_PAGE } from '@/utils/sorts';
 
 import { type RequestOptions, useControlledRequest } from './controlled-request';
 

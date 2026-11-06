@@ -59,7 +59,7 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
  */
 const vueClientConstants: Record<string, VueFieldClientConstant> = {
   Languages: {
-    vueConstantImport: "import languages from '@/shared/config/languages';",
+    vueConstantImport: "import languages from '@/config/languages';",
     vueConstantValues: 'Object.keys(languages())',
   },
   Authority: {
@@ -311,7 +311,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             // Admin entities, like the authorities, go to the admin menu.
             this.editFile(
               entity.adminEntity ?
-                `${application.clientSrcDir}/app/core/jhi-navbar/jhi-navbar.vue`
+                `${application.clientSrcDir}/app/layouts/navbar/navbar.vue`
               : `${application.clientSrcDir}/app/entities/entities-menu.vue`,
               createNeedleCallback({
                 needle: entity.adminEntity ? 'add-element-to-admin-menu' : 'add-entity-to-menu',
@@ -449,6 +449,38 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.asWritingTaskGroup({
       async cleanup({ control, application }) {
         await control.cleanupFiles({
+          '9.5.0': [
+            `${application.clientSrcDir}app/core/error/error-loading.vue`,
+            `${application.clientSrcDir}app/core/error/error.component.spec.ts`,
+            `${application.clientSrcDir}app/core/error/error.vue`,
+            `${application.clientSrcDir}app/core/home/home.component.spec.ts`,
+            `${application.clientSrcDir}app/core/home/home.vue`,
+            `${application.clientSrcDir}app/core/jhi-footer/jhi-footer.vue`,
+            `${application.clientSrcDir}app/core/jhi-navbar/jhi-navbar.component.spec.ts`,
+            `${application.clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
+            `${application.clientSrcDir}app/core/ribbon/ribbon.component.spec.ts`,
+            `${application.clientSrcDir}app/core/ribbon/ribbon.vue`,
+            `${application.clientSrcDir}app/locale/translation.service.ts`,
+            `${application.clientSrcDir}app/shared/composables/date-format.ts`,
+            `${application.clientSrcDir}app/shared/composables/index.ts`,
+            `${application.clientSrcDir}app/shared/composables/validation.ts`,
+            `${application.clientSrcDir}app/shared/computables/arrays.ts`,
+            `${application.clientSrcDir}app/shared/computables/index.ts`,
+            `${application.clientSrcDir}app/shared/config/axios-interceptor.spec.ts`,
+            `${application.clientSrcDir}app/shared/config/axios-interceptor.ts`,
+            `${application.clientSrcDir}app/shared/config/config-bootstrap-vue.ts`,
+            `${application.clientSrcDir}app/shared/config/config.ts`,
+            `${application.clientSrcDir}app/shared/config/dayjs.ts`,
+            `${application.clientSrcDir}app/shared/config/languages.ts`,
+            `${application.clientSrcDir}app/shared/config/store/account-store.ts`,
+            `${application.clientSrcDir}app/shared/config/store/translation-store.ts`,
+            `${application.clientSrcDir}app/shared/data/data-utils.service.spec.ts`,
+            `${application.clientSrcDir}app/shared/data/data-utils.service.ts`,
+            `${application.clientSrcDir}app/shared/jhi-item-count.vue`,
+            `${application.clientSrcDir}app/shared/sort/sorts.spec.ts`,
+            `${application.clientSrcDir}app/shared/sort/sorts.ts`,
+            `${application.clientSrcDir}app/store.ts`,
+          ],
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
           '8.7.4': [
             [

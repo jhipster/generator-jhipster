@@ -31,8 +31,8 @@ import { useLoginModal } from '@/account/login-modal';
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
-import { authenticatedKey, currentUsernameKey } from '@/shared/config/injection-keys';
-import { routerLinkStub } from '@/shared/testing/stubs';
+import { authenticatedKey, currentUsernameKey } from '@/config/injection-keys';
+import { routerLinkStub } from '@/testing/stubs';
 
 import Home from './home.vue';
 
