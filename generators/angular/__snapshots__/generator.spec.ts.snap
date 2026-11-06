@@ -2371,6 +2371,380 @@ export class UserManagementUpdate implements OnInit {
 ",
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/user-management-screens.spec.ts": {
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { provideHttpClient } from "@angular/common/http";
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from "@angular/common/http/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  ActivatedRoute,
+  convertToParamMap,
+  provideRouter,
+} from "@angular/router";
+
+import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { of } from "rxjs";
+
+import { Account } from "app/core/auth/account.model";
+import { AccountService } from "app/core/auth/account.service";
+
+import { UserManagementDeleteDialog } from "./delete/user-management-delete-dialog";
+import { UserManagementDetail } from "./detail/user-management-detail";
+import { sampleWithFullData } from "./user-management.test-samples";
+import { UserManagement } from "./list/user-management";
+import { UserManagementUpdate } from "./update/user-management-update";
+
+const related = { name: "ABC" };
+const sample: any = {
+  ...sampleWithFullData,
+  login: "ABC",
+  activated: true,
+  authorities: [related.name],
+};
+const sampleWithoutData = { login: "CBA" };
+
+vi.useFakeTimers();
+
+const clickAll = (
+  fixture: ComponentFixture<unknown>,
+  selector: string,
+): void => {
+  const elements: NodeListOf<HTMLElement> =
+    fixture.nativeElement.querySelectorAll(selector);
+  elements.forEach((element) => element.click());
+  fixture.detectChanges();
+};
+
+describe("UserManagement screens", () => {
+  let httpMock: HttpTestingController;
+
+  const flushAll = (body: unknown): void => {
+    const headers = {
+      link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
+      "X-Total-Count": "40",
+    };
+    httpMock
+      .match(() => true)
+      .forEach((request) => request.flush(body as any, { headers }));
+  };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([{ path: "**", children: [] }]),
+        NgbActiveModal,
+        {
+          provide: NgbModal,
+          useValue: {
+            open: vi.fn(() => ({ componentInstance: {}, closed: of() })),
+          },
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({ defaultSort: "login,asc", userManagement: sample }),
+            queryParamMap: of(
+              convertToParamMap({ page: "1", size: "1", sort: "login,desc" }),
+            ),
+            snapshot: {
+              data: { defaultSort: "login,asc" },
+              queryParams: {},
+              queryParamMap: convertToParamMap({
+                page: "1",
+                size: "1",
+                sort: "login,desc",
+              }),
+            },
+          },
+        },
+      ],
+    });
+    TestBed.inject(FaIconLibrary).addIconPacks(fas);
+    httpMock = TestBed.inject(HttpTestingController);
+    vi.spyOn(globalThis, "open").mockReturnValue(null);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  describe("list", () => {
+    const render = async (
+      entities: unknown[],
+    ): Promise<ComponentFixture<UserManagement>> => {
+      const fixture = TestBed.createComponent(UserManagement);
+      fixture.detectChanges();
+      TestBed.tick();
+      flushAll(entities);
+      await vi.runAllTimersAsync();
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it("should show the entities", async () => {
+      const fixture = await render([sample, sampleWithoutData]);
+
+      expect(fixture.nativeElement.querySelectorAll("tbody tr")).toHaveLength(
+        2,
+      );
+    });
+
+    it("should tell when there are no entities", async () => {
+      const fixture = await render([]);
+
+      expect(fixture.nativeElement.querySelector("#no-result")).not.toBeNull();
+    });
+
+    it("should use the default sort without a sort in the location", async () => {
+      Object.assign(TestBed.inject(ActivatedRoute), {
+        queryParamMap: of(convertToParamMap({})),
+      });
+      const fixture = await render([sample, sampleWithoutData]);
+
+      expect(fixture.nativeElement.querySelectorAll("tbody tr")).toHaveLength(
+        2,
+      );
+    });
+
+    it("should keep the order without a sort", async () => {
+      Object.assign(TestBed.inject(ActivatedRoute), {
+        data: of({}),
+        queryParamMap: of(convertToParamMap({})),
+      });
+      const fixture = await render([sample, sampleWithoutData]);
+
+      expect(fixture.nativeElement.querySelectorAll("tbody tr")).toHaveLength(
+        2,
+      );
+    });
+
+    it("should accept the actions of the rows", async () => {
+      TestBed.inject(AccountService).authenticate({
+        login: "other",
+      } as Account);
+      const fixture = await render([sample, { ...sample, activated: false }]);
+
+      clickAll(fixture, "tbody a:not([href]), tbody button, th, h2 button");
+
+      expect(fixture.nativeElement.querySelector("h2")).not.toBeNull();
+    });
+  });
+
+  describe("detail", () => {
+    const render = (
+      entity: unknown,
+    ): ComponentFixture<UserManagementDetail> => {
+      const fixture = TestBed.createComponent(UserManagementDetail);
+      fixture.componentRef.setInput("userManagement", entity);
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it("should show the entity", () => {
+      const fixture = render(sample);
+
+      expect(
+        fixture.nativeElement.querySelector(
+          '[data-cy="userManagementDetailsHeading"]',
+        ),
+      ).not.toBeNull();
+    });
+
+    it("should show an entity without data", () => {
+      const fixture = render(sampleWithoutData);
+
+      expect(fixture.nativeElement.querySelector("dd")).not.toBeNull();
+    });
+
+    it("should show nothing without an entity", () => {
+      const fixture = render(null);
+
+      expect(fixture.nativeElement.querySelector("dd")).toBeNull();
+    });
+
+    it("should accept the actions", () => {
+      TestBed.inject(AccountService).authenticate({
+        login: "other",
+      } as Account);
+      const fixture = render(sample);
+
+      clickAll(fixture, "a:not([href]), button");
+
+      expect(fixture.nativeElement.querySelector("dd")).not.toBeNull();
+    });
+  });
+
+  describe("update", () => {
+    const render = (): ComponentFixture<UserManagementUpdate> => {
+      const fixture = TestBed.createComponent(UserManagementUpdate);
+      fixture.detectChanges();
+      flushAll([related]);
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it("should show the form of an entity", () => {
+      const fixture = render();
+
+      expect(
+        fixture.nativeElement.querySelector("#save-entity"),
+      ).not.toBeNull();
+    });
+
+    it("should show the form of an entity without data", () => {
+      TestBed.inject(ActivatedRoute).data = of({
+        userManagement: sampleWithoutData,
+      });
+      const fixture = render();
+
+      expect(
+        fixture.nativeElement.querySelector("#save-entity"),
+      ).not.toBeNull();
+    });
+
+    it("should accept empty options", () => {
+      const fixture = TestBed.createComponent(UserManagementUpdate);
+      fixture.detectChanges();
+      flushAll(null);
+      fixture.detectChanges();
+
+      expect(
+        fixture.nativeElement.querySelector("#save-entity"),
+      ).not.toBeNull();
+    });
+
+    it("should show the form of a new entity", () => {
+      TestBed.inject(ActivatedRoute).data = of({});
+      const fixture = render();
+
+      expect(
+        fixture.nativeElement.querySelector("#save-entity"),
+      ).not.toBeNull();
+    });
+
+    it("should show the messages of the validations", () => {
+      TestBed.inject(ActivatedRoute).data = of({});
+      const fixture = render();
+
+      for (const control of Object.values(
+        fixture.componentInstance.editForm.controls,
+      )) {
+        control.markAsDirty();
+        control.setErrors({
+          required: true,
+          minlength: {},
+          maxlength: {},
+          min: {},
+          max: {},
+          pattern: {},
+          email: true,
+          number: true,
+          datetimelocal: true,
+        });
+      }
+      fixture.detectChanges();
+
+      expect(
+        fixture.nativeElement.querySelector("small.text-danger"),
+      ).not.toBeNull();
+
+      const controls = Object.values(
+        fixture.componentInstance.editForm.controls,
+      );
+      controls.forEach((control) => control.setErrors({ other: true }));
+      fixture.detectChanges();
+      controls.forEach((control) => {
+        control.markAsPristine();
+        control.markAsTouched();
+      });
+      fixture.detectChanges();
+      controls.forEach((control) => control.markAsUntouched());
+      fixture.detectChanges();
+
+      expect(
+        fixture.nativeElement.querySelector("small.text-danger"),
+      ).toBeNull();
+    });
+
+    it("should save the form", () => {
+      const fixture = render();
+      const previousState = vi.spyOn(
+        fixture.componentInstance,
+        "previousState",
+      );
+
+      fixture.nativeElement
+        .querySelector("form")
+        .dispatchEvent(new Event("submit"));
+      flushAll(sample);
+
+      expect(previousState).toHaveBeenCalled();
+    });
+
+    it("should accept the actions", () => {
+      const fixture = render();
+
+      clickAll(fixture, 'a:not([href]), button[type="button"]');
+      fixture.nativeElement
+        .querySelectorAll('input[type="file"]')
+        .forEach((input: HTMLElement) =>
+          input.dispatchEvent(new Event("change")),
+        );
+
+      expect(
+        fixture.nativeElement.querySelector("#save-entity"),
+      ).not.toBeNull();
+    });
+  });
+
+  describe("delete", () => {
+    const render = (
+      entity?: typeof sample,
+    ): ComponentFixture<UserManagementDeleteDialog> => {
+      const fixture = TestBed.createComponent(UserManagementDeleteDialog);
+      fixture.componentInstance.userManagement = entity;
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it("should show nothing without an entity", () => {
+      const fixture = render();
+
+      expect(fixture.nativeElement.querySelector("form")).toBeNull();
+    });
+
+    it("should dismiss the dialog when cancelled", () => {
+      const dismiss = vi.spyOn(TestBed.inject(NgbActiveModal), "dismiss");
+      const fixture = render(sample);
+
+      clickAll(fixture, ".btn-secondary");
+
+      expect(dismiss).toHaveBeenCalled();
+    });
+
+    it("should close the dialog when confirmed", () => {
+      const close = vi.spyOn(TestBed.inject(NgbActiveModal), "close");
+      const fixture = render(sample);
+
+      fixture.nativeElement
+        .querySelector("form")
+        .dispatchEvent(new Event("submit"));
+      flushAll(null);
+
+      expect(close).toHaveBeenCalled();
+    });
+  });
+});
+",
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
     "contents": "import dayjs from "dayjs/esm";
 
@@ -2954,6 +3328,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/core/auth/login.model.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/state-storage.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -3032,6 +3409,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
@@ -3105,6 +3485,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/microservice/list/microservice.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/microservice/microservice-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/microservice/microservice.model.ts": {
@@ -3182,6 +3565,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/simple/simple-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
@@ -3233,6 +3619,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/layouts/footer/footer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/layouts/layout-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/layouts/main/main.html": {
     "stateCleared": "modified",
   },
@@ -3267,6 +3656,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/profiles/profile-info.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/profiles/profile.service.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/profiles/profile.service.ts": {
@@ -3335,6 +3727,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/shared/date/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/filter/filter-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/filter/filter.html": {
     "stateCleared": "modified",
   },
@@ -3381,6 +3776,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/pagination/item-count.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/shared-utilities.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/index.ts": {
@@ -4093,6 +4491,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/admin/metrics/metrics-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/admin/metrics/metrics.html": {
     "stateCleared": "modified",
   },
@@ -4171,6 +4572,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/core/auth/logout.model.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/state-storage.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -4226,6 +4630,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/parse-links.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/admin/authority/authority-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/admin/authority/authority.model.ts": {
@@ -4309,6 +4716,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
@@ -4382,6 +4792,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/microservice/list/microservice.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/microservice/microservice-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/microservice/microservice.model.ts": {
@@ -4459,6 +4872,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/simple/simple-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
@@ -4522,6 +4938,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/layouts/footer/footer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/layouts/layout-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/layouts/main/main.html": {
     "stateCleared": "modified",
   },
@@ -4559,6 +4978,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/profiles/profile-info.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/profiles/profile.service.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/profiles/profile.service.ts": {
@@ -4616,6 +5038,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/date/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/filter/filter-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/filter/filter.html": {
@@ -4685,6 +5110,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/pagination/item-count.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/shared-utilities.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/index.ts": {
@@ -5347,6 +5775,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/core/auth/login.model.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/core/auth/state-storage.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -5431,6 +5862,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
@@ -5504,6 +5938,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/microservice/list/microservice.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/microservice/microservice-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/microservice/microservice.model.ts": {
@@ -5581,6 +6018,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/simple/simple-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
@@ -5632,6 +6072,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/layouts/footer/footer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/layouts/layout-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/layouts/main/main.html": {
     "stateCleared": "modified",
   },
@@ -5666,6 +6109,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/profiles/profile-info.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/layouts/profiles/profile.service.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/layouts/profiles/profile.service.ts": {
@@ -5734,6 +6180,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/shared/date/index.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/filter/filter-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/filter/filter.html": {
     "stateCleared": "modified",
   },
@@ -5780,6 +6229,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/pagination/item-count.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/shared-utilities.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/index.ts": {
@@ -6495,6 +6947,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/metrics/metrics-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/metrics/metrics.html": {
     "stateCleared": "modified",
   },
@@ -6571,6 +7026,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/logout.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/auth/state-storage.service.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
@@ -6657,6 +7115,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
@@ -6730,6 +7191,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/microservice/list/microservice.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/microservice/microservice-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/microservice/microservice.model.ts": {
@@ -6807,6 +7271,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/simple/simple-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
@@ -6858,6 +7325,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/layouts/footer/footer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/layouts/layout-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/layouts/main/main.html": {
     "stateCleared": "modified",
   },
@@ -6895,6 +7365,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile-info.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/profile.service.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile.service.ts": {
@@ -6952,6 +7425,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/filter.html": {
@@ -7021,6 +7497,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/shared-utilities.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/index.ts": {
@@ -7603,6 +8082,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/account/account-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/account/account.route.ts": {
     "stateCleared": "modified",
   },
@@ -7852,6 +8334,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/metrics/metrics-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/metrics/metrics.html": {
     "stateCleared": "modified",
   },
@@ -7933,6 +8418,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/core/auth/login.model.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/state-storage.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -7991,6 +8479,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/parse-links.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/authority/authority-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/authority/authority.model.ts": {
@@ -8110,6 +8601,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/user-management-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
     "stateCleared": "modified",
   },
@@ -8135,6 +8629,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
@@ -8212,6 +8709,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/microservice/list/microservice.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/microservice/microservice-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/microservice.model.ts": {
     "stateCleared": "modified",
   },
@@ -8287,6 +8787,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/simple/simple-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
@@ -8350,6 +8853,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/layouts/footer/footer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/layouts/layout-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/layouts/main/main.html": {
     "stateCleared": "modified",
   },
@@ -8387,6 +8893,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile-info.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/profile.service.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile.service.ts": {
@@ -8453,6 +8962,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/date/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/filter/filter-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/filter/filter.html": {
@@ -8522,6 +9034,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/shared-utilities.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/index.ts": {
@@ -9170,6 +9685,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/core/auth/logout.model.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/state-storage.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -9243,6 +9761,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
@@ -9320,6 +9841,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/entities/microservice/list/microservice.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/microservice/microservice-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/microservice.model.ts": {
     "stateCleared": "modified",
   },
@@ -9395,6 +9919,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/simple/simple-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
@@ -9446,6 +9973,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/layouts/footer/footer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/layouts/layout-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/layouts/main/main.html": {
     "stateCleared": "modified",
   },
@@ -9480,6 +10010,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile-info.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/profile.service.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile.service.ts": {
@@ -9539,6 +10072,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/shared/date/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/filter/filter.html": {
     "stateCleared": "modified",
   },
@@ -9585,6 +10121,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/shared-utilities.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/index.ts": {
@@ -10226,6 +10765,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/core/auth/login.model.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/state-storage.service.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },
@@ -10299,6 +10841,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/detail/entity-with-custom-id-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.model.ts": {
@@ -10376,6 +10921,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/entities/microservice/list/microservice.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/microservice/microservice-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/microservice.model.ts": {
     "stateCleared": "modified",
   },
@@ -10451,6 +10999,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/entities/simple/service/simple.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/simple/simple-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/simple/simple.model.ts": {
     "stateCleared": "modified",
   },
@@ -10502,6 +11053,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/layouts/footer/footer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/layouts/layout-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/layouts/main/main.html": {
     "stateCleared": "modified",
   },
@@ -10536,6 +11090,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile-info.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/profiles/profile.service.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/profile.service.ts": {
@@ -10604,6 +11161,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/shared/date/index.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/filter-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/filter/filter.html": {
     "stateCleared": "modified",
   },
@@ -10650,6 +11210,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/shared-utilities.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/index.ts": {

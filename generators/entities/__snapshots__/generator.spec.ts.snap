@@ -68,6 +68,9 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/resources/config/liquibase/fake-data/skip.csv": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/bar/bar-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/bar/bar.model.ts": {
     "stateCleared": "modified",
   },
@@ -147,6 +150,9 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/detail/foo-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.model.ts": {
@@ -231,6 +237,9 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/skip/service/skip.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/skip/skip-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/skip/skip.model.ts": {
@@ -422,6 +431,9 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/resources/config/liquibase/fake-data/foo.csv": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/bar/bar-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/bar/bar.model.ts": {
     "stateCleared": "modified",
   },
@@ -501,6 +513,9 @@ exports[`generator - entities regenerating some entities should match snapshot 1
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/detail/foo-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.model.ts": {

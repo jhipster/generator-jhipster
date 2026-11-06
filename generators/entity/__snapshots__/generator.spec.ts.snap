@@ -41,6 +41,9 @@ exports[`generator - entity with default configuration should match files snapsh
   "src/main/webapp/app/entities/foo/detail/foo-detail.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/foo/foo-screens.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/foo/foo.model.ts": {
     "stateCleared": "modified",
   },
@@ -188,6 +191,9 @@ exports[`generator - entity with enableTranslation disabled should match files s
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/detail/foo-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.model.ts": {

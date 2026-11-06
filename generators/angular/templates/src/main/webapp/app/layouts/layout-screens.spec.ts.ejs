@@ -1,0 +1,216 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
+import { <%- authenticationTypeOauth2 ? '' : 'HttpTestingController, ' %>provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+<%_ if (enableTranslation) { _%>
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
+import { of, throwError } from 'rxjs';
+
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { AlertModel, AlertService } from 'app/core/util/alert.service';
+import Home from 'app/home/home';
+<%_ if (!authenticationTypeOauth2) { _%>
+import Login from 'app/login/login';
+<%_ } _%>
+import { LoginService } from 'app/login/login.service';
+import { Alert } from 'app/shared/alert/alert';
+import { AlertError } from 'app/shared/alert/alert-error';
+
+import Navbar from './navbar/navbar';
+import PageRibbon from './profiles/page-ribbon';
+import { ProfileService } from './profiles/profile.service';
+
+const account: Account = {
+  activated: true,
+  authorities: ['ROLE_ADMIN'],
+  email: 'admin@localhost',
+  firstName: 'first',
+  langKey: 'en',
+  lastName: 'last',
+  login: 'admin',
+  imageUrl: null,
+};
+
+const clickAll = (fixture: ComponentFixture<unknown>, selector: string): void => {
+  fixture.nativeElement.querySelectorAll(selector).forEach((element: HTMLElement) => {
+    element.click();
+    fixture.detectChanges();
+  });
+};
+
+describe('Layout screens', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [<%- enableTranslation ? 'provideTranslateService(), ' : '' %>provideHttpClient(), provideHttpClientTesting(), provideRouter([{ path: '**', children: [] }])],
+    });
+    TestBed.inject(FaIconLibrary).addIconPacks(fas);
+  });
+
+  describe('navbar', () => {
+    const render = (identity: Account | null): ComponentFixture<Navbar> => {
+      TestBed.inject(AccountService).authenticate(identity);
+      vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({ inProduction: false, openAPIEnabled: true }));
+      vi.spyOn(TestBed.inject(LoginService), 'logout').mockImplementation(() => undefined);
+      const fixture = TestBed.createComponent(Navbar);
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it('should show the menus of an administrator and accept their links', () => {
+      const fixture = render(account);
+
+      clickAll(fixture, 'a, button');
+
+      expect(TestBed.inject(LoginService).logout).toHaveBeenCalled();
+    });
+
+<%_ if (enableTranslation) { _%>
+    it('should change the language', () => {
+      TestBed.inject(AccountService).authenticate(null);
+      vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({}));
+      const translateService = TestBed.inject(TranslateService);
+      const use = vi.spyOn(translateService, 'use');
+      const fixture = TestBed.createComponent(Navbar);
+      Object.assign(fixture.componentInstance, { languages: ['en', 'en'] });
+      fixture.detectChanges();
+
+      clickAll(fixture, '[data-cy="navbar"] a, a.dropdown-item');
+      translateService.use('en');
+      fixture.detectChanges();
+
+      expect(use).toHaveBeenCalledWith('en');
+    });
+
+<%_ } _%>
+    it('should show the picture of the account', () => {
+      const fixture = render({ ...account, imageUrl: 'http://localhost/image.png' });
+
+      expect(fixture.nativeElement.querySelector('img')).not.toBeNull();
+    });
+
+    it('should show the login to an anonymous user', () => {
+      const fixture = render(null);
+
+      clickAll(fixture, '#login');
+
+      expect(fixture.nativeElement.querySelector('#login')).not.toBeNull();
+    });
+  });
+
+  describe('home', () => {
+    it('should show the account', () => {
+      TestBed.inject(AccountService).authenticate(account);
+      const fixture = TestBed.createComponent(Home);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.alert-success')).not.toBeNull();
+    });
+
+    it('should invite to log in', () => {
+      TestBed.inject(AccountService).authenticate(null);
+      const fixture = TestBed.createComponent(Home);
+      fixture.detectChanges();
+
+      clickAll(fixture, 'a.alert-link');
+
+      expect(fixture.nativeElement.querySelector('.alert-success')).toBeNull();
+    });
+  });
+
+<%_ if (!authenticationTypeOauth2) { _%>
+  describe('login', () => {
+    it('should log in and out with the server', () => {
+      const httpMock = TestBed.inject(HttpTestingController);
+      const loginService = TestBed.inject(LoginService);
+      const authenticated = vi.fn();
+
+      loginService.login({ username: 'user', password: 'user', rememberMe: false }).subscribe(authenticated);
+      httpMock.match(() => true).forEach(request => request.flush({ id_token: 'token' }));
+      httpMock.match(() => true).forEach(request => request.flush(account));
+      loginService.logout();
+      httpMock.match(() => true).forEach(request => request.flush({}));
+
+      expect(authenticated).toHaveBeenCalled();
+    });
+
+    it('should show the form and the failure', () => {
+      vi.spyOn(TestBed.inject(AccountService), 'identity').mockReturnValue(of(null));
+      vi.spyOn(TestBed.inject(LoginService), 'login').mockReturnValue(throwError(() => new Error('failed')));
+      const fixture = TestBed.createComponent(Login);
+      fixture.detectChanges();
+
+      fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.alert-danger')).not.toBeNull();
+    });
+  });
+
+<%_ } _%>
+  describe('alerts', () => {
+    const alert: AlertModel = { id: 0, type: 'danger', message: 'failed', position: 'top right', toast: true, close: vi.fn() };
+
+    it('should show and close the alerts', () => {
+      const fixture = TestBed.createComponent(AlertError);
+      fixture.componentInstance.alerts.set([alert, { ...alert, message: undefined, position: undefined }]);
+      fixture.detectChanges();
+
+      fixture.debugElement.query(By.css('ngb-alert')).triggerEventHandler('closed');
+
+      expect(alert.close).toHaveBeenCalled();
+    });
+
+    it('should show and close the alerts of the service', () => {
+      TestBed.inject(AlertService).addAlert({ ...alert, timeout: 0 });
+      const fixture = TestBed.createComponent(Alert);
+      fixture.detectChanges();
+
+      fixture.debugElement.query(By.css('ngb-alert')).triggerEventHandler('closed');
+
+      expect(fixture.nativeElement.querySelector('.alerts')).not.toBeNull();
+    });
+  });
+
+  describe('ribbon', () => {
+    it('should show the environment', () => {
+      vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(of({ ribbonEnv: 'dev' }));
+      const fixture = TestBed.createComponent(PageRibbon);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.ribbon')).not.toBeNull();
+    });
+
+    it('should show nothing when the profile is unknown', () => {
+      vi.spyOn(TestBed.inject(ProfileService), 'getProfileInfo').mockReturnValue(throwError(() => new Error('failed')));
+      const fixture = TestBed.createComponent(PageRibbon);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.ribbon')).toBeNull();
+    });
+  });
+});

@@ -1,0 +1,394 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const screenRelationships = relationships.filter(rel => rel.otherEntity.primaryKey && !rel.otherEntity.embedded && (rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship));
+    const relatedValues = new Map();
+    for (const { otherEntity, otherEntityField } of screenRelationships) {
+      const { name, tsSampleValues } = otherEntity.primaryKey;
+      if (!relatedValues.has(name)) relatedValues.set(name, tsSampleValues[0]);
+      if (!relatedValues.has(otherEntityField)) relatedValues.set(otherEntityField, '\'related\'');
+    }
+    const primaryKeyName = primaryKey.name;
+    const [firstKey, secondKey] = primaryKey.tsSampleValues;
+    const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
+    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
+_%>
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+<%_ if (paginationInfiniteScroll) { _%>
+import { By } from '@angular/platform-browser';
+<%_ } _%>
+import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+<%_ if (readOnly) { _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<%_ } else { _%>
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+import { provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
+<%_ if (anyFieldIsDuration) { _%>
+import dayjs from 'dayjs/esm';
+import duration from 'dayjs/esm/plugin/duration';
+import relativeTime from 'dayjs/esm/plugin/relativeTime';
+<%_ } _%>
+import { of } from 'rxjs';
+
+<%_ if (builtInUserManagement) { _%>
+import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+import { <%- entityAngularName %>DeleteDialog } from './delete/<%- entityFileName %>-delete-dialog';
+<%_ } _%>
+import { <%- entityAngularName %>Detail } from './detail/<%- entityFileName %>-detail';
+import { sampleWithFullData } from './<%- entityFileName %>.test-samples';
+import { <%- entityAngularName %> } from './list/<%- entityFileName %>';
+<%_ if (!readOnly) { _%>
+import { <%- entityAngularName %>Update } from './update/<%- entityFileName %>-update';
+<%_ } _%>
+
+<%_ if (screenRelationships.length > 0) { _%>
+const related = { <%- [...relatedValues].map(([key, value]) => `${key}: ${value}`).join(', ') %> };
+<%_ } _%>
+const sample: any = {
+  ...sampleWithFullData,
+  <%- primaryKeyName %>: <%- firstKey %>,
+<%_ for (const field of booleanFields) { _%>
+  <%- field.fieldName %>: true,
+<%_ } _%>
+<%_ for (const field of fileFields) { _%>
+  <%- field.fieldName %>: 'aGlwc3Rlcg==',
+<%_ } _%>
+<%_ for (const rel of screenRelationships) { _%>
+  <%_ if (rel.relationshipSerializePrimaryKeyOnly) { _%>
+  <%- rel.propertyName %>: <%- rel.collection ? `[related.${rel.otherEntity.primaryKey.name}]` : `related.${rel.otherEntity.primaryKey.name}` %>,
+  <%_ } else { _%>
+  <%- rel.propertyName %>: <%- rel.collection ? '[related, related]' : 'related' %>,
+  <%_ } _%>
+<%_ } _%>
+};
+const sampleWithoutData = { <%- primaryKeyName %>: <%- secondKey %> };
+
+<%_ if (anyFieldIsDuration) { _%>
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
+
+<%_ } _%>
+vi.useFakeTimers();
+
+const clickAll = (fixture: ComponentFixture<unknown>, selector: string): void => {
+  const elements: NodeListOf<HTMLElement> = fixture.nativeElement.querySelectorAll(selector);
+  elements.forEach(element => element.click());
+  fixture.detectChanges();
+};
+
+describe('<%- entityAngularName %> screens', () => {
+  let httpMock: HttpTestingController;
+
+  const flushAll = (body: unknown): void => {
+    const headers = { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"', 'X-Total-Count': '40' };
+    httpMock.match(() => true).forEach(request => request.flush(body as any, { headers }));
+  };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([{ path: '**', children: [] }]),
+<%_ if (!readOnly) { _%>
+        NgbActiveModal,
+<%_ } _%>
+        { provide: NgbModal, useValue: { open: vi.fn(() => ({ componentInstance: {}, closed: of() })) } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({ defaultSort: '<%- primaryKeyName %>,asc', <%- entityInstance %>: sample }),
+            queryParamMap: of(convertToParamMap({ page: '1', size: '1', sort: '<%- primaryKeyName %>,desc' })),
+            snapshot: { data: { defaultSort: '<%- primaryKeyName %>,asc' }, queryParams: {}, queryParamMap: convertToParamMap({ page: '1', size: '1', sort: '<%- primaryKeyName %>,desc' }) },
+          },
+        },
+      ],
+    });
+    TestBed.inject(FaIconLibrary).addIconPacks(fas);
+    httpMock = TestBed.inject(HttpTestingController);
+    vi.spyOn(globalThis, 'open').mockReturnValue(null);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  describe('list', () => {
+    const render = async (entities: unknown[]): Promise<ComponentFixture<<%- entityAngularName %>>> => {
+      const fixture = TestBed.createComponent(<%- entityAngularName %>);
+      fixture.detectChanges();
+      TestBed.tick();
+      flushAll(entities);
+      await vi.runAllTimersAsync();
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it('should show the entities', async () => {
+      const fixture = await render([sample, sampleWithoutData]);
+
+      expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(2);
+    });
+
+    it('should tell when there are no entities', async () => {
+      const fixture = await render([]);
+
+      expect(fixture.nativeElement.querySelector('#no-result')).not.toBeNull();
+    });
+
+<%_ if (searchEngineAny) { _%>
+  <%_ const notSortableField = fields.find(field => !field.transient && field.fieldTypeString && !field.id); _%>
+  <%_ if (notSortableField) { _%>
+    it('should drop a sort that a search does not accept', async () => {
+      Object.assign(TestBed.inject(ActivatedRoute), { queryParamMap: of(convertToParamMap({ search: 'term', sort: '<%- notSortableField.fieldName %>,asc' })) });
+      const fixture = await render([sample]);
+
+      fixture.componentInstance.sortState.set({ predicate: '<%- notSortableField.fieldName %>', order: 'asc' });
+      clickAll(fixture, 'form button');
+
+      expect(fixture.nativeElement.querySelector('form')).not.toBeNull();
+    });
+
+  <%_ } _%>
+    it('should search and clear the search', async () => {
+      Object.assign(TestBed.inject(ActivatedRoute), { queryParamMap: of(convertToParamMap({ search: 'term', sort: '<%- primaryKeyName %>,asc' })) });
+      const fixture = await render([sample]);
+      const input: HTMLInputElement = fixture.nativeElement.querySelector('#currentSearch');
+
+      input.value = 'other';
+      input.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+      clickAll(fixture, 'form button');
+
+      expect(fixture.nativeElement.querySelector('form')).not.toBeNull();
+    });
+
+<%_ } _%>
+    it('should use the default sort without a sort in the location', async () => {
+      Object.assign(TestBed.inject(ActivatedRoute), { queryParamMap: of(convertToParamMap({})) });
+      const fixture = await render([sample, sampleWithoutData]);
+
+      expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(2);
+    });
+
+    it('should keep the order without a sort', async () => {
+      Object.assign(TestBed.inject(ActivatedRoute), { data: of({}), queryParamMap: of(convertToParamMap({})) });
+      const fixture = await render([sample, sampleWithoutData]);
+
+      expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(2);
+    });
+
+<%_ if (paginationInfiniteScroll) { _%>
+    it('should load the next page when scrolled', async () => {
+      const fixture = await render([sample]);
+      const loadNextPage = vi.spyOn(fixture.componentInstance as any, 'loadNextPage');
+
+      fixture.debugElement.query(By.css('tbody')).triggerEventHandler('scrolled');
+
+      expect(loadNextPage).toHaveBeenCalled();
+    });
+
+<%_ } _%>
+    it('should accept the actions of the rows', async () => {
+<%_ if (builtInUserManagement) { _%>
+      TestBed.inject(AccountService).authenticate({ login: 'other' } as Account);
+<%_ } _%>
+      const fixture = await render([sample<%- builtInUserManagement ? ', { ...sample, activated: false }' : '' %>]);
+
+      clickAll(fixture, 'tbody a:not([href]), tbody button, th, h2 button');
+
+      expect(fixture.nativeElement.querySelector('h2')).not.toBeNull();
+    });
+  });
+
+  describe('detail', () => {
+    const render = (entity: unknown): ComponentFixture<<%- entityAngularName %>Detail> => {
+      const fixture = TestBed.createComponent(<%- entityAngularName %>Detail);
+      fixture.componentRef.setInput('<%- entityInstance %>', entity);
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it('should show the entity', () => {
+      const fixture = render(sample);
+
+      expect(fixture.nativeElement.querySelector('[data-cy="<%- entityInstance %>DetailsHeading"]')).not.toBeNull();
+    });
+
+    it('should show an entity without data', () => {
+      const fixture = render(sampleWithoutData);
+
+      expect(fixture.nativeElement.querySelector('dd')).not.toBeNull();
+    });
+
+    it('should show nothing without an entity', () => {
+      const fixture = render(null);
+
+      expect(fixture.nativeElement.querySelector('dd')).toBeNull();
+    });
+
+    it('should accept the actions', () => {
+<%_ if (builtInUserManagement) { _%>
+      TestBed.inject(AccountService).authenticate({ login: 'other' } as Account);
+<%_ } _%>
+      const fixture = render(sample);
+
+      clickAll(fixture, 'a:not([href]), button');
+
+      expect(fixture.nativeElement.querySelector('dd')).not.toBeNull();
+    });
+  });
+<%_ if (!readOnly) { _%>
+
+  describe('update', () => {
+    const render = (): ComponentFixture<<%- entityAngularName %>Update> => {
+      const fixture = TestBed.createComponent(<%- entityAngularName %>Update);
+      fixture.detectChanges();
+      flushAll(<%- screenRelationships.length > 0 ? '[related]' : '[]' %>);
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it('should show the form of an entity', () => {
+      const fixture = render();
+
+      expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
+    });
+
+    it('should show the form of an entity without data', () => {
+      TestBed.inject(ActivatedRoute).data = of({ <%- entityInstance %>: sampleWithoutData });
+      const fixture = render();
+
+      expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
+    });
+
+    it('should accept empty options', () => {
+      const fixture = TestBed.createComponent(<%- entityAngularName %>Update);
+      fixture.detectChanges();
+      flushAll(null);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
+    });
+
+    it('should show the form of a new entity', () => {
+      TestBed.inject(ActivatedRoute).data = of({});
+      const fixture = render();
+
+      expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
+    });
+
+  <%_ if (fields.some(field => field.fieldValidate && !field.hidden)) { _%>
+    it('should show the messages of the validations', () => {
+      TestBed.inject(ActivatedRoute).data = of({});
+      const fixture = render();
+
+      for (const control of Object.values(fixture.componentInstance.editForm.controls)) {
+        control.markAsDirty();
+        control.setErrors({ required: true, minlength: {}, maxlength: {}, min: {}, max: {}, pattern: {}, email: true, number: true, datetimelocal: true });
+      }
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('small.text-danger')).not.toBeNull();
+
+      const controls = Object.values(fixture.componentInstance.editForm.controls);
+      controls.forEach(control => control.setErrors({ other: true }));
+      fixture.detectChanges();
+      controls.forEach(control => {
+        control.markAsPristine();
+        control.markAsTouched();
+      });
+      fixture.detectChanges();
+      controls.forEach(control => control.markAsUntouched());
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('small.text-danger')).toBeNull();
+    });
+
+  <%_ } _%>
+    it('should save the form', () => {
+      const fixture = render();
+      const previousState = vi.spyOn(fixture.componentInstance, 'previousState');
+
+      fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+      flushAll(sample);
+
+      expect(previousState).toHaveBeenCalled();
+    });
+
+    it('should accept the actions', () => {
+      const fixture = render();
+
+      clickAll(fixture, 'a:not([href]), button[type="button"]');
+      fixture.nativeElement.querySelectorAll('input[type="file"]').forEach((input: HTMLElement) => input.dispatchEvent(new Event('change')));
+
+      expect(fixture.nativeElement.querySelector('#save-entity')).not.toBeNull();
+    });
+  });
+
+  describe('delete', () => {
+    const render = (entity?: typeof sample): ComponentFixture<<%- entityAngularName %>DeleteDialog> => {
+      const fixture = TestBed.createComponent(<%- entityAngularName %>DeleteDialog);
+      fixture.componentInstance.<%- entityInstance %> = entity;
+      fixture.detectChanges();
+      return fixture;
+    };
+
+    it('should show nothing without an entity', () => {
+      const fixture = render();
+
+      expect(fixture.nativeElement.querySelector('form')).toBeNull();
+    });
+
+    it('should dismiss the dialog when cancelled', () => {
+      const dismiss = vi.spyOn(TestBed.inject(NgbActiveModal), 'dismiss');
+      const fixture = render(sample);
+
+      clickAll(fixture, '.btn-secondary');
+
+      expect(dismiss).toHaveBeenCalled();
+    });
+
+    it('should close the dialog when confirmed', () => {
+      const close = vi.spyOn(TestBed.inject(NgbActiveModal), 'close');
+      const fixture = render(sample);
+
+      fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+      flushAll(null);
+
+      expect(close).toHaveBeenCalled();
+    });
+  });
+<%_ } _%>
+});

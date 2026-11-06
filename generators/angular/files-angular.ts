@@ -119,6 +119,10 @@ export const files = asWriteFilesSection({
         'layouts/main/main.ts',
         'layouts/main/main.html',
         'layouts/navbar/navbar-item.model.d.ts',
+        'layouts/layout-screens.spec.ts',
+        'shared/shared-utilities.spec.ts',
+        'layouts/profiles/profile.service.spec.ts',
+        'core/auth/state-storage.service.spec.ts',
         'layouts/navbar/navbar.ts',
         'layouts/navbar/navbar.html',
         'layouts/footer/footer.ts',
@@ -156,6 +160,7 @@ export const files = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       condition: generator => generator.generateUserManagement,
       templates: [
+        'account/account-screens.spec.ts',
         'account/account.route.ts',
         'account/activate/activate.route.ts',
         'account/activate/activate.ts',
@@ -209,6 +214,7 @@ export const files = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: [
         // admin modules
+        'admin/metrics/metrics-screens.spec.ts',
         'admin/configuration/configuration.ts',
         'admin/configuration/configuration.html',
         'admin/configuration/configuration.service.ts',
@@ -345,6 +351,7 @@ export const files = asWriteFilesSection({
         'shared/filter/index.ts',
         'shared/filter/filter.html',
         'shared/filter/filter.ts',
+        'shared/filter/filter-screens.spec.ts',
         'shared/filter/filter.model.spec.ts',
         'shared/filter/filter.model.ts',
       ],
