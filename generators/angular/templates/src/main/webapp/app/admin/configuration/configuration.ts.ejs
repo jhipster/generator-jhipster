@@ -45,7 +45,10 @@ export default class Configuration implements OnInit {
     const { order, predicate } = this.sortState();
     return (this.allSections() ?? []).map(section => {
       const rows = section.rows.filter(row => row.key.toLowerCase().includes(filter));
-      return { ...section, rows: predicate && order ? rows.sort(this.sortService.startSort({ predicate, order })) : rows };
+      if (predicate && order) {
+        rows.sort(this.sortService.startSort({ predicate, order }));
+      }
+      return { ...section, rows };
     });
   });
 
