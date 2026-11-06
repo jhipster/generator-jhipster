@@ -3997,9 +3997,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/health/health.html": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/health/health.model.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/admin/health/health.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4643,6 +4640,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/health.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/health.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/label.ts": {
@@ -6408,9 +6411,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/admin/health/health.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/health/health.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/health/health.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -6988,6 +6988,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/health.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/health.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/label.ts": {
@@ -7774,9 +7780,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/health/health.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/health/health.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/health/health.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -8498,6 +8501,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/health.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/health.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/label.ts": {

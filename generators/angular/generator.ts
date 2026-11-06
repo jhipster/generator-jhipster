@@ -465,7 +465,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientRootDir}webpack/logo-jhipster.png`,
             [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
           ],
-          '9.5.0': [`${application.clientSrcDir}app/admin/logs/log.model.ts`],
+          '9.5.0': [
+            `${application.clientSrcDir}app/admin/health/health.model.ts`,
+            `${application.clientSrcDir}app/admin/logs/log.model.ts`,
+          ],
         });
       },
       cleanupOldFilesTask,

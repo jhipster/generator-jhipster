@@ -1,0 +1,144 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it } from 'vitest';
+
+import { toHealthChecks } from './health';
+
+describe('health', () => {
+  describe('toHealthChecks', () => {
+    it('should give no check for a response without components', () => {
+      expect(toHealthChecks({ status: 'UP' })).toEqual([]);
+    });
+
+    it('should convert a component with its texts and details', () => {
+      const [check] = toHealthChecks({
+        status: 'UP',
+        components: { db: { status: 'UP', details: { database: 'H2', valid: true, nested: { a: 1 } } } },
+      });
+
+      expect(check).toMatchObject({
+        id: 'db',
+        label: { text: 'db' },
+        status: { text: 'UP' },
+        healthy: true,
+        details: [
+          { key: 'database', value: 'H2' },
+          { key: 'valid', value: 'true' },
+          { key: 'nested', value: '{"a":1}' },
+        ],
+      });
+      expect(check.sublabel).toBeUndefined();
+    });
+<%_ if (enableTranslation) { _%>
+
+    it('should give the translation keys of the label and of the status', () => {
+      const [check] = toHealthChecks({ status: 'UP', components: { db: { status: 'DOWN' } } });
+
+      expect(check.label.translationKey).toBe('health.indicator.db');
+      expect(check.status.translationKey).toBe('health.status.DOWN');
+    });
+<%_ } _%>
+
+    it('should tell a status other than UP as not healthy', () => {
+      const checks = toHealthChecks({
+        status: 'DOWN',
+        components: { a: { status: 'DOWN' }, b: { status: 'OUT_OF_SERVICE' }, c: { status: 'UNKNOWN' } },
+      });
+
+      expect(checks.map(({ healthy }) => healthy)).toEqual([false, false, false]);
+    });
+
+    it('should leave out the details of a component without them', () => {
+      const [check] = toHealthChecks({ status: 'UP', components: { ping: { status: 'UP' } } });
+
+      expect(check.details).toBeUndefined();
+    });
+
+    it('should separate the error from the details', () => {
+      const checks = toHealthChecks({
+        status: 'DOWN',
+        components: {
+          mail: { status: 'DOWN', details: { error: 'failed' } },
+          db: { status: 'DOWN', details: { error: 'lost', database: 'H2' } },
+        },
+      });
+
+      expect(checks).toEqual([
+        expect.objectContaining({ id: 'mail', error: 'failed' }),
+        expect.objectContaining({ id: 'db', error: 'lost', details: [{ key: 'database', value: 'H2' }] }),
+      ]);
+      expect(checks[0].details).toBeUndefined();
+    });
+
+    it('should flatten the sub-components leaving out a parent with nothing to tell', () => {
+      const checks = toHealthChecks({
+        status: 'UP',
+        components: {
+          db: { status: 'UP', components: { primary: { status: 'UP' }, replica: { status: 'UP', components: { one: { status: 'UP' } } } } },
+        },
+      });
+
+      expect(checks.map(({ id, label, sublabel }) => [id, label.text, sublabel])).toEqual([
+        ['db.primary', 'db', 'primary'],
+        ['db.replica.one', 'db', 'replica.one'],
+      ]);
+    });
+
+    it('should keep a parent that has details or an error', () => {
+      const checks = toHealthChecks({
+        status: 'DOWN',
+        components: {
+          db: { status: 'UP', details: { database: 'H2' }, components: { primary: { status: 'UP' } } },
+          mail: { status: 'DOWN', details: { error: 'failed' }, components: { smtp: { status: 'DOWN' } } },
+        },
+      });
+
+      expect(checks.map(({ id }) => id)).toEqual(['db', 'db.primary', 'mail', 'mail.smtp']);
+    });
+
+    it('should show the numbers of the disk space in a human-readable unit', () => {
+      const [check] = toHealthChecks({
+        status: 'UP',
+        components: { diskSpace: { status: 'UP', details: { total: 2147483648, free: 214748, path: '/data', exists: true } } },
+      });
+
+      expect(check.details).toEqual([
+        { key: 'total', value: '2.00 GB' },
+        { key: 'free', value: '0.20 MB' },
+        { key: 'path', value: '/data' },
+        { key: 'exists', value: 'true' },
+      ]);
+    });
+
+    it('should show the numbers of a sub-component of the disk space in a human-readable unit', () => {
+      const [check] = toHealthChecks({
+        status: 'UP',
+        components: { diskSpace: { status: 'UP', components: { data: { status: 'UP', details: { total: 1073741824 } } } } },
+      });
+
+      expect(check.details).toEqual([{ key: 'total', value: '1024.00 MB' }]);
+    });
+
+    it('should show the numbers of any other component as they came', () => {
+      const [check] = toHealthChecks({ status: 'UP', components: { custom: { status: 'UP', details: { total: 2147483648 } } } });
+
+      expect(check.details).toEqual([{ key: 'total', value: '2147483648' }]);
+    });
+  });
+});

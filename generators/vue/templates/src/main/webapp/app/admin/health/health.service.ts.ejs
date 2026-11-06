@@ -18,115 +18,15 @@
 -%>
 import { type InjectionKey } from 'vue';
 
-import axios, { type AxiosPromise } from 'axios';
+import axios from 'axios';
 
-/** A health indicator of the health endpoint: its status and its details or its sub-indicators. */
-export type HealthObject = { status: string } & Record<string, unknown>;
-
-export interface Health {
-  status: string;
-  components?: Record<string, unknown>;
-}
-
-/** A row of the health page. */
-export interface HealthData {
-  name: string;
-  status?: unknown;
-  error?: unknown;
-  details?: Record<string, unknown>;
-}
+import { type HealthCheck, type HealthResponse, toHealthChecks } from '@/shared/jhipster/health';
 
 export default class HealthService {
-  separator = '.';
-
-  checkHealth(): AxiosPromise<Health> {
-    return axios.get('management/health');
-  }
-
-  transformHealthData(data: Partial<Health>): HealthData[] {
-    const response: HealthData[] = [];
-    this.flattenHealthData(response, null, data.components);
-    return response;
-  }
-
-  getBaseName(name: string): string | undefined {
-    if (name) {
-      const split = name.split('.');
-      return split[0];
-    }
-  }
-
-  getSubSystemName(name: string): string | undefined {
-    if (name) {
-      const split = name.split('.');
-      split.splice(0, 1);
-      const remainder = split.join('.');
-      return remainder ? ` - ${remainder}` : '';
-    }
-  }
-
-  addHealthObject(result: HealthData[], isLeaf: boolean, healthObject: HealthObject, name: string): HealthData {
-    const healthData: HealthData = {
-      name,
-      details: undefined,
-      error: undefined,
-    };
-
-    const details: Record<string, unknown> = {};
-    let hasDetails = false;
-
-    for (const [key, value] of Object.entries(healthObject)) {
-      if (key === 'status' || key === 'error') {
-        healthData[key] = value;
-      } else if (!this.isHealthObject(value)) {
-        details[key] = value;
-        hasDetails = true;
-      }
-    }
-
-    // Add the details
-    if (hasDetails) {
-      healthData.details = details;
-    }
-
-    // Only add nodes if they provide additional information
-    if (isLeaf || hasDetails || healthData.error) {
-      result.push(healthData);
-    }
-    return healthData;
-  }
-
-  flattenHealthData(result: HealthData[], path: string | null, data: Record<string, unknown> | undefined): HealthData[] {
-    for (const [key, value] of Object.entries(data ?? {})) {
-      if (this.isHealthObject(value)) {
-        if (this.hasSubSystem(value)) {
-          this.addHealthObject(result, false, value, this.getModuleName(path, key));
-          this.flattenHealthData(result, this.getModuleName(path, key), value);
-        } else {
-          this.addHealthObject(result, true, value, this.getModuleName(path, key));
-        }
-      }
-    }
-    return result;
-  }
-
-  getModuleName(path: string | null, name: string): string {
-    if (path && name) {
-      return path + this.separator + name;
-    } else if (path) {
-      return path;
-    } else if (name) {
-      return name;
-    }
-    return '';
-  }
-
-  hasSubSystem(healthObject: HealthObject): boolean {
-    return Object.values(healthObject).some(value => (value as { status?: unknown } | null | undefined)?.status);
-  }
-
-  isHealthObject(healthObject: unknown): healthObject is HealthObject {
-    return typeof healthObject === 'object' && healthObject !== null && Object.hasOwn(healthObject, 'status');
+  async checkHealth(): Promise<HealthCheck[]> {
+    // An unhealthy application answers with 503 and its health.
+    const res = await axios.get<HealthResponse>('management/health', { validateStatus: status => status === 200 || status === 503 });
+    return toHealthChecks(res.data);
   }
 }
 

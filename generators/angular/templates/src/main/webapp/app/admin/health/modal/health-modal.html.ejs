@@ -16,10 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const labelText = label => enableTranslation ? `${label}.translationKey ? (${label}.translationKey | translate) : ${label}.text` : `${label}.text`; _%>
 <div class="modal-header">
-@if (health) {
+@if (check) {
   <h4 class="modal-title" id="showHealthLabel">
-    __jhiTranslateTagEnum__('health.indicator', { "value": "health.key", "fallback": "health.key" })
+    <span>{{ <%- labelText('check.label') %> }}</span>{{ check.sublabel ? ' - ' + check.sublabel : '' }}
   </h4>
 }
 
@@ -29,7 +30,7 @@
 </div>
 
 <div class="modal-body pad">
-@if (health) {
+@if (check?.details; as details) {
   <div>
     <h5>__jhiTranslateTag__('health.details.properties')</h5>
 
@@ -42,15 +43,21 @@
           </tr>
         </thead>
         <tbody>
-        @for (healthDetail of health.value.details! | keyvalue; track healthDetail.key) {
+        @for (healthDetail of details; track healthDetail.key) {
           <tr>
             <td class="text-start">{{ healthDetail.key }}</td>
-            <td class="text-start">{{ readableValue(healthDetail.value) }}</td>
+            <td class="text-start">{{ healthDetail.value }}</td>
           </tr>
         }
         </tbody>
       </table>
     </div>
+  </div>
+}
+@if (check?.error; as error) {
+  <div>
+    <h4>__jhiTranslateTag__('health.details.error')</h4>
+    <pre>{{ error }}</pre>
   </div>
 }
 </div>

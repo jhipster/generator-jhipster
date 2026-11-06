@@ -21,6 +21,7 @@ import axios from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (withAdminUi) { _%>
+import { type HealthCheck, type HealthResponse, toHealthChecks } from 'app/shared/jhipster/health';
 import { type Log, type LoggersResponse, toLogs } from 'app/shared/jhipster/logs';
 <%_ } _%>
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
@@ -37,7 +38,7 @@ const initialState = {
   logs: {
     loggers: [] as Log[],
   },
-  health: {} as any,
+  health: [] as HealthCheck[],
   metrics: {} as any,
   threadDump: [],
   configuration: {
@@ -63,9 +64,14 @@ export const getGatewayRoutes = createAsyncThunk('administration/fetch_gateway_r
 <%_ } _%>
 
 <%_ if (withAdminUi) { _%>
-export const getSystemHealth = createAsyncThunk('administration/fetch_health', async () => axios.get<any>('management/health'), {
-  serializeError: serializeAxiosError,
-});
+export const getSystemHealth = createAsyncThunk(
+  'administration/fetch_health',
+  // An unhealthy application answers with 503 and its health.
+  async () => axios.get<HealthResponse>('management/health', { validateStatus: status => status === 200 || status === 503 }),
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const getSystemMetrics = createAsyncThunk('administration/fetch_metrics', async () => axios.get<any>('management/jhimetrics'), {
   serializeError: serializeAxiosError,
@@ -139,7 +145,7 @@ export const AdministrationSlice = createSlice({
   <%_ if (withAdminUi) { _%>
       .addCase(getSystemHealth.fulfilled, (state, action) => {
         state.loading = false;
-        state.health = action.payload.data;
+        state.health = toHealthChecks(action.payload.data);
       })
       .addCase(getSystemMetrics.fulfilled, (state, action) => {
         state.loading = false;

@@ -171,12 +171,12 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful fetch health request', () => {
-      const payload = { data: { status: 'UP' } };
+      const payload = { data: { status: 'UP', components: { ping: { status: 'UP' } } } };
       const toTest = administration(undefined, { type: getSystemHealth.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        health: payload.data,
+        health: [expect.objectContaining({ id: 'ping', healthy: true })],
       });
     });
 

@@ -218,7 +218,6 @@ export const files = asWriteFilesSection({
         'admin/health/modal/health-modal.ts',
         'admin/health/modal/health-modal.html',
         'admin/health/health.service.ts',
-        'admin/health/health.model.ts',
         'admin/logs/logs.ts',
         'admin/logs/logs.html',
         'admin/logs/logs.service.ts',
