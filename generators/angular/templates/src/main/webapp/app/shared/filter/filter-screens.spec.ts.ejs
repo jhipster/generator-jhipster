@@ -1,0 +1,66 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+<%_ if (enableTranslation) { _%>
+import { provideTranslateService } from '@ngx-translate/core';
+<%_ } _%>
+
+import Filter from './filter';
+import { FilterOption, FilterOptions } from './filter.model';
+
+describe('Filter screens', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+<%_ if (enableTranslation) { _%>
+      providers: [provideTranslateService()],
+<%_ } _%>
+    });
+    TestBed.inject(FaIconLibrary).addIconPacks(fas);
+  });
+
+  const render = (filters: FilterOptions): ComponentFixture<Filter> => {
+    const fixture = TestBed.createComponent(Filter);
+    fixture.componentRef.setInput('filters', filters);
+    fixture.detectChanges();
+    return fixture;
+  };
+
+  it('should show nothing without a filter', () => {
+    const fixture = render(new FilterOptions());
+
+    expect(fixture.nativeElement.querySelector('.filter-display')).toBeNull();
+  });
+
+  it('should clear a filter and all of them', () => {
+    const filters = new FilterOptions([new FilterOption('name', ['value', 'other'])]);
+    const removeFilter = vi.spyOn(filters, 'removeFilter');
+    const clear = vi.spyOn(filters, 'clear');
+    const fixture = render(filters);
+
+    fixture.nativeElement.querySelector('li button').click();
+    fixture.nativeElement.querySelector('.filter-display > button').click();
+
+    expect(removeFilter).toHaveBeenCalledWith('name', 'value');
+    expect(clear).toHaveBeenCalled();
+  });
+});

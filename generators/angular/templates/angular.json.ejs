@@ -209,6 +209,9 @@
             "buildTarget": "<%- microfrontend ? `${dasherizedBaseName}:esbuild:development` : '::development' %>",
             "runnerConfig": true,
             "coverageReporters": ["text", "lcov"],
+<%_ if (enableTranslation) { _%>
+            "coverageExclude": ["<%- clientSrcDir %>i18n/**"],
+<%_ } _%>
             "reporters": [
               "default",
               ["vitest-sonar-reporter", { "outputFile": "./<%- relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
