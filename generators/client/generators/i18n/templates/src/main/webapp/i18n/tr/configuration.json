@@ -3,8 +3,11 @@
     "title": "Yapılandırma",
     "filter": "Filtrele (Ön ek ile)",
     "table": {
+      "title": "Yapılandırma özellikleri",
       "prefix": "Ön ek",
-      "properties": "Özellikler"
+      "properties": "Özellikler",
+      "property": "Özellik",
+      "value": "Değer"
     }
   }
 }

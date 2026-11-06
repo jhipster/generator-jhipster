@@ -3,8 +3,11 @@
     "title": "Configuration များ",
     "filter": "Filter (by prefix)",
     "table": {
+      "title": "Configuration Properties",
       "prefix": "Prefix",
-      "properties": "Properties"
+      "properties": "Properties",
+      "property": "Property",
+      "value": "Value"
     }
   }
 }
