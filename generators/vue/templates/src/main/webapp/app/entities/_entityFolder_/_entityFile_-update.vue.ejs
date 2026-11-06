@@ -162,7 +162,7 @@ _%>
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="v$.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving || isLoading"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.save') }}</span>
@@ -264,7 +264,7 @@ const isUpdate = computed(() => Boolean(route.params?.<%- entityInstance %>Id));
 
 const previousState = () => router.go(-1);
 
-const { data: <%- entityInstance %> } = useControlledRequest(
+const { data: <%- entityInstance %>, isLoading } = useControlledRequest(
   async (id, { signal }) => {
     const res = await <%- entityInstance %>Service().find(id, { signal });
 <%_ for (field of fields.filter(field => !field.id)) { _%>

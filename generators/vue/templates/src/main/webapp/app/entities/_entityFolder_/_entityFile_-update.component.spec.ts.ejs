@@ -163,6 +163,26 @@ describe('Component Tests', () => {
 <%_ } _%>
 
     describe('save', () => {
+      it('Should not allow saving while the entity loads', async () => {
+        // GIVEN
+        const { promise, resolve } = Promise.withResolvers<typeof <%- entityInstance %>Sample>();
+        <%- entityInstance %>ServiceStub.find.mockReturnValue(promise);
+        route = { params: { <%- entityInstance %>Id: '123' } };
+
+        // WHEN
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
+
+        // THEN
+        expect(wrapper.find('[data-cy="entityCreateSaveButton"]').attributes('disabled')).toBeDefined();
+
+        // WHEN
+        resolve(<%- entityInstance %>Sample);
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.vm.isLoading).toBe(false);
+      });
+
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
 <%_ if (!builtInUserManagement && fields.some(field => field.id && !field.autoGenerate && !field.hidden)) { _%>
