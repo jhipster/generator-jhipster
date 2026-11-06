@@ -22,8 +22,7 @@ import axios from 'axios';
 
 import administration, {
 <%_ if (withAdminUi) { _%>
-  getConfigurations,
-  getEnv,
+  getConfiguration,
 <%_ } _%>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   getGatewayRoutes,
@@ -93,8 +92,7 @@ describe('Administration reducer tests', () => {
           getSystemHealth.pending.type,
           getSystemMetrics.pending.type,
           getSystemThreadDump.pending.type,
-          getConfigurations.pending.type,
-          getEnv.pending.type,
+          getConfiguration.pending.type,
 <%_ } _%>
         ],
         {},
@@ -120,8 +118,7 @@ describe('Administration reducer tests', () => {
           getSystemHealth.rejected.type,
           getSystemMetrics.rejected.type,
           getSystemThreadDump.rejected.type,
-          getConfigurations.rejected.type,
-          getEnv.rejected.type,
+          getConfiguration.rejected.type,
 <%_ } _%>
         ],
         'something happened',
@@ -171,12 +168,12 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful fetch health request', () => {
-      const payload = { data: { status: 'UP' } };
+      const payload = { data: { status: 'UP', components: { ping: { status: 'UP' } } } };
       const toTest = administration(undefined, { type: getSystemHealth.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        health: payload.data,
+        health: [expect.objectContaining({ id: 'ping', healthy: true })],
       });
     });
 
@@ -200,29 +197,13 @@ describe('Administration reducer tests', () => {
       });
     });
 
-    it('should update state according to a successful fetch configurations request', () => {
-      const payload = { data: { contexts: { jhipster: { beans: {} } } } };
-      const toTest = administration(undefined, { type: getConfigurations.fulfilled.type, payload });
+    it('should update state according to a successful fetch configuration request', () => {
+      const payload = [{ label: { text: 'source' }, columns: [{ text: 'Property' }, { text: 'Value' }], rows: [{ key: 'key', value: 'value' }] }];
+      const toTest = administration(undefined, { type: getConfiguration.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        configuration: {
-          configProps: payload.data,
-          env: {},
-        },
-      });
-    });
-
-    it('should update state according to a successful fetch env request', () => {
-      const payload = { data: { activeProfiles: ['api-docs', 'dev'] } };
-      const toTest = administration(undefined, { type: getEnv.fulfilled.type, payload });
-
-      expect(toTest).toMatchObject({
-        loading: false,
-        configuration: {
-          configProps: {},
-          env: payload.data,
-        },
+        configuration: payload,
       });
     });
   <%_ } _%>
@@ -345,27 +326,17 @@ describe('Administration reducer tests', () => {
       );
       expect(setLoggers.fulfilled.match(result)).toBe(true);
     });
-    it('dispatches FETCH_CONFIGURATIONS_PENDING and FETCH_CONFIGURATIONS_FULFILLED actions', async () => {
-      const result = await getConfigurations()(dispatch, getState, extra);
+    it('dispatches FETCH_CONFIGURATION_PENDING and FETCH_CONFIGURATION_FULFILLED actions', async () => {
+      axios.get = vi.fn().mockResolvedValue({ data: { contexts: {}, propertySources: [] } });
+      const result = await getConfiguration()(dispatch, getState, extra);
 
       expect(dispatch).toHaveBeenCalledWith(
         expect.objectContaining({
-          type: getConfigurations.pending.type,
+          type: getConfiguration.pending.type,
           meta: expect.objectContaining({ requestStatus: 'pending' }),
         }),
       );
-      expect(getConfigurations.fulfilled.match(result)).toBe(true);
-    });
-    it('dispatches FETCH_ENV_PENDING and FETCH_ENV_FULFILLED actions', async () => {
-      const result = await getEnv()(dispatch, getState, extra);
-
-      expect(dispatch).toHaveBeenCalledWith(
-        expect.objectContaining({
-          type: getEnv.pending.type,
-          meta: expect.objectContaining({ requestStatus: 'pending' }),
-        }),
-      );
-      expect(getEnv.fulfilled.match(result)).toBe(true);
+      expect(getConfiguration.fulfilled.match(result)).toBe(true);
     });
   <%_ } _%>
   });

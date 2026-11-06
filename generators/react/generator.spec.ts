@@ -185,13 +185,10 @@ describe(`generator - ${clientFramework}`, () => {
               'logs: {\n' +
                 '    loggers: [] as Log[],\n' +
                 '  },\n' +
-                '  health: {} as any,\n' +
+                '  health: [] as HealthCheck[],\n' +
                 '  metrics: {} as any,\n' +
                 '  threadDump: [],\n' +
-                '  configuration: {\n' +
-                '    configProps: {} as any,\n' +
-                '    env: {} as any,\n' +
-                '  },',
+                '  configuration: [] as ConfigurationSection[],',
             );
 
             if (enableTranslation) {
