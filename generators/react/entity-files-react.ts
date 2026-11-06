@@ -47,7 +47,7 @@ export const reactFiles = asWriteFilesSection({
     {
       condition: generator => !generator.embedded,
       ...clientApplicationTemplatesBlock(),
-      templates: ['entities/_entityFolder_/_entityFile_-reducer.spec.ts'],
+      templates: ['entities/_entityFolder_/_entityFile_-reducer.spec.ts', 'entities/_entityFolder_/_entityFile_.spec.tsx'],
     },
   ],
 });

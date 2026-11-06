@@ -3585,7 +3585,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
     "searchEngineElasticsearch": false,
     "searchEngineNo": true,
     "service": "no",
-    "skipClient": true,
+    "skipClient": false,
     "skipDbChangelog": true,
     "skipServer": true,
     "skipUiGrouping": false,

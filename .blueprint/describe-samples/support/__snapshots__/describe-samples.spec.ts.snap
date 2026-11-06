@@ -501,6 +501,7 @@ exports[`describe-samples - support describeSampleGroups should match the sample
   "react": {
     "samples": [
       "react-default",
+      "react-default-additional",
       "react-maven-h2mem-memcached",
       "react-gradle-mysql-es-noi18n-mapsid",
       "react-gradle-cassandra-session-redis",

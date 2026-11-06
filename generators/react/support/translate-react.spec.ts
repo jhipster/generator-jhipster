@@ -101,6 +101,21 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
 `);
         });
 
+        it('should replace translate function with a closing brace in an interpolated string', () => {
+          const body = `
+translate('global', { pattern: '^[a-z$&{|}~]+$' })
+`;
+          expect(replaceReactTranslations(body, extension)).not.toContain('translate(');
+        });
+
+        it('should write the quotes of an interpolated string for a double quoted translation', () => {
+          const body = String.raw`translate('global', { pattern: '^[a-z\'"]+$' })`;
+          const result = replaceReactTranslations(body, extension);
+          // The translation of the spec is the data as JSON.
+          expect(result).toContain(JSON.stringify(String.raw`[a-z'\"]`).slice(1, -1));
+          expect(result).not.toContain(String.raw`\'`);
+        });
+
         it('should replace wrapped translate function with interpolation', () => {
           const body = `
 {translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',

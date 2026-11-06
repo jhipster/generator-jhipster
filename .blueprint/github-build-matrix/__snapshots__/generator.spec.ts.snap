@@ -3335,6 +3335,32 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
+      "job-name": "react-default-additional (n[1]/j[1])",
+      "sample": "react-default-additional",
+      "os": "ubuntu-latest",
+      "node-version": "[1]",
+      "java-version": "[1]",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-compare": "false",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "react-default-additional",
+      "entity": "none",
+      "app-sample": "react-default",
+      "jdl-entity": "*",
+      "generatorOptions": {
+        "removeNeedles": true,
+        "e2eTls": true
+      },
+      "workspaces": "false",
+      "disabled": false,
+      "build-jhipster-bom": true,
+      "jhipster-bom-branch": "main",
+      "jhipster-bom-cicd-version": "0.0.0-CICD"
+    },
+    {
       "job-name": "react-maven-h2mem-memcached (n[2]/j[1])",
       "sample": "react-maven-h2mem-memcached",
       "os": "ubuntu-latest",

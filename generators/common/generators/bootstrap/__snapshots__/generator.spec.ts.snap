@@ -2727,7 +2727,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
     "restProperties": Any<Array>,
     "searchEngine": "no",
     "service": "no",
-    "skipClient": true,
+    "skipClient": false,
     "skipDbChangelog": true,
     "skipServer": true,
     "skipUiGrouping": false,
