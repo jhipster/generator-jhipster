@@ -34,12 +34,12 @@ import dayjs from 'dayjs';
 
 import AlertService, { alertServiceKey } from '@/shared/alert/alert.service';
 <%_ if (builtInUserManagement) { _%>
-import { currentUsernameKey } from '@/shared/config/injection-keys';
+import { currentUsernameKey } from '@/config/injection-keys';
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
+import JhiSortHeader from '@/components/jhi-sort-header.vue';
 <%_ } _%>
-import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/shared/testing/stubs';
+import { bButtonStub, bModalStub, routerLinkStub, triggerAll } from '@/testing/stubs';
 
 import { <%- entityInstance %>ServiceKey } from './<%- entityFileName %>.service';
 import <%- entityAngularName %> from './<%- entityFileName %>.vue';

@@ -199,13 +199,13 @@ import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 <%- exposeMicrofrontend ? '// ' : '' %>import EntitiesMenu from '@/entities/entities-menu.vue';
 <%_ if (enableTranslation) { _%>
-import { changeLanguageKey, currentLanguageKey } from '@/shared/config/injection-keys';
-import getLanguages from '@/shared/config/languages';
+import { changeLanguageKey, currentLanguageKey } from '@/config/injection-keys';
+import getLanguages from '@/config/languages';
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
-import { useStore } from '@/store';
+import { useStore } from '@/stores';
 
 defineOptions({
   name: 'JhiNavbar',
@@ -218,7 +218,7 @@ defineOptions({
   <%_ for (const remote of microfrontends) { _%>
     '<%- remote.moduleFederationName %>-menu': defineAsyncComponent(() => {
       return (loadRemote<{ default: Component }>('<%- remote.moduleFederationName %>/entities-menu') as Promise<{ default: Component }>)
-        .catch(() => import('@/core/error/error-loading.vue'));
+        .catch(() => import('@/layouts/error/error-loading.vue'));
     }),
   <%_ } _%>
 <%_ } _%>

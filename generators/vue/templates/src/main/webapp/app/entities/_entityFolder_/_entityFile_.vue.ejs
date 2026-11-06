@@ -226,12 +226,12 @@ import { type AxiosError } from 'axios';
 
 import { alertServiceKey, useAlertService } from '@/shared/alert/alert.service';
 <%_ const composables = [...anyFieldIsDuration || anyFieldIsTimeDerived ? ['useDateFormat'] : [], 'useEntityList', ...readOnly ? [] : ['useEntityRemove']]; _%>
-import { <%- composables.join(', ') %> } from '@/shared/composables';
+import { <%- composables.join(', ') %> } from '@/composables';
 <%_ if (builtInUserManagement) { _%>
-import { currentUsernameKey } from '@/shared/config/injection-keys';
+import { currentUsernameKey } from '@/config/injection-keys';
 <%_ } _%>
 <%_ if (anyFieldHasFileBasedContentType) { _%>
-import useDataUtils from '@/shared/data/data-utils.service';
+import useDataUtils from '@/composables/data-utils';
 <%_ } _%>
 <%_ if (!readOnly || builtInUserManagement) { _%>
 import { type I<%- entityAngularName %> } from './<%- entityFileName %>.model';
