@@ -259,7 +259,7 @@ describe(`generator - ${clientFramework}`, () => {
             );
             if (enableTranslation) {
               assertion(
-                `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
+                `${clientSrcDir}app/layouts/navbar/navbar.vue`,
                 '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
                   '            <font-awesome-icon icon="tachometer-alt" />\n' +
                   "            <span>{{ t$('global.menu.admin.metrics') }}</span>\n" +

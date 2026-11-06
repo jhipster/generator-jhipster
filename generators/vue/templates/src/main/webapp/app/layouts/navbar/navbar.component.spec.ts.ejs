@@ -33,11 +33,11 @@ import type LoginService from '@/account/login.service';
 import { loginServiceKey } from '@/account/login.service';
 <%_ } _%>
 import { createRouter } from '@/router';
-import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentLanguageKey } from '@/shared/config/injection-keys';
-import { slotsStub } from '@/shared/testing/stubs';
-import { useStore } from '@/store';
+import { <%- enableTranslation ? 'changeLanguageKey, ' : '' %>currentLanguageKey } from '@/config/injection-keys';
+import { slotsStub } from '@/testing/stubs';
+import { useStore } from '@/stores';
 
-import JhiNavbar from './jhi-navbar.vue';
+import JhiNavbar from './navbar.vue';
 <%_ if (microfrontend) { _%>
 
 vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
@@ -52,7 +52,7 @@ const store = useStore();
 
 <%_ if (enableTranslation) { _%>
 // Two languages show the menu of the languages.
-vi.mock('@/shared/config/languages', () => ({
+vi.mock('@/config/languages', () => ({
   default: () => ({ en: { name: 'English' }, fr: { name: 'Français' } }),
 }));
 

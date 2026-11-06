@@ -25,7 +25,7 @@ import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enh
 import axios from 'axios';
 import dayjs from 'dayjs';
 
-import languages from '@/shared/config/languages';
+import languages from '@/config/languages';
 
 <%_ if (microfrontend && microfrontends.some(remote => !remote.self)) { _%>
 /**
