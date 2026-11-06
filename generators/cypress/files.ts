@@ -57,6 +57,14 @@ export const cypressFiles = asWriteFilesSection({
       templates: ['e2e/account/logout.cy.ts'],
     },
     {
+      condition: generator =>
+        generator.enableTranslation &&
+        (generator.languages?.length > 1 || generator.microfrontends?.some((remote: { self?: boolean }) => !remote.self)),
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
+      templates: ['e2e/translation/translations.cy.ts'],
+    },
+    {
       condition: generator => !generator.authenticationTypeOauth2,
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,

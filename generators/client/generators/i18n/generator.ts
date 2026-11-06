@@ -140,7 +140,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
               templates: [
                 {
                   condition: (data: any) => data.enableTranslation && (data.clientFrameworkVue || data.clientFrameworkReact),
-                  sourceFile: data => `${CLIENT_MAIN_SRC_DIR}/i18n/index_${data.clientBundler}.js`,
+                  sourceFile: `${CLIENT_MAIN_SRC_DIR}/i18n/index.js`,
                   destinationFile: data => `${data.clientI18nDir}${data.lang}/${data.lang}.js`,
                 },
               ],
@@ -151,6 +151,16 @@ export default class I18NGenerator extends ClientApplicationGenerator {
             }),
           ),
         );
+        await this.writeFiles({
+          templates: [
+            {
+              condition: (data: any) => data.enableTranslation && (data.clientFrameworkVue || data.clientFrameworkReact),
+              sourceFile: 'build-plugins/i18n.ts',
+              destinationFile: data => `${data.clientRootDir}build-plugins/i18n.ts`,
+            },
+          ],
+          context: application,
+        });
       },
     });
   }

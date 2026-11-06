@@ -56,6 +56,14 @@ export const playwrightFiles = asWriteFilesSection({
       templates: ['e2e/account/logout.pw.ts'],
     },
     {
+      condition: generator =>
+        generator.enableTranslation &&
+        (generator.languages?.length > 1 || generator.microfrontends?.some((remote: { self?: boolean }) => !remote.self)),
+      path: PLAYWRIGHT_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.playwrightDir}${file}`,
+      templates: ['e2e/translation/translations.pw.ts'],
+    },
+    {
       condition: generator => !generator.authenticationTypeOauth2,
       path: PLAYWRIGHT_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.playwrightDir}${file}`,

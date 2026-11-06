@@ -6,7 +6,7 @@
  * - serviceDiscovery: consul
  * - authenticationType: oauth2
  * - prodDatabaseType: mysql
- * - testFrameworks: cypress
+ * - testFrameworks: playwright
  *
  * Imperative focus:
  * - cacheProvider: memcached
@@ -24,12 +24,13 @@ application {
     baseName gateway
     buildTool maven
     clientFramework vue
+    languages [en, pt-br]
     creationTimestamp 1617901618886
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.gateway
     prodDatabaseType mysql
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
     microfrontends [blog, notification]
   }
   entities UserData, Product
@@ -45,13 +46,14 @@ application {
     cacheProvider memcached
     clientBundler vite
     clientFramework vue
+    languages [en, pt-br]
     creationTimestamp 1617901618887
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     packageName com.okta.developer.blog
     prodDatabaseType mysql
     serverPort 8081
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
   }
   entities Blog, Post, Tag
 }
@@ -72,7 +74,7 @@ application {
     prodDatabaseType mysql
     serverPort 8082
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
   }
   entities Product
 }
@@ -85,6 +87,7 @@ application {
     baseName notification,
     buildTool gradle
     clientFramework vue
+    languages [en, pt-br]
     creationTimestamp 1617901618889
     dtoSuffix Rest
     entitySuffix Entity
@@ -94,7 +97,7 @@ application {
     reactive true
     serverPort 8083
     serviceDiscoveryType consul
-    testFrameworks [cypress]
+    testFrameworks [playwright]
   }
   entities Notification
 }
