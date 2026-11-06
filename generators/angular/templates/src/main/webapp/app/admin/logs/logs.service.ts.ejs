@@ -22,8 +22,7 @@ import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'microserviceContextPath, ' : '' %>serverApiUrl } from 'app/config';
-
-import { Level, LoggersResponse } from './log.model';
+import { Level, LoggersResponse } from 'app/shared/jhipster/logs';
 
 @Service()
 export class LogsService {

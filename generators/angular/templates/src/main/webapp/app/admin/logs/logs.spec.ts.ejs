@@ -22,11 +22,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
+import { Log, LoggersResponse } from 'app/shared/jhipster/logs';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
 
-import { Log, LoggersResponse } from './log.model';
 import Logs from './logs';
 import { LogsService } from './logs.service';
 
@@ -59,7 +59,7 @@ describe('Logs', () => {
 
     it('should call load all on init', () => {
       // GIVEN
-      const log = new Log('main', 'WARN');
+      const log: Log = { name: 'main', level: 'WARN' };
       vi.spyOn(service, 'findAll').mockReturnValue(
         of({
           loggers: {
@@ -82,7 +82,7 @@ describe('Logs', () => {
   describe('change log level', () => {
     it('should change log level correctly', () => {
       // GIVEN
-      const log = new Log('main', 'ERROR');
+      const log: Log = { name: 'main', level: 'ERROR' };
       vi.spyOn(service, 'changeLevel').mockReturnValue(of({}));
       vi.spyOn(service, 'findAll').mockReturnValue(
         of({

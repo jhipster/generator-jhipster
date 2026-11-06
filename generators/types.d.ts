@@ -74,6 +74,7 @@ type GeneratorsByNamespace = {
   'jhipster:client:common': import('./client/generators/common/generator.ts').default;
   'jhipster:client:encode-csrf-token': import('./client/generators/encode-csrf-token/generator.ts').default;
   'jhipster:client:i18n': import('./client/generators/i18n/generator.ts').default;
+  'jhipster:client:spring-boot': import('./client/generators/spring-boot/generator.ts').default;
   common: import('./common/generator.ts').default;
   'jhipster:common': import('./common/generator.ts').default;
   'jhipster:common:bootstrap': import('./common/generators/bootstrap/generator.ts').default;

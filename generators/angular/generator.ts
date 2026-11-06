@@ -117,6 +117,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       async composing() {
         await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
+        await this.composeWithJHipster('jhipster:client:spring-boot');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
         }
@@ -451,6 +452,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientRootDir}webpack/logo-jhipster.png`,
             [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
           ],
+          '9.5.0': [`${application.clientSrcDir}app/admin/logs/log.model.ts`],
         });
       },
       cleanupOldFilesTask,

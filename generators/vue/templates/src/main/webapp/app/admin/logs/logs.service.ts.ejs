@@ -20,17 +20,7 @@ import { type InjectionKey } from 'vue';
 
 import axios, { type AxiosPromise } from 'axios';
 
-export type Level = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF';
-
-export interface Logger {
-  configuredLevel: Level | null;
-  effectiveLevel: Level;
-}
-
-export interface LoggersResponse {
-  levels: Level[];
-  loggers: Record<string, Logger>;
-}
+import { type LoggersResponse } from '@/shared/jhipster/logs';
 
 export default class LogsService {
   changeLevel(name: string, configuredLevel: string): AxiosPromise<void> {

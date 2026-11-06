@@ -20,6 +20,9 @@ import { createAsyncThunk, createSlice, isPending, isRejected } from '@reduxjs/t
 import axios from 'axios';
 
 import { AppThunk } from 'app/config/store';
+<%_ if (withAdminUi) { _%>
+import { type Log, type LoggersResponse, toLogs } from 'app/shared/jhipster/logs';
+<%_ } _%>
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
@@ -32,7 +35,7 @@ const initialState = {
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
   logs: {
-    loggers: [] as any[],
+    loggers: [] as Log[],
   },
   health: {} as any,
   metrics: {} as any,
@@ -76,7 +79,7 @@ export const getSystemThreadDump = createAsyncThunk(
   },
 );
 
-export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<any>('management/loggers'), {
+export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<LoggersResponse>('management/loggers'), {
   serializeError: serializeAxiosError,
 });
 
@@ -149,7 +152,7 @@ export const AdministrationSlice = createSlice({
       .addCase(getLoggers.fulfilled, (state, action) => {
         state.loading = false;
         state.logs = {
-          loggers: action.payload.data.loggers,
+          loggers: toLogs(action.payload.data),
         };
       })
       .addCase(getConfigurations.fulfilled, (state, action) => {

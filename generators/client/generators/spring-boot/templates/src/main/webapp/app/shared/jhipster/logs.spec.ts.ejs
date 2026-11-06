@@ -16,21 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export type Level = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF';
+import { describe, expect, it } from 'vitest';
 
-export interface Logger {
-  configuredLevel: Level | null;
-  effectiveLevel: Level;
-}
+import { toLogs } from './logs';
 
-export interface LoggersResponse {
-  levels: Level[];
-  loggers: Record<string, Logger>;
-}
+describe('logs', () => {
+  describe('toLogs', () => {
+    it('should convert the loggers using their effective level', () => {
+      const logs = toLogs({
+        levels: ['INFO', 'WARN'],
+        loggers: { ROOT: { configuredLevel: 'INFO', effectiveLevel: 'INFO' }, main: { configuredLevel: null, effectiveLevel: 'WARN' } },
+      });
 
-export class Log {
-  constructor(
-    public name: string,
-    public level: Level,
-  ) {}
-}
+      expect(logs).toEqual([
+        { name: 'ROOT', level: 'INFO' },
+        { name: 'main', level: 'WARN' },
+      ]);
+    });
+  });
+});
