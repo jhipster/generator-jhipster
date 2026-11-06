@@ -1392,6 +1392,12 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/shared/error/page-not-found.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/configuration.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/configuration.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -3393,6 +3399,12 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/shared/error/page-not-found.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/configuration.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
@@ -4400,6 +4412,12 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/error/page-not-found.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/configuration.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {

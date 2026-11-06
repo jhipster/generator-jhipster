@@ -201,27 +201,27 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful fetch configurations request', () => {
-      const payload = { data: { contexts: { jhipster: { beans: {} } } } };
+      const payload = { data: { contexts: { jhipster: { beans: { bean: { prefix: 'jhipster' } } } } } };
       const toTest = administration(undefined, { type: getConfigurations.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
         configuration: {
-          configProps: payload.data,
-          env: {},
+          beans: [{ prefix: 'jhipster', properties: {} }],
+          propertySources: [],
         },
       });
     });
 
     it('should update state according to a successful fetch env request', () => {
-      const payload = { data: { activeProfiles: ['api-docs', 'dev'] } };
+      const payload = { data: { propertySources: [{ name: 'source', properties: { key: { value: 'value' } } }] } };
       const toTest = administration(undefined, { type: getEnv.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
         loading: false,
         configuration: {
-          configProps: {},
-          env: payload.data,
+          beans: [],
+          propertySources: [{ name: 'source', properties: [{ key: 'key', value: 'value' }] }],
         },
       });
     });

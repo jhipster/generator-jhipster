@@ -76,11 +76,11 @@
             </tr>
           </thead>
           <tbody>
-            @for (property of propertySource.properties | keyvalue; track property.key) {
+            @for (property of propertySource.properties; track property.key) {
               <tr>
                 <td class="break">{{ property.key }}</td>
                 <td class="break">
-                  <span class="float-end bg-secondary break">{{ property.value.value }}</span>
+                  <span class="float-end bg-secondary break">{{ property.value }}</span>
                 </td>
               </tr>
             }

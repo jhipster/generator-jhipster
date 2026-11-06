@@ -1,0 +1,64 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it } from 'vitest';
+
+import { toBeans, toPropertySources } from './configuration';
+
+describe('configuration', () => {
+  describe('toBeans', () => {
+    it('should merge the beans of the contexts ordered by prefix', () => {
+      const beans = toBeans({
+        contexts: {
+          bootstrap: { beans: { a: { prefix: 'b', properties: { key: 'value' } } } },
+          jhipster: { beans: { b: { prefix: 'a', properties: { other: 1 } } } },
+        },
+      });
+
+      expect(beans).toEqual([
+        { prefix: 'a', properties: { other: 1 } },
+        { prefix: 'b', properties: { key: 'value' } },
+      ]);
+    });
+
+    it('should keep one bean by name', () => {
+      const beans = toBeans({ contexts: { a: { beans: { bean: { prefix: 'first' } } }, b: { beans: { bean: { prefix: 'last' } } } } });
+
+      expect(beans).toEqual([{ prefix: 'last', properties: {} }]);
+    });
+  });
+
+  describe('toPropertySources', () => {
+    it('should convert the properties with readable values', () => {
+      const propertySources = toPropertySources({
+        propertySources: [{ name: 'server.ports', properties: { text: { value: '8080' }, flag: { value: false }, port: { value: 8080 } } }],
+      });
+
+      expect(propertySources).toEqual([
+        {
+          name: 'server.ports',
+          properties: [
+            { key: 'text', value: '8080' },
+            { key: 'flag', value: 'false' },
+            { key: 'port', value: '8080' },
+          ],
+        },
+      ]);
+    });
+  });
+});

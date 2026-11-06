@@ -21,6 +21,14 @@ import axios from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (withAdminUi) { _%>
+import {
+  type Bean,
+  type ConfigProps,
+  type Env,
+  type PropertySource,
+  toBeans,
+  toPropertySources,
+} from 'app/shared/jhipster/configuration';
 import { type Log, type LoggersResponse, toLogs } from 'app/shared/jhipster/logs';
 <%_ } _%>
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
@@ -41,8 +49,8 @@ const initialState = {
   metrics: {} as any,
   threadDump: [],
   configuration: {
-    configProps: {} as any,
-    env: {} as any,
+    beans: [] as Bean[],
+    propertySources: [] as PropertySource[],
   },
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
@@ -98,13 +106,13 @@ export const changeLogLevel: (name, configuredLevel) => AppThunk = (name, config
 
 export const getConfigurations = createAsyncThunk(
   'administration/fetch_configurations',
-  async () => axios.get<any>('management/configprops'),
+  async () => axios.get<ConfigProps>('management/configprops'),
   {
     serializeError: serializeAxiosError,
   },
 );
 
-export const getEnv = createAsyncThunk('administration/fetch_env', async () => axios.get<any>('management/env'), {
+export const getEnv = createAsyncThunk('administration/fetch_env', async () => axios.get<Env>('management/env'), {
   serializeError: serializeAxiosError,
 });
 <%_ } _%>
@@ -159,14 +167,14 @@ export const AdministrationSlice = createSlice({
         state.loading = false;
         state.configuration = {
           ...state.configuration,
-          configProps: action.payload.data,
+          beans: toBeans(action.payload.data),
         };
       })
       .addCase(getEnv.fulfilled, (state, action) => {
         state.loading = false;
         state.configuration = {
           ...state.configuration,
-          env: action.payload.data,
+          propertySources: toPropertySources(action.payload.data),
         };
       })
   <%_ } _%>

@@ -43,16 +43,16 @@
               <div class="row" v-for="key in keys(entry.properties)" :key="key">
                 <div class="col-md-4">{{ key }}</div>
                 <div class="col-md-8">
-                  <span class="float-end badge bg-secondary break">{{ entry.properties?.[key] }}</span>
+                  <span class="float-end badge bg-secondary break">{{ entry.properties[key] }}</span>
                 </div>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
-      <div v-for="(key, i) in keys(allConfiguration)" :key="key">
+      <div v-for="(propertySource, i) in allConfiguration" :key="propertySource.name">
         <h4 :id="'property-source-' + i">
-          <span>{{ key }}</span>
+          <span>{{ propertySource.name }}</span>
         </h4>
         <table class="table table-sm table-striped table-bordered table-responsive d-table" :aria-describedby="'property-source-' + i">
           <thead>
@@ -62,10 +62,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item of allConfiguration[key]" :key="item.key">
+            <tr v-for="item of propertySource.properties" :key="item.key">
               <td class="break">{{ item.key }}</td>
               <td class="break">
-                <span class="float-end badge bg-secondary break">{{ item.val }}</span>
+                <span class="float-end badge bg-secondary break">{{ item.value }}</span>
               </td>
             </tr>
           </tbody>
@@ -82,8 +82,9 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
+import { type Bean, type PropertySource } from '@/shared/jhipster/configuration';
 
-import ConfigurationService, { type ConfigurationBean, type EnvConfiguration, configurationServiceKey } from './configuration.service';
+import ConfigurationService, { configurationServiceKey } from './configuration.service';
 
 defineOptions({ name: '<%- jhiPrefixCapitalized %>Configuration' });
 
@@ -94,9 +95,8 @@ const configurationService = inject(configurationServiceKey, () => new Configura
 
 const orderProp = ref('prefix');
 const reverse = ref(false);
-const allConfiguration = ref<EnvConfiguration>({});
-const configuration = ref<ConfigurationBean[]>([]);
-const configKeys = ref<string[][]>([]);
+const allConfiguration = ref<PropertySource[]>([]);
+const configuration = ref<Bean[]>([]);
 const filtered = ref('');
 
 const filteredConfiguration = computed(() =>
@@ -110,12 +110,6 @@ const filteredConfiguration = computed(() =>
 const init = (): void => {
   configurationService.loadConfiguration().then(res => {
     configuration.value = res;
-
-    for (const config of configuration.value) {
-      if (config.properties !== undefined) {
-        configKeys.value.push(Object.keys(config.properties));
-      }
-    }
   });
 
   configurationService.loadEnvConfiguration().then(res => {
@@ -128,7 +122,7 @@ const changeOrder = (prop: string): void => {
   reverse.value = !reverse.value;
 };
 
-const keys = (dict: object | undefined): string[] => (dict === undefined ? [] : Object.keys(dict));
+const keys = (dict: object): string[] => Object.keys(dict);
 
 onMounted(() => {
   init();

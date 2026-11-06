@@ -50,7 +50,6 @@ describe('Configuration Component', () => {
 
   describe('OnRouteEnter', () => {
     it('should set all default values correctly', () => {
-      expect(configuration.configKeys).toEqual([]);
       expect(configuration.filtered).toBe('');
       expect(configuration.orderProp).toBe('prefix');
       expect(configuration.reverse).toBe(false);
@@ -76,7 +75,6 @@ describe('Configuration Component', () => {
 
       // THEN
       expect(configuration.keys(data)).toEqual(['key1', 'key2']);
-      expect(configuration.keys(undefined)).toEqual([]);
     });
   });
 
@@ -128,8 +126,7 @@ describe('Configuration view', () => {
 
     // THEN
     expect(wrapper.vm.configuration.map(({ prefix }) => prefix)).toEqual(['A', 'A', 'B']);
-    expect(wrapper.vm.configKeys).toEqual([['key3'], ['key2']]);
-    expect(wrapper.vm.allConfiguration).toEqual({ source: [{ key: 'key1', val: 'value1' }] });
+    expect(wrapper.vm.allConfiguration).toEqual([{ name: 'source', properties: [{ key: 'key1', value: 'value1' }] }]);
     expect(wrapper.vm.filteredConfiguration).toEqual([expect.objectContaining({ prefix: 'B' })]);
     expect(wrapper.text()).toContain('value2');
   });

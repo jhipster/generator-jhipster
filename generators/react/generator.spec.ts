@@ -189,8 +189,8 @@ describe(`generator - ${clientFramework}`, () => {
                 '  metrics: {} as any,\n' +
                 '  threadDump: [],\n' +
                 '  configuration: {\n' +
-                '    configProps: {} as any,\n' +
-                '    env: {} as any,\n' +
+                '    beans: [] as Bean[],\n' +
+                '    propertySources: [] as PropertySource[],\n' +
                 '  },',
             );
 

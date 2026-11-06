@@ -39,7 +39,6 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/configuration/configuration.html`,
   `${clientSrcDir}app/admin/configuration/configuration.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
-  `${clientSrcDir}app/admin/configuration/configuration.model.ts`,
   `${clientSrcDir}app/admin/health/modal/health-modal.html`,
   `${clientSrcDir}app/admin/health/modal/health-modal.ts`,
   `${clientSrcDir}app/admin/health/health.html`,

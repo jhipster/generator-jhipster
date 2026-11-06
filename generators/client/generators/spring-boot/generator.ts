@@ -38,11 +38,11 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
           blocks: [
             clientApplicationTemplatesBlock({
               condition: ctx => ctx.withAdminUi,
-              templates: ['shared/jhipster/logs.ts'],
+              templates: ['shared/jhipster/configuration.ts', 'shared/jhipster/logs.ts'],
             }),
             clientApplicationTemplatesBlock({
               condition: ctx => ctx.withAdminUi && ctx.clientTestFrameworkVitest,
-              templates: ['shared/jhipster/logs.spec.ts'],
+              templates: ['shared/jhipster/configuration.spec.ts', 'shared/jhipster/logs.spec.ts'],
             }),
           ],
           context: application,

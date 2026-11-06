@@ -21,12 +21,12 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { Bean, PropertySource } from 'app/shared/jhipster/configuration';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 import { SortByDirective, SortDirective, SortService, sortStateSignal } from 'app/shared/sort';
 
-import { Bean, PropertySource } from './configuration.model';
 import { ConfigurationService } from './configuration.service';
 
 @Component({

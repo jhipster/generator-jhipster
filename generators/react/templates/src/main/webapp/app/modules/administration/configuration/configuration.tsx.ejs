@@ -38,7 +38,7 @@ export const ConfigurationPage = () => {
 
   const changeFilter = evt => setFilter(evt.target.value);
 
-  const envFilterFn = configProp => configProp.toUpperCase().includes(filter.toUpperCase());
+  const envFilterFn = property => property.key.toUpperCase().includes(filter.toUpperCase());
 
   const propsFilterFn = configProp => configProp.prefix.toUpperCase().includes(filter.toUpperCase());
 
@@ -46,14 +46,9 @@ export const ConfigurationPage = () => {
 
   const changeReverseProperties = () => setReverseProperties(!reverseProperties);
 
-  const getContextList = contexts =>
-    Object.values(contexts)
-      .map((v: any) => v.beans)
-      .reduce((acc, e) => ({ ...acc, ...e }));
+  const beans = configuration?.beans ?? [];
 
-  const configProps = configuration?.configProps ?? {};
-
-  const env = configuration?.env ?? {};
+  const propertySources = configuration?.propertySources ?? [];
 
   return (
     <div>
@@ -77,30 +72,27 @@ export const ConfigurationPage = () => {
           </tr>
         </thead>
         <tbody>
-          {configProps.contexts &&
-            Object.values(getContextList(configProps.contexts))
-              .filter(propsFilterFn)
-              .map((property: any, propIndex) => (
-                <tr key={propIndex}>
-                  <td>{property['prefix']}</td>
-                  <td>
-                    {Object.keys(property['properties']).map((propKey, index) => (
-                      <Row key={index}>
-                        <Col md="4">{propKey}</Col>
-                        <Col md="8">
-                          <Badge className="float-end bg-secondary break">{JSON.stringify(property['properties'][propKey])}</Badge>
-                        </Col>
-                      </Row>
-                    ))}
-                  </td>
-                </tr>
-              ))}
+          {beans.filter(propsFilterFn).map((bean, beanIndex) => (
+            <tr key={beanIndex}>
+              <td>{bean.prefix}</td>
+              <td>
+                {Object.entries(bean.properties).map(([propKey, propValue], index) => (
+                  <Row key={index}>
+                    <Col md="4">{propKey}</Col>
+                    <Col md="8">
+                      <Badge className="float-end bg-secondary break">{JSON.stringify(propValue)}</Badge>
+                    </Col>
+                  </Row>
+                ))}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
-      {env.propertySources?.map((envKey, envIndex) => (
+      {propertySources.map((propertySource, envIndex) => (
         <div key={envIndex}>
           <h4>
-            <span>{envKey.name}</span>
+            <span>{propertySource.name}</span>
           </h4>
           <Table className="table table-sm table-striped table-bordered table-responsive d-table">
             <thead>
@@ -110,16 +102,14 @@ export const ConfigurationPage = () => {
               </tr>
             </thead>
             <tbody>
-              {Object.keys(envKey.properties)
-                .filter(envFilterFn)
-                .map((propKey, propIndex) => (
-                  <tr key={propIndex}>
-                    <td className="break">{propKey}</td>
-                    <td className="break">
-                      <span className="float-end badge bg-secondary break">{envKey.properties[propKey].value}</span>
-                    </td>
-                  </tr>
-                ))}
+              {propertySource.properties.filter(envFilterFn).map(property => (
+                <tr key={property.key}>
+                  <td className="break">{property.key}</td>
+                  <td className="break">
+                    <span className="float-end badge bg-secondary break">{property.value}</span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </div>
