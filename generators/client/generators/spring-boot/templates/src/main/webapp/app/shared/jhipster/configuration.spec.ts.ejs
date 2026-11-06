@@ -18,47 +18,55 @@
 -%>
 import { describe, expect, it } from 'vitest';
 
-import { toBeans, toPropertySources } from './configuration';
+import { toConfiguration } from './configuration';
 
 describe('configuration', () => {
-  describe('toBeans', () => {
-    it('should merge the beans of the contexts ordered by prefix', () => {
-      const beans = toBeans({
-        contexts: {
-          bootstrap: { beans: { a: { prefix: 'b', properties: { key: 'value' } } } },
-          jhipster: { beans: { b: { prefix: 'a', properties: { other: 1 } } } },
+  describe('toConfiguration', () => {
+    it('should give the beans of the contexts ordered by prefix, with their texts', () => {
+      const [section] = toConfiguration(
+        {
+          contexts: {
+            bootstrap: { beans: { a: { prefix: 'b', properties: { key: 'value' } } } },
+            jhipster: { beans: { b: { prefix: 'a', properties: { other: 1 } } } },
+          },
         },
-      });
+        { propertySources: [] },
+      );
 
-      expect(beans).toEqual([
-        { prefix: 'a', properties: { other: 1 } },
-        { prefix: 'b', properties: { key: 'value' } },
-      ]);
+      expect(section).toEqual({
+        label: 'Spring configuration',
+        columns: ['Prefix', 'Properties'],
+        rows: [
+          { key: 'a', properties: [{ key: 'other', value: '1' }] },
+          { key: 'b', properties: [{ key: 'key', value: 'value' }] },
+        ],
+      });
     });
 
     it('should keep one bean by name', () => {
-      const beans = toBeans({ contexts: { a: { beans: { bean: { prefix: 'first' } } }, b: { beans: { bean: { prefix: 'last' } } } } });
+      const [section] = toConfiguration(
+        { contexts: { a: { beans: { bean: { prefix: 'first' } } }, b: { beans: { bean: { prefix: 'last' } } } } },
+        { propertySources: [] },
+      );
 
-      expect(beans).toEqual([{ prefix: 'last', properties: {} }]);
+      expect(section.rows).toEqual([{ key: 'last', properties: [] }]);
     });
-  });
 
-  describe('toPropertySources', () => {
-    it('should convert the properties with readable values', () => {
-      const propertySources = toPropertySources({
-        propertySources: [{ name: 'server.ports', properties: { text: { value: '8080' }, flag: { value: false }, port: { value: 8080 } } }],
+    it('should give a section by property source with readable values', () => {
+      const [, section] = toConfiguration(
+        { contexts: {} },
+        { propertySources: [{ name: 'server.ports', properties: { text: { value: '8080' }, flag: { value: false }, port: { value: 8080 } } }] },
+      );
+
+      expect(section).toEqual({
+        label: 'server.ports',
+        columns: ['Property', 'Value'],
+        rows: [
+          { key: 'text', value: '8080' },
+          { key: 'flag', value: 'false' },
+          { key: 'port', value: '8080' },
+        ],
       });
-
-      expect(propertySources).toEqual([
-        {
-          name: 'server.ports',
-          properties: [
-            { key: 'text', value: '8080' },
-            { key: 'flag', value: 'false' },
-            { key: 'port', value: '8080' },
-          ],
-        },
-      ]);
     });
   });
 });

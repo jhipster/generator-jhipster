@@ -21,7 +21,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { Bean, PropertySource } from 'app/shared/jhipster/configuration';
+import { ConfigurationSection } from 'app/shared/jhipster/configuration';
 
 import Configuration from './configuration';
 import { ConfigurationService } from './configuration.service';
@@ -46,34 +46,25 @@ describe('Configuration', () => {
   describe('OnInit', () => {
     it('should call load all on init', () => {
       // GIVEN
-      const beans: Bean[] = [
-        {
-          prefix: 'jhipster',
-          properties: {
-            clientApp: {
-              name: 'jhipsterApp',
-            },
-          },
-        },
+      const sections: ConfigurationSection[] = [
+        { label: 'beans', columns: ['Prefix', 'Properties'], rows: [{ key: 'b', properties: [] }, { key: 'a', properties: [] }] },
+        { label: 'source', columns: ['Property', 'Value'], rows: [{ key: 'port', value: '8080' }] },
       ];
-      const propertySources: PropertySource[] = [
-        {
-          name: 'server.ports',
-          properties: [{ key: 'local.server.port', value: '8080' }],
-        },
-      ];
-      vi.spyOn(service, 'getBeans').mockReturnValue(of(beans));
-      vi.spyOn(service, 'getPropertySources').mockReturnValue(of(propertySources));
+      vi.spyOn(service, 'getConfiguration').mockReturnValue(of(sections));
 
       // WHEN
       comp.ngOnInit();
 
       // THEN
-      expect(service.getBeans).toHaveBeenCalled();
-      expect(service.getPropertySources).toHaveBeenCalled();
-      expect(comp.allBeans()).toEqual(beans);
-      expect(comp.beans()).toEqual(beans);
-      expect(comp.propertySources()).toEqual(propertySources);
+      expect(service.getConfiguration).toHaveBeenCalled();
+      expect(comp.allSections()).toEqual(sections);
+      expect(comp.sections()[0].rows.map(row => row.key)).toEqual(['a', 'b']);
+
+      // WHEN
+      comp.filter.set('PORT');
+
+      // THEN
+      expect(comp.sections().map(section => section.rows.length)).toEqual([0, 1]);
     });
   });
 });

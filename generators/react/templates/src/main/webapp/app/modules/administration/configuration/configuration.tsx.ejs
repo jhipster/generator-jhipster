@@ -21,34 +21,21 @@ import { Badge, Col, FormControl, Row, Table } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getConfigurations, getEnv } from '../administration.reducer';
+import { getConfiguration } from '../administration.reducer';
 
 export const ConfigurationPage = () => {
   const [filter, setFilter] = useState('');
-  const [reversePrefix, setReversePrefix] = useState(false);
-  const [reverseProperties, setReverseProperties] = useState(false);
   const dispatch = useAppDispatch();
 
-  const configuration = useAppSelector(state => state.administration.configuration);
+  const sections = useAppSelector(state => state.administration.configuration);
 
   useEffect(() => {
-    dispatch(getConfigurations());
-    dispatch(getEnv());
+    dispatch(getConfiguration());
   }, []);
 
   const changeFilter = evt => setFilter(evt.target.value);
 
-  const envFilterFn = property => property.key.toUpperCase().includes(filter.toUpperCase());
-
-  const propsFilterFn = configProp => configProp.prefix.toUpperCase().includes(filter.toUpperCase());
-
-  const changeReversePrefix = () => setReversePrefix(!reversePrefix);
-
-  const changeReverseProperties = () => setReverseProperties(!reverseProperties);
-
-  const beans = configuration?.beans ?? [];
-
-  const propertySources = configuration?.propertySources ?? [];
+  const filterFn = row => row.key.toUpperCase().includes(filter.toUpperCase());
 
   return (
     <div>
@@ -59,54 +46,33 @@ export const ConfigurationPage = () => {
         <Translate contentKey="configuration.filter">Filter</Translate>
       </span>{' '}
       <FormControl type="search" value={filter} onChange={changeFilter} name="search" id="search" />
-      <h3>Spring configuration</h3>
-      <Table className="table table-striped table-bordered table-responsive d-table">
-        <thead>
-          <tr>
-            <th onClick={changeReversePrefix}>
-              <Translate contentKey="configuration.table.prefix">Prefix</Translate>
-            </th>
-            <th onClick={changeReverseProperties}>
-              <Translate contentKey="configuration.table.properties">Properties</Translate>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {beans.filter(propsFilterFn).map((bean, beanIndex) => (
-            <tr key={beanIndex}>
-              <td>{bean.prefix}</td>
-              <td>
-                {Object.entries(bean.properties).map(([propKey, propValue], index) => (
-                  <Row key={index}>
-                    <Col md="4">{propKey}</Col>
-                    <Col md="8">
-                      <Badge className="float-end bg-secondary break">{JSON.stringify(propValue)}</Badge>
-                    </Col>
-                  </Row>
-                ))}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      {propertySources.map((propertySource, envIndex) => (
-        <div key={envIndex}>
-          <h4>
-            <span>{propertySource.name}</span>
-          </h4>
-          <Table className="table table-sm table-striped table-bordered table-responsive d-table">
+      {sections.map(section => (
+        <div key={section.label}>
+          <h3>{section.label}</h3>
+          <Table className="table table-striped table-bordered table-responsive d-table">
             <thead>
-              <tr key={envIndex}>
-                <th className="w-40">Property</th>
-                <th className="w-60">Value</th>
+              <tr>
+                <th className="w-40">{section.columns[0]}</th>
+                <th className="w-60">{section.columns[1]}</th>
               </tr>
             </thead>
             <tbody>
-              {propertySource.properties.filter(envFilterFn).map(property => (
-                <tr key={property.key}>
-                  <td className="break">{property.key}</td>
+              {section.rows.filter(filterFn).map(row => (
+                <tr key={row.key}>
+                  <td className="break">{row.key}</td>
                   <td className="break">
-                    <span className="float-end badge bg-secondary break">{property.value}</span>
+                    {row.properties ? (
+                      row.properties.map(property => (
+                        <Row key={property.key}>
+                          <Col md="4">{property.key}</Col>
+                          <Col md="8">
+                            <Badge className="float-end bg-secondary break">{property.value}</Badge>
+                          </Col>
+                        </Row>
+                      ))
+                    ) : (
+                      <span className="float-end badge bg-secondary break">{row.value}</span>
+                    )}
                   </td>
                 </tr>
               ))}

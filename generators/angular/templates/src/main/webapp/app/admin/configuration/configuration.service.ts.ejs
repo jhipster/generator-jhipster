@@ -19,20 +19,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
 
 import { serverApiUrl } from 'app/config';
-import { Bean, ConfigProps, Env, PropertySource, toBeans, toPropertySources } from 'app/shared/jhipster/configuration';
+import { ConfigProps, ConfigurationSection, Env, toConfiguration } from 'app/shared/jhipster/configuration';
 
 @Service()
 export class ConfigurationService {
   private readonly http = inject(HttpClient);
 
-  getBeans(): Observable<Bean[]> {
-    return this.http.get<ConfigProps>(`${serverApiUrl}management/configprops`).pipe(map(toBeans));
-  }
-
-  getPropertySources(): Observable<PropertySource[]> {
-    return this.http.get<Env>(`${serverApiUrl}management/env`).pipe(map(toPropertySources));
+  getConfiguration(): Observable<ConfigurationSection[]> {
+    return forkJoin([
+      this.http.get<ConfigProps>(`${serverApiUrl}management/configprops`),
+      this.http.get<Env>(`${serverApiUrl}management/env`),
+    ]).pipe(map(([configProps, env]) => toConfiguration(configProps, env)));
   }
 }

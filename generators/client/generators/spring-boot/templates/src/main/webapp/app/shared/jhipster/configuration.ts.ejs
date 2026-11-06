@@ -33,36 +33,48 @@ export interface Env {
   propertySources: { name: string; properties: Record<string, { value: unknown; origin?: string }> }[];
 }
 
-/** A row of the configuration page. */
-export interface Bean {
-  prefix: string;
-  properties: Record<string, unknown>;
-}
-
-export interface Property {
+/** A property of a row. */
+export interface ConfigurationProperty {
   key: string;
   value: string;
 }
 
-/** A table of the configuration page. */
-export interface PropertySource {
-  name: string;
-  properties: Property[];
+/** A row of a table of the configuration page: a value, or properties. */
+export interface ConfigurationRow {
+  key: string;
+  value?: string;
+  properties?: ConfigurationProperty[];
+}
+
+/** A table of the configuration page, with its texts. */
+export interface ConfigurationSection {
+  label: string;
+  columns: [string, string];
+  rows: ConfigurationRow[];
 }
 
 const readableValue = (value: unknown): string => (typeof value === 'string' ? value : JSON.stringify(value));
 
-/** Converts the response of the configuration properties endpoint to the rows of the configuration page, by prefix. */
-export const toBeans = ({ contexts }: ConfigProps): Bean[] => {
+const toBeansSection = ({ contexts }: ConfigProps): ConfigurationSection => {
   const beans: Record<string, ConfigPropsBean> = Object.assign({}, ...Object.values(contexts).map(context => context.beans));
-  return Object.values(beans)
-    .map(({ prefix, properties = {} }) => ({ prefix, properties }))
-    .sort((a, b) => a.prefix.localeCompare(b.prefix));
+  return {
+    label: 'Spring configuration',
+    columns: ['Prefix', 'Properties'],
+    rows: Object.values(beans)
+      .map(({ prefix, properties = {} }) => ({
+        key: prefix,
+        properties: Object.entries(properties).map(([key, value]) => ({ key, value: readableValue(value) })),
+      }))
+      .sort((a, b) => a.key.localeCompare(b.key)),
+  };
 };
 
-/** Converts the response of the environment endpoint to the tables of the configuration page. */
-export const toPropertySources = ({ propertySources }: Env): PropertySource[] =>
-  propertySources.map(({ name, properties }) => ({
-    name,
-    properties: Object.entries(properties).map(([key, { value }]) => ({ key, value: readableValue(value) })),
-  }));
+/** Converts the responses of the configuration properties and environment endpoints to the tables of the configuration page. */
+export const toConfiguration = (configProps: ConfigProps, { propertySources }: Env): ConfigurationSection[] => [
+  toBeansSection(configProps),
+  ...propertySources.map(({ name, properties }): ConfigurationSection => ({
+    label: name,
+    columns: ['Property', 'Value'],
+    rows: Object.entries(properties).map(([key, { value }]) => ({ key, value: readableValue(value) })),
+  })),
+];

@@ -21,14 +21,7 @@ import axios from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (withAdminUi) { _%>
-import {
-  type Bean,
-  type ConfigProps,
-  type Env,
-  type PropertySource,
-  toBeans,
-  toPropertySources,
-} from 'app/shared/jhipster/configuration';
+import { type ConfigProps, type ConfigurationSection, type Env, toConfiguration } from 'app/shared/jhipster/configuration';
 import { type Log, type LoggersResponse, toLogs } from 'app/shared/jhipster/logs';
 <%_ } _%>
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
@@ -48,10 +41,7 @@ const initialState = {
   health: {} as any,
   metrics: {} as any,
   threadDump: [],
-  configuration: {
-    beans: [] as Bean[],
-    propertySources: [] as PropertySource[],
-  },
+  configuration: [] as ConfigurationSection[],
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
   tracker: {
@@ -104,17 +94,16 @@ export const changeLogLevel: (name, configuredLevel) => AppThunk = (name, config
   dispatch(getLoggers());
 };
 
-export const getConfigurations = createAsyncThunk(
-  'administration/fetch_configurations',
-  async () => axios.get<ConfigProps>('management/configprops'),
+export const getConfiguration = createAsyncThunk(
+  'administration/fetch_configuration',
+  async () => {
+    const [configProps, env] = await Promise.all([axios.get<ConfigProps>('management/configprops'), axios.get<Env>('management/env')]);
+    return toConfiguration(configProps.data, env.data);
+  },
   {
     serializeError: serializeAxiosError,
   },
 );
-
-export const getEnv = createAsyncThunk('administration/fetch_env', async () => axios.get<Env>('management/env'), {
-  serializeError: serializeAxiosError,
-});
 <%_ } _%>
 
 export const AdministrationSlice = createSlice({
@@ -163,19 +152,9 @@ export const AdministrationSlice = createSlice({
           loggers: toLogs(action.payload.data),
         };
       })
-      .addCase(getConfigurations.fulfilled, (state, action) => {
+      .addCase(getConfiguration.fulfilled, (state, action) => {
         state.loading = false;
-        state.configuration = {
-          ...state.configuration,
-          beans: toBeans(action.payload.data),
-        };
-      })
-      .addCase(getEnv.fulfilled, (state, action) => {
-        state.loading = false;
-        state.configuration = {
-          ...state.configuration,
-          propertySources: toPropertySources(action.payload.data),
-        };
+        state.configuration = action.payload;
       })
   <%_ } _%>
       .addMatcher(
@@ -188,8 +167,7 @@ export const AdministrationSlice = createSlice({
           getSystemMetrics,
           getSystemThreadDump,
           getLoggers,
-          getConfigurations,
-          getEnv
+          getConfiguration
   <%_ } _%>
         ),
         state => {
@@ -207,8 +185,7 @@ export const AdministrationSlice = createSlice({
           getSystemMetrics,
           getSystemThreadDump,
           getLoggers,
-          getConfigurations,
-          getEnv
+          getConfiguration
   <%_ } _%>
         ),
         (state, action) => {

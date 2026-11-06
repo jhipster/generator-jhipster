@@ -188,10 +188,7 @@ describe(`generator - ${clientFramework}`, () => {
                 '  health: {} as any,\n' +
                 '  metrics: {} as any,\n' +
                 '  threadDump: [],\n' +
-                '  configuration: {\n' +
-                '    beans: [] as Bean[],\n' +
-                '    propertySources: [] as PropertySource[],\n' +
-                '  },',
+                '  configuration: [] as ConfigurationSection[],',
             );
 
             if (enableTranslation) {
