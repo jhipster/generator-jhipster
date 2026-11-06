@@ -236,6 +236,20 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async composeSpringBoot({ application }) {
+        if (application.backendTypeSpringBoot) {
+          await this.composeWithJHipster('jhipster:client:spring-boot');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
@@ -451,6 +465,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientRootDir}webpack/logo-jhipster.png`,
             [application.microfrontend, `${application.clientRootDir}webpack/webpack.microfrontend.js`],
           ],
+          '9.5.0': [`${application.clientSrcDir}app/admin/logs/log.model.ts`],
         });
       },
       cleanupOldFilesTask,

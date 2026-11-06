@@ -666,6 +666,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/client/generators/i18n/templates/template-file-client:i18n.ejs": {
     "stateCleared": "modified",
   },
+  "generators/client/generators/spring-boot/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/spring-boot/templates/template-file-client:spring-boot.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/client/index.ts": {
     "stateCleared": "modified",
   },

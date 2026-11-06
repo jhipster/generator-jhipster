@@ -280,7 +280,6 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "websocket": "no",
-  "withAdminUi": true,
   "withGeneratedFlag": false,
   "wrapMono": Any<Function>,
 }

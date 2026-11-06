@@ -49,7 +49,6 @@ const {
   CLIENT_FRAMEWORK,
   CLIENT_THEME,
   CLIENT_THEME_VARIANT,
-  WITH_ADMIN_UI,
   DATABASE_TYPE,
   DEV_DATABASE_TYPE,
   DTO_SUFFIX,
@@ -183,7 +182,6 @@ function getServerConfigForMonolithApplication(customOptions: ApplicationDefault
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: NO_SERVICE_DISCOVERY,
-    [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
   options[CACHE_PROVIDER] ??= options[REACTIVE] ? NO_CACHE_PROVIDER : EHCACHE;
@@ -210,7 +208,6 @@ function getServerConfigForGatewayApplication(customOptions: ApplicationDefaults
     [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: CONSUL,
-    [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
   options[CACHE_PROVIDER] ??= NO_CACHE_PROVIDER;
@@ -246,7 +243,6 @@ function getServerConfigForMicroserviceApplication(customOptions: ApplicationDef
   };
 
   options[CACHE_PROVIDER] ??= options[REACTIVE] ? NO_CACHE_PROVIDER : HAZELCAST;
-  options[WITH_ADMIN_UI] = false;
   return {
     ...options,
     [APPLICATION_TYPE]: APPLICATION_TYPE_MICROSERVICE,

@@ -4021,9 +4021,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/health/modal/health-modal.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/logs/log.model.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/admin/logs/logs.html": {
     "stateCleared": "modified",
   },
@@ -4649,6 +4646,12 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/logs.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/logs.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/pagination.spec.ts": {
@@ -6420,9 +6423,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/admin/health/modal/health-modal.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/logs/log.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/logs/logs.html": {
     "stateCleared": "modified",
   },
@@ -6982,6 +6982,12 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/logs.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/logs.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/pagination.spec.ts": {
@@ -7774,9 +7780,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/health/modal/health-modal.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/logs/log.model.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/logs/logs.html": {
     "stateCleared": "modified",
   },
@@ -8480,6 +8483,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/logs.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/logs.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/pagination.spec.ts": {

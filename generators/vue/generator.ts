@@ -329,6 +329,20 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async composeSpringBoot({ application }) {
+        if (application.backendTypeSpringBoot) {
+          await this.composeWithJHipster('jhipster:client:spring-boot');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareField({ field }) {

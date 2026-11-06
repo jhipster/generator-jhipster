@@ -77,8 +77,9 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
+import { type Log, type LoggersResponse, toLogs } from '@/shared/jhipster/logs';
 
-import LogsService, { type Level, type LoggersResponse, logsServiceKey } from './logs.service';
+import LogsService, { logsServiceKey } from './logs.service';
 
 defineOptions({ name: '<%- jhiPrefixCapitalized %>Logs' });
 
@@ -87,7 +88,7 @@ const { t: t$ } = useI18n();
 <%_ } _%>
 const logsService = inject(logsServiceKey, () => new LogsService(), true);
 
-const loggers = ref<{ name: string; level: Level }[]>([]);
+const loggers = ref<Log[]>([]);
 const filtered = ref('');
 const orderProp = ref('name');
 const reverse = ref(false);
@@ -100,13 +101,7 @@ const filteredLoggers = computed(() =>
 );
 
 const extractLoggers = (response: { data?: LoggersResponse }): void => {
-  loggers.value = [];
-  if (response.data) {
-    for (const key of Object.keys(response.data.loggers)) {
-      const logger = response.data.loggers[key];
-      loggers.value.push({ name: key, level: logger.effectiveLevel });
-    }
-  }
+  loggers.value = response.data ? toLogs(response.data) : [];
 };
 const init = (): void => {
   logsService.findAll().then(response => {

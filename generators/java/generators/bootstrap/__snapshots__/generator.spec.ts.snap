@@ -280,7 +280,6 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "websocket": "no",
-  "withAdminUi": true,
   "withGeneratedFlag": false,
   "wrapMono": Any<Function>,
 }

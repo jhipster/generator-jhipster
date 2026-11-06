@@ -147,7 +147,6 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "websocket": "no",
-  "withAdminUi": true,
 }
 `;
 

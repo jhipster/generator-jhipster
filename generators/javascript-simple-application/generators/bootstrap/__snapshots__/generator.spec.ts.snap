@@ -82,7 +82,6 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
   "websocket": "no",
-  "withAdminUi": true,
 }
 `;
 

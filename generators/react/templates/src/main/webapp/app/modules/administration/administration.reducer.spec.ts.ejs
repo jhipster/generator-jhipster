@@ -166,7 +166,7 @@ describe('Administration reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        logs: payload.data,
+        logs: { loggers: [{ name: 'main', level: 'WARN' }] },
       });
     });
 

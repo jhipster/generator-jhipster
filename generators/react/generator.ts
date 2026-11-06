@@ -239,6 +239,20 @@ ${comment}
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async composeSpringBoot({ application }) {
+        if (application.backendTypeSpringBoot) {
+          await this.composeWithJHipster('jhipster:client:spring-boot');
+        }
+      },
+    });
+  }
+
+  get [ReactApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {

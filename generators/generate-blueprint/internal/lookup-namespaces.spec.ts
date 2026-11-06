@@ -54,6 +54,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "client:common",
   "client:encode-csrf-token",
   "client:i18n",
+  "client:spring-boot",
   "common",
   "common:bootstrap",
   "cypress",

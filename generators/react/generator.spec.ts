@@ -55,6 +55,26 @@ const clientAdminFiles = (clientSrcDir: string) => [
 describe(`generator - ${clientFramework}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('backend type', () => {
+    const run = (config: Record<string, unknown>) =>
+      helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withJHipsterConfig({ clientFramework, ...config });
+
+    it('should compose with client:spring-boot for Spring Boot', async () => {
+      await run({});
+      expect(runResult.getComposedGenerators()).toContain('jhipster:client:spring-boot');
+    });
+
+    it('should not compose with client:spring-boot for another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.getComposedGenerators()).not.toContain('jhipster:client:spring-boot');
+    });
+  });
   checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
@@ -163,7 +183,7 @@ describe(`generator - ${clientFramework}`, () => {
             assertion(
               `${clientSrcDir}app/modules/administration/administration.reducer.ts`,
               'logs: {\n' +
-                '    loggers: [] as any[],\n' +
+                '    loggers: [] as Log[],\n' +
                 '  },\n' +
                 '  health: {} as any,\n' +
                 '  metrics: {} as any,\n' +

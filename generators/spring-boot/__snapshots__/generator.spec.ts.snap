@@ -895,7 +895,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "user": Any<Object>,
   "userManagement": Any<Object>,
   "websocket": "no",
-  "withAdminUi": true,
+  "withAdminUi": undefined,
   "withGeneratedFlag": false,
   "wrapMono": [Function],
 }
@@ -1793,7 +1793,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "useNpmWrapper": true,
   "user": undefined,
   "websocket": "no",
-  "withAdminUi": true,
+  "withAdminUi": undefined,
   "withGeneratedFlag": false,
   "wrapMono": [Function],
 }

@@ -46,7 +46,6 @@ const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/health/health.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
   `${clientSrcDir}app/admin/health/health.model.ts`,
-  `${clientSrcDir}app/admin/logs/log.model.ts`,
   `${clientSrcDir}app/admin/logs/logs.html`,
   `${clientSrcDir}app/admin/logs/logs.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.ts`,
@@ -86,6 +85,26 @@ const clientAdminFiles = (clientSrcDir: string) => [
 describe(`generator - ${clientFramework}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('backend type', () => {
+    const run = (config: Record<string, unknown>) =>
+      helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withJHipsterConfig({ clientFramework, ...config });
+
+    it('should compose with client:spring-boot for Spring Boot', async () => {
+      await run({});
+      expect(runResult.getComposedGenerators()).toContain('jhipster:client:spring-boot');
+    });
+
+    it('should not compose with client:spring-boot for another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.getComposedGenerators()).not.toContain('jhipster:client:spring-boot');
+    });
+  });
 
   checkEnforcements({ client: true }, generator);
 
