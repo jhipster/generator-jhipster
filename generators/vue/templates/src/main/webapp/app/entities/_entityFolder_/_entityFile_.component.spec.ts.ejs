@@ -141,6 +141,23 @@ describe('Component Tests', () => {
         expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledOnce();
         expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
       });
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+
+      it('Should list an entity without files', async () => {
+        // GIVEN
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
+
+        // WHEN
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
+        await flushPromises();
+
+        // THEN
+        expect(wrapper.findAll('[data-cy="entityTable"]')).toHaveLength(1);
+  <%_ if (anyFieldHasImageContentType) { _%>
+        expect(wrapper.find('[data-cy="entityTable"] img').exists()).toBe(false);
+  <%_ } _%>
+      });
+<%_ } _%>
 <%_ if (!paginationNo) { _%>
 
       it('should calculate the sort attribute for an id', async () => {

@@ -72,7 +72,14 @@ describe('useEntityValidation', () => {
   });
 
   it('should accept the valid values', async () => {
-    const { v$ } = mountValidation({ name: 'name', count: 2, code: 'aa' }, { name: { required: true, maxLength: 4 }, count: { integer: true, min: 1, max: 2 }, code: { pattern: { regex: /^a+$/, name: 'Code' } } });
+    const { v$ } = mountValidation(
+      { name: 'name', count: 2, code: 'aa' },
+      {
+        name: { required: true, maxLength: 4 },
+        count: { integer: true, min: 1, max: 2 },
+        code: { pattern: { regex: /^a+$/, name: 'Code' } },
+      },
+    );
     await flushPromises();
 
     expect(v$.value.$invalid).toBe(false);

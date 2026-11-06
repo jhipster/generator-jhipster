@@ -32,7 +32,6 @@ export const entityFiles = asWriteFilesSection({
         'entities/_entityFolder_/_entityFile_-details.vue',
         'entities/_entityFolder_/_entityFile_-details.component.spec.ts',
         'entities/_entityFolder_/_entityFile_.vue',
-        'entities/_entityFolder_/_entityFile_.component.ts',
         'entities/_entityFolder_/_entityFile_.component.spec.ts',
         'entities/_entityFolder_/_entityFile_.service.ts',
         'entities/_entityFolder_/_entityFile_.service.spec.ts',
@@ -41,11 +40,7 @@ export const entityFiles = asWriteFilesSection({
     {
       condition: generator => !generator.readOnly && !generator.embedded,
       ...clientApplicationTemplatesBlock(),
-      templates: [
-        'entities/_entityFolder_/_entityFile_-update.vue',
-        'entities/_entityFolder_/_entityFile_-update.component.ts',
-        'entities/_entityFolder_/_entityFile_-update.component.spec.ts',
-      ],
+      templates: ['entities/_entityFolder_/_entityFile_-update.vue', 'entities/_entityFolder_/_entityFile_-update.component.spec.ts'],
     },
   ],
 });
@@ -94,8 +89,12 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientAp
   if (control.isJhipsterVersionLessThan('9.5.0')) {
     for (const entity of (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
       this.removeFile(`${application.clientSrcDir}app/shared/model/${entity.entityModelFileName}.model.ts`);
-      // The details component is written with script setup, in its .vue.
-      this.removeFile(`${application.clientSrcDir}app/entities/${entity.entityFolderName}/${entity.entityFileName}-details.component.ts`);
+      // The components are written with script setup, in their .vue.
+      for (const component of ['', '-details', '-update']) {
+        this.removeFile(
+          `${application.clientSrcDir}app/entities/${entity.entityFolderName}/${entity.entityFileName}${component}.component.ts`,
+        );
+      }
       for (const field of entity.fields) {
         if (field.fieldIsEnum) {
           this.removeFile(`${application.clientSrcDir}app/shared/model/enumerations/${field.enumFileName}.model.ts`);

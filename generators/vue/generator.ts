@@ -380,6 +380,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           entityClientFieldDefaultValues: () => this.generateEntityClientFieldDefaultValues(fieldsWithoutId),
           entityModelEnumImports: () => this.generateEntityClientEnumImports(fieldsWithoutId),
           entityClientEnumImports: () => this.generateEntityClientEnumImports(entity.fields),
+          vueFormTimeFields: () =>
+            entity.fields.some(
+              field =>
+                (field.fieldTypeInstant || field.fieldTypeZonedDateTime) &&
+                (!field.id || entity.builtInUserManagement || !field.autoGenerate) &&
+                !field.hidden &&
+                !(entity.builtInUserManagement && field.readonly),
+            ),
         });
       },
     });
