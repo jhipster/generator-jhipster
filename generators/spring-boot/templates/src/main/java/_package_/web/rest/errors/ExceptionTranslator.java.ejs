@@ -63,6 +63,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause.ProblemDetailWithCauseBuilder;
 import org.springframework.security.access.AccessDeniedException;
@@ -142,7 +143,12 @@ _%>
     @Override
     protected <%- returnType %> handleExceptionInternal(
             Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%- requestEntityRequestClass %> request) {
-        body = body == null ? wrapAndCustomizeProblem(ex, (<%- requestClass %>) request) : body;
+        if (!(body instanceof ProblemDetailWithCause)) {
+            ProblemDetailWithCause problem = getProblemDetailWithCause(ex);
+            problem.setStatus(statusCode.value());
+            if (body instanceof ProblemDetail problemDetail) problem.setDetail(problemDetail.getDetail());
+            body = customizeProblem(problem, ex, (<%- requestClass %>) request);
+        }
 <%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
