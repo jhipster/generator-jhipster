@@ -184,13 +184,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
       "transient": undefined,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": [
-        "189bcd33-1d2c-4426-a20c-948f41d0b0a6",
-        "22ccb613-6f9d-4043-9a1b-63de682c25f1",
-        "19b8e903-b097-46b3-a65a-778acb6d87e9",
-        "6fe41aa2-077f-41d3-b692-28efde354481",
-        "6e13b9b6-a70d-4146-9d4c-ef8f187a1a20",
-      ],
+      "uniqueValue": [],
     },
     {
       "blobContentTypeAny": false,
@@ -695,13 +689,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "transient": undefined,
       "tsType": "number",
       "unique": false,
-      "uniqueValue": [
-        966,
-        24814,
-        5440,
-        3944,
-        6275,
-      ],
+      "uniqueValue": [],
     },
     {
       "blobContentTypeAny": false,
@@ -803,12 +791,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "tsType": "string",
       "unique": true,
       "uniqueConstraintName": "ux_jhi_user__login",
-      "uniqueValue": [
-        "Hudson_Senger",
-        "Luke36",
-        "Jovanny.Dietrich20",
-        "Frederick.Rath49",
-      ],
+      "uniqueValue": [],
     },
     {
       "blobContentTypeAny": false,
@@ -1708,13 +1691,7 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
       "transient": undefined,
       "tsType": "string",
       "unique": false,
-      "uniqueValue": [
-        "2189bcd3-31d2-4c42-9620-c948f41d0b0a",
-        "22ccb613-6f9d-4043-9a1b-63de682c25f1",
-        "19b8e903-b097-46b3-a65a-778acb6d87e9",
-        "6fe41aa2-077f-41d3-b692-28efde354481",
-        "6e13b9b6-a70d-4146-9d4c-ef8f187a1a20",
-      ],
+      "uniqueValue": [],
     },
   ],
   "fieldsContainNoOwnerOneToOne": false,

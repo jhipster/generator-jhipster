@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 import { mutateData } from '../../../lib/utils/object.ts';
-import type { Entity as ClientEntity } from '../types.ts';
+import { type EntitySamplesBatch, generateEntitySamples } from '../../base-application/support/entity-samples.ts';
+import type { Entity as ClientEntity, Field as ClientField } from '../types.ts';
 
 import { isClientField } from './filter-entities.ts';
-import { generateTestEntityId, generateTsTestEntityForFields, stringifyTsEntity } from './template-utils.ts';
+import { generateTestEntityId, stringifyTsEntity } from './template-utils.ts';
 import getTypescriptKeyType from './types-utils.ts';
 
 const SEED = 'post-prepare-client';
@@ -30,40 +31,38 @@ export function preparePostEntityClientDerivedProperties(entity: ClientEntity) {
   if (entity.builtInUser) {
     clientFields = clientFields.filter(field => ['id', 'login'].includes(field.fieldName));
   }
-  entity.resetFakerSeed!(`${SEED}-1`);
+  const generateTsSamples = (seed: number, fields: EntitySamplesBatch<ClientField>['fields'], count?: number) =>
+    generateEntitySamples(entity, { seed: `${SEED}-${seed}`, batches: [{ fields, format: 'ts', count }] })[0];
   const options = { sep: `\n  ` };
-  const fieldsWithPartialData = clientFields.filter(
-    field => field.id || field.fieldValidationRequired || (!field.transient && entity.faker!.datatype.boolean()),
+
+  const [partialSample] = generateTsSamples(1, faker =>
+    clientFields.filter(field => field.id || field.fieldValidationRequired || (!field.transient && faker.datatype.boolean())),
   );
-  entity.tsSampleWithPartialData = stringifyTsEntity(generateTsTestEntityForFields(fieldsWithPartialData), options);
+  entity.tsSampleWithPartialData = stringifyTsEntity(partialSample, options);
 
-  entity.resetFakerSeed!(`${SEED}-2`);
-  const fieldsWithRequiredData = clientFields.filter(field => field.id || field.fieldValidationRequired);
-  entity.tsSampleWithRequiredData = stringifyTsEntity(generateTsTestEntityForFields(fieldsWithRequiredData), options);
+  const [requiredSample] = generateTsSamples(
+    2,
+    clientFields.filter(field => field.id || field.fieldValidationRequired),
+  );
+  entity.tsSampleWithRequiredData = stringifyTsEntity(requiredSample, options);
 
-  entity.resetFakerSeed!(`${SEED}-3`);
-  const fieldsWithFullData = clientFields.filter(field => !field.transient);
-  entity.tsSampleWithFullData = stringifyTsEntity(generateTsTestEntityForFields(fieldsWithFullData), options);
+  const [fullSample] = generateTsSamples(
+    3,
+    clientFields.filter(field => !field.transient),
+  );
+  entity.tsSampleWithFullData = stringifyTsEntity(fullSample, options);
 
   if (entity.primaryKey) {
-    entity.resetFakerSeed!(`${SEED}-4`);
-    const fieldsWithNewData = clientFields.filter(field => !field.id && field.fieldValidationRequired);
-    entity.tsSampleWithNewData = stringifyTsEntity(
-      {
-        ...generateTsTestEntityForFields(fieldsWithNewData),
-        [entity.primaryKey.name]: null,
-      },
-      options,
+    const [newSample] = generateTsSamples(
+      4,
+      clientFields.filter(field => !field.id && field.fieldValidationRequired),
     );
+    entity.tsSampleWithNewData = stringifyTsEntity({ ...newSample, [entity.primaryKey.name]: null }, options);
 
-    entity.resetFakerSeed!(`${SEED}-5`);
     mutateData(entity, {
       tsKeyType: getTypescriptKeyType(entity.primaryKey.type),
     });
     entity.primaryKey.tsSampleValues = [generateTestEntityId(entity.primaryKey, 0), generateTestEntityId(entity.primaryKey, 1)];
-    entity.tsPrimaryKeySamples = [
-      stringifyTsEntity(generateTsTestEntityForFields(entity.primaryKey.fields)),
-      stringifyTsEntity(generateTsTestEntityForFields(entity.primaryKey.fields)),
-    ];
+    entity.tsPrimaryKeySamples = generateTsSamples(5, entity.primaryKey.fields, 2).map(sample => stringifyTsEntity(sample));
   }
 }
