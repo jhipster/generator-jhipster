@@ -721,9 +721,9 @@ describe('cli', () => {
         it('should print usage', () => {
           expect(stdout).toMatch('Usage: jhipster run jhipster:app [options]');
         });
-        // TODO handle command imports in run command.
-        it.skip('should print options', () => {
+        it('should print options from imported generators', () => {
           expect(stdout).toMatch('--defaults');
+          expect(stdout).toMatch('--client-framework');
         });
         it('should exit with code 0', () => {
           expect(exitCode).toBe(0);
