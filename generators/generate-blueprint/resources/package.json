@@ -4,7 +4,7 @@
     "eslint": "10.14.0",
     "globals": "17.14.0",
     "typescript-eslint": "8.72.1",
-    "vitest": "5.0.5"
+    "vitest": "5.1.0"
   },
   "packageManager": "npm@12"
 }
