@@ -88,8 +88,10 @@ liquibase {
 <%_ } _%>
       logLevel "debug"
       classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
-<%_ if (authenticationTypeOauth2) { _%>
-      excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
+<%_ if (databaseTypeSql) { _%>
+      // liquibaseUpdate runs the test context, which creates <%- jhiTablePrefix %>_date_time_wrapper for the test-only DateTimeWrapper entity.
+      // (?i) matches the name case-insensitively, since H2 stores it in upper case.
+      excludeObjects "(?i)<%- jhiTablePrefix %>_date_time_wrapper"
 <%_ } _%>
     }
   }

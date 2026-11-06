@@ -35,6 +35,13 @@ const getLiquibaseMavenPlugin = (): string => {
   return plugin;
 };
 
+const getGradleLiquibaseMainActivity = (): string => {
+  const gradle = runResult.fs.read(`${runResult.cwd}/gradle/liquibase.gradle`);
+  const activity = /^ {4}main \{[\s\S]*?^ {4}\}/m.exec(gradle)?.[0];
+  if (!activity) throw new Error('main activity not found in gradle/liquibase.gradle');
+  return activity;
+};
+
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
@@ -83,6 +90,42 @@ describe(`generator - ${generator}`, () => {
       runResult.assertFileContent('gradle/liquibase.gradle', 'searchPath ".,src/main/resources/"');
       runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime sourceSets.main.output');
       runResult.assertFileContent('gradle/liquibase.gradle', 'liquibaseRuntime "org.liquibase.ext:liquibase-hibernate7:');
+    });
+    it('should not set contexts in the main activity, since generate-changelog writes them to the changesets', () => {
+      expect(getGradleLiquibaseMainActivity()).not.toContain('contexts');
+    });
+    it('should exclude the test-only table from the diff', () => {
+      runResult.assertFileContent('gradle/liquibase.gradle', 'excludeObjects "(?i)jhi_date_time_wrapper"');
+    });
+  });
+
+  describe('with gradle and neo4j', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('app')
+        .withJHipsterConfig({ buildTool: 'gradle', skipClient: true, databaseType: 'neo4j', databaseMigration: 'liquibase' });
+    });
+
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
+    it('should not exclude objects from the diff', () => {
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'excludeObjects');
+    });
+  });
+
+  describe('with gradle and cassandra', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('app')
+        .withJHipsterConfig({ buildTool: 'gradle', skipClient: true, databaseType: 'cassandra', databaseMigration: 'liquibase' });
+    });
+
+    it('should match the gradle liquibase file snapshot', () => {
+      expect(runResult.getSnapshot('**/gradle/liquibase.gradle')).toMatchSnapshot();
+    });
+    it('should not exclude objects from the diff', () => {
+      runResult.assertNoFileContent('gradle/liquibase.gradle', 'excludeObjects');
     });
   });
 
