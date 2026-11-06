@@ -356,6 +356,7 @@ export const files = asWriteFilesSection({
         'shared/language/index.ts',
         'shared/language/translation.provider.ts',
         'shared/language/find-language-from-key.pipe.ts',
+        'shared/language/label.pipe.ts',
         'shared/language/translate.directive.ts',
       ],
     },
@@ -430,7 +431,7 @@ export const files = asWriteFilesSection({
     {
       condition: generator => generator.enableTranslation,
       ...clientApplicationTemplatesBlock(),
-      templates: ['shared/language/translate.directive.spec.ts'],
+      templates: ['shared/language/translate.directive.spec.ts', 'shared/language/label.pipe.spec.ts'],
     },
     {
       condition: generator => generator.generateUserManagement,

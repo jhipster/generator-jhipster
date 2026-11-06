@@ -16,7 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from '@yeoman/transform';
+import type { MemFsEditorFile } from 'mem-fs-editor';
+import { isFileStateModified } from 'mem-fs-editor/state';
+
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import type { EditorMetadata } from '../../../base-core/api.ts';
+import { createJhiTransformTranslateStringifyReplacer } from '../../../languages/support/translate.ts';
 import { clientApplicationTemplatesBlock } from '../../support/index.ts';
 
 /** Client code bound to the Spring Boot backend, composed by the client frameworks for that backend only. */
@@ -31,6 +37,33 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
     }
   }
 
+  get default() {
+    return this.asDefaultTaskGroup({
+      queueTranslateTransform({ application }) {
+        if (application.enableTranslation) return;
+
+        // The translations are loaded after the files are written, the texts are replaced when the generation ends.
+        const translate = createJhiTransformTranslateStringifyReplacer(application.getWebappTranslation);
+        const writtenByThisGenerator = (file: MemFsEditorFile & { editorMetadata?: EditorMetadata }) =>
+          file.editorMetadata?.namespace === this.options.namespace;
+        this.queueTransformStream(
+          {
+            name: 'translating the Spring Boot client files',
+            filter: file => isFileStateModified(file) && writtenByThisGenerator(file),
+            refresh: false,
+          },
+          passthrough(file => {
+            file.contents = Buffer.from(translate(file.contents.toString()));
+          }),
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
@@ -38,7 +71,7 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
           blocks: [
             clientApplicationTemplatesBlock({
               condition: ctx => ctx.withAdminUi,
-              templates: ['shared/jhipster/logs.ts'],
+              templates: ['shared/jhipster/label.ts', 'shared/jhipster/logs.ts'],
             }),
             clientApplicationTemplatesBlock({
               condition: ctx => ctx.withAdminUi && ctx.clientTestFrameworkVitest,
@@ -53,5 +86,9 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  override get editorMetadata(): EditorMetadata | undefined {
+    return { ...super.editorMetadata, namespace: this.options.namespace };
   }
 }
