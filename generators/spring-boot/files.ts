@@ -371,7 +371,11 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['web/rest/TestUtil.java', 'web/rest/errors/ExceptionTranslatorTestController.java'],
+      templates: [
+        'web/rest/TestUtil.java',
+        'web/rest/errors/ExceptionTranslatorTest.java',
+        'web/rest/errors/ExceptionTranslatorTestController.java',
+      ],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,

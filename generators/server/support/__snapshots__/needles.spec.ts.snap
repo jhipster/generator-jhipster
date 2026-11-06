@@ -437,6 +437,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },

@@ -1167,6 +1167,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
@@ -1958,6 +1961,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
