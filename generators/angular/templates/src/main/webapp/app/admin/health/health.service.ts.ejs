@@ -16,20 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 
 import { serverApiUrl } from 'app/config';
-
-import { HealthModel } from './health.model';
+import { HealthCheck, HealthResponse, toHealthChecks } from 'app/shared/jhipster/health';
 
 @Service()
 export class HealthService {
   private readonly http = inject(HttpClient);
 
-  checkHealth(): Observable<HealthModel> {
-    return this.http.get<HealthModel>(`${serverApiUrl}management/health`);
+  checkHealth(): Observable<HealthCheck[]> {
+    return this.http.get<HealthResponse>(`${serverApiUrl}management/health`).pipe(
+      // An unhealthy application answers with 503 and its health.
+      catchError((error: HttpErrorResponse) => (error.status === 503 ? of<HealthResponse>(error.error) : throwError(() => error))),
+      map(toHealthChecks),
+    );
   }
 }
