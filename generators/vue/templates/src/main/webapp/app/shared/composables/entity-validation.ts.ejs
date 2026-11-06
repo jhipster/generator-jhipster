@@ -1,0 +1,71 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { type Ref } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+
+import { useVuelidate } from '@vuelidate/core';
+
+import { useValidation } from './validation';
+
+/** The validation rules of a property of the form. */
+export type PropertyRules = {
+  required?: boolean;
+  email?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  integer?: boolean;
+  min?: number;
+  max?: number;
+  /** The pattern of the value, named in the message by the name of the property. */
+  pattern?: { regex: RegExp; name: string; login?: boolean };
+};
+
+/**
+ * The Vuelidate validation of the form of an entity, from the rules of each of its properties, validated at once.
+ */
+export const useEntityValidation = <T extends object>(entity: Ref<T>, rules: Record<string, PropertyRules>) => {
+<%_ if (enableTranslation) { _%>
+  const { t: t$ } = useI18n();
+<%_ } _%>
+  const validations = useValidation();
+  const vuelidateRules = ({ required, email, minLength, maxLength, integer, min, max, pattern }: PropertyRules) => ({
+    ...(required ? { required: validations.required(t$('entity.validation.required').toString()) } : {}),
+    ...(email ? { email: validations.email(t$('global.messages.validate.email.invalid').toString()) } : {}),
+    ...(minLength === undefined ? {} : { minLength: validations.minLength(t$('entity.validation.minlength', { min: minLength }).toString(), minLength) }),
+    ...(maxLength === undefined ? {} : { maxLength: validations.maxLength(t$('entity.validation.maxlength', { max: maxLength }).toString(), maxLength) }),
+    ...(integer ? { integer: validations.integer(t$('entity.validation.number').toString()) } : {}),
+    ...(min === undefined ? {} : { min: validations.minValue(t$('entity.validation.min', { min }).toString(), min) }),
+    ...(max === undefined ? {} : { max: validations.maxValue(t$('entity.validation.max', { max }).toString(), max) }),
+    ...(pattern
+      ? {
+          pattern: validations.pattern(
+            pattern.login
+              ? t$('entity.validation.patternLogin', { pattern: pattern.name }).toString()
+              : t$('entity.validation.pattern', { pattern: pattern.name }).toString(),
+            pattern.regex,
+          ),
+        }
+      : {}),
+  });
+  const v$ = useVuelidate(Object.fromEntries(Object.entries(rules).map(([property, propertyRules]) => [property, vuelidateRules(propertyRules)])), entity);
+  v$.value.$validate();
+  return v$;
+};

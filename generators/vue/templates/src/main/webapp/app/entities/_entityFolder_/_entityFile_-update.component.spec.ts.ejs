@@ -181,7 +181,7 @@ describe('Component Tests', () => {
 
         // WHEN
         comp.save();
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.update).toHaveBeenCalledWith(<%- entityInstance %>Sample);
@@ -198,7 +198,7 @@ describe('Component Tests', () => {
 
         // WHEN
         comp.save();
-        await comp.$nextTick();
+        await flushPromises();
 
         // THEN
         expect(<%- entityInstance %>ServiceStub.create).toHaveBeenCalledWith(entity);

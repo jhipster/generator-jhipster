@@ -1,0 +1,67 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { ref } from 'vue';
+
+import { type AxiosError } from 'axios';
+
+import type AlertService from '@/shared/alert/alert.service';
+
+/**
+ * The save of the form of an entity: created or updated, with an alert of the saved one.
+ */
+export const useEntitySave = <T, K>({
+  alertService,
+  isUpdate,
+  create,
+  update,
+  getId,
+  createdMessage,
+  updatedMessage,
+  onSaved,
+}: {
+  alertService: AlertService;
+  /** Whether the entity of the form exists, to update it, else to create it. */
+  isUpdate: () => boolean;
+  create: () => Promise<T>;
+  update: () => Promise<T>;
+  getId: (saved: T) => K;
+  createdMessage: (id: K) => string;
+  updatedMessage: (id: K) => string;
+  onSaved: () => unknown;
+}) => {
+  const isSaving = ref(false);
+
+  const save = async () => {
+    isSaving.value = true;
+    try {
+      if (isUpdate()) {
+        alertService.showInfo(updatedMessage(getId(await update())));
+      } else {
+        alertService.showSuccess(createdMessage(getId(await create())));
+      }
+      await onSaved();
+    } catch (error) {
+      alertService.showHttpError((error as AxiosError).response);
+    } finally {
+      isSaving.value = false;
+    }
+  };
+
+  return { isSaving, save };
+};
