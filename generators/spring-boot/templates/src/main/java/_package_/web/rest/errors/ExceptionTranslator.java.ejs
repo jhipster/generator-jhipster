@@ -24,7 +24,6 @@ import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.util.HeaderUtil;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,15 +44,11 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 <%_ if (reactive) { _%>
-  <%_ if (!skipUserManagement) { _%>
-import org.springframework.security.core.AuthenticationException;
-  <%_ } _%>
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.MediaType;
 import tech.jhipster.web.rest.errors.ExceptionTranslation;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 <%_ } else { _%>
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
@@ -66,9 +61,9 @@ import org.springframework.http.HttpStatusCode;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause.ProblemDetailWithCauseBuilder;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 <%_ if (reactive) { _%>
@@ -84,6 +79,7 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly JSON structures.
@@ -114,6 +110,7 @@ _%>
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
     private static final boolean CAUSAL_CHAIN_ENABLED = false;
+    private static final Pattern QUALIFIED_CLASS_NAME = Pattern.compile("\\b[a-z_][a-z0-9_]*+(?:\\.[a-z_][a-z0-9_]*+)*+\\.[A-Z]");
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
 
@@ -168,7 +165,6 @@ _%>
         if (ex instanceof <%- packageName %>.service.InvalidPasswordException)
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 
-  <%_ if (reactive) { _%>
         if (ex instanceof AuthenticationException) {
             // Ensure no information about existing users is revealed via failed authentication attempts
             return ProblemDetailWithCauseBuilder.instance()
@@ -177,7 +173,6 @@ _%>
                 .withDetail("Invalid credentials")
                 .build();
         }
-  <%_ } _%>
 <%_ } _%>
         if (
             ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause
@@ -240,7 +235,7 @@ _%>
                 new FieldErrorVM(
                     f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
                     f.getField(),
-                    StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
+                    f.isBindingFailure() || StringUtils.isBlank(f.getDefaultMessage()) ? f.getCode() : f.getDefaultMessage()
                 )
             )
             .toList();
@@ -319,11 +314,15 @@ _%>
     }
 
     private String getCustomizedErrorDetails(Throwable err) {
+        // The message of such an exception is its whole body, the message key of the problem tells the error
+        if (err instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause) return null;
+
         Collection<String> activeProfiles = List.of(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
 <%_ if (!databaseTypeNo) { _%>
             if (err instanceof DataAccessException) return "Failure during data access";
+            if (err instanceof PropertyReferenceException) return "Invalid sort property";
 <%_ } _%>
             if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
         }
@@ -336,10 +335,7 @@ _%>
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         if (err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
 <%_ } _%>
-        if (err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
-<%_ if (reactive) { _%>
-        if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
-<%_ } _%>
+        if (err instanceof AuthenticationException) return HttpStatus.UNAUTHORIZED;
         if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
 <%_ if (!databaseTypeNo) { _%>
         if (err instanceof PropertyReferenceException) return HttpStatus.BAD_REQUEST;
@@ -386,9 +382,7 @@ _%>
     }
 
     private boolean containsPackageName(String message) {
-
-        // This list is for sure not complete
-        return Strings.CS.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%- packageName %>");
+        return message != null && QUALIFIED_CLASS_NAME.matcher(message).find();
     }
 
 }

@@ -65,6 +65,16 @@ public class ExceptionTranslatorTestController {
         throw new BadCredentialsException("test authentication failed!");
     }
 
+    @GetMapping("/bad-request-alert")
+    public void badRequestAlert() {
+        throw new BadRequestAlertException("test bad request", "entity", "testkey");
+    }
+
+    @GetMapping("/binding-failure")
+    public void bindingFailure(@Valid @ModelAttribute TestBinding binding) {
+        // The binding fails before the method is called.
+    }
+
     @GetMapping("/response-status")
     public void exceptionWithResponseStatus() {
         throw new TestResponseStatusException();
@@ -73,6 +83,19 @@ public class ExceptionTranslatorTestController {
     @GetMapping("/internal-server-error")
     public void internalServerError() {
         throw new RuntimeException();
+    }
+
+    public static class TestBinding {
+
+        private Integer number;
+
+        public Integer getNumber() {
+            return number;
+        }
+
+        public void setNumber(Integer number) {
+            this.number = number;
+        }
     }
 
     public static class Test<%- dtoSuffix %> {

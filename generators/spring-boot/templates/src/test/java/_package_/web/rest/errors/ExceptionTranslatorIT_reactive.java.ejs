@@ -160,6 +160,36 @@ class ExceptionTranslatorIT {
     }
 
     @Test
+    void testBadRequestAlert() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/bad-request-alert")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo("error.testkey")
+            .jsonPath("$.detail")
+            .doesNotExist();
+    }
+
+    @Test
+    void testBindingFailure() {
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/binding-failure?number=abc")
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("number")
+            .jsonPath("$.fieldErrors.[0].message")
+            .isEqualTo("typeMismatch");
+    }
+
+    @Test
     void testMethodNotSupported() {
         webTestClient
             .post()

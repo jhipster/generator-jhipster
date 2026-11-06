@@ -57,8 +57,8 @@ import java.util.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
-<%_ if (authenticationTypeSession && !reactive) { _%>
 import java.nio.charset.StandardCharsets;
+<%_ if (authenticationTypeSession && !reactive) { _%>
 import java.net.URLDecoder;
 <%_ } _%>
 
@@ -373,7 +373,7 @@ public class AccountResource {
         return (
             StringUtils.isEmpty(password) ||
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
-            password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
+            password.getBytes(StandardCharsets.UTF_8).length > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
     }
 }
