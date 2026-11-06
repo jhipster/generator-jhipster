@@ -4491,9 +4491,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/admin/metrics/metrics-screens.spec.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/admin/metrics/metrics.html": {
     "stateCleared": "modified",
   },
@@ -6947,9 +6944,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/metrics-screens.spec.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/metrics/metrics.html": {
     "stateCleared": "modified",
   },
@@ -8332,9 +8326,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/metrics-screens.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/metrics/metrics.html": {

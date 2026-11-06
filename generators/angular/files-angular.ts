@@ -214,7 +214,6 @@ export const files = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: [
         // admin modules
-        'admin/metrics/metrics-screens.spec.ts',
         'admin/configuration/configuration.ts',
         'admin/configuration/configuration.html',
         'admin/configuration/configuration.service.ts',
