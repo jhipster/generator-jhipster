@@ -20,9 +20,6 @@
 import { useEffect, useState } from 'react';
 import { <%- builtInUserManagement ? 'Badge, ' : '' %>Button, <%- searchEngineAny ? 'Col, Form, FormControl, InputGroup, Row, ' : '' %>Table } from 'react-bootstrap';
 import {
-<%_ if (anyFieldIsBlobDerived) { _%>
-  byteSize,
-<%_ } _%>
   Translate<%- searchEngineAny ? ', translate' : '' %>
   <%- anyFieldIsDateDerived ? ', TextFormat' : '' %>
 <%_ if (paginationNo) { _%>
@@ -50,7 +47,7 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 <%_ if (anyFieldHasFileBasedContentType) { _%>
-import { openFile } from 'app/shared/jhipster/data-utils';
+import { byteSize, openFile } from 'app/shared/jhipster/data-utils';
 <%_ } _%>
 <%_ if (paginationNo) { _%>
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
