@@ -18,22 +18,33 @@
 -%>
 import { useEffect, useState } from 'react';
 import { Badge, Button, Table } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate<%- enableTranslation ? ', translate' : '' %> } from 'react-jhipster';
 
 import { faEye, faSync } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { type HealthCheck } from 'app/shared/jhipster/health';
+import { type Label } from 'app/shared/jhipster/label';
 import { getSystemHealth } from '../administration.reducer';
 
 import HealthModal from './health-modal';
 
+<%_ if (enableTranslation) { _%>
+export const labelText = ({ text, translationKey }: Label): string => {
+  const translated: string | undefined = translationKey && translate(translationKey);
+  return !translated || translated.startsWith('translation-not-found') ? text : translated;
+};
+<%_ } else { _%>
+export const labelText = ({ text }: Label): string => text;
+<%_ } _%>
+
 export const HealthPage = () => {
-  const [healthObject, setHealthObject] = useState({});
+  const [healthObject, setHealthObject] = useState<HealthCheck>();
   const [showModal, setShowModal] = useState(false);
   const dispatch = useAppDispatch();
 
-  const health = useAppSelector(state => state.administration.health);
+  const checks = useAppSelector(state => state.administration.health);
   const isFetching = useAppSelector(state => state.administration.loading);
 
   useEffect(() => {
@@ -46,18 +57,14 @@ export const HealthPage = () => {
     }
   };
 
-  const getSystemHealthInfo = (name, healthObj) => () => {
+  const getSystemHealthInfo = (check: HealthCheck) => () => {
     setShowModal(true);
-    setHealthObject({ ...healthObj, name });
+    setHealthObject(check);
   };
-
-  const getBadgeType = (status: string) => (status === 'UP' ? 'success' : 'danger');
 
   const handleClose = () => setShowModal(false);
 
   const renderModal = () => <HealthModal healthObject={healthObject} handleClose={handleClose} showModal={showModal} />;
-
-  const data = health?.components || {};
 
   return (
     <div>
@@ -88,30 +95,24 @@ export const HealthPage = () => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(data).map(
-            (configPropKey, configPropIndex) =>
-              configPropKey !== 'status' && (
-                <tr key={configPropIndex}>
-<%_ if (enableTranslation) { _%>
-                  <td>
-                    <Translate contentKey={`health.indicator.${configPropKey}`}>{configPropKey}</Translate>
-                  </td>
-<%_ } else { _%>
-                  <td className="text-capitalize">{configPropKey}</td>
-<%_ } _%>
-                  <td className="text-center">
-                    <Badge bg={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
-                  </td>
-                  <td className="text-center">
-                    {data[configPropKey].details && (
-                      <a className="hand" onClick={getSystemHealthInfo(configPropKey, data[configPropKey])}>
-                        <FontAwesomeIcon icon={faEye} />
-                      </a>
-                    )}
-                  </td>
-                </tr>
-              ),
-          )}
+          {checks.map(check => (
+            <tr key={check.id}>
+              <td>
+                <span>{labelText(check.label)}</span>
+                {check.sublabel ? ` - ${check.sublabel}` : ''}
+              </td>
+              <td className="text-center">
+                <Badge bg={check.healthy ? 'success' : 'danger'}>{labelText(check.status)}</Badge>
+              </td>
+              <td className="text-center">
+                {(check.details || check.error) && (
+                  <a className="hand" onClick={getSystemHealthInfo(check)}>
+                    <FontAwesomeIcon icon={faEye} />
+                  </a>
+                )}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
       {renderModal()}
