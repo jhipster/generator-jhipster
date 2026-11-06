@@ -54,7 +54,7 @@ describe('Configuration Service', () => {
       httpMock.expectOne(req => req.url.endsWith('management/configprops')).flush(configProps);
       httpMock.expectOne(req => req.url.endsWith('management/env')).flush(env);
       expect(expectedResult).toEqual([
-        expect.objectContaining({ label: { text: 'Spring configuration' }, rows: [{ key: 'jhipster', properties: [{ key: 'name', value: 'app' }] }] }),
+        expect.objectContaining({ rows: [{ key: 'jhipster', properties: [{ key: 'name', value: 'app' }] }] }),
         expect.objectContaining({ label: { text: 'server.ports' }, rows: [{ key: 'local.server.port', value: '8080' }] }),
       ]);
     });

@@ -67,13 +67,14 @@ const readableValue = (value: unknown): string => (typeof value === 'string' ? v
 const toBeansSection = ({ contexts }: ConfigProps): ConfigurationSection => {
   const beans: Record<string, ConfigPropsBean> = Object.assign({}, ...Object.values(contexts).map(context => context.beans));
   return {
-    label: { text: 'Spring configuration' },
 <%_ if (enableTranslation) { _%>
+    label: { text: 'Configuration properties', translationKey: 'configuration.table.title' },
     columns: [
       { text: 'Prefix', translationKey: 'configuration.table.prefix' },
       { text: 'Properties', translationKey: 'configuration.table.properties' },
     ],
 <%_ } else { _%>
+    label: { text: __jhiTransformTranslateStringify__('configuration.table.title') },
     columns: [
       { text: __jhiTransformTranslateStringify__('configuration.table.prefix') },
       { text: __jhiTransformTranslateStringify__('configuration.table.properties') },
@@ -93,7 +94,17 @@ export const toConfiguration = (configProps: ConfigProps, { propertySources }: E
   toBeansSection(configProps),
   ...propertySources.map(({ name, properties }): ConfigurationSection => ({
     label: { text: name },
-    columns: [{ text: 'Property' }, { text: 'Value' }],
+<%_ if (enableTranslation) { _%>
+    columns: [
+      { text: 'Property', translationKey: 'configuration.table.property' },
+      { text: 'Value', translationKey: 'configuration.table.value' },
+    ],
+<%_ } else { _%>
+    columns: [
+      { text: __jhiTransformTranslateStringify__('configuration.table.property') },
+      { text: __jhiTransformTranslateStringify__('configuration.table.value') },
+    ],
+<%_ } _%>
     rows: Object.entries(properties).map(([key, { value }]) => ({ key, value: readableValue(value) })),
   })),
 ];

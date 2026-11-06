@@ -3,8 +3,11 @@
     "title": "Konfigurasi",
     "filter": "Filter (berdasarkan awalan)",
     "table": {
+      "title": "Properti konfigurasi",
       "prefix": "Awalan",
-      "properties": "Properties"
+      "properties": "Properties",
+      "property": "Properti",
+      "value": "Nilai"
     }
   }
 }

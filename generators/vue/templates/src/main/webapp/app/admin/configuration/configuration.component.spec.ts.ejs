@@ -113,11 +113,7 @@ describe('Configuration view', () => {
 
     // THEN
     expect(wrapper.vm.allSections[0].rows.map(({ key }) => key)).toEqual(['A', 'A', 'B']);
-    expect(wrapper.vm.allSections[1]).toEqual({
-      label: { text: 'source' },
-      columns: [{ text: 'Property' }, { text: 'Value' }],
-      rows: [{ key: 'key1', value: 'value1' }],
-    });
+    expect(wrapper.vm.allSections[1]).toMatchObject({ label: { text: 'source' }, rows: [{ key: 'key1', value: 'value1' }] });
     expect(wrapper.vm.sections[0].rows).toEqual([expect.objectContaining({ key: 'B' })]);
     expect(wrapper.text()).toContain('value2');
   });

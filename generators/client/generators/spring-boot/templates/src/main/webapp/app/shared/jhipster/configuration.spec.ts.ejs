@@ -34,7 +34,7 @@ describe('configuration', () => {
       );
 
       expect(section).toEqual({
-        label: { text: 'Spring configuration' },
+        label: expect.any(Object),
         columns: expect.any(Array),
         rows: [
           { key: 'a', properties: [{ key: 'other', value: '1' }] },
@@ -47,6 +47,7 @@ describe('configuration', () => {
     it('should give the translation keys of the columns of the beans', () => {
       const [section] = toConfiguration({ contexts: {} }, { propertySources: [] });
 
+      expect(section.label.translationKey).toBe('configuration.table.title');
       expect(section.columns.map(({ translationKey }) => translationKey)).toEqual(['configuration.table.prefix', 'configuration.table.properties']);
     });
 
@@ -68,7 +69,7 @@ describe('configuration', () => {
 
       expect(section).toEqual({
         label: { text: 'server.ports' },
-        columns: [{ text: 'Property' }, { text: 'Value' }],
+        columns: expect.any(Array),
         rows: [
           { key: 'text', value: '8080' },
           { key: 'flag', value: 'false' },
