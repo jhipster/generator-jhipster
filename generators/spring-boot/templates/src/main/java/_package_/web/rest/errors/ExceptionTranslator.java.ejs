@@ -41,6 +41,9 @@ import org.springframework.http.converter.HttpMessageConversionException;
 <%_ if (reactive && databaseTypeSql) { _%>
 import org.springframework.stereotype.Component;
 <%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+import org.hibernate.query.sqm.UnknownPathException;
+<%_ } _%>
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -323,6 +326,7 @@ _%>
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
 <%_ if (!databaseTypeNo) { _%>
+            if (isInvalidSortProperty(err)) return "Invalid sort property";
             if (err instanceof DataAccessException) return "Failure during data access";
 <%_ } _%>
             if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
@@ -342,7 +346,7 @@ _%>
 <%_ } _%>
         if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
 <%_ if (!databaseTypeNo) { _%>
-        if (err instanceof PropertyReferenceException) return HttpStatus.BAD_REQUEST;
+        if (isInvalidSortProperty(err)) return HttpStatus.BAD_REQUEST;
 <%_ } _%>
         return null;
     }
@@ -385,6 +389,18 @@ _%>
         return CAUSAL_CHAIN_ENABLED;
     }
 
+<%_ if (!databaseTypeNo) { _%>
+    private boolean isInvalidSortProperty(Throwable err) {
+  <%_ if (databaseTypeSql && !reactive) { _%>
+        // A query with its own select fails when it runs instead of when the sort is read.
+        for (Throwable cause = err; cause != null; cause = cause.getCause()) {
+            if (cause instanceof UnknownPathException) return true;
+        }
+  <%_ } _%>
+        return err instanceof PropertyReferenceException;
+    }
+
+<%_ } _%>
     private boolean containsPackageName(String message) {
 
         // This list is for sure not complete

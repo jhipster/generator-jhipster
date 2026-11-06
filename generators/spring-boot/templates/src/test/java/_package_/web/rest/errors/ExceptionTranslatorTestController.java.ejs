@@ -21,6 +21,10 @@ package <%- packageName %>.web.rest.errors;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
+import org.hibernate.query.sqm.UnknownPathException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+<%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,6 +44,13 @@ public class ExceptionTranslatorTestController {
     }
 <%_ } _%>
 
+<%_ if (databaseTypeSql && !reactive) { _%>
+    @GetMapping("/invalid-sort")
+    public void invalidSort() {
+        throw new InvalidDataAccessApiUsageException("test invalid sort", new UnknownPathException("test unknown path"));
+    }
+
+<%_ } _%>
     @PostMapping("/method-argument")
     public void methodArgument(@Valid @RequestBody Test<%- dtoSuffix %> test<%- dtoSuffix %>) {
         // empty method
