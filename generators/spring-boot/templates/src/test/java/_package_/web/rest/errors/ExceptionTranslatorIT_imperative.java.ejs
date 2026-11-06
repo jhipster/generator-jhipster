@@ -58,6 +58,17 @@ class ExceptionTranslatorIT {
 <%_ } _%>
 
     @Test
+    void testUnreadableBody() throws Exception {
+         mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{").contentType(MediaType.APPLICATION_JSON)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.type").value("https://www.jhipster.tech/problem/problem-with-message"))
+            .andExpect(jsonPath("$.message").value("error.http.400"))
+            .andExpect(jsonPath("$.path").value("/api/exception-translator-test/method-argument"))
+            .andExpect(jsonPath("$.detail").value("Failed to read request"));
+    }
+
+    @Test
     void testMethodArgumentNotValid() throws Exception {
          mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
              .andExpect(status().isBadRequest())
