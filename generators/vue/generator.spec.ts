@@ -279,6 +279,33 @@ describe(`generator - ${clientFramework}`, () => {
     });
   });
 
+  describe('gateway with microfrontends', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({
+          ...commonConfig,
+          applicationType: 'gateway',
+          enableTranslation: true,
+          microfrontends: [{ baseName: 'blog' }],
+        })
+        .withSharedApplication({ gatewayServicesApiAvailable: true, getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should keep the gateway translations over the microfrontend translations', () => {
+      runResult.assertFileContent(
+        `${CLIENT_MAIN_SRC_DIR}app/locale/translation.service.ts`,
+        /loadRemote<.*?>\(`blog\/i18n-\$\{newLanguage\}`\),\s+loadRemote<.*?>\(`jhipster\/i18n-\$\{newLanguage\}`\),/,
+      );
+    });
+
+    it('should match translation service files snapshot', () => {
+      expect(runResult.getSnapshot('**/app/locale/translation.service*.ts')).toMatchSnapshot();
+    });
+  });
+
   describe('entity with a relationship to an embedded entity', () => {
     before(async () => {
       await helpers
