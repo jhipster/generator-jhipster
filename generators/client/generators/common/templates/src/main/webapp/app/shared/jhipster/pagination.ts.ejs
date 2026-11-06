@@ -22,6 +22,11 @@ export const SORT_PARAM = 'sort';
 
 export type SortOrder = 'asc' | 'desc';
 
+export const ASC = 'asc' satisfies SortOrder;
+export const DESC = 'desc' satisfies SortOrder;
+
+export const ITEMS_PER_PAGE = 20;
+
 export type SortState = { predicate?: string; order?: SortOrder };
 
 /**
