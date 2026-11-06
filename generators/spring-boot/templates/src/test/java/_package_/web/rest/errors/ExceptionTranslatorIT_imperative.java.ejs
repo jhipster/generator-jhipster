@@ -120,7 +120,7 @@ class ExceptionTranslatorIT {
         mockMvc
             .perform(get("/api/exception-translator-test/bad-request-alert"))
             .andExpect(status().isBadRequest())
-            .andExpect(header().string("X-<%- camelizedBaseName %>-error", "error.testkey"))
+            .andExpect(header().string("X-<%- skipClient ? camelizedBaseName : frontendAppName %>-error", "error.testkey"))
             .andExpect(jsonPath("$.message").value("error.testkey"))
             .andExpect(jsonPath("$.detail").doesNotExist());
     }
