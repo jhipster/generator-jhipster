@@ -105,6 +105,9 @@ export const <%- entityReactName %>Update = () => {
 <%_ for (const enumField of enumTypeFields) { _%>
   const <%- enumField.enumInstance %>Values = Object.keys(<%- enumField.fieldType %>);
 <%_ } _%>
+<%_ for (const field of formFields.filter(field => field.clientConstantsAsValues)) { _%>
+  const <%- field.fieldName %>Values = <%- field.reactFieldClientConstant.reactConstantValues %>;
+<%_ } _%>
 
   const handleClose = () => {
     navigate('/<%- entityPage %>'<%- paginationPagination ? ' + location.search' : '' %>);
@@ -255,7 +258,7 @@ export const <%- entityReactName %>Update = () => {
             multiple
     <%_ } _%>
           >
-            {<%- field.reactFieldClientConstant.reactConstantValues %>.map(value => (
+            {<%- field.fieldName %>Values.map(value => (
               <option value={value} key={value}>
                 {value}
               </option>

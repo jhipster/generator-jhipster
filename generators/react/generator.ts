@@ -49,6 +49,8 @@ import type {
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
+const REGEX_LITERAL_REPLACEMENTS: Record<string, string> = { '/': String.raw`\/`, [String.raw`\'`]: "'" };
+
 /**
  * Client constants backing the values of `clientConstantsAsValues` fields, by field type.
  */
@@ -63,11 +65,6 @@ const reactClientConstants: Record<string, ReactFieldClientConstant> = {
   },
 };
 
-const isAdminEntity = (application: { applicationTypeMicroservice?: boolean }, entity: { adminEntity?: boolean }): boolean =>
-  Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
-
-const REGEX_LITERAL_REPLACEMENTS: Record<string, string> = { '/': String.raw`\/`, [String.raw`\'`]: "'" };
-
 export class ReactApplicationGenerator extends ClientApplicationGenerator<
   ReactEntity,
   ReactApplication,
@@ -75,6 +72,9 @@ export class ReactApplicationGenerator extends ClientApplicationGenerator<
   ReactOptions,
   ReactSource
 > {}
+
+const isAdminEntity = (application: { applicationTypeMicroservice?: boolean }, entity: { adminEntity?: boolean }): boolean =>
+  Boolean(entity.adminEntity && !application.applicationTypeMicroservice);
 
 export default class ReactGenerator extends ReactApplicationGenerator {
   constructor(args?: string[], options?: ReactOptions, features?: ReactFeatures) {
