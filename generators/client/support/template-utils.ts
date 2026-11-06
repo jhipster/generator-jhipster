@@ -138,6 +138,7 @@ export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 
 
 /**
  * Generate a test entity, according to the type
+ * @deprecated use generateEntitySamples of base-application
  */
 export const generateTsTestEntityForFields = (fields: ClientField[]): Record<string, string | number | boolean> =>
   generateTsSample(fields, field => field.generateFakeData!('ts'));
@@ -150,7 +151,7 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
 
 /**
  * @private
- * @deprecated
+ * @deprecated use generateEntitySamples of base-application
  * Generate a test entity, according to the type
  */
 export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 | 'random' = 'random') => {
