@@ -61,7 +61,7 @@ export default class TranslationService {
       this.i18n.setLocaleMessage(newLanguage, {});
       // Load translations exposed by microfrontend
 <%_ } _%>
-      <%- exposeMicrofrontend ? '// ' : '' %>const translations = await import(`../../i18n/${newLanguage}/${newLanguage}.js`);
+      <%- exposeMicrofrontend ? '// ' : '' %>const translations = await import(`../../../i18n/${newLanguage}/${newLanguage}.js`);
       <%- exposeMicrofrontend ? '// ' : '' %>this.i18n.setLocaleMessage(newLanguage, translations.default);
 <%_ if (exposeMicrofrontend) { _%>
 
@@ -99,7 +99,7 @@ export default class TranslationService {
   <%_ if (exposeMicrofrontend) { _%>
     return loadRemote<{ default: Record<string, any> }>(`<%- microfrontends.find(remote => remote.self).moduleFederationName %>/i18n-${language}`);
   <%_ } else { _%>
-    return import(`../../i18n/${language}/${language}.js`);
+    return import(`../../../i18n/${language}/${language}.js`);
   <%_ } _%>
   }
 <%_ } _%>
