@@ -131,6 +131,8 @@ const fakeStringTemplateForFieldName = (columnName: string) => {
 /**
  * @returns fake value
  */
+/** Draws of a unique value of a domain that cannot be listed, like a pattern. */
+const MAX_UNIQUE_ATTEMPTS = 100;
 /** The largest range of integers listed as a domain. */
 const MAX_DOMAIN_RANGE = 1000;
 
@@ -166,6 +168,8 @@ function generateFakeDataForField(
   faker: FakerWithRandexp,
   changelogDate: Date,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
+  domainValue?: FieldDomainValue,
+  recentDays = 1,
 ) {
   let originalData: string | number | boolean | Date | undefined;
   let data: string | number | boolean | Date | undefined;
@@ -201,6 +205,8 @@ function generateFakeDataForField(
       this.log.warn(`Generated value for pattern ${field.fieldValidateRulesPattern} is not valid.`);
       data = undefined;
     }
+  } else if (domainValue !== undefined) {
+    data = domainValue;
   } else if (field.fieldIsEnum) {
     if (field.enumValues?.length) {
       const { enumValues } = field;
@@ -209,7 +215,7 @@ function generateFakeDataForField(
       this.log.warn(`Enum ${field.fieldType} is not valid`);
       data = undefined;
     }
-  } else if (field.fieldType === DURATION && type === 'cypress') {
+  } else if (field.fieldType === DURATION && (type === 'cypress' || type === 'json-serializable')) {
     data = `PT${faker.number.int({ min: 1, max: 59 })}M`;
 
     // eslint-disable-next-line no-template-curly-in-string
@@ -226,7 +232,7 @@ function generateFakeDataForField(
     });
   } else if (([INSTANT, ZONED_DATE_TIME, LOCAL_DATE, LOCAL_TIME] as string[]).includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
-    const date = faker.date.recent({ days: 1, refDate: changelogDate });
+    const date = faker.date.recent({ days: recentDays, refDate: changelogDate });
     originalData = date.toISOString();
     if (field.fieldType === LOCAL_DATE) {
       data = originalData.split('T')[0];
@@ -260,8 +266,6 @@ function generateFakeDataForField(
   } else {
     this.log.warn(`Fake data for field ${field.fieldType} is not supported`);
   }
-  originalData ??= data;
-
   if (field.fieldType === BYTES && type === 'json-serializable') {
     data = Buffer.from(data as string).toString('base64');
   }
@@ -300,6 +304,9 @@ function generateFakeDataForField(
     }
   }
 
+  // The value as it is written, to tell if it repeats: a max length or a date without its time can make two values equal.
+  const uniqueData = data instanceof Date ? data.toISOString() : data;
+
   if (data !== undefined) {
     // eslint-disable-next-line no-template-curly-in-string
     if (type === 'ts' && ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
@@ -309,7 +316,7 @@ function generateFakeDataForField(
     }
   }
 
-  return { data, originalData };
+  return { data, uniqueData };
 }
 
 export function prepareCommonFieldForTemplates(
@@ -376,21 +383,29 @@ export function prepareCommonFieldForTemplates(
     type = 'csv',
     { uniqueValues = field.uniqueValue!, unique = field.unique || field.id }: FakeDataOptions = {},
   ) => {
-    let generated = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
+    const generate = (domainValue?: FieldDomainValue, recentDays?: number) =>
+      generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type, domainValue, recentDays);
+    let generated: Partial<ReturnType<typeof generate>> = generate();
     // manage uniqueness
     if (unique) {
-      let i = 0;
-      while (uniqueValues.includes(generated.originalData)) {
-        if (i++ === 5) {
-          generated = {};
-          break;
+      const domain = getFieldFakeDataDomain(field);
+      if (domain) {
+        // A value of a small domain repeats often: take the next free one, none is left when the domain is used.
+        if (uniqueValues.includes(generated.uniqueData)) {
+          const start = domain.indexOf(generated.uniqueData as FieldDomainValue);
+          const free = [...domain.slice(start), ...domain.slice(0, start)].find(value => !uniqueValues.includes(value));
+          generated = free === undefined ? {} : generate(free);
         }
-        generated = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
+      } else {
+        for (let attempt = 0; generated.data !== undefined && uniqueValues.includes(generated.uniqueData); attempt++) {
+          // A date has few values in the default range: each attempt goes a day further.
+          generated = attempt === MAX_UNIQUE_ATTEMPTS ? {} : generate(undefined, attempt + 2);
+        }
       }
       if (generated.data === undefined) {
         generator.log.warn(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
       } else {
-        uniqueValues.push(generated.originalData);
+        uniqueValues.push(generated.uniqueData);
       }
     }
     if (generated.data === undefined) {

@@ -88,7 +88,13 @@ export function generateEntitySamples<F extends BaseApplicationField>(
   { seed, batches }: { seed: string; batches: EntitySamplesBatch<F>[] },
 ): Record<string, any>[][] {
   entity.resetFakerSeed!(seed);
-  const getUsedValues = (field: F) => field.uniqueValue!;
+  const usedValues = new Map<F, unknown[]>();
+  const getUsedValues = (field: F) => {
+    if (!usedValues.has(field)) {
+      usedValues.set(field, []);
+    }
+    return usedValues.get(field)!;
+  };
 
   return batches.map(({ fields: batchFields, format, count = 1 }) => {
     const fields = typeof batchFields === 'function' ? batchFields(entity.faker!) : batchFields;
