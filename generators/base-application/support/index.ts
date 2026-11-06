@@ -23,6 +23,7 @@ export * from './doc.ts';
 export * from './enum.ts';
 export * from './entity.ts';
 export * from './entities.ts';
+export * from './entity-samples.ts';
 export * from './faker.ts';
 export * from './field-utils.ts';
 export { default as prepareEntity } from './prepare-entity.ts';

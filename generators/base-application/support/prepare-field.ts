@@ -24,7 +24,7 @@ import { mutateData } from '../../../lib/utils/index.ts';
 import { kebabCase, lowerFirst } from '../../../lib/utils/string-utils.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
-import { mutateField } from '../entity.ts';
+import { type FakeDataOptions, mutateField } from '../entity.ts';
 import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.ts';
 
 import type { FakerWithRandexp } from './faker.ts';
@@ -131,6 +131,35 @@ const fakeStringTemplateForFieldName = (columnName: string) => {
 /**
  * @returns fake value
  */
+/** The largest range of integers listed as a domain. */
+const MAX_DOMAIN_RANGE = 1000;
+
+type FieldDomainValue = string | number | boolean;
+
+/**
+ * The values a field can take when they can be listed: an enum, a boolean or integers with a small range.
+ * A field with a template or a pattern has its values given by them.
+ */
+export function getFieldFakeDataDomain(field: BaseApplicationField): FieldDomainValue[] | undefined {
+  if (field.fakerTemplate || (field.fieldValidate && field.fieldValidateRules?.includes('pattern'))) {
+    return undefined;
+  }
+  if (field.fieldIsEnum) {
+    return field.enumValues?.map(({ name }) => name);
+  }
+  if (field.fieldType === BOOLEAN) {
+    return [false, true];
+  }
+  if (([INTEGER, LONG] as string[]).includes(field.fieldType)) {
+    const min = Number.parseInt(`${field.fieldValidateRulesMin ?? 0}`, 10);
+    const max = Number.parseInt(`${field.fieldValidateRulesMax ?? 32767}`, 10);
+    if (max - min <= MAX_DOMAIN_RANGE) {
+      return Array.from({ length: max - min + 1 }, (_, index) => min + index);
+    }
+  }
+  return undefined;
+}
+
 function generateFakeDataForField(
   this: CoreGenerator,
   field: BaseApplicationField,
@@ -343,12 +372,15 @@ export function prepareCommonFieldForTemplates(
 
   field.uniqueValue = [];
 
-  field.generateFakeData = (type = 'csv') => {
+  field.generateFakeData = (
+    type = 'csv',
+    { uniqueValues = field.uniqueValue!, unique = field.unique || field.id }: FakeDataOptions = {},
+  ) => {
     let generated = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
-    if (field.unique || field.id) {
+    if (unique) {
       let i = 0;
-      while (field.uniqueValue!.includes(generated.originalData)) {
+      while (uniqueValues.includes(generated.originalData)) {
         if (i++ === 5) {
           generated = {};
           break;
@@ -358,7 +390,7 @@ export function prepareCommonFieldForTemplates(
       if (generated.data === undefined) {
         generator.log.warn(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
       } else {
-        field.uniqueValue!.push(generated.originalData);
+        uniqueValues.push(generated.originalData);
       }
     }
     if (generated.data === undefined) {
