@@ -74,6 +74,21 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with pnpm', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ nodePackageManager: 'pnpm' })
+        .withMockedJHipsterGenerators()
+        .withMockedSource();
+    });
+
+    it('should write the pnpm wrapper', () => {
+      result.assertFile(['pnpmw', 'pnpmw.cmd']);
+      result.assertNoFile(['npmw', 'npmw.cmd']);
+    });
+  });
+
   for (const [clientFramework, testResult, coverage] of [
     ['angular', 'TESTS-results-sonar-vitest.xml', 'outputs.file("build/test-results/lcov.info")'],
     ['react', 'TESTS-results-vitest.xml', 'outputs.dir("build/test-results/lcov-report/")'],

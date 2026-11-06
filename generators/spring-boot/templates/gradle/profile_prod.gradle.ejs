@@ -38,8 +38,8 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-def webapp = tasks.register('webapp', NpmTask) {
-    dependsOn(npmInstall)
+def webapp = tasks.register('webapp', <%- nodePackageManagerPnpm ? 'PnpmTask' : 'NpmTask' %>) {
+    dependsOn(<%- nodePackageManager %>Install)
 
     outputs.dir(layout.buildDirectory.dir("<%- relativeDir(temporaryDir, clientDistDir) %>"))
         .withPropertyName("webapp-build-dir")
