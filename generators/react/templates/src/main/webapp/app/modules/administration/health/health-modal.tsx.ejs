@@ -32,12 +32,15 @@ const HealthModal = ({ handleClose, healthObject, showModal }: HealthModalProps)
   const details = healthObject?.details ?? [];
   return (
     <Modal show={showModal} onHide={handleClose}>
-      <ModalHeader closeButton>
+      <ModalHeader closeButton id="showHealthLabel">
         {healthObject && labelText(healthObject.label)}
         {healthObject?.sublabel ? ` - ${healthObject.sublabel}` : ''}
       </ModalHeader>
       <ModalBody>
-        <Table bordered>
+        <h5>
+          <Translate contentKey="health.details.properties">Properties</Translate>
+        </h5>
+        <Table striped responsive aria-describedby="showHealthLabel">
           <thead>
             <tr>
               <th>
@@ -67,8 +70,8 @@ const HealthModal = ({ handleClose, healthObject, showModal }: HealthModalProps)
         )}
       </ModalBody>
       <ModalFooter>
-        <Button variant="primary" onClick={handleClose}>
-          Close
+        <Button variant="secondary" className="float-start" onClick={handleClose}>
+          Done
         </Button>
       </ModalFooter>
     </Modal>

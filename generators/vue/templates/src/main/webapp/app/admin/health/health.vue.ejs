@@ -32,7 +32,7 @@
         </tbody>
       </table>
     </div>
-    <b-modal ref="healthModal" ok-only>
+    <b-modal ref="healthModal" ok-only ok-title="Done" ok-variant="secondary">
       <template #title>
         <h4 v-if="currentCheck" class="modal-title" id="showHealthLabel">
           <span>{{ labelText(currentCheck.label) }}</span>{{ currentCheck.sublabel ? ` - ${currentCheck.sublabel}` : '' }}
@@ -59,11 +59,11 @@ defineOptions({ name: '<%- jhiPrefixCapitalized %>Health' });
 
 const healthService = inject(healthServiceKey, () => new HealthService(), true);
 <%_ if (enableTranslation) { _%>
-const { t: t$ } = useI18n();
+const { t: t$, te } = useI18n();
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
-const labelText = ({ text, translationKey }: Label): string => (translationKey ? t$(translationKey) : text);
+const labelText = ({ text, translationKey }: Label): string => (translationKey && te(translationKey) ? t$(translationKey) : text);
 <%_ } else { _%>
 const labelText = ({ text }: Label): string => text;
 <%_ } _%>

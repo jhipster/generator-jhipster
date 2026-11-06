@@ -63,12 +63,16 @@ const detailFormatters: Record<string, (value: unknown) => string> = {
   diskSpace: readableBytes,
 };
 
-const toLabel = (text: string, prefix: string): Label => ({
-  text,
 <%_ if (enableTranslation) { _%>
-  translationKey: `${prefix}.${text}`,
+const toIndicatorLabel = (text: string): Label => ({ text, translationKey: `health.indicator.${text}` });
+const toStatusLabel = (text: string): Label => ({ text, translationKey: `health.status.${text}` });
+<%_ } else { _%>
+const indicatorTexts: Record<string, string> = __jhiTransformTranslateStringify__('health.indicator');
+const statusTexts: Record<string, string> = __jhiTransformTranslateStringify__('health.status');
+
+const toIndicatorLabel = (text: string): Label => ({ text: indicatorTexts[text] ?? text });
+const toStatusLabel = (text: string): Label => ({ text: statusTexts[text] ?? text });
 <%_ } _%>
-});
 
 const toHealthCheck = (id: string, { status, details: { error, ...details } = {} }: HealthComponent): HealthCheck => {
   const [baseName, ...subSystem] = id.split('.');
@@ -76,9 +80,9 @@ const toHealthCheck = (id: string, { status, details: { error, ...details } = {}
   const entries = Object.entries(details);
   return {
     id,
-    label: toLabel(baseName, 'health.indicator'),
+    label: toIndicatorLabel(baseName),
     ...(subSystem.length > 0 ? { sublabel: subSystem.join('.') } : {}),
-    status: toLabel(status, 'health.status'),
+    status: toStatusLabel(status),
     healthy: status === 'UP',
     ...(error === undefined ? {} : { error: readableValue(error) }),
     ...(entries.length > 0 ? { details: entries.map(([key, value]) => ({ key, value: format(value) })) } : {}),

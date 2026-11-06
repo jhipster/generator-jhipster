@@ -73,6 +73,25 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with enableTranslation disabled and the health model', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: (key: string) => `translated ${key}` })
+        .withJHipsterConfig({ enableTranslation: false });
+    });
+
+    it('should write the texts of the health', () => {
+      result.assertFileContent(
+        'src/main/webapp/app/shared/jhipster/health.ts',
+        'indicatorTexts: Record<string, string> = "translated health.indicator"',
+      );
+      result.assertNoFileContent('src/main/webapp/app/shared/jhipster/health.ts', 'translationKey');
+    });
+  });
+
   describe('with defaults options', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();

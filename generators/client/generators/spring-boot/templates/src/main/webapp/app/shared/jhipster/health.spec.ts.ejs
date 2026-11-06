@@ -34,8 +34,6 @@ describe('health', () => {
 
       expect(check).toMatchObject({
         id: 'db',
-        label: { text: 'db' },
-        status: { text: 'UP' },
         healthy: true,
         details: [
           { key: 'database', value: 'H2' },
@@ -52,6 +50,13 @@ describe('health', () => {
 
       expect(check.label.translationKey).toBe('health.indicator.db');
       expect(check.status.translationKey).toBe('health.status.DOWN');
+    });
+<%_ } else { _%>
+
+    it('should keep the name of a component without a text', () => {
+      const [check] = toHealthChecks({ status: 'UP', components: { custom: { status: 'UP' } } });
+
+      expect(check.label.text).toBe('custom');
     });
 <%_ } _%>
 
@@ -94,9 +99,9 @@ describe('health', () => {
         },
       });
 
-      expect(checks.map(({ id, label, sublabel }) => [id, label.text, sublabel])).toEqual([
-        ['db.primary', 'db', 'primary'],
-        ['db.replica.one', 'db', 'replica.one'],
+      expect(checks.map(({ id, sublabel }) => [id, sublabel])).toEqual([
+        ['db.primary', 'primary'],
+        ['db.replica.one', 'replica.one'],
       ]);
     });
 

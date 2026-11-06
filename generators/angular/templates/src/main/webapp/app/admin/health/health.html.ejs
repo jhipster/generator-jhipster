@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const labelText = label => enableTranslation ? `${label}.translationKey ? (${label}.translationKey | translate) : ${label}.text` : `${label}.text`; _%>
+<%_ const labelText = label => enableTranslation ? `${label} | label` : `${label}.text`; _%>
 <div>
   <h2>
     <span id="health-page-heading" data-cy="healthPageHeading">__jhiTranslateTag__('health.title')</span>

@@ -31,7 +31,10 @@ import { getSystemHealth } from '../administration.reducer';
 import HealthModal from './health-modal';
 
 <%_ if (enableTranslation) { _%>
-export const labelText = ({ text, translationKey }: Label): string => (translationKey ? translate(translationKey) : text);
+export const labelText = ({ text, translationKey }: Label): string => {
+  const translated: string | undefined = translationKey && translate(translationKey);
+  return !translated || translated.startsWith('translation-not-found') ? text : translated;
+};
 <%_ } else { _%>
 export const labelText = ({ text }: Label): string => text;
 <%_ } _%>

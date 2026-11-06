@@ -20,13 +20,10 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-<%_ if (enableTranslation) { _%>
-import { TranslatePipe } from '@ngx-translate/core';
-<%_ } _%>
 
 import { HealthCheck } from 'app/shared/jhipster/health';
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
+import { LabelPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 import { HealthService } from './health.service';
@@ -37,8 +34,8 @@ import HealthModal from './modal/health-modal';
   templateUrl: './health.html',
   imports: [
 <%_ if (enableTranslation) { _%>
+    LabelPipe,
     TranslateDirective,
-    TranslatePipe,
 <%_ } _%>
     FontAwesomeModule,
   ],
