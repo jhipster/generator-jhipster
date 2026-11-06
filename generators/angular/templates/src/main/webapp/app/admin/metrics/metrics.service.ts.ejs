@@ -22,15 +22,14 @@ import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { serverApiUrl } from 'app/config';
-
-import { MetricsModel, ThreadDump } from './metrics.model';
+import { MetricsResponse, ThreadDump } from 'app/shared/jhipster/metrics';
 
 @Service()
 export class MetricsService {
   private readonly http = inject(HttpClient);
 
-  getMetrics(): Observable<MetricsModel> {
-    return this.http.get<MetricsModel>(`${serverApiUrl}management/jhimetrics`);
+  getMetrics(): Observable<MetricsResponse> {
+    return this.http.get<MetricsResponse>(`${serverApiUrl}management/jhimetrics`);
   }
 
   threadDump(): Observable<ThreadDump> {

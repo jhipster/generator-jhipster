@@ -16,30 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { DecimalPipe } from '@angular/common';
-import { Component, input } from '@angular/core';
-
-import { Databases } from 'app/admin/metrics/metrics.model';
-import { filterNaN } from 'app/core/util';
+/** A text of a page, given by the backend. */
+export interface Label {
+  text: string;
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
+  /** Gives the text in the language of the user. */
+  translationKey?: string;
 <%_ } _%>
-
-@Component({
-  selector: '<%- jhiPrefixDashed %>-metrics-datasource',
-  templateUrl: './metrics-datasource.html',
-  imports: [DecimalPipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
-})
-export class MetricsDatasource {
-  /**
-   * Object containing all datasource related metrics
-   */
-  readonly datasourceMetrics = input<Databases>();
-
-  /**
-   * Boolean field saying if the metrics are in the process of being updated
-   */
-  readonly updating = input<boolean>();
-
-  filterNaN = filterNaN;
 }

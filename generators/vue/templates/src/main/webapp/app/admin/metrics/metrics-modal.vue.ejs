@@ -24,12 +24,12 @@
       <h6>
         <span class="badge" :class="getBadgeClass(entry.threadState)">{{ entry.threadState }}</span
         >&nbsp;{{ entry.threadName }} (ID {{ entry.threadId }})
-        <a @click="entry.show = !entry.show" href="javascript:void(0);">
-          <span :hidden="entry.show">{{ t$('metrics.jvm.threads.dump.show') }}</span>
-          <span :hidden="!entry.show">{{ t$('metrics.jvm.threads.dump.hide') }}</span>
+        <a @click="entry.showThreadDump = !entry.showThreadDump" href="javascript:void(0);">
+          <span :hidden="entry.showThreadDump">{{ t$('metrics.jvm.threads.dump.show') }}</span>
+          <span :hidden="!entry.showThreadDump">{{ t$('metrics.jvm.threads.dump.hide') }}</span>
         </a>
       </h6>
-      <div class="card" :hidden="!entry.show">
+      <div class="card" :hidden="!entry.showThreadDump">
         <div class="card-body">
           <div v-for="(st, key2) of entry.stackTrace" :key="key2" class="break">
             <samp
@@ -73,8 +73,8 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { filterBy } from '@/shared/computables';
+import { type Thread } from '@/shared/jhipster/metrics';
 
-import { type Thread } from './metrics.service';
 
 defineOptions({ name: '<%- jhiPrefixCapitalized %>MetricsModal' });
 
