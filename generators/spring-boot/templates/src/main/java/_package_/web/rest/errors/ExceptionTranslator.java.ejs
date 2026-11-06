@@ -110,7 +110,7 @@ _%>
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
     private static final boolean CAUSAL_CHAIN_ENABLED = false;
-    private static final Pattern QUALIFIED_CLASS_NAME = Pattern.compile("\\b[a-z_][a-z0-9_]*(\\.[a-z_][a-z0-9_]*)*\\.[A-Z]\\w*");
+    private static final Pattern QUALIFIED_CLASS_NAME = Pattern.compile("\\b[a-z_][a-z0-9_]*+(?:\\.[a-z_][a-z0-9_]*+)*+\\.[A-Z]");
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
 

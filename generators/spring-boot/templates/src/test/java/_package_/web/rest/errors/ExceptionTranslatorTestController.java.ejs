@@ -71,7 +71,9 @@ public class ExceptionTranslatorTestController {
     }
 
     @GetMapping("/binding-failure")
-    public void bindingFailure(@Valid @ModelAttribute TestBinding binding) {}
+    public void bindingFailure(@Valid @ModelAttribute TestBinding binding) {
+        // The binding fails before the method is called.
+    }
 
     @GetMapping("/response-status")
     public void exceptionWithResponseStatus() {
