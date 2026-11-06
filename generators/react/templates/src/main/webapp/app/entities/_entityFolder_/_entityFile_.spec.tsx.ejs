@@ -1,0 +1,447 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const screenRelationships = relationships.filter(rel => !rel.otherEntity.embedded && (rel.relationshipSerializePrimaryKeyOnly || rel.persistableRelationship));
+    const relatedValues = new Map();
+    for (const { otherEntity, otherEntityField } of screenRelationships) {
+      const { name, tsSampleValues } = otherEntity.primaryKey;
+      if (!relatedValues.has(name)) relatedValues.set(name, tsSampleValues[0]);
+      if (!relatedValues.has(otherEntityField)) relatedValues.set(otherEntityField, '\'related\'');
+    }
+    const primaryKeyName = primaryKey.name;
+    const [firstKey, secondKey] = primaryKey.tsSampleValues;
+    const numericFormFields = readOnly ? [] : fields.filter(field => field.fieldTypeNumeric && field.fieldValidate && !field.id && !field.hidden && !field.readonly);
+    const booleanFields = fields.filter(field => field.fieldTypeBoolean && !field.transient && !field.hidden);
+    const fileFields = fields.filter(field => field.fieldTypeBinary && !field.blobContentTypeText && !field.transient && !field.hidden);
+    const validatedForm = numericFormFields.length > 0 || builtInUserManagement;
+_%>
+import { afterEach, <%- validatedForm ? 'beforeAll, ' : '' %>beforeEach, describe, expect, it, vi } from 'vitest';
+<%_ if (validatedForm) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
+import { Route, Routes } from 'react-router';
+
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import axios from 'axios';
+<%_ if (anyFieldIsDateDerived) { _%>
+import dayjs from 'dayjs';
+<%_ } _%>
+
+import { <%- readOnly ? '' : 'fillForm, ' %>renderWithStore } from 'app/shared/util/test-utils';
+
+import <%- entityReactName %>Routes from './index';
+
+const apiUrl = '<%- entityApi %>api/<%- entityApiUrl %>';
+const page = '/<%- entityPage %>';
+<%_ if (screenRelationships.length > 0) { _%>
+const related = { <%- [...relatedValues].map(([key, value]) => `${key}: ${value}`).join(', ') %> };
+<%_ } _%>
+const sample: any = {
+  ...<%- tsSampleWithFullData %>,
+  <%- primaryKeyName %>: <%- firstKey %>,
+<%_ for (const field of booleanFields) { _%>
+  <%- field.fieldName %>: true,
+<%_ } _%>
+<%_ for (const rel of screenRelationships) { _%>
+  <%_ if (rel.relationshipSerializePrimaryKeyOnly) { _%>
+  <%- rel.propertyName %>: <%- rel.collection ? `[related.${rel.otherEntity.primaryKey.name}]` : `related.${rel.otherEntity.primaryKey.name}` %>,
+  <%_ } else { _%>
+  <%- rel.propertyName %>: <%- rel.collection ? '[related, related]' : 'related' %>,
+  <%_ } _%>
+<%_ } _%>
+};
+const sampleWithoutData = { <%- primaryKeyName %>: <%- secondKey %> };
+<%_ if (fileFields.length > 0) { _%>
+const sampleWithFiles = {
+  ...sample,
+  <%_ for (const field of fileFields) { _%>
+  <%- field.fieldName %>: 'aGlwc3Rlcg==',
+  <%_ } _%>
+};
+const sampleWithoutContentType = {
+  ...sample,
+  <%_ for (const field of fileFields) { _%>
+  <%- field.contentTypeFieldName %>: undefined,
+  <%_ } _%>
+};
+<%_ } _%>
+
+const renderPage = (path = '') =>
+  renderWithStore(
+    <Routes>
+      <Route path={`${page}/*`} element={<<%- entityReactName %>Routes />} />
+    </Routes>,
+    `${page}${path}`,
+<%_ if (builtInUserManagement) { _%>
+    { authentication: { account: { login: 'current' } } },
+<%_ } _%>
+  );
+
+const heading = () => document.querySelector('#<%- entityFileName %>-heading');
+<%_ if (paginationInfiniteScroll) { _%>
+
+const observeIntersection = () => {
+  const callbacks: IntersectionObserverCallback[] = [];
+  vi.stubGlobal(
+    'IntersectionObserver',
+    class {
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
+      constructor(callback: IntersectionObserverCallback) {
+        callbacks.push(callback);
+      }
+    },
+  );
+  return () => callbacks.at(-1)!([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver);
+};
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+
+const formValues = {
+  ...sample,
+  <%_ for (const rel of screenRelationships.filter(rel => !rel.collection && !rel.relationshipSerializePrimaryKeyOnly)) { _%>
+  <%- rel.propertyName %>: related.<%- rel.otherEntity.primaryKey.name %>,
+  <%_ } _%>
+};
+
+const waitForForm = () =>
+  waitFor(() => {
+    expect(document.querySelector('#save-entity')).not.toBeNull();
+    const selects = Array.from(document.querySelectorAll('form select'));
+    expect(selects.every(select => select.querySelector('option:not([value=""])'))).toBe(true);
+  });
+<%_ } _%>
+
+describe('<%- entityReactName %> screens', () => {
+  let entities: unknown[];
+
+  beforeEach(() => {
+    entities = [sample, sampleWithoutData];
+    vi.spyOn(axios, 'get').mockImplementation((url: string) => {
+      const list = url.startsWith(`${apiUrl}?`) || url.startsWith(`${apiUrl}/_search`);
+      const data = list ? [...entities] : url.startsWith(`${apiUrl}/`) ? sample : <%- screenRelationships.length > 0 ? '[related]' : '[]' %>;
+      return Promise.resolve({ data, headers: { 'x-total-count': '40', link: `<${apiUrl}?page=1>; rel="next"` } });
+    });
+<%_ if (!readOnly) { _%>
+    vi.spyOn(axios, 'post').mockResolvedValue({ data: sample });
+    vi.spyOn(axios, 'put').mockResolvedValue({ data: sample });
+    vi.spyOn(axios, 'delete').mockResolvedValue({ data: {} });
+<%_ } _%>
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+<%_ if (paginationInfiniteScroll) { _%>
+    vi.unstubAllGlobals();
+<%_ } _%>
+  });
+
+<%_ if (validatedForm) { _%>
+  beforeAll(() => {
+    // The message of a validation is the one that tells it failed.
+    TranslatorContext.registerTranslations('en', {});
+    TranslatorContext.setLocale('en');
+  });
+
+<%_ } _%>
+  describe('list', () => {
+    it('should show the entities', async () => {
+      const { container } = renderPage();
+
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+    });
+
+    it('should tell when there are no entities', async () => {
+      entities = [];
+      const { container } = renderPage();
+
+      await waitFor(() => expect(container.querySelector('.alert-warning')).not.toBeNull());
+    });
+
+    it('should sort by each column in both directions', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+
+      const columns = () => container.querySelectorAll('th.hand');
+      const count = columns().length;
+      const sortBy = async (index: number) => {
+        const calls = vi.mocked(axios.get).mock.calls.length;
+        fireEvent.click(columns()[index]);
+        await waitFor(() => expect(vi.mocked(axios.get).mock.calls.length).toBeGreaterThan(calls));
+        await waitFor(() => expect(columns()).toHaveLength(count));
+      };
+
+      for (let index = 0; index < count; index++) {
+        await sortBy(index);
+      }
+      await sortBy(0);
+      await sortBy(0);
+      entities.reverse();
+      await sortBy(0);
+      await sortBy(0);
+      expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('sort='));
+    }, 30_000);
+
+    it('should accept the sort of the location', async () => {
+      const { container } = renderPage('?page=1&sort=other,asc');
+
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+      expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('sort=other,asc'));
+    });
+
+    it('should refresh the list', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+      const calls = vi.mocked(axios.get).mock.calls.length;
+
+      fireEvent.click(heading()!.querySelector('button')!);
+
+      await waitFor(() => expect(vi.mocked(axios.get).mock.calls.length).toBeGreaterThan(calls));
+    });
+<%_ if (builtInUserManagement) { _%>
+
+    it('should toggle the activation of a user', async () => {
+      entities = [
+        { ...sample, activated: true },
+        { ...sampleWithoutData, activated: false },
+      ];
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+
+      fireEvent.click(container.querySelector('tbody .btn-success')!);
+
+      await waitFor(() => expect(axios.put).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ activated: false })));
+    });
+<%_ } _%>
+<%_ if (fileFields.length > 0) { _%>
+
+    it('should show the files without a content type', async () => {
+      entities = [sampleWithoutContentType];
+      const { container } = renderPage();
+
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(1));
+      expect(container.querySelector('tbody td a:not([href])')).toBeNull();
+    });
+<%_ } _%>
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+
+    it('should open the files', async () => {
+      const open = vi.spyOn(globalThis, 'open').mockReturnValue(null);
+      entities = [sampleWithFiles];
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(1));
+
+      container.querySelectorAll<HTMLElement>('tbody td a:not([href])').forEach(link => fireEvent.click(link));
+
+      expect(open).toHaveBeenCalled();
+    });
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+
+    it('should load more entities when scrolled', async () => {
+      const intersect = observeIntersection();
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).not.toHaveLength(0));
+
+      vi.spyOn(globalThis, 'scrollY', 'get').mockReturnValue(10);
+      intersect();
+
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('page=1')));
+    });
+
+    it('should not load more entities without scrolling', async () => {
+      const intersect = observeIntersection();
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).not.toHaveLength(0));
+
+      vi.spyOn(globalThis, 'scrollY', 'get').mockReturnValue(0);
+      intersect();
+
+      expect(axios.get).not.toHaveBeenCalledWith(expect.stringContaining('page=1'));
+    });
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+
+    it('should change the page', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelector('.pagination')).not.toBeNull());
+
+      fireEvent.click(screen.getByText('2'));
+
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('page=1')));
+    });
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+
+    it('should search and clear the search', async () => {
+      const { container } = renderPage();
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+      const input = container.querySelector('input[name="search"]')!;
+
+      fireEvent.submit(input.closest('form')!);
+      fireEvent.change(input, { target: { value: 'term' } });
+      fireEvent.submit(input.closest('form')!);
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=term')));
+      await waitFor(() => expect(container.querySelector('th.hand')).not.toBeNull());
+
+      vi.mocked(axios.get).mockClear();
+      fireEvent.click(container.querySelector('th.hand')!);
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('_search?query=term')));
+      await waitFor(() => expect(container.querySelector('th.hand')).not.toBeNull());
+
+      fireEvent.click(container.querySelector('button[type="reset"]')!);
+      await waitFor(() => expect(container.querySelectorAll('tbody tr')).toHaveLength(2));
+    });
+<%_ } _%>
+  });
+
+  describe('detail', () => {
+    it('should show the entity', async () => {
+      renderPage(`/${sample.<%- primaryKeyName %>}`);
+
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`));
+      await waitFor(() => expect(document.querySelector('[data-cy="<%- entityInstance %>DetailsHeading"]')).not.toBeNull());
+    });
+
+    it('should show an entity without data', async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: sampleWithoutData });
+      const { container } = renderPage(`/${sampleWithoutData.<%- primaryKeyName %>}`);
+
+      await waitFor(() => expect(container.querySelector('dd')?.textContent).toContain(`${sampleWithoutData.<%- primaryKeyName %>}`));
+    });
+<%_ if (fileFields.length > 0) { _%>
+
+    it('should show the files without a content type', async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: sampleWithoutContentType });
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}`);
+
+      await waitFor(() => expect(container.querySelector('dd span')).not.toBeNull());
+      expect(container.querySelector('dd a:not([href])')).toBeNull();
+    });
+<%_ } _%>
+<%_ if (anyFieldHasFileBasedContentType) { _%>
+
+    it('should open the files', async () => {
+      const open = vi.spyOn(globalThis, 'open').mockReturnValue(null);
+      vi.mocked(axios.get).mockResolvedValue({ data: sampleWithFiles });
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}`);
+      await waitFor(() => expect(container.querySelector('dd a:not([href])')).not.toBeNull());
+
+      container.querySelectorAll<HTMLElement>('dd a:not([href])').forEach(link => fireEvent.click(link));
+
+      expect(open).toHaveBeenCalled();
+    });
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+
+    it('should show an activated user', async () => {
+      vi.mocked(axios.get).mockResolvedValue({ data: { ...sample, activated: true } });
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}`);
+
+      await waitFor(() => expect(container.querySelector('dl')?.textContent).toContain('true'));
+    });
+<%_ } _%>
+  });
+<%_ if (!readOnly) { _%>
+
+  describe('update', () => {
+    it('should update an entity', async () => {
+      const { container } = renderPage(`/${sample.<%- primaryKeyName %>}/edit`);
+      await waitForForm();
+
+      fillForm(container, formValues);
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(axios.put).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`, expect.anything()));
+      await waitFor(() => expect(heading()).not.toBeNull());
+    });
+
+  <%_ if (numericFormFields.length > 0) { _%>
+    it('should not save a number that is not valid', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, { ...formValues, <%- numericFormFields.map(field => `${field.fieldName}: 'invalid'`).join(', ') %> });
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(container.querySelector('.invalid-feedback')).not.toBeNull());
+      expect(axios.post).not.toHaveBeenCalled();
+    });
+
+  <%_ } _%>
+  <%_ if (builtInUserManagement) { _%>
+    it('should not save an invalid email', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, { ...formValues, email: 'invalid' });
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(container.querySelector('.invalid-feedback')).not.toBeNull());
+      expect(axios.post).not.toHaveBeenCalled();
+    });
+
+  <%_ } _%>
+    it('should create an entity', async () => {
+      const { container } = renderPage('/new');
+      await waitForForm();
+
+      fillForm(container, formValues);
+      fireEvent.click(container.querySelector('#save-entity')!);
+
+      await waitFor(() => expect(axios.post).toHaveBeenCalledWith(apiUrl, expect.anything()));
+      await waitFor(() => expect(heading()).not.toBeNull());
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete the entity', async () => {
+      renderPage(`/${sample.<%- primaryKeyName %>}/delete`);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityConfirmDeleteButton"]')).not.toBeNull());
+
+      fireEvent.click(document.querySelector('[data-cy="entityConfirmDeleteButton"]')!);
+
+      await waitFor(() => expect(axios.delete).toHaveBeenCalledWith(`${apiUrl}/${sample.<%- primaryKeyName %>}`));
+      await waitFor(() => expect(heading()).not.toBeNull());
+    });
+
+    it('should go back to the list when cancelled', async () => {
+      renderPage(`/${sample.<%- primaryKeyName %>}/delete`);
+      await waitFor(() => expect(document.querySelector('.modal-footer .btn-secondary')).not.toBeNull());
+
+      fireEvent.click(document.querySelector('.modal-footer .btn-secondary')!);
+
+      await waitFor(() => expect(heading()).not.toBeNull());
+      expect(axios.delete).not.toHaveBeenCalled();
+    });
+
+    it('should stay in the detail when cancelled there', async () => {
+      renderPage(`/${sample.<%- primaryKeyName %>}`);
+      await waitFor(() => expect(document.querySelector('[data-cy="entityDeleteButton"]')).not.toBeNull());
+
+      fireEvent.click(document.querySelector('[data-cy="entityDeleteButton"]')!);
+      await waitFor(() => expect(document.querySelector('.modal-footer .btn-secondary')).not.toBeNull());
+      fireEvent.click(document.querySelector('.modal-footer .btn-secondary')!);
+
+      await waitFor(() => expect(document.querySelector('.modal-footer')).toBeNull());
+      expect(document.querySelector('[data-cy="<%- entityInstance %>DetailsHeading"]')).not.toBeNull();
+    });
+  });
+<%_ } _%>
+});

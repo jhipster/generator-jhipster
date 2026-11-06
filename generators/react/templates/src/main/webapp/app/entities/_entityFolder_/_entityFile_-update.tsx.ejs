@@ -138,7 +138,7 @@ export const <%- entityReactName %>Update = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-<%_ for (field of fields.filter(field => field.id || formFields.includes(field))) { _%>
+<%_ for (field of formFields) { _%>
   <%_ const { fieldName } = field; _%>
   <%_ if (field.fieldTypeTimed) { _%>
     values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>);
@@ -354,15 +354,13 @@ export const <%- entityReactName %>Update = () => {
     <%_ if (!rel.relationshipSerializePrimaryKeyOnly) { _%>
               <option value="" key="0" />
     <%_ } _%>
-              {
-                (<%- rel.otherEntity.entityInstancePlural %>) ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
+              {<%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                 <option
                     value={otherEntity.<%- otherEntityPkName %>}
                     key={otherEntity.<%- otherEntityPkName %>}>
                     {otherEntity.<%- otherEntityField %>}
                 </option>
-                ) : null
-              }
+              )}
           </ValidatedField>
   <%_ } else { _%>
           <ValidatedField
@@ -380,15 +378,13 @@ export const <%- entityReactName %>Update = () => {
     <%_ } _%>
           >
               <option value="" key="0" />
-              {
-                <%- rel.otherEntity.entityInstancePlural %> ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
+              {<%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                   <option
                     value={otherEntity.<%- otherEntityPkName %>}
                     key={otherEntity.<%- otherEntityPkName %>}>
                     {otherEntity.<%- otherEntityField %>}
                   </option>
-                ) : null
-              }
+              )}
           </ValidatedField>
     <%_ if (relationshipRequired) { _%>
             <FormText><Translate contentKey="entity.validation.required">This field is required.</Translate></FormText>

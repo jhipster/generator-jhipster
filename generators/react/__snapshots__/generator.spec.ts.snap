@@ -406,10 +406,16 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/menu.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/menu.tsx": {
@@ -433,10 +439,16 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/microservice/microservice.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/routes.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/routes.tsx": {
@@ -458,6 +470,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/simple/simple.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple.tsx": {
@@ -638,6 +653,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/util/test-utils.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/typings.d.ts": {
@@ -1194,6 +1212,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/entities/admin/authority/authority.reducer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/admin/authority/authority.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/admin/authority/authority.tsx": {
     "stateCleared": "modified",
   },
@@ -1215,10 +1236,16 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/menu.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/menu.tsx": {
@@ -1242,10 +1269,16 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/microservice/microservice.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/routes.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/routes.tsx": {
@@ -1267,6 +1300,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/simple/simple.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple.tsx": {
@@ -1477,6 +1513,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/util/test-utils.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/util/url-utils.ts": {
@@ -2293,10 +2332,16 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/menu.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/menu.tsx": {
@@ -2320,10 +2365,16 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/entities/microservice/microservice.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/routes.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/routes.tsx": {
@@ -2345,6 +2396,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/entities/simple/simple.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/simple/simple.tsx": {
@@ -2528,6 +2582,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/util/test-utils.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/typings.d.ts": {
@@ -3165,10 +3222,16 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/menu.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/menu.tsx": {
@@ -3192,10 +3255,16 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/microservice/microservice.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/routes.tsx": {
@@ -3217,6 +3286,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.tsx": {
@@ -3421,6 +3493,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/test-utils.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/url-utils.ts": {
@@ -4057,6 +4132,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/entities/admin/authority/authority.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/authority/authority.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/authority/authority.tsx": {
     "stateCleared": "modified",
   },
@@ -4081,6 +4159,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/entities/admin/user-management/user-management.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/user-management.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/user-management.tsx": {
     "stateCleared": "modified",
   },
@@ -4097,6 +4178,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
@@ -4126,10 +4210,16 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/microservice/microservice.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/routes.tsx": {
@@ -4151,6 +4241,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.tsx": {
@@ -4412,6 +4505,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/test-utils.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/typings.d.ts": {
@@ -4973,6 +5069,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
@@ -5000,10 +5099,16 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/microservice/microservice.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/routes.tsx": {
@@ -5025,6 +5130,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.tsx": {
@@ -5199,6 +5307,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/test-utils.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/url-utils.ts": {
@@ -5762,6 +5873,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
@@ -5789,10 +5903,16 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/microservice/microservice.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/routes.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/routes.tsx": {
@@ -5814,6 +5934,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/simple/simple.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.tsx": {
@@ -5991,6 +6114,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/util/test-utils.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/typings.d.ts": {

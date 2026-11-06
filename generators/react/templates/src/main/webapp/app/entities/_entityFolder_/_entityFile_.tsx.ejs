@@ -380,7 +380,7 @@ export const <%- entityReactName %> = () => {
 <%_ } _%>
       <div className="table-responsive">
 <%_ if (paginationInfiniteScroll) { _%>
-        <InfiniteScroll dataLength={<%- entityInstance %>List ? <%- entityInstance %>List.length : 0}
+        <InfiniteScroll dataLength={<%- entityInstance %>List.length}
                         next={handleLoadMore}
                         hasMore={paginationState.activePage - 1 < links.next}
                         loader={<div className="loader">Loading ...</div>}>

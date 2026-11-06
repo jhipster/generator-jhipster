@@ -241,8 +241,18 @@ export const files = asWriteFilesSection({
   clientTestFw: [
     {
       ...clientApplicationTemplatesBlock(),
+      templates: ['entities/routes.spec.tsx'],
+    },
+    {
+      condition: generator => !generator.applicationTypeMonolith,
+      ...clientApplicationTemplatesBlock(),
+      templates: ['entities/menu.spec.tsx'],
+    },
+    {
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'config/axios-interceptor.spec.ts',
+        'shared/util/test-utils.tsx',
         'config/notification-middleware.spec.ts',
         'shared/reducers/application-profile.spec.ts',
         'shared/reducers/authentication.spec.ts',
