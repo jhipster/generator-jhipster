@@ -9,7 +9,7 @@
     "@vuelidate/validators": "2.0.4",
     "@vueuse/core": "15.0.0",
     "axios": "1.21.0",
-    "bootstrap": "5.3.7",
+    "bootstrap": "5.3.8",
     "bootstrap-vue-next": "1.2.2",
     "bootswatch": "5.3.8",
     "deepmerge": "4.3.1",
