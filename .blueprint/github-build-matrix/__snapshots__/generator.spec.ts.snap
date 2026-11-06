@@ -650,6 +650,35 @@ exports[`generator - github-build-matrix with daily-elasticsearch should match m
 }"
 `;
 
+exports[`generator - github-build-matrix with daily-liquibase should match matrix value 1`] = `
+"{
+  "include": [
+    {
+      "job-name": "daily-gradle-liquibase",
+      "sample": "daily-gradle-liquibase",
+      "os": "ubuntu-latest",
+      "node-version": "NODE-VERSION",
+      "java-version": "25",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-compare": "false",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "daily-gradle-liquibase",
+      "entity": "sql",
+      "app-sample": "daily-gradle-liquibase",
+      "workspaces": "false",
+      "disabled": false,
+      "build-jhipster-bom": true,
+      "jhipster-bom-branch": "main",
+      "jhipster-bom-cicd-version": "0.0.0-CICD"
+    }
+  ]
+}"
+`;
+
 exports[`generator - github-build-matrix with daily-monolith-oauth2 should match matrix value 1`] = `
 "{
   "include": [
