@@ -186,6 +186,8 @@ class ExceptionTranslatorIT {
             .exchange()
             .expectStatus()
             .isBadRequest()
+            .expectHeader()
+            .valueEquals("X-<%- camelizedBaseName %>-error", "error.testkey")
             .expectBody()
             .jsonPath("$.message")
             .isEqualTo("error.testkey")

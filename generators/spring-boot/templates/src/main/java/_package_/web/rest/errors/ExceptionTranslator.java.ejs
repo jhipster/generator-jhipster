@@ -146,6 +146,11 @@ _%>
             if (body instanceof ProblemDetail problemDetail) problem.setDetail(problemDetail.getDetail());
             body = customizeProblem(problem, ex, (<%- requestClass %>) request);
         }
+        HttpHeaders alertHeaders = buildHeaders(ex);
+        if (alertHeaders != null) {
+            alertHeaders.putAll(headers);
+            headers = alertHeaders;
+        }
 <%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
