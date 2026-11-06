@@ -30,6 +30,67 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
+  describe('with enableTranslation disabled', () => {
+    const marker = "__jhiTransformTranslateStringify__('key')";
+
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: (key: string) => `translated ${key}` })
+        .withJHipsterConfig({ enableTranslation: false })
+        .onGenerator(clientSpringBoot => {
+          clientSpringBoot.writeDestination('written.ts', marker);
+          clientSpringBoot.fs.write(clientSpringBoot.destinationPath('other.ts'), marker);
+        });
+    });
+
+    it('should translate the files written by the generator', () => {
+      result.assertFileContent('written.ts', '"translated key"');
+    });
+
+    it('should keep the files of other generators', () => {
+      result.assertFileContent('other.ts', marker);
+    });
+  });
+
+  describe('with enableTranslation disabled and the models', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: (key: string) => `translated ${key}` })
+        .withJHipsterConfig({ enableTranslation: false });
+    });
+
+    for (const model of ['configuration', 'health', 'metrics']) {
+      it(`should write the texts of the ${model} model`, () => {
+        result.assertFileContent(`src/main/webapp/app/shared/jhipster/${model}.ts`, '"translated ');
+        result.assertNoFileContent(`src/main/webapp/app/shared/jhipster/${model}.ts`, 'translationKey');
+      });
+    }
+  });
+
+  describe('with enableTranslation enabled', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: (key: string) => `translated ${key}` })
+        .withJHipsterConfig({ enableTranslation: true })
+        .onGenerator(clientSpringBoot => {
+          clientSpringBoot.writeDestination('written.ts', "__jhiTransformTranslateStringify__('key')");
+        });
+    });
+
+    it('should not translate the files', () => {
+      result.assertFileContent('written.ts', '__jhiTransformTranslateStringify__');
+    });
+  });
+
   describe('with defaults options', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();

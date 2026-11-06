@@ -50,9 +50,8 @@ describe('Configuration Component', () => {
 
   describe('OnRouteEnter', () => {
     it('should set all default values correctly', () => {
-      expect(configuration.configKeys).toEqual([]);
       expect(configuration.filtered).toBe('');
-      expect(configuration.orderProp).toBe('prefix');
+      expect(configuration.orderProp).toBe('key');
       expect(configuration.reverse).toBe(false);
     });
     it('Should call load all on init', async () => {
@@ -66,30 +65,16 @@ describe('Configuration Component', () => {
     });
   });
 
-  describe('keys method', () => {
-    it('should return the keys of an Object', () => {
-      // GIVEN
-      const data = {
-        key1: 'test',
-        key2: 'test2',
-      };
-
-      // THEN
-      expect(configuration.keys(data)).toEqual(['key1', 'key2']);
-      expect(configuration.keys(undefined)).toEqual([]);
-    });
-  });
-
   describe('changeOrder function', () => {
     it('should change order', () => {
       // GIVEN
       const rev = configuration.reverse;
 
       // WHEN
-      configuration.changeOrder('prefix');
+      configuration.changeOrder('key');
 
       // THEN
-      expect(configuration.orderProp).toBe('prefix');
+      expect(configuration.orderProp).toBe('key');
       expect(configuration.reverse).toBe(!rev);
     });
   });
@@ -127,10 +112,9 @@ describe('Configuration view', () => {
     await wrapper.find('input').setValue('b');
 
     // THEN
-    expect(wrapper.vm.configuration.map(({ prefix }) => prefix)).toEqual(['A', 'A', 'B']);
-    expect(wrapper.vm.configKeys).toEqual([['key3'], ['key2']]);
-    expect(wrapper.vm.allConfiguration).toEqual({ source: [{ key: 'key1', val: 'value1' }] });
-    expect(wrapper.vm.filteredConfiguration).toEqual([expect.objectContaining({ prefix: 'B' })]);
+    expect(wrapper.vm.allSections[0].rows.map(({ key }) => key)).toEqual(['A', 'A', 'B']);
+    expect(wrapper.vm.allSections[1]).toMatchObject({ label: { text: 'source' }, rows: [{ key: 'key1', value: 'value1' }] });
+    expect(wrapper.vm.sections[0].rows).toEqual([expect.objectContaining({ key: 'B' })]);
     expect(wrapper.text()).toContain('value2');
   });
 });

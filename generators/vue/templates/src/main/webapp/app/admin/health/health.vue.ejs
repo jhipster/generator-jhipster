@@ -16,13 +16,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="health of healthData" :key="health.name">
-            <td><%- enableTranslation ? '<span />{{ t$(\'health.indicator.\' + baseName(health.name)) }}' : '<span class="text-capitalize">{{ baseName(health.name) }}</span>' %> {{ subSystemName(health.name) }}</td>
-            <td class="text-center">
-              <span class="badge" :class="getBadgeClass(health.status)"><%- enableTranslation ? '{{ t$(\'health.status.\' + health.status) }}' : '{{ health.status }}' %></span>
+          <tr v-for="check of checks" :key="check.id">
+            <td>
+              <span>{{ labelText(check.label) }}</span>{{ check.sublabel ? ` - ${check.sublabel}` : '' }}
             </td>
             <td class="text-center">
-              <a class="hand" @click="showHealth(health)" v-if="health.details || health.error">
+              <span class="badge" :class="check.healthy ? 'bg-success' : 'bg-danger'">{{ labelText(check.status) }}</span>
+            </td>
+            <td class="text-center">
+              <a class="hand" @click="showHealth(check)" v-if="check.details || check.error">
                 <font-awesome-icon icon="eye"></font-awesome-icon>
               </a>
             </td>
@@ -30,18 +32,13 @@
         </tbody>
       </table>
     </div>
-    <b-modal ref="healthModal" ok-only>
+    <b-modal ref="healthModal" ok-only ok-title="Done" ok-variant="secondary">
       <template #title>
-        <h4 v-if="currentHealth" class="modal-title" id="showHealthLabel">
-<%_ if (enableTranslation) { _%>
-          <span>{{ t$('health.indicator.' + baseName(currentHealth.name)) }}</span>
-<%_ } else { _%>
-          <span class="text-capitalize">{{ baseName(currentHealth.name) }}</span>
-<%_ } _%>
-          {{ subSystemName(currentHealth.name) }}
+        <h4 v-if="currentCheck" class="modal-title" id="showHealthLabel">
+          <span>{{ labelText(currentCheck.label) }}</span>{{ currentCheck.sublabel ? ` - ${currentCheck.sublabel}` : '' }}
         </h4>
       </template>
-      <HealthModal :current-health="currentHealth"></HealthModal>
+      <HealthModal :current-check="currentCheck"></HealthModal>
     </b-modal>
   </div>
 </template>
@@ -52,44 +49,47 @@ import { type Ref, inject, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
+import { type HealthCheck } from '@/shared/jhipster/health';
+import { type Label } from '@/shared/jhipster/label';
+
 import HealthModal from './health-modal.vue';
-import HealthService, { type HealthData, healthServiceKey } from './health.service';
+import HealthService, { healthServiceKey } from './health.service';
 
 defineOptions({ name: '<%- jhiPrefixCapitalized %>Health' });
 
 const healthService = inject(healthServiceKey, () => new HealthService(), true);
 <%_ if (enableTranslation) { _%>
-const { t: t$ } = useI18n();
+const { t: t$, te } = useI18n();
 <%_ } _%>
 
-const healthData: Ref<HealthData[] | null> = ref(null);
-const currentHealth: Ref<HealthData | null> = ref(null);
+<%_ if (enableTranslation) { _%>
+const labelText = ({ text, translationKey }: Label): string => (translationKey && te(translationKey) ? t$(translationKey) : text);
+<%_ } else { _%>
+const labelText = ({ text }: Label): string => text;
+<%_ } _%>
+
+const checks: Ref<HealthCheck[] | null> = ref(null);
+const currentCheck: Ref<HealthCheck | null> = ref(null);
 const updatingHealth = ref(false);
 
 const healthModal = ref<{ show: () => void } | null>(null);
 
-const baseName = (name: string): string | undefined => healthService.getBaseName(name);
-const getBadgeClass = (statusState: unknown): string => (statusState === 'UP' ? 'bg-success' : 'bg-danger');
 const refresh = (): void => {
   updatingHealth.value = true;
   healthService
     .checkHealth()
     .then(res => {
-      healthData.value = healthService.transformHealthData(res.data);
-      updatingHealth.value = false;
+      checks.value = res;
     })
-    .catch(error => {
-      if (error.response?.status === 503) {
-        healthData.value = healthService.transformHealthData(error.response.data);
-      }
+    .catch(() => {})
+    .finally(() => {
       updatingHealth.value = false;
     });
 };
-const showHealth = (health: HealthData): void => {
-  currentHealth.value = health;
+const showHealth = (check: HealthCheck): void => {
+  currentCheck.value = check;
   healthModal.value?.show();
 };
-const subSystemName = (name: string): string | undefined => healthService.getSubSystemName(name);
 
 onMounted(() => {
   refresh();

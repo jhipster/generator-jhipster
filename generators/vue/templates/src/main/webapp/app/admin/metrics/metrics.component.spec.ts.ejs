@@ -236,7 +236,7 @@ describe('Metrics Component', () => {
   };
 
   beforeEach(() => {
-    axiosStub.get.mockResolvedValue({ data: { timers: [], gauges: [] } });
+    axiosStub.get.mockResolvedValue({ data: response });
     const wrapper = shallowMount(Metrics, {
       global: {
         stubs: {
@@ -244,7 +244,7 @@ describe('Metrics Component', () => {
           bProgress: true,
           bProgressBar: true,
           'font-awesome-icon': true,
-          'metrics-modal': true,
+          MetricsModal: true,
         },
         directives: {
           'b-modal': {},
@@ -260,10 +260,7 @@ describe('Metrics Component', () => {
   });
 
   describe('refresh', () => {
-    it('should call refresh on init', async () => {
-      // GIVEN
-      axiosStub.get.mockResolvedValue({ data: response });
-
+    it('should load the sections on init', async () => {
       // WHEN
       await metricsComponent.refresh();
       await metricsComponent.$nextTick();
@@ -271,22 +268,9 @@ describe('Metrics Component', () => {
       // THEN
       expect(axiosStub.get).toHaveBeenCalledWith('management/jhimetrics');
       expect(axiosStub.get).toHaveBeenCalledWith('management/threaddump');
-      expect(metricsComponent.metrics).toHaveProperty('jvm');
-      expect(metricsComponent.metrics).toEqual(response);
-      expect(metricsComponent.threadStats).toEqual({
-        threadDumpRunnable: 1,
-        threadDumpWaiting: 0,
-        threadDumpTimedWaiting: 0,
-        threadDumpBlocked: 0,
-        threadDumpAll: 1,
-      });
-    });
-  });
-
-  describe('isNan', () => {
-    it('should return if a variable is NaN', () => {
-      expect(metricsComponent.filterNaN(1)).toBe(1);
-      expect(metricsComponent.filterNaN('test')).toBe(0);
+      expect(metricsComponent.sections.map(section => section.id)).toContain('jvmMetrics');
+      expect(metricsComponent.threads).toEqual(response.threads);
+      expect(metricsComponent.updatingMetrics).toBe(false);
     });
   });
 
@@ -301,19 +285,15 @@ describe('Metrics Component', () => {
       },
     });
 
-    it('should render the metrics and handle its actions', async () => {
+    it('should render the sections and open the thread dump', async () => {
       // GIVEN
-      const threads = ['RUNNABLE', 'WAITING', 'TIMED_WAITING', 'BLOCKED', 'NEW'].map(threadState => ({ threadState }));
-      axiosStub.get.mockImplementation((url?: string) =>
-        Promise.resolve({ data: url === 'management/threaddump' ? { threads } : response }),
-      );
       const wrapper = shallowMount(Metrics, {
         global: {
           stubs: {
             bModal: contentStub,
             bProgress: contentStub,
             'font-awesome-icon': true,
-            'metrics-modal': true,
+            MetricsModal: true,
           },
           provide: {
             [metricsServiceKey as symbol]: new MetricsService(),
@@ -323,23 +303,15 @@ describe('Metrics Component', () => {
       await flushPromises();
 
       // WHEN
-      for (const element of wrapper.findAll('button, a')) {
-        await element.trigger('click');
-      }
-      await flushPromises();
+      await wrapper.find('button.btn-sm').trigger('click');
 
       // THEN
-      expect(wrapper.vm.threadStats).toEqual({
-        threadDumpRunnable: 1,
-        threadDumpWaiting: 1,
-        threadDumpTimedWaiting: 1,
-        threadDumpBlocked: 1,
-        threadDumpAll: 4,
-      });
+      expect(wrapper.find('h3#jvmMetrics').exists()).toBe(true);
+      expect(wrapper.find('table').exists()).toBe(true);
       expect(show).toHaveBeenCalled();
     });
 
-    it('should keep updating when the thread dump fails', async () => {
+    it('should stop updating when the thread dump fails', async () => {
       // GIVEN
       axiosStub.get.mockImplementation((url?: string) =>
         url === 'management/threaddump' ? Promise.reject(new Error('failed')) : Promise.resolve({ data: response }),
@@ -347,21 +319,9 @@ describe('Metrics Component', () => {
 
       // WHEN
       await metricsComponent.refresh();
-      await flushPromises();
 
       // THEN
-      expect(metricsComponent.updatingMetrics).toBe(true);
-    });
-
-    it('should keep updating when the metrics fail', async () => {
-      // GIVEN
-      axiosStub.get.mockRejectedValue(new Error('failed'));
-
-      // WHEN
-      await metricsComponent.refresh();
-
-      // THEN
-      expect(metricsComponent.updatingMetrics).toBe(true);
+      expect(metricsComponent.updatingMetrics).toBe(false);
     });
 
     it('should use the default service', async () => {
@@ -369,7 +329,7 @@ describe('Metrics Component', () => {
       axiosStub.get.mockResolvedValue({ data: response });
 
       // WHEN
-      shallowMount(Metrics, { global: { stubs: { bModal: true, bProgress: true, 'font-awesome-icon': true, 'metrics-modal': true } } });
+      shallowMount(Metrics, { global: { stubs: { bModal: true, bProgress: true, 'font-awesome-icon': true, MetricsModal: true } } });
       await flushPromises();
 
       // THEN

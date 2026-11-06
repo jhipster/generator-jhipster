@@ -1,6 +1,6 @@
 <template>
   <div class="modal-body pad">
-    <div v-if="currentHealth?.details">
+    <div v-if="currentCheck?.details">
       <h5>{{ t$('health.details.properties') }}</h5>
       <div class="table-responsive">
         <table class="table table-striped" aria-describedby="showHealthLabel">
@@ -11,17 +11,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in currentHealth.details.details" :key="index">
-              <td class="text-start">{{ index }}</td>
-              <td class="text-start">{{ readableValue(item) }}</td>
+            <tr v-for="detail in currentCheck.details" :key="detail.key">
+              <td class="text-start">{{ detail.key }}</td>
+              <td class="text-start">{{ detail.value }}</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div v-if="currentHealth?.error">
+    <div v-if="currentCheck?.error">
       <h4>{{ t$('health.details.error') }}</h4>
-      <pre>{{ currentHealth.error }}</pre>
+      <pre>{{ currentCheck.error }}</pre>
     </div>
   </div>
 </template>
@@ -31,33 +31,14 @@
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import { type HealthData } from './health.service';
+import { type HealthCheck } from '@/shared/jhipster/health';
 
 defineOptions({ name: '<%- jhiPrefixCapitalized %>HealthModal' });
 
-const props = withDefaults(defineProps<{ currentHealth?: HealthData | null }>(), {
-  currentHealth: () => ({}) as HealthData,
-});
+defineProps<{ currentCheck?: HealthCheck | null }>();
 
 <%_ if (enableTranslation) { _%>
 const { t: t$ } = useI18n();
 <%_ } _%>
-
-const readableValue = (value: unknown): string => {
-  if (props.currentHealth?.name === 'diskSpace') {
-    // Should display storage space in a human-readable unit
-    const val = Number(value) / 1073741824;
-    if (val > 1) {
-      // Value
-      return `${val.toFixed(2)} GB`;
-    }
-    return `${(Number(value) / 1048576).toFixed(2)} MB`;
-  }
-
-  if (typeof value === 'object') {
-    return JSON.stringify(value);
-  }
-  return String(value);
-};
 
 </script>

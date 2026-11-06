@@ -1,0 +1,92 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { type Label } from './label';
+
+/** A bean of the configuration properties endpoint. */
+export interface ConfigPropsBean {
+  prefix: string;
+  properties?: Record<string, unknown>;
+}
+
+/** The response of the configuration properties endpoint. */
+export interface ConfigProps {
+  contexts: Record<string, { beans: Record<string, ConfigPropsBean> }>;
+}
+
+/** The response of the environment endpoint. */
+export interface Env {
+  activeProfiles?: string[];
+  propertySources: { name: string; properties: Record<string, { value: unknown; origin?: string }> }[];
+}
+
+/** A property of a row. */
+export interface ConfigurationProperty {
+  key: string;
+  value: string;
+}
+
+/** A row of a table of the configuration page: a value, or properties. */
+export interface ConfigurationRow {
+  key: string;
+  value?: string;
+  properties?: ConfigurationProperty[];
+}
+
+/** A table of the configuration page, with its texts. */
+export interface ConfigurationSection {
+  label: Label;
+  columns: [Label, Label];
+  rows: ConfigurationRow[];
+}
+
+const readableValue = (value: unknown): string => (typeof value === 'string' ? value : JSON.stringify(value));
+
+const toBeansSection = ({ contexts }: ConfigProps): ConfigurationSection => {
+  const beans: Record<string, ConfigPropsBean> = Object.assign({}, ...Object.values(contexts).map(context => context.beans));
+  return {
+    label: { text: 'Spring configuration' },
+<%_ if (enableTranslation) { _%>
+    columns: [
+      { text: 'Prefix', translationKey: 'configuration.table.prefix' },
+      { text: 'Properties', translationKey: 'configuration.table.properties' },
+    ],
+<%_ } else { _%>
+    columns: [
+      { text: __jhiTransformTranslateStringify__('configuration.table.prefix') },
+      { text: __jhiTransformTranslateStringify__('configuration.table.properties') },
+    ],
+<%_ } _%>
+    rows: Object.values(beans)
+      .map(({ prefix, properties = {} }) => ({
+        key: prefix,
+        properties: Object.entries(properties).map(([key, value]) => ({ key, value: readableValue(value) })),
+      }))
+      .sort((a, b) => a.key.localeCompare(b.key)),
+  };
+};
+
+/** Converts the responses of the configuration properties and environment endpoints to the tables of the configuration page. */
+export const toConfiguration = (configProps: ConfigProps, { propertySources }: Env): ConfigurationSection[] => [
+  toBeansSection(configProps),
+  ...propertySources.map(({ name, properties }): ConfigurationSection => ({
+    label: { text: name },
+    columns: [{ text: 'Property' }, { text: 'Value' }],
+    rows: Object.entries(properties).map(([key, { value }]) => ({ key, value: readableValue(value) })),
+  })),
+];

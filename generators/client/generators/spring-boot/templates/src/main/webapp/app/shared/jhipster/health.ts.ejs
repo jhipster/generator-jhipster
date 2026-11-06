@@ -1,0 +1,102 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { type Label } from './label';
+
+/** A component of the response of the health endpoint, named by the backend. */
+export interface HealthComponent {
+  status: string;
+  details?: Record<string, unknown>;
+  components?: Record<string, HealthComponent>;
+}
+
+/** The response of the health endpoint. */
+export interface HealthResponse {
+  status: string;
+  components?: Record<string, HealthComponent>;
+}
+
+export interface HealthDetail {
+  key: string;
+  value: string;
+}
+
+/** A row of the health page, with its texts. */
+export interface HealthCheck {
+  id: string;
+  label: Label;
+  /** What tells apart the checks with the same label, like the name of a datasource. */
+  sublabel?: string;
+  status: Label;
+  healthy: boolean;
+  error?: string;
+  details?: HealthDetail[];
+}
+
+const readableValue = (value: unknown): string => (typeof value === 'string' ? value : JSON.stringify(value));
+
+const readableBytes = (value: unknown): string => {
+  if (typeof value !== 'number') {
+    return readableValue(value);
+  }
+  const gigabytes = value / 1073741824;
+  return gigabytes > 1 ? `${gigabytes.toFixed(2)} GB` : `${(value / 1048576).toFixed(2)} MB`;
+};
+
+/** The components whose details are not shown as they came, by base name. */
+const detailFormatters: Record<string, (value: unknown) => string> = {
+  diskSpace: readableBytes,
+};
+
+<%_ if (enableTranslation) { _%>
+const toIndicatorLabel = (text: string): Label => ({ text, translationKey: `health.indicator.${text}` });
+const toStatusLabel = (text: string): Label => ({ text, translationKey: `health.status.${text}` });
+<%_ } else { _%>
+const indicatorTexts: Record<string, string> = __jhiTransformTranslateStringify__('health.indicator');
+const statusTexts: Record<string, string> = __jhiTransformTranslateStringify__('health.status');
+
+const toIndicatorLabel = (text: string): Label => ({ text: indicatorTexts[text] ?? text });
+const toStatusLabel = (text: string): Label => ({ text: statusTexts[text] ?? text });
+<%_ } _%>
+
+const toHealthCheck = (id: string, { status, details: { error, ...details } = {} }: HealthComponent): HealthCheck => {
+  const [baseName, ...subSystem] = id.split('.');
+  const format = detailFormatters[baseName] ?? readableValue;
+  const entries = Object.entries(details);
+  return {
+    id,
+    label: toIndicatorLabel(baseName),
+    ...(subSystem.length > 0 ? { sublabel: subSystem.join('.') } : {}),
+    status: toStatusLabel(status),
+    healthy: status === 'UP',
+    ...(error === undefined ? {} : { error: readableValue(error) }),
+    ...(entries.length > 0 ? { details: entries.map(([key, value]) => ({ key, value: format(value) })) } : {}),
+  };
+};
+
+const toChecks = (components: Record<string, HealthComponent> = {}, path?: string): HealthCheck[] =>
+  Object.entries(components).flatMap(([key, component]) => {
+    const id = path ? `${path}.${key}` : key;
+    const check = toHealthCheck(id, component);
+    const children = toChecks(component.components, id);
+    // A component with sub-components is a row only when it has something to tell.
+    return children.length === 0 || check.details || check.error ? [check, ...children] : children;
+  });
+
+/** Converts the response of the health endpoint to the rows of the health page. */
+export const toHealthChecks = ({ components }: HealthResponse): HealthCheck[] => toChecks(components);
