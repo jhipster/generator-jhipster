@@ -325,9 +325,11 @@ _%>
 <%_ if (!databaseTypeNo) { _%>
             if (err instanceof DataAccessException) return "Failure during data access";
 <%_ } _%>
-            if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
         }
-        return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+        String detail = err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+        return activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION) && containsPackageName(detail)
+            ? "Unexpected runtime exception"
+            : detail;
     }
 
     private HttpStatus getMappedStatus(Throwable err) {
