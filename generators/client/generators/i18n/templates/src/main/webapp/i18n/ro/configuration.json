@@ -3,8 +3,11 @@
     "title": "Configurare",
     "filter": "Filtru (după prefix)",
     "table": {
+      "title": "Proprietăți de configurare",
       "prefix": "Prefix",
-      "properties": "Proprietăți"
+      "properties": "Proprietăți",
+      "property": "Proprietate",
+      "value": "Valoare"
     }
   }
 }
