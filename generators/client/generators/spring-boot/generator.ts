@@ -16,7 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from '@yeoman/transform';
+import { isFileStateModified } from 'mem-fs-editor/state';
+
 import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { createJhiTransformTranslateStringifyReplacer } from '../../../languages/support/translate.ts';
 import { clientApplicationTemplatesBlock } from '../../support/index.ts';
 
 /** Client code bound to the Spring Boot backend, composed by the client frameworks for that backend only. */
@@ -29,6 +33,34 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('client');
     }
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      queueTranslateTransform({ application }) {
+        if (application.enableTranslation) return;
+
+        // The translations are loaded after the files are written, the texts are replaced when the generation ends.
+        const translate = createJhiTransformTranslateStringifyReplacer(application.getWebappTranslation);
+        this.queueTransformStream(
+          {
+            name: 'translating the Spring Boot client files',
+            filter: file =>
+              isFileStateModified(file) &&
+              file.path.startsWith(this.destinationPath()) &&
+              file.path.endsWith('shared/jhipster/configuration.ts'),
+            refresh: false,
+          },
+          passthrough(file => {
+            file.contents = Buffer.from(translate(file.contents.toString()));
+          }),
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {

@@ -19,6 +19,9 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ if (enableTranslation) { _%>
+import { TranslatePipe } from '@ngx-translate/core';
+<%_ } _%>
 
 import { ConfigurationSection } from 'app/shared/jhipster/configuration';
 <%_ if (enableTranslation) { _%>
@@ -31,7 +34,7 @@ import { ConfigurationService } from './configuration.service';
 @Component({
   selector: '<%- jhiPrefixDashed %>-configuration',
   templateUrl: './configuration.html',
-  imports: [FontAwesomeModule, SortDirective, SortByDirective<%- enableTranslation ? ', TranslateDirective' : '' %>],
+  imports: [FontAwesomeModule, SortDirective, SortByDirective<%- enableTranslation ? ', TranslateDirective, TranslatePipe' : '' %>],
 })
 export default class Configuration implements OnInit {
   readonly allSections = signal<ConfigurationSection[] | undefined>(undefined);

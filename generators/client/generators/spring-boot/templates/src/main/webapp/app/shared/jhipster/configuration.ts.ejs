@@ -46,10 +46,19 @@ export interface ConfigurationRow {
   properties?: ConfigurationProperty[];
 }
 
+/** A text of the configuration page. */
+export interface ConfigurationLabel {
+  text: string;
+<%_ if (enableTranslation) { _%>
+  /** Gives the text in the language of the user. */
+  translationKey?: string;
+<%_ } _%>
+}
+
 /** A table of the configuration page, with its texts. */
 export interface ConfigurationSection {
-  label: string;
-  columns: [string, string];
+  label: ConfigurationLabel;
+  columns: [ConfigurationLabel, ConfigurationLabel];
   rows: ConfigurationRow[];
 }
 
@@ -58,8 +67,18 @@ const readableValue = (value: unknown): string => (typeof value === 'string' ? v
 const toBeansSection = ({ contexts }: ConfigProps): ConfigurationSection => {
   const beans: Record<string, ConfigPropsBean> = Object.assign({}, ...Object.values(contexts).map(context => context.beans));
   return {
-    label: 'Spring configuration',
-    columns: ['Prefix', 'Properties'],
+    label: { text: 'Spring configuration' },
+<%_ if (enableTranslation) { _%>
+    columns: [
+      { text: 'Prefix', translationKey: 'configuration.table.prefix' },
+      { text: 'Properties', translationKey: 'configuration.table.properties' },
+    ],
+<%_ } else { _%>
+    columns: [
+      { text: __jhiTransformTranslateStringify__('configuration.table.prefix') },
+      { text: __jhiTransformTranslateStringify__('configuration.table.properties') },
+    ],
+<%_ } _%>
     rows: Object.values(beans)
       .map(({ prefix, properties = {} }) => ({
         key: prefix,
@@ -73,8 +92,8 @@ const toBeansSection = ({ contexts }: ConfigProps): ConfigurationSection => {
 export const toConfiguration = (configProps: ConfigProps, { propertySources }: Env): ConfigurationSection[] => [
   toBeansSection(configProps),
   ...propertySources.map(({ name, properties }): ConfigurationSection => ({
-    label: name,
-    columns: ['Property', 'Value'],
+    label: { text: name },
+    columns: [{ text: 'Property' }, { text: 'Value' }],
     rows: Object.entries(properties).map(([key, { value }]) => ({ key, value: readableValue(value) })),
   })),
 ];

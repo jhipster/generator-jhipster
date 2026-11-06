@@ -30,6 +30,22 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
+  describe('with translation disabled', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators()
+        .withMockedSource()
+        .withSharedApplication({ getWebappTranslation: (key: string) => `translated ${key}` })
+        .withJHipsterConfig({ enableTranslation: false });
+    });
+
+    it('should write the texts of the configuration', () => {
+      result.assertFileContent('src/main/webapp/app/shared/jhipster/configuration.ts', 'text: "translated configuration.table.prefix"');
+      result.assertNoFileContent('src/main/webapp/app/shared/jhipster/configuration.ts', 'translationKey');
+    });
+  });
+
   describe('with defaults options', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();

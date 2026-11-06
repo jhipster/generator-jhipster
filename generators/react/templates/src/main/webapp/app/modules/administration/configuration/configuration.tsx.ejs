@@ -18,10 +18,17 @@
 -%>
 import { useEffect, useState } from 'react';
 import { Badge, Col, FormControl, Row, Table } from 'react-bootstrap';
-import { Translate } from 'react-jhipster';
+import { Translate<%- enableTranslation ? ', translate' : '' %> } from 'react-jhipster';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import { type ConfigurationLabel } from 'app/shared/jhipster/configuration';
 import { getConfiguration } from '../administration.reducer';
+
+<%_ if (enableTranslation) { _%>
+const labelText = ({ text, translationKey }: ConfigurationLabel): string => (translationKey ? translate(translationKey) : text);
+<%_ } else { _%>
+const labelText = ({ text }: ConfigurationLabel): string => text;
+<%_ } _%>
 
 export const ConfigurationPage = () => {
   const [filter, setFilter] = useState('');
@@ -47,13 +54,13 @@ export const ConfigurationPage = () => {
       </span>{' '}
       <FormControl type="search" value={filter} onChange={changeFilter} name="search" id="search" />
       {sections.map(section => (
-        <div key={section.label}>
-          <h3>{section.label}</h3>
+        <div key={section.label.text}>
+          <h3>{labelText(section.label)}</h3>
           <Table className="table table-striped table-bordered table-responsive d-table">
             <thead>
               <tr>
-                <th className="w-40">{section.columns[0]}</th>
-                <th className="w-60">{section.columns[1]}</th>
+                <th className="w-40">{labelText(section.columns[0])}</th>
+                <th className="w-60">{labelText(section.columns[1])}</th>
               </tr>
             </thead>
             <tbody>

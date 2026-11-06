@@ -47,8 +47,15 @@ describe('Configuration', () => {
     it('should call load all on init', () => {
       // GIVEN
       const sections: ConfigurationSection[] = [
-        { label: 'beans', columns: ['Prefix', 'Properties'], rows: [{ key: 'b', properties: [] }, { key: 'a', properties: [] }] },
-        { label: 'source', columns: ['Property', 'Value'], rows: [{ key: 'port', value: '8080' }] },
+        {
+          label: { text: 'beans' },
+          columns: [{ text: 'Prefix' }, { text: 'Properties' }],
+          rows: [
+            { key: 'b', properties: [] },
+            { key: 'a', properties: [] },
+          ],
+        },
+        { label: { text: 'source' }, columns: [{ text: 'Property' }, { text: 'Value' }], rows: [{ key: 'port', value: '8080' }] },
       ];
       vi.spyOn(service, 'getConfiguration').mockReturnValue(of(sections));
 

@@ -22,15 +22,15 @@
 
     <div>
       <span>{{ t$('configuration.filter') }}</span> <input type="text" v-model="filtered" class="form-control" />
-      <div v-for="(section, i) in sections" :key="section.label">
-        <h3 :id="'configuration-section-' + i">{{ section.label }}</h3>
+      <div v-for="(section, i) in sections" :key="section.label.text">
+        <h3 :id="'configuration-section-' + i">{{ labelText(section.label) }}</h3>
         <table class="table table-striped table-bordered table-responsive d-table" :aria-describedby="'configuration-section-' + i">
           <thead>
             <tr>
               <jhi-sort-header class="w-40" field-name="key" :current-order="orderProp" :reverse="reverse" @sort="changeOrder">
-                <span>{{ section.columns[0] }}</span>
+                <span>{{ labelText(section.columns[0]) }}</span>
               </jhi-sort-header>
-              <th class="w-60" scope="col">{{ section.columns[1] }}</th>
+              <th class="w-60" scope="col">{{ labelText(section.columns[1]) }}</th>
             </tr>
           </thead>
           <tbody>
@@ -64,7 +64,7 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
-import { type ConfigurationSection } from '@/shared/jhipster/configuration';
+import { type ConfigurationLabel, type ConfigurationSection } from '@/shared/jhipster/configuration';
 
 import ConfigurationService, { configurationServiceKey } from './configuration.service';
 
@@ -74,6 +74,12 @@ defineOptions({ name: '<%- jhiPrefixCapitalized %>Configuration' });
 const { t: t$ } = useI18n();
 <%_ } _%>
 const configurationService = inject(configurationServiceKey, () => new ConfigurationService(), true);
+
+<%_ if (enableTranslation) { _%>
+const labelText = ({ text, translationKey }: ConfigurationLabel): string => (translationKey ? t$(translationKey) : text);
+<%_ } else { _%>
+const labelText = ({ text }: ConfigurationLabel): string => text;
+<%_ } _%>
 
 const orderProp = ref('key');
 const reverse = ref(false);

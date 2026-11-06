@@ -198,7 +198,7 @@ describe('Administration reducer tests', () => {
     });
 
     it('should update state according to a successful fetch configuration request', () => {
-      const payload = [{ label: 'source', columns: ['Property', 'Value'], rows: [{ key: 'key', value: 'value' }] }];
+      const payload = [{ label: { text: 'source' }, columns: [{ text: 'Property' }, { text: 'Value' }], rows: [{ key: 'key', value: 'value' }] }];
       const toTest = administration(undefined, { type: getConfiguration.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({
