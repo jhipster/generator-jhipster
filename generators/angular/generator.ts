@@ -117,7 +117,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       async composing() {
         await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
-        await this.composeWithJHipster('jhipster:client:spring-boot');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
         }
@@ -235,6 +234,20 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async composeSpringBoot({ application }) {
+        if (application.backendTypeSpringBoot) {
+          await this.composeWithJHipster('jhipster:client:spring-boot');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get preparingEachEntity() {

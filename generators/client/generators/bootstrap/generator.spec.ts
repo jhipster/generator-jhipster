@@ -39,6 +39,30 @@ describe(`generator - ${generator}`, () => {
     expect(runResult.getComposedGenerators()).toContain('jhipster:client:bootstrap');
   });
 
+  describe('withAdminUi', () => {
+    const run = (config: Record<string, unknown>) => helpers.runJHipster(generator).withJHipsterConfig(config);
+
+    it('should default to true with a Spring Boot backend', async () => {
+      await run({});
+      expect(runResult.application?.withAdminUi).toBe(true);
+    });
+
+    it('should default to false with another backend', async () => {
+      await run({ backendType: 'Other' });
+      expect(runResult.application?.withAdminUi).toBe(false);
+    });
+
+    it('should keep the value set for another backend', async () => {
+      await run({ backendType: 'Other', withAdminUi: true });
+      expect(runResult.application?.withAdminUi).toBe(true);
+    });
+
+    it('should default to false in a microservice', async () => {
+      await run({ applicationType: 'microservice' });
+      expect(runResult.application?.withAdminUi).toBe(false);
+    });
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {

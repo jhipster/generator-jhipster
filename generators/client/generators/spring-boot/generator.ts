@@ -19,7 +19,7 @@
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { clientApplicationTemplatesBlock } from '../../support/index.ts';
 
-/** Client code bound to the Spring Boot backend: a client of another backend writes its own. */
+/** Client code bound to the Spring Boot backend, composed by the client frameworks for that backend only. */
 export default class ClientSpringBootGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -37,11 +37,11 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
         await this.writeFiles({
           blocks: [
             clientApplicationTemplatesBlock({
-              condition: ctx => ctx.backendTypeSpringBoot && ctx.withAdminUi,
+              condition: ctx => ctx.withAdminUi,
               templates: ['shared/jhipster/logs.ts'],
             }),
             clientApplicationTemplatesBlock({
-              condition: ctx => ctx.backendTypeSpringBoot && ctx.withAdminUi && ctx.clientTestFrameworkVitest,
+              condition: ctx => ctx.withAdminUi && ctx.clientTestFrameworkVitest,
               templates: ['shared/jhipster/logs.spec.ts'],
             }),
           ],

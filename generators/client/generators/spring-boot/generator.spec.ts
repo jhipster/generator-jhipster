@@ -43,25 +43,4 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`[]`);
     });
   });
-
-  describe('with another backend', () => {
-    before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .withMockedJHipsterGenerators()
-        .withMockedSource()
-        .withSharedApplication({})
-        .withJHipsterConfig({ backendType: 'Other' });
-    });
-
-    it('should not write the Spring Boot files', () => {
-      expect(result.getStateSnapshot()).toMatchInlineSnapshot(`
-{
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-}
-`);
-    });
-  });
 });
