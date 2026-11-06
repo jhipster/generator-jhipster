@@ -30,7 +30,6 @@ export const entityFiles = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder_/_entityFile_-details.vue',
-        'entities/_entityFolder_/_entityFile_-details.component.ts',
         'entities/_entityFolder_/_entityFile_-details.component.spec.ts',
         'entities/_entityFolder_/_entityFile_.vue',
         'entities/_entityFolder_/_entityFile_.component.ts',
@@ -95,6 +94,8 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientAp
   if (control.isJhipsterVersionLessThan('9.5.0')) {
     for (const entity of (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
       this.removeFile(`${application.clientSrcDir}app/shared/model/${entity.entityModelFileName}.model.ts`);
+      // The details component is written with script setup, in its .vue.
+      this.removeFile(`${application.clientSrcDir}app/entities/${entity.entityFolderName}/${entity.entityFileName}-details.component.ts`);
       for (const field of entity.fields) {
         if (field.fieldIsEnum) {
           this.removeFile(`${application.clientSrcDir}app/shared/model/enumerations/${field.enumFileName}.model.ts`);

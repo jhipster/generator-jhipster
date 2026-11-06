@@ -136,6 +136,25 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
     });
   });
   describe('replaceVueTranslations', () => {
+    it('should translate the script of a component written with script setup', () => {
+      const body = `<template>
+  <span>{{ t$('global.title') }}</span>
+</template>
+
+<script setup lang="ts">
+const message = t$('entity.validation.required').toString();
+</script>
+`;
+      expect(replaceVueTranslations({ body, enableTranslation: false, getWebappTranslation: key => `translated ${key}` })).toBe(`<template>
+  <span>translated global.title</span>
+</template>
+
+<script setup lang="ts">
+const message = 'translated entity.validation.required';
+</script>
+`);
+    });
+
     describe('with nested tag', () => {
       it('should throw', () => {
         expect(() =>

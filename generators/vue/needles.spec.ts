@@ -113,14 +113,14 @@ const entityNameUpdate = () => import('@/entities/entityFolderName/entityFileNam
 
   it('menu contains the item in service import', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`,
       "import entityNameService, { entityInstanceServiceKey } from './entityFolderName/entityFileName.service';",
     );
   });
 
   it('menu contains the item in service', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.component.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entities.vue`,
       'provide(entityInstanceServiceKey, () => new entityNameService());',
     );
   });
