@@ -21,7 +21,7 @@ import assert from 'node:assert';
 import type { FieldType } from '../../../lib/jhipster/field-types.ts';
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
-import { generateJsonSample, generateTsSample } from '../../base-application/support/entity-samples.ts';
+import { generateJsonSample, generateTsSample } from '../../base-application/internal/fake-data.ts';
 import type {
   Field as BaseApplicationField,
   PrimaryKey,
