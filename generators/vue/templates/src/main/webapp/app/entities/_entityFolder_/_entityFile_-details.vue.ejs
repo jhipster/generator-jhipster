@@ -55,7 +55,7 @@
           </dt>
           <dd>
     <%_ if (relationship.otherEntityUser) { _%>
-      <%_ if (relationship.relationshipManyToMany) { _%>
+      <%_ if (relationship.collection) { _%>
             <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
               {{<%- relationshipFieldName %>.<%- otherEntityField %>}}
             </span>
@@ -63,7 +63,7 @@
             {{<%- `${entityInstance}.${relationshipFieldName}` %> ? <%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %> : ''}}
       <%_ } _%>
     <%_ } else { _%>
-      <%_ if (relationship.relationshipManyToMany) { _%>
+      <%_ if (relationship.collection) { _%>
             <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
               <router-link :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- relationship.otherEntity.entityInstance %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- `${relationshipFieldName}.${otherEntityField}` %>}}</router-link>
             </span>
