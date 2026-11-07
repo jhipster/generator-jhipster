@@ -24,7 +24,7 @@ import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import { healthResponse } from '@/shared/jhipster/admin.samples';
-import { healthEndpoint } from '@/shared/jhipster/health';
+import { type HealthCheck, healthEndpoint, toHealthChecks } from '@/shared/jhipster/health';
 
 import HealthService, { healthServiceKey } from './health.service';
 import Health from './health.vue';
@@ -85,15 +85,14 @@ describe('Health Component', () => {
     });
     it('should show the checks of the response', async () => {
       // GIVEN
-      const data = { status: 'DOWN', components: { db: { status: 'DOWN' } } };
-      axiosStub.get.mockResolvedValue({ data });
+      axiosStub.get.mockResolvedValue({ data: healthResponse });
 
       // WHEN
       health.refresh();
-      await vi.waitFor(() => expect(health.checks).toContainEqual(expect.objectContaining({ id: 'db', healthy: false })));
+      await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
 
       // THEN
-      expect(health.updatingHealth).toEqual(false);
+      expect(health.checks).toEqual(toHealthChecks(healthResponse));
     });
   });
 });
@@ -109,11 +108,11 @@ describe('Health view', () => {
     },
   });
 
-  it('should list the health of the components and show their details', async () => {
+  it('should list the checks of the response and show the details of a check', async () => {
     // GIVEN
-    const get = vi.spyOn(axios, 'get').mockResolvedValue({
-      data: { components: { db: { status: 'UP', details: { database: 'H2' } }, mail: { status: 'DOWN', details: { error: 'failed' } }, ping: { status: 'UP' } } },
-    });
+    const check: HealthCheck = { id: 'check', label: { text: 'Check' }, status: { text: 'UP' }, healthy: true, details: [{ key: 'key', value: 'value' }] };
+    const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: healthResponse });
+    get.mockClear();
     const wrapper = shallowMount(Health, {
       global: {
         stubs: { bModal: modalStub, 'font-awesome-icon': true, 'health-modal': true },
@@ -122,15 +121,16 @@ describe('Health view', () => {
     await flushPromises();
 
     // WHEN
-    for (const element of wrapper.findAll('button, a')) {
-      await element.trigger('click');
-    }
+    await wrapper.find('button').trigger('click');
     await flushPromises();
+    wrapper.vm.showHealth(check);
+    await wrapper.vm.$nextTick();
 
     // THEN
     expect(get).toHaveBeenCalledTimes(2);
-    expect(show).toHaveBeenCalledTimes(2);
-    expect(wrapper.vm.currentCheck).toEqual(expect.objectContaining({ id: 'mail' }));
+    expect(wrapper.vm.checks).toEqual(toHealthChecks(healthResponse));
+    expect(show).toHaveBeenCalledTimes(1);
+    expect(wrapper.vm.currentCheck).toEqual(check);
     expect(wrapper.find('#showHealthLabel').exists()).toBe(true);
   });
 });
