@@ -50,18 +50,20 @@ const createSpawnCommandReturn = (resolvedValue?: any, data?: any) =>
 describe('generator - Heroku', () => {
   const herokuAppName = 'jhipster-test';
   let stub: ReturnType<typeof exnode.fn>;
+  let deployCommandResult: { command: string; result: any } | undefined;
   let createWithNameResult: any;
   let createWithoutNameResult: any;
   let appInfoResult: { appName: string; result: any } | undefined;
 
   beforeEach(() => {
+    deployCommandResult = undefined;
     createWithNameResult = undefined;
     createWithoutNameResult = undefined;
     appInfoResult = undefined;
 
     stub = exnode.fn((method: string, command: string, args: string[]) => {
-      if (method === 'spawnCommand' && command === 'heroku plugins') {
-        return createSpawnCommandReturn({ stdout: 'heroku-cli-deploy', stderr: '' });
+      if (method === 'spawnCommand' && command === deployCommandResult?.command) {
+        return deployCommandResult.result;
       }
 
       if (method === 'spawn' && command === 'heroku' && Array.isArray(args)) {
@@ -81,6 +83,71 @@ describe('generator - Heroku', () => {
   });
   afterEach(() => {
     stub.mockClear();
+  });
+
+  describe('JAR deployment', () => {
+    const mavenDeployCommand = `./mvnw -ntp -Pheroku com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy-only -Dheroku.appName=${herokuAppName}`;
+    const gradleDeployCommand = './gradlew deployHeroku --no-daemon';
+    const spawnCommands = () =>
+      getRunResultCalls()
+        .filter(([method]: [string]) => method === 'spawnCommand')
+        .map(([, command]: [string, string]) => command);
+    const loggedMessages = (adapterLog: any) =>
+      adapterLog.log.mock.calls.map(({ arguments: [message] }: { arguments: [string] }) => message).join('\n');
+    const answers = { herokuAppName, herokuRegion: 'us', herokuDeployType: 'jar', herokuJavaVersion: '21' };
+
+    for (const [buildTool, deployCommand] of [
+      ['maven', mavenDeployCommand],
+      ['gradle', gradleDeployCommand],
+    ] as const) {
+      describe(`with ${buildTool}`, () => {
+        beforeEach(async () => {
+          await helpers
+            .runJHipster(GENERATOR_HEROKU)
+            .withJHipsterConfig({ buildTool })
+            .withFiles({
+              'build.gradle': `plugins {
+    // jhipster-needle-gradle-plugins
+}
+// jhipster-needle-gradle-apply-from
+`,
+            })
+            .withAnswers(answers)
+            .withSpawnMock(stub);
+        });
+        it('deploys the built jar with the build plugin', () => {
+          expect(spawnCommands()).toEqual(expect.arrayContaining(['npm run java:jar:prod', deployCommand]));
+          expect(spawnCommands().indexOf(deployCommand)).toBeGreaterThan(spawnCommands().indexOf('npm run java:jar:prod'));
+        });
+        it('logs that the app is live', () => {
+          expect(loggedMessages(runResult.env.adapter.log)).toContain('Your app should now be live');
+        });
+      });
+    }
+
+    describe('with a failed deployment', () => {
+      let adapterLog: any;
+      beforeEach(async () => {
+        deployCommandResult = { command: mavenDeployCommand, result: createSpawnCommandReturn({ exitCode: 1 }) };
+        await expect(
+          helpers
+            .runJHipster(GENERATOR_HEROKU)
+            .withJHipsterConfig()
+            .withAnswers(answers)
+            .withSpawnMock(stub)
+            .onEnvironment(env => {
+              adapterLog = env.adapter.log;
+            }),
+        ).rejects.toThrow('Heroku deployment failed with exit code 1');
+      });
+      it('logs the failed command', () => {
+        const errors = adapterLog.error.mock.calls.map(({ arguments: [message] }: { arguments: [string] }) => message);
+        expect(errors).toContain(`Heroku deployment failed: ${mavenDeployCommand}`);
+      });
+      it('does not log that the app is live', () => {
+        expect(loggedMessages(adapterLog)).not.toContain('Your app should now be live');
+      });
+    });
   });
 
   describe('microservice application', () => {
