@@ -88,6 +88,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 <%_ if (!paginationNo) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
   <%_ if (reactive) { _%>
 import org.springframework.data.domain.PageImpl;
   <%_ } _%>
@@ -133,6 +134,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+<%_ if (!paginationNo) { _%>
+import java.util.Set;
+<%_ } _%>
 <%_ if (primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
@@ -154,6 +158,17 @@ import java.util.stream.StreamSupport;
 public class <%- entityClass %>Resource {
 
     private static final Logger LOG = LoggerFactory.getLogger(<%- entityClass %>Resource.class);
+<%_ if (!paginationNo) { _%>
+  <%_ const sortProperties = [...new Set([
+        ...fields.filter(field => !field.transient).map(field => field.fieldName),
+        ...relationships
+          .filter(relationship => relationship.persistableRelationship && !relationship.collection && !relationship.otherEntity.embedded)
+          .flatMap(relationship => [relationship.otherEntity.primaryKey.name, relationship.otherEntityField].map(property => `${relationship.relationshipName}.${property}`)),
+      ])];
+  _%>
+
+    private static final Set<String> SORT_PROPERTIES = Set.of(<%- sortProperties.map(property => `"${property}"`).join(', ') %>);
+<%_ } _%>
 <%_ if (!readOnly) { _%>
 
     private static final String ENTITY_NAME = "<%- entityAlertName %>";
@@ -530,5 +545,11 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
   <%_ } _%>
 <%- include('../../_partials_entity_/search_template', { viaService }) -%>
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+
+    private static boolean onlySortsByAllowedProperties(Pageable pageable) {
+        return pageable.getSort().stream().map(Sort.Order::getProperty).allMatch(SORT_PROPERTIES::contains);
+    }
 <%_ } _%>
 }
