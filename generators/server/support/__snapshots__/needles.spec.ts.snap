@@ -146,7 +146,7 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/Sortable.java": {
+  "src/main/java/com/mycompany/myapp/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/User.java": {

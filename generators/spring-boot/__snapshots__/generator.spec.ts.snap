@@ -962,7 +962,7 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/Sortable.java": {
+  "src/main/java/com/mycompany/myapp/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/User.java": {
@@ -1871,7 +1871,7 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/Sortable.java": {
+  "src/main/java/com/mycompany/myapp/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/security/AuthoritiesConstants.java": {

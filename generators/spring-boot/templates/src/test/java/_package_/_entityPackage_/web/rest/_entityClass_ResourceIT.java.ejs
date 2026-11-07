@@ -1104,10 +1104,7 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
     }
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-  <%_ const sortRelationship = relationships.find(relationship => relationship.persistableRelationship && !relationship.collection && !relationship.otherEntity.embedded
-        && relationship.otherEntity.fields.some(field => !field.id && !field.transient && field.fieldName !== relationship.otherEntityField));
-      const notSortedField = sortRelationship?.otherEntity.fields.find(field => !field.id && !field.transient && field.fieldName !== sortRelationship.otherEntityField);
-  _%>
+  <%_ const sortRelationship = relationships.find(relationship => relationship.persistableRelationship && !relationship.collection && !relationship.otherEntity.embedded); _%>
 
     @Test
     void getAll<%- entityClassPlural %>SortedByWhatIsNotAProperty() <%- reactive ? '' : 'throws Exception ' %>{
@@ -1125,18 +1122,34 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ if (sortRelationship) { _%>
 
     @Test
-    void getAll<%- entityClassPlural %>SortedByAPropertyOfARelationshipThatIsNotItsDisplayField() <%- reactive ? '' : 'throws Exception ' %>{
+    void getAll<%- entityClassPlural %>SortedByWhatIsNotAPropertyOfARelationship() <%- reactive ? '' : 'throws Exception ' %>{
     <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.<%- notSortedField.fieldName %>,asc")
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus()
             .isBadRequest();
     <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.<%- notSortedField.fieldName %>,asc"))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.doesNotExist,asc"))
             .andExpect(status().isBadRequest());
     <%_ } _%>
     }
+    <%_ if (sortRelationship.otherEntity.builtInUser && !authenticationTypeOauth2) { _%>
+
+    @Test
+    void getAll<%- entityClassPlural %>SortedByAPropertyOfARelationshipMarkedNotSortable() <%- reactive ? '' : 'throws Exception ' %>{
+      <%_ if (reactive) { _%>
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+      <%_ } else { _%>
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- sortRelationship.relationshipName %>.password,asc"))
+            .andExpect(status().isBadRequest());
+      <%_ } _%>
+    }
+    <%_ } _%>
   <%_ } _%>
   <%_ if (searchEngineCouchbase) { _%>
 

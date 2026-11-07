@@ -47,11 +47,6 @@ export const restFiles = javaWriteFileSection({
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['web/rest/_entityClass_Resource.java'],
     },
-    {
-      condition: generator => !generator.embedded && generator.entityRestLayer && generator.entityDomainLayer && !generator.paginationNo,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['domain/_persistClass_.java.jhi.sortable'],
-    },
   ],
   restTestFiles: [
     {
@@ -152,6 +147,10 @@ const userDtoFiles = javaWriteFileSection({
       ...javaMainPackageTemplatesBlock(),
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user!.persistClass}.java`),
       templates: ['domain/User.java'],
+    },
+    {
+      ...javaMainPackageTemplatesBlock(),
+      templates: ['domain/NotSortable.java'],
     },
   ],
   dto: [

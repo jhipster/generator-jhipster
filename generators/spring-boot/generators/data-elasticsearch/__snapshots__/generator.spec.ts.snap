@@ -89,10 +89,10 @@ exports[`generator - elasticsearch gateway-jwt-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
@@ -571,10 +571,10 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
@@ -921,10 +921,10 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
   "src/main/java/com/mycompany/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/User.java": {
@@ -1274,10 +1274,10 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/AuthoritiesConstants.java": {
@@ -1639,10 +1639,10 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -1989,10 +1989,10 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/main/java/com/mycompany/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -2297,10 +2297,10 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
@@ -2388,9 +2388,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/SortValidator.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/UserResource.java": {
@@ -2585,9 +2582,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/web/rest/SortValidatorTest.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
@@ -2761,10 +2755,10 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
@@ -3081,10 +3075,10 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/search/AnotherSimpleSearchRepository.java": {
@@ -3461,10 +3455,10 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
@@ -3793,13 +3787,13 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/PersistentToken.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
@@ -4296,10 +4290,10 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/domain/Microservice.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {

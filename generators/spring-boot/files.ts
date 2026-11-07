@@ -325,7 +325,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       condition: ctx => !ctx.databaseTypeNo && !ctx.databaseTypeCassandra,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['domain/Sortable.java', 'web/rest/SortValidator.java'],
+      templates: ['domain/NotSortable.java', 'web/rest/SortValidator.java'],
     },
     {
       condition: ctx => !ctx.databaseTypeNo && !ctx.databaseTypeCassandra,

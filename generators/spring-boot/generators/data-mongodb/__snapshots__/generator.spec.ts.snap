@@ -77,10 +77,10 @@ exports[`generator - mongodb gateway-jwt-reactive(false)-maven-enableTranslation
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
@@ -508,10 +508,10 @@ exports[`generator - mongodb gateway-jwt-reactive(true)-gradle-enableTranslation
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
@@ -822,10 +822,10 @@ exports[`generator - mongodb gateway-oauth2-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/domain/User.java": {
@@ -1136,10 +1136,10 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
@@ -1438,10 +1438,10 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
@@ -1737,10 +1737,10 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
@@ -2000,10 +2000,10 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
@@ -2428,10 +2428,10 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
@@ -2688,10 +2688,10 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
+  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
@@ -2996,10 +2996,10 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
@@ -3271,13 +3271,13 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/NotSortable.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/PersistentToken.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/Sortable.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/domain/UserEntity.java": {
@@ -3702,10 +3702,10 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/NotSortable.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/domain/Sortable.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {

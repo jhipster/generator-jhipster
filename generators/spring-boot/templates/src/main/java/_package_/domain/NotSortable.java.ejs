@@ -25,17 +25,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a property the list of an entity can be sorted by.
+ * Marks a property the list of an entity cannot be sorted by, like a secret.
  * <p>
- * On a relationship, {@link #value()} names the properties of the related entity the list can be sorted by,
- * like {@code @Sortable({ "id", "name" })} for {@code sort=relationship.id} and {@code sort=relationship.name}.
+ * On a relationship, the list cannot be sorted by any property of the related entity.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Sortable {
-    /**
-     * The properties of the related entity to sort by, empty to sort by the property itself.
-     */
-    String[] value() default {};
-}
+public @interface NotSortable {}

@@ -20,7 +20,9 @@ package <%- packageName %>.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import <%- packageName %>.domain.Sortable;
+import <%- packageName %>.domain.NotSortable;
+import java.time.Instant;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
 
@@ -29,28 +31,49 @@ import org.springframework.data.domain.Sort;
  */
 class SortValidatorTest {
 
-    static class Related {}
+    static class Related {
+
+        private Long id;
+
+        private String name;
+
+        @NotSortable
+        private String secret;
+
+        private Related parent;
+    }
 
     static class Base {
 
-        @Sortable
         private Long id;
     }
 
     static class Sample extends Base {
 
-        @Sortable
+        private static final String CONSTANT = "constant";
+
         private String name;
 
+        private Instant createdDate;
+
+        private byte[] picture;
+
+        private transient String computed;
+
+        @NotSortable
         private String secret;
 
-        @Sortable({ "id", "name" })
         private Related related;
+
+        @NotSortable
+        private Related hidden;
+
+        private Set<Related> others;
     }
 
     @Test
-    void acceptsTheSortableProperties() {
-        assertThat(SortValidator.isSortable(Sample.class, Sort.by("id", "name", "related.id", "related.name"))).isTrue();
+    void acceptsTheColumnsAndTheColumnsOfARelationship() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("id", "name", "createdDate", "related.id", "related.name"))).isTrue();
     }
 
     @Test
@@ -59,22 +82,30 @@ class SortValidatorTest {
     }
 
     @Test
-    void rejectsAPropertyThatIsNotSortable() {
+    void rejectsAFieldMarkedNotSortable() {
         assertThat(SortValidator.isSortable(Sample.class, Sort.by("name", "secret"))).isFalse();
     }
 
     @Test
-    void rejectsAPropertyThatDoesNotExist() {
-        assertThat(SortValidator.isSortable(Sample.class, Sort.by("doesNotExist"))).isFalse();
-    }
-
-    @Test
-    void rejectsARelationshipAlone() {
-        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related"))).isFalse();
-    }
-
-    @Test
-    void rejectsAPropertyOfARelationshipThatIsNotSortable() {
+    void rejectsAFieldOfARelationshipMarkedNotSortable() {
         assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.secret"))).isFalse();
+    }
+
+    @Test
+    void rejectsARelationshipMarkedNotSortable() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("hidden.name"))).isFalse();
+    }
+
+    @Test
+    void rejectsWhatIsNotAColumn() {
+        for (String property : new String[] { "doesNotExist", "CONSTANT", "computed", "picture", "related", "others", "others.name" }) {
+            assertThat(SortValidator.isSortable(Sample.class, Sort.by(property))).as(property).isFalse();
+        }
+    }
+
+    @Test
+    void rejectsAPathDeeperThanARelationship() {
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.parent.name"))).isFalse();
+        assertThat(SortValidator.isSortable(Sample.class, Sort.by("related.doesNotExist"))).isFalse();
     }
 }
