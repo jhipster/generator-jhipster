@@ -1,0 +1,110 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+
+import { type MetricsSection } from 'app/shared/jhipster/metrics.model';
+import { renderWithStore } from 'app/shared/util/test-utils';
+import { getSystemMetrics } from '../administration.reducer';
+import { administrationState } from '../admin-test-utils';
+
+import MetricsPage from './metrics';
+
+<%_ if (enableTranslation) { _%>
+vi.mock('react-jhipster', async importOriginal => ({
+  ...(await importOriginal<typeof import('react-jhipster')>()),
+  translate: (key: string) => (key === 'known' ? 'Translated' : `translation-not-found[${key}]`),
+}));
+<%_ } _%>
+vi.mock('../administration.reducer', async importOriginal => ({
+  ...(await importOriginal<typeof import('../administration.reducer')>()),
+  getSystemMetrics: vi.fn(() => ({ type: 'test/getSystemMetrics' })),
+}));
+
+const gauge = { percent: 50, text: '50%', status: 'success' as const };
+const sections: MetricsSection[] = [
+  {
+    id: 'jvm',
+    label: { text: 'JVM', translationKey: 'known' },
+    blocks: [
+      {
+        label: { text: 'Memory' },
+        items: [
+          { label: { text: 'Heap' }, value: '1 MB', note: 'of 2 MB', gauge },
+          { label: { text: 'Classes', translationKey: 'unknown' }, value: '10' },
+        ],
+        details: {
+          label: { text: 'Threads' },
+          showLines: { text: 'Show' },
+          hideLines: { text: 'Hide' },
+          columns: [],
+          filters: [],
+          items: [],
+        },
+      },
+      { items: [{ label: { text: 'Uptime' }, value: '1 h' }] },
+    ],
+    tables: [
+      {
+        columns: [{ label: { text: 'Name' } }, { label: { text: 'Count' }, numeric: true }, { label: { text: 'Usage' } }],
+        rows: [[{ text: 'gc' }, { text: '2' }, { text: '', gauge }]],
+      },
+    ],
+  },
+  { id: 'cache', label: { text: 'Cache' }, blocks: [], tables: [] },
+];
+
+describe('MetricsPage', () => {
+  it('should load the metrics and render their sections', () => {
+    renderWithStore(<MetricsPage />, '/', administrationState({ metrics: sections }));
+
+    expect(getSystemMetrics).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('<%- enableTranslation ? 'Translated' : 'JVM' %>')).not.toBeNull();
+    expect(screen.getByText('Classes')).not.toBeNull();
+    expect(screen.getByText('of 2 MB')).not.toBeNull();
+    expect(screen.getByText('2').className).toContain('text-end');
+    expect(document.querySelectorAll('.progress')).toHaveLength(2);
+    expect(screen.getByText('Cache')).not.toBeNull();
+  });
+
+  it('should refresh the metrics', () => {
+    renderWithStore(<MetricsPage />, '/', administrationState({ metrics: sections }));
+
+    fireEvent.click(document.querySelector('h2 button')!);
+
+    expect(getSystemMetrics).toHaveBeenCalledTimes(2);
+  });
+
+  it('should tell that the metrics are updating', () => {
+    renderWithStore(<MetricsPage />, '/', administrationState({ loading: true }));
+
+    expect(document.querySelector('.alert-info')).not.toBeNull();
+  });
+
+  it('should show and close the details of a block', async () => {
+    renderWithStore(<MetricsPage />, '/', administrationState({ metrics: sections }));
+
+    fireEvent.click(screen.getByText('Expand'));
+    expect((await screen.findByRole('dialog')).textContent).toContain('Threads');
+
+    fireEvent.click(screen.getByText('Close', { selector: '.btn-primary' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+});

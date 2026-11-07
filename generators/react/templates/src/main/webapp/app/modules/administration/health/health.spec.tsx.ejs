@@ -1,0 +1,85 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { describe, expect, it, vi } from 'vitest';
+
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+
+import { type HealthCheck } from 'app/shared/jhipster/health.model';
+import { renderWithStore } from 'app/shared/util/test-utils';
+import { getSystemHealth } from '../administration.reducer';
+import { administrationState } from '../admin-test-utils';
+
+import HealthPage from './health';
+
+<%_ if (enableTranslation) { _%>
+vi.mock('react-jhipster', async importOriginal => ({
+  ...(await importOriginal<typeof import('react-jhipster')>()),
+  translate: (key: string) => (key === 'known' ? 'Translated' : `translation-not-found[${key}]`),
+}));
+<%_ } _%>
+vi.mock('../administration.reducer', async importOriginal => ({
+  ...(await importOriginal<typeof import('../administration.reducer')>()),
+  getSystemHealth: vi.fn(() => ({ type: 'test/getSystemHealth' })),
+}));
+
+const checks: HealthCheck[] = [
+  {
+    id: 'db',
+    label: { text: 'Database', translationKey: 'known' },
+    sublabel: 'H2',
+    status: { text: 'UP' },
+    healthy: true,
+    details: [{ key: 'database', value: 'H2' }],
+  },
+  { id: 'mail', label: { text: 'Email' }, status: { text: 'DOWN', translationKey: 'unknown' }, healthy: false, error: 'refused' },
+  { id: 'ping', label: { text: 'Ping' }, status: { text: 'UP' }, healthy: true },
+];
+
+describe('HealthPage', () => {
+  it('should load the health and render its checks', () => {
+    renderWithStore(<HealthPage />, '/', administrationState({ health: checks }));
+
+    expect(getSystemHealth).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('<%- enableTranslation ? 'Translated' : 'Database' %>')).not.toBeNull();
+    expect(screen.getByText(/- H2/)).not.toBeNull();
+    expect(screen.getByText('DOWN').className).toContain('bg-danger');
+    expect(document.querySelectorAll('tbody a.hand')).toHaveLength(2);
+  });
+
+  it('should refresh the health', () => {
+    renderWithStore(<HealthPage />, '/', administrationState({ health: checks }));
+
+    fireEvent.click(document.querySelector('h2 button')!);
+
+    expect(getSystemHealth).toHaveBeenCalledTimes(2);
+  });
+
+  it('should show the details and the error of a check', async () => {
+    renderWithStore(<HealthPage />, '/', administrationState({ health: checks }));
+
+    fireEvent.click(document.querySelectorAll('tbody a.hand')[0]);
+    expect((await screen.findByRole('dialog')).textContent).toContain('database');
+
+    fireEvent.click(screen.getByText('Done'));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+
+    fireEvent.click(document.querySelectorAll('tbody a.hand')[1]);
+    expect((await screen.findByRole('dialog')).textContent).toContain('refused');
+  });
+});

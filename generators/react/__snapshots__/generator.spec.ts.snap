@@ -486,6 +486,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/index.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/admin-test-utils.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
@@ -495,10 +498,16 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/docs/docs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/docs/docs.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/gateway/gateway.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/index.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/index.tsx": {
@@ -1321,10 +1330,16 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/index.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/admin-test-utils.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/administration.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/configuration/configuration.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/configuration/configuration.tsx": {
@@ -1333,22 +1348,46 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/src/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/docs/docs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/docs/docs.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/gateway/gateway.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/health/health-modal.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/health/health-modal.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/health/health.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/health/health.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/index.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/logs/logs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/logs/logs.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/metrics/metrics-details-modal.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/metrics/metrics-details-modal.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/metrics/metrics.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/metrics/metrics.tsx": {
@@ -2467,6 +2506,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/main.tsx": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/admin-test-utils.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
@@ -2476,7 +2518,13 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/modules/administration/docs/docs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/modules/administration/docs/docs.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/modules/administration/index.spec.tsx": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/modules/administration/index.tsx": {
@@ -3362,10 +3410,16 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/main.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/admin-test-utils.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/administration.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/configuration/configuration.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/configuration/configuration.tsx": {
@@ -3374,19 +3428,43 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/docs/docs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/docs/docs.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/health/health-modal.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/health/health-modal.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/health/health.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/health/health.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/logs/logs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/logs/logs.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/metrics/metrics.tsx": {
@@ -4409,10 +4487,16 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/modules/account/settings/settings.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/admin-test-utils.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/administration.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/configuration/configuration.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/configuration/configuration.tsx": {
@@ -4421,19 +4505,43 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/docs/docs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/docs/docs.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/health/health-modal.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/health/health-modal.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/health/health.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/health/health.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/logs/logs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/logs/logs.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics-details-modal.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/metrics/metrics.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/metrics/metrics.tsx": {
@@ -5297,6 +5405,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/index.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/admin-test-utils.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
@@ -5306,7 +5417,13 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/docs/docs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/docs/docs.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/index.tsx": {
@@ -6106,6 +6223,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/index.tsx": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/admin-test-utils.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
@@ -6115,7 +6235,13 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/modules/administration/docs/docs.spec.tsx": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/modules/administration/docs/docs.tsx": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/modules/administration/index.spec.tsx": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/modules/administration/index.tsx": {
