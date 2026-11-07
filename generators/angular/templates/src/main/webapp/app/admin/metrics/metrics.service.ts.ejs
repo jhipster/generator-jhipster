@@ -22,7 +22,8 @@ import { Service, inject } from '@angular/core';
 import { Observable, forkJoin, map } from 'rxjs';
 
 import { serverApiUrl } from 'app/config';
-import { MetricsSection, metricsEndpoints, toMetrics } from 'app/shared/jhipster/metrics';
+import { metricsEndpoints, toMetrics } from 'app/shared/jhipster/metrics';
+import { MetricsSection } from 'app/shared/jhipster/metrics.model';
 
 @Service()
 export class MetricsService {
