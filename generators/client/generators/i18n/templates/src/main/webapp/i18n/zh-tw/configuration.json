@@ -3,8 +3,11 @@
     "title": "設定",
     "filter": "篩選條件 (依據前置名稱)",
     "table": {
+      "title": "設定屬性",
       "prefix": "前置名稱",
-      "properties": "屬性"
+      "properties": "屬性",
+      "property": "屬性",
+      "value": "值"
     }
   }
 }

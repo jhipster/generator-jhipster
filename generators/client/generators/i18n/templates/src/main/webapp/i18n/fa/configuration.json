@@ -3,8 +3,11 @@
     "title": "پیکربندی",
     "filter": "فیلتر (با پیشوند)",
     "table": {
+      "title": "خواص پیکربندی",
       "prefix": "پیشوند",
-      "properties": "خواص"
+      "properties": "خواص",
+      "property": "خاصیت",
+      "value": "مقدار"
     }
   }
 }

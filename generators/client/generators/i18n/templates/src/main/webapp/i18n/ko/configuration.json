@@ -3,8 +3,11 @@
     "title": "설정",
     "filter": "필터 (prefix 기준)",
     "table": {
+      "title": "설정 속성",
       "prefix": "Prefix",
-      "properties": "Properties"
+      "properties": "Properties",
+      "property": "속성",
+      "value": "값"
     }
   }
 }

@@ -3,8 +3,11 @@
     "title": "Configuratie",
     "filter": "Filteren (op voorvoegsel)",
     "table": {
+      "title": "Configuratie-eigenschappen",
       "prefix": "Voorvoegsel",
-      "properties": "Eigenschappen"
+      "properties": "Eigenschappen",
+      "property": "Eigenschap",
+      "value": "Waarde"
     }
   }
 }
