@@ -23,7 +23,7 @@ import { createTestingPinia } from '@pinia/testing';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { useLoginModal } from '@/account/login-modal';
+import { useLoginNavigation } from '@/account/login-navigation';
 import { currentLanguageKey } from '@/shared/config/injection-keys';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 import { formValues, setAllValues } from '@/shared/testing/stubs';
@@ -87,7 +87,7 @@ describe('Register Component', () => {
   });
 
   it('should open login modal when asked to', () => {
-    const login = useLoginModal();
+    const login = useLoginNavigation();
     register.showLogin();
     expect(login.showLogin).toHaveBeenCalledOnce();
   });
@@ -172,7 +172,7 @@ describe('Register Component', () => {
     await flushPromises();
 
     // THEN
-    expect(useLoginModal().showLogin).toHaveBeenCalled();
+    expect(useLoginNavigation().showLogin).toHaveBeenCalled();
     expect(axiosStub.post).toHaveBeenCalledWith('api/register', {
       email: 'jhi@pster.net',
       langKey: '<%- nativeLanguage %>',

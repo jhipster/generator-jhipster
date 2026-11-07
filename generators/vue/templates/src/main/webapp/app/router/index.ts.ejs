@@ -24,6 +24,9 @@ import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enh
 
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
+<%_ if (!authenticationTypeOauth2) { _%>
+const Login = () => import('@/account/login-form/login-form.vue');
+<%_ } _%>
 <%_ if (generateUserManagement) { _%>
 import account from '@/router/account';
 <%_ } _%>
@@ -51,6 +54,13 @@ export const createRouter = () => createVueRouter({
       component: Error,
       meta: { error404: true }
     },
+<%_ if (!authenticationTypeOauth2) { _%>
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+<%_ } _%>
 <%_ if (generateUserManagement) { _%>
     ...account,
 <%_ } _%>

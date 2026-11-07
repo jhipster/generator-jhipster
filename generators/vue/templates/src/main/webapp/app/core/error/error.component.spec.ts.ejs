@@ -24,7 +24,7 @@ import { createTestingPinia } from '@pinia/testing';
 import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 
 <%_ if (generateUserManagement) { _%>
-import { useLoginModal } from '@/account/login-modal';
+import { useLoginNavigation } from '@/account/login-navigation';
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
@@ -49,7 +49,7 @@ describe('Error component', () => {
   let loginService: LoginService;
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-  let login: ReturnType<typeof useLoginModal>;
+  let login: ReturnType<typeof useLoginNavigation>;
 <%_ } _%>
   let authenticated: Ref<boolean>;
   let mountOptions: ComponentMountingOptions<ErrorComponentType>;
@@ -82,7 +82,7 @@ describe('Error component', () => {
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
 <%_ if (generateUserManagement) { _%>
-    login = useLoginModal();
+    login = useLoginNavigation();
 <%_ } _%>
 
     expect(error.errorMessage).toBe(customErrorMsg);
@@ -102,7 +102,7 @@ describe('Error component', () => {
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
 <%_ if (generateUserManagement) { _%>
-    login = useLoginModal();
+    login = useLoginNavigation();
 <%_ } _%>
 
     expect(error.errorMessage).toBeNull();
@@ -122,7 +122,7 @@ describe('Error component', () => {
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
 <%_ if (generateUserManagement) { _%>
-    login = useLoginModal();
+    login = useLoginNavigation();
 <%_ } _%>
 
     expect(error.errorMessage).toBeNull();
@@ -139,7 +139,7 @@ describe('Error component', () => {
     const wrapper = shallowMount(Error, mountOptions);
     error = wrapper.vm;
 <%_ if (generateUserManagement) { _%>
-    login = useLoginModal();
+    login = useLoginNavigation();
 <%_ } _%>
 
     expect(error.errorMessage).toBeNull();

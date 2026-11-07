@@ -38,7 +38,7 @@ describe('login page', () => {
     cy.visit('');
     cy.clickOnLoginItem();
 <%_ if (clientFrameworkVue) { _%>
-    // The login modal moves focus to the username field once its enter transition ends;
+    // The login page moves focus to the username field once it renders;
     // typing before that lands part of the input in the wrong field.
     cy.get(usernameLoginSelector).should('have.focus');
 <%_ } _%>
@@ -51,7 +51,7 @@ describe('login page', () => {
   it('greets with signin', () => {
     cy.get(titleLoginSelector).should('be.visible');
   });
-<%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
+<%_ if (clientFrameworkAngular || clientFrameworkReact || clientFrameworkVue) { _%>
 
   it('greets visiting /login directly', () => {
     cy.visit('/login');

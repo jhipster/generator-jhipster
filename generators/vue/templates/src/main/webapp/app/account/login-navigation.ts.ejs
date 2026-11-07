@@ -16,24 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ref } from 'vue';
-
 import { defineStore } from 'pinia';
 
-export const useLoginModal = defineStore('login', () => {
-  const loginModalOpen = ref(false);
+export const loginRouteName = 'Login';
 
-  function showLogin() {
-    loginModalOpen.value = true;
-  }
-
-  function hideLogin() {
-    loginModalOpen.value = false;
+/**
+ * Navigates to the login page, which comes back to the current page once signed in.
+ */
+export const useLoginNavigation = defineStore('login', () => {
+  async function showLogin() {
+    const { default: router } = await import('@/router');
+    const { fullPath, name } = router.currentRoute.value;
+    if (name !== loginRouteName) {
+      await router.push({ name: loginRouteName, query: { redirect: fullPath } });
+    }
   }
 
   return {
-    loginModalOpen,
     showLogin,
-    hideLogin,
   };
 });

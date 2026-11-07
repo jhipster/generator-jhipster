@@ -28,8 +28,8 @@ import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' :
 import { createPinia, storeToRefs } from 'pinia'
 
 import AccountService, { accountServiceKey } from '@/account/account.service';
-<%_ if (generateUserManagement) { _%>
-import { useLoginModal } from '@/account/login-modal';
+<%_ if (!authenticationTypeOauth2) { _%>
+import { loginRouteName, useLoginNavigation } from '@/account/login-navigation';
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import LoginService, { loginServiceKey } from '@/account/login.service';
@@ -81,8 +81,8 @@ const app = createApp({
 <%_ if (authenticationUsesCsrf) { _%>
     provide(loginServiceKey, new LoginService());
 <%_ } _%>
-<%_ if (generateUserManagement) { _%>
-    const { hideLogin, showLogin } = useLoginModal();
+<%_ if (!authenticationTypeOauth2) { _%>
+    const { showLogin } = useLoginNavigation();
 <%_ } _%>
     const store = useStore();
     const accountService = new AccountService(store);
@@ -149,14 +149,6 @@ const app = createApp({
 <%_ } _%>
 
     router.beforeResolve(async (to, from) => {
-<%_ if (!authenticationTypeOauth2) { _%>
-      // Make sure login modal is closed when navigating.
-      // The initial navigation may resolve after the user opened the login modal, don't close it.
-      if (from !== START_LOCATION) {
-        hideLogin();
-      }
-
-<%_ } _%>
       // The account is loaded on the first navigation only: a login loads it again, a 401 logs out.
       if (from === START_LOCATION && !store.authenticated) {
         await accountService.update();
@@ -164,6 +156,11 @@ const app = createApp({
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
         const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
         if (!value && from.path !== '/forbidden') {
+<%_ if (!authenticationTypeOauth2) { _%>
+          if (!store.authenticated) {
+            return { name: loginRouteName, query: { redirect: to.fullPath } };
+          }
+<%_ } _%>
           return { path: '/forbidden' };
         }
       }

@@ -479,6 +479,11 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             [application.microfrontend, 'webpack/webpack.microfrontend.js'],
             [application.microfrontend, 'module-federation.config.cjs'],
           ],
+          '9.5.0': [
+            // The login modal was replaced with a login page
+            `${application.clientSrcDir}app/account/login-modal.ts`,
+            `${application.clientSrcDir}app/account/login-modal.spec.ts`,
+          ],
         });
       },
       cleanupOldFilesTask,

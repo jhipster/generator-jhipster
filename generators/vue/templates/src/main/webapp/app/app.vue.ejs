@@ -27,14 +27,6 @@
         <div class="card jh-card">
           <router-view></router-view>
         </div>
-<%_ if (!authenticationTypeOauth2) { _%>
-        <b-modal id="login-page" focus="username" v-model="loginModalOpen" :no-footer="true" lazy>
-          <template #title>
-            <span data-cy="loginTitle" id="login-title">{{ t$('login.title') }}</span>
-          </template>
-          <LoginForm v-if="loginModalOpen"></LoginForm>
-        </b-modal>
-<%_ } _%>
         <JhiFooter></JhiFooter>
       </div>
     </div>
@@ -43,19 +35,9 @@
 
 <script setup lang="ts">
 import { provide } from 'vue';
-<%_ if (enableTranslation && !authenticationTypeOauth2) { _%>
-import { useI18n } from 'vue-i18n';
-<%_ } _%>
 
 import { BApp } from 'bootstrap-vue-next';
-<%_ if (!authenticationTypeOauth2) { _%>
-import { storeToRefs } from 'pinia';
-<%_ } _%>
 
-<%_ if (!authenticationTypeOauth2) { _%>
-import LoginForm from '@/account/login-form/login-form.vue';
-import { useLoginModal } from '@/account/login-modal';
-<%_ } _%>
 import JhiFooter from '@/core/jhi-footer/jhi-footer.vue';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 import Ribbon from '@/core/ribbon/ribbon.vue';
@@ -65,10 +47,4 @@ import '@/shared/config/dayjs';
 defineOptions({ name: 'App' });
 
 provide(alertServiceKey, useAlertService());
-<%_ if (enableTranslation && !authenticationTypeOauth2) { _%>
-const { t: t$ } = useI18n();
-<%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
-const { loginModalOpen } = storeToRefs(useLoginModal());
-<%_ } _%>
 </script>

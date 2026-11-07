@@ -66,7 +66,7 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 <%_ if (!authenticationTypeOauth2) { _%>
-import { useLoginModal } from '@/account/login-modal';
+import { useLoginNavigation } from '@/account/login-navigation';
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { loginServiceKey } from '@/account/login.service';
@@ -79,7 +79,7 @@ const { t: t$ } = useI18n();
 <%_ if (authenticationTypeOauth2) { _%>
 const { login } = inject(loginServiceKey)!;
 <%_ } else { _%>
-const { showLogin } = useLoginModal();
+const { showLogin } = useLoginNavigation();
 <%_ } _%>
 const authenticated = inject(authenticatedKey);
 const username = inject(currentUsernameKey);

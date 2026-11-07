@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 <template>
-  <div class="d-flex justify-content-center">
-    <div class="row-md">
-      <div class="col-md-12">
+  <div class="d-flex justify-content-center" id="login-page">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <h1 id="login-title" data-cy="loginTitle">{{ t$('login.title') }}</h1>
+      <div>
         <b-alert
           data-cy="loginError"
           variant="danger"
@@ -27,7 +28,7 @@
           v-html="t$('login.messages.error.authentication')"
         ></b-alert>
       </div>
-      <div class="col-md-12">
+      <div>
         <b-form @submit.prevent="doLogin()">
           <b-form-group :label="t$('global.form[\'username.label\']')" label-for="username">
             <b-form-input
@@ -37,6 +38,7 @@
               :placeholder="t$('global.form[\'username.placeholder\']')"
               v-model="login"
               data-cy="username"
+              autofocus
             >
             </b-form-input>
           </b-form-group>
@@ -90,7 +92,6 @@ import { useRoute, useRouter } from 'vue-router';
 
 import axios from 'axios';
 
-import { useLoginModal } from '@/account/login-modal';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
 <%_ } _%>
@@ -105,11 +106,14 @@ const login = ref<string | null>(null);
 const password = ref<string | null>(null);
 const rememberMe = ref(false);
 
-const { hideLogin } = useLoginModal();
 const route = useRoute();
 const router = useRouter();
 
-const previousState = () => router.go(-1);
+/** The page to go back to: a path of the application, else home. */
+const redirectPath = (): string => {
+  const { redirect } = route.query;
+  return typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/';
+};
 
 const accountService = inject(accountServiceKey)!;
 
@@ -140,11 +144,8 @@ const doLogin = async () => {
 <%_ } _%>
 
     authenticationError.value = false;
-    hideLogin();
     await accountService.retrieveAccount();
-    if (route.path === '/forbidden') {
-      previousState();
-    }
+    await router.replace(redirectPath());
   } catch {
     authenticationError.value = true;
   }

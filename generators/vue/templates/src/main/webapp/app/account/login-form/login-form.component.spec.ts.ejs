@@ -35,10 +35,10 @@ import LoginForm from './login-form.vue';
 type LoginFormComponentType = InstanceType<typeof LoginForm>;
 
 let route: Partial<RouteLocation>;
-const routerGoMock = vi.fn();
+const routerReplaceMock = vi.fn();
 vi.mock('vue-router', () => ({
   useRoute: () => route,
-  useRouter: () => ({ go: routerGoMock }),
+  useRouter: () => ({ replace: routerReplaceMock }),
 }));
 
 const axiosStub = {
@@ -51,7 +51,8 @@ describe('LoginForm Component', () => {
   let loginForm: LoginFormComponentType;
 
   beforeEach(() => {
-    route = {};
+    route = { query: {} };
+    routerReplaceMock.mockReset();
     axiosStub.get.mockResolvedValue({});
     axiosStub.post.mockReset();
 
@@ -202,16 +203,31 @@ describe('LoginForm Component', () => {
     expect(axiosStub.post).toHaveBeenCalled();
   });
 
-  it('should go back after logging in from the forbidden page', async () => {
-    // GIVEN
-    route.path = '/forbidden';
-    axiosStub.post.mockResolvedValue({ headers: {} });
+  describe('once signed in', () => {
+    beforeEach(() => {
+      axiosStub.post.mockResolvedValue({ headers: {} });
+    });
 
-    // WHEN
-    await loginForm.doLogin();
-    await flushPromises();
+    it('should go back to the page it came from', async () => {
+      route.query = { redirect: '/admin/health' };
 
-    // THEN
-    expect(routerGoMock).toHaveBeenCalledWith(-1);
+      await loginForm.doLogin();
+
+      expect(routerReplaceMock).toHaveBeenCalledWith('/admin/health');
+    });
+
+    it('should go home without a page to go back to', async () => {
+      await loginForm.doLogin();
+
+      expect(routerReplaceMock).toHaveBeenCalledWith('/');
+    });
+
+    it('should go home instead of leaving the application', async () => {
+      route.query = { redirect: '//example.com' };
+
+      await loginForm.doLogin();
+
+      expect(routerReplaceMock).toHaveBeenCalledWith('/');
+    });
   });
 });

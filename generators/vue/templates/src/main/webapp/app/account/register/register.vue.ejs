@@ -158,14 +158,14 @@ import { useVuelidate } from '@vuelidate/core';
 import { sameAs } from '@vuelidate/validators';
 
 import { accountValidations, passwordValidations } from '@/account/account-validations';
-import { useLoginModal } from '@/account/login-modal';
+import { useLoginNavigation } from '@/account/login-navigation';
 import RegisterService, { registerServiceKey } from '@/account/register/register.service';
 import { currentLanguageKey } from '@/shared/config/injection-keys';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 
 defineOptions({ name: 'Register' });
 
-const { showLogin } = useLoginModal();
+const { showLogin } = useLoginNavigation();
 const registerService = inject(registerServiceKey, () => new RegisterService(), true);
 const currentLanguage = inject(currentLanguageKey, () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 <%_ if (enableTranslation) { _%>

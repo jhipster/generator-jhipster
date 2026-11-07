@@ -25,7 +25,7 @@ import { createTestingPinia } from '@pinia/testing';
 import { type VueWrapper, shallowMount } from '@vue/test-utils';
 
 <%_ if (!authenticationTypeOauth2) { _%>
-import { useLoginModal } from '@/account/login-modal';
+import { useLoginNavigation } from '@/account/login-navigation';
 <%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
@@ -44,7 +44,7 @@ describe('Home', () => {
   let authenticated;
   let currentUsername;
 <%_ if (!authenticationTypeOauth2) { _%>
-  let login: ReturnType<typeof useLoginModal>;
+  let login: ReturnType<typeof useLoginNavigation>;
 <%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
@@ -72,7 +72,7 @@ describe('Home', () => {
     });
     home = wrapper.vm;
 <%_ if (!authenticationTypeOauth2) { _%>
-    login = useLoginModal();
+    login = useLoginNavigation();
 <%_ } _%>
   });
 

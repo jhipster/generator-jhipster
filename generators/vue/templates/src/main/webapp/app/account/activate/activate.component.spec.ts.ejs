@@ -22,7 +22,7 @@ import { createTestingPinia } from '@pinia/testing';
 import { type ComponentMountingOptions, flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
-import { useLoginModal } from '@/account/login-modal';
+import { useLoginNavigation } from '@/account/login-navigation';
 
 import Activate from './activate.vue';
 
@@ -77,7 +77,7 @@ describe('Activate Component', () => {
     expect(activate.success).toBeTruthy();
     await flushPromises();
     await wrapper.find('a.alert-link').trigger('click');
-    expect(useLoginModal().showLogin).toHaveBeenCalled();
+    expect(useLoginNavigation().showLogin).toHaveBeenCalled();
   });
 
   it('should activate with the first key of the route', async () => {
