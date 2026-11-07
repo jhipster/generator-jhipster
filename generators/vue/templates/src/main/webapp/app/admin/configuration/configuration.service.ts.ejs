@@ -20,7 +20,8 @@ import { type InjectionKey } from 'vue';
 
 import axios from 'axios';
 
-import { type ConfigurationSection, configurationEndpoints, toConfiguration } from '@/shared/jhipster/configuration';
+import { type ConfigurationSection } from '@/shared/jhipster/configuration.model';
+import { configurationEndpoints, toConfiguration } from '@/shared/jhipster/configuration';
 
 export default class ConfigurationService {
   async loadConfiguration(): Promise<ConfigurationSection[]> {

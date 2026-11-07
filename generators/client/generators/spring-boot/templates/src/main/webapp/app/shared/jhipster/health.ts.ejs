@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { type HealthCheck } from './health.model';
 import { type Label } from './label';
 
 /** A component of the response of the health endpoint, named by the backend. */
@@ -29,23 +30,6 @@ export interface HealthComponent {
 export interface HealthResponse {
   status: string;
   components?: Record<string, HealthComponent>;
-}
-
-export interface HealthDetail {
-  key: string;
-  value: string;
-}
-
-/** A row of the health page, with its texts. */
-export interface HealthCheck {
-  id: string;
-  label: Label;
-  /** What tells apart the checks with the same label, like the name of a datasource. */
-  sublabel?: string;
-  status: Label;
-  healthy: boolean;
-  error?: string;
-  details?: HealthDetail[];
 }
 
 /** The endpoint of the health page, the response of an unhealthy application comes with the status 503. */
@@ -102,4 +86,4 @@ const toChecks = (components: Record<string, HealthComponent> = {}, path?: strin
   });
 
 /** Converts the response of the health endpoint to the rows of the health page. */
-export const toHealthChecks = ({ components }: HealthResponse): HealthCheck[] => toChecks(components);
+export const toHealthChecks = (response: unknown): HealthCheck[] => toChecks((response as HealthResponse).components);

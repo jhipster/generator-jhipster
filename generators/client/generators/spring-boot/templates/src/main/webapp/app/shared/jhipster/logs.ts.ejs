@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export type Level = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF';
+import { type Level, type Log } from './logs.model';
 
 /** A logger of the loggers endpoint. */
 export interface Logger {
@@ -30,15 +30,9 @@ export interface LoggersResponse {
   loggers: Record<string, Logger>;
 }
 
-/** A row of the logs page. */
-export interface Log {
-  name: string;
-  level: Level;
-}
-
 /** The endpoint of the logs page. */
 export const loggersEndpoint = 'management/loggers';
 
 /** Converts the response of the loggers endpoint to the rows of the logs page. */
-export const toLogs = ({ loggers }: LoggersResponse): Log[] =>
-  Object.entries(loggers).map(([name, { effectiveLevel }]) => ({ name, level: effectiveLevel }));
+export const toLogs = (response: unknown): Log[] =>
+  Object.entries((response as LoggersResponse).loggers).map(([name, { effectiveLevel }]) => ({ name, level: effectiveLevel }));

@@ -21,7 +21,8 @@ import axios from 'axios';
 
 import { AppThunk } from 'app/config/store';
 <%_ if (withAdminUi) { _%>
-import { type Log, type LoggersResponse, toLogs } from 'app/shared/jhipster/logs';
+import { type Log } from 'app/shared/jhipster/logs.model';
+import { toLogs } from 'app/shared/jhipster/logs';
 <%_ } _%>
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
@@ -79,7 +80,7 @@ export const getSystemThreadDump = createAsyncThunk(
   },
 );
 
-export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<LoggersResponse>('management/loggers'), {
+export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<unknown>('management/loggers'), {
   serializeError: serializeAxiosError,
 });
 

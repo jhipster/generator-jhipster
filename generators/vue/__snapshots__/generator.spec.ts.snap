@@ -1576,6 +1576,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/configuration.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/configuration.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1600,6 +1603,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/health.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/health.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1615,10 +1621,16 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/logs.model.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/logs.spec.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/logs.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/metrics.model.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/metrics.spec.ts": {
@@ -3414,6 +3426,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/configuration.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3438,6 +3453,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/health.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/health.spec.ts": {
     "stateCleared": "modified",
   },
@@ -3453,10 +3471,16 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/logs.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/logs.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/logs.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/metrics.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/metrics.spec.ts": {
@@ -4461,6 +4485,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/admin.samples.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/configuration.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/configuration.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4485,6 +4512,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/health.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/health.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4500,10 +4530,16 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/logs.model.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/logs.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/logs.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/metrics.model.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/metrics.spec.ts": {

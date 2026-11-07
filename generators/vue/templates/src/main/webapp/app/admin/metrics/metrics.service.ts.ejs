@@ -20,7 +20,8 @@ import { type InjectionKey } from 'vue';
 
 import axios from 'axios';
 
-import { type MetricsSection, metricsEndpoints, toMetrics } from '@/shared/jhipster/metrics';
+import { type MetricsSection } from '@/shared/jhipster/metrics.model';
+import { metricsEndpoints, toMetrics } from '@/shared/jhipster/metrics';
 
 export default class MetricsService {
   async getMetrics(): Promise<MetricsSection[]> {

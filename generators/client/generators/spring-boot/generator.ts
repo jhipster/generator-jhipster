@@ -74,7 +74,6 @@ export default class ClientSpringBootGenerator extends BaseApplicationGenerator 
               templates: [
                 'shared/jhipster/configuration.ts',
                 'shared/jhipster/health.ts',
-                'shared/jhipster/label.ts',
                 'shared/jhipster/logs.ts',
                 'shared/jhipster/metrics.ts',
               ],

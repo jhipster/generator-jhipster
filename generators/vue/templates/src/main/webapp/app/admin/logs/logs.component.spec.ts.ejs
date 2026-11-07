@@ -24,7 +24,7 @@ import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import { loggersResponse } from '@/shared/jhipster/admin.samples';
-import { type LoggersResponse, loggersEndpoint, toLogs } from '@/shared/jhipster/logs';
+import { loggersEndpoint, toLogs } from '@/shared/jhipster/logs';
 import JhiSortHeader from '@/shared/sort/jhi-sort-header.vue';
 
 import Logs from './logs.vue';
@@ -113,7 +113,7 @@ describe('Logs view', () => {
   it('should list the loggers and change their level', async () => {
     // GIVEN
     const levels = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'OFF'];
-    const [logger, ...otherLoggers] = toLogs(loggersResponse as LoggersResponse);
+    const [logger, ...otherLoggers] = toLogs(loggersResponse);
     vi.spyOn(axios, 'get').mockResolvedValue({ data: loggersResponse });
     const post = vi.spyOn(axios, 'post').mockResolvedValue({});
     const wrapper = shallowMount(Logs, {

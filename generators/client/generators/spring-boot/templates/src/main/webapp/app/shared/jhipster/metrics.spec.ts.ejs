@@ -18,7 +18,8 @@
 -%>
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { type MetricsResponse, type MetricsSection, type MetricsWithPercentile, type Thread, ThreadState, toMetrics } from './metrics';
+import { type MetricsResponse, type MetricsWithPercentile, type Thread, ThreadState, toMetrics } from './metrics';
+import { type MetricsSection } from './metrics.model';
 
 const percentiles: MetricsWithPercentile = { count: 2, mean: 1, max: 3, '0.0': 0, '0.5': 1, '0.75': 2, '0.95': 3, '0.99': 3 };
 

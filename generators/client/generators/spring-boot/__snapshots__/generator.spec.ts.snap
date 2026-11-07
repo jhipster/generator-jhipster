@@ -20,9 +20,6 @@ exports[`generator - client:spring-boot with defaults options should match files
   "src/main/webapp/app/shared/jhipster/health.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/jhipster/label.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/shared/jhipster/logs.spec.ts": {
     "stateCleared": "modified",
   },

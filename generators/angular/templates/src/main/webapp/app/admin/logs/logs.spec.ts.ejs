@@ -22,7 +22,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { Log, LoggersResponse } from 'app/shared/jhipster/logs';
+import { Log } from 'app/shared/jhipster/logs.model';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
@@ -67,7 +67,7 @@ describe('Logs', () => {
               effectiveLevel: 'WARN',
             },
           },
-        } as unknown as LoggersResponse),
+        }),
       );
 
       // WHEN
@@ -91,7 +91,7 @@ describe('Logs', () => {
               effectiveLevel: 'ERROR',
             },
           },
-        } as unknown as LoggersResponse),
+        }),
       );
 
       // WHEN

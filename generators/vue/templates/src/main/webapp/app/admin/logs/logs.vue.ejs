@@ -77,7 +77,7 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { orderAndFilterBy } from '@/shared/computables';
-import { type Log, type LoggersResponse, toLogs } from '@/shared/jhipster/logs';
+import { type Log } from '@/shared/jhipster/logs.model';
 
 import LogsService, { logsServiceKey } from './logs.service';
 
@@ -100,12 +100,9 @@ const filteredLoggers = computed(() =>
   }),
 );
 
-const extractLoggers = (response: { data?: LoggersResponse }): void => {
-  loggers.value = response.data ? toLogs(response.data) : [];
-};
 const init = (): void => {
-  logsService.findAll().then(response => {
-    extractLoggers(response);
+  logsService.findAll().then(found => {
+    loggers.value = found;
   });
 };
 const updateLevel = (name: string, level: string): void => {

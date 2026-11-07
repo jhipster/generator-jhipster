@@ -24,7 +24,8 @@ import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
 import { healthResponse } from '@/shared/jhipster/admin.samples';
-import { type HealthCheck, healthEndpoint, toHealthChecks } from '@/shared/jhipster/health';
+import { type HealthCheck } from '@/shared/jhipster/health.model';
+import { healthEndpoint, toHealthChecks } from '@/shared/jhipster/health';
 
 import HealthService, { healthServiceKey } from './health.service';
 import Health from './health.vue';
