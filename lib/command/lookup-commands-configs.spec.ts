@@ -61,6 +61,7 @@ describe('jdl options', () => {
   "skipServer",
   "authenticationType",
   "skipUserManagement",
+  "skipUserRegistration",
   "applicationType",
   "serverPort",
   "gatewayServerPort",

@@ -127,17 +127,23 @@ export const files = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: [
         'modules/account/index.tsx',
-        'modules/account/activate/activate.tsx',
         'modules/account/password/password.tsx',
-        'modules/account/register/register.tsx',
         'modules/account/password-reset/init/password-reset-init.tsx',
         'modules/account/password-reset/finish/password-reset-finish.tsx',
         'modules/account/settings/settings.tsx',
-        'modules/account/register/register.reducer.ts',
-        'modules/account/activate/activate.reducer.ts',
         'modules/account/password-reset/password-reset.reducer.ts',
         'modules/account/password/password.reducer.ts',
         'modules/account/settings/settings.reducer.ts',
+      ],
+    },
+    {
+      condition: generator => generator.generateUserRegistration,
+      ...clientApplicationTemplatesBlock(),
+      templates: [
+        'modules/account/activate/activate.tsx',
+        'modules/account/activate/activate.reducer.ts',
+        'modules/account/register/register.tsx',
+        'modules/account/register/register.reducer.ts',
       ],
     },
     {
@@ -268,12 +274,15 @@ export const files = asWriteFilesSection({
     {
       condition: generator => generator.generateUserManagement,
       ...clientApplicationTemplatesBlock(),
+      templates: ['modules/account/password/password.reducer.spec.ts', 'modules/account/settings/settings.reducer.spec.ts'],
+    },
+    {
+      condition: generator => generator.generateUserRegistration,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         // 'spec/app/modules/account/register/register.spec.tsx',
         'modules/account/register/register.reducer.spec.ts',
         'modules/account/activate/activate.reducer.spec.ts',
-        'modules/account/password/password.reducer.spec.ts',
-        'modules/account/settings/settings.reducer.spec.ts',
       ],
     },
     {

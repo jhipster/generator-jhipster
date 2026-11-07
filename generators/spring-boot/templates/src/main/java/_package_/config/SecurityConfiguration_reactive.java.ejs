@@ -275,8 +275,10 @@ public class SecurityConfiguration {
 <%_ } _%>
                     .pathMatchers("/api/authenticate").permitAll()
 <%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserRegistration) { _%>
                     .pathMatchers("/api/register").permitAll()
                     .pathMatchers("/api/activate").permitAll()
+  <%_ } _%>
                     .pathMatchers("/api/account/reset-password/init").permitAll()
                     .pathMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>

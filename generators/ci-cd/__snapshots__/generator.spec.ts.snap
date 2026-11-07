@@ -210,6 +210,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "generateBuiltInUserEntity": true,
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
+  "generateUserRegistration": true,
   "gitLabIndent": "",
   "githubActions": {
     "actions/checkout": "actions/checkout@VERSION",
@@ -468,6 +469,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
+  "skipUserRegistration": undefined,
   "sonarName": "sonar",
   "sonarOrga": undefined,
   "sonarUrl": "https://sonarcloud.io",

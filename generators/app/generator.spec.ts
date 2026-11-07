@@ -138,6 +138,29 @@ describe(`generator - ${helpers.commandName}`, () => {
     });
   });
 
+  describe('with skipUserRegistration', () => {
+    for (const clientFramework of ['angular', 'react', 'vue'] as const) {
+      describe(`with ${clientFramework}`, () => {
+        before(async () => {
+          await helpers.runJHipster().withJHipsterConfig({ clientFramework, skipUserRegistration: true, testFrameworks: ['cypress'] });
+        });
+
+        it('should not write the registration nor the activation of an account', () => {
+          const files = Object.keys(result.getStateSnapshot());
+          // The settings of an account use the messages of the registration.
+          expect(files.filter(file => /\/(register|activate)[/.-]|activationEmail/.test(file))).toEqual([
+            'src/main/webapp/i18n/en/register.json',
+          ]);
+        });
+
+        it('should write the other pages of an account', () => {
+          const files = Object.keys(result.getStateSnapshot());
+          expect(files.filter(file => /password-reset|reset-password/.test(file))).not.toEqual([]);
+        });
+      });
+    }
+  });
+
   describe('jdlStore', () => {
     describe('with application', () => {
       before(async () => {
