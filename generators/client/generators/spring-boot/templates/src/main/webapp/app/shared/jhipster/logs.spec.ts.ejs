@@ -18,7 +18,7 @@
 -%>
 import { describe, expect, it } from 'vitest';
 
-import { toLogs } from './logs';
+import { toLevelChange, toLogs } from './logs';
 
 describe('logs', () => {
   describe('toLogs', () => {
@@ -32,6 +32,12 @@ describe('logs', () => {
         { name: 'ROOT', level: 'INFO' },
         { name: 'main', level: 'WARN' },
       ]);
+    });
+  });
+
+  describe('toLevelChange', () => {
+    it('should configure the level of the logger', () => {
+      expect(toLevelChange('main', 'ERROR')).toEqual({ url: 'management/loggers/main', body: { configuredLevel: 'ERROR' } });
     });
   });
 });

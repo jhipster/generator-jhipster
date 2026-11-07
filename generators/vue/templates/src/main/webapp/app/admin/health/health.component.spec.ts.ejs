@@ -23,10 +23,18 @@ import { defineComponent, h } from 'vue';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 
+import { healthEndpoint, toHealthChecks } from '@/shared/jhipster/health';
+import { type HealthCheck } from '@/shared/jhipster/health.model';
+
 import HealthService, { healthServiceKey } from './health.service';
 import Health from './health.vue';
 
 type HealthComponentType = InstanceType<typeof Health>;
+
+vi.mock('@/shared/jhipster/health', () => ({ healthEndpoint: 'health', toHealthChecks: vi.fn() }));
+
+const healthResponse = { response: 'of the backend' };
+const checks: HealthCheck[] = [{ id: 'db', label: { text: 'Database' }, status: { text: 'UP' }, healthy: true }];
 
 const axiosStub = {
   get: vi.spyOn(axios, 'get'),
@@ -36,7 +44,8 @@ describe('Health Component', () => {
   let health: HealthComponentType;
 
   beforeEach(() => {
-    axiosStub.get.mockResolvedValue({});
+    vi.mocked(toHealthChecks).mockReturnValue(checks);
+    axiosStub.get.mockResolvedValue({ data: healthResponse });
     const wrapper = shallowMount(Health, {
       global: {
         stubs: {
@@ -55,48 +64,20 @@ describe('Health Component', () => {
     health = wrapper.vm;
   });
 
-  describe('baseName and subSystemName', () => {
-    it('should return the basename when it has no sub system', () => {
-      expect(health.baseName('base')).toBe('base');
-    });
-
-    it('should return the basename when it has sub systems', () => {
-      expect(health.baseName('base.subsystem.system')).toBe('base');
-    });
-
-    it('should return the sub system name', () => {
-      expect(health.subSystemName('subsystem')).toBe('');
-    });
-
-    it('should return the subsystem when it has multiple keys', () => {
-      expect(health.subSystemName('subsystem.subsystem.system')).toBe(' - subsystem.system');
-    });
-  });
-
-  describe('getBadgeClass', () => {
-    it('should get badge class', () => {
-      const upBadgeClass = health.getBadgeClass('UP');
-      const downBadgeClass = health.getBadgeClass('DOWN');
-      expect(upBadgeClass).toEqual('bg-success');
-      expect(downBadgeClass).toEqual('bg-danger');
-    });
-  });
-
   describe('refresh', () => {
     it('should call refresh on init', async () => {
       // GIVEN
-      axiosStub.get.mockResolvedValue({});
+      axiosStub.get.mockResolvedValue({ data: healthResponse });
 
       // WHEN
       health.refresh();
       await health.$nextTick();
 
       // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith('management/health');
-      await health.$nextTick();
-      expect(health.updatingHealth).toEqual(false);
+      expect(axiosStub.get).toHaveBeenCalledWith(healthEndpoint, expect.anything());
+      await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
     });
-    it('should handle a 503 on refreshing health data', async () => {
+    it('should stop updating when the request fails', async () => {
       // GIVEN
       axiosStub.get.mockRejectedValue({});
 
@@ -105,22 +86,20 @@ describe('Health Component', () => {
       await health.$nextTick();
 
       // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith('management/health');
-      await health.$nextTick();
-      expect(health.updatingHealth).toEqual(false);
+      expect(axiosStub.get).toHaveBeenCalledWith(healthEndpoint, expect.anything());
+      await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
     });
-    it('should show the health data of a 503 on refreshing health data', async () => {
+    it('should show the checks of the response', async () => {
       // GIVEN
-      const data = { status: 'DOWN', components: { db: { status: 'DOWN' } } };
-      axiosStub.get.mockRejectedValue({ response: { status: 503, data } });
+      axiosStub.get.mockResolvedValue({ data: healthResponse });
 
       // WHEN
       health.refresh();
       await vi.waitFor(() => expect(health.updatingHealth).toEqual(false));
 
       // THEN
-      expect(health.healthData).toEqual(new HealthService().transformHealthData(data));
-      expect(health.healthData).toContainEqual(expect.objectContaining({ name: 'db', status: 'DOWN' }));
+      expect(toHealthChecks).toHaveBeenCalledWith(healthResponse);
+      expect(health.checks).toEqual(checks);
     });
   });
 });
@@ -136,11 +115,12 @@ describe('Health view', () => {
     },
   });
 
-  it('should list the health of the components and show their details', async () => {
+  it('should list the checks of the response and show the details of a check', async () => {
     // GIVEN
-    const get = vi.spyOn(axios, 'get').mockResolvedValue({
-      data: { components: { db: { status: 'UP', details: { database: 'H2' } }, mail: { status: 'DOWN', error: 'failed' }, ping: { status: 'UP' } } },
-    });
+    const check: HealthCheck = { id: 'check', label: { text: 'Check' }, status: { text: 'UP' }, healthy: true, details: [{ key: 'key', value: 'value' }] };
+    vi.mocked(toHealthChecks).mockReturnValue(checks);
+    const get = vi.spyOn(axios, 'get').mockResolvedValue({ data: healthResponse });
+    get.mockClear();
     const wrapper = shallowMount(Health, {
       global: {
         stubs: { bModal: modalStub, 'font-awesome-icon': true, 'health-modal': true },
@@ -149,15 +129,16 @@ describe('Health view', () => {
     await flushPromises();
 
     // WHEN
-    for (const element of wrapper.findAll('button, a')) {
-      await element.trigger('click');
-    }
+    await wrapper.find('button').trigger('click');
     await flushPromises();
+    wrapper.vm.showHealth(check);
+    await wrapper.vm.$nextTick();
 
     // THEN
     expect(get).toHaveBeenCalledTimes(2);
-    expect(show).toHaveBeenCalledTimes(2);
-    expect(wrapper.vm.currentHealth).toEqual(expect.objectContaining({ name: 'mail' }));
+    expect(wrapper.vm.checks).toEqual(checks);
+    expect(show).toHaveBeenCalledTimes(1);
+    expect(wrapper.vm.currentCheck).toEqual(check);
     expect(wrapper.find('#showHealthLabel').exists()).toBe(true);
   });
 });
